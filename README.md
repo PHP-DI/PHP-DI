@@ -6,24 +6,24 @@ by Matthieu Napoli
 
 ### Example
 
- class Class2 {
- }
+    class Class2 {
+    }
 
 Dependency can be automatically injected in a class using `Class2`:
 
- use DI\Annotations\Inject;
+    use DI\Annotations\Inject;
 
- class Class1 {
-     /**
-      * @Inject
-      * @var Class2
-      */
-     private $class2;
+    class Class1 {
+        /**
+         * @Inject
+         * @var Class2
+         */
+        private $class2;
 
-     public function __construct() {
-         \DI\DependencyManager::getInstance()->resolveDependencies($this);
-     }
- }
+        public function __construct() {
+            \DI\DependencyManager::getInstance()->resolveDependencies($this);
+        }
+    }
 
 ### Requirements
 
