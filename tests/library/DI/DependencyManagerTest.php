@@ -38,4 +38,12 @@ class DependencyManagerTest extends \PHPUnit_Framework_TestCase {
         $this->assertInstanceOf('\Class2', $dependency);
     }
 
+    public function testDefaultFactorySingleton() {
+        $class1_1 = new \Class1();
+        $class2_1 = $class1_1->getClass2();
+        $class1_2 = new \Class1();
+        $class2_2 = $class1_2->getClass2();
+        $this->assertSame($class2_1, $class2_2);
+    }
+
 }

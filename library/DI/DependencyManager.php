@@ -12,10 +12,10 @@ use Doctrine\Common\Annotations\AnnotationReader;
 class DependencyManager {
 
     /**
-     * Array of instances, indexed by their classnames
-     * @var type instance[string]
+     * Factory to use to create instances
+     * @var FactoryInterface
      */
-	protected $instancesMap = array();
+	protected $factory;
 
     /**
      * Returns an instance of the class
@@ -34,6 +34,7 @@ class DependencyManager {
      * Protected constructor because of singleton
      */
     protected function __construct() {
+        $this->factory = new Factory();
     }
 
     /**
@@ -64,7 +65,7 @@ class DependencyManager {
             $propertyType = $this->getPropertyType($property);
             // Injection
             if ($inject && ($propertyType != null)) {
-                $dependencyInstance = $this->factory($propertyType);
+                $dependencyInstance = $this->factory->getInstance($propertyType);
                 $property->setAccessible(true);
                 $property->setValue($object, $dependencyInstance);
             } elseif ($inject && ($propertyType == null)) {
@@ -75,14 +76,17 @@ class DependencyManager {
     }
 
     /**
-     * Factory for dependencies
-     *
-     * @todo Implement a factory class
-     * @param string $type Type of the class to load
-     * @return object Instance of the type
+     * @return FactoryInterface the factory used for creating instances
      */
-    private function factory($type) {
-        return new $type();
+    public function getFactory() {
+        return $this->factory;
+    }
+
+    /**
+     * @param $factory the factory to use for creating instances
+     */
+    public function setFactory(FactoryInterface $factory) {
+        $this->factory = $factory;
     }
 
 	/**
