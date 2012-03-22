@@ -9,6 +9,8 @@ require dirname(__FILE__) . '/../../../library/Doctrine/Common/ClassLoader.php';
 // Fixtures
 require_once dirname(__FILE__) . '/fixtures/Class1.php';
 require_once dirname(__FILE__) . '/fixtures/Class2.php';
+require_once dirname(__FILE__) . '/fixtures/Interface1.php';
+require_once dirname(__FILE__) . '/fixtures/Class3.php';
 
 
 /**

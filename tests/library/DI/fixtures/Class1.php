@@ -4,11 +4,17 @@ use DI\Annotations\Inject;
 
 class Class1 {
 
-    /**
-     * @Inject
-     * @var Class2
-     */
-    private $class2;
+	/**
+	 * @Inject
+	 * @var Class2
+	 */
+	private $class2;
+
+	/**
+	 * @Inject("Class3")
+	 * @var Interface1
+	 */
+	private $interface1;
 
     /**
      * Inject the dependencies
@@ -17,8 +23,12 @@ class Class1 {
         \DI\DependencyManager::getInstance()->resolveDependencies($this);
     }
 
-    public function getClass2() {
-        return $this->class2;
-    }
+	public function getClass2() {
+		return $this->class2;
+	}
+
+	public function getInterface1() {
+		return $this->interface1;
+	}
 
 }

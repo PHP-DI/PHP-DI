@@ -33,12 +33,31 @@ An instance of Class2 can be automatically injected in another class very simply
         }
     }
 
+Ways to inject:
+
+        /**
+         * @Inject
+         * @var Class1
+         */
+        private $class1;
+
+        /**
+         * @Inject("Class2")
+         */
+        private $class2;
+
+        /**
+         * @Inject("Class3")
+         * @var Class3Interface
+         */
+        private $class3Interface;
+
 ### How are instances created?
 
 A factory is used to create the instances that are injected.
 
 By default, the strategy used is the Singleton pattern, which means that only one
-instance of each class is instanciated.
+instance of each class is instantiated.
 
 This can be configured to a different strategy, or even to use a different factory.
 

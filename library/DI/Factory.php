@@ -3,7 +3,7 @@
 namespace DI;
 
 /**
- * Factory for instanciating dependencies
+ * Factory for instantiating dependencies
  */
 class Factory implements FactoryInterface {
 
@@ -34,22 +34,25 @@ class Factory implements FactoryInterface {
     /**
      * Returns an instance of the class wanted
      * @param string $classname Name of the class
-     * @return Object instance created
+     * @return object instance created
      */
     public function getInstance($classname) {
+		if (! class_exists($classname) && ! interface_exists($classname)) {
+			throw new FactoryException("The class or interface $classname doesn't exist.");
+		}
         switch ($this->getDefaultStrategy()) {
 
             // Single instance
             case self::STRATEGY_SINGLETON:
                 if (! array_key_exists($classname, $this->singletonsMap)) {
-                    $this->singletonsMap[$classname] = new $classname();
+                    $this->singletonsMap[$classname] = $this->newInstance($classname);
                 }
                 return $this->singletonsMap[$classname];
 
             // New instance
             case self::STRATEGY_NEW:
             default:
-                return new $classname();
+                return $this->newInstance($classname);
         }
     }
 
@@ -66,5 +69,19 @@ class Factory implements FactoryInterface {
     public function setDefaultStrategy($strategy) {
         $this->defaultStrategy = $strategy;
     }
+
+	/**
+	 * Create a new instance of the class
+	 * @param string $classname Class to instantiate
+	 * @return object the instance
+	 * @throw FactoryException If the class is not instantiable
+	 */
+	private function newInstance($classname) {
+		$reflectionClass = new \ReflectionClass($classname);
+		if (! $reflectionClass->isInstantiable()) {
+			throw new FactoryException("The class $classname is not instantiable.");
+		}
+		return new $classname();
+	}
 
 }
