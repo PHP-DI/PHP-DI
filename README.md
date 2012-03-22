@@ -33,7 +33,9 @@ An instance of Class2 can be automatically injected in another class very simply
         }
     }
 
-Ways to inject:
+### Annotation usage
+
+There are several alternative to inject:
 
         /**
          * @Inject
@@ -51,6 +53,9 @@ Ways to inject:
          * @var Class3Interface
          */
         private $class3Interface;
+
+Each one has its own advantages (short, code completion, specification of
+the interface and the implementation to use...). You choose your favorite.
 
 ### How are instances created?
 
