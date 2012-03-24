@@ -9,9 +9,4 @@ namespace DI\Annotations;
  */
 class Inject {
 
-	/**
-	 * @var string Classname of the instance
-	 */
-	public $class;
-
 }

@@ -24,6 +24,8 @@ class DependencyManagerTest extends \PHPUnit_Framework_TestCase {
         $doctrineClassLoader->register();
         $diClassLoader = new ClassLoader('DI', dirname(__FILE__) . '/../../../library');
         $diClassLoader->register();
+		// Dependency injection configuration
+		DependencyManager::getInstance()->setConfiguration(dirname(__FILE__) . '/di.ini');
     }
 
     public function testGetInstance() {

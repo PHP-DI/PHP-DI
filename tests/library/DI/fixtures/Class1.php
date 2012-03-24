@@ -11,7 +11,7 @@ class Class1 {
 	private $class2;
 
 	/**
-	 * @Inject("Class3")
+	 * @Inject
 	 * @var Interface1
 	 */
 	private $interface1;

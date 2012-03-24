@@ -74,7 +74,7 @@ class Factory implements FactoryInterface {
 	 * Create a new instance of the class
 	 * @param string $classname Class to instantiate
 	 * @return object the instance
-	 * @throw FactoryException If the class is not instantiable
+	 * @throws FactoryException If the class is not instantiable
 	 */
 	private function newInstance($classname) {
 		$reflectionClass = new \ReflectionClass($classname);

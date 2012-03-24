@@ -17,6 +17,12 @@ class DependencyManager {
      */
 	protected $factory;
 
+	/**
+	 * Array of implementations for abstract classes and interfaces
+	 * @var implementation[contract]
+	 */
+	protected $implementationMapping = array();
+
     /**
      * Returns an instance of the class
      * @return \DI\DependencyManager
@@ -37,12 +43,13 @@ class DependencyManager {
         $this->factory = new Factory();
     }
 
-    /**
-     * Resolve the dependencies of the object
-     *
-     * @param mixed $object Object in which to resolve dependencies
-	 * @return void
-     */
+	/**
+	 * Resolve the dependencies of the object
+	 *
+	 * @param mixed $object Object in which to resolve dependencies
+	 * @throws \Exception
+	 * @throws DependencyException
+	 */
     public function resolveDependencies($object) {
         if (is_null($object)) {
             return;
@@ -65,13 +72,13 @@ class DependencyManager {
                 continue;
             }
 			// Find the type of the class to inject
-			if ($injectAnnotation->class != null) {
-				$classname = $injectAnnotation->class;
-			} else {
-            	$classname = $this->getPropertyType($property);
-			}
-            // Injection
+			$classname = $this->getPropertyType($property);
+			// Injection
             if ($injectAnnotation && $classname) {
+				// Try to find a mapping for the implementation to use
+				if (array_key_exists($classname, $this->implementationMapping)) {
+					$classname = $this->implementationMapping[$classname];
+				}
 				try {
                 	$dependencyInstance = $this->factory->getInstance($classname);
 				} catch (FactoryException $e) {
@@ -94,12 +101,39 @@ class DependencyManager {
         return $this->factory;
     }
 
-    /**
-     * @param FactoryInterface $factory the factory to use for creating instances
-     */
-    public function setFactory(FactoryInterface $factory) {
-        $this->factory = $factory;
-    }
+	/**
+	 * @param FactoryInterface $factory the factory to use for creating instances
+	 */
+	public function setFactory(FactoryInterface $factory) {
+		$this->factory = $factory;
+	}
+
+	/**
+	 * @param string $configurationFile the php-di configuration file
+	 * @throws \Exception
+	 */
+	public function setConfiguration($configurationFile) {
+		if (! (file_exists($configurationFile) && is_readable($configurationFile))) {
+			throw new \Exception("Configuration file $configurationFile doesn't exist or is not readable");
+		}
+		// Read ini file
+		$data = parse_ini_file($configurationFile);
+		$mappings = $data['di.implementation.map'];
+		if ($mappings && is_array($mappings)) {
+			foreach ($mappings as $contract => $implementation) {
+				$this->addImplementationMapping($contract, $implementation);
+			}
+		}
+	}
+
+	/**
+	 * Map the implementation to use for an abstract class or interface
+	 * @param $contractType the abstract class or interface name
+	 * @param $implementationType the class to use as the implementation
+	 */
+	public function addImplementationMapping($contractType, $implementationType) {
+		$this->implementationMapping[$contractType] = $implementationType;
+	}
 
 	/**
 	 * Annotation reader

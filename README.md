@@ -2,7 +2,6 @@
 by Matthieu Napoli
 
 * Project home [http://github.com/mnapoli/PHP-DI](http://github.com/mnapoli/PHP-DI)
-* Documentation [http://github.com/mnapoli/PHP-DI/wiki](http://github.com/mnapoli/PHP-DI/wiki)
 
 ### Introduction
 
@@ -12,7 +11,31 @@ as simple as possible with PHP.
 
 No fancy features, but no overhead. The simpler the better.
 
+#### Pros
+
+* Annotations!
+* As little configuration as possible
+* Doesn't need getters/setters
+* Doesn't need any change to your existing code (you can give it a shot easily)
+* Fully compatible PHP 5.3/5.4
+
+#### Cons
+
+* You have to write a line of code in the constructor of your classes
+(i'm looking for a solution about that)
+* *Not* production ready for now
+
+### Why?
+
+Using the singleton design pattern may be practical at first, but it comes with several disadvantages,
+the main one being that it's not testable.
+
+By using dependency injection, you can develop using contracts and not care what implementation
+will be used. As the dependency can be injected by the "user", your class can be tested with mocks.
+
 ### Basic example
+
+Say you have this class:
 
     class Class2 {
     }
@@ -33,29 +56,35 @@ An instance of Class2 can be automatically injected in another class very simply
         }
     }
 
-### Annotation usage
+### Using interfaces or abstract types?
 
-There are several alternative to inject:
+If you have something like:
 
-        /**
-         * @Inject
-         * @var Class1
-         */
-        private $class1;
+    class Class1 {
+		/**
+		 * @Inject
+		 * @var MyInterface
+		 */
+		private $myProperty;
 
-        /**
-         * @Inject("Class2")
-         */
-        private $class2;
+and:
 
-        /**
-         * @Inject("Class3")
-         * @var Class3Interface
-         */
-        private $class3Interface;
+    class MyInterface {
+    }
+	class TheImplementationToUse implements MyInterface {
+	}
 
-Each one has its own advantages (short, code completion, specification of
-the interface and the implementation to use...). You choose your favorite.
+PHP-DI will fail to inject "myProperty" because the type is an interface (MyInterface).
+
+You have to do the mapping between the interface (or abstract class) and the implementation to use.
+This can be done with a configuration file (di.ini):
+
+	; Type mapping for injection
+	di.implementation.map["MyInterface"] = "TheImplementationToUse"
+
+And in your code (Bootstrap for example):
+
+	DependencyManager::getInstance()->setConfiguration('di.ini');
 
 ### How are instances created?
 
@@ -71,4 +100,4 @@ In the near future, more configurations (via annotations) will be available very
 ### Requirements
 
 * __PHP 5.3__ or higher
-* Using an autoloading system (as in most of the major frameworks)
+* Using an autoloading system is recommended (as in most of the major frameworks)
