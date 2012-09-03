@@ -3,7 +3,7 @@
 namespace DI;
 
 /**
- * Factory for instanciating dependencies
+ * Factory for instantiating dependencies
  */
 interface FactoryInterface {
 

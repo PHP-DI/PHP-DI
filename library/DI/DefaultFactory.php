@@ -3,9 +3,9 @@
 namespace DI;
 
 /**
- * Factory for instantiating dependencies
+ * Default factory for instantiating dependencies
  */
-class Factory implements FactoryInterface {
+class DefaultFactory implements FactoryInterface {
 
     /**
      * Strategy for creating instances: singleton (one shared instance)
@@ -31,11 +31,12 @@ class Factory implements FactoryInterface {
     private $singletonsMap = array();
 
 
-    /**
-     * Returns an instance of the class wanted
-     * @param string $classname Name of the class
-     * @return object instance created
-     */
+	/**
+	 * Returns an instance of the class wanted
+	 * @param string $classname Name of the class
+	 * @throws FactoryException
+	 * @return object Instance created
+	 */
     public function getInstance($classname) {
 		if (! class_exists($classname) && ! interface_exists($classname)) {
 			throw new FactoryException("The class or interface $classname doesn't exist.");

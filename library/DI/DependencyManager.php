@@ -40,7 +40,7 @@ class DependencyManager {
      * Protected constructor because of singleton
      */
     protected function __construct() {
-        $this->factory = new Factory();
+        $this->factory = new DefaultFactory();
     }
 
 	/**
