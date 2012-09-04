@@ -1,7 +1,10 @@
 {
 	"name": "mnapoli/php-di",
 	"autoload": {
-		"psr-0": {"DI": "src/"}
+		"psr-0": {
+			"DI": "src/",
+			"TestFixtures": "tests/"
+		}
 	},
 	"require": {
 		"doctrine/common": "2.2.*"

@@ -1,6 +1,6 @@
 <?php
 
-namespace tests\DI\fixtures\DefaultFactoryTest;
+namespace TestFixtures\DefaultFactoryTest;
 
 use DI\Annotations\Inject;
 
