@@ -1,6 +1,8 @@
 # PHP-DI - Simple PHP dependency injection library
 by Matthieu Napoli
 
+[![Build Status](https://secure.travis-ci.org/mnapoli/PHP-DI.png)](http://travis-ci.org/mnapoli/PHP-DI)
+
 * Project home [http://github.com/mnapoli/PHP-DI](http://github.com/mnapoli/PHP-DI)
 
 ### Introduction
