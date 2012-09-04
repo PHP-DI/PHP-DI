@@ -11,7 +11,8 @@ require_once dirname(__FILE__) . '/fixtures/DefaultFactoryTest/Class1.php';
 /**
  * DefaultFactory test class
  */
-class DefaultFactoryTest extends \PHPUnit_Framework_TestCase {
+class DefaultFactoryTest extends \PHPUnit_Framework_TestCase
+{
 
 	/**
 	 * Checks that the "NEW" strategy returns new instances every time
