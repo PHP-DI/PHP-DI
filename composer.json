@@ -1,0 +1,6 @@
+{
+	"name": "mnapoli/php-di",
+	"require": {
+		"doctrine/common": "2.2.*"
+	}
+}

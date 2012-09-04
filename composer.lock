@@ -1,0 +1,17 @@
+{
+    "hash": "04e702a2261ce37dbc916a92dbb9dced",
+    "packages": [
+        {
+            "package": "doctrine/common",
+            "version": "2.2.3"
+        }
+    ],
+    "packages-dev": null,
+    "aliases": [
+
+    ],
+    "minimum-stability": "stable",
+    "stability-flags": [
+
+    ]
+}
