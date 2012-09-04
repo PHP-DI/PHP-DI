@@ -4,8 +4,6 @@ namespace tests\DI;
 
 use \DI\DependencyManager;
 
-require dirname(__FILE__) . '/../../vendor/autoload.php';
-
 // Fixtures
 require_once dirname(__FILE__) . '/fixtures/Class1.php';
 require_once dirname(__FILE__) . '/fixtures/Class2.php';

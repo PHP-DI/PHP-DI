@@ -4,8 +4,6 @@ namespace tests\DI;
 
 use \DI\DefaultFactory;
 
-require dirname(__FILE__) . '/../../vendor/autoload.php';
-
 // Fixtures
 require_once dirname(__FILE__) . '/fixtures/DefaultFactoryTest/Class1.php';
 
