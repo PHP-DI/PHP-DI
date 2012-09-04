@@ -1,5 +1,9 @@
 language: php
+
 php:
   - 5.3
   - 5.4
-composer install
+
+before_script:
+  - curl -s http://getcomposer.org/installer | php -- --quiet
+  - php composer.phar install
