@@ -44,4 +44,12 @@ class DefaultFactoryTest extends \PHPUnit_Framework_TestCase {
 		$this->assertSame($instance1, $instance2);
 	}
 
+	/**
+	 * @expectedException \DI\FactoryException
+	 */
+	public function testGetInstanceException() {
+		$factory = new DefaultFactory();
+		$factory->getInstance('UnknownClassname');
+	}
+
 }
