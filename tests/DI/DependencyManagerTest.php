@@ -1,10 +1,10 @@
 <?php
 
-namespace DI;
+namespace tests\DI;
 
-use Doctrine\Common\ClassLoader;
+use \DI\DependencyManager;
 
-require dirname(__FILE__) . '/../../../library/Doctrine/Common/ClassLoader.php';
+require dirname(__FILE__) . '/../../vendor/autoload.php';
 
 // Fixtures
 require_once dirname(__FILE__) . '/fixtures/Class1.php';
@@ -19,11 +19,6 @@ require_once dirname(__FILE__) . '/fixtures/Class3.php';
 class DependencyManagerTest extends \PHPUnit_Framework_TestCase {
 
     public function setUp() {
-        // Autoloading
-        $doctrineClassLoader = new ClassLoader('Doctrine', dirname(__FILE__) . '/../../../library');
-        $doctrineClassLoader->register();
-        $diClassLoader = new ClassLoader('DI', dirname(__FILE__) . '/../../../library');
-        $diClassLoader->register();
 		// Dependency injection configuration
 		DependencyManager::getInstance()->setConfiguration(dirname(__FILE__) . '/di.ini');
     }

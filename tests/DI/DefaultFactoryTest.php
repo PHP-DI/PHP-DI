@@ -1,26 +1,19 @@
 <?php
 
-namespace DI;
+namespace tests\DI;
 
-use Doctrine\Common\ClassLoader;
+use \DI\DefaultFactory;
 
-require dirname(__FILE__) . '/../../../library/Doctrine/Common/ClassLoader.php';
+require dirname(__FILE__) . '/../../vendor/autoload.php';
 
 // Fixtures
 require_once dirname(__FILE__) . '/fixtures/DefaultFactoryTest/Class1.php';
+
 
 /**
  * DefaultFactory test class
  */
 class DefaultFactoryTest extends \PHPUnit_Framework_TestCase {
-
-	public function setUp() {
-		// Autoloading
-		$doctrineClassLoader = new ClassLoader('Doctrine', dirname(__FILE__) . '/../../../library');
-		$doctrineClassLoader->register();
-		$diClassLoader = new ClassLoader('DI', dirname(__FILE__) . '/../../../library');
-		$diClassLoader->register();
-	}
 
 	/**
 	 * Checks that the "NEW" strategy returns new instances every time

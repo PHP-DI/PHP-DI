@@ -1,5 +1,8 @@
 {
 	"name": "mnapoli/php-di",
+	"autoload": {
+		"psr-0": {"DI": "src/"}
+	},
 	"require": {
 		"doctrine/common": "2.2.*"
 	}
