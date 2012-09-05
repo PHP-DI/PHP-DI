@@ -104,6 +104,11 @@ In the near future, more configurations (via annotations) will be available very
 * __PHP 5.3__ or higher
 * Using an autoloading system is recommended (as in most of the major frameworks)
 
+### Zend Framework
+
+Are you using Zend Framework? Check out the official quickstart with
+Dependency Injection already configured: [zf-quickstart-di](https://github.com/mnapoli/zf-quickstart-di)
+
 ### Contribute
 
 To run the project, get [composer](http://getcomposer.org/doc/00-intro.md):
