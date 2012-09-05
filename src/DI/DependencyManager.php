@@ -146,10 +146,10 @@ class DependencyManager
 	/**
 	 * Map the implementation to use for an abstract class or interface
 	 * @param string $contractType the abstract class or interface name
-	 * @param string $implementationType the class to use as the implementation
+	 * @param string|mixed $implementation Can be a class name (to instantiate) or an instance
 	 */
-	public function addInstancesMapping($contractType, $implementationType) {
-		$this->instancesMapping[$contractType] = $implementationType;
+	public function addInstancesMapping($contractType, $implementation) {
+		$this->instancesMapping[$contractType] = $implementation;
 	}
 
 	/**
