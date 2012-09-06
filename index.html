@@ -27,7 +27,7 @@
         </ul>
       </header>
       <section>
-        <h3>Dependency Injection</h3>
+        <h2>Dependency Injection</h2>
 
 <p>An example is worth a thousand words:</p>
 
@@ -40,15 +40,38 @@ class MyClass {
      */
     private $service;
 
+    public function __construct() {
+        \DI\DependencyManager::getInstance()-&gt;resolveDependencies($this);
+    }
+
     public function doSomething($id) {
         $object = $service-&gt;getSomething($id);
     }
 }
 </code></pre>
 
+<h3>Installation</h3>
+
+<h4>Using Composer?</h4>
+
+<p>PHP-DI is published on packagist.org and can be automatically installed with <a href="http://getcomposer.org/doc/00-intro.md">Composer</a>:</p>
+
+<pre><code>{
+    "require": {
+        "mnapoli/php-di": "dev-master",
+    }
+}
+</code></pre>
+
+<p>That's it! You can start using it.</p>
+
 <h4>Using Zend Framework?</h4>
 
 <p>Check out the Zend Framework quickstart with PHP-DI already configured with examples on <a href="https://github.com/mnapoli/zf-quickstart-di">zf-quickstart-di</a>.</p>
+
+<h3>More</h3>
+
+<p>You can read more at <a href="https://github.com/mnapoli/PHP-DI">https://github.com/mnapoli/PHP-DI</a>.</p>
       </section>
     </div>
     <footer>
