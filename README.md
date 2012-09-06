@@ -3,7 +3,7 @@ by Matthieu Napoli
 
 [![Build Status](https://secure.travis-ci.org/mnapoli/PHP-DI.png)](http://travis-ci.org/mnapoli/PHP-DI)
 
-* Project home [http://github.com/mnapoli/PHP-DI](http://github.com/mnapoli/PHP-DI)
+* Project home [http://mnapoli.github.com/PHP-DI/](http://mnapoli.github.com/PHP-DI/)
 
 ### Introduction
 
