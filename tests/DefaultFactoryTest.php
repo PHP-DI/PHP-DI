@@ -33,7 +33,7 @@ class DefaultFactoryTest extends \PHPUnit_Framework_TestCase
 	}
 
 	/**
-	 * @expectedException \DI\FactoryException
+	 * @expectedException \InvalidArgumentException
 	 */
 	public function testGetInstanceException() {
 		$factory = new DefaultFactory();

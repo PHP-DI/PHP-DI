@@ -41,12 +41,12 @@ class DefaultFactory implements FactoryInterface
 	/**
 	 * Returns an instance of the class wanted
 	 * @param string $classname Name of the class
-	 * @throws InvalidArgumentException
+	 * @throws \InvalidArgumentException
 	 * @return object Instance created
 	 */
 	public function getInstance($classname) {
 		if (!class_exists($classname) && !interface_exists($classname)) {
-			throw new InvalidArgumentException("The class or interface $classname doesn't exist.");
+			throw new \InvalidArgumentException("The class or interface $classname doesn't exist.");
 		}
 		switch ($this->getDefaultStrategy()) {
 
@@ -82,12 +82,12 @@ class DefaultFactory implements FactoryInterface
 	 * Create a new instance of the class
 	 * @param string $classname Class to instantiate
 	 * @return object the instance
-	 * @throws InvalidArgumentException If the class is not instantiable
+	 * @throws \InvalidArgumentException If the class is not instantiable
 	 */
 	private function newInstance($classname) {
 		$reflectionClass = new \ReflectionClass($classname);
 		if (!$reflectionClass->isInstantiable()) {
-			throw new InvalidArgumentException("The class $classname is not instantiable.");
+			throw new \InvalidArgumentException("The class $classname is not instantiable.");
 		}
 		return new $classname();
 	}
