@@ -11,10 +11,10 @@ class Proxy
 {
 
 	/**
-	 * Name of the bean that is proxied
-	 * @var string
+	 * Callback that will return the instance
+	 * @var callable
 	 */
-	private $beanName;
+	private $beanInstanceLoader;
 
 	/**
 	 * Instance of the bean that is proxied
@@ -23,24 +23,38 @@ class Proxy
 	 */
 	private $beanInstance = null;
 
+
+	/**
+	 * Define the callback that will return the instance
+	 * @param callable $instanceLoader The function to call to retrieve an instance
+	 * @return void
+	 */
+	public function __setInstanceLoader(callable $instanceLoader) {
+		$this->beanInstanceLoader = $instanceLoader;
+	}
+
 	/**
 	 * Load the instance of the bean (used for lazy-loading)
 	 */
-	private function loadInstance() {
+	private function __loadInstance() {
 		if ($this->beanInstance == null) {
-			// TODO
+			$instanceLoader = $this->beanInstanceLoader;
+			$this->beanInstance = $instanceLoader();
 		}
 	}
+
+
+	/*********  Proxy methods  *********/
 
 	/**
 	 * Magic method to catch calls to methods of the bean
 	 * @param string $name Name of the method called
-	 * @param array $arguments Parameters passed to the method
+	 * @param array  $arguments Parameters passed to the method
 	 * @return mixed
 	 */
 	public function __call($name, array $arguments) {
 		if ($this->beanInstance == null) {
-			$this->loadInstance();
+			$this->__loadInstance();
 		}
 		return call_user_func_array(array($this->beanInstance, $name), $arguments);
 	}
@@ -48,14 +62,14 @@ class Proxy
 	/**
 	 * Magic method to catch calls to static methods of the bean
 	 * @param string $name Name of the method called
-	 * @param array $arguments Parameters passed to the method
+	 * @param array  $arguments Parameters passed to the method
+	 * @throws \Exception
 	 * @return mixed
 	 */
 	public static function __callStatic($name, array $arguments) {
-		if ($this->beanInstance == null) {
-			$this->loadInstance();
-		}
-		return forward_static_call_array(array($this->beanInstance, $name), $arguments);
+		// This should never happen because static method calls should be on the class name,
+		// not the object
+		throw new \Exception("Unexpected static call on Proxy. Did you do a static call on an object?");
 	}
 
 	/**
@@ -66,7 +80,7 @@ class Proxy
 	 */
 	public function __set($name, $value) {
 		if ($this->beanInstance == null) {
-			$this->loadInstance();
+			$this->__loadInstance();
 		}
 		$this->beanInstance->$name = $value;
 	}
@@ -78,7 +92,7 @@ class Proxy
 	 */
 	public function __get($name) {
 		if ($this->beanInstance == null) {
-			$this->loadInstance();
+			$this->__loadInstance();
 		}
 		return $this->beanInstance->$name;
 	}
@@ -90,7 +104,7 @@ class Proxy
 	 */
 	public function __isset($name) {
 		if ($this->beanInstance == null) {
-			$this->loadInstance();
+			$this->__loadInstance();
 		}
 		return isset($this->beanInstance->$name);
 	}
@@ -102,27 +116,28 @@ class Proxy
 	 */
 	public function __unset($name) {
 		if ($this->beanInstance == null) {
-			$this->loadInstance();
+			$this->__loadInstance();
 		}
 		unset($this->beanInstance->$name);
 	}
 
 	/**
-	 * The __invoke() method is called when a script tries to call an object as a function.
+	 * The __invoke() method is called when a script tries to call an object as a function
 	 * @param string $x
 	 * @return mixed
 	 * @see http://www.php.net/manual/en/language.oop5.magic.php#object.invoke
 	 */
 	public function __invoke($x) {
 		if ($this->beanInstance == null) {
-			$this->loadInstance();
+			$this->__loadInstance();
 		}
-		$this->beanInstance($x);
+		$this->__loadInstance($x);
 	}
 
 	/**
 	 * This static method is called for classes exported by var_export()
 	 * @param array $array Array containing exported properties in the form array('property' => value, ...)
+	 * @throws \Exception
 	 * @return mixed Returns an instance of this class
 	 * @see http://www.php.net/manual/en/language.oop5.magic.php#object.set-state
 	 */
@@ -134,7 +149,7 @@ class Proxy
 	 * Method called when the object is destroyed
 	 */
 	function __destruct() {
-		// TODO
+		// Nothing to do
 	}
 
 	/**
@@ -142,9 +157,9 @@ class Proxy
 	 */
 	public function __clone() {
 		if ($this->beanInstance == null) {
-			$this->loadInstance();
+			$this->__loadInstance();
 		}
-		$newInstance = (clone) $this->beanInstance;
+		$newInstance = clone $this->beanInstance;
 		$this->beanInstance = $newInstance;
 	}
 
@@ -153,9 +168,9 @@ class Proxy
 	 */
 	public function __toString() {
 		if ($this->beanInstance == null) {
-			$this->loadInstance();
+			$this->__loadInstance();
 		}
-		return $this->beanInstance->__toString();
+		return (string) $this->beanInstance;
 	}
 
 	/**
