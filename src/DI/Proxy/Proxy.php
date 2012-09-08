@@ -21,15 +21,14 @@ class Proxy
 	 *
 	 * Lazy-loaded, i.e. the instance will be loaded only when the proxy is called
 	 */
-	private $beanInstance = null;
+	private $beanInstance;
 
 
 	/**
 	 * Define the callback that will return the instance
 	 * @param callable $instanceLoader The function to call to retrieve an instance
-	 * @return void
 	 */
-	public function __setInstanceLoader(callable $instanceLoader) {
+	public function __construct($instanceLoader) {
 		$this->beanInstanceLoader = $instanceLoader;
 	}
 
@@ -63,13 +62,13 @@ class Proxy
 	 * Magic method to catch calls to static methods of the bean
 	 * @param string $name Name of the method called
 	 * @param array  $arguments Parameters passed to the method
-	 * @throws \Exception
+	 * @throws ProxyException
 	 * @return mixed
 	 */
 	public static function __callStatic($name, array $arguments) {
 		// This should never happen because static method calls should be on the class name,
 		// not the object
-		throw new \Exception("Unexpected static call on Proxy. Did you do a static call on an object?");
+		throw new ProxyException("Unexpected static call on Proxy. Did you do a static call on an object?");
 	}
 
 	/**
@@ -123,26 +122,26 @@ class Proxy
 
 	/**
 	 * The __invoke() method is called when a script tries to call an object as a function
-	 * @param string $x
 	 * @return mixed
 	 * @see http://www.php.net/manual/en/language.oop5.magic.php#object.invoke
 	 */
-	public function __invoke($x) {
+	public function __invoke() {
 		if ($this->beanInstance == null) {
 			$this->__loadInstance();
 		}
-		$this->__loadInstance($x);
+		$beanInstance = $this->beanInstance;
+		return $beanInstance();
 	}
 
 	/**
 	 * This static method is called for classes exported by var_export()
 	 * @param array $array Array containing exported properties in the form array('property' => value, ...)
-	 * @throws \Exception
+	 * @throws ProxyException
 	 * @return mixed Returns an instance of this class
 	 * @see http://www.php.net/manual/en/language.oop5.magic.php#object.set-state
 	 */
 	public static function __set_state(array $array) {
-		throw new \Exception("Proxy classes can't be exported");
+		throw new ProxyException("Proxy classes can't be exported");
 	}
 
 	/**
@@ -177,14 +176,14 @@ class Proxy
 	 * Method called when the object is serialized
 	 */
 	public function __sleep() {
-		throw new \Exception("Proxy classes can't be serialized");
+		throw new ProxyException("Proxy classes can't be serialized");
 	}
 
 	/**
 	 * Method called when the object is unserialized
 	 */
 	public function __wakeup() {
-		throw new \Exception("Proxy classes can't be serialized");
+		throw new ProxyException("Proxy classes can't be serialized");
 	}
 
 }
