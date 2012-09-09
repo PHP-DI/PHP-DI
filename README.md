@@ -90,12 +90,13 @@ And in your code (Bootstrap for example):
 
 A factory is used to create the instances that are injected.
 
-By default, the strategy used is the Singleton pattern, which means that only one
-instance of each class is instantiated.
+By default, the strategy used is the Singleton pattern (`\DI\Factory\SingletonFactory`),
+which means that only one
+instance of each class/dependency is instantiated.
 
-This can be configured to a different strategy, or even to use a different factory.
-
-In the near future, more configurations (via annotations) will be available very easily.
+This can be configured to a different factory, using code or the configuration file (see below).
+For example the `\DI\Factory\NewFactory`
+will create a new instance each time a dependency is resolved.
 
 
 ### Installation
