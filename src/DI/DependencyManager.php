@@ -3,14 +3,20 @@
 namespace DI;
 
 use DI\Annotations\Inject;
+use DI\Factory\FactoryInterface;
+use DI\Factory\SingletonFactory;
 use Doctrine\Common\Annotations\AnnotationRegistry;
 use Doctrine\Common\Annotations\AnnotationReader;
 
 /**
  * Dependency manager
+ *
+ * This class uses the resettable Singleton pattern (resettable for the tests).
  */
 class DependencyManager
 {
+
+	private static $singletonInstance = null;
 
 	/**
 	 * Factory to use to create instances
@@ -26,23 +32,31 @@ class DependencyManager
 	protected $instancesMapping = array();
 
 	/**
-	 * Returns an instance of the class
+	 * Returns an instance of the class (Singleton design pattern)
 	 * @return \DI\DependencyManager
 	 */
 	public static function getInstance() {
-		static $instance;
-		if ($instance == null) {
-			$instance = new self();
+		if (self::$singletonInstance == null) {
+			self::$singletonInstance = new self();
 		}
-		return $instance;
+		return self::$singletonInstance;
+	}
+
+	/**
+	 * Reset the singleton instance, for the tests only
+	 */
+	public static function reset() {
+		self::$singletonInstance = null;
 	}
 
 	/**
 	 * Protected constructor because of singleton
 	 */
 	protected function __construct() {
-		$this->factory = new DefaultFactory();
+		$this->factory = new SingletonFactory();
 	}
+
+	private final function __clone() {}
 
 	/**
 	 * Resolve the dependencies of the object
@@ -95,7 +109,7 @@ class DependencyManager
 				if ($dependencyInstance === null) {
 					try {
 						$dependencyInstance = $this->factory->getInstance($classname);
-					} catch (FactoryException $e) {
+					} catch (\Exception $e) {
 						throw new DependencyException("Error while injecting $classname in "
 							. $reflectionClass->getName() . "::" . $property->getName() . ". " . $e->getMessage(), 0, $e);
 					}
@@ -126,17 +140,37 @@ class DependencyManager
 	}
 
 	/**
+	 * Read and applies the configuration found in the file
+	 *
+	 * Doesn't reset the configuration to default before importing the file.
 	 * @param string $configurationFile the php-di configuration file
 	 * @throws \Exception
+	 * @throws DependencyException
 	 */
-	public function setConfiguration($configurationFile) {
+	public function addConfigurationFile($configurationFile) {
 		if (!(file_exists($configurationFile) && is_readable($configurationFile))) {
 			throw new \Exception("Configuration file $configurationFile doesn't exist or is not readable");
 		}
 		// Read ini file
 		$data = parse_ini_file($configurationFile);
-		$mappings = $data['di.implementation.map'];
-		if ($mappings && is_array($mappings)) {
+		// Factory
+		if (isset($data['di.factory']) && class_exists($data['di.factory'])) {
+			$factoryClassname = $data['di.factory'];
+			if (! class_exists($factoryClassname)) {
+				throw new DependencyException("The factory class '$factoryClassname' "
+					. "defined in the configuration file '$configurationFile' "
+					. "doesn't exist");
+			}
+			$factory = new $factoryClassname();
+			if (! $factory instanceof FactoryInterface) {
+				throw new DependencyException("The factory class '$factoryClassname' "
+					. "doesn't implement the \DI\Factory\FactoryInterface");
+			}
+			$this->setFactory($factory);
+		}
+		// Implementation map
+		if (isset($data['di.implementation.map']) && is_array($data['di.implementation.map'])) {
+			$mappings = $data['di.implementation.map'];
 			foreach ($mappings as $contract => $implementation) {
 				$this->addInstancesMapping($contract, $implementation);
 			}

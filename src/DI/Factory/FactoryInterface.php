@@ -1,6 +1,6 @@
 <?php
 
-namespace DI;
+namespace DI\Factory;
 
 /**
  * Factory for instantiating dependencies

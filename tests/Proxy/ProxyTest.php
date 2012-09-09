@@ -35,7 +35,7 @@ class ProxyTest extends \PHPUnit_Framework_TestCase
 	 * @expectedException \DI\Proxy\ProxyException
 	 */
 	public function testCallStatic() {
-		Proxy::getTrue();
+		Proxy::unknownMethod();
 	}
 
 	public function testGet() {

@@ -3,7 +3,7 @@ by Matthieu Napoli
 
 [![Build Status](https://secure.travis-ci.org/mnapoli/PHP-DI.png)](http://travis-ci.org/mnapoli/PHP-DI)
 
-* Project home [http://mnapoli.github.com/PHP-DI/](http://mnapoli.github.com/PHP-DI/)
+* *Project home* [http://mnapoli.github.com/PHP-DI/](http://mnapoli.github.com/PHP-DI/)
 
 ### Introduction
 
@@ -15,17 +15,15 @@ No fancy features, but no overhead. The simpler the better.
 
 #### Pros
 
-* Annotations!
+* Annotations! No configuration file needed, easy to read and to write
 * As little configuration as possible
 * Doesn't need getters/setters
 * Doesn't need any change to your existing code (you can give it a shot easily)
-* Fully compatible PHP 5.3/5.4
 
 #### Cons
 
 * You have to write a line of code in the constructor of your classes
 (i'm looking for a solution about that)
-* *Not* production ready for now
 
 ### Why?
 
@@ -86,7 +84,7 @@ This can be done with a configuration file (di.ini):
 
 And in your code (Bootstrap for example):
 
-	DependencyManager::getInstance()->setConfiguration('di.ini');
+	DependencyManager::getInstance()->addConfigurationFile('di.ini');
 
 ### How are instances created?
 
@@ -99,15 +97,57 @@ This can be configured to a different strategy, or even to use a different facto
 
 In the near future, more configurations (via annotations) will be available very easily.
 
-### Requirements
+
+### Installation
+
+#### Requirements
 
 * __PHP 5.3__ or higher
-* Using an autoloading system is recommended (as in most of the major frameworks)
 
-### Zend Framework
+#### Install and use with Composer
+
+The easiest way is to install PHP-DI with [Composer](http://getcomposer.org/doc/00-intro.md):
+
+    $ curl -s http://getcomposer.org/installer | php
+	$ php composer.phar install
+
+Then you have nothing to do, PHP-DI will be autoloaded by Composer
+(if you use Composer's autoloading system, which I highly recommend).
+
+#### Zend Framework
 
 Are you using Zend Framework? Check out the official quickstart with
 Dependency Injection already configured: [zf-quickstart-di](https://github.com/mnapoli/zf-quickstart-di)
+
+#### Configuration file
+
+The configuration file is optional, PHP-DI will work with default behavior without it.
+
+Here is an example of a configuration file:
+
+```
+; PHP-DI - Dependency injection configuration
+
+; The factory to use is the Singleton factory (default)
+di.factory = "\DI\Factory\SingletonFactory"
+
+; Type mapping for injection using abstract types
+di.implementation.map["\My\Interface"] = "\My\Implementation"
+di.implementation.map["\My\AbstractClass"] = "\My\OtherImplementation"
+```
+
+To import the configuration file:
+
+```
+DependencyManager::getInstance()->addConfigurationFile('di.ini');
+```
+
+
+### Projects using
+
+Public projects using PHP-DI:
+* [phpBeanstalkdAdmin](http://mnapoli.github.com/phpBeanstalkdAdmin/)
+
 
 ### Contribute
 
