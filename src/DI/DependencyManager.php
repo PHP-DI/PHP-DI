@@ -2,7 +2,9 @@
 
 namespace DI;
 
+use DI\Annotations\AnnotationException;
 use DI\Annotations\Inject;
+use DI\Annotations\Value;
 use DI\Factory\FactoryInterface;
 use DI\Factory\SingletonFactory;
 use Doctrine\Common\Annotations\AnnotationRegistry;
@@ -29,7 +31,13 @@ class DependencyManager
 	 * @var mixed[] implementation[name] The name is the var type,
 	 * the implementation can be a class name (string) or an instance
 	 */
-	protected $instancesMapping = array();
+	protected $injectMapping = array();
+
+	/**
+	 * Array of the values to inject with the Value annotation
+	 * @var array value[key]
+	 */
+	protected $valueMapping = array();
 
 	/**
 	 * Returns an instance of the class (Singleton design pattern)
@@ -62,65 +70,37 @@ class DependencyManager
 	 * Resolve the dependencies of the object
 	 *
 	 * @param mixed $object Object in which to resolve dependencies
-	 * @throws \Exception
-	 * @throws DependencyException
+	 * @throws Annotations\AnnotationException
 	 */
 	public function resolveDependencies($object) {
 		if (is_null($object)) {
 			return;
 		}
-		// Properties
+		// Fetch the object's properties
 		$reflectionClass = new \ReflectionObject($object);
 		$properties = $reflectionClass->getProperties();
+		// For each property
 		foreach ($properties as $property) {
-			// Look for @Inject and @var
+			// Look for DI annotations
 			$injectAnnotation = null;
-			$classname = null;
+			$valueAnnotation = null;
 			$propertyAnnotations = $this->getAnnotationReader()->getPropertyAnnotations($property);
 			foreach ($propertyAnnotations as $annotation) {
 				if ($annotation instanceof Inject) {
 					$injectAnnotation = $annotation;
 				}
-			}
-			// If no @Inject annotation, continue
-			if ($injectAnnotation == null) {
-				continue;
-			}
-			// Find the type of the class to inject
-			$classname = $this->getPropertyType($property);
-			// Injection
-			if ($injectAnnotation && $classname) {
-
-				$dependencyInstance = null;
-
-				// Try to find a mapping for the implementation to use
-				if (array_key_exists($classname, $this->instancesMapping)) {
-					$tmp = $this->instancesMapping[$classname];
-					if (is_string($tmp)) {
-						// Override the class name, will use the factory to get an instance
-						$classname = $tmp;
-					} else {
-						// This is an instance
-						$dependencyInstance = $tmp;
-					}
+				if ($annotation instanceof Value) {
+					$valueAnnotation = $annotation;
 				}
-
-				// Use the factory to get an instance
-				if ($dependencyInstance === null) {
-					try {
-						$dependencyInstance = $this->factory->getInstance($classname);
-					} catch (\Exception $e) {
-						throw new DependencyException("Error while injecting $classname in "
-							. $reflectionClass->getName() . "::" . $property->getName() . ". " . $e->getMessage(), 0, $e);
-					}
-				}
-
-				// Inject the dependency
-				$property->setAccessible(true);
-				$property->setValue($object, $dependencyInstance);
-			} elseif ($injectAnnotation && (!$classname)) {
-				throw new \Exception("@Inject was found on " . get_class($object) . "::"
-					. $property->getName() . " but no @var annotation.");
+			}
+			// If both @Inject and @Value annotation, exception
+			if ($injectAnnotation && $valueAnnotation) {
+				throw new AnnotationException(get_class($object) . "::" . $property->getName()
+					. " can't have both @Inject and @Value annotations");
+			} elseif ($injectAnnotation) {
+				$this->resolveInject($property, $object);
+			} elseif ($valueAnnotation) {
+				$this->resolveValue($property, $valueAnnotation->key, $object);
 			}
 		}
 	}
@@ -164,7 +144,7 @@ class DependencyManager
 			$factory = new $factoryClassname();
 			if (! $factory instanceof FactoryInterface) {
 				throw new DependencyException("The factory class '$factoryClassname' "
-					. "doesn't implement the \DI\Factory\FactoryInterface");
+					. "doesn't implement the \\DI\\Factory\\FactoryInterface");
 			}
 			$this->setFactory($factory);
 		}
@@ -175,6 +155,10 @@ class DependencyManager
 				$this->addInstancesMapping($contract, $implementation);
 			}
 		}
+		// Values map
+		if (isset($data['di.values']) && is_array($data['di.values'])) {
+			$this->valueMapping = array_merge($this->valueMapping, $data['di.values']);
+		}
 	}
 
 	/**
@@ -183,7 +167,73 @@ class DependencyManager
 	 * @param string|mixed $implementation Can be a class name (to instantiate) or an instance
 	 */
 	public function addInstancesMapping($contractType, $implementation) {
-		$this->instancesMapping[$contractType] = $implementation;
+		$this->injectMapping[$contractType] = $implementation;
+	}
+
+	/**
+	 * Resolve the Inject annotation on a property
+	 * @param \ReflectionProperty $property
+	 * @param                     $object
+	 * @throws DependencyException
+	 * @throws Annotations\AnnotationException
+	 */
+	private function resolveInject(\ReflectionProperty $property, $object) {
+		// Find the type of the class to inject
+		$classname = $this->getPropertyType($property);
+		// Injection
+		if ($classname) {
+
+			$dependencyInstance = null;
+
+			// Try to find a mapping for the implementation to use
+			if (array_key_exists($classname, $this->injectMapping)) {
+				$tmp = $this->injectMapping[$classname];
+				if (is_string($tmp)) {
+					// Override the class name, will use the factory to get an instance
+					$classname = $tmp;
+				} else {
+					// This is an instance
+					$dependencyInstance = $tmp;
+				}
+			}
+
+			// Use the factory to get an instance
+			if ($dependencyInstance === null) {
+				try {
+					$dependencyInstance = $this->factory->getInstance($classname);
+				} catch (\Exception $e) {
+					throw new DependencyException("Error while injecting $classname in "
+						. get_class($object) . "::" . $property->getName() . ". "
+						. $e->getMessage(), 0, $e);
+				}
+			}
+
+			// Inject the dependency
+			$property->setAccessible(true);
+			$property->setValue($object, $dependencyInstance);
+		} else {
+			throw new AnnotationException("@Inject was found on " . get_class($object) . "::"
+				. $property->getName() . " but no @var annotation");
+		}
+	}
+
+	/**
+	 * Resolve the Value annotation on a property
+	 * @param \ReflectionProperty $property
+	 * @param string              $key
+	 * @param                     $object
+	 * @throws DependencyException
+	 * @throws Annotations\AnnotationException
+	 */
+	private function resolveValue(\ReflectionProperty $property, $key, $object) {
+		if (! isset($this->valueMapping[$key])) {
+			throw new AnnotationException("@Value was found on " . get_class($object) . "::"
+				. $property->getName() . " but the key '$key' can't be resolved");
+		}
+		$value = $this->valueMapping[$key];
+		// Inject the value
+		$property->setAccessible(true);
+		$property->setValue($object, $value);
 	}
 
 	/**

@@ -2,6 +2,7 @@
 
 use \DI\DependencyManager;
 use \TestFixtures\DependencyManagerTest\Class1;
+use \TestFixtures\DependencyManagerTest\ValueInjectionClass;
 
 
 /**
@@ -49,6 +50,24 @@ class DependencyManagerTest extends \PHPUnit_Framework_TestCase
 		$dependency = $class1->getInterface1();
 		$this->assertNotNull($dependency);
 		$this->assertInstanceOf('\TestFixtures\DependencyManagerTest\Class3', $dependency);
+	}
+
+	/**
+	 * Value annotation
+	 */
+	public function testValue1() {
+		DependencyManager::getInstance()->addConfigurationFile(dirname(__FILE__)
+			. '/TestFixtures/DependencyManagerTest/di-values.ini');
+		$class = new ValueInjectionClass();
+		$value = $class->getValue();
+		$this->assertEquals("localhost", $value);
+	}
+	/**
+	 * @expectedException \DI\Annotations\AnnotationException
+	 */
+	public function testValueException() {
+		$class = new ValueInjectionClass();
+		$value = $class->getValue();
 	}
 
 	public function testSingletonFactory1() {

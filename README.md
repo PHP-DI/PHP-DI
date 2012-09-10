@@ -13,6 +13,13 @@ as simple as possible with PHP.
 
 No fancy features, but no overhead. The simpler the better.
 
+#### Current features
+
+* `@Inject` annotation to inject a dependency
+* `@Value` annotation to inject a configuration value
+* Interface-Implementation mapping
+* Integrated with [Composer](http://getcomposer.org/doc/00-intro.md) so you can install it easily
+
 #### Pros
 
 * Annotations! No configuration file needed, easy to read and to write
@@ -33,7 +40,7 @@ the main one being that it's not testable.
 By using dependency injection, you can develop using contracts and not care what implementation
 will be used. As the dependency can be injected by the "user", your class can be tested with mocks.
 
-### Basic example
+### @Inject
 
 Say you have this class:
 
@@ -56,7 +63,7 @@ An instance of Class2 can be automatically injected in another class very simply
         }
     }
 
-### Using interfaces or abstract types?
+#### Using interfaces or abstract types?
 
 If you have something like:
 
@@ -86,7 +93,7 @@ And in your code (Bootstrap for example):
 
 	DependencyManager::getInstance()->addConfigurationFile('di.ini');
 
-### How are instances created?
+#### How are instances created?
 
 A factory is used to create the instances that are injected.
 
@@ -98,6 +105,33 @@ This can be configured to a different factory, using code or the configuration f
 For example the `\DI\Factory\NewFactory`
 will create a new instance each time a dependency is resolved.
 
+### @Value
+
+You can also inject values with the `@Value` annotation.
+
+For example, you can inject database configuration values:
+
+    use DI\Annotations\Value;
+
+    class Class1 {
+        /**
+         * @Value("db.host")
+         */
+        private $dbHost;
+
+        public function __construct() {
+            \DI\DependencyManager::getInstance()->resolveDependencies($this);
+        }
+    }
+
+And to configure the value to inject:
+
+```
+; PHP-DI - Dependency injection configuration
+
+; Value injections
+di.values["db.host"] = "localhost"
+```
 
 ### Installation
 
@@ -131,6 +165,9 @@ Here is an example of a configuration file:
 
 ; The factory to use is the Singleton factory (default)
 di.factory = "\DI\Factory\SingletonFactory"
+
+; Value injections
+di.values["db.host"] = "localhost"
 
 ; Type mapping for injection using abstract types
 di.implementation.map["\My\Interface"] = "\My\Implementation"
