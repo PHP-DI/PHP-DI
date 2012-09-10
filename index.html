@@ -50,6 +50,31 @@ class MyClass {
 }
 </code></pre>
 
+<p>Read more at <a href="https://github.com/mnapoli/PHP-DI">https://github.com/mnapoli/PHP-DI</a>.</p>
+
+<h3>Value injection</h3>
+
+<p>PHP-DI also supports <code>@Value</code> annotations to inject values:</p>
+
+<pre><code>use DI\Annotations\Value;
+
+class MyClass {
+    /**
+     * @Value("db.host")
+     */
+    private $dbHost;
+
+    public function __construct() {
+        \DI\DependencyManager::getInstance()-&gt;resolveDependencies($this);
+    }
+}
+</code></pre>
+
+<p>You can use a <code>.ini</code> file to configure the value to inject:</p>
+
+<pre><code>di.values["db.host"] = "localhost"
+</code></pre>
+
 <h3>Installation</h3>
 
 <h4>Using Composer?</h4>
@@ -79,6 +104,16 @@ class MyClass {
       <p>Hosted on GitHub Pages &mdash; Theme by <a href="https://github.com/orderedlist">orderedlist</a></p>
     </footer>
     <!--[if !IE]><script>fixScale(document);</script><![endif]-->
-    
+              <script type="text/javascript">
+            var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+            document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+          </script>
+          <script type="text/javascript">
+            try {
+              var pageTracker = _gat._getTracker("UA-15584647-13");
+            pageTracker._trackPageview();
+            } catch(err) {}
+          </script>
+
   </body>
 </html>
