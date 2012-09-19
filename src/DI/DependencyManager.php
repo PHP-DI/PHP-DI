@@ -7,6 +7,7 @@ use DI\Annotations\Inject;
 use DI\Annotations\Value;
 use DI\Factory\FactoryInterface;
 use DI\Factory\SingletonFactory;
+use DI\Proxy\Proxy;
 use Doctrine\Common\Annotations\AnnotationRegistry;
 use Doctrine\Common\Annotations\AnnotationReader;
 
@@ -98,7 +99,7 @@ class DependencyManager
 				throw new AnnotationException(get_class($object) . "::" . $property->getName()
 					. " can't have both @Inject and @Value annotations");
 			} elseif ($injectAnnotation) {
-				$this->resolveInject($property, $object);
+				$this->resolveInject($property, $object, $injectAnnotation->lazy);
 			} elseif ($valueAnnotation) {
 				$this->resolveValue($property, $valueAnnotation->key, $object);
 			}
@@ -174,10 +175,11 @@ class DependencyManager
 	 * Resolve the Inject annotation on a property
 	 * @param \ReflectionProperty $property
 	 * @param                     $object
+	 * @param boolean             $lazy If true, inject a proxy class
 	 * @throws DependencyException
 	 * @throws Annotations\AnnotationException
 	 */
-	private function resolveInject(\ReflectionProperty $property, $object) {
+	private function resolveInject(\ReflectionProperty $property, $object, $lazy) {
 		// Find the type of the class to inject
 		$classname = $this->getPropertyType($property);
 		// Injection
@@ -200,7 +202,15 @@ class DependencyManager
 			// Use the factory to get an instance
 			if ($dependencyInstance === null) {
 				try {
-					$dependencyInstance = $this->factory->getInstance($classname);
+					if ($lazy) {
+						// Lazy loading for the dependency: inject a proxy class
+						$factory = $this->factory;
+						$dependencyInstance = new Proxy(function() use ($factory, $classname) {
+							return $factory->getInstance($classname);
+						});
+					} else {
+						$dependencyInstance = $this->factory->getInstance($classname);
+					}
 				} catch (\Exception $e) {
 					throw new DependencyException("Error while injecting $classname in "
 						. get_class($object) . "::" . $property->getName() . ". "

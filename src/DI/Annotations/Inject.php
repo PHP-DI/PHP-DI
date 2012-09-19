@@ -9,4 +9,9 @@ namespace DI\Annotations;
  */
 class Inject {
 
+	/**
+	 * @var boolean
+	 */
+	public $lazy = false;
+
 }

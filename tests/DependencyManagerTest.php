@@ -3,6 +3,7 @@
 use \DI\DependencyManager;
 use \TestFixtures\DependencyManagerTest\Class1;
 use \TestFixtures\DependencyManagerTest\ValueInjectionClass;
+use \TestFixtures\DependencyManagerTest\LazyInjectionClass;
 
 
 /**
@@ -50,6 +51,25 @@ class DependencyManagerTest extends \PHPUnit_Framework_TestCase
 		$dependency = $class1->getInterface1();
 		$this->assertNotNull($dependency);
 		$this->assertInstanceOf('\TestFixtures\DependencyManagerTest\Class3', $dependency);
+	}
+
+	/**
+	 * Injection with lazy enabled
+	 */
+	public function testLazyInjection1() {
+		$class = new LazyInjectionClass();
+		$dependency = $class->getClass2();
+		$this->assertNotNull($dependency);
+		$this->assertInstanceOf('\DI\Proxy\Proxy', $dependency);
+	}
+	public function testLazyInjection2() {
+		$class = new LazyInjectionClass();
+		$dependency = $class->getClass2();
+		$this->assertTrue($dependency->getBoolean());
+	}
+	public function testLazyInjection3() {
+		$class = new LazyInjectionClass();
+		$this->assertTrue($class->getDependencyAttribute());
 	}
 
 	/**
