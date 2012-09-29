@@ -189,7 +189,4 @@ Public projects using PHP-DI:
 
 ### Contribute
 
-To run the project, get [composer](http://getcomposer.org/doc/00-intro.md):
-
-    $ curl -s http://getcomposer.org/installer | php
-	$ php composer.phar install
+* Read the wiki: [Contribute](https://github.com/mnapoli/PHP-DI/wiki/Contribute)
