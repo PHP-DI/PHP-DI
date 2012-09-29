@@ -3,7 +3,7 @@
 	"autoload": {
 		"psr-0": {
 			"DI": "src/",
-			"TestFixtures": "tests/"
+			"DI\\Tests": "tests/"
 		}
 	},
 	"require": {

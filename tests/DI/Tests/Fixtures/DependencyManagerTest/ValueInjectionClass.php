@@ -1,6 +1,6 @@
 <?php
 
-namespace TestFixtures\DependencyManagerTest;
+namespace DI\Tests\Fixtures\DependencyManagerTest;
 
 use DI\Annotations\Value;
 

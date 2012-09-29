@@ -1,7 +1,9 @@
 <?php
 
+namespace DI\Tests;
+
 use \DI\Factory\SingletonFactory;
-use \TestFixtures\Factory\Class1;
+use \DI\Tests\Fixtures\Factory\Class1;
 
 
 /**
@@ -15,8 +17,8 @@ class SingletonFactoryTest extends \PHPUnit_Framework_TestCase
 	 */
 	public function testGetInstance() {
 		$factory = new SingletonFactory();
-		$instance1 = $factory->getInstance('\TestFixtures\Factory\Class1');
-		$instance2 = $factory->getInstance('\TestFixtures\Factory\Class1');
+		$instance1 = $factory->getInstance('\DI\Tests\Fixtures\Factory\Class1');
+		$instance2 = $factory->getInstance('\DI\Tests\Fixtures\Factory\Class1');
 		$this->assertSame($instance1, $instance2);
 	}
 

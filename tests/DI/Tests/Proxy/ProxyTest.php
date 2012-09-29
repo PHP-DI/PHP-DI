@@ -1,7 +1,7 @@
 <?php
 
 use \DI\Proxy\Proxy;
-use \TestFixtures\Proxy\Class1;
+use \DI\Tests\Fixtures\Proxy\Class1;
 
 
 /**
@@ -11,11 +11,11 @@ class ProxyTest extends \PHPUnit_Framework_TestCase
 {
 
 	/**
-	 * @var \TestFixtures\Proxy\Class1
+	 * @var \DI\Tests\Fixtures\Proxy\Class1
 	 */
 	private $instance;
 	/**
-	 * @var \TestFixtures\Proxy\Class1
+	 * @var \DI\Tests\Fixtures\Proxy\Class1
 	 */
 	private $proxy;
 

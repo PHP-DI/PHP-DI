@@ -1,25 +1,19 @@
 <?php
 
-namespace TestFixtures\DependencyManagerTest;
+namespace DI\Tests\Fixtures\DependencyManagerTest;
 
 use DI\Annotations\Inject;
 
 /**
  * Fixture class
  */
-class Class1 {
+class LazyInjectionClass {
 
 	/**
-	 * @Inject
-	 * @var \TestFixtures\DependencyManagerTest\Class2
+	 * @Inject(lazy=true)
+	 * @var \DI\Tests\Fixtures\DependencyManagerTest\Class2
 	 */
 	private $class2;
-
-	/**
-	 * @Inject
-	 * @var \TestFixtures\DependencyManagerTest\Interface1
-	 */
-	private $interface1;
 
     /**
      * Inject the dependencies
@@ -36,10 +30,10 @@ class Class1 {
 	}
 
 	/**
-	 * @return Interface1
+	 * @return boolean
 	 */
-	public function getInterface1() {
-		return $this->interface1;
+	public function getDependencyAttribute() {
+		return $this->class2->getBoolean();
 	}
 
 }

@@ -1,9 +1,11 @@
 <?php
 
+namespace DI\Tests;
+
 use \DI\DependencyManager;
-use \TestFixtures\DependencyManagerTest\Class1;
-use \TestFixtures\DependencyManagerTest\ValueInjectionClass;
-use \TestFixtures\DependencyManagerTest\LazyInjectionClass;
+use \DI\Tests\Fixtures\DependencyManagerTest\Class1;
+use \DI\Tests\Fixtures\DependencyManagerTest\ValueInjectionClass;
+use \DI\Tests\Fixtures\DependencyManagerTest\LazyInjectionClass;
 
 
 /**
@@ -17,7 +19,7 @@ class DependencyManagerTest extends \PHPUnit_Framework_TestCase
 		DependencyManager::reset();
 		// Dependency injection configuration
 		DependencyManager::getInstance()->addConfigurationFile(dirname(__FILE__)
-			. '/TestFixtures/DependencyManagerTest/di.ini');
+			. '/Fixtures/DependencyManagerTest/di.ini');
 	}
 
 
@@ -30,7 +32,7 @@ class DependencyManagerTest extends \PHPUnit_Framework_TestCase
 
 	public function testConfigurationFile1() {
 		DependencyManager::getInstance()->addConfigurationFile(dirname(__FILE__)
-			. '/TestFixtures/DependencyManagerTest/di-empty.ini');
+			. '/Fixtures/DependencyManagerTest/di-empty.ini');
 	}
 
 	/**
@@ -40,7 +42,7 @@ class DependencyManagerTest extends \PHPUnit_Framework_TestCase
 		$class1 = new Class1();
 		$dependency = $class1->getClass2();
 		$this->assertNotNull($dependency);
-		$this->assertInstanceOf('\TestFixtures\DependencyManagerTest\Class2', $dependency);
+		$this->assertInstanceOf('\DI\Tests\Fixtures\DependencyManagerTest\Class2', $dependency);
 	}
 
 	/**
@@ -50,7 +52,7 @@ class DependencyManagerTest extends \PHPUnit_Framework_TestCase
 		$class1 = new Class1();
 		$dependency = $class1->getInterface1();
 		$this->assertNotNull($dependency);
-		$this->assertInstanceOf('\TestFixtures\DependencyManagerTest\Class3', $dependency);
+		$this->assertInstanceOf('\DI\Tests\Fixtures\DependencyManagerTest\Class3', $dependency);
 	}
 
 	/**
@@ -77,7 +79,7 @@ class DependencyManagerTest extends \PHPUnit_Framework_TestCase
 	 */
 	public function testValue1() {
 		DependencyManager::getInstance()->addConfigurationFile(dirname(__FILE__)
-			. '/TestFixtures/DependencyManagerTest/di-values.ini');
+			. '/Fixtures/DependencyManagerTest/di-values.ini');
 		$class = new ValueInjectionClass();
 		$value = $class->getValue();
 		$this->assertEquals("localhost", $value);
@@ -101,7 +103,7 @@ class DependencyManagerTest extends \PHPUnit_Framework_TestCase
 	}
 	public function testSingletonFactory2() {
 		DependencyManager::getInstance()->addConfigurationFile(dirname(__FILE__)
-			. '/TestFixtures/DependencyManagerTest/di-singletonfactory.ini');
+			. '/Fixtures/DependencyManagerTest/di-singletonfactory.ini');
 		$class1_1 = new Class1();
 		$class2_1 = $class1_1->getClass2();
 		$class1_2 = new Class1();
@@ -120,7 +122,7 @@ class DependencyManagerTest extends \PHPUnit_Framework_TestCase
 	}
 	public function testNewFactory2() {
 		DependencyManager::getInstance()->addConfigurationFile(dirname(__FILE__)
-			. '/TestFixtures/DependencyManagerTest/di-newfactory.ini');
+			. '/Fixtures/DependencyManagerTest/di-newfactory.ini');
 		$class1_1 = new Class1();
 		$class2_1 = $class1_1->getClass2();
 		$class1_2 = new Class1();

@@ -1,6 +1,6 @@
 <?php
 
-namespace TestFixtures\Factory;
+namespace DI\Tests\Fixtures\Factory;
 
 /**
  * Fixture class
