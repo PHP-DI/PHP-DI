@@ -1,6 +1,6 @@
 <?php
 
-namespace DI\Tests\Fixtures\DependencyManagerTest;
+namespace DI\Tests\Fixtures\ContainerTest;
 
 use DI\Annotations\Value;
 
@@ -19,7 +19,7 @@ class ValueInjectionClass {
      * Inject the dependencies
      */
     public function __construct() {
-        \DI\DependencyManager::getInstance()->resolveDependencies($this);
+        \DI\Container::getInstance()->resolveDependencies($this);
     }
 
 	/**

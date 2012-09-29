@@ -1,6 +1,6 @@
 <?php
 
-namespace DI\Tests\Fixtures\DependencyManagerTest;
+namespace DI\Tests\Fixtures\ContainerTest;
 
 use DI\Annotations\Inject;
 
@@ -11,13 +11,13 @@ class Class1 {
 
 	/**
 	 * @Inject
-	 * @var \DI\Tests\Fixtures\DependencyManagerTest\Class2
+	 * @var \DI\Tests\Fixtures\ContainerTest\Class2
 	 */
 	private $class2;
 
 	/**
 	 * @Inject
-	 * @var \DI\Tests\Fixtures\DependencyManagerTest\Interface1
+	 * @var \DI\Tests\Fixtures\ContainerTest\Interface1
 	 */
 	private $interface1;
 
@@ -25,7 +25,7 @@ class Class1 {
      * Inject the dependencies
      */
     public function __construct() {
-        \DI\DependencyManager::getInstance()->resolveDependencies($this);
+        \DI\Container::getInstance()->resolveDependencies($this);
     }
 
 	/**

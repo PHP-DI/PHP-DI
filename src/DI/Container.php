@@ -12,11 +12,11 @@ use Doctrine\Common\Annotations\AnnotationRegistry;
 use Doctrine\Common\Annotations\AnnotationReader;
 
 /**
- * Dependency manager
+ * Container
  *
  * This class uses the resettable Singleton pattern (resettable for the tests).
  */
-class DependencyManager
+class Container
 {
 
 	private static $singletonInstance = null;
@@ -42,7 +42,7 @@ class DependencyManager
 
 	/**
 	 * Returns an instance of the class (Singleton design pattern)
-	 * @return \DI\DependencyManager
+	 * @return \DI\Container
 	 */
 	public static function getInstance() {
 		if (self::$singletonInstance == null) {

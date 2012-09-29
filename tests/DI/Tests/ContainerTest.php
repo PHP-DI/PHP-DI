@@ -2,37 +2,37 @@
 
 namespace DI\Tests;
 
-use \DI\DependencyManager;
-use \DI\Tests\Fixtures\DependencyManagerTest\Class1;
-use \DI\Tests\Fixtures\DependencyManagerTest\ValueInjectionClass;
-use \DI\Tests\Fixtures\DependencyManagerTest\LazyInjectionClass;
+use \DI\Container;
+use \DI\Tests\Fixtures\ContainerTest\Class1;
+use \DI\Tests\Fixtures\ContainerTest\ValueInjectionClass;
+use \DI\Tests\Fixtures\ContainerTest\LazyInjectionClass;
 
 
 /**
- * Test class for DependencyManager.
+ * Test class for Container.
  */
-class DependencyManagerTest extends \PHPUnit_Framework_TestCase
+class ContainerTest extends \PHPUnit_Framework_TestCase
 {
 
 	public function setUp() {
 		// Reset the singleton instance to ensure all tests are independent
-		DependencyManager::reset();
+		Container::reset();
 		// Dependency injection configuration
-		DependencyManager::getInstance()->addConfigurationFile(dirname(__FILE__)
-			. '/Fixtures/DependencyManagerTest/di.ini');
+		Container::getInstance()->addConfigurationFile(dirname(__FILE__)
+			. '/Fixtures/ContainerTest/di.ini');
 	}
 
 
 	public function testGetInstance() {
-		$instance = DependencyManager::getInstance();
-		$this->assertInstanceOf('\DI\DependencyManager', $instance);
-		$instance2 = DependencyManager::getInstance();
+		$instance = Container::getInstance();
+		$this->assertInstanceOf('\DI\Container', $instance);
+		$instance2 = Container::getInstance();
 		$this->assertSame($instance, $instance2);
 	}
 
 	public function testConfigurationFile1() {
-		DependencyManager::getInstance()->addConfigurationFile(dirname(__FILE__)
-			. '/Fixtures/DependencyManagerTest/di-empty.ini');
+		Container::getInstance()->addConfigurationFile(dirname(__FILE__)
+			. '/Fixtures/ContainerTest/di-empty.ini');
 	}
 
 	/**
@@ -42,7 +42,7 @@ class DependencyManagerTest extends \PHPUnit_Framework_TestCase
 		$class1 = new Class1();
 		$dependency = $class1->getClass2();
 		$this->assertNotNull($dependency);
-		$this->assertInstanceOf('\DI\Tests\Fixtures\DependencyManagerTest\Class2', $dependency);
+		$this->assertInstanceOf('\DI\Tests\Fixtures\ContainerTest\Class2', $dependency);
 	}
 
 	/**
@@ -52,7 +52,7 @@ class DependencyManagerTest extends \PHPUnit_Framework_TestCase
 		$class1 = new Class1();
 		$dependency = $class1->getInterface1();
 		$this->assertNotNull($dependency);
-		$this->assertInstanceOf('\DI\Tests\Fixtures\DependencyManagerTest\Class3', $dependency);
+		$this->assertInstanceOf('\DI\Tests\Fixtures\ContainerTest\Class3', $dependency);
 	}
 
 	/**
@@ -78,8 +78,8 @@ class DependencyManagerTest extends \PHPUnit_Framework_TestCase
 	 * Value annotation
 	 */
 	public function testValue1() {
-		DependencyManager::getInstance()->addConfigurationFile(dirname(__FILE__)
-			. '/Fixtures/DependencyManagerTest/di-values.ini');
+		Container::getInstance()->addConfigurationFile(dirname(__FILE__)
+			. '/Fixtures/ContainerTest/di-values.ini');
 		$class = new ValueInjectionClass();
 		$value = $class->getValue();
 		$this->assertEquals("localhost", $value);
@@ -94,7 +94,7 @@ class DependencyManagerTest extends \PHPUnit_Framework_TestCase
 
 	public function testSingletonFactory1() {
 		$factory = new \DI\Factory\SingletonFactory();
-		DependencyManager::getInstance()->setFactory($factory);
+		Container::getInstance()->setFactory($factory);
 		$class1_1 = new Class1();
 		$class2_1 = $class1_1->getClass2();
 		$class1_2 = new Class1();
@@ -102,8 +102,8 @@ class DependencyManagerTest extends \PHPUnit_Framework_TestCase
 		$this->assertSame($class2_1, $class2_2);
 	}
 	public function testSingletonFactory2() {
-		DependencyManager::getInstance()->addConfigurationFile(dirname(__FILE__)
-			. '/Fixtures/DependencyManagerTest/di-singletonfactory.ini');
+		Container::getInstance()->addConfigurationFile(dirname(__FILE__)
+			. '/Fixtures/ContainerTest/di-singletonfactory.ini');
 		$class1_1 = new Class1();
 		$class2_1 = $class1_1->getClass2();
 		$class1_2 = new Class1();
@@ -113,7 +113,7 @@ class DependencyManagerTest extends \PHPUnit_Framework_TestCase
 
 	public function testNewFactory1() {
 		$factory = new \DI\Factory\NewFactory();
-		DependencyManager::getInstance()->setFactory($factory);
+		Container::getInstance()->setFactory($factory);
 		$class1_1 = new Class1();
 		$class2_1 = $class1_1->getClass2();
 		$class1_2 = new Class1();
@@ -121,8 +121,8 @@ class DependencyManagerTest extends \PHPUnit_Framework_TestCase
 		$this->assertNotSame($class2_1, $class2_2);
 	}
 	public function testNewFactory2() {
-		DependencyManager::getInstance()->addConfigurationFile(dirname(__FILE__)
-			. '/Fixtures/DependencyManagerTest/di-newfactory.ini');
+		Container::getInstance()->addConfigurationFile(dirname(__FILE__)
+			. '/Fixtures/ContainerTest/di-newfactory.ini');
 		$class1_1 = new Class1();
 		$class2_1 = $class1_1->getClass2();
 		$class1_2 = new Class1();

@@ -1,6 +1,6 @@
 <?php
 
-namespace DI\Tests\Fixtures\DependencyManagerTest;
+namespace DI\Tests\Fixtures\ContainerTest;
 
 /**
  * Fixture class

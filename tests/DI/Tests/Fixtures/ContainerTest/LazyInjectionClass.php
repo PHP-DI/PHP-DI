@@ -1,6 +1,6 @@
 <?php
 
-namespace DI\Tests\Fixtures\DependencyManagerTest;
+namespace DI\Tests\Fixtures\ContainerTest;
 
 use DI\Annotations\Inject;
 
@@ -11,7 +11,7 @@ class LazyInjectionClass {
 
 	/**
 	 * @Inject(lazy=true)
-	 * @var \DI\Tests\Fixtures\DependencyManagerTest\Class2
+	 * @var \DI\Tests\Fixtures\ContainerTest\Class2
 	 */
 	private $class2;
 
@@ -19,7 +19,7 @@ class LazyInjectionClass {
      * Inject the dependencies
      */
     public function __construct() {
-        \DI\DependencyManager::getInstance()->resolveDependencies($this);
+        \DI\Container::getInstance()->resolveDependencies($this);
     }
 
 	/**
