@@ -6,6 +6,8 @@ use \DI\Container;
 use \DI\Tests\Fixtures\ContainerTest\Class1;
 use \DI\Tests\Fixtures\ContainerTest\ValueInjectionClass;
 use \DI\Tests\Fixtures\ContainerTest\LazyInjectionClass;
+use \DI\Tests\Fixtures\ContainerTest\NamedBean;
+use \DI\Tests\Fixtures\ContainerTest\NamedInjectionClass;
 
 
 /**
@@ -90,6 +92,36 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
 	public function testValueException() {
 		$class = new ValueInjectionClass();
 		$value = $class->getValue();
+	}
+
+	/**
+	 * Injection of named beans
+	 */
+	public function testNamedInjection1() {
+		// Configure the named bean
+		$bean = new NamedBean();
+		$bean->nameForTest = 'namedDependency';
+		$container = Container::getInstance();
+		$container->addInstancesMapping('namedDependency', $bean);
+		$bean2 = new NamedBean();
+		$bean2->nameForTest = 'namedDependency2';
+		$container = Container::getInstance();
+		$container->addInstancesMapping('namedDependency2', $bean2);
+		// Test
+		$class = new NamedInjectionClass();
+		$dependency = $class->getDependency();
+		$this->assertNotNull($dependency);
+		$this->assertInstanceOf('\DI\Tests\Fixtures\ContainerTest\NamedBean', $dependency);
+		$this->assertEquals('namedDependency', $dependency->nameForTest);
+		$this->assertSame($bean, $dependency);
+		$this->assertNotSame($bean2, $dependency);
+	}
+	/**
+	 * @expectedException \DI\BeanNotFoundException
+	 */
+	public function testNamedInjection2() {
+		// Exception (bean not defined)
+		new NamedInjectionClass();
 	}
 
 	public function testSingletonFactory1() {

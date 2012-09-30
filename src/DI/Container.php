@@ -7,6 +7,7 @@ use DI\Annotations\Inject;
 use DI\Annotations\Value;
 use DI\Factory\FactoryInterface;
 use DI\Factory\SingletonFactory;
+use DI\Injector\DependencyInjector;
 use DI\Proxy\Proxy;
 use Doctrine\Common\Annotations\AnnotationRegistry;
 use Doctrine\Common\Annotations\AnnotationReader;
@@ -25,20 +26,25 @@ class Container
 	 * Factory to use to create instances
 	 * @var FactoryInterface
 	 */
-	protected $factory;
+	private $factory;
+
+	/**
+	 * @var DependencyInjector
+	 */
+	private $dependencyInjector;
 
 	/**
 	 * Array of instances/class names to use for abstract classes and interfaces
-	 * @var mixed[] implementation[name] The name is the var type,
-	 * the implementation can be a class name (string) or an instance
+	 * @var mixed[] implementation[name] The name is the var type or the bean name,
+	 * the implementation can be another class name (string) or an instance
 	 */
-	protected $injectMapping = array();
+	private $beanMap = array();
 
 	/**
 	 * Array of the values to inject with the Value annotation
 	 * @var array value[key]
 	 */
-	protected $valueMapping = array();
+	private $valueMap = array();
 
 	/**
 	 * Returns an instance of the class (Singleton design pattern)
@@ -63,6 +69,7 @@ class Container
 	 */
 	protected function __construct() {
 		$this->factory = new SingletonFactory();
+		$this->dependencyInjector = new DependencyInjector();
 	}
 
 	private final function __clone() {}
@@ -99,7 +106,8 @@ class Container
 				throw new AnnotationException(get_class($object) . "::" . $property->getName()
 					. " can't have both @Inject and @Value annotations");
 			} elseif ($injectAnnotation) {
-				$this->resolveInject($property, $object, $injectAnnotation->lazy);
+				$this->dependencyInjector->inject($object, $property, $injectAnnotation,
+					$this->beanMap, $this->factory);
 			} elseif ($valueAnnotation) {
 				$this->resolveValue($property, $valueAnnotation->key, $object);
 			}
@@ -158,7 +166,7 @@ class Container
 		}
 		// Values map
 		if (isset($data['di.values']) && is_array($data['di.values'])) {
-			$this->valueMapping = array_merge($this->valueMapping, $data['di.values']);
+			$this->valueMap = array_merge($this->valueMap, $data['di.values']);
 		}
 	}
 
@@ -168,63 +176,7 @@ class Container
 	 * @param string|mixed $implementation Can be a class name (to instantiate) or an instance
 	 */
 	public function addInstancesMapping($contractType, $implementation) {
-		$this->injectMapping[$contractType] = $implementation;
-	}
-
-	/**
-	 * Resolve the Inject annotation on a property
-	 * @param \ReflectionProperty $property
-	 * @param                     $object
-	 * @param boolean             $lazy If true, inject a proxy class
-	 * @throws DependencyException
-	 * @throws Annotations\AnnotationException
-	 */
-	private function resolveInject(\ReflectionProperty $property, $object, $lazy) {
-		// Find the type of the class to inject
-		$classname = $this->getPropertyType($property);
-		// Injection
-		if ($classname) {
-
-			$dependencyInstance = null;
-
-			// Try to find a mapping for the implementation to use
-			if (array_key_exists($classname, $this->injectMapping)) {
-				$tmp = $this->injectMapping[$classname];
-				if (is_string($tmp)) {
-					// Override the class name, will use the factory to get an instance
-					$classname = $tmp;
-				} else {
-					// This is an instance
-					$dependencyInstance = $tmp;
-				}
-			}
-
-			// Use the factory to get an instance
-			if ($dependencyInstance === null) {
-				try {
-					if ($lazy) {
-						// Lazy loading for the dependency: inject a proxy class
-						$factory = $this->factory;
-						$dependencyInstance = new Proxy(function() use ($factory, $classname) {
-							return $factory->getInstance($classname);
-						});
-					} else {
-						$dependencyInstance = $this->factory->getInstance($classname);
-					}
-				} catch (\Exception $e) {
-					throw new DependencyException("Error while injecting $classname in "
-						. get_class($object) . "::" . $property->getName() . ". "
-						. $e->getMessage(), 0, $e);
-				}
-			}
-
-			// Inject the dependency
-			$property->setAccessible(true);
-			$property->setValue($object, $dependencyInstance);
-		} else {
-			throw new AnnotationException("@Inject was found on " . get_class($object) . "::"
-				. $property->getName() . " but no @var annotation");
-		}
+		$this->beanMap[$contractType] = $implementation;
 	}
 
 	/**
@@ -236,11 +188,11 @@ class Container
 	 * @throws Annotations\AnnotationException
 	 */
 	private function resolveValue(\ReflectionProperty $property, $key, $object) {
-		if (! isset($this->valueMapping[$key])) {
+		if (! isset($this->valueMap[$key])) {
 			throw new AnnotationException("@Value was found on " . get_class($object) . "::"
 				. $property->getName() . " but the key '$key' can't be resolved");
 		}
-		$value = $this->valueMapping[$key];
+		$value = $this->valueMap[$key];
 		// Inject the value
 		$property->setAccessible(true);
 		$property->setValue($object, $value);
@@ -258,19 +210,6 @@ class Container
 			$annotationReader = new AnnotationReader();
 		}
 		return $annotationReader;
-	}
-
-	/**
-	 * Parse the docblock of the property to get the var annotation
-	 * @param \ReflectionProperty $property
-	 * @return string Type of the property (content of var annotation)
-	 */
-	private function getPropertyType(\ReflectionProperty $property) {
-		if (preg_match('/@var\s+([^\s]+)/', $property->getDocComment(), $matches)) {
-			list(, $type) = $matches;
-			return $type;
-		}
-		return null;
 	}
 
 }
