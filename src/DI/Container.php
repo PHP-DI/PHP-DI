@@ -8,6 +8,7 @@ use DI\Annotations\Value;
 use DI\Factory\FactoryInterface;
 use DI\Factory\SingletonFactory;
 use DI\Injector\DependencyInjector;
+use DI\Injector\ValueInjector;
 use DI\Proxy\Proxy;
 use Doctrine\Common\Annotations\AnnotationRegistry;
 use Doctrine\Common\Annotations\AnnotationReader;
@@ -34,9 +35,20 @@ class Container
 	private $dependencyInjector;
 
 	/**
-	 * Array of instances/class names to use for abstract classes and interfaces
-	 * @var mixed[] implementation[name] The name is the var type or the bean name,
+	 * @var ValueInjector
+	 */
+	private $valueInjector;
+
+	/**
+	 * Map of instances/class names to use for abstract classes and interfaces
+	 * @var array implementation[interface] The name is the var type or the bean name,
 	 * the implementation can be another class name (string) or an instance
+	 */
+	private $typeMap = array();
+
+	/**
+	 * Map of bean instances
+	 * @var array bean[name]
 	 */
 	private $beanMap = array();
 
@@ -70,6 +82,7 @@ class Container
 	protected function __construct() {
 		$this->factory = new SingletonFactory();
 		$this->dependencyInjector = new DependencyInjector();
+		$this->valueInjector = new ValueInjector();
 	}
 
 	private final function __clone() {}
@@ -107,25 +120,11 @@ class Container
 					. " can't have both @Inject and @Value annotations");
 			} elseif ($injectAnnotation) {
 				$this->dependencyInjector->inject($object, $property, $injectAnnotation,
-					$this->beanMap, $this->factory);
+					$this->typeMap, $this->factory);
 			} elseif ($valueAnnotation) {
-				$this->resolveValue($property, $valueAnnotation->key, $object);
+				$this->valueInjector->inject($object, $property, $valueAnnotation, $this->valueMap);
 			}
 		}
-	}
-
-	/**
-	 * @return FactoryInterface the factory used for creating instances
-	 */
-	public function getFactory() {
-		return $this->factory;
-	}
-
-	/**
-	 * @param FactoryInterface $factory the factory to use for creating instances
-	 */
-	public function setFactory(FactoryInterface $factory) {
-		$this->factory = $factory;
 	}
 
 	/**
@@ -176,26 +175,21 @@ class Container
 	 * @param string|mixed $implementation Can be a class name (to instantiate) or an instance
 	 */
 	public function addInstancesMapping($contractType, $implementation) {
-		$this->beanMap[$contractType] = $implementation;
+		$this->typeMap[$contractType] = $implementation;
 	}
 
 	/**
-	 * Resolve the Value annotation on a property
-	 * @param \ReflectionProperty $property
-	 * @param string              $key
-	 * @param                     $object
-	 * @throws DependencyException
-	 * @throws Annotations\AnnotationException
+	 * @param FactoryInterface $factory the factory to use for creating instances
 	 */
-	private function resolveValue(\ReflectionProperty $property, $key, $object) {
-		if (! isset($this->valueMap[$key])) {
-			throw new AnnotationException("@Value was found on " . get_class($object) . "::"
-				. $property->getName() . " but the key '$key' can't be resolved");
-		}
-		$value = $this->valueMap[$key];
-		// Inject the value
-		$property->setAccessible(true);
-		$property->setValue($object, $value);
+	public function setFactory(FactoryInterface $factory) {
+		$this->factory = $factory;
+	}
+
+	/**
+	 * @return FactoryInterface the factory used for creating instances
+	 */
+	public function getFactory() {
+		return $this->factory;
 	}
 
 	/**
