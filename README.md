@@ -135,53 +135,10 @@ di.values["db.host"] = "localhost"
 
 ### Installation
 
-#### Requirements
-
-* __PHP 5.3__ or higher
-
-#### Install and use with Composer
-
-The easiest way is to install PHP-DI with [Composer](http://getcomposer.org/doc/00-intro.md):
-
-    $ curl -s http://getcomposer.org/installer | php
-	$ php composer.phar install
-
-Then you have nothing to do, PHP-DI will be autoloaded by Composer
-(if you use Composer's autoloading system, which I highly recommend).
-
-#### Zend Framework
-
-Are you using Zend Framework? Check out the official quickstart with
-Dependency Injection already configured: [zf-quickstart-di](https://github.com/mnapoli/zf-quickstart-di)
-
-#### Configuration file
-
-The configuration file is optional, PHP-DI will work with default behavior without it.
-
-Here is an example of a configuration file:
-
-```
-; PHP-DI - Dependency injection configuration
-
-; The factory to use is the Singleton factory (default)
-di.factory = "\DI\Factory\SingletonFactory"
-
-; Value injections
-di.values["db.host"] = "localhost"
-
-; Type mapping for injection using abstract types
-di.implementation.map["\My\Interface"] = "\My\Implementation"
-di.implementation.map["\My\AbstractClass"] = "\My\OtherImplementation"
-```
-
-To import the configuration file:
-
-```
-DependencyManager::getInstance()->addConfigurationFile('di.ini');
-```
+Read the [Getting started](https://github.com/mnapoli/PHP-DI/wiki/Getting-started) guide.
 
 
-### Projects using
+### Projects using PHP-DI
 
 Public projects using PHP-DI:
 * [phpBeanstalkdAdmin](http://mnapoli.github.com/phpBeanstalkdAdmin/)
