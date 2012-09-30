@@ -20,6 +20,7 @@ class DependencyInjector
 	 * @param mixed               $object Object to inject dependencies to
 	 * @param \ReflectionProperty $property Property annotated
 	 * @param Inject              $annotation Inject annotation
+	 * @param array               $typeMap Map of the class types
 	 * @param array               $beanMap Map of the beans
 	 * @param FactoryInterface    $factory Factory for instanciating beans
 	 * @throws DependencyException
@@ -27,7 +28,7 @@ class DependencyInjector
 	 * @throws AnnotationException
 	 */
 	public function inject($object, \ReflectionProperty $property, Inject $annotation,
-						   array $beanMap, FactoryInterface $factory
+						   array $typeMap, array $beanMap, FactoryInterface $factory
 	) {
 		$dependencyInstance = null;
 		if ($annotation->name != null) {
@@ -36,7 +37,7 @@ class DependencyInjector
 		} else {
 			// Not named bean
 			$dependencyInstance = $this->resolveNotNamedBean($object, $property, $annotation,
-				$beanMap, $factory);
+				$typeMap, $factory);
 		}
 
 		// Inject the dependency
@@ -71,14 +72,14 @@ class DependencyInjector
 	 * @param mixed               $object Object to inject dependencies to
 	 * @param \ReflectionProperty $property Property annotated
 	 * @param Inject              $annotation Inject annotation
-	 * @param array               $beanMap Map of the beans
+	 * @param array               $typeMap Map of the class types
 	 * @param FactoryInterface    $factory Factory for instanciating beans
 	 * @return object Dependency to inject
 	 * @throws DependencyException
 	 * @throws AnnotationException
 	 */
 	private function resolveNotNamedBean($object, \ReflectionProperty $property, Inject $annotation,
-										array $beanMap, FactoryInterface $factory
+										array $typeMap, FactoryInterface $factory
 	) {
 		$dependencyInstance = null;
 		// Not named bean => we use the @var annotation
@@ -89,8 +90,8 @@ class DependencyInjector
 		}
 
 		// Try to find a mapping for the implementation to use
-		if (array_key_exists($dependencyType, $beanMap)) {
-			$tmp = $beanMap[$dependencyType];
+		if (array_key_exists($dependencyType, $typeMap)) {
+			$tmp = $typeMap[$dependencyType];
 			if (is_string($tmp)) {
 				// Override the dependency type, will use the factory to get an instance
 				$dependencyType = $tmp;

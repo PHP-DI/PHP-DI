@@ -120,7 +120,7 @@ class Container
 					. " can't have both @Inject and @Value annotations");
 			} elseif ($injectAnnotation) {
 				$this->dependencyInjector->inject($object, $property, $injectAnnotation,
-					$this->typeMap, $this->factory);
+					$this->typeMap, $this->beanMap, $this->factory);
 			} elseif ($valueAnnotation) {
 				$this->valueInjector->inject($object, $property, $valueAnnotation, $this->valueMap);
 			}
@@ -157,10 +157,10 @@ class Container
 			$this->setFactory($factory);
 		}
 		// Implementation map
-		if (isset($data['di.implementation.map']) && is_array($data['di.implementation.map'])) {
-			$mappings = $data['di.implementation.map'];
+		if (isset($data['di.types.map']) && is_array($data['di.types.map'])) {
+			$mappings = $data['di.types.map'];
 			foreach ($mappings as $contract => $implementation) {
-				$this->addInstancesMapping($contract, $implementation);
+				$this->addTypeMapping($contract, $implementation);
 			}
 		}
 		// Values map
@@ -172,10 +172,20 @@ class Container
 	/**
 	 * Map the implementation to use for an abstract class or interface
 	 * @param string $contractType the abstract class or interface name
-	 * @param string|mixed $implementation Can be a class name (to instantiate) or an instance
+	 * @param string|mixed $implementation Can be a class name (factory will be used to instantiate)
+	 * or an instance
 	 */
-	public function addInstancesMapping($contractType, $implementation) {
+	public function addTypeMapping($contractType, $implementation) {
 		$this->typeMap[$contractType] = $implementation;
+	}
+
+	/**
+	 * Add a named bean in the container
+	 * @param string $name Bean name to be used with Inject annotation
+	 * @param object $instance Bean instance
+	 */
+	public function addBean($name, $instance) {
+		$this->beanMap[$name] = $instance;
 	}
 
 	/**

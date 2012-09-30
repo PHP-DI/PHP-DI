@@ -102,11 +102,11 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
 		$bean = new NamedBean();
 		$bean->nameForTest = 'namedDependency';
 		$container = Container::getInstance();
-		$container->addInstancesMapping('namedDependency', $bean);
+		$container->addBean('namedDependency', $bean);
 		$bean2 = new NamedBean();
 		$bean2->nameForTest = 'namedDependency2';
 		$container = Container::getInstance();
-		$container->addInstancesMapping('namedDependency2', $bean2);
+		$container->addBean('namedDependency2', $bean2);
 		// Test
 		$class = new NamedInjectionClass();
 		$dependency = $class->getDependency();
