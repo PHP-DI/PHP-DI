@@ -1,0 +1,6 @@
+safe: true
+source: https://github.com/mnapoli/PHP-DI
+destination: .
+lsi: false
+pygments: true
+
