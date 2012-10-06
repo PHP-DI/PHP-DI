@@ -15,7 +15,7 @@ Unlike Zend\DI, Symfony Service Container or Pimple, PHP-DI:
 
 * can be used by a monkey
 * is not limited to Services (_anything_ can be injected)
-* uses annotations
+* uses annotations for code-readability and ease of use
 
 Read more here on the [project home](http://mnapoli.github.com/PHP-DI/).
 
