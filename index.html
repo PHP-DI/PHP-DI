@@ -33,19 +33,15 @@
 
 <pre><code>use DI\Annotations\Inject;
 
-class MyClass {
+class ProductService {
     /**
      * @Inject
-     * @var MyService
+     * @var PriceService
      */
-    private $service;
+    private $priceService;
 
-    public function __construct() {
-        \DI\DependencyManager::getInstance()-&gt;resolveDependencies($this);
-    }
-
-    public function doSomething($id) {
-        $object = $service-&gt;getSomething($id);
+    public function doSomething($productId) {
+        $price = $priceService-&gt;getPrice($productId);
     }
 }
 </code></pre>
@@ -62,9 +58,6 @@ class MyClass {
      */
     private $dbHost;
 
-    public function __construct() {
-        \DI\DependencyManager::getInstance()-&gt;resolveDependencies($this);
-    }
 }
 </code></pre>
 
