@@ -11,127 +11,23 @@ The aim of this library is to make [Dependency Injection]
 (http://en.wikipedia.org/wiki/Dependency_injection)
 as simple as possible with PHP.
 
-No fancy features, but no overhead. The simpler the better.
+Unlike Zend\DI, Symfony Service Container or Pimple, PHP-DI:
 
-#### Current features
+* can be used by a monkey
+* is not limited to Services (_anything_ can be injected)
+* uses annotations
 
+Read more here on the [project home](http://mnapoli.github.com/PHP-DI/).
+
+
+#### Features
+
+* Uses annotations for simplicity, readability and auto-completion in your IDE
 * `@Inject` annotation to inject a dependency
 * `@Value` annotation to inject a configuration value
 * Interface-Implementation mapping
-* Integrated with [Composer](http://getcomposer.org/doc/00-intro.md) so you can install it easily
+* Easy installation with [Composer](http://getcomposer.org/doc/00-intro.md)
 
-#### Pros
-
-* Annotations! No configuration file needed, easy to read and to write
-* As little configuration as possible
-* Doesn't need getters/setters
-* Doesn't need any change to your existing code (you can give it a shot easily)
-
-#### Cons
-
-* You have to write a line of code in the constructor of your classes
-(i'm looking for a solution about that)
-
-### Why?
-
-Using the singleton design pattern may be practical at first, but it comes with several disadvantages,
-the main one being that it's not testable.
-
-By using dependency injection, you can develop using contracts and not care what implementation
-will be used. As the dependency can be injected by the "user", your class can be tested with mocks.
-
-### @Inject
-
-Say you have this class:
-
-    class Class2 {
-    }
-
-An instance of Class2 can be automatically injected in another class very simply:
-
-    use DI\Annotations\Inject;
-
-    class Class1 {
-        /**
-         * @Inject
-         * @var Class2
-         */
-        private $class2;
-
-        public function __construct() {
-            \DI\DependencyManager::getInstance()->resolveDependencies($this);
-        }
-    }
-
-#### Using interfaces or abstract types?
-
-If you have something like:
-
-    class Class1 {
-		/**
-		 * @Inject
-		 * @var MyInterface
-		 */
-		private $myProperty;
-
-and:
-
-    class MyInterface {
-    }
-	class TheImplementationToUse implements MyInterface {
-	}
-
-PHP-DI will fail to inject "myProperty" because the type is an interface (MyInterface).
-
-You have to do the mapping between the interface (or abstract class) and the implementation to use.
-This can be done with a configuration file (di.ini):
-
-	; Type mapping for injection
-	di.implementation.map["MyInterface"] = "TheImplementationToUse"
-
-And in your code (Bootstrap for example):
-
-	DependencyManager::getInstance()->addConfigurationFile('di.ini');
-
-#### How are instances created?
-
-A factory is used to create the instances that are injected.
-
-By default, the strategy used is the Singleton pattern (`\DI\Factory\SingletonFactory`),
-which means that only one
-instance of each class/dependency is instantiated.
-
-This can be configured to a different factory, using code or the configuration file (see below).
-For example the `\DI\Factory\NewFactory`
-will create a new instance each time a dependency is resolved.
-
-### @Value
-
-You can also inject values with the `@Value` annotation.
-
-For example, you can inject database configuration values:
-
-    use DI\Annotations\Value;
-
-    class Class1 {
-        /**
-         * @Value("db.host")
-         */
-        private $dbHost;
-
-        public function __construct() {
-            \DI\DependencyManager::getInstance()->resolveDependencies($this);
-        }
-    }
-
-And to configure the value to inject:
-
-```
-; PHP-DI - Dependency injection configuration
-
-; Value injections
-di.values["db.host"] = "localhost"
-```
 
 ### Installation
 
