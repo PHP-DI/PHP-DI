@@ -8,6 +8,7 @@ use DI\Annotations\Value;
 use DI\Injector\DependencyInjector;
 use DI\Injector\ValueInjector;
 use DI\Proxy\Proxy;
+use Doctrine\Common\Annotations\Reader;
 use Doctrine\Common\Annotations\AnnotationRegistry;
 use Doctrine\Common\Annotations\AnnotationReader;
 
@@ -48,6 +49,11 @@ class Container
 	 * @var ValueInjector
 	 */
 	private $valueInjector;
+
+	/**
+	 * @var \Doctrine\Common\Annotations\Reader
+	 */
+	private $annotationReader;
 
 	/**
 	 * Returns an instance of the class (Singleton design pattern)
@@ -228,13 +234,12 @@ class Container
 	 * @return AnnotationReader
 	 */
 	private function getAnnotationReader() {
-		static $annotationReader;
-		if ($annotationReader == null) {
+		if ($this->annotationReader == null) {
 			AnnotationRegistry::registerAutoloadNamespace('DI\Annotations',
 				dirname(__FILE__) . '/../');
-			$annotationReader = new AnnotationReader();
+			$this->annotationReader = new AnnotationReader();
 		}
-		return $annotationReader;
+		return $this->annotationReader;
 	}
 
 	private final function __clone() {}

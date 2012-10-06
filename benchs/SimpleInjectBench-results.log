@@ -1,0 +1,8 @@
+PHPBench - https://github.com/mnapoli/PHPBench - Matthieu Napoli - LGPL v3
+
+Bench case : SimpleInjectBench
+    New : 0.016 s - 166 %
+    Singleton : 0.010 s - 100 %
+    Inject : 5.806 s - 59,260 %
+    LazyInject : 5.846 s - 59,666 %
+    NamedInject : 6.550 s - 66,857 %

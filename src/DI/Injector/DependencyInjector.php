@@ -45,7 +45,7 @@ class DependencyInjector
 			$beanName = $this->getPropertyType($property);
 			if ($beanName == null) {
 				throw new AnnotationException("@Inject was found on " . get_class($object) . "::"
-					. $property->getName() . " but no @var annotation");
+					. $property->getName() . " but no (or empty) @var annotation");
 			}
 			// Need to create the instance
 			try {
