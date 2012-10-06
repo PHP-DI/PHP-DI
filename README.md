@@ -24,8 +24,9 @@ Read more here on the [project home](http://mnapoli.github.com/PHP-DI/).
 
 * Uses annotations for simplicity, readability and auto-completion in your IDE
 * `@Inject` annotation to inject a dependency
+* Optional lazy-loading of dependencies (@Inject(lazy=true))
 * `@Value` annotation to inject a configuration value
-* Interface-Implementation mapping
+* Class aliases (interface-implementation mapping)
 * Easy installation with [Composer](http://getcomposer.org/doc/00-intro.md)
 
 
