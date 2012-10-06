@@ -69,6 +69,7 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
 	public function testLazyInjection2() {
 		$class = new LazyInjectionClass();
 		$dependency = $class->getClass2();
+		$this->assertNotNull($dependency);
 		$this->assertTrue($dependency->getBoolean());
 	}
 	public function testLazyInjection3() {
@@ -102,11 +103,11 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
 		$bean = new NamedBean();
 		$bean->nameForTest = 'namedDependency';
 		$container = Container::getInstance();
-		$container->addBean('namedDependency', $bean);
+		$container->set('namedDependency', $bean);
 		$bean2 = new NamedBean();
 		$bean2->nameForTest = 'namedDependency2';
 		$container = Container::getInstance();
-		$container->addBean('namedDependency2', $bean2);
+		$container->set('namedDependency2', $bean2);
 		// Test
 		$class = new NamedInjectionClass();
 		$dependency = $class->getDependency();
@@ -124,42 +125,13 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
 		new NamedInjectionClass();
 	}
 
-	public function testSingletonFactory1() {
-		$factory = new \DI\Factory\SingletonFactory();
-		Container::getInstance()->setFactory($factory);
+	public function testSingleton() {
 		$class1_1 = new Class1();
 		$class2_1 = $class1_1->getClass2();
 		$class1_2 = new Class1();
 		$class2_2 = $class1_2->getClass2();
+		$this->assertNotNull($class2_1);
 		$this->assertSame($class2_1, $class2_2);
-	}
-	public function testSingletonFactory2() {
-		Container::getInstance()->addConfigurationFile(dirname(__FILE__)
-			. '/Fixtures/ContainerTest/di-singletonfactory.ini');
-		$class1_1 = new Class1();
-		$class2_1 = $class1_1->getClass2();
-		$class1_2 = new Class1();
-		$class2_2 = $class1_2->getClass2();
-		$this->assertSame($class2_1, $class2_2);
-	}
-
-	public function testNewFactory1() {
-		$factory = new \DI\Factory\NewFactory();
-		Container::getInstance()->setFactory($factory);
-		$class1_1 = new Class1();
-		$class2_1 = $class1_1->getClass2();
-		$class1_2 = new Class1();
-		$class2_2 = $class1_2->getClass2();
-		$this->assertNotSame($class2_1, $class2_2);
-	}
-	public function testNewFactory2() {
-		Container::getInstance()->addConfigurationFile(dirname(__FILE__)
-			. '/Fixtures/ContainerTest/di-newfactory.ini');
-		$class1_1 = new Class1();
-		$class2_1 = $class1_1->getClass2();
-		$class1_2 = new Class1();
-		$class2_2 = $class1_2->getClass2();
-		$this->assertNotSame($class2_1, $class2_2);
 	}
 
 }

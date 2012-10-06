@@ -33,6 +33,9 @@ class LazyInjectionClass {
 	 * @return boolean
 	 */
 	public function getDependencyAttribute() {
+		if ($this->class2 === null) {
+			throw new \Exception('Injection of $class2 failed');
+		}
 		return $this->class2->getBoolean();
 	}
 
