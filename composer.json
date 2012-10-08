@@ -1,5 +1,10 @@
 {
 	"name": "mnapoli/php-di",
+	"type": "library",
+	"description": "PHP dependency injection using annotations",
+	"keywords": ["di","dependency injection", "container"],
+	"homepage": "http://mnapoli.github.com/PHP-DI/",
+	"license": "LGPL",
 	"autoload": {
 		"psr-0": {
 			"DI": "src/",
