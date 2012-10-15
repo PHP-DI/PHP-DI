@@ -3,7 +3,7 @@
 [![Build Status](https://secure.travis-ci.org/mnapoli/PHP-DI.png)](http://travis-ci.org/mnapoli/PHP-DI)
 
 * *Project home* [http://mnapoli.github.com/PHP-DI/](http://mnapoli.github.com/PHP-DI/)
-
+``
 ### Introduction
 
 The aim of this library is to make [Dependency Injection]
@@ -23,7 +23,7 @@ Read more here on the [project home](http://mnapoli.github.com/PHP-DI/).
 
 * Uses annotations for simplicity, readability and auto-completion in your IDE
 * `@Inject` annotation to inject a dependency
-* Optional lazy-loading of dependencies (@Inject(lazy=true))
+* Optional lazy-loading of dependencies (`@Inject(lazy=true)`)
 * `@Value` annotation to inject a configuration value
 * Class aliases (interface-implementation mapping)
 * Easy installation with [Composer](http://getcomposer.org/doc/00-intro.md)
