@@ -1,4 +1,4 @@
-# PHP-DI - PHP dependency injection with annotations
+## PHP-DI - PHP dependency injection with annotations
 
 [![Build Status](https://secure.travis-ci.org/mnapoli/PHP-DI.png)](http://travis-ci.org/mnapoli/PHP-DI)
 
