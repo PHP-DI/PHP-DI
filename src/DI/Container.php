@@ -142,6 +142,11 @@ class Container
 		$properties = $reflectionClass->getProperties();
 		// For each property
 		foreach ($properties as $property) {
+			// Consider only not set properties
+			$property->setAccessible(true);
+			if ($property->getValue($object) !== null) {
+				continue;
+			}
 			// Look for DI annotations
 			$injectAnnotation = null;
 			$valueAnnotation = null;

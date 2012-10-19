@@ -134,4 +134,16 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
 		$this->assertSame($class2_1, $class2_2);
 	}
 
+	/**
+	 * Check that if a dependency is already set, the container
+	 * will not overwrite it
+	 */
+	public function testIssue14() {
+		$object = new \DI\Tests\Fixtures\ContainerTest\Issue14();
+		$class2 = new \DI\Tests\Fixtures\ContainerTest\Class2();
+		$object->setClass2($class2);
+		Container::getInstance()->resolveDependencies($object);
+		$this->assertSame($class2, $object->getClass2());
+	}
+
 }
