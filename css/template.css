@@ -1,6 +1,7 @@
 body {
     font-size: 16px;
     line-height: 23px;
+    padding-top: 0;
 }
 
 header {
@@ -11,4 +12,11 @@ footer {
     margin-top: 70px;
     border-top: 1px solid #E5E5E5;
     background-color: whiteSmoke;
+}
+
+/* Fixed subnav on scroll, but only for 980px and up (sorry IE!) */
+@media (min-width: 980px) {
+    .subnav-fixed {
+        top: 0;
+    }
 }
