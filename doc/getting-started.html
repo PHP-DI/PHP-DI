@@ -39,51 +39,51 @@
         </header>
 
         <section>
-<p>Dependency injection with annotations in PHP</p>
+<h1>Installation</h1>
 
-<h2>Introduction</h2>
-
-<p>The aim of PHP-DI is to make <a href="http://en.wikipedia.org/wiki/Dependency_injection">Dependency Injection</a>
-as simple as possible with PHP.</p>
-
-<p>Unlike Zend\DI, Symfony Service Container or Pimple, PHP-DI:</p>
+<h2>Requirements</h2>
 
 <ul>
-<li>can be used by a monkey</li>
-<li>is not limited to Services (_anything_ can be injected)</li>
-<li>uses annotations for code-readability and ease of use</li>
+<li><strong>PHP 5.3</strong> or higher</li>
 </ul>
 
-<h3>Features</h3>
+<h2>Installation</h2>
 
-<ul>
-<li>Uses annotations for simplicity, readability and auto-completion in your IDE
+<h3>Install and use with Composer</h3>
 
-<ul>
-<li><code>@Inject</code> annotation to inject a dependency</li>
-<li><code>@Value</code> annotation to inject a configuration value</li>
-</ul></li>
-<li>Optional lazy-loading of dependencies (<code>@Inject(lazy=true)</code>)</li>
-<li>Class aliases (interface-implementation mapping)</li>
-<li>Easy installation with <a href="http://getcomposer.org/doc/00-intro.md">Composer</a> and easy integration with Zend Framework (see <a href="doc/getting-started">Getting started</a>)</li>
-<li>Non-intrusive: you can add PHP-DI into an existing project and use it <em>without impacting existing code</em></li>
-</ul>
+<p>The easiest way is to install PHP-DI with <a href="http://getcomposer.org/doc/00-intro.md">Composer</a>.</p>
 
-<h3>Installation</h3>
+<p>First, create a file named <code>composer.json</code> in your project root:</p>
 
-<p>Read the <a href="doc/getting-started">Getting started</a> guide.</p>
+<pre><code class="json">{
+    &quot;require&quot;: {
+        &quot;mnapoli/php-di&quot;: &quot;1.0.*&quot;,
+    }
+}
+</code></pre>
 
-<h3>Documentation</h3>
+<p>Then, run the following commands:</p>
 
-<p>Read the <a href="doc/">documentation</a>.</p>
+<pre><code class="bash">$ curl -s http://getcomposer.org/installer | php
+$ php composer.phar install
+</code></pre>
 
-<h3>Contribute</h3>
+<p>PHP-DI classes will be autoloaded by Composer
+if you use Composer&#39;s autoloading system (which I highly recommend).</p>
 
-<p><a href="http://travis-ci.org/mnapoli/PHP-DI"><img src="https://secure.travis-ci.org/mnapoli/PHP-DI.png" alt="Build Status"></a></p>
+<h3>Install and use with Zend Framework</h3>
 
-<ul>
-<li>Read the wiki: <a href="doc/contribute">Contribute</a></li>
-</ul>
+<p>Are you using Zend Framework? Check out the official ZF quickstart with
+Dependency Injection already configured: <a href="https://github.com/mnapoli/zf-quickstart-di">zf-quickstart-di</a>.</p>
+
+<pre><code class="bash">$ git clone git://github.com/mnapoli/zf-quickstart-di.git
+</code></pre>
+
+<h2>Configuration file</h2>
+
+<p><strong>The configuration file is optional</strong>, PHP-DI will work with default behavior without it.</p>
+
+<p>Read more about the <a href="doc/configuration-file">configuration file</a></p>
 
 		</section>
 

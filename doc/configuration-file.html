@@ -39,51 +39,27 @@
         </header>
 
         <section>
-<p>Dependency injection with annotations in PHP</p>
+<h1>Configuration file</h1>
 
-<h2>Introduction</h2>
+<p>The configuration file is <strong>optional</strong>. PHP-DI will work with default behavior without it.</p>
 
-<p>The aim of PHP-DI is to make <a href="http://en.wikipedia.org/wiki/Dependency_injection">Dependency Injection</a>
-as simple as possible with PHP.</p>
+<p>Here is an example of a configuration file (<code>di.ini</code>):</p>
 
-<p>Unlike Zend\DI, Symfony Service Container or Pimple, PHP-DI:</p>
+<pre><code class="ini">; PHP-DI - Dependency injection configuration
 
-<ul>
-<li>can be used by a monkey</li>
-<li>is not limited to Services (_anything_ can be injected)</li>
-<li>uses annotations for code-readability and ease of use</li>
-</ul>
+; Value injections
+di.values[&quot;db.host&quot;] = &quot;localhost&quot;
+di.values[&quot;email.from&quot;] = &quot;support@example.com&quot;
 
-<h3>Features</h3>
+; Type mapping for injection using abstract types
+di.types.map[&quot;\My\Interface&quot;] = &quot;\My\Implementation&quot;
+di.types.map[&quot;\My\AbstractClass&quot;] = &quot;\My\OtherImplementation&quot;
+</code></pre>
 
-<ul>
-<li>Uses annotations for simplicity, readability and auto-completion in your IDE
+<p>To import the configuration file:</p>
 
-<ul>
-<li><code>@Inject</code> annotation to inject a dependency</li>
-<li><code>@Value</code> annotation to inject a configuration value</li>
-</ul></li>
-<li>Optional lazy-loading of dependencies (<code>@Inject(lazy=true)</code>)</li>
-<li>Class aliases (interface-implementation mapping)</li>
-<li>Easy installation with <a href="http://getcomposer.org/doc/00-intro.md">Composer</a> and easy integration with Zend Framework (see <a href="doc/getting-started">Getting started</a>)</li>
-<li>Non-intrusive: you can add PHP-DI into an existing project and use it <em>without impacting existing code</em></li>
-</ul>
-
-<h3>Installation</h3>
-
-<p>Read the <a href="doc/getting-started">Getting started</a> guide.</p>
-
-<h3>Documentation</h3>
-
-<p>Read the <a href="doc/">documentation</a>.</p>
-
-<h3>Contribute</h3>
-
-<p><a href="http://travis-ci.org/mnapoli/PHP-DI"><img src="https://secure.travis-ci.org/mnapoli/PHP-DI.png" alt="Build Status"></a></p>
-
-<ul>
-<li>Read the wiki: <a href="doc/contribute">Contribute</a></li>
-</ul>
+<pre><code class="php">\DI\Container::getInstance()-&gt;addConfigurationFile(&#39;di.ini&#39;);
+</code></pre>
 
 		</section>
 

@@ -1,0 +1,11 @@
+body {
+    font-size: 16px;
+    line-height: 23px;
+}
+
+footer {
+    padding: 70px 0;
+    margin-top: 70px;
+    border-top: 1px solid #E5E5E5;
+    background-color: whiteSmoke;
+}

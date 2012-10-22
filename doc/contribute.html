@@ -39,51 +39,35 @@
         </header>
 
         <section>
-<p>Dependency injection with annotations in PHP</p>
+<h1>Contribute</h1>
 
-<h2>Introduction</h2>
-
-<p>The aim of PHP-DI is to make <a href="http://en.wikipedia.org/wiki/Dependency_injection">Dependency Injection</a>
-as simple as possible with PHP.</p>
-
-<p>Unlike Zend\DI, Symfony Service Container or Pimple, PHP-DI:</p>
+<h2>Set up</h2>
 
 <ul>
-<li>can be used by a monkey</li>
-<li>is not limited to Services (_anything_ can be injected)</li>
-<li>uses annotations for code-readability and ease of use</li>
+<li>Check out the sources using git or download them</li>
 </ul>
 
-<h3>Features</h3>
+<pre><code class="bash">$ git clone https://github.com/mnapoli/PHP-DI.git
+</code></pre>
 
 <ul>
-<li>Uses annotations for simplicity, readability and auto-completion in your IDE
-
-<ul>
-<li><code>@Inject</code> annotation to inject a dependency</li>
-<li><code>@Value</code> annotation to inject a configuration value</li>
-</ul></li>
-<li>Optional lazy-loading of dependencies (<code>@Inject(lazy=true)</code>)</li>
-<li>Class aliases (interface-implementation mapping)</li>
-<li>Easy installation with <a href="http://getcomposer.org/doc/00-intro.md">Composer</a> and easy integration with Zend Framework (see <a href="doc/getting-started">Getting started</a>)</li>
-<li>Non-intrusive: you can add PHP-DI into an existing project and use it <em>without impacting existing code</em></li>
+<li>Install the libraries using composer:</li>
 </ul>
 
-<h3>Installation</h3>
+<pre><code class="bash">$ curl -s http://getcomposer.org/installer | php
+$ php composer.phar install
+</code></pre>
 
-<p>Read the <a href="doc/getting-started">Getting started</a> guide.</p>
+<p>If you are running Windows or are having trouble, read <a href="http://getcomposer.org/doc/00-intro.md#installation">the official documentation</a>.</p>
 
-<h3>Documentation</h3>
+<h2>Run the tests</h2>
 
-<p>Read the <a href="doc/">documentation</a>.</p>
+<p>The tests are run with <a href="http://www.phpunit.de/manual/current/en/installation.html">PHPUnit</a>.</p>
 
-<h3>Contribute</h3>
+<p>In order to run, you need to specify (in command line or by configuring your IDE) a bootstrap file:</p>
 
-<p><a href="http://travis-ci.org/mnapoli/PHP-DI"><img src="https://secure.travis-ci.org/mnapoli/PHP-DI.png" alt="Build Status"></a></p>
-
-<ul>
-<li>Read the wiki: <a href="doc/contribute">Contribute</a></li>
-</ul>
+<pre><code class="bash">$ phpunit --bootstrap tests/bootstrap.php tests
+</code></pre>
 
 		</section>
 

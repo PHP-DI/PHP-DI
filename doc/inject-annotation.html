@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PHP-DI : Dependency injection with annotations in PHP</title>
+    <meta name="description" content="PHP-DI is a PHP framework providing dependency injection using annotations">
+
+    <base href="http://mnapoli.github.com/PHP-DI/">
+
+    <!-- Le styles -->
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/bootstrap-responsive.min.css" rel="stylesheet">
+    <link href="css/bootstrap-docs.css" rel="stylesheet">
+    <link href="google-code-prettify/prettify.css" rel="stylesheet">
+    <link href="css/template.css" rel="stylesheet">
+
+    <!--[if lt IE 9]>
+    <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+</head>
+
+<body>
+
+    <div class="container">
+
+        <header class="jumbotron subhead" id="overview">
+            <h1>PHP-DI</h1>
+            <p class="lead">Dependency injection with annotations in PHP.</p>
+            <div class="subnav">
+                <ul class="nav nav-pills">
+                    <li><a href="index">Home</a></li>
+                    <li><a href="doc/getting-started">Getting started</a></li>
+                    <li><a href="doc/">Documentation</a></li>
+                </ul>
+            </div>
+        </header>
+
+        <section>
+<h1>@Inject annotation</h1>
+
+<p>The <code>@Inject</code> annotation allows you to inject a dependency automatically.</p>
+
+<p>Say you have a dependency (a service, a DAO, a Helper... any class):</p>
+
+<pre><code class="php">&lt;?php
+class Class2 {
+}
+</code></pre>
+
+<p>An instance of <code>Class2</code> can be automatically injected in another class very simply:</p>
+
+<pre><code class="php">&lt;?php
+use DI\Annotations\Inject;
+
+class Class1 {
+    /**
+     * @Inject
+     * @var Class2
+     */
+    private $class2;
+
+    public function __construct() {
+        \DI\Container::getInstance()-&gt;resolveDependencies($this);
+    }
+}
+</code></pre>
+
+<p>The line in the constructor will inject the dependencies, read the <a href="doc/getting-started">getting started</a> guide to see how you can automate this.</p>
+
+<h2>Named injection</h2>
+
+<p>While you can automatically inject an instance by specifying its type using the <code>@var</code> annotation, you can also inject a <em>specific</em> instance:</p>
+
+<pre><code class="php">$container = \DI\Container::getInstance();
+$container-&gt;set(&#39;myDependency&#39;, $myObject);
+</code></pre>
+
+<p>and then:</p>
+
+<pre><code class="php">&lt;?php
+class NamedInjectionClass {
+    /**
+     * @Inject(name=&quot;myDependency&quot;)
+     */
+    private $dependency;
+</code></pre>
+
+<h2>Using interfaces or abstract types</h2>
+
+<p>If you have something like:</p>
+
+<pre><code class="php">&lt;?php
+class Class1 {
+    /**
+     * @Inject
+     * @var MyInterface
+     */
+    private $myProperty;
+</code></pre>
+
+<p>and:</p>
+
+<pre><code class="php">&lt;?php
+interface MyInterface {
+}
+class TheImplementationToUse implements MyInterface {
+}
+</code></pre>
+
+<p>PHP-DI will fail to inject <code>myProperty</code> because the type is an interface (MyInterface) and it will not know what class to use.</p>
+
+<p>You have to do the mapping between the interface (or abstract class) and the implementation to use.
+This can be done in the [[configuration file]]:</p>
+
+<pre><code class="ini">; Type mapping for injection
+di.types.map[&quot;MyInterface&quot;] = &quot;TheImplementationToUse&quot;
+</code></pre>
+
+<h2>Lazy-loading dependencies</h2>
+
+<p>With the default behavior, the dependencies are injected in the class constructor:</p>
+
+<pre><code class="php">&lt;?php
+use DI\Annotations\Inject;
+
+class Class1 {
+    /**
+     * @Inject
+     * @var Class2
+     */
+    private $class2;
+
+    public function __construct() {
+        \DI\Container::getInstance()-&gt;resolveDependencies($this);
+    }
+
+    public function getSomething() {
+        return $this-&gt;class2-&gt;getSomethingElse();
+    }
+}
+</code></pre>
+
+<p>If you are injecting multiple dependencies and not always using them, you might not want to load and inject all the dependencies every time the class is used.</p>
+
+<p>You can force a dependency to be loaded only when it is used:</p>
+
+<pre><code class="php">&lt;?php
+class Class1 {
+    /**
+     * @Inject(lazy=true)
+     * @var Class2
+     */
+     private $class2;
+</code></pre>
+
+<p>In this case, when <code>Class1</code> is instantiated, a Proxy class will be injected instead of the real <code>Class2</code> dependency.</p>
+
+<p>Only when the dependency is used (in <code>getSomething()</code>) the <code>Class2</code> instance will be loaded.</p>
+
+<p>This can help save resources and improve performances.</p>
+
+<p><em>Warning: this feature is experimental, it&#39;s effectiveness in improving performances is still to be proved.</em></p>
+
+		</section>
+
+    </div><!-- /container -->
+
+    <footer class="footer">
+        <div class="container">
+            <p class="pull-right"><a href="#">Back to top</a></p>
+            <p>
+                Documentation generated by
+                <a href="http://mnapoli.github.com/gh-pages-compiler/" target="_blank">gh-pages-compiler</a>.
+            </p>
+        </div>
+    </footer>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="google-code-prettify/prettify.js"></script>
+
+	<script>
+		$(function() {
+            $("section h1").wrap('<div class="page-header" />');
+            $("section p:first-child").addClass('lead');
+            $("pre").addClass('prettyprint');
+            prettyPrint();
+		});
+	</script>
+
+</body>
+</html>

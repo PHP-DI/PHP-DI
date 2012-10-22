@@ -39,51 +39,32 @@
         </header>
 
         <section>
-<p>Dependency injection with annotations in PHP</p>
-
-<h2>Introduction</h2>
-
-<p>The aim of PHP-DI is to make <a href="http://en.wikipedia.org/wiki/Dependency_injection">Dependency Injection</a>
-as simple as possible with PHP.</p>
-
-<p>Unlike Zend\DI, Symfony Service Container or Pimple, PHP-DI:</p>
+<h1>Documentation</h1>
 
 <ul>
-<li>can be used by a monkey</li>
-<li>is not limited to Services (_anything_ can be injected)</li>
-<li>uses annotations for code-readability and ease of use</li>
+<li><a href="doc/getting-started">Getting started</a></li>
+<li><a href="doc/inject-annotation">Inject annotation</a> (<code>@Inject</code>)</li>
+<li><a href="doc/value-annotation">Value annotation</a> (<code>@Value</code>)</li>
+<li><a href="doc/contribute">Contribute</a></li>
 </ul>
 
-<h3>Features</h3>
+<h2>Quickstart example</h2>
 
-<ul>
-<li>Uses annotations for simplicity, readability and auto-completion in your IDE
+<pre><code class="php">&lt;?php
+use DI\Annotations\Inject;
 
-<ul>
-<li><code>@Inject</code> annotation to inject a dependency</li>
-<li><code>@Value</code> annotation to inject a configuration value</li>
-</ul></li>
-<li>Optional lazy-loading of dependencies (<code>@Inject(lazy=true)</code>)</li>
-<li>Class aliases (interface-implementation mapping)</li>
-<li>Easy installation with <a href="http://getcomposer.org/doc/00-intro.md">Composer</a> and easy integration with Zend Framework (see <a href="doc/getting-started">Getting started</a>)</li>
-<li>Non-intrusive: you can add PHP-DI into an existing project and use it <em>without impacting existing code</em></li>
-</ul>
+class Class1 {
+    /**
+     * @Inject
+     * @var Class2
+     */
+    private $class2;
 
-<h3>Installation</h3>
-
-<p>Read the <a href="doc/getting-started">Getting started</a> guide.</p>
-
-<h3>Documentation</h3>
-
-<p>Read the <a href="doc/">documentation</a>.</p>
-
-<h3>Contribute</h3>
-
-<p><a href="http://travis-ci.org/mnapoli/PHP-DI"><img src="https://secure.travis-ci.org/mnapoli/PHP-DI.png" alt="Build Status"></a></p>
-
-<ul>
-<li>Read the wiki: <a href="doc/contribute">Contribute</a></li>
-</ul>
+    public function __construct() {
+        \DI\Container::getInstance()-&gt;resolveDependencies($this);
+    }
+}
+</code></pre>
 
 		</section>
 
