@@ -1,3 +1,5 @@
+# Installation
+
 ## Requirements
 
 * __PHP 5.3__ or higher
@@ -18,8 +20,6 @@ First, create a file named `composer.json` in your project root:
 }
 ```
 
-**Current stable version of PHP-DI is 1.0**
-
 Then, run the following commands:
 
 ```bash
@@ -27,10 +27,10 @@ $ curl -s http://getcomposer.org/installer | php
 $ php composer.phar install
 ```
 
-Then you have nothing to do, PHP-DI will be autoloaded by Composer
-(if you use Composer's autoloading system, which I highly recommend).
+PHP-DI classes will be autoloaded by Composer
+if you use Composer's autoloading system (which I highly recommend).
 
-#### Zend Framework
+### Install and use with Zend Framework
 
 Are you using Zend Framework? Check out the official ZF quickstart with
 Dependency Injection already configured: [zf-quickstart-di](https://github.com/mnapoli/zf-quickstart-di).
@@ -39,8 +39,8 @@ Dependency Injection already configured: [zf-quickstart-di](https://github.com/m
 $ git clone git://github.com/mnapoli/zf-quickstart-di.git
 ```
 
-## The configuration file
+## Configuration file
 
-**The [[configuration file]] is optional**, PHP-DI will work with default behavior without it.
+**The configuration file is optional**, PHP-DI will work with default behavior without it.
 
-* Read more about the [[configuration file]]
+Read more about the [configuration file](doc/configuration-file)
