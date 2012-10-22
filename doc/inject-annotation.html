@@ -13,7 +13,7 @@
     <link href="css/bootstrap.min.css" rel="stylesheet">
     <link href="css/bootstrap-responsive.min.css" rel="stylesheet">
     <link href="css/bootstrap-docs.css" rel="stylesheet">
-    <link href="google-code-prettify/prettify.css" rel="stylesheet">
+    <link href="css/prettify.css" rel="stylesheet">
     <link href="css/template.css" rel="stylesheet">
 
     <!--[if lt IE 9]>
@@ -24,19 +24,20 @@
 
 <body>
 
-    <div class="container">
+	<header class="jumbotron subhead" id="overview">
+		<h1>PHP-DI</h1>
+		<p class="lead">Dependency injection with annotations in PHP.</p>
+	</header>
 
-        <header class="jumbotron subhead" id="overview">
-            <h1>PHP-DI</h1>
-            <p class="lead">Dependency injection with annotations in PHP.</p>
-            <div class="subnav">
-                <ul class="nav nav-pills">
-                    <li><a href="index">Home</a></li>
-                    <li><a href="doc/getting-started">Getting started</a></li>
-                    <li><a href="doc/">Documentation</a></li>
-                </ul>
-            </div>
-        </header>
+    <div class="container">
+	
+		<div class="subnav">
+			<ul class="nav nav-pills">
+				<li><a href="index">Home</a></li>
+				<li><a href="doc/getting-started">Getting started</a></li>
+				<li><a href="doc/">Documentation</a></li>
+			</ul>
+		</div>
 
         <section>
 <h1>@Inject annotation</h1>
@@ -180,16 +181,8 @@ class Class1 {
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
     <script src="js/bootstrap.min.js"></script>
-    <script src="google-code-prettify/prettify.js"></script>
-
-	<script>
-		$(function() {
-            $("section h1").wrap('<div class="page-header" />');
-            $("section p:first-child").addClass('lead');
-            $("pre").addClass('prettyprint');
-            prettyPrint();
-		});
-	</script>
+    <script src="js/prettify.js"></script>
+    <script src="js/template.js"></script>
 
 </body>
 </html>
