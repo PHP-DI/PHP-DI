@@ -5,6 +5,11 @@ body {
 }
 
 header {
+    background-color: #616A74;
+    color: white;
+    border-bottom: solid 4px #E6E6E6;
+    padding-bottom: 20px;
+    padding-top: 20px;
 }
 
 footer {
