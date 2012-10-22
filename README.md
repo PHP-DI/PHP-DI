@@ -1,14 +1,10 @@
-Dependency injection with annotations in PHP
-
-## Introduction
-
 The aim of PHP-DI is to make [Dependency Injection](http://en.wikipedia.org/wiki/Dependency_injection)
 as simple as possible with PHP.
 
 Unlike Zend\DI, Symfony Service Container or Pimple, PHP-DI:
 
 * can be used by a monkey
-* is not limited to Services (_anything_ can be injected)
+* is not limited to Services (anything can be injected)
 * uses annotations for code-readability and ease of use
 
 
