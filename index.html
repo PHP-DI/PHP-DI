@@ -68,13 +68,27 @@ as simple as possible with PHP.</p>
 <li>Non-intrusive: you can add PHP-DI into an existing project and use it <em>without impacting existing code</em></li>
 </ul>
 
-<h3>Installation</h3>
+<h3>Quick example</h3>
 
-<p>Read the <a href="doc/getting-started">Getting started</a> guide.</p>
+<pre><code class="php">&lt;?php
+use DI\Annotations\Inject;
 
-<h3>Documentation</h3>
+class Foo {
+    /**
+     * @Inject
+     * @var Bar
+     */
+    private $bar;
 
-<p>Read the <a href="doc/">documentation</a>.</p>
+    public function hello() {
+        return $this-&gt;bar-&gt;sayHello();
+    }
+}
+</code></pre>
+
+<p>In this example, a instance of the <code>Bar</code> class is injected in the <code>Foo</code> class.</p>
+
+<p>That&#39;s as easy as possible!</p>
 
 <h3>Contribute</h3>
 
