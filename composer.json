@@ -8,7 +8,9 @@
 	"autoload": {
 		"psr-0": {
 			"DI": "src/",
-			"DI\\Tests": "tests/"
+			"Benchmarks": "tests/",
+			"IntegrationTests": "tests/",
+			"UnitTests": "tests/"
 		}
 	},
 	"require": {
