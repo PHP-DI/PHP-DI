@@ -19,14 +19,28 @@ Unlike Zend\DI, Symfony Service Container or Pimple, PHP-DI:
 * Non-intrusive: you can add PHP-DI into an existing project and use it *without impacting existing code*
 
 
-### Installation
+### Quick example
 
-Read the [Getting started](doc/getting-started) guide.
+```php
+<?php
+use DI\Annotations\Inject;
 
+class Foo {
+    /**
+     * @Inject
+     * @var Bar
+     */
+    private $bar;
 
-### Documentation
+    public function hello() {
+        return $this->bar->sayHello();
+    }
+}
+```
 
-Read the [documentation](doc/).
+In this example, a instance of the `Bar` class is injected in the `Foo` class.
+
+That's as easy as possible!
 
 
 ### Contribute
