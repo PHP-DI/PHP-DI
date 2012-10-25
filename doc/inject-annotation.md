@@ -78,7 +78,7 @@ class TheImplementationToUse implements MyInterface {
 PHP-DI will fail to inject `myProperty` because the type is an interface (MyInterface) and it will not know what class to use.
 
 You have to do the mapping between the interface (or abstract class) and the implementation to use.
-This can be done in the [[configuration file]]:
+This can be done in the [configuration file](doc/configuration-file):
 
 ```ini
 ; Type mapping for injection
