@@ -52,7 +52,7 @@ $class1 = new Class1();
 \DI\Container::getInstance()->resolveDependencies($class1);
 ```
 
-Where to call `resolveDependencies()`?
+Where to call `resolveDependencies()`? Several solutions are possible:
 
 - in your class constructors
 - in the constructor of a base class (for your controllers for example)
