@@ -59,14 +59,15 @@ Where to call `resolveDependencies()`?
 - where your root application classes (controllers?) are instantiated
 
 If your controller uses services who use repositories, then you just have to use `resolveDependencies()` on your controller when it is
-created. The dependencies will have *their* dependencies injected too, etc... The dependency injection process is transitive.
+created. The dependencies will have *their* dependencies injected too, etc... The dependency injection process is transitive:
+repositories will be injected in services who will be injected in the controller.
 
 ## Zend Framework 1 integration
 
-Are you using Zend Framework 1? Check out the official ZF quickstart with Dependency Injection already configured: [zf-quickstart-di]
+Are you using Zend Framework 1? Check out the ZF quickstart with Dependency Injection already configured: [zf-quickstart-di]
 (https://github.com/mnapoli/zf-quickstart-di).
 
-Short version: just change the base class you use for your controllers.
+**Short version**: just change the base class you use for your controllers.
 
 ```php
 <?php
