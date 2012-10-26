@@ -116,7 +116,7 @@ class TheImplementationToUse implements MyInterface {
 <p>PHP-DI will fail to inject <code>myProperty</code> because the type is an interface (MyInterface) and it will not know what class to use.</p>
 
 <p>You have to do the mapping between the interface (or abstract class) and the implementation to use.
-This can be done in the [[configuration file]]:</p>
+This can be done in the <a href="doc/configuration-file">configuration file</a>:</p>
 
 <pre><code class="ini">; Type mapping for injection
 di.types.map[&quot;MyInterface&quot;] = &quot;TheImplementationToUse&quot;

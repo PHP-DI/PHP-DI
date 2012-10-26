@@ -52,24 +52,6 @@
 <li><a href="doc/contribute">Contribute</a></li>
 </ul>
 
-<h2>Quickstart example</h2>
-
-<pre><code class="php">&lt;?php
-use DI\Annotations\Inject;
-
-class Class1 {
-    /**
-     * @Inject
-     * @var Class2
-     */
-    private $class2;
-
-    public function __construct() {
-        \DI\Container::getInstance()-&gt;resolveDependencies($this);
-    }
-}
-</code></pre>
-
 		</section>
 
     </div><!-- /container -->

@@ -42,17 +42,17 @@
 		</div>
 
         <section>
-<h1>Installation</h1>
+<h1>Getting started</h1>
 
 <h2>Requirements</h2>
 
 <ul>
-<li><strong>PHP 5.3</strong> or higher</li>
+<li><strong>PHP 5.3.0</strong> or higher</li>
 </ul>
 
 <h2>Installation</h2>
 
-<h3>Install and use with Composer</h3>
+<h3>Install with Composer</h3>
 
 <p>The easiest way is to install PHP-DI with <a href="http://getcomposer.org/doc/00-intro.md">Composer</a>.</p>
 
@@ -71,16 +71,52 @@
 $ php composer.phar install
 </code></pre>
 
-<p>PHP-DI classes will be autoloaded by Composer
-if you use Composer&#39;s autoloading system (which I highly recommend).</p>
+<p>PHP-DI classes will be autoloaded by Composer if you use Composer&#39;s autoloading system (which I highly recommend).</p>
 
-<h3>Install and use with Zend Framework</h3>
+<h2>Usage</h2>
 
-<p>Are you using Zend Framework? Check out the official ZF quickstart with
-Dependency Injection already configured: <a href="https://github.com/mnapoli/zf-quickstart-di">zf-quickstart-di</a>.</p>
+<p>We can <strong>declare</strong> a dependency to be injected with the <code>@Inject</code> and <code>@var</code> annotations.</p>
 
-<pre><code class="bash">$ git clone git://github.com/mnapoli/zf-quickstart-di.git
+<pre><code class="php">&lt;?php
+use DI\Annotations\Inject;
+
+class Class1 {
+    /**
+     * @Inject
+     * @var Class2
+     */
+    private $class2;
 </code></pre>
+
+<p>However, declaring the dependency is not enough: the dependency needs to be injected:</p>
+
+<pre><code class="php">$class1 = new Class1();
+\DI\Container::getInstance()-&gt;resolveDependencies($class1);
+</code></pre>
+
+<p>Where to call <code>resolveDependencies()</code>?</p>
+
+<ul>
+<li>in your class constructors</li>
+<li>in the constructor of a base class (for your controllers for example)</li>
+<li>where your root application classes (controllers?) are instantiated</li>
+</ul>
+
+<p>If your controller uses services who use repositories, then you just have to use <code>resolveDependencies()</code> on your controller when it is
+created. The dependencies will have <em>their</em> dependencies injected too, etc... The dependency injection process is transitive:
+repositories will be injected in services who will be injected in the controller.</p>
+
+<h2>Zend Framework 1 integration</h2>
+
+<p>Are you using Zend Framework 1? Check out the ZF quickstart with Dependency Injection already configured: <a href="https://github.com/mnapoli/zf-quickstart-di">zf-quickstart-di</a>.</p>
+
+<p><strong>Short version</strong>: just change the base class you use for your controllers.</p>
+
+<pre><code class="php">&lt;?php
+class IndexController extends \DI\Zend\Controller\Action
+</code></pre>
+
+<p>This base controller class will inject the dependencies automatically in your controller and in every dependency that is injected.</p>
 
 <h2>Configuration file</h2>
 
