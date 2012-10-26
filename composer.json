@@ -12,7 +12,6 @@
 		}
 	},
 	"require": {
-		"doctrine/common": "2.*",
-		"mnapoli/phpbench": "dev-master"
+		"doctrine/common": "2.*"
 	}
 }
