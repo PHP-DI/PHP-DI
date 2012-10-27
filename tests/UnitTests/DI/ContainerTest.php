@@ -3,7 +3,7 @@
 namespace UnitTests\DI;
 
 use \DI\Container;
-
+use stdClass;
 
 /**
  * Test class for Container
@@ -30,6 +30,21 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
 		Container::reset();
 		$instance2 = Container::getInstance();
 		$this->assertNotSame($instance, $instance2);
+	}
+
+	public function testSetGet() {
+		$container = Container::getInstance();
+		$dummy = new stdClass();
+		$container->set('key', $dummy);
+		$this->assertSame($dummy, $container->get('key'));
+	}
+
+	public function testSetClassAlias() {
+		$container = Container::getInstance();
+		$dummy = new stdClass();
+		$container->set('key', $dummy);
+		$container->setClassAlias('alias', 'key');
+		$this->assertSame($dummy, $container->get('alias'));
 	}
 
 	public function testConfigurationFile1() {

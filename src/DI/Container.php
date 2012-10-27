@@ -189,7 +189,7 @@ class Container
 		if (isset($data['di.types.map']) && is_array($data['di.types.map'])) {
 			$mappings = $data['di.types.map'];
 			foreach ($mappings as $contract => $implementation) {
-				$this->addClassAlias($contract, $implementation);
+				$this->setClassAlias($contract, $implementation);
 			}
 		}
 		// Values map
@@ -203,7 +203,7 @@ class Container
 	 * @param string $contractType the abstract class or interface name
 	 * @param string $implementationType Class name of the implementation
 	 */
-	public function addClassAlias($contractType, $implementationType) {
+	public function setClassAlias($contractType, $implementationType) {
 		$this->classAliases[$contractType] = $implementationType;
 	}
 
