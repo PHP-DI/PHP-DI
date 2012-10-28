@@ -88,6 +88,7 @@ di.types.map["MyInterface"] = "TheImplementationToUse"
 This can also be done in PHP:
 
 ```php
+$container = \DI\Container::getInstance();
 $container->setClassAlias('MyInterface', 'TheImplementationToUse');
 ```
 
