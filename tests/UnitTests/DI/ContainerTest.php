@@ -47,6 +47,13 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
 		$this->assertSame($dummy, $container->get('alias'));
 	}
 
+	public function testAnnotationReader() {
+		$container = Container::getInstance();
+		$reader = $this->getMockForAbstractClass('Doctrine\\Common\\Annotations\\Reader');
+		$container->setAnnotationReader($reader);
+		$this->assertSame($reader, $container->getAnnotationReader());
+	}
+
 	public function testConfigurationFile1() {
 		// Empty configuration file
 		Container::getInstance()->addConfigurationFile(dirname(__FILE__)

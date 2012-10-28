@@ -210,7 +210,7 @@ class Container
 	/**
 	 * Returns a proxy class
 	 * @param string $classname
-	 * @return Proxy proxy instance
+	 * @return \DI\Proxy\Proxy Proxy instance
 	 */
 	private function getProxy($classname) {
 		$container = $this;
@@ -235,16 +235,22 @@ class Container
 	}
 
 	/**
-	 * Annotation reader
-	 * @return AnnotationReader
+	 * @return Reader The annotation reader
 	 */
-	private function getAnnotationReader() {
+	public function getAnnotationReader() {
 		if ($this->annotationReader == null) {
 			AnnotationRegistry::registerAutoloadNamespace('DI\Annotations',
 				dirname(__FILE__) . '/../');
 			$this->annotationReader = new AnnotationReader();
 		}
 		return $this->annotationReader;
+	}
+
+	/**
+	 * @param Reader $annotationReader The annotation reader
+	 */
+	public function setAnnotationReader(Reader $annotationReader) {
+		$this->annotationReader = $annotationReader;
 	}
 
 	private final function __clone() {}
