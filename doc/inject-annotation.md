@@ -53,7 +53,7 @@ class NamedInjectionClass {
 
 ## Using interfaces or abstract types
 
-If you have something like:
+If you have a situation like:
 
 ```php
 <?php
@@ -83,6 +83,12 @@ This can be done in the [configuration file](doc/configuration-file):
 ```ini
 ; Type mapping for injection
 di.types.map["MyInterface"] = "TheImplementationToUse"
+```
+
+This can also be done in PHP:
+
+```php
+$container->setClassAlias('MyInterface', 'TheImplementationToUse');
 ```
 
 ## Lazy-loading dependencies
