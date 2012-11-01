@@ -4,7 +4,6 @@ namespace DI\Injector;
 
 use \DI\Annotations\AnnotationException;
 use \DI\Annotations\Value;
-use \DI\Proxy\Proxy;
 
 /**
  * Class injecting values
