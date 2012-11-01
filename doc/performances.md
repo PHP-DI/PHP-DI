@@ -2,10 +2,10 @@
 
 ## Cache
 
-In order to work, PHP-DI has to parse your code to find annotations. This parsing is based on [Doctrine Annotations](http://docs.doctrine-project
-.org/projects/doctrine-common/en/latest/reference/annotations.html).
+In order to work, PHP-DI has to parse your code to find annotations. This parsing is based on
+[Doctrine Annotations](http://docs.doctrine-project.org/projects/doctrine-common/en/latest/reference/annotations.html).
 
-Like Doctrine does, PHP-DI offers a simple solution to put those data into a cache (and it is recommended to use it).
+Like Doctrine does, PHP-DI offers an easy and complete solution to put those data into a cache (and it is recommended to use it).
 
 ### Setup
 
@@ -25,9 +25,9 @@ $container = Container::getInstance();
 $container->setMetadataReader($metadataReader);
 ```
 
-The debug flag is used to invalidate the cache files when your code changed. This flag should be used during development (this is the
-same flag than in [Doctrine annotation setup](http://docs.doctrine-project.org/projects/doctrine-common/en/latest/reference/annotations
-.html#setup-and-configuration)).
+The debug flag is used to invalidate the cache files when your code has changed. This flag should be set to `true` during development
+(this is the same flag than in
+[Doctrine annotation setup](http://docs.doctrine-project.org/projects/doctrine-common/en/latest/reference/annotations.html#setup-and-configuration)).
 
 ### Cache types
 
@@ -44,5 +44,5 @@ The cache implementation is provided by Doctrine (because it works very well) an
 - XcacheCache.php (requires ext/xcache)
 - ZendDataCache.php (requires Zend Server Platform)
 
-Read the [Doctrine documentation](http://docs.doctrine-project.org/projects/doctrine-common/en/latest/reference/caching.html) for more
-details.
+Read the [Doctrine documentation](http://docs.doctrine-project.org/projects/doctrine-common/en/latest/reference/caching.html)
+for more details.

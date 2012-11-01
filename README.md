@@ -14,8 +14,8 @@ Unlike Zend\DI, Symfony Service Container or Pimple, PHP-DI:
     * `@Value` annotation to inject a configuration value
 * Optional lazy-loading of dependencies (`@Inject(lazy=true)`)
 * Class aliases (interface-implementation mapping)
-* Easy installation with [Composer](http://getcomposer.org/doc/00-intro.md) and easy integration with **Zend Framework** (see [Getting
-started](doc/getting-started))
+* Easy installation with [Composer](http://getcomposer.org/doc/00-intro.md) and easy integration with **Zend Framework**
+(see [Getting started](doc/getting-started))
 * Non-intrusive: you can add PHP-DI into an existing project and use it *without impacting existing code*
 
 
