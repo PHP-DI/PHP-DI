@@ -7,7 +7,7 @@ Unlike Zend\DI, Symfony Service Container or Pimple, PHP-DI:
 * uses annotations for code-readability and ease of use
 
 
-### Features
+## Features
 
 * Uses annotations for simplicity, readability and auto-completion in your IDE
     * `@Inject` annotation to inject a dependency
@@ -19,7 +19,7 @@ Unlike Zend\DI, Symfony Service Container or Pimple, PHP-DI:
 * Non-intrusive: you can add PHP-DI into an existing project and use it *without impacting existing code*
 
 
-### Quick example
+## Quick example
 
 ```php
 <?php
@@ -43,7 +43,7 @@ In this example, a instance of the `Bar` class is injected in the `Foo` class.
 That's as easy as possible!
 
 
-### Contribute
+## Contribute
 
 [![Build Status](https://secure.travis-ci.org/mnapoli/PHP-DI.png)](http://travis-ci.org/mnapoli/PHP-DI)
 
