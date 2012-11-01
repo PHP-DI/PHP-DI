@@ -1,6 +1,6 @@
 <?php
 
-namespace UnitTests\DI\Fixtures\ProxyTest;
+namespace UnitTests\DI\Proxy\Fixtures\ProxyTest;
 
 /**
  * Fixture class

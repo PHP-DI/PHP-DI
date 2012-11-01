@@ -12,7 +12,10 @@ class BenchSuite extends \PHPBench\BenchSuite
 	protected $_path = __DIR__;
 
 	public function getBenchCases() {
-		return array(new SimpleInjectBench());
+		return array(
+			new SimpleInjectBench(),
+			new InjectWithCacheBench(),
+		);
 	}
 }
 

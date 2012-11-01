@@ -4,7 +4,10 @@ namespace Benchmarks\DI;
 
 require_once __DIR__ . '/../../../vendor/autoload.php';
 
+use Doctrine\Common\Cache\ArrayCache;
 use DI\Container;
+use DI\MetadataReader\DefaultMetadataReader;
+use DI\MetadataReader\CachedMetadataReader;
 use Benchmarks\DI\Fixtures\NamedInjection\NamedInjectionBenchClass;
 use Benchmarks\DI\Fixtures\PHPDI\PHPDIBenchClass;
 use Benchmarks\DI\Fixtures\PHPDILazy\PHPDILazyBenchClass;
@@ -12,11 +15,9 @@ use Benchmarks\DI\Fixtures\NewInstance\NewBenchClass;
 use Benchmarks\DI\Fixtures\Singleton\SingletonBenchClass;
 
 /**
- * Bench of the injection of a dependency
- *
- * These numbers do not represent really a lot, but it is useful to compare to when using the cache
+ * Bench of a dependency injected using a cache
  */
-class SimpleInjectBench extends \PHPBench\BenchCase
+class InjectWithCacheBench extends \PHPBench\BenchCase
 {
 
 	/**
@@ -25,7 +26,15 @@ class SimpleInjectBench extends \PHPBench\BenchCase
 	protected $_iterationNumber = 40000;
 
 	public function setUp() {
-		Container::getInstance()->set("myBean", new PHPDIBenchClass());
+		$container = Container::getInstance();
+		$container->set("myBean", new PHPDIBenchClass());
+		$container->setMetadataReader(
+			new CachedMetadataReader(
+				new DefaultMetadataReader(),
+				new ArrayCache(),
+				false
+			)
+		);
 	}
 
 	public function benchNew() {

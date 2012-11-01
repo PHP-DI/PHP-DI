@@ -1,9 +1,9 @@
 <?php
 
-namespace UnitTests\DI;
+namespace UnitTests\DI\Proxy;
 
 use \DI\Proxy\Proxy;
-use \UnitTests\DI\Fixtures\ProxyTest\Class1;
+use \UnitTests\DI\Proxy\Fixtures\ProxyTest\Class1;
 
 
 /**
