@@ -22,6 +22,9 @@ class ValueInjector
 	public function inject($object, \ReflectionProperty $property, Value $annotation,
 							array $valueMap
 	) {
+		// Allow access to protected and private properties
+		$property->setAccessible(true);
+		// Get the value
 		$key = $annotation->key;
 		if (! isset($valueMap[$key])) {
 			throw new AnnotationException("@Value was found on " . get_class($object) . "::"
@@ -29,7 +32,6 @@ class ValueInjector
 		}
 		$value = $valueMap[$key];
 		// Inject the value
-		$property->setAccessible(true);
 		$property->setValue($object, $value);
 	}
 

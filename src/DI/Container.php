@@ -3,10 +3,12 @@
 namespace DI;
 
 use DI\Annotations\AnnotationException;
+use DI\MetadataReader\DefaultMetadataReader;
 use DI\Annotations\Inject;
 use DI\Annotations\Value;
 use DI\Injector\DependencyInjector;
 use DI\Injector\ValueInjector;
+use DI\MetadataReader\MetadataReader;
 use DI\Proxy\Proxy;
 use Doctrine\Common\Annotations\Reader;
 use Doctrine\Common\Annotations\AnnotationRegistry;
@@ -51,9 +53,9 @@ class Container
 	private $valueInjector;
 
 	/**
-	 * @var \Doctrine\Common\Annotations\Reader
+	 * @var MetadataReader
 	 */
-	private $annotationReader;
+	private $metadataReader;
 
 	/**
 	 * Returns an instance of the class (Singleton design pattern)
@@ -137,36 +139,16 @@ class Container
 		if (is_null($object)) {
 			throw new DependencyException("null given, object instance expected");
 		}
-		// Fetch the object's properties
-		$reflectionClass = new \ReflectionObject($object);
-		$properties = $reflectionClass->getProperties();
-		// For each property
-		foreach ($properties as $property) {
-			// Consider only not set properties
-			$property->setAccessible(true);
-			if ($property->getValue($object) !== null) {
-				continue;
+		// Get the class metadata
+		$annotations = $this->getMetadataReader()->getClassMetadata(get_class($object));
+		// Process annotations
+		foreach ($annotations as $propertyName => $annotation) {
+			$property = new \ReflectionProperty(get_class($object), $propertyName);
+			if ($annotation instanceof Inject) {
+				$this->dependencyInjector->inject($object, $property, $annotation, $this);
 			}
-			// Look for DI annotations
-			$injectAnnotation = null;
-			$valueAnnotation = null;
-			$propertyAnnotations = $this->getAnnotationReader()->getPropertyAnnotations($property);
-			foreach ($propertyAnnotations as $annotation) {
-				if ($annotation instanceof Inject) {
-					$injectAnnotation = $annotation;
-				}
-				if ($annotation instanceof Value) {
-					$valueAnnotation = $annotation;
-				}
-			}
-			// If both @Inject and @Value annotation, exception
-			if ($injectAnnotation && $valueAnnotation) {
-				throw new AnnotationException(get_class($object) . "::" . $property->getName()
-					. " can't have both @Inject and @Value annotations");
-			} elseif ($injectAnnotation) {
-				$this->dependencyInjector->inject($object, $property, $injectAnnotation, $this);
-			} elseif ($valueAnnotation) {
-				$this->valueInjector->inject($object, $property, $valueAnnotation, $this->valueMap);
+			if ($annotation instanceof Value) {
+				$this->valueInjector->inject($object, $property, $annotation, $this->valueMap);
 			}
 		}
 	}
@@ -208,6 +190,23 @@ class Container
 	}
 
 	/**
+	 * @return MetadataReader The metadata reader
+	 */
+	public function getMetadataReader() {
+		if ($this->metadataReader == null) {
+			$this->metadataReader = new DefaultMetadataReader();
+		}
+		return $this->metadataReader;
+	}
+
+	/**
+	 * @param MetadataReader $metadataReader The metadata reader
+	 */
+	public function setMetadataReader(MetadataReader $metadataReader) {
+		$this->metadataReader = $metadataReader;
+	}
+
+	/**
 	 * Returns a proxy class
 	 * @param string $classname
 	 * @return \DI\Proxy\Proxy Proxy instance
@@ -232,25 +231,6 @@ class Container
 		$instance = new $classname();
 		Container::getInstance()->resolveDependencies($instance);
 		return $instance;
-	}
-
-	/**
-	 * @return Reader The annotation reader
-	 */
-	public function getAnnotationReader() {
-		if ($this->annotationReader == null) {
-			AnnotationRegistry::registerAutoloadNamespace('DI\Annotations',
-				dirname(__FILE__) . '/../');
-			$this->annotationReader = new AnnotationReader();
-		}
-		return $this->annotationReader;
-	}
-
-	/**
-	 * @param Reader $annotationReader The annotation reader
-	 */
-	public function setAnnotationReader(Reader $annotationReader) {
-		$this->annotationReader = $annotationReader;
 	}
 
 	private final function __clone() {}
