@@ -43,27 +43,55 @@
 		</div>
 
         <section>
-<h1>Configuration file</h1>
+<h1>Performances</h1>
 
-<p>The configuration file is <strong>optional</strong>. PHP-DI will work with default behavior without it.</p>
+<h2>Cache</h2>
 
-<p>Here is an example of a configuration file (<code>di.ini</code>):</p>
+<p>In order to work, PHP-DI has to parse your code to find annotations. This parsing is based on
+<a href="http://docs.doctrine-project.org/projects/doctrine-common/en/latest/reference/annotations.html">Doctrine Annotations</a>.</p>
 
-<pre><code class="ini">; PHP-DI - Dependency injection configuration
+<p>Like Doctrine does, PHP-DI offers an easy and complete solution to put those data into a cache (and it is recommended to use it).</p>
 
-; Value injections
-di.values[&quot;db.host&quot;] = &quot;localhost&quot;
-di.values[&quot;email.from&quot;] = &quot;support@example.com&quot;
+<h3>Setup</h3>
 
-; Type mapping for injection using abstract types
-di.types.map[&quot;\My\Interface&quot;] = &quot;\My\Implementation&quot;
-di.types.map[&quot;\My\AbstractClass&quot;] = &quot;\My\OtherImplementation&quot;
+<pre><code class="php">&lt;?php
+use DI\Container;
+use DI\MetadataReader\DefaultMetadataReader;
+use DI\MetadataReader\CachedMetadataReader;
+
+$metadataReader = new CachedMetadataReader(
+    new DefaultMetadataReader(),
+    new Doctrine\Common\Cache\ArrayCache(),
+    $debug = true
+)
+
+$container = Container::getInstance();
+$container-&gt;setMetadataReader($metadataReader);
 </code></pre>
 
-<p>To import the configuration file:</p>
+<p>The debug flag is used to invalidate the cache files when your code has changed. This flag should be set to <code>true</code> during development
+(this is the same flag than in
+<a href="http://docs.doctrine-project.org/projects/doctrine-common/en/latest/reference/annotations.html#setup-and-configuration">Doctrine annotation setup</a>).</p>
 
-<pre><code class="php">\DI\Container::getInstance()-&gt;addConfigurationFile(&#39;di.ini&#39;);
-</code></pre>
+<h3>Cache types</h3>
+
+<p>The cache implementation is provided by Doctrine (because it works very well) and contains:</p>
+
+<ul>
+<li>ApcCache (requires ext/apc)</li>
+<li>ArrayCache (in memory, lifetime of the request)</li>
+<li>FilesystemCache (not optimal for high concurrency)</li>
+<li>MemcacheCache (requires ext/memcache)</li>
+<li>MemcachedCache (requires ext/memcached)</li>
+<li>PhpFileCache (not optimal for high concurrency)</li>
+<li>RedisCache.php (requires ext/phpredis)</li>
+<li>WinCacheCache.php (requires ext/wincache)</li>
+<li>XcacheCache.php (requires ext/xcache)</li>
+<li>ZendDataCache.php (requires Zend Server Platform)</li>
+</ul>
+
+<p>Read the <a href="http://docs.doctrine-project.org/projects/doctrine-common/en/latest/reference/caching.html">Doctrine documentation</a>
+for more details.</p>
 
 		</section>
 

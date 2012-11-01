@@ -38,6 +38,7 @@
 				<li><a href="">Home</a></li>
 				<li><a href="doc/getting-started">Getting started</a></li>
 				<li><a href="doc/">Documentation</a></li>
+                <li><a href="change-log">Change log</a></li>
 			</ul>
 		</div>
 
@@ -93,7 +94,7 @@ class NamedInjectionClass {
 
 <h2>Using interfaces or abstract types</h2>
 
-<p>If you have something like:</p>
+<p>If you have a situation like:</p>
 
 <pre><code class="php">&lt;?php
 class Class1 {
@@ -120,6 +121,12 @@ This can be done in the <a href="doc/configuration-file">configuration file</a>:
 
 <pre><code class="ini">; Type mapping for injection
 di.types.map[&quot;MyInterface&quot;] = &quot;TheImplementationToUse&quot;
+</code></pre>
+
+<p>This can also be done in PHP:</p>
+
+<pre><code class="php">$container = \DI\Container::getInstance();
+$container-&gt;setClassAlias(&#39;MyInterface&#39;, &#39;TheImplementationToUse&#39;);
 </code></pre>
 
 <h2>Lazy-loading dependencies</h2>

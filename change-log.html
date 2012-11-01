@@ -43,27 +43,22 @@
 		</div>
 
         <section>
-<h1>Configuration file</h1>
+<h1>Change log</h1>
 
-<p>The configuration file is <strong>optional</strong>. PHP-DI will work with default behavior without it.</p>
+<h2>1.1</h2>
 
-<p>Here is an example of a configuration file (<code>di.ini</code>):</p>
+<ul>
+<li>Caching of annotations based on Doctrine caches</li>
+</ul>
 
-<pre><code class="ini">; PHP-DI - Dependency injection configuration
+<h2>1.0</h2>
 
-; Value injections
-di.values[&quot;db.host&quot;] = &quot;localhost&quot;
-di.values[&quot;email.from&quot;] = &quot;support@example.com&quot;
-
-; Type mapping for injection using abstract types
-di.types.map[&quot;\My\Interface&quot;] = &quot;\My\Implementation&quot;
-di.types.map[&quot;\My\AbstractClass&quot;] = &quot;\My\OtherImplementation&quot;
-</code></pre>
-
-<p>To import the configuration file:</p>
-
-<pre><code class="php">\DI\Container::getInstance()-&gt;addConfigurationFile(&#39;di.ini&#39;);
-</code></pre>
+<ul>
+<li>DependencyManager renamed to Container</li>
+<li>Refactored basic Container usage with <code>get</code> and <code>set</code></li>
+<li>Allow named injection <code>@Inject(name=&quot;&quot;)</code></li>
+<li>Zend Framework integration</li>
+</ul>
 
 		</section>
 
