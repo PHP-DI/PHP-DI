@@ -13,6 +13,7 @@ class CachedMetadataReader implements MetadataReader
 {
 
 	/**
+	 * Prefix for cache key, to avoid conflicts with other systems using the same cache
 	 * @var string
 	 */
 	private static $CACHE_PREFIX = 'DI\\MetadataReader';
