@@ -16,6 +16,7 @@ use \IntegrationTests\DI\Fixtures\BeanInjectionTest\Issue14;
 use \IntegrationTests\DI\Fixtures\BeanInjectionTest\LazyInjectionClass;
 use \IntegrationTests\DI\Fixtures\BeanInjectionTest\NamedBean;
 use \IntegrationTests\DI\Fixtures\BeanInjectionTest\NamedInjectionClass;
+use \IntegrationTests\DI\Fixtures\BeanInjectionTest\NamedInjectionWithTypeMappingClass;
 
 /**
  * Test class for bean injection
@@ -76,14 +77,13 @@ class BeanInjectionTest extends \PHPUnit_Framework_TestCase
 	 * Injection of named beans
 	 */
 	public function testNamedInjection1() {
+		$container = Container::getInstance();
 		// Configure the named bean
 		$bean = new NamedBean();
 		$bean->nameForTest = 'namedDependency';
-		$container = Container::getInstance();
 		$container->set('namedDependency', $bean);
 		$bean2 = new NamedBean();
 		$bean2->nameForTest = 'namedDependency2';
-		$container = Container::getInstance();
 		$container->set('namedDependency2', $bean2);
 		// Test
 		$class = new NamedInjectionClass();
@@ -100,6 +100,22 @@ class BeanInjectionTest extends \PHPUnit_Framework_TestCase
 	public function testNamedInjection2() {
 		// Exception (bean not defined)
 		new NamedInjectionClass();
+	}
+	/**
+	 * Test that type mapping also works with named injections
+	 */
+	public function testNamedInjectionWithTypeMapping() {
+		$container = Container::getInstance();
+		// Configure the named bean
+		$bean = new NamedBean();
+		$container->set('namedDependency', $bean);
+		$container->setClassAlias('nonExistentDependencyName', 'namedDependency');
+		// Test
+		$class = new NamedInjectionWithTypeMappingClass();
+		$dependency = $class->getDependency();
+		$this->assertNotNull($dependency);
+		$this->assertInstanceOf('\IntegrationTests\DI\Fixtures\BeanInjectionTest\NamedBean', $dependency);
+		$this->assertSame($bean, $dependency);
 	}
 
 	public function testSingleton() {
