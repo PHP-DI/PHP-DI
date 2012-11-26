@@ -1,5 +1,9 @@
 # Change log
 
+## 1.2
+
+* Switched to MIT License
+
 ## 1.1
 
 * Caching of annotations based on Doctrine caches

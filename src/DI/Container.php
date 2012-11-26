@@ -1,4 +1,11 @@
 <?php
+/**
+ * PHP-DI
+ *
+ * @link      http://mnapoli.github.com/PHP-DI/
+ * @copyright 2012 Matthieu Napoli (http://mnapoli.fr/)
+ * @license   http://www.opensource.org/licenses/mit-license.php MIT (see the LICENSE file)
+ */
 
 namespace DI;
 
@@ -10,9 +17,6 @@ use DI\Injector\DependencyInjector;
 use DI\Injector\ValueInjector;
 use DI\MetadataReader\MetadataReader;
 use DI\Proxy\Proxy;
-use Doctrine\Common\Annotations\Reader;
-use Doctrine\Common\Annotations\AnnotationRegistry;
-use Doctrine\Common\Annotations\AnnotationReader;
 
 /**
  * Container

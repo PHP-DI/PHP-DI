@@ -49,3 +49,5 @@ That's as easy as possible!
 
 * PHP-DI sources are [on Github](https://github.com/mnapoli/PHP-DI).
 * Read the wiki: [Contribute](doc/contribute)
+
+PHP-DI is license under the MIT License.

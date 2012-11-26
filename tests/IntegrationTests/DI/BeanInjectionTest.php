@@ -1,4 +1,11 @@
 <?php
+/**
+ * PHP-DI
+ *
+ * @link      http://mnapoli.github.com/PHP-DI/
+ * @copyright 2012 Matthieu Napoli (http://mnapoli.fr/)
+ * @license   http://www.opensource.org/licenses/mit-license.php MIT (see the LICENSE file)
+ */
 
 namespace IntegrationTests\DI;
 
@@ -9,7 +16,6 @@ use \IntegrationTests\DI\Fixtures\BeanInjectionTest\Issue14;
 use \IntegrationTests\DI\Fixtures\BeanInjectionTest\LazyInjectionClass;
 use \IntegrationTests\DI\Fixtures\BeanInjectionTest\NamedBean;
 use \IntegrationTests\DI\Fixtures\BeanInjectionTest\NamedInjectionClass;
-
 
 /**
  * Test class for bean injection

@@ -4,7 +4,7 @@
 	"description": "PHP dependency injection using annotations",
 	"keywords": ["di","dependency injection", "container"],
 	"homepage": "http://mnapoli.github.com/PHP-DI/",
-	"license": "LGPL",
+	"license": "MIT",
 	"autoload": {
 		"psr-0": {
 			"DI": "src/",
