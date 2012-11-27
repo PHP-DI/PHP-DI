@@ -1,7 +1,13 @@
 # Change log
 
-## 1.2
+## 2.0
 
+Compatibility break with 1.x.
+
+* Merge `@Value` annotation with `@Inject`: no difference between value and bean injection anymore
+* Container implements ArrayAccess for get() and set() (`$container['db.host'] = 'localhost';`)
+* Ini configuration files removed: configuration is done in PHP
+* Allow to define beans within closures for lazy-loading
 * Switched to MIT License
 
 ## 1.1
