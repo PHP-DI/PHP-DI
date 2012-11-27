@@ -1,22 +1,25 @@
-The aim of PHP-DI is to make [Dependency Injection](http://en.wikipedia.org/wiki/Dependency_injection) as simple as possible with PHP.
+The aim of PHP-DI is to make [Dependency Injection](http://en.wikipedia.org/wiki/Dependency_injection)
+as simple as possible with PHP.
 
-Unlike Zend\DI, Symfony Service Container or Pimple, PHP-DI:
+Unlike Zend\DI, Symfony Service Container or Pimple (though they are of a great inspiration), PHP-DI:
 
 * can be used by a monkey
-* is not limited to Services (anything can be injected)
+* is not limited to Services (*anything* can be injected)
 * uses annotations for code-readability and ease of use
+* can find and instantiate dependencies automatically (without configuration)
 
 
 ## Features
 
-* Uses annotations for simplicity, readability and auto-completion in your IDE
-    * `@Inject` annotation to inject a dependency
-    * `@Value` annotation to inject a configuration value
-* Optional lazy-loading of dependencies (`@Inject(lazy=true)`)
+* Simple, yet full-featured
+* Uses **annotations** for simplicity, readability and auto-completion in your IDE
+* Automatic bean resolution: you don't have to declare all your beans in configuration files
+* Optional **lazy-loading** of dependencies
+* **Cacheable** for optimal performances
 * Class aliases (interface-implementation mapping)
-* Easy installation with [Composer](http://getcomposer.org/doc/00-intro.md) and easy integration with **Zend Framework**
-(see [Getting started](doc/getting-started))
-* Non-intrusive: you can add PHP-DI into an existing project and use it *without impacting existing code*
+* Easy installation with [**Composer**](http://getcomposer.org/doc/00-intro.md)
+and easy integration with **Zend Framework** (see [Getting started](doc/getting-started))
+* **Non-intrusive**: you can add PHP-DI into an existing project and use it *without impacting existing code*
 
 
 ## Quick example
@@ -38,9 +41,48 @@ class Foo {
 }
 ```
 
-In this example, a instance of the `Bar` class is injected in the `Foo` class.
+In this example, a instance of the `Bar` class is created and injected in the `Foo` class. **No configuration needed**.
 
 That's as easy as possible!
+
+## More
+
+Do you want more? PHP-DI comes on top of a classic, full-featured Dependency Injection container:
+
+```php
+$container = \DI\Container::getInstance();
+$container['dbAdapter'] = $myDbAdapter;
+$myDbAdapter = $container['dbAdapter'];
+```
+
+### Even more
+
+```php
+$container = \DI\Container::getInstance();
+$container['db.params'] = [
+	'dbname'   => 'foo',
+	'user'     => 'root',
+	'password' => '',
+];
+$container['dbAdapter'] = function(\DI\Container $c) {
+	return new DbAdapter($c['db.params']);
+};
+```
+
+and later:
+
+```php
+class Foo {
+    /**
+     * @Inject("dbAdapter")
+     */
+    private $dbAdapter;
+
+    public function foo() {
+        return $this->dbAdapter->query("");
+    }
+}
+```
 
 
 ## Contribute
