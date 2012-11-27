@@ -14,10 +14,9 @@ Container::addConfiguration(array(
 	// Value injections
 	"values" => array(
 		"db.params" => array(
-			"driver"   => "pdo_mysql",
+			"dbname"   => "foo",
 			"user"     => "root",
 			"password" => "",
-			"dbname"   => "foo",
 		),
 		"model" => true,
 		"isDevelopment" => true,
@@ -25,26 +24,17 @@ Container::addConfiguration(array(
 
 	// Type mapping for injection using abstract types
 	"mapping" => array(
-		"\My\Interface"     => "\My\Implementation",
-		"\My\AbstractClass" => "\My\OtherImplementation",
+		"\My\Interface" => "\My\Implementation",
 	),
 
 	// Explicit bean definition
 	"beans" => array(
 		"entityManager" => function(Container $c) {
-			$config = Doctrine\ORM\Tools\Setup::createAnnotationMetadataConfiguration(
-													APPLICATION_PATH . "/models", $c["isDevelopment"]);
-			return Doctrine\ORM\EntityManager::create($c["db.params"], $config);
+			return new DbAdapter($c["db.params"]);
 		},
 	),
 
 ));
-```
-
-To import the configuration file:
-
-```php
-\DI\Container::getInstance()->addConfigurationFile('di.ini');
 ```
 
 ## Value injection
