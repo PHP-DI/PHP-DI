@@ -1,10 +1,10 @@
-The aim of PHP-DI is to make [Dependency Injection](http://en.wikipedia.org/wiki/Dependency_injection)
+The aim of PHP-DI is to make [*Dependency Injection*](http://en.wikipedia.org/wiki/Dependency_injection)
 as simple as possible with PHP.
 
 Unlike Zend\DI, Symfony Service Container or Pimple (though they are of a great inspiration), PHP-DI:
 
 * can be used by a monkey
-* is not limited to Services (*anything* can be injected)
+* is not limited to Services (anything can be injected)
 * uses annotations for code-readability and ease of use
 * can find and instantiate dependencies automatically (without configuration)
 
@@ -55,17 +55,18 @@ $container['dbAdapter'] = $myDbAdapter;
 $myDbAdapter = $container['dbAdapter'];
 ```
 
-### Even more
+## Even more
+
+A more complete version of the previous example:
 
 ```php
-$container = \DI\Container::getInstance();
 $container['db.params'] = [
 	'dbname'   => 'foo',
 	'user'     => 'root',
 	'password' => '',
 ];
-$container['dbAdapter'] = function(\DI\Container $c) {
-	return new DbAdapter($c['db.params']);
+$container['dbAdapter'] = function(Container $c) {
+	return new MyDbAdapter($c['db.params']);
 };
 ```
 
