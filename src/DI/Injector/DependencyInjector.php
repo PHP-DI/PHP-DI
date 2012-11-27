@@ -10,12 +10,13 @@
 namespace DI\Injector;
 
 use \DI\Container;
-use \DI\BeanNotFoundException;
+use \DI\NotFoundException;
 use \DI\DependencyException;
 use \DI\Annotations\Inject;
 
 /**
  * Class injecting dependencies
+ * @deprecated
  */
 class DependencyInjector
 {
@@ -25,13 +26,11 @@ class DependencyInjector
 	 * @param mixed               $object Object to inject dependencies to
 	 * @param \ReflectionProperty $property Property annotated
 	 * @param Inject              $annotation Inject annotation
-	 * @param Container           $container Map of the class types
+	 * @param Container           $container
 	 * @throws DependencyException
-	 * @throws BeanNotFoundException
+	 * @throws NotFoundException
 	 */
-	public function inject($object, \ReflectionProperty $property, Inject $annotation,
-						   Container $container
-	) {
+	public function inject($object, \ReflectionProperty $property, Inject $annotation, Container $container) {
 		// Allow access to protected and private properties
 		$property->setAccessible(true);
 		// Consider only not set properties
@@ -41,9 +40,9 @@ class DependencyInjector
 		// Get the dependency
 		try {
 			$dependencyInstance = $container->get($annotation->name, $annotation->lazy);
-		} catch (BeanNotFoundException $e) {
+		} catch (NotFoundException $e) {
 			// Better exception message
-			throw new BeanNotFoundException("@Inject was found on "
+			throw new NotFoundException("@Inject was found on "
 				. get_class($object) . "::" . $property->getName()
 				. " but no bean '$annotation->name' was found");
 		} catch (\Exception $e) {

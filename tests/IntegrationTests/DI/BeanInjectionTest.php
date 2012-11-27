@@ -27,26 +27,22 @@ class BeanInjectionTest extends \PHPUnit_Framework_TestCase
 	public function setUp() {
 		// Reset the singleton instance to ensure all tests are independent
 		Container::reset();
-		// Dependency injection configuration
-		Container::getInstance()->addConfigurationFile(dirname(__FILE__)
-			. '/Fixtures/BeanInjectionTest/di.ini');
+		Container::addConfiguration(array(
+			'aliases' => array(
+				'\IntegrationTests\DI\Fixtures\BeanInjectionTest\Interface1' => '\IntegrationTests\DI\Fixtures\BeanInjectionTest\Class3'
+			)
+		));
 	}
 
 
-	/**
-	 * Injection with a class name
-	 */
-	public function testInjection1() {
+	public function testBasicInjection() {
 		$class1 = new Class1();
 		$dependency = $class1->getClass2();
 		$this->assertNotNull($dependency);
 		$this->assertInstanceOf('\IntegrationTests\DI\Fixtures\BeanInjectionTest\Class2', $dependency);
 	}
 
-	/**
-	 * Injection with an interface name
-	 */
-	public function testInjection2() {
+	public function testInterfaceInjection() {
 		$class1 = new Class1();
 		$dependency = $class1->getInterface1();
 		$this->assertNotNull($dependency);
@@ -61,14 +57,11 @@ class BeanInjectionTest extends \PHPUnit_Framework_TestCase
 		$dependency = $class->getClass2();
 		$this->assertNotNull($dependency);
 		$this->assertInstanceOf('\DI\Proxy\Proxy', $dependency);
-	}
-	public function testLazyInjection2() {
-		$class = new LazyInjectionClass();
-		$dependency = $class->getClass2();
-		$this->assertNotNull($dependency);
+		// Correct proxy resolution
 		$this->assertTrue($dependency->getBoolean());
 	}
-	public function testLazyInjection3() {
+
+	public function testLazyInjection2() {
 		$class = new LazyInjectionClass();
 		$this->assertTrue($class->getDependencyAttribute());
 	}
@@ -76,7 +69,7 @@ class BeanInjectionTest extends \PHPUnit_Framework_TestCase
 	/**
 	 * Injection of named beans
 	 */
-	public function testNamedInjection1() {
+	public function testNamedInjection() {
 		$container = Container::getInstance();
 		// Configure the named bean
 		$bean = new NamedBean();
@@ -94,22 +87,28 @@ class BeanInjectionTest extends \PHPUnit_Framework_TestCase
 		$this->assertSame($bean, $dependency);
 		$this->assertNotSame($bean2, $dependency);
 	}
+
 	/**
-	 * @expectedException \DI\BeanNotFoundException
+	 * @expectedException \DI\NotFoundException
 	 */
-	public function testNamedInjection2() {
+	public function testNamedInjectionNotFound() {
 		// Exception (bean not defined)
 		new NamedInjectionClass();
 	}
+
 	/**
 	 * Test that type mapping also works with named injections
 	 */
 	public function testNamedInjectionWithTypeMapping() {
 		$container = Container::getInstance();
+		Container::addConfiguration(array(
+			'aliases' => array(
+				'nonExistentDependencyName' => 'namedDependency'
+			)
+		));
 		// Configure the named bean
 		$bean = new NamedBean();
 		$container->set('namedDependency', $bean);
-		$container->setClassAlias('nonExistentDependencyName', 'namedDependency');
 		// Test
 		$class = new NamedInjectionWithTypeMappingClass();
 		$dependency = $class->getDependency();
@@ -118,7 +117,7 @@ class BeanInjectionTest extends \PHPUnit_Framework_TestCase
 		$this->assertSame($bean, $dependency);
 	}
 
-	public function testSingleton() {
+	public function testFactoryCreatesSingletons() {
 		$class1_1 = new Class1();
 		$class2_1 = $class1_1->getClass2();
 		$class1_2 = new Class1();

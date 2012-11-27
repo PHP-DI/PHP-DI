@@ -11,55 +11,89 @@ Container::addConfiguration(array(
 	// Used to restrict the configuration to a specific namespace
 	"namespace" => "",
 
-	// Value injections
-	"values" => array(
+	// Beans and value definitions
+	"entries" => array(
+		"email.from" => "me@example.org",
 		"db.params" => array(
 			"dbname"   => "foo",
 			"user"     => "root",
 			"password" => "",
 		),
-		"model" => true,
-		"isDevelopment" => true,
-	),
-
-	// Type mapping for injection using abstract types
-	"mapping" => array(
-		"\My\Interface" => "\My\Implementation",
-	),
-
-	// Explicit bean definition
-	"beans" => array(
-		"entityManager" => function(Container $c) {
+		"dbAdapter" => function(\DI\Container $c) {
 			return new DbAdapter($c["db.params"]);
 		},
 	),
 
+	// Type mapping for injection using abstract types
+	"aliases" => array(
+		"\My\Interface" => "\My\Implementation",
+	),
+
 ));
 ```
 
-## Value injection
+## Beans
+
+You can define a bean that can be injected using the [@Inject annotation](doc/inject-annotation).
 
 ```php
 Container::addConfiguration(array(
-	"values" => array(
-		"key" => "value",
+	"entries" => array(
+		"name" => $myObject,
 	),
 ));
 ```
 
-Defines a value that can be injected using the [@Value annotation](doc/value-annotation).
-
-## Type mapping
+However, a more efficient way of configuring a bean is through a closure (or callback):
 
 ```php
 Container::addConfiguration(array(
-	"mapping" => array(
+	"entries" => array(
+		"name" => function(\DI\Container $c) {
+			return new MyClass();
+		},
+	),
+));
+```
+
+Using this way, the object is instantiated only when (and if) it is injected.
+
+## Values
+
+You can define a value that can be injected using the [@Inject annotation](doc/inject-annotation).
+
+```php
+Container::addConfiguration(array(
+	"entries" => array(
+		"name" => "value",
+	),
+));
+```
+
+## Aliases
+
+If you are trying to inject an abstract type (interface or abstract class),
+this configuration allows you to define which implementation to use.
+
+```php
+Container::addConfiguration(array(
+	"aliases" => array(
 		"\My\Interface" => "\My\Implementation",
 	),
 ));
 ```
 
-If you are trying to inject an abstract type (interface or abstract class),
-this configuration allows you to define which implementation to use.
+You can also use it to map any types, i.e. to override a type being injected
+(or even configuration values).
 
-You can also use it to map any types, i.e. to override a type being injected.
+If you really want to know, this is simply translated by PHP-DI to:
+
+```php
+Container::addConfiguration(array(
+	"entries" => array(
+		"\My\Interface" => function(\DI\Container $c) {
+			return $c->get("\My\Implementation");
+		},
+	),
+));
+```

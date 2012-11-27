@@ -9,8 +9,8 @@
 
 namespace UnitTests\DI;
 
-use \DI\Container;
 use stdClass;
+use \DI\Container;
 
 /**
  * Test class for Container
@@ -45,16 +45,45 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
 		$container->set('key', $dummy);
 		$this->assertSame($dummy, $container->get('key'));
 	}
-
-	public function testSetClassAlias() {
+	/**
+	 * @expectedException \DI\NotFoundException
+	 */
+	public function testGetNotFound() {
 		$container = Container::getInstance();
-		$dummy = new stdClass();
-		$container->set('key', $dummy);
-		$container->setClassAlias('alias', 'key');
-		$this->assertSame($dummy, $container->get('alias'));
+		$container->get('key');
+	}
+	public function testGetWithClosure() {
+		$container = Container::getInstance();
+		$container->set('key', function(Container $c) {
+			return 'hello';
+		});
+		$this->assertEquals('hello', $container->get('key'));
+	}
+	public function testGetWithClosureIsCached() {
+		$container = Container::getInstance();
+		$container->set('key', function(Container $c) {
+			return new stdClass();
+		});
+		$instance1 = $container->get('key');
+		$instance2 = $container->get('key');
+		$this->assertSame($instance1, $instance2);
+	}
+	public function testGetWithFactory() {
+		$container = Container::getInstance();
+		$this->assertInstanceOf('stdClass', $container->get('stdClass'));
+	}
+	public function testGetWithFactoryIsCached() {
+		$container = Container::getInstance();
+		$instance1 = $container->get('stdClass');
+		$instance2 = $container->get('stdClass');
+		$this->assertSame($instance1, $instance2);
+	}
+	public function testGetWithProxy() {
+		$container = Container::getInstance();
+		$this->assertInstanceOf('\DI\Proxy\Proxy', $container->get('stdClass', true));
 	}
 
-	public function testAnnotationReader() {
+	public function testMetadataReader() {
 		$container = Container::getInstance();
 		/** @var $reader \DI\MetadataReader\MetadataReader */
 		$reader = $this->getMockForAbstractClass('DI\\MetadataReader\\MetadataReader');
@@ -62,10 +91,72 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
 		$this->assertSame($reader, $container->getMetadataReader());
 	}
 
-	public function testConfigurationFile1() {
-		// Empty configuration file
-		Container::getInstance()->addConfigurationFile(dirname(__FILE__)
-			. '/Fixtures/ContainerTest/di-empty.ini');
+	public function testAddConfigurationEmpty() {
+		// Empty configuration, no errors
+		Container::addConfiguration(array());
+	}
+	public function testAddConfigurationEntries1() {
+		Container::addConfiguration(array(
+			'entries' => array(),
+		));
+	}
+	/**
+	 * @depends testSetGet
+	 */
+	public function testAddConfigurationEntries2() {
+		Container::addConfiguration(array(
+			'entries' => array(
+				'test' => 'success',
+			),
+		));
+		$container = Container::getInstance();
+		$this->assertEquals('success', $container->get('test'));
+	}
+
+	/**
+	 * @depends testSetGet
+	 */
+	public function testArrayAccessGet() {
+		$container = Container::getInstance();
+		$dummy = new stdClass();
+		$container->set('key', $dummy);
+		$this->assertSame($dummy, $container['key']);
+	}
+	/**
+	 * @depends testArrayAccessGet
+	 */
+	public function testArrayAccessSet() {
+		$container = Container::getInstance();
+		$dummy = new stdClass();
+		$container['key'] = $dummy;
+		$this->assertSame($dummy, $container['key']);
+	}
+	/**
+	 * @depends testArrayAccessGet
+	 */
+	public function testArrayAccessExists() {
+		$container = Container::getInstance();
+		$dummy = new stdClass();
+		$this->assertFalse(isset($container['key']));
+		$container['key'] = $dummy;
+		$this->assertTrue(isset($container['key']));
+	}
+	/**
+	 * @depends testArrayAccessGet
+	 */
+	public function testArrayAccessExistsWithClassName() {
+		$container = Container::getInstance();
+		$this->assertTrue(isset($container['stdClass']));
+	}
+	/**
+	 * @depends testArrayAccessGet
+	 */
+	public function testArrayAccessUnset() {
+		$container = Container::getInstance();
+		$dummy = new stdClass();
+		$container['key'] = $dummy;
+		unset($container['key']);
+		$this->assertFalse(isset($container['key']));
 	}
 
 }

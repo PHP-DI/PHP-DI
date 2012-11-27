@@ -10,7 +10,7 @@
 namespace DI;
 
 /**
- * Exception for the Dependency Manager
+ * Exception for the Container
  */
 class DependencyException extends \Exception
 {

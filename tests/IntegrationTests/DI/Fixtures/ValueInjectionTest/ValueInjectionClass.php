@@ -9,7 +9,7 @@
 
 namespace IntegrationTests\DI\Fixtures\ValueInjectionTest;
 
-use DI\Annotations\Value;
+use DI\Annotations\Inject;
 
 /**
  * Fixture class
@@ -17,7 +17,7 @@ use DI\Annotations\Value;
 class ValueInjectionClass {
 
 	/**
-	 * @Value("db.host")
+	 * @Inject("db.host")
 	 * @var string
 	 */
 	private $value;

@@ -63,11 +63,6 @@ class DefaultMetadataReader implements MetadataReader
 					$annotations[$property->getName()] = $annotation;
 					break;
 				}
-				// @Value
-				if ($annotation instanceof Value) {
-					$annotations[$property->getName()] = $annotation;
-					break;
-				}
 			}
 
 		}

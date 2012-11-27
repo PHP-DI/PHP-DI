@@ -26,19 +26,22 @@ class ValueInjectionTest extends \PHPUnit_Framework_TestCase
 	/**
 	 * Value annotation
 	 */
-	public function testValue1() {
-		Container::getInstance()->addConfigurationFile(dirname(__FILE__)
-			. '/Fixtures/ValueInjectionTest/di.ini');
+	public function testValue() {
+		Container::addConfiguration(array(
+			'entries' => array(
+				'db.host' => 'localhost'
+			)
+		));
 		$class = new ValueInjectionClass();
 		$value = $class->getValue();
-		$this->assertEquals("localhost", $value);
+		$this->assertEquals('localhost', $value);
 	}
 	/**
-	 * @expectedException \DI\Annotations\AnnotationException
+	 * @expectedException \DI\NotFoundException
 	 */
 	public function testValueException() {
 		$class = new ValueInjectionClass();
-		$value = $class->getValue();
+		$class->getValue();
 	}
 
 }

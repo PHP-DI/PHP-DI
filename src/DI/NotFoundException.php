@@ -10,9 +10,9 @@
 namespace DI;
 
 /**
- * Exception thrown when a bean is not found
+ * Exception thrown when a bean or a value is not found in the container
  */
-class BeanNotFoundException extends \Exception
+class NotFoundException extends \Exception
 {
 
 }

@@ -9,12 +9,10 @@
 
 namespace DI;
 
+use ArrayAccess;
 use DI\Annotations\AnnotationException;
 use DI\MetadataReader\DefaultMetadataReader;
 use DI\Annotations\Inject;
-use DI\Annotations\Value;
-use DI\Injector\DependencyInjector;
-use DI\Injector\ValueInjector;
 use DI\MetadataReader\MetadataReader;
 use DI\Proxy\Proxy;
 
@@ -23,43 +21,22 @@ use DI\Proxy\Proxy;
  *
  * This class uses the resettable Singleton pattern (resettable for the tests).
  */
-class Container
+class Container implements ArrayAccess
 {
 
 	private static $singletonInstance = null;
 
 	/**
-	 * Map of instances
-	 * @var array object[name]
+	 * Map of instances and values that can be injected
+	 * @var array
 	 */
-	private $beanMap = array();
-
-	/**
-	 * Array of the values to inject with the Value annotation
-	 * @var array value[key]
-	 */
-	private $valueMap = array();
-
-	/**
-	 * Map of instances/class names to use for abstract classes and interfaces
-	 * @var array array(interface => implementation)
-	 */
-	private $classAliases = array();
-
-	/**
-	 * @var DependencyInjector
-	 */
-	private $dependencyInjector;
-
-	/**
-	 * @var ValueInjector
-	 */
-	private $valueInjector;
+	private $map = array();
 
 	/**
 	 * @var MetadataReader
 	 */
 	private $metadataReader;
+
 
 	/**
 	 * Returns an instance of the class (Singleton design pattern)
@@ -80,11 +57,31 @@ class Container
 	}
 
 	/**
+	 * Applies the configuration given
+	 * @param array $configuration See the documentation
+	 */
+	public static function addConfiguration(array $configuration) {
+		$container = self::getInstance();
+		// Entries
+		if (isset($configuration['entries'])) {
+			foreach ($configuration['entries'] as $name => $entry) {
+				$container->set($name, $entry);
+			}
+		}
+		// Aliases
+		if (isset($configuration['aliases'])) {
+			foreach ($configuration['aliases'] as $from => $to) {
+				$container->set($from, function(Container $c) use ($to) {
+					return $c->get($to);
+				});
+			}
+		}
+	}
+
+	/**
 	 * Protected constructor because of singleton
 	 */
 	protected function __construct() {
-		$this->dependencyInjector = new DependencyInjector();
-		$this->valueInjector = new ValueInjector();
 	}
 
 	/**
@@ -92,44 +89,41 @@ class Container
 	 *
 	 * @param string $name Can be a bean name or a class name
 	 * @param bool   $useProxy If true, returns a proxy class of the instance
-	 * 						   if it is not already loaded
+	 *                            if it is not already loaded
 	 * @return mixed Instance
-	 * @throws BeanNotFoundException
+	 * @throws NotFoundException
 	 */
 	public function get($name, $useProxy = false) {
-		if (array_key_exists($name, $this->beanMap)) {
-			return $this->beanMap[$name];
-		}
-		$className = $name;
-		// Try to find a mapping for the implementation to use
-		if (array_key_exists($name, $this->classAliases)) {
-			$className = $this->classAliases[$className];
-		}
-		// Try to find the bean
-		if (array_key_exists($className, $this->beanMap)) {
-			return $this->beanMap[$className];
-		}
-		// Instance not found, use the factory to create it
-		if (class_exists($className)) {
-			if (!$useProxy) {
-				$this->beanMap[$className] = $this->getNewInstance($className);
-				return $this->beanMap[$className];
-			} else {
-				// Return a proxy class
-				return $this->getProxy($className);
+		// Try to find the entry in the map
+		if (array_key_exists($name, $this->map)) {
+			$entry = $this->map[$name];
+			// If it's a closure, resolve it and save the bean
+			if ($entry instanceof \Closure) {
+				$entry = $entry($this);
+				$this->map[$name] = $entry;
 			}
+			return $entry;
 		}
-		throw new BeanNotFoundException("No bean or class named '$name' was found");
+		// Entry not found, use the factory if it's a class name
+		if (class_exists($name)) {
+			// Return a proxy class
+			if ($useProxy) {
+				return $this->getProxy($name);
+			}
+			$this->map[$name] = $this->getNewInstance($name);
+			return $this->map[$name];
+		}
+		throw new NotFoundException("No bean, value or class found for '$name'");
 	}
 
 	/**
-	 * Define a bean in the container
+	 * Define a bean or a value in the container
 	 *
-	 * @param string $name Bean name or class name to be used with Inject annotation
-	 * @param object $instance Instance
+	 * @param string $name Name to use with Inject annotation
+	 * @param mixed  $entry Entry to store in the container (bean or value)
 	 */
-	public function set($name, $instance) {
-		$this->beanMap[$name] = $instance;
+	public function set($name, $entry) {
+		$this->map[$name] = $entry;
 	}
 
 	/**
@@ -147,50 +141,10 @@ class Container
 		$annotations = $this->getMetadataReader()->getClassMetadata(get_class($object));
 		// Process annotations
 		foreach ($annotations as $propertyName => $annotation) {
-			$property = new \ReflectionProperty(get_class($object), $propertyName);
 			if ($annotation instanceof Inject) {
-				$this->dependencyInjector->inject($object, $property, $annotation, $this);
-			}
-			if ($annotation instanceof Value) {
-				$this->valueInjector->inject($object, $property, $annotation, $this->valueMap);
+				$this->inject($object, $propertyName, $annotation);
 			}
 		}
-	}
-
-	/**
-	 * Read and applies the configuration found in the file
-	 *
-	 * Doesn't reset the configuration to default before importing the file.
-	 * @param string $configurationFile the php-di configuration file
-	 * @throws \Exception
-	 * @throws DependencyException
-	 */
-	public function addConfigurationFile($configurationFile) {
-		if (!(file_exists($configurationFile) && is_readable($configurationFile))) {
-			throw new \Exception("Configuration file $configurationFile doesn't exist or is not readable");
-		}
-		// Read ini file
-		$data = parse_ini_file($configurationFile);
-		// Implementation map
-		if (isset($data['di.types.map']) && is_array($data['di.types.map'])) {
-			$mappings = $data['di.types.map'];
-			foreach ($mappings as $contract => $implementation) {
-				$this->setClassAlias($contract, $implementation);
-			}
-		}
-		// Values map
-		if (isset($data['di.values']) && is_array($data['di.values'])) {
-			$this->valueMap = array_merge($this->valueMap, $data['di.values']);
-		}
-	}
-
-	/**
-	 * Map the implementation to use for an abstract class or interface
-	 * @param string $contractType the abstract class or interface name
-	 * @param string $implementationType Class name of the implementation
-	 */
-	public function setClassAlias($contractType, $implementationType) {
-		$this->classAliases[$contractType] = $implementationType;
 	}
 
 	/**
@@ -211,18 +165,61 @@ class Container
 	}
 
 	/**
+	 * Whether a offset exists
+	 * @link http://php.net/manual/en/arrayaccess.offsetexists.php
+	 * @param mixed $offset An offset to check for
+	 * @return boolean true on success or false on failure
+	 */
+	public function offsetExists($offset) {
+		// Try to find the entry in the map
+		if (array_key_exists($offset, $this->map)) {
+			return true;
+		}
+		// Entry not found, it's a class name
+		if (class_exists($offset)) {
+			return true;
+		}
+		return false;
+	}
+
+	/**
+	 * Offset to retrieve
+	 * @link http://php.net/manual/en/arrayaccess.offsetget.php
+	 * @param mixed $offset The offset to retrieve
+	 * @return mixed Can return all value types
+	 */
+	public function offsetGet($offset) {
+		return $this->get($offset);
+	}
+
+	/**
+	 * Offset to set
+	 * @link http://php.net/manual/en/arrayaccess.offsetset.php
+	 * @param mixed $offset The offset to assign the value to
+	 * @param mixed $value The value to set
+	 */
+	public function offsetSet($offset, $value) {
+		$this->set($offset, $value);
+	}
+
+	/**
+	 * Offset to unset
+	 * @link http://php.net/manual/en/arrayaccess.offsetunset.php
+	 * @param mixed $offset The offset to unset
+	 */
+	public function offsetUnset($offset) {
+		unset($this->map[$offset]);
+	}
+
+	/**
 	 * Returns a proxy class
 	 * @param string $classname
 	 * @return \DI\Proxy\Proxy Proxy instance
 	 */
 	private function getProxy($classname) {
 		$container = $this;
-		return new Proxy(function() use ($container, $classname) {
-			// Create the instance and add it to the container
-			$instance = new $classname();
-			$container->resolveDependencies($instance);
-			$container->set($classname, $instance);
-			return $instance;
+		return new Proxy(function () use ($container, $classname) {
+			return $container->get($classname);
 		});
 	}
 
@@ -237,6 +234,40 @@ class Container
 		return $instance;
 	}
 
-	private final function __clone() {}
+	/**
+	 * Resolve the Inject annotation on a property
+	 * @param mixed  $object Object to inject dependencies to
+	 * @param string $propertyName Name of the property annotated
+	 * @param Inject $annotation Inject annotation
+	 * @throws DependencyException
+	 * @throws NotFoundException
+	 */
+	private function inject($object, $propertyName, Inject $annotation) {
+		$property = new \ReflectionProperty(get_class($object), $propertyName);
+		// Allow access to protected and private properties
+		$property->setAccessible(true);
+		// Consider only not set properties
+		if ($property->getValue($object) !== null) {
+			return;
+		}
+		// Get the dependency
+		try {
+			$value = $this->get($annotation->name, $annotation->lazy);
+		} catch (NotFoundException $e) {
+			// Better exception message
+			throw new NotFoundException("@Inject was found on "
+				. get_class($object) . "::" . $property->getName()
+				. " but no bean or value '$annotation->name' was found");
+		} catch (\Exception $e) {
+			throw new DependencyException("Error while injecting $annotation->name in "
+				. get_class($object) . "::" . $property->getName() . ". "
+				. $e->getMessage(), 0, $e);
+		}
+		// Inject the dependency
+		$property->setValue($object, $value);
+	}
+
+	private final function __clone() {
+	}
 
 }

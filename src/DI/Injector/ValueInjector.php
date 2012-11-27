@@ -9,11 +9,13 @@
 
 namespace DI\Injector;
 
-use \DI\Annotations\AnnotationException;
-use \DI\Annotations\Value;
+use DI\Annotations\AnnotationException;
+use DI\Annotations\Value;
+use DI\Container;
 
 /**
  * Class injecting values
+ * @deprecated
  */
 class ValueInjector
 {
@@ -23,22 +25,19 @@ class ValueInjector
 	 * @param mixed               $object Object to inject dependencies to
 	 * @param \ReflectionProperty $property Property annotated
 	 * @param Value               $annotation Value annotation
-	 * @param array               $valueMap Map of values
+	 * @param Container           $container Map of values
 	 * @throws AnnotationException
 	 */
-	public function inject($object, \ReflectionProperty $property, Value $annotation,
-							array $valueMap
-	) {
-		// Allow access to protected and private properties
-		$property->setAccessible(true);
+	public function inject($object, \ReflectionProperty $property, Value $annotation, Container $container) {
 		// Get the value
 		$key = $annotation->key;
-		if (! isset($valueMap[$key])) {
+		if (! isset($container[$key])) {
 			throw new AnnotationException("@Value was found on " . get_class($object) . "::"
 				. $property->getName() . " but the key '$key' can't be resolved");
 		}
-		$value = $valueMap[$key];
+		$value = $container[$key];
 		// Inject the value
+		$property->setAccessible(true);
 		$property->setValue($object, $value);
 	}
 

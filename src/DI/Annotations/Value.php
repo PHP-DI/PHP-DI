@@ -13,6 +13,7 @@ namespace DI\Annotations;
  * "Value" annotation
  * @Annotation
  * @Target("PROPERTY")
+ * @deprecated
  */
 class Value {
 
