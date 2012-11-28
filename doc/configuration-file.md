@@ -26,7 +26,7 @@ Container::addConfiguration(array(
 
 	// Type mapping for injection using abstract types
 	"aliases" => array(
-		"\My\Interface" => "\My\Implementation",
+		"My\Interface" => "My\Implementation",
 	),
 
 ));
@@ -78,7 +78,7 @@ this configuration allows you to define which implementation to use.
 ```php
 Container::addConfiguration(array(
 	"aliases" => array(
-		"\My\Interface" => "\My\Implementation",
+		"My\Interface" => "My\Implementation",
 	),
 ));
 ```
@@ -91,8 +91,8 @@ If you really want to know, this is simply translated by PHP-DI to:
 ```php
 Container::addConfiguration(array(
 	"entries" => array(
-		"\My\Interface" => function(\DI\Container $c) {
-			return $c->get("\My\Implementation");
+		"My\Interface" => function(\DI\Container $c) {
+			return $c->get("My\Implementation");
 		},
 	),
 ));
