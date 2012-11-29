@@ -1,11 +1,10 @@
-# Configuration file
+# Configure
 
-The configuration file is **optional**. PHP-DI will work with default behavior without it.
+The configuration is **optional**. PHP-DI will work with default and automatic behavior without it.
 
-Here is an example of a configuration file (`di.php`):
+Here is an example of a configuration (you can put it in a `di.php` configuration file if you want to):
 
 ```php
-// Dependency injection configuration
 Container::addConfiguration(array(
 
 	// Used to restrict the configuration to a specific namespace
@@ -32,9 +31,10 @@ Container::addConfiguration(array(
 ));
 ```
 
+
 ## Beans
 
-You can define a bean that can be injected using the [@Inject annotation](doc/inject-annotation).
+You can define a bean that can be injected using the [@Inject("myBean") annotation](doc/inject).
 
 ```php
 Container::addConfiguration(array(
