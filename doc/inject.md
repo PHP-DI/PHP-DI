@@ -46,11 +46,9 @@ Also, if you want dependency injection, you'll have noticed by now that this loo
 
 ### Declaring
 
-We can declare a dependency to be injected with the `@Inject` and `@var` annotations.
+We can declare a dependency to inject with the `@Inject` and `@var` annotations.
 
-*`@Inject` is annotation defined by PHP-DI, `@var` is the standard phpDocumentor annotation*
-
-With the previous example, we can inject an instance of `My\GreatClass` right into our class:
+Like the previous example, we can inject an instance of `My\GreatClass` right into our class:
 
 ```php
 use DI\Annotations\Inject;
@@ -63,6 +61,8 @@ class MyService {
     private $myDependency;
 }
 ```
+
+*`@Inject` is annotation defined by PHP-DI, `@var` is the standard phpDocumentor annotation*
 
 ### Injecting
 
