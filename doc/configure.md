@@ -58,9 +58,10 @@ Container::addConfiguration(array(
 
 Using this way, the object is instantiated only when (and if) it is injected.
 
+
 ## Values
 
-You can define a value that can be injected using the [@Inject annotation](doc/inject-annotation).
+You can define a value that can be injected using the [@Inject annotation](doc/inject).
 
 ```php
 Container::addConfiguration(array(
@@ -69,6 +70,7 @@ Container::addConfiguration(array(
 	),
 ));
 ```
+
 
 ## Aliases
 

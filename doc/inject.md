@@ -26,7 +26,7 @@ $something = $container['something'];
 
 (to put something into the container, read the [configuration manual](doc/configure))
 
-If you don't want to do any configuration, you can simply do:
+If you don't want to do any configuration and get class instances, you can simply do:
 
 ```php
 // Object style
@@ -96,6 +96,24 @@ If your controller uses services which use repositories, then you just have to u
 on your controller when it is created.
 The dependency injection process is **transitive**: *repositories will be injected in services who
 will be injected in the controller*.
+
+
+### Value injection
+
+Like with `$container->get($something)`, you can of course inject values:
+
+```php
+use DI\Annotations\Inject;
+
+class MyService {
+    /**
+     * @Inject("db.host")
+     */
+    private $dbHost;
+}
+```
+
+(to put something into the container, read the [configuration manual](doc/configure))
 
 
 ### Named injection
