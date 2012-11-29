@@ -94,7 +94,7 @@ when the controller is created by Zend Framework.
 
 If your controller uses services which use repositories, then you just have to use `resolveDependencies()`
 on your controller when it is created.
-The dependency injection process is **transitive**: *repositories will be injected in services who
+The dependency injection process is **transitive**: *repositories will be injected in services which
 will be injected in the controller*.
 
 
