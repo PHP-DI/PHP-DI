@@ -26,7 +26,7 @@ $something = $container['something'];
 
 (to put something into the container, read the [configuration manual](doc/configure))
 
-If you don't want to do any configuration and get class instances, you can simply do:
+If you want to get class instances, you don't need any configuration, you can simply do:
 
 ```php
 // Object style
