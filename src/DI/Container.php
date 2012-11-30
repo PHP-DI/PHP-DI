@@ -30,7 +30,7 @@ class Container implements ArrayAccess
 	 * Map of instances and values that can be injected
 	 * @var array
 	 */
-	private $map = array();
+	private $entries = array();
 
 	/**
 	 * @var MetadataReader
@@ -95,12 +95,12 @@ class Container implements ArrayAccess
 	 */
 	public function get($name, $useProxy = false) {
 		// Try to find the entry in the map
-		if (array_key_exists($name, $this->map)) {
-			$entry = $this->map[$name];
+		if (array_key_exists($name, $this->entries)) {
+			$entry = $this->entries[$name];
 			// If it's a closure, resolve it and save the bean
 			if ($entry instanceof \Closure) {
 				$entry = $entry($this);
-				$this->map[$name] = $entry;
+				$this->entries[$name] = $entry;
 			}
 			return $entry;
 		}
@@ -110,8 +110,8 @@ class Container implements ArrayAccess
 			if ($useProxy) {
 				return $this->getProxy($name);
 			}
-			$this->map[$name] = $this->getNewInstance($name);
-			return $this->map[$name];
+			$this->entries[$name] = $this->getNewInstance($name);
+			return $this->entries[$name];
 		}
 		throw new NotFoundException("No bean, value or class found for '$name'");
 	}
@@ -123,7 +123,7 @@ class Container implements ArrayAccess
 	 * @param mixed  $entry Entry to store in the container (bean or value)
 	 */
 	public function set($name, $entry) {
-		$this->map[$name] = $entry;
+		$this->entries[$name] = $entry;
 	}
 
 	/**
@@ -172,7 +172,7 @@ class Container implements ArrayAccess
 	 */
 	public function offsetExists($offset) {
 		// Try to find the entry in the map
-		if (array_key_exists($offset, $this->map)) {
+		if (array_key_exists($offset, $this->entries)) {
 			return true;
 		}
 		// Entry not found, it's a class name
@@ -208,7 +208,7 @@ class Container implements ArrayAccess
 	 * @param mixed $offset The offset to unset
 	 */
 	public function offsetUnset($offset) {
-		unset($this->map[$offset]);
+		unset($this->entries[$offset]);
 	}
 
 	/**
