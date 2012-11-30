@@ -18,7 +18,7 @@ Container::addConfiguration(array(
 			"user"     => "root",
 			"password" => "",
 		),
-		"dbAdapter" => function(\DI\Container $c) {
+		"dbAdapter" => function(Container $c) {
 			return new DbAdapter($c["db.params"]);
 		},
 	),
@@ -30,6 +30,39 @@ Container::addConfiguration(array(
 
 ));
 ```
+
+
+## Namespace
+
+When you call `Container::addConfiguration`, you can specify a namespace:
+
+```php
+Container::addConfiguration(array(
+	"namespace" => "Application\Users",
+	"entries" => array(
+		"dbAdapter" => function(Container $c) {
+			return new DbAdapter("user_database");
+		},
+	),
+));
+```
+
+The whole configuration given in the array will then be effective only for classes of this namespace.
+
+That way, you can for example make your modules use 2 different databases without impacting your code:
+
+```php
+Container::addConfiguration(array(
+	"namespace" => "Application\Products",
+	"entries" => array(
+		"dbAdapter" => function(Container $c) {
+			return new DbAdapter("product_database");
+		},
+	),
+));
+```
+
+By default you can skip it and your configuration will be applied globally.
 
 
 ## Beans
