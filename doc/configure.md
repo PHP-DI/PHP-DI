@@ -39,7 +39,7 @@ You can define a bean that can be injected using the [@Inject("myBean") annotati
 ```php
 Container::addConfiguration(array(
 	"entries" => array(
-		"name" => $myObject,
+		"myBean" => new MyClass(),
 	),
 ));
 ```
@@ -49,8 +49,8 @@ However, a more efficient way of configuring a bean is through a closure (or cal
 ```php
 Container::addConfiguration(array(
 	"entries" => array(
-		"name" => function(\DI\Container $c) {
-			return new MyClass();
+		"myBean" => function(Container $c) {
+			return new MyClass($c["foo"], $c["bar"]);
 		},
 	),
 ));
