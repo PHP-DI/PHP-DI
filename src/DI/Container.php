@@ -127,13 +127,13 @@ class Container implements ArrayAccess
 	}
 
 	/**
-	 * Resolve the dependencies of the object
+	 * Inject the dependencies of the object (marked with the Inject annotation)
 	 *
 	 * @param mixed $object Object in which to resolve dependencies
 	 * @throws Annotations\AnnotationException
 	 * @throws DependencyException
 	 */
-	public function resolveDependencies($object) {
+	public function injectAll($object) {
 		if (is_null($object)) {
 			throw new DependencyException("null given, object instance expected");
 		}
@@ -230,7 +230,7 @@ class Container implements ArrayAccess
 	 */
 	private function getNewInstance($classname) {
 		$instance = new $classname();
-		Container::getInstance()->resolveDependencies($instance);
+		Container::getInstance()->injectAll($instance);
 		return $instance;
 	}
 

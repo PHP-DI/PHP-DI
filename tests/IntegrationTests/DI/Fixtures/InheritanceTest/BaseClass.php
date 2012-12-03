@@ -26,7 +26,7 @@ abstract class BaseClass {
      * Inject the dependencies
      */
     public function __construct() {
-        \DI\Container::getInstance()->resolveDependencies($this);
+        \DI\Container::getInstance()->injectAll($this);
     }
 
 	/**

@@ -54,17 +54,17 @@ class InjectWithCacheBench extends \PHPBench\BenchCase
 
 	public function benchInject() {
 		$class = new PHPDIBenchClass();
-		\DI\Container::getInstance()->resolveDependencies($class);
+		\DI\Container::getInstance()->injectAll($class);
 	}
 
 	public function benchLazyInject() {
 		$class = new PHPDILazyBenchClass();
-		\DI\Container::getInstance()->resolveDependencies($class);
+		\DI\Container::getInstance()->injectAll($class);
 	}
 
 	public function benchNamedInject() {
 		$class = new NamedInjectionBenchClass();
-		\DI\Container::getInstance()->resolveDependencies($class);
+		\DI\Container::getInstance()->injectAll($class);
 	}
 
 }

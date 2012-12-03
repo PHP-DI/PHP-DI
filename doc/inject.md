@@ -70,7 +70,7 @@ Declaring the dependency with `@Inject` is not enough: the dependency needs to b
 
 ```php
 $myService = new MyService();
-$container->resolveDependencies($myService);
+$container->injectAll($myService);
 
 // Or simply
 $myService = $container->get('MyService');
@@ -78,21 +78,21 @@ $myService = $container->get('MyService');
 // Or also
 class MyService {
     public function __construct() {
-        \DI\Container::getInstance()->resolveDependencies($this);
+        \DI\Container::getInstance()->injectAll($this);
     }
 ```
 
-Where to call `resolveDependencies()`? Several solutions are possible:
+Where to call `injectAll()`? Several solutions are possible:
 
 - in your class constructors
 - in the constructor of a base class (for your controllers for example)
 - where your root application classes (front controller, routing?) are instantiated
 - ...
 
-For example in the [Zend Framework 1.x integration](getting-started), the dependencies are resolved
+For example in the [Zend Framework 1.x integration](getting-started), the dependencies are injected
 when the controller is created by Zend Framework.
 
-If your controller uses services which use repositories, then you just have to use `resolveDependencies()`
+If your controller uses services which use repositories, then you just have to use `injectAll()`
 on your controller when it is created.
 The dependency injection process is **transitive**: *repositories will be injected in services which
 will be injected in the controller*.
@@ -154,7 +154,7 @@ class Class1 {
     private $class2;
 
     public function __construct() {
-        \DI\Container::getInstance()->resolveDependencies($this);
+        \DI\Container::getInstance()->injectAll($this);
     }
 
     public function getSomething() {

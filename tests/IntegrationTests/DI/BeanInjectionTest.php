@@ -134,7 +134,7 @@ class BeanInjectionTest extends \PHPUnit_Framework_TestCase
 		$object = new \IntegrationTests\DI\Fixtures\BeanInjectionTest\Issue14();
 		$class2 = new Class2();
 		$object->setClass2($class2);
-		Container::getInstance()->resolveDependencies($object);
+		Container::getInstance()->injectAll($object);
 		$this->assertSame($class2, $object->getClass2());
 	}
 

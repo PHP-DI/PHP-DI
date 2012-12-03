@@ -32,7 +32,7 @@ abstract class Action extends \Zend_Controller_Action
 								array $invokeArgs = array()
 	) {
 		// Dependency injection
-		Container::getInstance()->resolveDependencies($this);
+		Container::getInstance()->injectAll($this);
 		parent::__construct($request, $response, $invokeArgs);
 	}
 
