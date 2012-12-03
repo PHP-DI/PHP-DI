@@ -69,11 +69,12 @@ class MyService {
 Declaring the dependency with `@Inject` is not enough: the dependency needs to be injected by PHP-DI:
 
 ```php
+// The best solution
+$myService = $container->get('MyService'); // The dependencies will be injected before the constructor is called
+
+// Another solution
 $myService = new MyService(); // The dependencies will not be available in the constructor
 $container->injectAll($myService);
-
-// Or simply
-$myService = $container->get('MyService'); // The dependencies will be injected before the constructor is called
 
 // Or also
 class MyService {
