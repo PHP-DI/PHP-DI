@@ -69,24 +69,24 @@ class MyService {
 Declaring the dependency with `@Inject` is not enough: the dependency needs to be injected by PHP-DI:
 
 ```php
-$myService = new MyService();
+$myService = new MyService(); // The dependencies will not be available in the constructor
 $container->injectAll($myService);
 
 // Or simply
-$myService = $container->get('MyService');
+$myService = $container->get('MyService'); // The dependencies will be injected before the constructor is called
 
 // Or also
 class MyService {
     public function __construct() {
-        \DI\Container::getInstance()->injectAll($this);
+        \DI\Container::getInstance()->injectAll($this); // The dependencies are available after this line
     }
 ```
 
 Where to call `injectAll()`? Several solutions are possible:
 
-- in your class constructors
-- in the constructor of a base class (for your controllers for example)
+- in your class constructors, or in the constructor of a base class (for your controllers for example)
 - where your root application classes (front controller, routing?) are instantiated
+- or use `$container->get()` instead and you don't need to call `injectAll()`
 - ...
 
 For example in the [Zend Framework 1.x integration](getting-started), the dependencies are injected
