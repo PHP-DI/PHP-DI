@@ -10,6 +10,8 @@
 namespace UnitTests\DI;
 
 use stdClass;
+use ReflectionClass;
+use ReflectionMethod;
 use \DI\Container;
 
 /**
@@ -157,6 +159,25 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
 		$container['key'] = $dummy;
 		unset($container['key']);
 		$this->assertFalse(isset($container['key']));
+	}
+
+	public function testNewInstanceWithoutConstructor() {
+		$container = Container::getInstance();
+		$method = new ReflectionMethod(get_class($container), 'newInstanceWithoutConstructor');
+		$method->setAccessible(true);
+		$reflectionClass = new ReflectionClass('UnitTests\DI\Fixtures\NewInstanceWithoutConstructor');
+		$this->assertInstanceOf('UnitTests\DI\Fixtures\NewInstanceWithoutConstructor',
+			$method->invoke($container, $reflectionClass));
+	}
+
+	/**
+	 * @expectedException \DI\DependencyException
+	 */
+	public function testNewInstanceConstructorWithParameters() {
+		$container = Container::getInstance();
+		$method = new ReflectionMethod(get_class($container), 'getNewInstance');
+		$method->setAccessible(true);
+		$method->invoke($container, 'UnitTests\DI\Fixtures\ConstructorWithParameters');
 	}
 
 }

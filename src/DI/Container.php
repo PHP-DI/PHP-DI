@@ -10,6 +10,9 @@
 namespace DI;
 
 use ArrayAccess;
+use ReflectionClass;
+use ReflectionMethod;
+use ReflectionProperty;
 use DI\Annotations\AnnotationException;
 use DI\MetadataReader\DefaultMetadataReader;
 use DI\Annotations\Inject;
@@ -71,7 +74,7 @@ class Container implements ArrayAccess
 		// Aliases
 		if (isset($configuration['aliases'])) {
 			foreach ($configuration['aliases'] as $from => $to) {
-				$container->set($from, function(Container $c) use ($to) {
+				$container->set($from, function (Container $c) use ($to) {
 					return $c->get($to);
 				});
 			}
@@ -90,8 +93,9 @@ class Container implements ArrayAccess
 	 * @param string $name Can be a bean name or a class name
 	 * @param bool   $useProxy If true, returns a proxy class of the instance
 	 *                            if it is not already loaded
-	 * @return mixed Instance
 	 * @throws NotFoundException
+	 * @throws DependencyException
+	 * @return mixed Instance
 	 */
 	public function get($name, $useProxy = false) {
 		// Try to find the entry in the map
@@ -165,7 +169,8 @@ class Container implements ArrayAccess
 	}
 
 	/**
-	 * Whether a offset exists
+	 * Whether an offset exists
+	 *
 	 * @link http://php.net/manual/en/arrayaccess.offsetexists.php
 	 * @param mixed $offset An offset to check for
 	 * @return boolean true on success or false on failure
@@ -184,6 +189,7 @@ class Container implements ArrayAccess
 
 	/**
 	 * Offset to retrieve
+	 *
 	 * @link http://php.net/manual/en/arrayaccess.offsetget.php
 	 * @param mixed $offset The offset to retrieve
 	 * @return mixed Can return all value types
@@ -194,6 +200,7 @@ class Container implements ArrayAccess
 
 	/**
 	 * Offset to set
+	 *
 	 * @link http://php.net/manual/en/arrayaccess.offsetset.php
 	 * @param mixed $offset The offset to assign the value to
 	 * @param mixed $value The value to set
@@ -204,6 +211,7 @@ class Container implements ArrayAccess
 
 	/**
 	 * Offset to unset
+	 *
 	 * @link http://php.net/manual/en/arrayaccess.offsetunset.php
 	 * @param mixed $offset The offset to unset
 	 */
@@ -213,6 +221,7 @@ class Container implements ArrayAccess
 
 	/**
 	 * Returns a proxy class
+	 *
 	 * @param string $classname
 	 * @return \DI\Proxy\Proxy Proxy instance
 	 */
@@ -225,13 +234,45 @@ class Container implements ArrayAccess
 
 	/**
 	 * Create a new instance of the class
+	 *
 	 * @param string $classname Class to instantiate
+	 * @throws DependencyException
 	 * @return string the instance
 	 */
 	private function getNewInstance($classname) {
-		$instance = new $classname();
-		Container::getInstance()->injectAll($instance);
+		$classReflection = new ReflectionClass($classname);
+		$constructorReflection = $classReflection->getConstructor();
+		if ($constructorReflection && $constructorReflection->getNumberOfRequiredParameters() > 0) {
+			throw new DependencyException("$classname cannot be instantiated because it's constructor has required parameters");
+		}
+		$instance = $this->newInstanceWithoutConstructor($classReflection);
+		// Inject the dependencies
+		$this->injectAll($instance);
+		// Call the constructor
+		if ($constructorReflection) {
+			$constructorReflection->invoke($instance);
+		}
 		return $instance;
+	}
+
+	/**
+	 * Creates a new instance of a class without calling its constructor
+	 *
+	 * @param ReflectionClass $classReflection
+	 * @return mixed|void
+	 */
+	private function newInstanceWithoutConstructor(ReflectionClass $classReflection) {
+		if (version_compare(PHP_VERSION, '5.4.0') >= 0) {
+			// Create a new class instance without calling the constructor (PHP 5.4 magic)
+			return $classReflection->newInstanceWithoutConstructor();
+		} else {
+			$classname = $classReflection->getName();
+			return unserialize(
+				sprintf(
+					'O:%d:"%s":0:{}',
+					strlen($classname), $classname
+				));
+		}
 	}
 
 	/**
@@ -243,7 +284,7 @@ class Container implements ArrayAccess
 	 * @throws NotFoundException
 	 */
 	private function inject($object, $propertyName, Inject $annotation) {
-		$property = new \ReflectionProperty(get_class($object), $propertyName);
+		$property = new ReflectionProperty(get_class($object), $propertyName);
 		// Allow access to protected and private properties
 		$property->setAccessible(true);
 		// Consider only not set properties
