@@ -10,7 +10,6 @@
 namespace DI\MetadataReader;
 
 use DI\Annotations\AnnotationException;
-use DI\Annotations\Value;
 use DI\Annotations\Inject;
 use InvalidArgumentException;
 use Doctrine\Common\Annotations\AnnotationReader;
