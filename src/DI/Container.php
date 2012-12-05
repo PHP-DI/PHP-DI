@@ -11,7 +11,6 @@ namespace DI;
 
 use ArrayAccess;
 use ReflectionClass;
-use ReflectionMethod;
 use ReflectionProperty;
 use DI\Annotations\AnnotationException;
 use DI\MetadataReader\DefaultMetadataReader;
