@@ -45,6 +45,26 @@
         <section>
 <h1>Change log</h1>
 
+<h2>2.0</h2>
+
+<p>Major compatibility breaks with 1.x.</p>
+
+<ul>
+<li><code>Container::resolveDependencies()</code> has been renamed to <code>Container::injectAll()</code></li>
+<li>Dependencies are now injected <strong>before</strong> the constructor is called, and thus are available in the constructor</li>
+<li>Merged <code>@Value</code> annotation with <code>@Inject</code>: no difference between value and bean injection anymore</li>
+<li>Container implements ArrayAccess for get() and set() (<code>$container[&#39;db.host&#39;] = &#39;localhost&#39;;</code>)</li>
+<li>Ini configuration files removed: configuration is done in PHP</li>
+<li>Allow to define beans within closures for lazy-loading</li>
+<li>Switched to MIT License</li>
+</ul>
+
+<p>Warning:</p>
+
+<ul>
+<li>If you use PHP 5.3 and __wakeup() methods, they will be called when PHP-DI creates new instances of them.</li>
+</ul>
+
 <h2>1.1</h2>
 
 <ul>

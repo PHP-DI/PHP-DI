@@ -61,7 +61,7 @@
 
 <pre><code class="json">{
     &quot;require&quot;: {
-        &quot;mnapoli/php-di&quot;: &quot;1.0.*&quot;,
+        &quot;mnapoli/php-di&quot;: &quot;2.0.*&quot;,
     }
 }
 </code></pre>
@@ -72,58 +72,26 @@
 $ php composer.phar install
 </code></pre>
 
-<p>PHP-DI classes will be autoloaded by Composer if you use Composer&#39;s autoloading system (which I highly recommend).</p>
+<p>PHP-DI classes will be autoloaded by Composer if you use Composer&#39;s autoloading system (which is highly recommended).</p>
 
 <h2>Usage</h2>
 
-<p>We can <strong>declare</strong> a dependency to be injected with the <code>@Inject</code> and <code>@var</code> annotations.</p>
-
-<pre><code class="php">&lt;?php
-use DI\Annotations\Inject;
-
-class Class1 {
-    /**
-     * @Inject
-     * @var Class2
-     */
-    private $class2;
-</code></pre>
-
-<p>However, declaring the dependency is not enough: the dependency needs to be injected:</p>
-
-<pre><code class="php">$class1 = new Class1();
-\DI\Container::getInstance()-&gt;resolveDependencies($class1);
-</code></pre>
-
-<p>Where to call <code>resolveDependencies()</code>? Several solutions are possible:</p>
-
 <ul>
-<li>in your class constructors</li>
-<li>in the constructor of a base class (for your controllers for example)</li>
-<li>where your root application classes (controllers?) are instantiated</li>
+<li>Read how you can <a href="doc/inject">inject</a></li>
+<li>Read how you can <a href="doc/configure">configure</a></li>
 </ul>
-
-<p>If your controller uses services who use repositories, then you just have to use <code>resolveDependencies()</code> on your controller when it is
-created. The dependencies will have <em>their</em> dependencies injected too, etc... The dependency injection process is transitive:
-repositories will be injected in services who will be injected in the controller.</p>
 
 <h2>Zend Framework 1 integration</h2>
 
-<p>Are you using Zend Framework 1? Check out the ZF quickstart with Dependency Injection already configured: <a href="https://github.com/mnapoli/zf-quickstart-di">zf-quickstart-di</a>.</p>
+<p>Are you using Zend Framework 1? Check out the ZF quickstart with Dependency Injection already configured:
+<a href="https://github.com/mnapoli/zf-quickstart-di">zf-quickstart-di</a>.</p>
 
 <p><strong>Short version</strong>: just change the base class you use for your controllers.</p>
 
-<pre><code class="php">&lt;?php
-class IndexController extends \DI\Zend\Controller\Action
+<pre><code class="php">class IndexController extends \DI\Zend\Controller\Action
 </code></pre>
 
 <p>This base controller class will inject the dependencies automatically in your controller and in every dependency that is injected.</p>
-
-<h2>Configuration file</h2>
-
-<p><strong>The configuration file is optional</strong>, PHP-DI will work with default behavior without it.</p>
-
-<p>Read more about the <a href="doc/configuration-file">configuration file</a></p>
 
 		</section>
 

@@ -43,30 +43,31 @@
 		</div>
 
         <section>
-<p>The aim of PHP-DI is to make <a href="http://en.wikipedia.org/wiki/Dependency_injection">Dependency Injection</a> as simple as possible with PHP.</p>
+<p>The aim of PHP-DI is to make <a href="http://en.wikipedia.org/wiki/Dependency_injection"><em>Dependency Injection</em></a>
+as simple as possible with PHP.</p>
 
-<p>Unlike Zend\DI, Symfony Service Container or Pimple, PHP-DI:</p>
+<p>Unlike Flow3, Zend\DI, Symfony Service Container or Pimple (though they are of a great inspiration), PHP-DI:</p>
 
 <ul>
 <li>can be used by a monkey</li>
+<li>is non-intrusive and compatible with any framework</li>
 <li>is not limited to Services (anything can be injected)</li>
 <li>uses annotations for code-readability and ease of use</li>
+<li>can find and instantiate dependencies automatically without configuration</li>
 </ul>
 
 <h2>Features</h2>
 
 <ul>
-<li>Uses annotations for simplicity, readability and auto-completion in your IDE
-
-<ul>
-<li><code>@Inject</code> annotation to inject a dependency</li>
-<li><code>@Value</code> annotation to inject a configuration value</li>
-</ul></li>
-<li>Optional lazy-loading of dependencies (<code>@Inject(lazy=true)</code>)</li>
+<li>Simple, yet full-featured</li>
+<li>Uses <strong>annotations</strong> for simplicity, readability and auto-completion in your IDE</li>
+<li>Automatic dependency resolution: you don&#39;t have to declare all your beans in configuration files</li>
+<li>Optional <strong>lazy-loading</strong> of dependencies</li>
+<li><strong>Cacheable</strong> for optimal performances</li>
 <li>Class aliases (interface-implementation mapping)</li>
-<li>Easy installation with <a href="http://getcomposer.org/doc/00-intro.md">Composer</a> and easy integration with <strong>Zend Framework</strong>
-(see <a href="doc/getting-started">Getting started</a>)</li>
-<li>Non-intrusive: you can add PHP-DI into an existing project and use it <em>without impacting existing code</em></li>
+<li>Easy installation with <a href="http://getcomposer.org/doc/00-intro.md"><strong>Composer</strong></a>
+and easy integration with <strong>Zend Framework</strong> (see <a href="doc/getting-started">Getting started</a>)</li>
+<li><strong>Non-intrusive</strong>: you can add PHP-DI into an existing project and use it <em>without impacting existing code</em></li>
 </ul>
 
 <h2>Quick example</h2>
@@ -81,15 +82,54 @@ class Foo {
      */
     private $bar;
 
-    public function hello() {
+    public function __construct() {
+        // The dependency is injected
         return $this-&gt;bar-&gt;sayHello();
     }
 }
 </code></pre>
 
-<p>In this example, a instance of the <code>Bar</code> class is injected in the <code>Foo</code> class.</p>
+<p>In this example, a instance of the <code>Bar</code> class is created and injected in the <code>Foo</code> class. <strong>No configuration needed</strong>.</p>
 
 <p>That&#39;s as easy as possible!</p>
+
+<h2>More</h2>
+
+<p>Do you want more? PHP-DI comes on top of a classic, full-featured Dependency Injection container:</p>
+
+<pre><code class="php">$container = \DI\Container::getInstance();
+$container[&#39;dbAdapter&#39;] = $myDbAdapter;
+$myDbAdapter = $container[&#39;dbAdapter&#39;];
+</code></pre>
+
+<h2>Even more</h2>
+
+<p>A more complete version of the previous example:</p>
+
+<pre><code class="php">$container = \DI\Container::getInstance();
+$container[&#39;db.params&#39;] = [
+    &#39;dbname&#39;   =&gt; &#39;foo&#39;,
+    &#39;user&#39;     =&gt; &#39;root&#39;,
+    &#39;password&#39; =&gt; &#39;&#39;,
+];
+$container[&#39;dbAdapter&#39;] = function(Container $c) {
+    return new MyDbAdapter($c[&#39;db.params&#39;]);
+};
+</code></pre>
+
+<p>and later:</p>
+
+<pre><code class="php">class Foo {
+    /**
+     * @Inject(&quot;dbAdapter&quot;)
+     */
+    private $dbAdapter;
+
+    public function foo() {
+        return $this-&gt;dbAdapter-&gt;query(&quot;&quot;);
+    }
+}
+</code></pre>
 
 <h2>Contribute</h2>
 
@@ -99,6 +139,8 @@ class Foo {
 <li>PHP-DI sources are <a href="https://github.com/mnapoli/PHP-DI">on Github</a>.</li>
 <li>Read the wiki: <a href="doc/contribute">Contribute</a></li>
 </ul>
+
+<p>PHP-DI is license under the MIT License.</p>
 
 		</section>
 

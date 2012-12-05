@@ -50,27 +50,27 @@
 <p>In order to work, PHP-DI has to parse your code to find annotations. This parsing is based on
 <a href="http://docs.doctrine-project.org/projects/doctrine-common/en/latest/reference/annotations.html">Doctrine Annotations</a>.</p>
 
-<p>Like Doctrine does, PHP-DI offers an easy and complete solution to put those data into a cache (and it is recommended to use it).</p>
+<p>Like Doctrine does, PHP-DI offers an easy and complete solution to put those data into a cache
+(and it is recommended to use it).</p>
 
 <h3>Setup</h3>
 
-<pre><code class="php">&lt;?php
-use DI\Container;
+<pre><code class="php">use DI\MetadataReader\CachedMetadataReader;
 use DI\MetadataReader\DefaultMetadataReader;
-use DI\MetadataReader\CachedMetadataReader;
+
+$debug = true;
 
 $metadataReader = new CachedMetadataReader(
     new DefaultMetadataReader(),
     new Doctrine\Common\Cache\ArrayCache(),
-    $debug = true
-)
+    $debug
+);
 
-$container = Container::getInstance();
 $container-&gt;setMetadataReader($metadataReader);
 </code></pre>
 
-<p>The debug flag is used to invalidate the cache files when your code has changed. This flag should be set to <code>true</code> during development
-(this is the same flag than in
+<p>The debug flag is used to invalidate the cache files when your code has changed.
+This flag should be set to <code>true</code> during development (this is the same flag than in
 <a href="http://docs.doctrine-project.org/projects/doctrine-common/en/latest/reference/annotations.html#setup-and-configuration">Doctrine annotation setup</a>).</p>
 
 <h3>Cache types</h3>
