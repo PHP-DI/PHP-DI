@@ -14,7 +14,7 @@ Unlike Flow3, Zend\DI, Symfony Service Container or Pimple (though they are of a
 
 * Simple, yet full-featured
 * Uses **annotations** for simplicity, readability and auto-completion in your IDE
-* Automatic bean resolution: you don't have to declare all your beans in configuration files
+* Automatic dependency resolution: you don't have to declare all your beans in configuration files
 * Optional **lazy-loading** of dependencies
 * **Cacheable** for optimal performances
 * Class aliases (interface-implementation mapping)
