@@ -14,7 +14,7 @@ Major compatibility breaks with 1.x.
 
 Warning:
 
-* If you use PHP 5.3 and __wakeup() methods, they will be called when PHP-DI creates new instances of them.
+* If you use PHP 5.3 and __wakeup() methods, they will be called when PHP-DI creates new instances of those classes.
 
 ## 1.1
 

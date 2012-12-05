@@ -95,7 +95,7 @@
     color: #060; } }
 /* Style */
 pre.prettyprint {
-  background: white;
+  background: #eee;
   font-family: Menlo, Monaco, Consolas, monospace;
   font-size: 12px;
   line-height: 1.5;
