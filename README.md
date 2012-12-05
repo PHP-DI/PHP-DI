@@ -37,7 +37,7 @@ class Foo {
     private $bar;
 
     public function __construct() {
-    	// Yes, the dependency is already injected
+    	// The dependency is injected
         return $this->bar->sayHello();
     }
 }

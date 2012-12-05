@@ -66,7 +66,9 @@ class MyService {
 
 ### Injecting
 
-Declaring the dependency with `@Inject` is not enough: the dependency needs to be injected by PHP-DI:
+Declaring the dependency with `@Inject` is not enough: the dependency needs to be injected by PHP-DI.
+
+You can't use `new` to create a new instance of your class `MyService`. Instead use PHP-DI:
 
 ```php
 // The best solution
@@ -94,9 +96,8 @@ For example in the [Zend Framework 1.x integration](getting-started), the depend
 when the controller is created by Zend Framework.
 
 If your controller uses services which use repositories, then you just have to use `injectAll()`
-on your controller when it is created.
-The dependency injection process is **transitive**: *repositories will be injected in services which
-will be injected in the controller*.
+on your controller when it is created. **The dependency injection process is transitive**: repositories will be injected in services which
+will be injected in the controller.
 
 
 ### Value injection
