@@ -23,6 +23,11 @@ and easy integration with **Zend Framework** (see [Getting started](doc/getting-
 * **Non-intrusive**: you can add PHP-DI into an existing project and use it *without impacting existing code*
 
 
+## What is dependency injection, and why use it?
+
+Read the [introduction to dependency injection with an example](doc/example).
+
+
 ## Quick example
 
 ```php
