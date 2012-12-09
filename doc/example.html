@@ -44,21 +44,85 @@
 		</div>
 
         <section>
-<h1>Documentation</h1>
+<p>Here is real life example, comparing the classic implementation (<code>new</code>, singletons...)
+vs an implementation using dependency injection.</p>
 
-<ul>
-<li><a href="doc/example">Introduction to dependency injection with an example</a></li>
-<li><a href="doc/getting-started">Getting started</a></li>
-<li><a href="doc/inject">Inject</a></li>
-<li><a href="doc/configure">Configure</a></li>
-</ul>
+<h2>Classic implementation</h2>
 
-<p>Extra topics:</p>
+<p>Say you have:</p>
 
-<ul>
-<li><a href="doc/performances">Performances</a></li>
-<li><a href="CONTRIBUTING.md">Contribute</a></li>
-</ul>
+<pre><code class="php">class GoogleMapsService {
+    public function getCoordinatesFromAddress($address) {
+        // calls Google Maps webservice
+    }
+}
+class OpenStreetMapService {
+    public function getCoordinatesFromAddress($address) {
+        // calls OpenStreetMap webservice
+    }
+}
+</code></pre>
+
+<p>The classic way of doing things is:</p>
+
+<pre><code class="php">class StoreService {
+    public function getStoreCoordinates($store) {
+        $geolocationService = new GoogleMapsService();
+        // or $geolocationService = GoogleMapsService::getInstance() if you use singletons
+        return $geolocationService-&gt;getCoordinatesFromAddress($store-&gt;getAddress());
+    }
+}
+</code></pre>
+
+<p>Now we want to use the OpenStreetMapService instead of GoogleMapsService,
+how do we do? We have to change the code of StoreService, and all the other classes that use GoogleMapsService.</p>
+
+<p><strong>Without dependency injection, your classes are tightly coupled with their dependencies.</strong></p>
+
+<h2>Dependency injection implementation</h2>
+
+<p>The StoreService now uses dependency injection:</p>
+
+<pre><code class="php">class StoreService {
+    /**
+     * @Inject
+     * @var GeolocationService
+     */
+    private $geolocationService;
+
+    public function getStoreCoordinates($store) {
+        return $this-&gt;geolocationService-&gt;getCoordinatesFromAddress($store-&gt;getAddress());
+    }
+}
+</code></pre>
+
+<p>And the services are defined using an interface:</p>
+
+<pre><code class="php">interface GeolocationService {
+    public function getCoordinatesFromAddress($address);
+}
+class GoogleMapsService implements GeolocationService {
+    public function getCoordinatesFromAddress($address) {
+        // calls Google Maps webservice
+    }
+}
+class OpenStreetMapService implements GeolocationService {
+    public function getCoordinatesFromAddress($address) {
+        // calls OpenStreetMap webservice
+    }
+}
+</code></pre>
+
+<p>You then configure which implementation will be used:</p>
+
+<pre><code class="php">Container::addConfiguration([
+    &quot;aliases&quot; =&gt; [
+        &quot;GeolocationService&quot; =&gt; &quot;OpenStreetMapService&quot;,
+    ],
+]);
+</code></pre>
+
+<p>If you change your mind, there&#39;s just one line of configuration to change now.</p>
 
 		</section>
 
