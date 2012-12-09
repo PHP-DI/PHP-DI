@@ -8,4 +8,4 @@
 Extra topics:
 
 * [Performances](doc/performances)
-* [Contribute](CONTRIBUTING.md)
+* [Contribute](CONTRIBUTING)

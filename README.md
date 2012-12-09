@@ -99,6 +99,6 @@ class Foo {
 [![Build Status](https://secure.travis-ci.org/mnapoli/PHP-DI.png)](http://travis-ci.org/mnapoli/PHP-DI)
 
 * PHP-DI sources are [on Github](https://github.com/mnapoli/PHP-DI).
-* Read the wiki: [Contribute](doc/contribute)
+* Read the doc: [Contributing](CONTRIBUTING)
 
 PHP-DI is license under the MIT License.
