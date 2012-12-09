@@ -4,4 +4,4 @@
 * [Inject](doc/inject)
 * [Configure](doc/configure)
 * [Performances](doc/performances)
-* [Contribute](doc/contribute)
+* [Contribute](CONTRIBUTING.md)
