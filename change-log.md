@@ -1,5 +1,9 @@
 # Change log
 
+## 2.1
+
+* Updated and lightened the dependencies : `doctrine/common` has been replaced with more specific `doctrine/annotations` and `doctrine/cache`
+
 ## 2.0
 
 Major compatibility breaks with 1.x.
@@ -15,10 +19,6 @@ Major compatibility breaks with 1.x.
 Warning:
 
 * If you use PHP 5.3 and __wakeup() methods, they will be called when PHP-DI creates new instances of those classes.
-
-## 1.2
-
-* Lightened the dependencies : doctrine/common has been replaced with more specific doctrine/annotations and doctrine/cache
 
 ## 1.1
 
