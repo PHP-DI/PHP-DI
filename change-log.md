@@ -16,6 +16,10 @@ Warning:
 
 * If you use PHP 5.3 and __wakeup() methods, they will be called when PHP-DI creates new instances of those classes.
 
+## 1.2
+
+* Lightened the dependencies : doctrine/common has been replaced with more specific doctrine/annotations and doctrine/cache
+
 ## 1.1
 
 * Caching of annotations based on Doctrine caches
