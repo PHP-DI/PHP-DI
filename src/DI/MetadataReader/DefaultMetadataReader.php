@@ -14,6 +14,7 @@ use DI\Annotations\Inject;
 use InvalidArgumentException;
 use Doctrine\Common\Annotations\AnnotationReader;
 use Doctrine\Common\Annotations\AnnotationRegistry;
+use Doctrine\Common\Annotations\PhpParser;
 use Doctrine\Common\Annotations\Reader;
 
 /**
@@ -28,6 +29,15 @@ class DefaultMetadataReader implements MetadataReader
 	 * @var \Doctrine\Common\Annotations\Reader
 	 */
 	private $annotationReader;
+
+	/**
+	 * @var \Doctrine\Common\Annotations\PhpParser
+	 */
+	private $phpParser;
+
+	public function __construct() {
+		$this->phpParser = new PhpParser;
+	}
 
 	/**
 	 * Returns DI annotations found in the class
@@ -52,7 +62,7 @@ class DefaultMetadataReader implements MetadataReader
 				if ($annotation instanceof Inject) {
 					// Enrich @Inject annotation with @var content
 					if ($annotation->name == null) {
-						$propertyType = $this->getPropertyType($property);
+						$propertyType = $this->getPropertyType($reflectionClass, $property);
 						if ($propertyType == null) {
 							throw new AnnotationException("@Inject was found on $classname::"
 								. $property->getName() . " but no (or empty) @var annotation");
@@ -88,15 +98,69 @@ class DefaultMetadataReader implements MetadataReader
 
 	/**
 	 * Parse the docblock of the property to get the var annotation
+	 * @param \ReflectionClass    $class
 	 * @param \ReflectionProperty $property
-	 * @return string Type of the property (content of var annotation)
+	 * @throws \DI\Annotations\AnnotationException
+	 * @return string|null Type of the property (content of var annotation)
 	 */
-	private function getPropertyType(\ReflectionProperty $property) {
+	private function getPropertyType(\ReflectionClass $class, \ReflectionProperty $property) {
+		// Get the content of the @var annotation
 		if (preg_match('/@var\s+([^\s]+)/', $property->getDocComment(), $matches)) {
 			list(, $type) = $matches;
-			return $type;
+		} else {
+			return null;
 		}
-		return null;
+
+		// If the class name is not fully qualified (FQN must start with a \)
+		if ($type[0] !== '\\') {
+			$alias = (false === $pos = strpos($type, '\\')) ? $type : substr($type, 0, $pos);
+			$loweredAlias = strtolower($alias);
+
+			// Retrieve "use" statements
+			$uses = $this->phpParser->parseClass($property->getDeclaringClass());
+
+			$found = false;
+
+			if ($this->classExists($class->getNamespaceName() . '\\' . $type)) {
+				$type = $class->getNamespaceName() . '\\' . $type;
+				$found = true;
+			} elseif (isset($uses[$loweredAlias])) {
+				// Imported classes
+				if (false !== $pos) {
+					$type = $uses[$loweredAlias] . substr($type, $pos);
+				} else {
+					$type = $uses[$loweredAlias];
+				}
+				$found = true;
+			} elseif (isset($uses['__NAMESPACE__']) && $this->classExists($uses['__NAMESPACE__'] . '\\' . $type)) {
+				// Class namespace
+				$type = $uses['__NAMESPACE__'] . '\\' . $type;
+				$found = true;
+			} elseif ($this->classExists($type)) {
+				// No namespace
+				$found = true;
+			}
+
+			if (!$found) {
+				throw new AnnotationException("The @var annotation on {$class->name}::" . $property->getName()
+					. " contains a non existent class. Did you maybe forget to add a 'use' statement for this annotation?");
+			}
+		}
+
+		if (!$this->classExists($type)) {
+			throw new AnnotationException("The @var annotation on {$class->name}::" . $property->getName()
+				. " contains a non existent class");
+		}
+
+		return $type;
+	}
+
+	/**
+	 * @param string $class
+	 * @return bool
+	 */
+	private function classExists($class) {
+		return class_exists($class) || interface_exists($class);
 	}
 
 }

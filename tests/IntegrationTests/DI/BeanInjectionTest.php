@@ -126,16 +126,41 @@ class BeanInjectionTest extends \PHPUnit_Framework_TestCase
 		$this->assertSame($class2_1, $class2_2);
 	}
 
+    /**
+     * Check that if a dependency is already set, the container
+     * will not overwrite it
+     */
+    public function testIssue14() {
+        $object = new \IntegrationTests\DI\Fixtures\BeanInjectionTest\Issue14();
+        $class2 = new Class2();
+        $object->setClass2($class2);
+        Container::getInstance()->injectAll($object);
+        $this->assertSame($class2, $object->getClass2());
+    }
+
 	/**
-	 * Check that if a dependency is already set, the container
-	 * will not overwrite it
+	 * Check that @ var annotation takes "use" statements into account
 	 */
-	public function testIssue14() {
-		$object = new \IntegrationTests\DI\Fixtures\BeanInjectionTest\Issue14();
-		$class2 = new Class2();
-		$object->setClass2($class2);
-		Container::getInstance()->injectAll($object);
-		$this->assertSame($class2, $object->getClass2());
+	public function testIssue1() {
+		/** @var $object \IntegrationTests\DI\Fixtures\BeanInjectionTest\Issue1 */
+		$object = Container::getInstance()->get('\IntegrationTests\DI\Fixtures\BeanInjectionTest\Issue1');
+		$this->assertInstanceOf('\IntegrationTests\DI\Fixtures\BeanInjectionTest\Class2', $object->class2);
+		$this->assertInstanceOf('\IntegrationTests\DI\Fixtures\BeanInjectionTest\Class2', $object->alias);
+		$this->assertInstanceOf('\IntegrationTests\DI\Fixtures\BeanInjectionTest\Class2', $object->namespaceAlias);
+
+		/** @var $object \IntegrationTests\DI\Fixtures\BeanInjectionTest\Issue1\AnotherIssue1 */
+		$object = Container::getInstance()->get('\IntegrationTests\DI\Fixtures\BeanInjectionTest\Issue1\AnotherIssue1');
+		$this->assertInstanceOf('\IntegrationTests\DI\Fixtures\BeanInjectionTest\Class2', $object->dependency);
+		$this->assertInstanceOf('\IntegrationTests\DI\Fixtures\BeanInjectionTest\Issue1\Dependency', $object->sameNamespaceDependency);
+	}
+
+	/**
+	 * Check error cases
+	 * @expectedException \DI\Annotations\AnnotationException
+	 */
+	public function testNotFoundVarAnnotation() {
+		/** @var $object \IntegrationTests\DI\Fixtures\BeanInjectionTest\NotFoundVarAnnotation */
+		Container::getInstance()->get('\IntegrationTests\DI\Fixtures\BeanInjectionTest\NotFoundVarAnnotation');
 	}
 
 }

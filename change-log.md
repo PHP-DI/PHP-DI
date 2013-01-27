@@ -2,6 +2,7 @@
 
 ## 2.1
 
+* `use` statements to import classes from other namespaces are now taken into account with the `@var` annotation
 * Updated and lightened the dependencies : `doctrine/common` has been replaced with more specific `doctrine/annotations` and `doctrine/cache`
 
 ## 2.0
