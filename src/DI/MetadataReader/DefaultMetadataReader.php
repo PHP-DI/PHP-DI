@@ -207,7 +207,11 @@ class DefaultMetadataReader implements MetadataReader
 	 * @return string|null Type of the parameter
 	 */
 	private function getParameterType(\ReflectionClass $class, \ReflectionMethod $method, \ReflectionParameter $parameter) {
-		return $parameter->getClass()->name;
+		$reflectionClass = $parameter->getClass();
+		if ($reflectionClass === null) {
+			return null;
+		}
+		return $reflectionClass->getName();
 	}
 
 	/**

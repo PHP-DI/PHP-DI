@@ -28,4 +28,13 @@ class SetterInjectionTest extends \PHPUnit_Framework_TestCase
 		$this->assertInstanceOf('IntegrationTests\DI\Fixtures\SetterInjectionTest\Class2', $dependency);
 	}
 
+	/**
+	 * @expectedException \DI\Annotations\AnnotationException
+	 * @expectedExceptionMessage @Inject was found on IntegrationTests\DI\Fixtures\SetterInjectionTest\Buggy::setDependency()
+	 * but the parameter $dependency has no type: impossible to deduce its type
+	 */
+	public function testNonTypeHintedMethod() {
+		Container::getInstance()->get('IntegrationTests\DI\Fixtures\SetterInjectionTest\Buggy');
+	}
+
 }
