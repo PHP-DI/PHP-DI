@@ -19,10 +19,8 @@ If you are running Windows or are having trouble, read [the official documentati
 
 ## Run the tests
 
-The tests are run with [PHPUnit](http://www.phpunit.de/manual/current/en/installation.html).
-
-In order to run, you need to specify (in command line or by configuring your IDE) the configuration file:
+The tests are run with [PHPUnit](http://www.phpunit.de/manual/current/en/installation.html):
 
 ```bash
-$ phpunit -c phpunit.xml
+$ phpunit
 ```
