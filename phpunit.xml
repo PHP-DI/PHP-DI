@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    phpunit -c phpunit.xml
+-->
+<phpunit backupGlobals="false"
+         backupStaticAttributes="false"
+         colors="true"
+         convertErrorsToExceptions="true"
+         convertNoticesToExceptions="true"
+         convertWarningsToExceptions="true"
+         processIsolation="false"
+         stopOnFailure="false"
+         syntaxCheck="false"
+         bootstrap="./tests/bootstrap.php">
+
+    <testsuites>
+        <testsuite name="PHP-DI unit tests">
+            <directory>./tests/UnitTests/DI/</directory>
+            <directory>./tests/IntegrationTests/DI/</directory>
+        </testsuite>
+    </testsuites>
+
+</phpunit>
