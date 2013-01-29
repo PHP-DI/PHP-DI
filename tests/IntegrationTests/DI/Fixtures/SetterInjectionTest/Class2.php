@@ -7,24 +7,18 @@
  * @license   http://www.opensource.org/licenses/mit-license.php MIT (see the LICENSE file)
  */
 
-namespace DI\Annotations;
+namespace IntegrationTests\DI\Fixtures\SetterInjectionTest;
 
 /**
- * "Inject" annotation
- * @Annotation
- * @Target({"METHOD","PROPERTY"})
+ * Fixture class
  */
-class Inject {
+class Class2 {
 
 	/**
-	 * Bean name
-	 * @var string
+	 * @return boolean
 	 */
-	public $name;
-
-	/**
-	 * @var boolean
-	 */
-	public $lazy = false;
+	public function getBoolean() {
+		return true;
+	}
 
 }

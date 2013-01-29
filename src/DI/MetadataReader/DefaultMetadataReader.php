@@ -35,8 +35,9 @@ class DefaultMetadataReader implements MetadataReader
 	 */
 	private $phpParser;
 
+
 	public function __construct() {
-		$this->phpParser = new PhpParser;
+		$this->phpParser = new PhpParser();
 	}
 
 	/**
@@ -44,16 +45,23 @@ class DefaultMetadataReader implements MetadataReader
 	 * @param string $classname
 	 * @throws \DI\Annotations\AnnotationException
 	 * @throws \InvalidArgumentException The class doesn't exist
-	 * @return array Array of annotations indexed by the property name
+	 * @return ClassMetadata
 	 */
 	public function getClassMetadata($classname) {
 		if (!class_exists($classname)) {
 			throw new InvalidArgumentException("The class $classname doesn't exist");
 		}
-		$annotations = array();
-		// Browse the object's properties
 		$reflectionClass = new \ReflectionClass($classname);
+
+		$classMetadata = new ClassMetadata();
+
+		// Browse the object's properties looking for annotated properties
 		foreach ($reflectionClass->getProperties() as $property) {
+
+			// Ignore static properties
+			if ($property->isStatic()) {
+				continue;
+			}
 
 			// Look for DI annotations
 			$propertyAnnotations = $this->getAnnotationReader()->getPropertyAnnotations($property);
@@ -62,20 +70,57 @@ class DefaultMetadataReader implements MetadataReader
 				if ($annotation instanceof Inject) {
 					// Enrich @Inject annotation with @var content
 					if ($annotation->name == null) {
-						$propertyType = $this->getPropertyType($reflectionClass, $property);
-						if ($propertyType == null) {
+						$parameterType = $this->getPropertyType($reflectionClass, $property);
+						if ($parameterType == null) {
 							throw new AnnotationException("@Inject was found on $classname::"
 								. $property->getName() . " but no (or empty) @var annotation");
 						}
-						$annotation->name = $propertyType;
+						$annotation->name = $parameterType;
 					}
-					$annotations[$property->getName()] = $annotation;
+					$classMetadata->addPropertyAnnotation($property->getName(), $annotation);
 					break;
 				}
 			}
 
 		}
-		return $annotations;
+
+		// Browse the object's methods looking for annotated methods
+		foreach ($reflectionClass->getMethods(\ReflectionMethod::IS_PUBLIC) as $method) {
+
+			// Ignore static methods
+			if ($method->isStatic()) {
+				continue;
+			}
+
+			// Look for DI annotations
+			$methodAnnotations = $this->getAnnotationReader()->getMethodAnnotations($method);
+			foreach ($methodAnnotations as $annotation) {
+				// @Inject
+				if ($annotation instanceof Inject) {
+					if ($method->getNumberOfParameters() != 1) {
+						throw new AnnotationException("@Inject was found on $classname::"
+							. $method->getName() . "() the method should have exactly one parameter");
+					}
+					/** @var $parameter \ReflectionParameter */
+					$parameter = current($method->getParameters());
+					// Enrich @Inject annotation with @var content
+					if ($annotation->name == null) {
+						$parameterType = $this->getParameterType($reflectionClass, $method, $parameter);
+						if ($parameterType == null) {
+							throw new AnnotationException("@Inject was found on $classname::"
+								. $method->getName() . "() but the parameter $" . $parameter->getName()
+								. " has no type: impossible to deduce its type");
+						}
+						$annotation->name = $parameterType;
+					}
+					$classMetadata->addMethodAnnotation($method->getName(), $annotation);
+					break;
+				}
+			}
+
+		}
+
+		return $classMetadata;
 	}
 
 	/**
@@ -153,6 +198,16 @@ class DefaultMetadataReader implements MetadataReader
 		}
 
 		return $type;
+	}
+
+	/**
+	 * @param \ReflectionClass     $class
+	 * @param \ReflectionMethod    $method
+	 * @param \ReflectionParameter $parameter
+	 * @return string|null Type of the parameter
+	 */
+	private function getParameterType(\ReflectionClass $class, \ReflectionMethod $method, \ReflectionParameter $parameter) {
+		return $parameter->getClass()->name;
 	}
 
 	/**

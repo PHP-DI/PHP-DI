@@ -58,7 +58,7 @@ class CachedMetadataReader implements MetadataReader
 	/**
 	 * Returns DI annotations found in the class
 	 * @param string $classname
-	 * @return array Array of annotations indexed by the property name
+	 * @return ClassMetadata
 	 */
 	public function getClassMetadata($classname) {
 		$result = $this->fetchFromCache($classname);

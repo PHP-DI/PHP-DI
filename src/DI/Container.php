@@ -10,6 +10,7 @@
 namespace DI;
 
 use ArrayAccess;
+use ReflectionMethod;
 use ReflectionClass;
 use ReflectionProperty;
 use DI\Annotations\AnnotationException;
@@ -141,11 +142,17 @@ class Container implements ArrayAccess
 			throw new DependencyException("null given, object instance expected");
 		}
 		// Get the class metadata
-		$annotations = $this->getMetadataReader()->getClassMetadata(get_class($object));
-		// Process annotations
-		foreach ($annotations as $propertyName => $annotation) {
+		$classMetadata = $this->getMetadataReader()->getClassMetadata(get_class($object));
+		// Process annotations on methods
+		foreach ($classMetadata->getMethodAnnotations() as $methodName => $annotation) {
 			if ($annotation instanceof Inject) {
-				$this->inject($object, $propertyName, $annotation);
+				$this->injectMethod($object, $methodName, $annotation);
+			}
+		}
+		// Process annotations on properties
+		foreach ($classMetadata->getPropertyAnnotations() as $propertyName => $annotation) {
+			if ($annotation instanceof Inject) {
+				$this->injectProperty($object, $propertyName, $annotation);
 			}
 		}
 	}
@@ -275,6 +282,31 @@ class Container implements ArrayAccess
 	}
 
 	/**
+	 * Resolve the Inject annotation on a method
+	 * @param mixed  $object Object to inject dependencies to
+	 * @param string $methodName Name of the method annotated
+	 * @param Inject $annotation Inject annotation
+	 * @throws DependencyException
+	 * @throws NotFoundException
+	 */
+	private function injectMethod($object, $methodName, Inject $annotation) {
+		$classname = get_class($object);
+		// Get the dependency
+		try {
+			$value = $this->get($annotation->name, $annotation->lazy);
+		} catch (NotFoundException $e) {
+			// Better exception message
+			throw new NotFoundException("@Inject was found on $classname::$methodName(...)"
+				. " but no bean or value '$annotation->name' was found");
+		} catch (\Exception $e) {
+			throw new DependencyException("Error while injecting {$annotation->name} to $classname::$methodName(...). "
+				. $e->getMessage(), 0, $e);
+		}
+		// Inject the dependency by calling the method
+		call_user_func_array(array($object, $methodName), array($value));
+	}
+
+	/**
 	 * Resolve the Inject annotation on a property
 	 * @param mixed  $object Object to inject dependencies to
 	 * @param string $propertyName Name of the property annotated
@@ -282,7 +314,7 @@ class Container implements ArrayAccess
 	 * @throws DependencyException
 	 * @throws NotFoundException
 	 */
-	private function inject($object, $propertyName, Inject $annotation) {
+	private function injectProperty($object, $propertyName, Inject $annotation) {
 		$property = new ReflectionProperty(get_class($object), $propertyName);
 		// Allow access to protected and private properties
 		$property->setAccessible(true);
@@ -295,8 +327,7 @@ class Container implements ArrayAccess
 			$value = $this->get($annotation->name, $annotation->lazy);
 		} catch (NotFoundException $e) {
 			// Better exception message
-			throw new NotFoundException("@Inject was found on "
-				. get_class($object) . "::" . $property->getName()
+			throw new NotFoundException("@Inject was found on " . get_class($object) . "::" . $property->getName()
 				. " but no bean or value '$annotation->name' was found");
 		} catch (\Exception $e) {
 			throw new DependencyException("Error while injecting $annotation->name in "
