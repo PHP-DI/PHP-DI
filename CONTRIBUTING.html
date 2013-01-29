@@ -36,7 +36,8 @@
 		<div class="subnav">
 			<ul class="nav nav-pills">
 				<li><a href="">Home</a></li>
-				<li><a href="doc/getting-started">Getting started</a></li>
+                <li><a href="doc/example">Example</a></li>
+                <li><a href="doc/getting-started">Getting started</a></li>
 				<li><a href="doc/">Documentation</a></li>
                 <li><a href="change-log">Change log</a></li>
                 <li class="pull-right"><a href="https://github.com/mnapoli/PHP-DI">Sources on Github</a></li>
@@ -69,9 +70,9 @@ $ php composer.phar install
 
 <p>The tests are run with <a href="http://www.phpunit.de/manual/current/en/installation.html">PHPUnit</a>.</p>
 
-<p>In order to run, you need to specify (in command line or by configuring your IDE) a bootstrap file:</p>
+<p>In order to run, you need to specify (in command line or by configuring your IDE) the configuration file:</p>
 
-<pre><code class="bash">$ phpunit --bootstrap tests/bootstrap.php tests
+<pre><code class="bash">$ phpunit -c phpunit.xml
 </code></pre>
 
 		</section>
