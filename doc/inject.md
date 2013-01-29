@@ -52,17 +52,18 @@ Like the previous example, we can inject an instance of `My\GreatClass` right in
 
 ```php
 use DI\Annotations\Inject;
+use My\GreatClass;
 
 class MyService {
     /**
      * @Inject
-     * @var My\GreatClass
+     * @var GreatClass
      */
     private $myDependency;
 }
 ```
 
-*`@Inject` is annotation defined by PHP-DI, `@var` is the standard phpDocumentor annotation*
+*`@Inject` is an annotation defined by PHP-DI, `@var` is the standard phpDoc annotation*
 
 ### Injecting
 

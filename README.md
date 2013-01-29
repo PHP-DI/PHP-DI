@@ -28,7 +28,7 @@ and easy integration with **Zend Framework** (see [Getting started](doc/getting-
 Read the [introduction to dependency injection with an example](doc/example).
 
 
-## Quick example
+## Short example
 
 ```php
 <?php
@@ -51,6 +51,9 @@ class Foo {
 In this example, a instance of the `Bar` class is created and injected in the `Foo` class. **No configuration needed**.
 
 That's as easy as possible!
+
+Of course, in the spirit of Dependency Injection, `Bar` will rather be an interface, and you will configure
+which implementation will be injected through [configuration](doc/configure).
 
 ## More
 
