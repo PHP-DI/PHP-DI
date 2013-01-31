@@ -12,6 +12,9 @@ namespace IntegrationTests\DI;
 use DI\Container;
 use IntegrationTests\DI\Fixtures\SetterInjectionTest\Class1;
 use IntegrationTests\DI\Fixtures\SetterInjectionTest\LazyInjectionClass;
+use IntegrationTests\DI\Fixtures\SetterInjectionTest\NamedInjectionWithTypeMappingClass;
+use IntegrationTests\DI\Fixtures\SetterInjectionTest\NamedInjectionClass;
+use IntegrationTests\DI\Fixtures\SetterInjectionTest\NamedBean;
 
 /**
  * Test class for setter injection
@@ -59,6 +62,57 @@ class SetterInjectionTest extends \PHPUnit_Framework_TestCase
 	public function testLazyInjection2() {
 		$class = new LazyInjectionClass();
 		$this->assertTrue($class->getDependencyAttribute());
+	}
+
+	/**
+	 * Injection of named beans
+	 */
+	public function testNamedInjection() {
+		$container = Container::getInstance();
+		// Configure the named bean
+		$bean = new NamedBean();
+		$bean->nameForTest = 'namedDependency';
+		$container->set('namedDependency', $bean);
+		$bean2 = new NamedBean();
+		$bean2->nameForTest = 'namedDependency2';
+		$container->set('namedDependency2', $bean2);
+		// Test
+		$class = new NamedInjectionClass();
+		$dependency = $class->getDependency();
+		$this->assertNotNull($dependency);
+		$this->assertInstanceOf('\IntegrationTests\DI\Fixtures\SetterInjectionTest\NamedBean', $dependency);
+		$this->assertEquals('namedDependency', $dependency->nameForTest);
+		$this->assertSame($bean, $dependency);
+		$this->assertNotSame($bean2, $dependency);
+	}
+
+	/**
+	 * @expectedException \DI\NotFoundException
+	 */
+	public function testNamedInjectionNotFound() {
+		// Exception (bean not defined)
+		new NamedInjectionClass();
+	}
+
+	/**
+	 * Test that type mapping also works with named injections
+	 */
+	public function testNamedInjectionWithTypeMapping() {
+		$container = Container::getInstance();
+		Container::addConfiguration(array(
+			'aliases' => array(
+				'nonExistentDependencyName' => 'namedDependency'
+			)
+		));
+		// Configure the named bean
+		$bean = new NamedBean();
+		$container->set('namedDependency', $bean);
+		// Test
+		$class = new NamedInjectionWithTypeMappingClass();
+		$dependency = $class->getDependency();
+		$this->assertNotNull($dependency);
+		$this->assertInstanceOf('\IntegrationTests\DI\Fixtures\SetterInjectionTest\NamedBean', $dependency);
+		$this->assertSame($bean, $dependency);
 	}
 
 	/**
