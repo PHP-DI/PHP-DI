@@ -99,7 +99,7 @@ class DefaultMetadataReader implements MetadataReader
 				if ($annotation instanceof Inject) {
 					if ($method->getNumberOfParameters() != 1) {
 						throw new AnnotationException("@Inject was found on $classname::"
-							. $method->getName() . "() the method should have exactly one parameter");
+							. $method->getName() . "(), the method should have exactly one parameter");
 					}
 					/** @var $parameter \ReflectionParameter */
 					$parameter = current($method->getParameters());

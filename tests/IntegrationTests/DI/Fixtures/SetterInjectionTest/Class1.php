@@ -10,7 +10,6 @@
 namespace IntegrationTests\DI\Fixtures\SetterInjectionTest;
 
 use DI\Annotations\Inject;
-use IntegrationTests\DI\Fixtures\SetterInjectionTest\Class2;
 
 /**
  * Fixture class
@@ -21,6 +20,11 @@ class Class1 {
 	 * @var Class2
 	 */
 	private $dependency;
+
+	/**
+	 * @var Interface1
+	 */
+	private $interface1;
 
 	/**
 	 * @Inject
@@ -35,6 +39,21 @@ class Class1 {
 	 */
 	public function getDependency() {
 		return $this->dependency;
+	}
+
+	/**
+	 * @Inject
+	 * @param Interface1 $interface
+	 */
+	public function setInterface1(Interface1 $interface) {
+		$this->interface1 = $interface;
+	}
+
+	/**
+	 * @return Interface1
+	 */
+	public function getInterface1() {
+		return $this->interface1;
 	}
 
 }

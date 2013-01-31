@@ -15,7 +15,7 @@ use IntegrationTests\DI\Fixtures\SetterInjectionTest\Class2;
 /**
  * Fixture class
  */
-class Buggy {
+class Buggy1 {
 
 	/**
 	 * @var Class2
