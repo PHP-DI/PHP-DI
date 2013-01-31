@@ -17,5 +17,8 @@
 		"php": ">=5.3.0",
 		"doctrine/annotations": "1.*",
 		"doctrine/cache": "1.*"
-	}
+	},
+    "require-dev" : {
+        "mnapoli/phpbench": "dev-master"
+    }
 }
