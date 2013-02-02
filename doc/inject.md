@@ -7,48 +7,29 @@ PHP-DI Container can contain and provide:
 - values (configuration values, like integers, strings, arrays, ...)
 
 
-## The container
-
-The container is a singleton:
-
-```php
-$container = \DI\Container::getInstance();
-```
-
-To get something from the container, you can simply do:
-
-```php
-// Object style
-$something = $container->get('something');
-// Or array style
-$something = $container['something'];
-```
-
-(to put something into the container, read the [configuration manual](doc/configure))
-
-If you want to get class instances, you don't need any configuration, you can simply do:
-
-```php
-// Object style
-$something = $container->get('My\GreatClass');
-// Or array style
-$something = $container['My\GreatClass'];
-```
-
-This will simply return an instance of the class `My\GreatClass`.
-
-
 ## @Inject annotation
 
-If you are lazy (like we all are), you don't want to write that much code.
-Also, if you want dependency injection, you'll have noticed by now that this looks more like
-*Dependency Fetching* rather than *Dependency Injection*.
+We can declare a dependency with the `@Inject` annotation.
 
-### Declaring
+### Setter injection:
 
-We can declare a dependency to inject with the `@Inject` and `@var` annotations.
+```php
+use DI\Annotations\Inject;
+use My\GreatClass;
 
-Like the previous example, we can inject an instance of `My\GreatClass` right into our class:
+class MyService {
+    /**
+     * @Inject
+     */
+    public function setMyDependency(GreatClass $myDependency) {
+    	// ...
+    }
+}
+```
+
+PHP-DI will guess that you want a `GreatClass` instance based on the parameter type (`GreatClass $myDependency`).
+
+### Property injection:
 
 ```php
 use DI\Annotations\Inject;
@@ -60,10 +41,12 @@ class MyService {
      * @var GreatClass
      */
     private $myDependency;
+
+    // ...
 }
 ```
 
-*`@Inject` is an annotation defined by PHP-DI, `@var` is the standard phpDoc annotation*
+Notice that the `@var` annotation is needed in this case because you can't specify a property's type.
 
 ### Injecting
 
@@ -112,16 +95,31 @@ class MyService {
     /**
      * @Inject("db.host")
      */
-    private $dbHost;
+    public function setDbHost($dbHost) {
+    	// ...
+    }
 }
 ```
 
-(to put something into the container, read the [configuration manual](doc/configure))
+or:
+
+```php
+use DI\Annotations\Inject;
+
+class MyService {
+    /**
+     * @Inject("db.host")
+     */
+    private $dbHost;
+
+    // ...
+}
+```
 
 
 ### Named injection
 
-While you can automatically inject an instance by specifying its type using the `@var` annotation,
+While you can automatically inject an instance based on its type (using `@var` annotations or type-hinting),
 you can also inject a *specific* instance:
 
 ```php
@@ -133,55 +131,60 @@ $container->set('myDependency', $myObject);
 and then:
 
 ```php
-<?php
+use DI\Annotations\Inject;
+
+class Class1 {
+    /**
+     * @Inject("myDependency")
+     */
+    public function setDependency($dependency) {
+    	// ...
+    }
+}
+```
+
+or:
+
+```php
+use DI\Annotations\Inject;
+
 class Class1 {
 	/**
 	 * @Inject("myDependency")
 	 */
 	private $dependency;
+	
+    // ...
+}
 ```
+
+Note that type-hinting or `@var` annotations are not required here.
 
 
 ### Lazy-loading dependencies
 
-With the default behavior, the dependencies are created when injected:
+**Note: lazy-loading is only possible with property injection (not setter injection).**
+
+If you are injecting multiple dependencies and not always using them, you might not want to load and
+inject all the dependencies every time the class is used.
+
+You can have a dependency to be loaded **only when it is used**:
 
 ```php
 use DI\Annotations\Inject;
 
 class Class1 {
     /**
-     * @Inject
-     * @var Class2
-     */
-    private $class2;
-
-    public function __construct() {
-        \DI\Container::getInstance()->injectAll($this);
-    }
-
-    public function getSomething() {
-        return $this->class2->getSomethingElse();
-    }
-}
-```
-
-If you are injecting multiple dependencies and not always using them, you might not want to load and
-inject all the dependencies every time the class is used.
-
-You can force a dependency to be loaded only when it is used:
-
-```php
-class Class1 {
-    /**
      * @Inject(lazy=true)
      * @var Class2
      */
      private $class2;
+	
+    // ...
 ```
 
-In this case, when `Class1` is instantiated, a Proxy class will be injected instead of the real `Class2` dependency.
+In this case, a Proxy class will be injected instead of the real `Class2` dependency.
 
-Only when the dependency is used (in `getSomething()`) the `Class2` instance will be loaded.
+The `Class2` instance will be loaded only when the property is used.
 
 This can help save resources and improve performances.

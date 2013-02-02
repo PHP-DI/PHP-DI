@@ -57,7 +57,7 @@ which implementation will be injected through [configuration](doc/configure).
 
 ## More
 
-Do you want more? PHP-DI comes on top of a classic, full-featured Dependency Injection container:
+Do you want more? PHP-DI comes on top of a classic container:
 
 ```php
 $container = \DI\Container::getInstance();
