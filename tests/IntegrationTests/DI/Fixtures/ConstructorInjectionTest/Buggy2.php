@@ -7,18 +7,20 @@
  * @license   http://www.opensource.org/licenses/mit-license.php MIT (see the LICENSE file)
  */
 
-namespace UnitTests\DI\Fixtures;
+namespace IntegrationTests\DI\Fixtures\ConstructorInjectionTest;
+
+use DI\Annotations\Inject;
 
 /**
- * Class with a constructor that has mandatory parameters
+ * Fixture class
  */
-class ConstructorWithParameters
-{
+class Buggy2 {
 
 	/**
-	 * The constructor has mandatory parameters
+	 * @Inject(name="nonExistentBean")
+	 * @param $dependency
 	 */
-	public function __construct($a, $b) {
+	public function __construct($dependency) {
 	}
 
 }

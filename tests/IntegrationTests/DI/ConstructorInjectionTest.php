@@ -10,16 +10,16 @@
 namespace IntegrationTests\DI;
 
 use DI\Container;
-use IntegrationTests\DI\Fixtures\SetterInjectionTest\Class1;
-use IntegrationTests\DI\Fixtures\SetterInjectionTest\LazyInjectionClass;
-use IntegrationTests\DI\Fixtures\SetterInjectionTest\NamedInjectionWithTypeMappingClass;
-use IntegrationTests\DI\Fixtures\SetterInjectionTest\NamedInjectionClass;
-use IntegrationTests\DI\Fixtures\SetterInjectionTest\NamedBean;
+use IntegrationTests\DI\Fixtures\ConstructorInjectionTest\Class1;
+use IntegrationTests\DI\Fixtures\ConstructorInjectionTest\LazyInjectionClass;
+use IntegrationTests\DI\Fixtures\ConstructorInjectionTest\NamedInjectionWithTypeMappingClass;
+use IntegrationTests\DI\Fixtures\ConstructorInjectionTest\NamedInjectionClass;
+use IntegrationTests\DI\Fixtures\ConstructorInjectionTest\NamedBean;
 
 /**
- * Test class for setter injection
+ * Test class for constructor injection
  */
-class SetterInjectionTest extends \PHPUnit_Framework_TestCase
+class ConstructorInjectionTest extends \PHPUnit_Framework_TestCase
 {
 
 	public function setUp() {
@@ -27,24 +27,24 @@ class SetterInjectionTest extends \PHPUnit_Framework_TestCase
 		Container::reset();
 		Container::addConfiguration(array(
 			'aliases' => array(
-				'IntegrationTests\DI\Fixtures\SetterInjectionTest\Interface1' => 'IntegrationTests\DI\Fixtures\SetterInjectionTest\Class3'
+				'IntegrationTests\DI\Fixtures\ConstructorInjectionTest\Interface1' => 'IntegrationTests\DI\Fixtures\ConstructorInjectionTest\Class3'
 			)
 		));
 	}
 
 	public function testBasicInjection() {
 		/** @var $class1 Class1 */
-		$class1 = Container::getInstance()->get('IntegrationTests\DI\Fixtures\SetterInjectionTest\Class1');
+		$class1 = Container::getInstance()->get('IntegrationTests\DI\Fixtures\ConstructorInjectionTest\Class1');
 		$dependency = $class1->getDependency();
-		$this->assertInstanceOf('IntegrationTests\DI\Fixtures\SetterInjectionTest\Class2', $dependency);
+		$this->assertInstanceOf('IntegrationTests\DI\Fixtures\ConstructorInjectionTest\Class2', $dependency);
 	}
 
 	public function testInterfaceInjection() {
 		/** @var $class1 Class1 */
-		$class1 = Container::getInstance()->get('IntegrationTests\DI\Fixtures\SetterInjectionTest\Class1');
+		$class1 = Container::getInstance()->get('IntegrationTests\DI\Fixtures\ConstructorInjectionTest\Class1');
 		$dependency = $class1->getInterface1();
-		$this->assertInstanceOf('IntegrationTests\DI\Fixtures\SetterInjectionTest\Interface1', $dependency);
-		$this->assertInstanceOf('IntegrationTests\DI\Fixtures\SetterInjectionTest\Class3', $dependency);
+		$this->assertInstanceOf('IntegrationTests\DI\Fixtures\ConstructorInjectionTest\Interface1', $dependency);
+		$this->assertInstanceOf('IntegrationTests\DI\Fixtures\ConstructorInjectionTest\Class3', $dependency);
 	}
 
 	/**
@@ -79,10 +79,10 @@ class SetterInjectionTest extends \PHPUnit_Framework_TestCase
 		$bean2->nameForTest = 'namedDependency2';
 		$container->set('namedDependency2', $bean2);
 		// Test
-		$class = new NamedInjectionClass();
+		$class = Container::getInstance()->get('IntegrationTests\DI\Fixtures\ConstructorInjectionTest\NamedInjectionClass');
 		$dependency = $class->getDependency();
 		$this->assertNotNull($dependency);
-		$this->assertInstanceOf('\IntegrationTests\DI\Fixtures\SetterInjectionTest\NamedBean', $dependency);
+		$this->assertInstanceOf('\IntegrationTests\DI\Fixtures\ConstructorInjectionTest\NamedBean', $dependency);
 		$this->assertEquals('namedDependency', $dependency->nameForTest);
 		$this->assertSame($bean, $dependency);
 		$this->assertNotSame($bean2, $dependency);
@@ -93,7 +93,7 @@ class SetterInjectionTest extends \PHPUnit_Framework_TestCase
 	 */
 	public function testNamedInjectionNotFound() {
 		// Exception (bean not defined)
-		new NamedInjectionClass();
+		Container::getInstance()->get('IntegrationTests\DI\Fixtures\ConstructorInjectionTest\NamedInjectionClass');
 	}
 
 	/**
@@ -110,35 +110,23 @@ class SetterInjectionTest extends \PHPUnit_Framework_TestCase
 		$bean = new NamedBean();
 		$container->set('namedDependency', $bean);
 		// Test
-		$class = new NamedInjectionWithTypeMappingClass();
+		$class = Container::getInstance()->get('IntegrationTests\DI\Fixtures\ConstructorInjectionTest\NamedInjectionWithTypeMappingClass');
 		$dependency = $class->getDependency();
 		$this->assertNotNull($dependency);
-		$this->assertInstanceOf('\IntegrationTests\DI\Fixtures\SetterInjectionTest\NamedBean', $dependency);
+		$this->assertInstanceOf('\IntegrationTests\DI\Fixtures\ConstructorInjectionTest\NamedBean', $dependency);
 		$this->assertSame($bean, $dependency);
 	}
 
 	/**
 	 * @expectedException \DI\Annotations\AnnotationException
-	 * @expectedExceptionMessage @Inject was found on IntegrationTests\DI\Fixtures\SetterInjectionTest\Buggy1::setDependency() but the parameter $dependency has no type: impossible to deduce its type
+	 * @expectedExceptionMessage The parameter dependency of the constructor of  has no type: impossible to deduce its type
 	 */
 	public function testNonTypeHintedMethod() {
-		Container::getInstance()->get('IntegrationTests\DI\Fixtures\SetterInjectionTest\Buggy1');
+		Container::getInstance()->get('IntegrationTests\DI\Fixtures\ConstructorInjectionTest\Buggy1');
 	}
 
-	/**
-	 * @expectedException \DI\Annotations\AnnotationException
-	 * @expectedExceptionMessage @Inject was found on IntegrationTests\DI\Fixtures\SetterInjectionTest\Buggy2::setDependency(), the method should have exactly one parameter
-	 */
-	public function testNoParametersMethod() {
-		Container::getInstance()->get('IntegrationTests\DI\Fixtures\SetterInjectionTest\Buggy2');
-	}
-
-	/**
-	 * @expectedException \DI\NotFoundException
-	 * @expectedExceptionMessage @Inject was found on IntegrationTests\DI\Fixtures\SetterInjectionTest\Buggy3::setDependency(...) but no bean or value 'nonExistentBean' was found
-	 */
 	public function testNamedUnknownBean() {
-		Container::getInstance()->get('IntegrationTests\DI\Fixtures\SetterInjectionTest\Buggy3');
+		Container::getInstance()->get('IntegrationTests\DI\Fixtures\ConstructorInjectionTest\Buggy2');
 	}
 
 }

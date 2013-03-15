@@ -170,14 +170,4 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
 			$method->invoke($container, $reflectionClass));
 	}
 
-	/**
-	 * @expectedException \DI\DependencyException
-	 */
-	public function testNewInstanceConstructorWithParameters() {
-		$container = Container::getInstance();
-		$method = new ReflectionMethod(get_class($container), 'getNewInstance');
-		$method->setAccessible(true);
-		$method->invoke($container, 'UnitTests\DI\Fixtures\ConstructorWithParameters');
-	}
-
 }

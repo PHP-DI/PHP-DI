@@ -98,6 +98,9 @@ class Container implements ArrayAccess
 	 * @return mixed Instance
 	 */
 	public function get($name, $useProxy = false) {
+		if (! is_string($name)) {
+			throw new \InvalidArgumentException("The name parameter must be of type string");
+		}
 		// Try to find the entry in the map
 		if (array_key_exists($name, $this->entries)) {
 			$entry = $this->entries[$name];
@@ -248,15 +251,17 @@ class Container implements ArrayAccess
 	private function getNewInstance($classname) {
 		$classReflection = new ReflectionClass($classname);
 		$constructorReflection = $classReflection->getConstructor();
-		if ($constructorReflection && $constructorReflection->getNumberOfRequiredParameters() > 0) {
-			throw new DependencyException("$classname cannot be instantiated because it's constructor has required parameters");
-		}
 		$instance = $this->newInstanceWithoutConstructor($classReflection);
 		// Inject the dependencies
 		$this->injectAll($instance);
 		// Call the constructor
 		if ($constructorReflection) {
-			$constructorReflection->invoke($instance);
+			if ($constructorReflection->getNumberOfRequiredParameters() > 0) {
+				// Constructor injection
+				$this->injectConstructor($instance, $constructorReflection);
+			} else {
+				$constructorReflection->invoke($instance);
+			}
 		}
 		return $instance;
 	}
@@ -279,6 +284,24 @@ class Container implements ArrayAccess
 					strlen($classname), $classname
 				));
 		}
+	}
+
+	/**
+	 * Inject dependencies through the constructor
+	 * @param mixed            $object
+	 * @param ReflectionMethod $constructorReflection
+	 */
+	private function injectConstructor($object, ReflectionMethod $constructorReflection) {
+		$args = array();
+		foreach ($constructorReflection->getParameters() as $parameter) {
+			$parameterClass = $parameter->getClass();
+			if ($parameterClass === null) {
+				throw new AnnotationException("The parameter {$parameter->name} of the constructor of $parameterClass"
+					. " has no type: impossible to deduce its type");
+			}
+			$args[] = $this->get($parameterClass->name);
+		}
+		$constructorReflection->invokeArgs($object, $args);
 	}
 
 	/**

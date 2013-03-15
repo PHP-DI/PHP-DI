@@ -27,4 +27,10 @@ class Inject {
 	 */
 	public $lazy = false;
 
+	/**
+	 * Param name if the annotation is set on a method
+	 * @var string
+	 */
+	public $param;
+
 }
