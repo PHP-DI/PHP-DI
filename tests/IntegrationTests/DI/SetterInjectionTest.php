@@ -11,10 +11,9 @@ namespace IntegrationTests\DI;
 
 use DI\Container;
 use IntegrationTests\DI\Fixtures\SetterInjectionTest\Class1;
-use IntegrationTests\DI\Fixtures\SetterInjectionTest\LazyInjectionClass;
-use IntegrationTests\DI\Fixtures\SetterInjectionTest\NamedInjectionWithTypeMappingClass;
-use IntegrationTests\DI\Fixtures\SetterInjectionTest\NamedInjectionClass;
 use IntegrationTests\DI\Fixtures\SetterInjectionTest\NamedBean;
+use IntegrationTests\DI\Fixtures\SetterInjectionTest\NamedInjectionClass;
+use IntegrationTests\DI\Fixtures\SetterInjectionTest\NamedInjectionWithTypeMappingClass;
 
 /**
  * Test class for setter injection
@@ -45,25 +44,6 @@ class SetterInjectionTest extends \PHPUnit_Framework_TestCase
 		$dependency = $class1->getInterface1();
 		$this->assertInstanceOf('IntegrationTests\DI\Fixtures\SetterInjectionTest\Interface1', $dependency);
 		$this->assertInstanceOf('IntegrationTests\DI\Fixtures\SetterInjectionTest\Class3', $dependency);
-	}
-
-	/**
-	 * Injection with lazy enabled
-	 */
-	public function testLazyInjection1() {
-		$this->markTestSkipped("TODO");
-		$class = new LazyInjectionClass();
-		$dependency = $class->getClass2();
-		$this->assertNotNull($dependency);
-		$this->assertInstanceOf('DI\Proxy\Proxy', $dependency);
-		// Correct proxy resolution
-		$this->assertTrue($dependency->getBoolean());
-	}
-
-	public function testLazyInjection2() {
-		$this->markTestSkipped("TODO");
-		$class = new LazyInjectionClass();
-		$this->assertTrue($class->getDependencyAttribute());
 	}
 
 	/**
