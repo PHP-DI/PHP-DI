@@ -284,7 +284,7 @@ class Container implements ArrayAccess
 			// Create a new class instance without calling the constructor (PHP 5.4 magic)
 			return $classReflection->newInstanceWithoutConstructor();
 		} else {
-			$classname = $classReflection->getName();
+			$classname = $classReflection->name;
 			return unserialize(
 				sprintf(
 					'O:%d:"%s":0:{}',
