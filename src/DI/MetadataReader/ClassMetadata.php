@@ -33,7 +33,7 @@ class ClassMetadata
 	/**
 	 * @return Inject[] Property annotations indexed by the property name
 	 */
-	public function getPropertyAnnotations() {
+	public function getAllPropertyAnnotations() {
 		return $this->propertyAnnotations;
 	}
 
@@ -55,7 +55,7 @@ class ClassMetadata
 	/**
 	 * @return Inject[] Method annotations indexed by the method name
 	 */
-	public function getMethodAnnotations() {
+	public function getAllMethodAnnotations() {
 		return $this->methodAnnotations;
 	}
 

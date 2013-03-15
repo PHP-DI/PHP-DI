@@ -147,7 +147,7 @@ class Container implements ArrayAccess
 		// Get the class metadata
 		$classMetadata = $this->getMetadataReader()->getClassMetadata(get_class($object));
 		// Process annotations on methods
-		foreach ($classMetadata->getMethodAnnotations() as $methodName => $annotation) {
+		foreach ($classMetadata->getAllMethodAnnotations() as $methodName => $annotation) {
 			// Ignore constructor
 			if ($methodName === '__construct') {
 				continue;
@@ -157,7 +157,7 @@ class Container implements ArrayAccess
 			}
 		}
 		// Process annotations on properties
-		foreach ($classMetadata->getPropertyAnnotations() as $propertyName => $annotation) {
+		foreach ($classMetadata->getAllPropertyAnnotations() as $propertyName => $annotation) {
 			if ($annotation instanceof Inject) {
 				$this->injectProperty($object, $propertyName, $annotation);
 			}
