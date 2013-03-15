@@ -144,6 +144,9 @@ class Container implements ArrayAccess
 		if (is_null($object)) {
 			throw new DependencyException("null given, object instance expected");
 		}
+		if (! is_object($object)) {
+			throw new DependencyException("object instance expected");
+		}
 		// Get the class metadata
 		$classMetadata = $this->getMetadataReader()->getClassMetadata(get_class($object));
 		// Process annotations on methods
