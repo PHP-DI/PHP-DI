@@ -1,5 +1,10 @@
 # Change log
 
+## 3.0
+
+* Setter injection
+* Constructor injection
+
 ## 2.1
 
 * `use` statements to import classes from other namespaces are now taken into account with the `@var` annotation
