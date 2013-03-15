@@ -30,8 +30,32 @@ Read the [introduction to dependency injection with an example](doc/example).
 
 ## Short example
 
+If you use dependency injection through your constructors:
+
 ```php
-<?php
+class Foo {
+    private $bar;
+
+    public function __construct(Bar $bar) {
+        return $this->bar = $bar;
+    }
+}
+```
+
+PHP-DI will help you get an instance of `Foo`: it will create an instance of `Bar` and feed it through the constructor.
+
+```php
+$foo = DI\Container::get('Foo');
+```
+
+**No configuration needed**. That's as easy as possible!
+
+
+## Practical annotations
+
+PHP-DI provides useful annotations for Setter and Property injection:
+
+```php
 use DI\Annotations\Inject;
 
 class Foo {
@@ -50,19 +74,24 @@ class Foo {
 
 In this example, a instance of the `Bar` class is created and injected in the `Foo` class. **No configuration needed**.
 
-That's as easy as possible!
-
-Of course, in the spirit of Dependency Injection, `Bar` will rather be an interface, and you will configure
+*Note*: Of course, in the spirit of Dependency Injection, `Bar` will rather be an interface, and you will configure
 which implementation will be injected through [configuration](doc/configure).
+
 
 ## More
 
 Do you want more? PHP-DI comes on top of a classic container:
 
 ```php
-$container = \DI\Container::getInstance();
+$container = DI\Container::getInstance();
+
 $container['dbAdapter'] = $myDbAdapter;
+// or
+$container->set('dbAdapter', $myDbAdapter);
+
 $myDbAdapter = $container['dbAdapter'];
+// or
+$myDbAdapter = $container->get('dbAdapter');
 ```
 
 ## Even more
@@ -70,7 +99,7 @@ $myDbAdapter = $container['dbAdapter'];
 A more complete version of the previous example:
 
 ```php
-$container = \DI\Container::getInstance();
+$container = DI\Container::getInstance();
 $container['db.params'] = [
 	'dbname'   => 'foo',
 	'user'     => 'root',
