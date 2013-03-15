@@ -148,6 +148,10 @@ class Container implements ArrayAccess
 		$classMetadata = $this->getMetadataReader()->getClassMetadata(get_class($object));
 		// Process annotations on methods
 		foreach ($classMetadata->getMethodAnnotations() as $methodName => $annotation) {
+			// Ignore constructor
+			if ($methodName === '__construct') {
+				continue;
+			}
 			if ($annotation instanceof Inject) {
 				$this->injectMethod($object, $methodName, $annotation);
 			}
@@ -296,8 +300,8 @@ class Container implements ArrayAccess
 		foreach ($constructorReflection->getParameters() as $parameter) {
 			$parameterClass = $parameter->getClass();
 			if ($parameterClass === null) {
-				throw new AnnotationException("The parameter {$parameter->name} of the constructor of $parameterClass"
-					. " has no type: impossible to deduce its type");
+				throw new AnnotationException("The parameter '{$parameter->name}' of the constructor of '" . get_class($object)
+					. "' has no type: impossible to deduce its type");
 			}
 			$args[] = $this->get($parameterClass->name);
 		}

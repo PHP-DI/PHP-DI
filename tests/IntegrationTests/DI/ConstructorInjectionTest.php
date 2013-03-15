@@ -119,12 +119,16 @@ class ConstructorInjectionTest extends \PHPUnit_Framework_TestCase
 
 	/**
 	 * @expectedException \DI\Annotations\AnnotationException
-	 * @expectedExceptionMessage The parameter dependency of the constructor of  has no type: impossible to deduce its type
+	 * @expectedExceptionMessage The parameter 'dependency' of the constructor of 'IntegrationTests\DI\Fixtures\ConstructorInjectionTest\Buggy1' has no type: impossible to deduce its type
 	 */
 	public function testNonTypeHintedMethod() {
 		Container::getInstance()->get('IntegrationTests\DI\Fixtures\ConstructorInjectionTest\Buggy1');
 	}
 
+	/**
+	 * @expectedException \DI\Annotations\AnnotationException
+	 * @expectedExceptionMessage The parameter 'dependency' of the constructor of 'IntegrationTests\DI\Fixtures\ConstructorInjectionTest\Buggy2' has no type: impossible to deduce its type
+	 */
 	public function testNamedUnknownBean() {
 		Container::getInstance()->get('IntegrationTests\DI\Fixtures\ConstructorInjectionTest\Buggy2');
 	}
