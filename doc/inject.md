@@ -7,15 +7,31 @@ PHP-DI Container can contain and provide:
 - values (configuration values, like integers, strings, arrays, ...)
 
 
+## Constructor injection
+
+Constructor injection is the simplest way to perform dependency injection.
+
+```php
+class MyService {
+    public function __construct(GreatClass $myDependency) {
+    	// ...
+    }
+}
+```
+
+In this case, you don't need to use annotations: PHP-DI assumes that all constructor's parameters are dependencies to inject.
+
+It will know which dependency to inject based on the parameter type. For this reason, constructors parameters have to use type-hinting (`__construct($myDependency)` wouldn't work).
+
+
 ## @Inject annotation
 
-We can declare a dependency with the `@Inject` annotation.
+We can mark a dependency to be injected with the `@Inject` annotation.
 
 ### Setter injection:
 
 ```php
 use DI\Annotations\Inject;
-use My\GreatClass;
 
 class MyService {
     /**
@@ -46,7 +62,9 @@ class MyService {
 }
 ```
 
-Notice that the `@var` annotation is needed in this case because you can't specify a property's type.
+Note that the `@var` annotation is needed in this case because you can't specify a property's type.
+
+One advantage of property injection is its conciseness. However, don't forget to write setters for those properties if you intend to use that class without PHP-DI (for example for tests).
 
 ### Injecting
 
