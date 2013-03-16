@@ -141,7 +141,7 @@ While you can automatically inject an instance based on its type (using `@var` a
 you can also inject a *specific* instance:
 
 ```php
-$container->set('myDependency', $myObject);
+$container->set('loggedInUser', $loggedInUser);
 ```
 
 (to put something into the container, read the [configuration manual](doc/configure))
@@ -151,11 +151,11 @@ and then:
 ```php
 use DI\Annotations\Inject;
 
-class Class1 {
+class MyController {
     /**
-     * @Inject("myDependency")
+     * @Inject("loggedInUser")
      */
-    public function setDependency($dependency) {
+    public function setLoggedInUser($user) {
     	// ...
     }
 }
@@ -166,11 +166,11 @@ or:
 ```php
 use DI\Annotations\Inject;
 
-class Class1 {
+class MyController {
 	/**
-	 * @Inject("myDependency")
+	 * @Inject("loggedInUser")
 	 */
-	private $dependency;
+	private $loggedInUser;
 	
     // ...
 }
