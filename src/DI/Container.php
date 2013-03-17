@@ -16,6 +16,7 @@ use ReflectionProperty;
 use DI\Annotations\AnnotationException;
 use DI\MetadataReader\DefaultMetadataReader;
 use DI\Annotations\Inject;
+use DI\MetadataReader\ClassMetadata;
 use DI\MetadataReader\MetadataReader;
 use DI\Proxy\Proxy;
 
@@ -117,8 +118,14 @@ class Container implements ArrayAccess
 			if ($useProxy) {
 				return $this->getProxy($name);
 			}
-			$this->entries[$name] = $this->getNewInstance($name);
-			return $this->entries[$name];
+
+            if (ClassMetadata::SCOPE_PROTOTYPE === $this->getMetadataReader()->getClassMetadata($name)->getScope()) {
+                return $this->getNewInstance($name);
+            }
+
+            // As it's a singleton, store the newly created instance
+            $this->entries[$name] = $this->getNewInstance($name);
+            return $this->entries[$name];
 		}
 		throw new NotFoundException("No bean, value or class found for '$name'");
 	}
@@ -147,8 +154,10 @@ class Container implements ArrayAccess
 		if (! is_object($object)) {
 			throw new DependencyException("object instance expected");
 		}
+
 		// Get the class metadata
 		$classMetadata = $this->getMetadataReader()->getClassMetadata(get_class($object));
+
 		// Process annotations on methods
 		foreach ($classMetadata->getAllMethodAnnotations() as $methodName => $annotation) {
 			// Ignore constructor
@@ -159,6 +168,7 @@ class Container implements ArrayAccess
 				$this->injectMethod($object, $methodName, $annotation);
 			}
 		}
+
 		// Process annotations on properties
 		foreach ($classMetadata->getAllPropertyAnnotations() as $propertyName => $annotation) {
 			if ($annotation instanceof Inject) {
@@ -259,8 +269,10 @@ class Container implements ArrayAccess
 		$classReflection = new ReflectionClass($classname);
 		$constructorReflection = $classReflection->getConstructor();
 		$instance = $this->newInstanceWithoutConstructor($classReflection);
+
 		// Inject the dependencies
 		$this->injectAll($instance);
+
 		// Call the constructor
 		if ($constructorReflection) {
 			if ($constructorReflection->getNumberOfRequiredParameters() > 0) {

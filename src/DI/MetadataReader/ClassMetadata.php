@@ -16,6 +16,8 @@ use \DI\Annotations\Inject;
  */
 class ClassMetadata
 {
+    const SCOPE_PROTOTYPE = 1;
+    const SCOPE_SINGLETON = 2;
 
 	/**
 	 * Property annotations indexed by the property name
@@ -29,6 +31,10 @@ class ClassMetadata
 	 */
 	private $methodAnnotations = array();
 
+    /**
+     * @var integer
+     */
+    private $scope = self::SCOPE_PROTOTYPE;
 
 	/**
 	 * @return Inject[] Property annotations indexed by the property name
@@ -73,6 +79,20 @@ class ClassMetadata
 	public function setMethodAnnotations(array $methodAnnotations) {
 		$this->methodAnnotations = $methodAnnotations;
 	}
+
+    /**
+     * @param integer $scope
+     */
+    public function setScope($scope) {
+        $this->scope = $scope;
+    }
+
+    /**
+     * @return integer
+     */
+    public function getScope() {
+        return $this->scope;
+    }
 
 	/**
 	 * Serialization
