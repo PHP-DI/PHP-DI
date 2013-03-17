@@ -117,15 +117,6 @@ class BeanInjectionTest extends \PHPUnit_Framework_TestCase
 		$this->assertSame($bean, $dependency);
 	}
 
-	public function testFactoryCreatesSingletons() {
-		$class1_1 = new Class1();
-		$class2_1 = $class1_1->getClass2();
-		$class1_2 = new Class1();
-		$class2_2 = $class1_2->getClass2();
-		$this->assertNotNull($class2_1);
-		$this->assertSame($class2_1, $class2_2);
-	}
-
     /**
      * Check that if a dependency is already set, the container
      * will not overwrite it

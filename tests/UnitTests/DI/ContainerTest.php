@@ -74,10 +74,23 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
 		$container = Container::getInstance();
 		$this->assertInstanceOf('stdClass', $container->get('stdClass'));
 	}
-	public function testGetWithFactoryIsCached() {
+    public function testGetWithFactoryIsPrototype() {
+        $container = Container::getInstance();
+
+        // Without @Scope annotation
+        $instance1 = $container->get('stdClass');
+        $instance2 = $container->get('stdClass');
+        $this->assertNotSame($instance1, $instance2);
+
+        // With @Scope("prototype") annotation
+        $instance3 = $container->get('UnitTests\DI\Fixtures\Prototype');
+        $instance4 = $container->get('UnitTests\DI\Fixtures\Prototype');
+        $this->assertNotSame($instance3, $instance4);
+    }
+	public function testGetWithFactoryIsSingleton() {
 		$container = Container::getInstance();
-		$instance1 = $container->get('stdClass');
-		$instance2 = $container->get('stdClass');
+		$instance1 = $container->get('UnitTests\DI\Fixtures\Singleton');
+		$instance2 = $container->get('UnitTests\DI\Fixtures\Singleton');
 		$this->assertSame($instance1, $instance2);
 	}
 	public function testGetWithProxy() {
