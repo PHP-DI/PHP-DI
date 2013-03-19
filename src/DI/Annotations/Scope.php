@@ -14,21 +14,22 @@ namespace DI\Annotations;
  * @Annotation
  * @Target("CLASS")
  */
-final class Scope {
+final class Scope
+{
 
-    /**
-     * The scope of an object: prototype, singleton
-     * @var Scope|null
-     */
-    public $value;
+	/**
+	 * The scope of an object: prototype, singleton
+	 * @var Scope|null
+	 */
+	public $value;
 
-    /**
-     * @param array $values
-     */
-    public function __construct(array $values) {
-        if (isset($values['value'])) {
-            $this->value = new \DI\Scope($values['value']);
-        }
-    }
+	/**
+	 * @param array $values
+	 */
+	public function __construct(array $values) {
+		if (isset($values['value'])) {
+			$this->value = new \DI\Scope($values['value']);
+		}
+	}
 
 }

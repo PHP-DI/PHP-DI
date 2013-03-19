@@ -57,9 +57,9 @@ class DefaultMetadataReader implements MetadataReader
 
 		// Scope annotation
 		$scopeAnnotation = $this->getAnnotationReader()->getClassAnnotation($reflectionClass, 'DI\Annotations\Scope');
-        if ($scopeAnnotation !== null && $scopeAnnotation->value) {
-            $classMetadata->setScope($scopeAnnotation->value);
-        }
+		if ($scopeAnnotation !== null && $scopeAnnotation->value) {
+			$classMetadata->setScope($scopeAnnotation->value);
+		}
 
 		// Browse the object's properties looking for annotated properties
 		foreach ($reflectionClass->getProperties() as $property) {

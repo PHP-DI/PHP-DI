@@ -30,10 +30,10 @@ class ClassMetadata
 	 */
 	private $methodAnnotations = array();
 
-    /**
-     * @var Scope
-     */
-    private $scope;
+	/**
+	 * @var Scope
+	 */
+	private $scope;
 
 	public function __construct() {
 		// Default scope
@@ -84,19 +84,19 @@ class ClassMetadata
 		$this->methodAnnotations = $methodAnnotations;
 	}
 
-    /**
-     * @param Scope $scope
-     */
-    public function setScope(Scope $scope) {
-        $this->scope = $scope;
-    }
+	/**
+	 * @param Scope $scope
+	 */
+	public function setScope(Scope $scope) {
+		$this->scope = $scope;
+	}
 
-    /**
-     * @return Scope
-     */
-    public function getScope() {
-        return $this->scope;
-    }
+	/**
+	 * @return Scope
+	 */
+	public function getScope() {
+		return $this->scope;
+	}
 
 	/**
 	 * Serialization

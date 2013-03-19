@@ -63,7 +63,7 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
 	}
 	public function testGetWithClosureIsCached() {
 		$container = Container::getInstance();
-		$container->set('key', function(Container $c) {
+		$container->set('key', function (Container $c) {
 			return new stdClass();
 		});
 		$instance1 = $container->get('key');
@@ -74,13 +74,13 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
 		$container = Container::getInstance();
 		$this->assertInstanceOf('stdClass', $container->get('stdClass'));
 	}
-    public function testGetWithFactoryIsPrototype() {
-        $container = Container::getInstance();
-        // With @Scope("prototype") annotation
-        $instance1 = $container->get('UnitTests\DI\Fixtures\Prototype');
-        $instance2 = $container->get('UnitTests\DI\Fixtures\Prototype');
-        $this->assertNotSame($instance1, $instance2);
-    }
+	public function testGetWithFactoryIsPrototype() {
+		$container = Container::getInstance();
+		// With @Scope("prototype") annotation
+		$instance1 = $container->get('UnitTests\DI\Fixtures\Prototype');
+		$instance2 = $container->get('UnitTests\DI\Fixtures\Prototype');
+		$this->assertNotSame($instance1, $instance2);
+	}
 	public function testGetWithFactoryIsSingleton() {
 		$container = Container::getInstance();
 		// Without @Scope annotation => default is Singleton

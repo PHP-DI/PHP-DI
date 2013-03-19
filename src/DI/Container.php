@@ -10,15 +10,14 @@
 namespace DI;
 
 use ArrayAccess;
-use ReflectionMethod;
-use ReflectionClass;
-use ReflectionProperty;
 use DI\Annotations\AnnotationException;
-use DI\MetadataReader\ClassMetadata;
-use DI\MetadataReader\DefaultMetadataReader;
 use DI\Annotations\Inject;
+use DI\MetadataReader\DefaultMetadataReader;
 use DI\MetadataReader\MetadataReader;
 use DI\Proxy\Proxy;
+use ReflectionClass;
+use ReflectionMethod;
+use ReflectionProperty;
 
 /**
  * Container
@@ -99,7 +98,7 @@ class Container implements ArrayAccess
 	 * @return mixed Instance
 	 */
 	public function get($name, $useProxy = false) {
-		if (! is_string($name)) {
+		if (!is_string($name)) {
 			throw new \InvalidArgumentException("The name parameter must be of type string");
 		}
 		// Try to find the entry in the map
@@ -120,11 +119,11 @@ class Container implements ArrayAccess
 			}
 
 			$scope = $this->getMetadataReader()->getClassMetadata($name)->getScope();
-            if ($scope == Scope::PROTOTYPE()) {
-                return $this->getNewInstance($name);
-            }
+			if ($scope == Scope::PROTOTYPE()) {
+				return $this->getNewInstance($name);
+			}
 
-            // If it's a singleton, store the newly created instance
+			// If it's a singleton, store the newly created instance
 			$this->entries[$name] = $this->getNewInstance($name);
 			return $this->entries[$name];
 		}
@@ -152,7 +151,7 @@ class Container implements ArrayAccess
 		if (is_null($object)) {
 			throw new DependencyException("null given, object instance expected");
 		}
-		if (! is_object($object)) {
+		if (!is_object($object)) {
 			throw new DependencyException("object instance expected");
 		}
 
