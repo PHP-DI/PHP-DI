@@ -14,7 +14,8 @@ namespace DI\Annotations;
  * @Annotation
  * @Target({"METHOD","PROPERTY"})
  */
-class Inject {
+class Inject
+{
 
 	/**
 	 * Bean name

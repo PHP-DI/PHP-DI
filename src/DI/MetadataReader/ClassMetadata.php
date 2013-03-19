@@ -9,7 +9,7 @@
 
 namespace DI\MetadataReader;
 
-use \DI\Annotations\Inject;
+use DI\Annotations\Inject;
 
 /**
  * Class metadata

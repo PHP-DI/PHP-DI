@@ -10,14 +10,14 @@
 namespace DI;
 
 use ArrayAccess;
-use ReflectionMethod;
-use ReflectionClass;
-use ReflectionProperty;
 use DI\Annotations\AnnotationException;
-use DI\MetadataReader\DefaultMetadataReader;
 use DI\Annotations\Inject;
+use DI\MetadataReader\DefaultMetadataReader;
 use DI\MetadataReader\MetadataReader;
 use DI\Proxy\Proxy;
+use ReflectionClass;
+use ReflectionMethod;
+use ReflectionProperty;
 
 /**
  * Container
@@ -93,12 +93,12 @@ class Container implements ArrayAccess
 	 * @param string $name Can be a bean name or a class name
 	 * @param bool   $useProxy If true, returns a proxy class of the instance
 	 *                            if it is not already loaded
+	 * @throws \InvalidArgumentException
 	 * @throws NotFoundException
-	 * @throws DependencyException
 	 * @return mixed Instance
 	 */
 	public function get($name, $useProxy = false) {
-		if (! is_string($name)) {
+		if (!is_string($name)) {
 			throw new \InvalidArgumentException("The name parameter must be of type string");
 		}
 		// Try to find the entry in the map
@@ -144,7 +144,7 @@ class Container implements ArrayAccess
 		if (is_null($object)) {
 			throw new DependencyException("null given, object instance expected");
 		}
-		if (! is_object($object)) {
+		if (!is_object($object)) {
 			throw new DependencyException("object instance expected");
 		}
 		// Get the class metadata
@@ -297,6 +297,7 @@ class Container implements ArrayAccess
 	 * Inject dependencies through the constructor
 	 * @param mixed            $object
 	 * @param ReflectionMethod $constructorReflection
+	 * @throws Annotations\AnnotationException
 	 */
 	private function injectConstructor($object, ReflectionMethod $constructorReflection) {
 		$args = array();

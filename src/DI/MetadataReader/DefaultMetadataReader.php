@@ -11,11 +11,11 @@ namespace DI\MetadataReader;
 
 use DI\Annotations\AnnotationException;
 use DI\Annotations\Inject;
-use InvalidArgumentException;
 use Doctrine\Common\Annotations\AnnotationReader;
 use Doctrine\Common\Annotations\AnnotationRegistry;
 use Doctrine\Common\Annotations\PhpParser;
 use Doctrine\Common\Annotations\Reader;
+use InvalidArgumentException;
 
 /**
  * Reads PHP class metadata such as @ Inject and @ var annotations
