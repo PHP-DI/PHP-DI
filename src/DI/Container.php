@@ -10,14 +10,15 @@
 namespace DI;
 
 use ArrayAccess;
+use ReflectionMethod;
+use ReflectionClass;
+use ReflectionProperty;
 use DI\Annotations\AnnotationException;
-use DI\Annotations\Inject;
+use DI\MetadataReader\ClassMetadata;
 use DI\MetadataReader\DefaultMetadataReader;
+use DI\Annotations\Inject;
 use DI\MetadataReader\MetadataReader;
 use DI\Proxy\Proxy;
-use ReflectionClass;
-use ReflectionMethod;
-use ReflectionProperty;
 
 /**
  * Container
@@ -93,12 +94,12 @@ class Container implements ArrayAccess
 	 * @param string $name Can be a bean name or a class name
 	 * @param bool   $useProxy If true, returns a proxy class of the instance
 	 *                            if it is not already loaded
-	 * @throws \InvalidArgumentException
 	 * @throws NotFoundException
+	 * @throws DependencyException
 	 * @return mixed Instance
 	 */
 	public function get($name, $useProxy = false) {
-		if (!is_string($name)) {
+		if (! is_string($name)) {
 			throw new \InvalidArgumentException("The name parameter must be of type string");
 		}
 		// Try to find the entry in the map
@@ -117,6 +118,12 @@ class Container implements ArrayAccess
 			if ($useProxy) {
 				return $this->getProxy($name);
 			}
+
+            if (ClassMetadata::SCOPE_PROTOTYPE === $this->getMetadataReader()->getClassMetadata($name)->getScope()) {
+                return $this->getNewInstance($name);
+            }
+
+            // As it's a singleton, store the newly created instance
 			$this->entries[$name] = $this->getNewInstance($name);
 			return $this->entries[$name];
 		}
@@ -144,11 +151,13 @@ class Container implements ArrayAccess
 		if (is_null($object)) {
 			throw new DependencyException("null given, object instance expected");
 		}
-		if (!is_object($object)) {
+		if (! is_object($object)) {
 			throw new DependencyException("object instance expected");
 		}
+
 		// Get the class metadata
 		$classMetadata = $this->getMetadataReader()->getClassMetadata(get_class($object));
+
 		// Process annotations on methods
 		foreach ($classMetadata->getAllMethodAnnotations() as $methodName => $annotation) {
 			// Ignore constructor
@@ -159,6 +168,7 @@ class Container implements ArrayAccess
 				$this->injectMethod($object, $methodName, $annotation);
 			}
 		}
+
 		// Process annotations on properties
 		foreach ($classMetadata->getAllPropertyAnnotations() as $propertyName => $annotation) {
 			if ($annotation instanceof Inject) {
@@ -259,8 +269,10 @@ class Container implements ArrayAccess
 		$classReflection = new ReflectionClass($classname);
 		$constructorReflection = $classReflection->getConstructor();
 		$instance = $this->newInstanceWithoutConstructor($classReflection);
+
 		// Inject the dependencies
 		$this->injectAll($instance);
+
 		// Call the constructor
 		if ($constructorReflection) {
 			if ($constructorReflection->getNumberOfRequiredParameters() > 0) {
@@ -297,7 +309,6 @@ class Container implements ArrayAccess
 	 * Inject dependencies through the constructor
 	 * @param mixed            $object
 	 * @param ReflectionMethod $constructorReflection
-	 * @throws Annotations\AnnotationException
 	 */
 	private function injectConstructor($object, ReflectionMethod $constructorReflection) {
 		$args = array();

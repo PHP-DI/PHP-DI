@@ -14,7 +14,7 @@ namespace DI\Annotations;
  * @Annotation
  * @Target({"METHOD","PROPERTY"})
  */
-class Inject
+final class Inject
 {
 
 	/**
