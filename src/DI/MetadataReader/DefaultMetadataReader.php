@@ -55,8 +55,10 @@ class DefaultMetadataReader implements MetadataReader
 
 		$classMetadata = new ClassMetadata();
 
-        if (($scopeAnnotation = $this->getAnnotationReader()->getClassAnnotation($reflectionClass, 'DI\Annotations\Scope')) !== null) {
-            $classMetadata->setScope($this->parseScope($scopeAnnotation->value));
+		// Scope annotation
+		$scopeAnnotation = $this->getAnnotationReader()->getClassAnnotation($reflectionClass, 'DI\Annotations\Scope');
+        if ($scopeAnnotation !== null && $scopeAnnotation->value) {
+            $classMetadata->setScope($scopeAnnotation->value);
         }
 
 		// Browse the object's properties looking for annotated properties
@@ -226,22 +228,4 @@ class DefaultMetadataReader implements MetadataReader
 		return class_exists($class) || interface_exists($class);
 	}
 
-
-    /**
-     * Parses the value of the option "scope"
-     *
-     * @param  string $value Value of the option
-     * @return integer The scope translated into a ClassMetadata::SCOPE_* constant
-     * @throws \DI\Annotations\AnnotationException if an invalid scope has been specified
-     */
-    private function parseScope($value) {
-        switch ($value) {
-            case 'singleton':
-                return ClassMetadata::SCOPE_SINGLETON;
-            case 'prototype':
-                return ClassMetadata::SCOPE_PROTOTYPE;
-            default:
-                throw new AnnotationException("Invalid scope '$value'");
-        }
-    }
 }

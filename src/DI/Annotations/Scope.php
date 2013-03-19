@@ -18,16 +18,16 @@ final class Scope {
 
     /**
      * The scope of an object: prototype, singleton
-     * @var string
+     * @var Scope|null
      */
-    public $value = 'prototype';
+    public $value;
 
     /**
      * @param array $values
      */
     public function __construct(array $values) {
         if (isset($values['value'])) {
-            $this->value = $values['value'];
+            $this->value = new \DI\Scope($values['value']);
         }
     }
 

@@ -76,22 +76,29 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
 	}
     public function testGetWithFactoryIsPrototype() {
         $container = Container::getInstance();
-
-        // Without @Scope annotation
-        $instance1 = $container->get('stdClass');
-        $instance2 = $container->get('stdClass');
-        $this->assertNotSame($instance1, $instance2);
-
         // With @Scope("prototype") annotation
-        $instance3 = $container->get('UnitTests\DI\Fixtures\Prototype');
-        $instance4 = $container->get('UnitTests\DI\Fixtures\Prototype');
-        $this->assertNotSame($instance3, $instance4);
+        $instance1 = $container->get('UnitTests\DI\Fixtures\Prototype');
+        $instance2 = $container->get('UnitTests\DI\Fixtures\Prototype');
+        $this->assertNotSame($instance1, $instance2);
     }
 	public function testGetWithFactoryIsSingleton() {
 		$container = Container::getInstance();
-		$instance1 = $container->get('UnitTests\DI\Fixtures\Singleton');
-		$instance2 = $container->get('UnitTests\DI\Fixtures\Singleton');
+		// Without @Scope annotation => default is Singleton
+		$instance1 = $container->get('stdClass');
+		$instance2 = $container->get('stdClass');
 		$this->assertSame($instance1, $instance2);
+		// With @Scope annotation
+		$instance3 = $container->get('UnitTests\DI\Fixtures\Singleton');
+		$instance4 = $container->get('UnitTests\DI\Fixtures\Singleton');
+		$this->assertSame($instance3, $instance4);
+	}
+	/**
+	 * @expectedException \UnexpectedValueException
+	 * @expectedExceptionMessage Value 'foobar' is not part of the enum DI\Scope
+	 */
+	public function testGetWithInvalidScope() {
+		$container = Container::getInstance();
+		$container->get('UnitTests\DI\Fixtures\InvalidScope');
 	}
 	public function testGetWithProxy() {
 		$container = Container::getInstance();

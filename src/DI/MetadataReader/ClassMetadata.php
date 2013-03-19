@@ -10,14 +10,13 @@
 namespace DI\MetadataReader;
 
 use DI\Annotations\Inject;
+use DI\Scope;
 
 /**
  * Class metadata
  */
 class ClassMetadata
 {
-    const SCOPE_PROTOTYPE = 1;
-    const SCOPE_SINGLETON = 2;
 
 	/**
 	 * Property annotations indexed by the property name
@@ -32,9 +31,14 @@ class ClassMetadata
 	private $methodAnnotations = array();
 
     /**
-     * @var integer
+     * @var Scope
      */
-    private $scope = self::SCOPE_PROTOTYPE;
+    private $scope;
+
+	public function __construct() {
+		// Default scope
+		$this->scope = Scope::SINGLETON();
+	}
 
 	/**
 	 * @return Inject[] Property annotations indexed by the property name
@@ -81,14 +85,14 @@ class ClassMetadata
 	}
 
     /**
-     * @param integer $scope
+     * @param Scope $scope
      */
-    public function setScope($scope) {
+    public function setScope(Scope $scope) {
         $this->scope = $scope;
     }
 
     /**
-     * @return integer
+     * @return Scope
      */
     public function getScope() {
         return $this->scope;
@@ -102,6 +106,7 @@ class ClassMetadata
 		return array(
 			'propertyAnnotations',
 			'methodAnnotations',
+			'scope',
 		);
 	}
 

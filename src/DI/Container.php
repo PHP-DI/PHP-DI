@@ -119,11 +119,12 @@ class Container implements ArrayAccess
 				return $this->getProxy($name);
 			}
 
-            if (ClassMetadata::SCOPE_PROTOTYPE === $this->getMetadataReader()->getClassMetadata($name)->getScope()) {
+			$scope = $this->getMetadataReader()->getClassMetadata($name)->getScope();
+            if ($scope == Scope::PROTOTYPE()) {
                 return $this->getNewInstance($name);
             }
 
-            // As it's a singleton, store the newly created instance
+            // If it's a singleton, store the newly created instance
 			$this->entries[$name] = $this->getNewInstance($name);
 			return $this->entries[$name];
 		}
