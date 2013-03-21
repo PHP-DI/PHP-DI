@@ -9,7 +9,7 @@
 
 namespace DI;
 
-use Mycsense\Enum\Enum;
+use MyCLabs\Enum\Enum;
 
 /**
  * Scope enum
