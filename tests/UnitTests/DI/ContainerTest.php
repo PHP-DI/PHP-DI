@@ -105,6 +105,24 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
 		$this->assertInstanceOf('\DI\Proxy\Proxy', $container->get('stdClass', true));
 	}
 
+	/**
+	 * Tests if instantiation unlock works. We should be able to create two instances of the same class.
+	 */
+	public function testCircularDependencies() {
+		$container = Container::getInstance();
+		$instance1 = $container->get('UnitTests\DI\Fixtures\Prototype');
+		$instance2 = $container->get('UnitTests\DI\Fixtures\Prototype');
+	}
+
+	/**
+	 * @expectedException \DI\DependencyException
+	 * @expectedExceptionMessage Circular dependency detected while trying to instantiate class '\UnitTests\DI\Fixtures\Class1CircularDependencies'.
+	 */
+	public function testCircularDependenciesException() {
+		$container = Container::getInstance();
+		$container->get('\UnitTests\DI\Fixtures\Class1CircularDependencies');
+	}
+
 	public function testMetadataReader() {
 		$container = Container::getInstance();
 		/** @var $reader \DI\MetadataReader\MetadataReader */
