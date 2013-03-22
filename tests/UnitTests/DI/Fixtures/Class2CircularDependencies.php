@@ -19,9 +19,9 @@ use DI\Annotations\Inject;
  */
 class Class2CircularDependencies
 {
-    /**
-     * @Inject
-     * @var \UnitTests\DI\Fixtures\Class1CircularDependencies
-     */
-    public $class1;
+	/**
+	 * @Inject
+	 * @var \UnitTests\DI\Fixtures\Class1CircularDependencies
+	 */
+	public $class1;
 }

@@ -40,12 +40,12 @@ class Container implements ArrayAccess
 	 */
 	private $metadataReader;
 
-    /**
-     * Array of classes being instantiated.
-     * Used to avoid circular dependencies.
-     * @var array
-     */
-    private $classesBeingInstantiated = array();
+	/**
+	 * Array of classes being instantiated.
+	 * Used to avoid circular dependencies.
+	 * @var array
+	 */
+	private $classesBeingInstantiated = array();
 
 	/**
 	 * Returns an instance of the class (Singleton design pattern)
@@ -93,16 +93,16 @@ class Container implements ArrayAccess
 	protected function __construct() {
 	}
 
-    /**
-     * Returns an instance by its name
-     *
-     * @param string $name Can be a bean name or a class name
-     * @param bool   $useProxy If true, returns a proxy class of the instance
-     *                            if it is not already loaded
-     * @throws \InvalidArgumentException
-     * @throws NotFoundException
-     * @return mixed Instance
-     */
+	/**
+	 * Returns an instance by its name
+	 *
+	 * @param string $name Can be a bean name or a class name
+	 * @param bool   $useProxy If true, returns a proxy class of the instance
+	 *                            if it is not already loaded
+	 * @throws \InvalidArgumentException
+	 * @throws NotFoundException
+	 * @return mixed Instance
+	 */
 	public function get($name, $useProxy = false) {
 		if (!is_string($name)) {
 			throw new \InvalidArgumentException("The name parameter must be of type string");
@@ -129,11 +129,11 @@ class Container implements ArrayAccess
 				return $this->getNewInstance($name);
 			}
 
-            // If it's a singleton, store the newly created instance
-            $this->entries[$name] = $this->getNewInstance($name);
-            return $this->entries[$name];
+			// If it's a singleton, store the newly created instance
+			$this->entries[$name] = $this->getNewInstance($name);
+			return $this->entries[$name];
 		}
-	    throw new NotFoundException("No bean, value or class found for '$name'");
+		throw new NotFoundException("No bean, value or class found for '$name'");
 	}
 
 	/**
@@ -264,43 +264,43 @@ class Container implements ArrayAccess
 		});
 	}
 
-    /**
-     * Create a new instance of the class
-     *
-     * @param string $classname Class to instantiate
-     * @throws DependencyException
-     * @throws \Exception
-     * @return object the instance
-     */
+	/**
+	 * Create a new instance of the class
+	 *
+	 * @param string $classname Class to instantiate
+	 * @throws DependencyException
+	 * @throws \Exception
+	 * @return object the instance
+	 */
 	private function getNewInstance($classname) {
-        if (isset($this->classesBeingInstantiated[$classname])) {
-            throw new DependencyException("Circular dependency detected while trying to instantiate class '" . $classname . "'.");
-        }
-        $this->classesBeingInstantiated[$classname] = true;
+		if (isset($this->classesBeingInstantiated[$classname])) {
+			throw new DependencyException("Circular dependency detected while trying to instantiate class '" . $classname . "'.");
+		}
+		$this->classesBeingInstantiated[$classname] = true;
 
-        try {
-            $classReflection = new ReflectionClass($classname);
-            $constructorReflection = $classReflection->getConstructor();
-            $instance = $this->newInstanceWithoutConstructor($classReflection);
+		try {
+			$classReflection = new ReflectionClass($classname);
+			$constructorReflection = $classReflection->getConstructor();
+			$instance = $this->newInstanceWithoutConstructor($classReflection);
 
-            // Inject the dependencies
-            $this->injectAll($instance);
+			// Inject the dependencies
+			$this->injectAll($instance);
 
-            // Call the constructor
-            if ($constructorReflection) {
-                if ($constructorReflection->getNumberOfRequiredParameters() > 0) {
-                    // Constructor injection
-                    $this->injectConstructor($instance, $constructorReflection);
-                } else {
-                    $constructorReflection->invoke($instance);
-                }
-            }
+			// Call the constructor
+			if ($constructorReflection) {
+				if ($constructorReflection->getNumberOfRequiredParameters() > 0) {
+					// Constructor injection
+					$this->injectConstructor($instance, $constructorReflection);
+				} else {
+					$constructorReflection->invoke($instance);
+				}
+			}
 		} catch (\Exception $exception) {
-            unset($this->classesBeingInstantiated[$classname]);
-            throw $exception;
-        }
+			unset($this->classesBeingInstantiated[$classname]);
+			throw $exception;
+		}
 
-        unset($this->classesBeingInstantiated[$classname]);
+		unset($this->classesBeingInstantiated[$classname]);
 		return $instance;
 	}
 
@@ -328,7 +328,7 @@ class Container implements ArrayAccess
 	 * Inject dependencies through the constructor
 	 * @param mixed            $object
 	 * @param ReflectionMethod $constructorReflection
-     * @throws AnnotationException
+	 * @throws AnnotationException
 	 */
 	private function injectConstructor($object, ReflectionMethod $constructorReflection) {
 		$args = array();
@@ -361,8 +361,8 @@ class Container implements ArrayAccess
 			throw new NotFoundException("@Inject was found on $classname::$methodName(...)"
 				. " but no bean or value '$annotation->name' was found");
 		} catch (DependencyException $e) {
-            throw $e;
-        } catch (\Exception $e) {
+			throw $e;
+		} catch (\Exception $e) {
 			throw new DependencyException("Error while injecting {$annotation->name} to $classname::$methodName(...). "
 				. $e->getMessage(), 0, $e);
 		}
@@ -394,8 +394,8 @@ class Container implements ArrayAccess
 			throw new NotFoundException("@Inject was found on " . get_class($object) . "::" . $property->getName()
 				. " but no bean or value '$annotation->name' was found");
 		} catch (DependencyException $e) {
-            throw $e;
-        } catch (\Exception $e) {
+			throw $e;
+		} catch (\Exception $e) {
 			throw new DependencyException("Error while injecting $annotation->name in "
 				. get_class($object) . "::" . $property->getName() . ". "
 				. $e->getMessage(), 0, $e);
