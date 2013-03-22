@@ -12,8 +12,9 @@ namespace IntegrationTests\DI\Fixtures\SetterInjectionTest;
 /**
  * Fixture class
  */
-class NamedBean {
+class NamedBean
+{
 
-	public $nameForTest;
+    public $nameForTest;
 
 }

@@ -26,36 +26,42 @@ use Benchmarks\DI\Fixtures\Singleton\SingletonBenchClass;
 class SimpleInjectBench extends \PHPBench\BenchCase
 {
 
-	/**
-	 * Run each bench X times
-	 */
-	protected $_iterationNumber = 40000;
+    /**
+     * Run each bench X times
+     */
+    protected $_iterationNumber = 40000;
 
-	public function setUp() {
-		Container::getInstance()->set("myBean", new PHPDIBenchClass());
-	}
+    public function setUp()
+    {
+        Container::getInstance()->set("myBean", new PHPDIBenchClass());
+    }
 
-	public function benchNew() {
-		$class = new NewBenchClass();
-	}
+    public function benchNew()
+    {
+        $class = new NewBenchClass();
+    }
 
-	public function benchSingleton() {
-		$class = new SingletonBenchClass();
-	}
+    public function benchSingleton()
+    {
+        $class = new SingletonBenchClass();
+    }
 
-	public function benchInject() {
-		$class = new PHPDIBenchClass();
-		\DI\Container::getInstance()->injectAll($class);
-	}
+    public function benchInject()
+    {
+        $class = new PHPDIBenchClass();
+        \DI\Container::getInstance()->injectAll($class);
+    }
 
-	public function benchLazyInject() {
-		$class = new PHPDILazyBenchClass();
-		\DI\Container::getInstance()->injectAll($class);
-	}
+    public function benchLazyInject()
+    {
+        $class = new PHPDILazyBenchClass();
+        \DI\Container::getInstance()->injectAll($class);
+    }
 
-	public function benchNamedInject() {
-		$class = new NamedInjectionBenchClass();
-		\DI\Container::getInstance()->injectAll($class);
-	}
+    public function benchNamedInject()
+    {
+        $class = new NamedInjectionBenchClass();
+        \DI\Container::getInstance()->injectAll($class);
+    }
 
 }

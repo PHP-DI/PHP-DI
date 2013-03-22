@@ -15,23 +15,25 @@ use Exception;
 /**
  * Fixture class
  */
-class Class1 {
+class Class1
+{
 
-	/**
-	 * @Inject
-	 * @var \IntegrationTests\DI\Fixtures\PreConstructorInjection\Class2
-	 */
-	private $class2;
+    /**
+     * @Inject
+     * @var \IntegrationTests\DI\Fixtures\PreConstructorInjection\Class2
+     */
+    private $class2;
 
-	public $dependencyInjected = false;
+    public $dependencyInjected = false;
 
     /**
      * Inject the dependencies
      */
-    public function __construct() {
+    public function __construct()
+    {
         if ($this->class2 !== null) {
-			$this->dependencyInjected = true;
-		}
+            $this->dependencyInjected = true;
+        }
     }
 
 }

@@ -14,12 +14,13 @@ use \DI\Annotations\Inject;
 /**
  * Fixture class
  */
-class NotFoundVarAnnotation {
+class NotFoundVarAnnotation
+{
 
-	/**
-	 * @Inject
-	 * @var this_is_a_non_existent_class
-	 */
-	public $class2;
+    /**
+     * @Inject
+     * @var this_is_a_non_existent_class
+     */
+    public $class2;
 
 }

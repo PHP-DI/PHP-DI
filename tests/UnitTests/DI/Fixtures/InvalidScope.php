@@ -19,4 +19,5 @@ use DI\Annotations\Scope;
  */
 class InvalidScope
 {
+
 }

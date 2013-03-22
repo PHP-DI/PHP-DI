@@ -18,45 +18,52 @@ use IntegrationTests\DI\Fixtures\ConstructorInjectionTest\Class1;
 class ConstructorInjectionTest extends \PHPUnit_Framework_TestCase
 {
 
-	public function setUp() {
-		// Reset the singleton instance to ensure all tests are independent
-		Container::reset();
-		Container::addConfiguration(array(
-			'aliases' => array(
-				'IntegrationTests\DI\Fixtures\ConstructorInjectionTest\Interface1' => 'IntegrationTests\DI\Fixtures\ConstructorInjectionTest\Class3'
-			)
-		));
-	}
+    public function setUp()
+    {
+        // Reset the singleton instance to ensure all tests are independent
+        Container::reset();
+        Container::addConfiguration(
+            array(
+                'aliases' => array(
+                    'IntegrationTests\DI\Fixtures\ConstructorInjectionTest\Interface1' => 'IntegrationTests\DI\Fixtures\ConstructorInjectionTest\Class3'
+                )
+            )
+        );
+    }
 
-	public function testBasicInjection() {
-		/** @var $class1 Class1 */
-		$class1 = Container::getInstance()->get('IntegrationTests\DI\Fixtures\ConstructorInjectionTest\Class1');
-		$dependency = $class1->getDependency();
-		$this->assertInstanceOf('IntegrationTests\DI\Fixtures\ConstructorInjectionTest\Class2', $dependency);
-	}
+    public function testBasicInjection()
+    {
+        /** @var $class1 Class1 */
+        $class1 = Container::getInstance()->get('IntegrationTests\DI\Fixtures\ConstructorInjectionTest\Class1');
+        $dependency = $class1->getDependency();
+        $this->assertInstanceOf('IntegrationTests\DI\Fixtures\ConstructorInjectionTest\Class2', $dependency);
+    }
 
-	public function testInterfaceInjection() {
-		/** @var $class1 Class1 */
-		$class1 = Container::getInstance()->get('IntegrationTests\DI\Fixtures\ConstructorInjectionTest\Class1');
-		$dependency = $class1->getInterface1();
-		$this->assertInstanceOf('IntegrationTests\DI\Fixtures\ConstructorInjectionTest\Interface1', $dependency);
-		$this->assertInstanceOf('IntegrationTests\DI\Fixtures\ConstructorInjectionTest\Class3', $dependency);
-	}
+    public function testInterfaceInjection()
+    {
+        /** @var $class1 Class1 */
+        $class1 = Container::getInstance()->get('IntegrationTests\DI\Fixtures\ConstructorInjectionTest\Class1');
+        $dependency = $class1->getInterface1();
+        $this->assertInstanceOf('IntegrationTests\DI\Fixtures\ConstructorInjectionTest\Interface1', $dependency);
+        $this->assertInstanceOf('IntegrationTests\DI\Fixtures\ConstructorInjectionTest\Class3', $dependency);
+    }
 
-	/**
-	 * @expectedException \DI\Annotations\AnnotationException
-	 * @expectedExceptionMessage The parameter 'dependency' of the constructor of 'IntegrationTests\DI\Fixtures\ConstructorInjectionTest\Buggy1' has no type: impossible to deduce its type
-	 */
-	public function testNonTypeHintedMethod() {
-		Container::getInstance()->get('IntegrationTests\DI\Fixtures\ConstructorInjectionTest\Buggy1');
-	}
+    /**
+     * @expectedException \DI\Annotations\AnnotationException
+     * @expectedExceptionMessage The parameter 'dependency' of the constructor of 'IntegrationTests\DI\Fixtures\ConstructorInjectionTest\Buggy1' has no type: impossible to deduce its type
+     */
+    public function testNonTypeHintedMethod()
+    {
+        Container::getInstance()->get('IntegrationTests\DI\Fixtures\ConstructorInjectionTest\Buggy1');
+    }
 
-	/**
-	 * @expectedException \DI\Annotations\AnnotationException
-	 * @expectedExceptionMessage The parameter 'dependency' of the constructor of 'IntegrationTests\DI\Fixtures\ConstructorInjectionTest\Buggy2' has no type: impossible to deduce its type
-	 */
-	public function testNamedUnknownBean() {
-		Container::getInstance()->get('IntegrationTests\DI\Fixtures\ConstructorInjectionTest\Buggy2');
-	}
+    /**
+     * @expectedException \DI\Annotations\AnnotationException
+     * @expectedExceptionMessage The parameter 'dependency' of the constructor of 'IntegrationTests\DI\Fixtures\ConstructorInjectionTest\Buggy2' has no type: impossible to deduce its type
+     */
+    public function testNamedUnknownBean()
+    {
+        Container::getInstance()->get('IntegrationTests\DI\Fixtures\ConstructorInjectionTest\Buggy2');
+    }
 
 }

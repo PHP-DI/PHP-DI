@@ -14,13 +14,15 @@ use DI\Annotations\Inject;
 /**
  * Fixture class
  */
-class Buggy2 {
+class Buggy2
+{
 
-	/**
-	 * @Inject(name="nonExistentBean")
-	 * @param $dependency
-	 */
-	public function __construct($dependency) {
-	}
+    /**
+     * @Inject(name="nonExistentBean")
+     * @param $dependency
+     */
+    public function __construct($dependency)
+    {
+    }
 
 }

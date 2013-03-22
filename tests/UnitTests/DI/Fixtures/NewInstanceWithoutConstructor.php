@@ -17,11 +17,12 @@ use Exception;
 class NewInstanceWithoutConstructor
 {
 
-	/**
-	 * If the constructor is called, it will throw an exception
-	 */
-	public function __construct() {
-		throw new Exception("The constructor is called");
-	}
+    /**
+     * If the constructor is called, it will throw an exception
+     */
+    public function __construct()
+    {
+        throw new Exception("The constructor is called");
+    }
 
 }

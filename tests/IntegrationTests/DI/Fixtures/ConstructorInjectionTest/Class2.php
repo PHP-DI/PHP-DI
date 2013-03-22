@@ -12,13 +12,15 @@ namespace IntegrationTests\DI\Fixtures\ConstructorInjectionTest;
 /**
  * Fixture class
  */
-class Class2 {
+class Class2
+{
 
-	/**
-	 * @return boolean
-	 */
-	public function getBoolean() {
-		return true;
-	}
+    /**
+     * @return boolean
+     */
+    public function getBoolean()
+    {
+        return true;
+    }
 
 }

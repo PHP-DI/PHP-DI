@@ -18,30 +18,36 @@ use \IntegrationTests\DI\Fixtures\ValueInjectionTest\ValueInjectionClass;
 class ValueInjectionTest extends \PHPUnit_Framework_TestCase
 {
 
-	public function setUp() {
-		// Reset the singleton instance to ensure all tests are independent
-		Container::reset();
-	}
+    public function setUp()
+    {
+        // Reset the singleton instance to ensure all tests are independent
+        Container::reset();
+    }
 
-	/**
-	 * Value annotation
-	 */
-	public function testValue() {
-		Container::addConfiguration(array(
-			'entries' => array(
-				'db.host' => 'localhost'
-			)
-		));
-		$class = new ValueInjectionClass();
-		$value = $class->getValue();
-		$this->assertEquals('localhost', $value);
-	}
-	/**
-	 * @expectedException \DI\NotFoundException
-	 */
-	public function testValueException() {
-		$class = new ValueInjectionClass();
-		$class->getValue();
-	}
+    /**
+     * Value annotation
+     */
+    public function testValue()
+    {
+        Container::addConfiguration(
+            array(
+                'entries' => array(
+                    'db.host' => 'localhost'
+                )
+            )
+        );
+        $class = new ValueInjectionClass();
+        $value = $class->getValue();
+        $this->assertEquals('localhost', $value);
+    }
+
+    /**
+     * @expectedException \DI\NotFoundException
+     */
+    public function testValueException()
+    {
+        $class = new ValueInjectionClass();
+        $class->getValue();
+    }
 
 }

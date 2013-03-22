@@ -12,6 +12,7 @@ namespace IntegrationTests\DI\Fixtures\SetterInjectionTest;
 /**
  * Fixture interface
  */
-interface Interface1 {
+interface Interface1
+{
 
 }

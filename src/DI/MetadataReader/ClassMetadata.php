@@ -18,96 +18,106 @@ use DI\Scope;
 class ClassMetadata
 {
 
-	/**
-	 * Property annotations indexed by the property name
-	 * @var Inject[]
-	 */
-	private $propertyAnnotations = array();
+    /**
+     * Property annotations indexed by the property name
+     * @var Inject[]
+     */
+    private $propertyAnnotations = array();
 
-	/**
-	 * Method annotations indexed by the method name
-	 * @var Inject[]
-	 */
-	private $methodAnnotations = array();
+    /**
+     * Method annotations indexed by the method name
+     * @var Inject[]
+     */
+    private $methodAnnotations = array();
 
-	/**
-	 * @var Scope
-	 */
-	private $scope;
+    /**
+     * @var Scope
+     */
+    private $scope;
 
-	public function __construct() {
-		// Default scope
-		$this->scope = Scope::SINGLETON();
-	}
+    public function __construct()
+    {
+        // Default scope
+        $this->scope = Scope::SINGLETON();
+    }
 
-	/**
-	 * @return Inject[] Property annotations indexed by the property name
-	 */
-	public function getAllPropertyAnnotations() {
-		return $this->propertyAnnotations;
-	}
+    /**
+     * @return Inject[] Property annotations indexed by the property name
+     */
+    public function getAllPropertyAnnotations()
+    {
+        return $this->propertyAnnotations;
+    }
 
-	/**
-	 * @param string $propertyName
-	 * @param Inject $propertyAnnotation
-	 */
-	public function addPropertyAnnotation($propertyName, Inject $propertyAnnotation) {
-		$this->propertyAnnotations[$propertyName] = $propertyAnnotation;
-	}
+    /**
+     * @param string $propertyName
+     * @param Inject $propertyAnnotation
+     */
+    public function addPropertyAnnotation($propertyName, Inject $propertyAnnotation)
+    {
+        $this->propertyAnnotations[$propertyName] = $propertyAnnotation;
+    }
 
-	/**
-	 * @param Inject[] $propertyAnnotations
-	 */
-	public function setPropertyAnnotations(array $propertyAnnotations) {
-		$this->propertyAnnotations = $propertyAnnotations;
-	}
+    /**
+     * @param Inject[] $propertyAnnotations
+     */
+    public function setPropertyAnnotations(array $propertyAnnotations)
+    {
+        $this->propertyAnnotations = $propertyAnnotations;
+    }
 
-	/**
-	 * @return Inject[] Method annotations indexed by the method name
-	 */
-	public function getAllMethodAnnotations() {
-		return $this->methodAnnotations;
-	}
+    /**
+     * @return Inject[] Method annotations indexed by the method name
+     */
+    public function getAllMethodAnnotations()
+    {
+        return $this->methodAnnotations;
+    }
 
-	/**
-	 * @param string $methodName
-	 * @param Inject $methodAnnotation
-	 */
-	public function addMethodAnnotation($methodName, Inject $methodAnnotation) {
-		$this->methodAnnotations[$methodName] = $methodAnnotation;
-	}
+    /**
+     * @param string $methodName
+     * @param Inject $methodAnnotation
+     */
+    public function addMethodAnnotation($methodName, Inject $methodAnnotation)
+    {
+        $this->methodAnnotations[$methodName] = $methodAnnotation;
+    }
 
-	/**
-	 * @param Inject[] $methodAnnotations
-	 */
-	public function setMethodAnnotations(array $methodAnnotations) {
-		$this->methodAnnotations = $methodAnnotations;
-	}
+    /**
+     * @param Inject[] $methodAnnotations
+     */
+    public function setMethodAnnotations(array $methodAnnotations)
+    {
+        $this->methodAnnotations = $methodAnnotations;
+    }
 
-	/**
-	 * @param Scope $scope
-	 */
-	public function setScope(Scope $scope) {
-		$this->scope = $scope;
-	}
+    /**
+     * @param Scope $scope
+     */
+    public function setScope(Scope $scope)
+    {
+        $this->scope = $scope;
+    }
 
-	/**
-	 * @return Scope
-	 */
-	public function getScope() {
-		return $this->scope;
-	}
+    /**
+     * @return Scope
+     */
+    public function getScope()
+    {
+        return $this->scope;
+    }
 
-	/**
-	 * Serialization
-	 * @return array
-	 */
-	public function __sleep() {
-		return array(
-			'propertyAnnotations',
-			'methodAnnotations',
-			'scope',
-		);
-	}
+    /**
+     * Serialization
+     * @return array
+     */
+    public function __sleep()
+    {
+        return array(
+            'propertyAnnotations',
+            'methodAnnotations',
+            'scope',
+        );
+    }
 
 }

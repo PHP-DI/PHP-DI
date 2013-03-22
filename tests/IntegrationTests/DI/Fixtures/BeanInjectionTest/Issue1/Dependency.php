@@ -12,6 +12,7 @@ namespace IntegrationTests\DI\Fixtures\BeanInjectionTest\Issue1;
 /**
  * Fixture class
  */
-class Dependency {
+class Dependency
+{
 
 }

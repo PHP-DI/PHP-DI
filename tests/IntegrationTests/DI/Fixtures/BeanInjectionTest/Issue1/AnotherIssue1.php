@@ -15,18 +15,19 @@ use \IntegrationTests\DI\Fixtures\BeanInjectionTest\Class2;
 /**
  * Fixture class
  */
-class AnotherIssue1 {
+class AnotherIssue1
+{
 
-	/**
-	 * @Inject
-	 * @var Class2
-	 */
-	public $dependency;
+    /**
+     * @Inject
+     * @var Class2
+     */
+    public $dependency;
 
-	/**
-	 * @Inject
-	 * @var Dependency
-	 */
-	public $sameNamespaceDependency;
+    /**
+     * @Inject
+     * @var Dependency
+     */
+    public $sameNamespaceDependency;
 
 }

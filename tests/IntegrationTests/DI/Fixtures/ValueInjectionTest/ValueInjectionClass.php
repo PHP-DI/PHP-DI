@@ -14,26 +14,29 @@ use DI\Annotations\Inject;
 /**
  * Fixture class
  */
-class ValueInjectionClass {
+class ValueInjectionClass
+{
 
-	/**
-	 * @Inject("db.host")
-	 * @var string
-	 */
-	private $value;
+    /**
+     * @Inject("db.host")
+     * @var string
+     */
+    private $value;
 
     /**
      * Inject the dependencies
      */
-    public function __construct() {
+    public function __construct()
+    {
         \DI\Container::getInstance()->injectAll($this);
     }
 
-	/**
-	 * @return string
-	 */
-	public function getValue() {
-		return $this->value;
-	}
+    /**
+     * @return string
+     */
+    public function getValue()
+    {
+        return $this->value;
+    }
 
 }

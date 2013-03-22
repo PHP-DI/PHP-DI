@@ -17,24 +17,25 @@ use \IntegrationTests\DI\Fixtures\BeanInjectionTest as NamespaceAlias;
 /**
  * Fixture class
  */
-class Issue1 {
+class Issue1
+{
 
-	/**
-	 * @Inject
-	 * @var Class2
-	 */
-	public $class2;
+    /**
+     * @Inject
+     * @var Class2
+     */
+    public $class2;
 
-	/**
-	 * @Inject
-	 * @var Alias
-	 */
-	public $alias;
+    /**
+     * @Inject
+     * @var Alias
+     */
+    public $alias;
 
-	/**
-	 * @Inject
-	 * @var NamespaceAlias\Class2
-	 */
-	public $namespaceAlias;
+    /**
+     * @Inject
+     * @var NamespaceAlias\Class2
+     */
+    public $namespaceAlias;
 
 }

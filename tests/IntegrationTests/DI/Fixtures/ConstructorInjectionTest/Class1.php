@@ -12,39 +12,43 @@ namespace IntegrationTests\DI\Fixtures\ConstructorInjectionTest;
 /**
  * Fixture class
  */
-class Class1 {
+class Class1
+{
 
-	/**
-	 * @var Class2
-	 */
-	private $dependency;
+    /**
+     * @var Class2
+     */
+    private $dependency;
 
-	/**
-	 * @var Interface1
-	 */
-	private $interface1;
+    /**
+     * @var Interface1
+     */
+    private $interface1;
 
-	/**
-	 * @param Class2     $dependency
-	 * @param Interface1 $interface
-	 */
-	public function __construct(Class2 $dependency, Interface1 $interface) {
-		$this->dependency = $dependency;
-		$this->interface1 = $interface;
-	}
+    /**
+     * @param Class2     $dependency
+     * @param Interface1 $interface
+     */
+    public function __construct(Class2 $dependency, Interface1 $interface)
+    {
+        $this->dependency = $dependency;
+        $this->interface1 = $interface;
+    }
 
-	/**
-	 * @return Class2
-	 */
-	public function getDependency() {
-		return $this->dependency;
-	}
+    /**
+     * @return Class2
+     */
+    public function getDependency()
+    {
+        return $this->dependency;
+    }
 
-	/**
-	 * @return Interface1
-	 */
-	public function getInterface1() {
-		return $this->interface1;
-	}
+    /**
+     * @return Interface1
+     */
+    public function getInterface1()
+    {
+        return $this->interface1;
+    }
 
 }

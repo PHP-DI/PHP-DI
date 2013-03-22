@@ -14,46 +14,51 @@ use DI\Annotations\Inject;
 /**
  * Fixture class
  */
-class Class1 {
+class Class1
+{
 
-	/**
-	 * @var Class2
-	 */
-	private $dependency;
+    /**
+     * @var Class2
+     */
+    private $dependency;
 
-	/**
-	 * @var Interface1
-	 */
-	private $interface1;
+    /**
+     * @var Interface1
+     */
+    private $interface1;
 
-	/**
-	 * @Inject
-	 * @param Class2 $dependency
-	 */
-	public function setDependency(Class2 $dependency) {
-		$this->dependency = $dependency;
-	}
+    /**
+     * @Inject
+     * @param Class2 $dependency
+     */
+    public function setDependency(Class2 $dependency)
+    {
+        $this->dependency = $dependency;
+    }
 
-	/**
-	 * @return Class2
-	 */
-	public function getDependency() {
-		return $this->dependency;
-	}
+    /**
+     * @return Class2
+     */
+    public function getDependency()
+    {
+        return $this->dependency;
+    }
 
-	/**
-	 * @Inject
-	 * @param Interface1 $interface
-	 */
-	public function setInterface1(Interface1 $interface) {
-		$this->interface1 = $interface;
-	}
+    /**
+     * @Inject
+     * @param Interface1 $interface
+     */
+    public function setInterface1(Interface1 $interface)
+    {
+        $this->interface1 = $interface;
+    }
 
-	/**
-	 * @return Interface1
-	 */
-	public function getInterface1() {
-		return $this->interface1;
-	}
+    /**
+     * @return Interface1
+     */
+    public function getInterface1()
+    {
+        return $this->interface1;
+    }
 
 }

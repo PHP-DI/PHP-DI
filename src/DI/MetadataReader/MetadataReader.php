@@ -15,11 +15,11 @@ namespace DI\MetadataReader;
 interface MetadataReader
 {
 
-	/**
-	 * Returns DI annotations found in the class
-	 * @param string $classname
-	 * @return ClassMetadata
-	 */
-	public function getClassMetadata($classname);
+    /**
+     * Returns DI annotations found in the class
+     * @param string $classname
+     * @return ClassMetadata
+     */
+    public function getClassMetadata($classname);
 
 }

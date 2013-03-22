@@ -17,21 +17,23 @@ use MyCLabs\Enum\Enum;
 class Scope extends Enum
 {
 
-	const SINGLETON = 'singleton';
-	const PROTOTYPE = 'prototype';
+    const SINGLETON = 'singleton';
+    const PROTOTYPE = 'prototype';
 
-	/**
-	 * @return Scope
-	 */
-	public static function SINGLETON() {
-		return new static(self::SINGLETON);
-	}
+    /**
+     * @return Scope
+     */
+    public static function SINGLETON()
+    {
+        return new static(self::SINGLETON);
+    }
 
-	/**
-	 * @return Scope
-	 */
-	public static function PROTOTYPE() {
-		return new static(self::PROTOTYPE);
-	}
+    /**
+     * @return Scope
+     */
+    public static function PROTOTYPE()
+    {
+        return new static(self::PROTOTYPE);
+    }
 
 }

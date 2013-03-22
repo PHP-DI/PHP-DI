@@ -12,6 +12,7 @@ namespace IntegrationTests\DI\Fixtures\BeanInjectionTest;
 /**
  * Fixture interface
  */
-interface Interface1 {
+interface Interface1
+{
 
 }

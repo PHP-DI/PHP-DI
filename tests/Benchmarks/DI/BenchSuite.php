@@ -16,14 +16,16 @@ require_once __DIR__ . '/../../../vendor/autoload.php';
  */
 class BenchSuite extends \PHPBench\BenchSuite
 {
-	protected $_path = __DIR__;
 
-	public function getBenchCases() {
-		return array(
-			new SimpleInjectBench(),
-			new InjectWithCacheBench(),
-		);
-	}
+    protected $_path = __DIR__;
+
+    public function getBenchCases()
+    {
+        return array(
+            new SimpleInjectBench(),
+            new InjectWithCacheBench(),
+        );
+    }
 }
 
 $benchRunner = new \PHPBench\Runner();

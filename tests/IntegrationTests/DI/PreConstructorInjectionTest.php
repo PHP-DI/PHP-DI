@@ -18,16 +18,18 @@ use IntegrationTests\DI\Fixtures\PreConstructorInjection\Class1;
 class PreConstructorInjectionInjectionTest extends \PHPUnit_Framework_TestCase
 {
 
-	public function setUp() {
-		// Reset the singleton instance to ensure all tests are independent
-		Container::reset();
-	}
+    public function setUp()
+    {
+        // Reset the singleton instance to ensure all tests are independent
+        Container::reset();
+    }
 
-	public function testDependenciesAreInjectedBeforeConstructorIsCalled() {
-		$container = Container::getInstance();
-		/** @var $class1 Class1 */
-		$class1 = $container->get('IntegrationTests\DI\Fixtures\PreConstructorInjection\Class1');
-		$this->assertTrue($class1->dependencyInjected);
-	}
+    public function testDependenciesAreInjectedBeforeConstructorIsCalled()
+    {
+        $container = Container::getInstance();
+        /** @var $class1 Class1 */
+        $class1 = $container->get('IntegrationTests\DI\Fixtures\PreConstructorInjection\Class1');
+        $this->assertTrue($class1->dependencyInjected);
+    }
 
 }

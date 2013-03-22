@@ -18,20 +18,22 @@ use IntegrationTests\DI\Fixtures\InheritanceTest\SubClass;
 class InheritanceTest extends \PHPUnit_Framework_TestCase
 {
 
-	public function setUp() {
-		// Reset the singleton instance to ensure all tests are independent
-		Container::reset();
-	}
+    public function setUp()
+    {
+        // Reset the singleton instance to ensure all tests are independent
+        Container::reset();
+    }
 
 
-	/**
-	 * Injection in a base class
-	 */
-	public function testInjectionExtends() {
-		$instance = new SubClass();
-		$dependency = $instance->getDependency();
-		$this->assertNotNull($dependency);
-		$this->assertInstanceOf('\IntegrationTests\DI\Fixtures\InheritanceTest\Dependency', $dependency);
-	}
+    /**
+     * Injection in a base class
+     */
+    public function testInjectionExtends()
+    {
+        $instance = new SubClass();
+        $dependency = $instance->getDependency();
+        $this->assertNotNull($dependency);
+        $this->assertInstanceOf('\IntegrationTests\DI\Fixtures\InheritanceTest\Dependency', $dependency);
+    }
 
 }

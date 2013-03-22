@@ -12,6 +12,7 @@ namespace IntegrationTests\DI\Fixtures\PreConstructorInjection;
 /**
  * Fixture class
  */
-class Class2 {
+class Class2
+{
 
 }

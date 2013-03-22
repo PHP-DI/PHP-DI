@@ -17,23 +17,25 @@ use DI\Container;
 abstract class Action extends \Zend_Controller_Action
 {
 
-	/**
-	 * Class constructor
-	 *
-	 * Overriding the constructor to inject dependencies.
-	 *
-	 * Do not override this method, use {@link init()} instead.
-	 *
-	 * @param \Zend_Controller_Request_Abstract  $request
-	 * @param \Zend_Controller_Response_Abstract $response
-	 * @param array                             $invokeArgs Any additional invocation arguments
-	 */
-	public function __construct(\Zend_Controller_Request_Abstract $request, \Zend_Controller_Response_Abstract $response,
-								array $invokeArgs = array()
-	) {
-		// Dependency injection
-		Container::getInstance()->injectAll($this);
-		parent::__construct($request, $response, $invokeArgs);
-	}
+    /**
+     * Class constructor
+     *
+     * Overriding the constructor to inject dependencies.
+     *
+     * Do not override this method, use {@link init()} instead.
+     *
+     * @param \Zend_Controller_Request_Abstract  $request
+     * @param \Zend_Controller_Response_Abstract $response
+     * @param array                              $invokeArgs Any additional invocation arguments
+     */
+    public function __construct(
+        \Zend_Controller_Request_Abstract $request,
+        \Zend_Controller_Response_Abstract $response,
+        array $invokeArgs = array()
+    ) {
+        // Dependency injection
+        Container::getInstance()->injectAll($this);
+        parent::__construct($request, $response, $invokeArgs);
+    }
 
 }

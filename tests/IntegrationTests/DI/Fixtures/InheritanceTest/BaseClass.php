@@ -14,26 +14,29 @@ use DI\Annotations\Inject;
 /**
  * Fixture class
  */
-abstract class BaseClass {
+abstract class BaseClass
+{
 
-	/**
-	 * @Inject
-	 * @var \IntegrationTests\DI\Fixtures\InheritanceTest\Dependency
-	 */
-	protected $dependency;
+    /**
+     * @Inject
+     * @var \IntegrationTests\DI\Fixtures\InheritanceTest\Dependency
+     */
+    protected $dependency;
 
     /**
      * Inject the dependencies
      */
-    public function __construct() {
+    public function __construct()
+    {
         \DI\Container::getInstance()->injectAll($this);
     }
 
-	/**
-	 * @return Dependency
-	 */
-	public function getDependency() {
-		return $this->dependency;
-	}
+    /**
+     * @return Dependency
+     */
+    public function getDependency()
+    {
+        return $this->dependency;
+    }
 
 }

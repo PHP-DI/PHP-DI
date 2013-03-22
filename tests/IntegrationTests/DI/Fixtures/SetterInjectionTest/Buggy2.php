@@ -14,12 +14,14 @@ use DI\Annotations\Inject;
 /**
  * Fixture class
  */
-class Buggy2 {
+class Buggy2
+{
 
-	/**
-	 * @Inject
-	 */
-	public function setDependency() {
-	}
+    /**
+     * @Inject
+     */
+    public function setDependency()
+    {
+    }
 
 }

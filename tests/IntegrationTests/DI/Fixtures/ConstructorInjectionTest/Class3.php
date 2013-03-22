@@ -12,6 +12,7 @@ namespace IntegrationTests\DI\Fixtures\ConstructorInjectionTest;
 /**
  * Fixture class
  */
-class Class3 implements Interface1 {
+class Class3 implements Interface1
+{
 
 }

@@ -17,21 +17,21 @@ namespace DI\Annotations;
 final class Inject
 {
 
-	/**
-	 * Bean name
-	 * @var string
-	 */
-	public $name;
+    /**
+     * Bean name
+     * @var string
+     */
+    public $name;
 
-	/**
-	 * @var boolean
-	 */
-	public $lazy = false;
+    /**
+     * @var boolean
+     */
+    public $lazy = false;
 
-	/**
-	 * Param name if the annotation is set on a method
-	 * @var string
-	 */
-	public $param;
+    /**
+     * Param name if the annotation is set on a method
+     * @var string
+     */
+    public $param;
 
 }

@@ -14,14 +14,15 @@ use DI\Annotations\Inject;
 class PHPDIBenchClass
 {
 
-	/**
-	 * @Inject
-	 * @var \Benchmarks\DI\Fixtures\PHPDI\PHPDIDependency
-	 */
-	private $service;
+    /**
+     * @Inject
+     * @var \Benchmarks\DI\Fixtures\PHPDI\PHPDIDependency
+     */
+    private $service;
 
-	public function test() {
-		$this->service->foo();
-	}
+    public function test()
+    {
+        $this->service->foo();
+    }
 
 }

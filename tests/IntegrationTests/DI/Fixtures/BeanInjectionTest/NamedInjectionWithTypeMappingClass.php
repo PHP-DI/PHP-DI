@@ -14,22 +14,25 @@ use DI\Annotations\Inject;
 /**
  * Fixture class
  */
-class NamedInjectionWithTypeMappingClass {
+class NamedInjectionWithTypeMappingClass
+{
 
-	/**
-	 * @Inject(name="nonExistentDependencyName")
-	 */
-	private $dependency;
+    /**
+     * @Inject(name="nonExistentDependencyName")
+     */
+    private $dependency;
 
     /**
      * Inject the dependencies
      */
-    public function __construct() {
+    public function __construct()
+    {
         \DI\Container::getInstance()->injectAll($this);
     }
 
-	public function getDependency() {
-		return $this->dependency;
-	}
+    public function getDependency()
+    {
+        return $this->dependency;
+    }
 
 }

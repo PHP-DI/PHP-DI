@@ -12,7 +12,8 @@ namespace Benchmarks\DI\Fixtures\PHPDILazy;
 class PHPDILazyDependency
 {
 
-	public function foo() {
-	}
+    public function foo()
+    {
+    }
 
 }
