@@ -13,8 +13,8 @@ require_once __DIR__ . '/../../../vendor/autoload.php';
 
 use Doctrine\Common\Cache\ArrayCache;
 use DI\Container;
-use DI\MetadataReader\DefaultMetadataReader;
-use DI\MetadataReader\CachedMetadataReader;
+use DI\Metadata\AnnotationMetadataReader;
+use DI\Metadata\CachedMetadataReader;
 use Benchmarks\DI\Fixtures\NamedInjection\NamedInjectionBenchClass;
 use Benchmarks\DI\Fixtures\PHPDI\PHPDIBenchClass;
 use Benchmarks\DI\Fixtures\PHPDILazy\PHPDILazyBenchClass;
@@ -38,7 +38,7 @@ class InjectWithCacheBench extends \PHPBench\BenchCase
         $container->set("myBean", new PHPDIBenchClass());
         $container->setMetadataReader(
             new CachedMetadataReader(
-                new DefaultMetadataReader(),
+                new AnnotationMetadataReader(),
                 new ArrayCache(),
                 false
             )

@@ -9,7 +9,7 @@
 
 namespace UnitTests\DI\MetadataReader;
 
-use DI\MetadataReader\CachedMetadataReader;
+use DI\Metadata\CachedMetadataReader;
 
 /**
  * Test class for CachedMetadataReader
@@ -19,7 +19,7 @@ class CachedMetadataReaderTest extends \PHPUnit_Framework_TestCase
 
     public function testGetters()
     {
-        $otherReader = $this->getMockForAbstractClass('DI\\MetadataReader\\MetadataReader');
+        $otherReader = $this->getMockForAbstractClass('DI\\Metadata\\MetadataReader');
         $cache = $this->getMockForAbstractClass('Doctrine\\Common\\Cache\\Cache');
         $cachedMetadataReader = new CachedMetadataReader($otherReader, $cache, true);
         $this->assertSame($otherReader, $cachedMetadataReader->getMetadataReader());
@@ -30,7 +30,7 @@ class CachedMetadataReaderTest extends \PHPUnit_Framework_TestCase
     public function testGetClassMetadataNotCached()
     {
         // Reader
-        $otherReader = $this->getMockForAbstractClass('DI\\MetadataReader\\MetadataReader');
+        $otherReader = $this->getMockForAbstractClass('DI\\Metadata\\MetadataReader');
         $otherReader->expects($this->any())->method('getClassMetadata')->will($this->returnValue('test'));
         // Cache
         $cache = $this->getMockForAbstractClass('Doctrine\\Common\\Cache\\Cache');
@@ -45,7 +45,7 @@ class CachedMetadataReaderTest extends \PHPUnit_Framework_TestCase
     public function testGetClassMetadataCached()
     {
         // Reader
-        $otherReader = $this->getMockForAbstractClass('DI\\MetadataReader\\MetadataReader');
+        $otherReader = $this->getMockForAbstractClass('DI\\Metadata\\MetadataReader');
         $otherReader->expects($this->any())->method('getClassMetadata')->will($this->returnValue('test'));
         // Cache
         $cache = $this->getMockForAbstractClass('Doctrine\\Common\\Cache\\Cache');

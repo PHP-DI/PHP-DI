@@ -7,7 +7,7 @@
  * @license   http://www.opensource.org/licenses/mit-license.php MIT (see the LICENSE file)
  */
 
-namespace DI\MetadataReader;
+namespace DI\Metadata;
 
 use Doctrine\Common\Cache\Cache;
 

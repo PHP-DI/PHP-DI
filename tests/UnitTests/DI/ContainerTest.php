@@ -154,8 +154,8 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
     public function testMetadataReader()
     {
         $container = Container::getInstance();
-        /** @var $reader \DI\MetadataReader\MetadataReader */
-        $reader = $this->getMockForAbstractClass('DI\\MetadataReader\\MetadataReader');
+        /** @var $reader \DI\Metadata\MetadataReader */
+        $reader = $this->getMockForAbstractClass('DI\\Metadata\\MetadataReader');
         $container->setMetadataReader($reader);
         $this->assertSame($reader, $container->getMetadataReader());
     }

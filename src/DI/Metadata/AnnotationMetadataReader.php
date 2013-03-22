@@ -7,7 +7,7 @@
  * @license   http://www.opensource.org/licenses/mit-license.php MIT (see the LICENSE file)
  */
 
-namespace DI\MetadataReader;
+namespace DI\Metadata;
 
 use DI\Annotations\AnnotationException;
 use DI\Annotations\Inject;
@@ -18,11 +18,11 @@ use Doctrine\Common\Annotations\Reader;
 use InvalidArgumentException;
 
 /**
- * Reads PHP class metadata such as @ Inject and @ var annotations
+ * Reads PHP class metadata in annotations such as @ Inject and @ var annotations
  *
  * Uses Reflection, Doctrine's Annotations and regex docblock parsing
  */
-class DefaultMetadataReader implements MetadataReader
+class AnnotationMetadataReader implements MetadataReader
 {
 
     /**
@@ -85,7 +85,7 @@ class DefaultMetadataReader implements MetadataReader
                         }
                         $annotation->name = $parameterType;
                     }
-                    $classMetadata->addPropertyAnnotation($property->getName(), $annotation);
+                    $classMetadata->setPropertyInjection($property->getName(), $annotation->name);
                     break;
                 }
             }
@@ -122,7 +122,9 @@ class DefaultMetadataReader implements MetadataReader
                         }
                         $annotation->name = $parameterType;
                     }
-                    $classMetadata->addMethodAnnotation($method->name, $annotation);
+                    // Only 1 parameter taken into account for now
+                    $injectionParameters = array($parameter->name => $annotation->name);
+                    $classMetadata->setMethodInjection($method->name, $injectionParameters);
                     break;
                 }
             }

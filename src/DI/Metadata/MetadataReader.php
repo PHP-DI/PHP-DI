@@ -7,7 +7,7 @@
  * @license   http://www.opensource.org/licenses/mit-license.php MIT (see the LICENSE file)
  */
 
-namespace DI\MetadataReader;
+namespace DI\Metadata;
 
 /**
  * Reads PHP class metadata such as @ Inject and @ var annotations
@@ -16,7 +16,7 @@ interface MetadataReader
 {
 
     /**
-     * Returns DI annotations found in the class
+     * Returns DI metadata for the class
      * @param string $classname
      * @return ClassMetadata
      */
