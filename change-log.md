@@ -4,6 +4,8 @@
 
 * Setter injection
 * Constructor injection
+* @Scope annotations
+* Code now follows PSR1 and PSR2 coding styles
 
 ## 2.1
 
