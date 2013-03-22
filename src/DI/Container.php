@@ -100,6 +100,7 @@ class Container implements ArrayAccess
 	 * @param bool   $useProxy If true, returns a proxy class of the instance
 	 *                            if it is not already loaded
 	 * @throws \InvalidArgumentException
+	 * @throws DependencyException
 	 * @throws NotFoundException
 	 * @return mixed Instance
 	 */
