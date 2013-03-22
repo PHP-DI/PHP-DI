@@ -31,8 +31,8 @@ PHP-DI classes will be autoloaded by Composer if you use Composer's autoloading 
 
 ## Usage
 
-* Read how you can [inject](doc/inject)
-* Read how you can [configure](doc/configure)
+* Read how you can [inject](doc/inject.md)
+* Read how you can [configure](doc/configure.md)
 
 ## Zend Framework 1 integration
 

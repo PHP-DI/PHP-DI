@@ -19,13 +19,13 @@ Unlike Flow3, Zend\DI, Symfony Service Container or Pimple (though they are of a
 * **Cacheable** for optimal performances
 * Class aliases (interface-implementation mapping)
 * Easy installation with [**Composer**](http://getcomposer.org/doc/00-intro.md)
-and easy integration with **Zend Framework** (see [Getting started](doc/getting-started))
+and easy integration with **Zend Framework** (see [Getting started](doc/getting-started.md))
 * **Non-intrusive**: you can add PHP-DI into an existing project and use it *without impacting existing code*
 
 
 ## What is dependency injection, and why use it?
 
-Read the [introduction to dependency injection with an example](doc/example).
+Read the [introduction to dependency injection with an example](doc/example.md).
 
 
 ## Short example
@@ -75,7 +75,7 @@ class Foo {
 In this example, a instance of the `Bar` class is created and injected in the `Foo` class. **No configuration needed**.
 
 *Note*: Of course, in the spirit of Dependency Injection, `Bar` will rather be an interface, and you will configure
-which implementation will be injected through [configuration](doc/configure).
+which implementation will be injected through [configuration](doc/configure.md).
 
 
 ## More
@@ -131,6 +131,6 @@ class Foo {
 [![Build Status](https://secure.travis-ci.org/mnapoli/PHP-DI.png)](http://travis-ci.org/mnapoli/PHP-DI)
 
 * PHP-DI sources are [on Github](https://github.com/mnapoli/PHP-DI).
-* Read the doc: [Contributing](CONTRIBUTING)
+* Read the doc: [Contributing](CONTRIBUTING.md)
 
 PHP-DI is license under the MIT License.

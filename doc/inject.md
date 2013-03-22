@@ -94,7 +94,7 @@ Where to call `injectAll()`? Several solutions are possible:
 - or use `$container->get()` instead and you don't need to call `injectAll()`
 - ...
 
-For example in the [Zend Framework 1.x integration](getting-started), the dependencies are injected
+For example in the [Zend Framework 1.x integration](getting-started.md), the dependencies are injected
 when the controller is created by Zend Framework.
 
 If your controller uses services which use repositories, then you just have to use `injectAll()`
@@ -144,7 +144,7 @@ you can also inject a *specific* instance:
 $container->set('loggedInUser', $loggedInUser);
 ```
 
-(to put something into the container, read the [configuration manual](doc/configure))
+(to put something into the container, read the [configuration manual](doc/configure.md))
 
 and then:
 

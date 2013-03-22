@@ -31,7 +31,7 @@ Container::addConfiguration(array(
 
 ## Beans
 
-You can define a bean that can be injected using the [@Inject("myBean") annotation](doc/inject).
+You can define a bean that can be injected using the [@Inject("myBean") annotation](doc/inject.md).
 
 ```php
 Container::addConfiguration(array(
@@ -58,7 +58,7 @@ Using this way, the object is instantiated only when (and if) it is injected.
 
 ## Values
 
-You can define a value that can be injected using the [@Inject annotation](doc/inject).
+You can define a value that can be injected using the [@Inject annotation](doc/inject.md).
 
 ```php
 Container::addConfiguration(array(
