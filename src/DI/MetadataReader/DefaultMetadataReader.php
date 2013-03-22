@@ -107,7 +107,7 @@ class DefaultMetadataReader implements MetadataReader
                 if ($annotation instanceof Inject) {
                     if ($method->getNumberOfParameters() != 1) {
                         throw new AnnotationException("@Inject was found on $classname::"
-                            . $method->getName() . "(), the method should have exactly one parameter");
+                            . $method->name . "(), the method should have exactly one parameter");
                     }
                     /** @var $parameter \ReflectionParameter */
                     $parameter = current($method->getParameters());
@@ -116,12 +116,12 @@ class DefaultMetadataReader implements MetadataReader
                         $parameterType = $this->getParameterType($reflectionClass, $method, $parameter);
                         if ($parameterType == null) {
                             throw new AnnotationException("@Inject was found on $classname::"
-                                . $method->getName() . "() but the parameter $" . $parameter->getName()
+                                . $method->name . "() but the parameter $" . $parameter->getName()
                                 . " has no type: impossible to deduce its type");
                         }
                         $annotation->name = $parameterType;
                     }
-                    $classMetadata->addMethodAnnotation($method->getName(), $annotation);
+                    $classMetadata->addMethodAnnotation($method->name, $annotation);
                     break;
                 }
             }
@@ -223,7 +223,7 @@ class DefaultMetadataReader implements MetadataReader
         if ($reflectionClass === null) {
             return null;
         }
-        return $reflectionClass->getName();
+        return $reflectionClass->name;
     }
 
     /**
