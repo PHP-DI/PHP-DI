@@ -26,7 +26,7 @@ final class Inject
     /**
      * @var boolean
      */
-    public $lazy = false;
+    public $lazy;
 
     /**
      * Param name if the annotation is set on a method

@@ -18,8 +18,8 @@ class ClassMetadata
 {
 
     /**
-     * Property injections indexed by the property name
-     * @var array
+     * Property injections
+     * @var PropertyInjection[]
      */
     private $propertyInjections = array();
 
@@ -46,7 +46,7 @@ class ClassMetadata
     }
 
     /**
-     * @return string[] Property injections indexed by the property name
+     * @return PropertyInjection[] Property injections
      */
     public function getPropertyInjections()
     {
@@ -54,12 +54,11 @@ class ClassMetadata
     }
 
     /**
-     * @param string $propertyName
-     * @param string $beanName
+     * @param PropertyInjection $propertyInjection
      */
-    public function setPropertyInjection($propertyName, $beanName)
+    public function addPropertyInjection($propertyInjection)
     {
-        $this->propertyInjections[$propertyName] = $beanName;
+        $this->propertyInjections[] = $propertyInjection;
     }
 
     /**
@@ -98,7 +97,7 @@ class ClassMetadata
     /**
      * @return bool
      */
-    public function getLazy()
+    public function isLazy()
     {
         return $this->lazy;
     }

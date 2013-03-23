@@ -85,7 +85,8 @@ class AnnotationMetadataReader implements MetadataReader
                         }
                         $annotation->name = $parameterType;
                     }
-                    $classMetadata->setPropertyInjection($property->getName(), $annotation->name);
+                    $propertyInjection = new PropertyInjection($property->name, $annotation->name, $annotation->lazy);
+                    $classMetadata->addPropertyInjection($propertyInjection);
                     break;
                 }
             }

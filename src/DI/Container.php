@@ -14,6 +14,7 @@ use DI\Annotations\AnnotationException;
 use DI\Annotations\Inject;
 use DI\Metadata\AnnotationMetadataReader;
 use DI\Metadata\MetadataReader;
+use DI\Metadata\PropertyInjection;
 use DI\Proxy\Proxy;
 use ReflectionClass;
 use ReflectionMethod;
@@ -185,8 +186,8 @@ class Container implements ArrayAccess
         }
 
         // Process annotations on properties
-        foreach ($classMetadata->getPropertyInjections() as $propertyName => $beanName) {
-            $this->injectProperty($object, $propertyName, $beanName);
+        foreach ($classMetadata->getPropertyInjections() as $propertyInjection) {
+            $this->injectProperty($object, $propertyInjection);
         }
     }
 
@@ -289,7 +290,7 @@ class Container implements ArrayAccess
     private function getNewInstance($classname)
     {
         if (isset($this->classesBeingInstantiated[$classname])) {
-            throw new DependencyException("Circular dependency detected while trying to instantiate class '" . $classname . "'.");
+            throw new DependencyException("Circular dependency detected while trying to instantiate class '$classname'");
         }
         $this->classesBeingInstantiated[$classname] = true;
 
@@ -354,8 +355,8 @@ class Container implements ArrayAccess
         foreach ($constructorReflection->getParameters() as $parameter) {
             $parameterClass = $parameter->getClass();
             if ($parameterClass === null) {
-                throw new AnnotationException("The parameter '{$parameter->name}' of the constructor of '" . get_class($object)
-                    . "' has no type: impossible to deduce its type");
+                throw new AnnotationException("The parameter '{$parameter->name}' of the constructor of '"
+                    . get_class($object) . "' has no type: impossible to deduce its type");
             }
             $args[] = $this->get($parameterClass->name);
         }
@@ -394,14 +395,14 @@ class Container implements ArrayAccess
 
     /**
      * Resolve the Inject annotation on a property
-     * @param mixed  $object Object to inject dependencies to
-     * @param string $propertyName Name of the property annotated
-     * @param string $beanName Name of the bean to inject
+     * @param mixed             $object Object to inject dependencies to
+     * @param PropertyInjection $propertyInjection Property injection definition
      * @throws DependencyException
      * @throws NotFoundException
      */
-    private function injectProperty($object, $propertyName, $beanName)
+    private function injectProperty($object, PropertyInjection $propertyInjection)
     {
+        $propertyName = $propertyInjection->getPropertyName();
         $property = new ReflectionProperty(get_class($object), $propertyName);
         // Allow access to protected and private properties
         $property->setAccessible(true);
@@ -411,15 +412,15 @@ class Container implements ArrayAccess
         }
         // Get the dependency
         try {
-            $value = $this->get($beanName);
+            $value = $this->get($propertyInjection->getEntryName(), $propertyInjection->isLazy());
         } catch (NotFoundException $e) {
             // Better exception message
             throw new NotFoundException("@Inject was found on " . get_class($object) . "::" . $property->name
-                . " but no bean or value '$beanName' was found");
+                . " but no bean or value '$propertyName' was found");
         } catch (DependencyException $e) {
             throw $e;
         } catch (\Exception $e) {
-            throw new DependencyException("Error while injecting $beanName in "
+            throw new DependencyException("Error while injecting $propertyName in "
                 . get_class($object) . "::" . $property->name . ". "
                 . $e->getMessage(), 0, $e);
         }
