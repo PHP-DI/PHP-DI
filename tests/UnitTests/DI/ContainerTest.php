@@ -143,7 +143,7 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException \DI\DependencyException
-     * @expectedExceptionMessage Circular dependency detected while trying to instantiate class '\UnitTests\DI\Fixtures\Class1CircularDependencies'.
+     * @expectedExceptionMessage Circular dependency detected while trying to instantiate class '\UnitTests\DI\Fixtures\Class1CircularDependencies'
      */
     public function testCircularDependenciesException()
     {
