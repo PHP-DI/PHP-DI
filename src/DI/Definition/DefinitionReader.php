@@ -18,6 +18,7 @@ interface DefinitionReader
     /**
      * Returns DI definition for the entry name
      * @param string $name
+     * @throws DefinitionException Invalid DI definitions
      * @return Definition|null
      */
     public function getDefinition($name);

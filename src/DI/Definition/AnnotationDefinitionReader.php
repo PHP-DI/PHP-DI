@@ -42,7 +42,7 @@ class AnnotationDefinitionReader implements DefinitionReader
 
     /**
      * {@inheritdoc}
-     * @throws \DI\Annotations\AnnotationException
+     * @throws AnnotationException
      * @throws \InvalidArgumentException The class doesn't exist
      */
     public function getDefinition($name)
@@ -161,7 +161,7 @@ class AnnotationDefinitionReader implements DefinitionReader
      * Parse the docblock of the property to get the var annotation
      * @param \ReflectionClass    $class
      * @param \ReflectionProperty $property
-     * @throws \DI\Annotations\AnnotationException
+     * @throws AnnotationException
      * @return string|null Type of the property (content of var annotation)
      */
     private function getPropertyType(\ReflectionClass $class, \ReflectionProperty $property)

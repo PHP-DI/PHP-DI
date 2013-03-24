@@ -17,6 +17,9 @@ namespace DI\Definition;
 interface Definition
 {
 
+    /**
+     * @return string Entry name
+     */
     function getName();
 
 }

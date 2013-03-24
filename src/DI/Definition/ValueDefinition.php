@@ -41,7 +41,7 @@ class ValueDefinition implements Definition
     }
 
     /**
-     * @return string
+     * @return string Entry nam
      */
     public function getName()
     {

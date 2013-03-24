@@ -12,6 +12,7 @@ namespace DI;
 use ArrayAccess;
 use DI\Definition\AnnotationException;
 use DI\Definition\AnnotationDefinitionReader;
+use DI\Definition\ClassDefinition;
 use DI\Definition\DefinitionReader;
 use DI\Definition\MethodInjection;
 use DI\Definition\PropertyInjection;
@@ -71,6 +72,7 @@ class Container implements ArrayAccess
     /**
      * Applies the configuration given
      * @param array $configuration See the documentation
+     * @todo Delete this method
      */
     public static function addConfiguration(array $configuration)
     {
@@ -117,6 +119,7 @@ class Container implements ArrayAccess
         if (!is_string($name)) {
             throw new \InvalidArgumentException("The name parameter must be of type string");
         }
+
         // Try to find the entry in the map
         if (array_key_exists($name, $this->entries)) {
             $entry = $this->entries[$name];
@@ -127,6 +130,7 @@ class Container implements ArrayAccess
             }
             return $entry;
         }
+
         // Entry not found, use the factory if it's a class name
         if (class_exists($name)) {
             // Return a proxy class
@@ -161,7 +165,7 @@ class Container implements ArrayAccess
      * Inject the dependencies of the object (marked with the Inject annotation)
      *
      * @param mixed $object Object in which to resolve dependencies
-     * @throws Annotations\AnnotationException
+     * @throws Definition\AnnotationException
      * @throws DependencyException
      */
     public function injectAll($object)
@@ -174,6 +178,7 @@ class Container implements ArrayAccess
         }
 
         // Get the class definition
+        /** @var $classDefinition ClassDefinition */
         $classDefinition = $this->getDefinitionReader()->getDefinition(get_class($object));
 
         // Process annotations on methods

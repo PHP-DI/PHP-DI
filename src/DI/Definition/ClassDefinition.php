@@ -20,10 +20,16 @@ class ClassDefinition implements Definition
 {
 
     /**
-     * Class name
+     * Entry name (most of the time, same as $classname)
      * @var string
      */
-    private $classname;
+    private $name;
+
+    /**
+     * Class name (if null, then the class name is $name)
+     * @var string|null
+     */
+    private $className;
 
     /**
      * Constructor injection
@@ -55,20 +61,33 @@ class ClassDefinition implements Definition
 
     /**
      * @param string $name Class name
+     * @param string $className
      */
-    public function __construct($name)
+    public function __construct($name, $className = null)
     {
-        $this->classname = $name;
+        $this->name = (string) $name;
+        $this->className = $className;
         // Default scope
         $this->scope = Scope::SINGLETON();
     }
 
     /**
-     * @return string Class name
+     * @return string Entry name
      */
     public function getName()
     {
-        return $this->classname;
+        return $this->name;
+    }
+
+    /**
+     * @return string Class name
+     */
+    public function getClassName()
+    {
+        if ($this->className !== null) {
+            return $this->className;
+        }
+        return $this->name;
     }
 
     /**

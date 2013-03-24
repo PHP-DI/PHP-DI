@@ -59,7 +59,7 @@ class MethodInjection
      */
     public function addParameterInjection(ParameterInjection $parameterInjection)
     {
-        $this->parameterInjections[] = $parameterInjection;
+        $this->parameterInjections[$parameterInjection->getParameterName()] = $parameterInjection;
     }
 
 }

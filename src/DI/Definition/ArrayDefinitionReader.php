@@ -41,7 +41,12 @@ class ArrayDefinitionReader implements DefinitionReader
             }
 
             // It's a class
-            $definition = new ClassDefinition($name);
+            if (array_key_exists('class', $arrayDefinition)) {
+                $className = $arrayDefinition['class'];
+                $definition = new ClassDefinition($name, $className);
+            } else {
+                $definition = new ClassDefinition($name);
+            }
 
             // Class scope
             if (array_key_exists('scope', $arrayDefinition)) {
@@ -59,6 +64,9 @@ class ArrayDefinitionReader implements DefinitionReader
 
             // Properties
             $this->readPropertyInjections($definition, $arrayDefinition);
+
+            // Methods
+            $this->readMethodInjections($definition, $arrayDefinition);
         }
 
         return $definition;
@@ -77,16 +85,19 @@ class ArrayDefinitionReader implements DefinitionReader
     /**
      * @param ClassDefinition $definition
      * @param array           $arrayDefinition
+     * @throws DefinitionException
      */
     private function readPropertyInjections(ClassDefinition $definition, array $arrayDefinition)
     {
         if (array_key_exists('properties', $arrayDefinition)) {
             foreach ($arrayDefinition['properties'] as $propertyName => $arrayPropertyDefinition) {
+
+                // Full definition: array
                 if (is_array($arrayPropertyDefinition)) {
                     // Name
                     if (!array_key_exists('name', $arrayPropertyDefinition)) {
                         throw new DefinitionException("Key 'name' not found in array definition of "
-                            . $definition->getName() . "::" . $propertyName);
+                            . $definition->getName() . "::$propertyName");
                     }
                     $name = $arrayPropertyDefinition['name'];
 
@@ -99,11 +110,72 @@ class ArrayDefinitionReader implements DefinitionReader
 
                     $definition->addPropertyInjection($propertyInjection);
                 }
+
+                // Shortcut: string
                 if (is_string($arrayPropertyDefinition)) {
                     $propertyInjection = new PropertyInjection($propertyName, $arrayPropertyDefinition);
                     $definition->addPropertyInjection($propertyInjection);
                 }
+
             }
+        }
+    }
+
+    /**
+     * @param ClassDefinition $definition
+     * @param array           $arrayDefinition
+     * @throws DefinitionException
+     */
+    private function readMethodInjections(ClassDefinition $definition, array $arrayDefinition)
+    {
+        if (array_key_exists('methods', $arrayDefinition)) {
+            foreach ($arrayDefinition['methods'] as $methodName => $arrayMethodDefinition) {
+                if (!is_array($arrayMethodDefinition)) {
+                    throw new DefinitionException("Key 'methods' for class " . $definition->getName()
+                        . " should be an array");
+                }
+
+                $methodInjection = new MethodInjection($methodName);
+                // Parameters
+                $this->readParameterInjections($definition, $methodInjection, $arrayMethodDefinition);
+
+                $definition->addMethodInjection($methodInjection);
+            }
+        }
+    }
+
+    /**
+     * @param ClassDefinition $definition
+     * @param MethodInjection $methodInjection
+     * @param array           $arrayDefinition
+     * @throws DefinitionException
+     */
+    private function readParameterInjections(ClassDefinition $definition, MethodInjection $methodInjection, array $arrayDefinition)
+    {
+        foreach ($arrayDefinition as $parameterName => $arrayParameterDefinition) {
+
+            // Full definition: array
+            if (is_array($arrayParameterDefinition)) {
+                // Name
+                if (!array_key_exists('name', $arrayParameterDefinition)) {
+                    throw new DefinitionException("Key 'name' not found in array definition for parameter "
+                        . "$parameterName of method "
+                        . $definition->getName() . "::" . $methodInjection->getMethodName());
+                }
+                $name = $arrayParameterDefinition['name'];
+
+                $parameterInjection = new ParameterInjection($parameterName, $name);
+
+                $methodInjection->addParameterInjection($parameterInjection);
+            }
+
+            // Shortcut: string
+            if (is_string($arrayParameterDefinition)) {
+                $parameterInjection = new ParameterInjection($parameterName, $arrayParameterDefinition);
+
+                $methodInjection->addParameterInjection($parameterInjection);
+            }
+
         }
     }
 
