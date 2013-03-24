@@ -106,6 +106,10 @@ class AnnotationMetadataReader implements MetadataReader
             foreach ($methodAnnotations as $annotation) {
                 // @Inject
                 if ($annotation instanceof Inject) {
+                    // Ignore constructor
+                    if ($method->isConstructor()) {
+                        continue;
+                    }
                     if ($method->getNumberOfParameters() != 1) {
                         throw new AnnotationException("@Inject was found on $classname::"
                             . $method->name . "(), the method should have exactly one parameter");
@@ -124,8 +128,9 @@ class AnnotationMetadataReader implements MetadataReader
                         $annotation->name = $parameterType;
                     }
                     // Only 1 parameter taken into account for now
-                    $injectionParameters = array($parameter->name => $annotation->name);
-                    $classMetadata->setMethodInjection($method->name, $injectionParameters);
+                    $parameterInjection = new ParameterInjection($parameter->name, $annotation->name);
+                    $methodInjection = new MethodInjection($method->name, array($parameterInjection));
+                    $classMetadata->addMethodInjection($methodInjection);
                     break;
                 }
             }

@@ -66,7 +66,7 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
         $container = Container::getInstance();
         $container->set(
             'key',
-            function (Container $c) {
+            function () {
                 return 'hello';
             }
         );
@@ -78,7 +78,7 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
         $container = Container::getInstance();
         $container->set(
             'key',
-            function (Container $c) {
+            function () {
                 return new stdClass();
             }
         );
@@ -137,8 +137,8 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
     public function testCircularDependencies()
     {
         $container = Container::getInstance();
-        $instance1 = $container->get('UnitTests\DI\Fixtures\Prototype');
-        $instance2 = $container->get('UnitTests\DI\Fixtures\Prototype');
+        $container->get('UnitTests\DI\Fixtures\Prototype');
+        $container->get('UnitTests\DI\Fixtures\Prototype');
     }
 
     /**

@@ -56,7 +56,7 @@ class PropertyInjection
     }
 
     /**
-     * @return string
+     * @return string Name of the entry that should be injected in the property
      */
     public function getEntryName()
     {

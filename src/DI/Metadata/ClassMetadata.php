@@ -56,13 +56,13 @@ class ClassMetadata
     /**
      * @param PropertyInjection $propertyInjection
      */
-    public function addPropertyInjection($propertyInjection)
+    public function addPropertyInjection(PropertyInjection $propertyInjection)
     {
         $this->propertyInjections[] = $propertyInjection;
     }
 
     /**
-     * @return string[] Method injections indexed by the method name
+     * @return MethodInjection[] Method injections
      */
     public function getMethodInjections()
     {
@@ -70,12 +70,11 @@ class ClassMetadata
     }
 
     /**
-     * @param string   $methodName
-     * @param string[] $parameters
+     * @param MethodInjection $methodInjection
      */
-    public function setMethodInjection($methodName, array $parameters)
+    public function addMethodInjection(MethodInjection $methodInjection)
     {
-        $this->methodInjections[$methodName] = $parameters;
+        $this->methodInjections[] = $methodInjection;
     }
 
     /**

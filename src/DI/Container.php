@@ -14,6 +14,7 @@ use DI\Annotations\AnnotationException;
 use DI\Annotations\Inject;
 use DI\Metadata\AnnotationMetadataReader;
 use DI\Metadata\MetadataReader;
+use DI\Metadata\MethodInjection;
 use DI\Metadata\PropertyInjection;
 use DI\Proxy\Proxy;
 use ReflectionClass;
@@ -177,12 +178,8 @@ class Container implements ArrayAccess
         $classMetadata = $this->getMetadataReader()->getClassMetadata(get_class($object));
 
         // Process annotations on methods
-        foreach ($classMetadata->getMethodInjections() as $methodName => $injectionParameters) {
-            // Ignore constructor
-            if ($methodName === '__construct') {
-                continue;
-            }
-            $this->injectMethod($object, $methodName, $injectionParameters);
+        foreach ($classMetadata->getMethodInjections() as $methodInjection) {
+            $this->injectMethod($object, $methodInjection);
         }
 
         // Process annotations on properties
@@ -365,28 +362,30 @@ class Container implements ArrayAccess
 
     /**
      * Resolve the Inject annotation on a method
-     * @param mixed  $object Object to inject dependencies to
-     * @param string $methodName Name of the method annotated
-     * @param array  $injectionParameters Injection parameters
+     * @param mixed           $object Object to inject dependencies to
+     * @param MethodInjection $methodInjection
      * @throws DependencyException
      * @throws NotFoundException
      */
-    private function injectMethod($object, $methodName, array $injectionParameters)
+    private function injectMethod($object, MethodInjection $methodInjection)
     {
         $classname = get_class($object);
+        $methodName = $methodInjection->getMethodName();
         // One 1-parameter methods supported for now
-        $beanName = current($injectionParameters);
+        $parameterInjections = $methodInjection->getParameterInjections();
+        $parameterInjection = $parameterInjections[0];
+        $entryName = $parameterInjection->getEntryName();
         // Get the dependency
         try {
-            $value = $this->get($beanName);
+            $value = $this->get($entryName);
         } catch (NotFoundException $e) {
             // Better exception message
             throw new NotFoundException("@Inject was found on $classname::$methodName(...)"
-                . " but no bean or value '$beanName' was found");
+                . " but no bean or value '$entryName' was found");
         } catch (DependencyException $e) {
             throw $e;
         } catch (\Exception $e) {
-            throw new DependencyException("Error while injecting {$beanName} to $classname::$methodName(...). "
+            throw new DependencyException("Error while injecting {$entryName} to $classname::$methodName(...). "
                 . $e->getMessage(), 0, $e);
         }
         // Inject the dependency by calling the method
