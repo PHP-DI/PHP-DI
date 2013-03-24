@@ -44,7 +44,7 @@ class PropertyInjection
     {
         $this->propertyName = (string) $propertyName;
         $this->entryName = (string) $entryName;
-        $this->lazy = (boolean) $lazy;
+        $this->setLazy($lazy);
     }
 
     /**
@@ -69,6 +69,14 @@ class PropertyInjection
     public function isLazy()
     {
         return $this->lazy;
+    }
+
+    /**
+     * @param boolean $lazy If the injected object should be a proxy for lazy-loading
+     */
+    public function setLazy($lazy)
+    {
+        $this->lazy = (boolean) $lazy;
     }
 
 }

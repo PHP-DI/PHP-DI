@@ -13,6 +13,8 @@ use DI\Scope;
 
 /**
  * Definition of a value for dependency injection
+ *
+ * @author Matthieu Napoli <matthieu@mnapoli.fr>
  */
 class ValueDefinition implements Definition
 {

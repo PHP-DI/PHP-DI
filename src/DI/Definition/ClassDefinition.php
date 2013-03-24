@@ -13,6 +13,8 @@ use DI\Scope;
 
 /**
  * Definition of a class for dependency injection
+ *
+ * @author Matthieu Napoli <matthieu@mnapoli.fr>
  */
 class ClassDefinition implements Definition
 {
@@ -106,7 +108,7 @@ class ClassDefinition implements Definition
      */
     public function addPropertyInjection(PropertyInjection $propertyInjection)
     {
-        $this->propertyInjections[] = $propertyInjection;
+        $this->propertyInjections[$propertyInjection->getPropertyName()] = $propertyInjection;
     }
 
     /**
@@ -122,7 +124,7 @@ class ClassDefinition implements Definition
      */
     public function addMethodInjection(MethodInjection $methodInjection)
     {
-        $this->methodInjections[] = $methodInjection;
+        $this->methodInjections[$methodInjection->getMethodName()] = $methodInjection;
     }
 
     /**
