@@ -9,7 +9,6 @@
 
 namespace DI\Definition;
 
-use DI\Annotations\AnnotationException;
 use DI\Annotations\Inject;
 use Doctrine\Common\Annotations\AnnotationReader;
 use Doctrine\Common\Annotations\AnnotationRegistry;

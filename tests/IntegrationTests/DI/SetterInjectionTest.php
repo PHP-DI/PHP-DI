@@ -108,7 +108,7 @@ class SetterInjectionTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \DI\Annotations\AnnotationException
+     * @expectedException \DI\Definition\AnnotationException
      * @expectedExceptionMessage @Inject was found on IntegrationTests\DI\Fixtures\SetterInjectionTest\Buggy1::setDependency() but the parameter $dependency has no type: impossible to deduce its type
      */
     public function testNonTypeHintedMethod()
@@ -117,7 +117,7 @@ class SetterInjectionTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \DI\Annotations\AnnotationException
+     * @expectedException \DI\Definition\AnnotationException
      * @expectedExceptionMessage @Inject was found on IntegrationTests\DI\Fixtures\SetterInjectionTest\Buggy2::setDependency(), the method should have exactly one parameter
      */
     public function testNoParametersMethod()

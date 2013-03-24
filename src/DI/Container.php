@@ -10,8 +10,7 @@
 namespace DI;
 
 use ArrayAccess;
-use DI\Annotations\AnnotationException;
-use DI\Annotations\Inject;
+use DI\Definition\AnnotationException;
 use DI\Definition\AnnotationDefinitionReader;
 use DI\Definition\DefinitionReader;
 use DI\Definition\MethodInjection;

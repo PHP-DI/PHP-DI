@@ -161,7 +161,7 @@ class BeanInjectionTest extends \PHPUnit_Framework_TestCase
 
     /**
      * Check error cases
-     * @expectedException \DI\Annotations\AnnotationException
+     * @expectedException \DI\Definition\AnnotationException
      */
     public function testNotFoundVarAnnotation()
     {

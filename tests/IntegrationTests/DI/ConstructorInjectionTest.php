@@ -49,7 +49,7 @@ class ConstructorInjectionTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \DI\Annotations\AnnotationException
+     * @expectedException \DI\Definition\AnnotationException
      * @expectedExceptionMessage The parameter 'dependency' of the constructor of 'IntegrationTests\DI\Fixtures\ConstructorInjectionTest\Buggy1' has no type: impossible to deduce its type
      */
     public function testNonTypeHintedMethod()
@@ -58,7 +58,7 @@ class ConstructorInjectionTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \DI\Annotations\AnnotationException
+     * @expectedException \DI\Definition\AnnotationException
      * @expectedExceptionMessage The parameter 'dependency' of the constructor of 'IntegrationTests\DI\Fixtures\ConstructorInjectionTest\Buggy2' has no type: impossible to deduce its type
      */
     public function testNamedUnknownBean()
