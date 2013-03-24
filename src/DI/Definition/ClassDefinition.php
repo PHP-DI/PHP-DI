@@ -50,14 +50,14 @@ class ClassDefinition implements Definition
     private $methodInjections = array();
 
     /**
-     * @var Scope
+     * @var Scope|null
      */
     private $scope;
 
     /**
-     * @var bool
+     * @var boolean|null
      */
-    private $lazy = false;
+    private $lazy;
 
     /**
      * @param string $name Class name
@@ -67,8 +67,6 @@ class ClassDefinition implements Definition
     {
         $this->name = (string) $name;
         $this->className = $className;
-        // Default scope
-        $this->scope = Scope::SINGLETON();
     }
 
     /**
@@ -88,14 +86,6 @@ class ClassDefinition implements Definition
             return $this->className;
         }
         return $this->name;
-    }
-
-    /**
-     * @param bool $lazy
-     */
-    public function setLazy($lazy)
-    {
-        $this->lazy = (bool) $lazy;
     }
 
     /**
@@ -159,7 +149,20 @@ class ClassDefinition implements Definition
      */
     public function getScope()
     {
-        return $this->scope;
+        if ($this->scope !== null) {
+            return $this->scope;
+        } else {
+            // Default scope
+            return Scope::SINGLETON();
+        }
+    }
+
+    /**
+     * @param boolean|null $lazy
+     */
+    public function setLazy($lazy)
+    {
+        $this->lazy = $lazy;
     }
 
     /**
@@ -167,7 +170,69 @@ class ClassDefinition implements Definition
      */
     public function isLazy()
     {
-        return $this->lazy;
+        if ($this->lazy !== null) {
+            return $this->lazy;
+        } else {
+            // Default value
+            return false;
+        }
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function merge(Definition $definition)
+    {
+        if ($definition instanceof ClassDefinition) {
+
+            // The latter prevails
+            if ($definition->className !== null) {
+                $this->className = $definition->className;
+            }
+            if ($definition->scope !== null) {
+                $this->scope = $definition->scope;
+            }
+            if ($definition->lazy !== null) {
+                $this->lazy = $definition->lazy;
+            }
+
+            // Merge constructor injection
+            if ($definition->getConstructorInjection() !== null) {
+                if ($this->constructorInjection !== null) {
+                    // Merge
+                    $this->constructorInjection->merge($definition->getConstructorInjection());
+                } else {
+                    // Set
+                    $this->constructorInjection = $definition->getConstructorInjection();
+                }
+            }
+
+            // Merge property injections
+            foreach ($definition->getPropertyInjections() as $propertyName => $propertyInjection) {
+                if (array_key_exists($propertyName, $this->propertyInjections)) {
+                    // Merge
+                    $this->propertyInjections[$propertyName]->merge($propertyInjection);
+                } else {
+                    // Add
+                    $this->propertyInjections[$propertyName] = $propertyInjection;
+                }
+            }
+
+            // Merge method injections
+            foreach ($definition->getMethodInjections() as $methodName => $methodInjection) {
+                if (array_key_exists($methodName, $this->methodInjections)) {
+                    // Merge
+                    $this->methodInjections[$methodName]->merge($methodInjection);
+                } else {
+                    // Add
+                    $this->methodInjections[$methodName] = $methodInjection;
+                }
+            }
+
+        } else {
+            throw new DefinitionException("DI definition conflict: there are 2 different definitions for '"
+                . $definition->getName() . "' that are incompatible, they are not of the same type");
+        }
     }
 
 }

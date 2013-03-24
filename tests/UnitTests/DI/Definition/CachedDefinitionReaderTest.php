@@ -7,7 +7,7 @@
  * @license   http://www.opensource.org/licenses/mit-license.php MIT (see the LICENSE file)
  */
 
-namespace UnitTests\DI\DefinitionReader;
+namespace UnitTests\DI\Definition;
 
 use DI\Definition\CachedDefinitionReader;
 

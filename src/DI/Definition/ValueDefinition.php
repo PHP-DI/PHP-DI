@@ -9,8 +9,6 @@
 
 namespace DI\Definition;
 
-use DI\Scope;
-
 /**
  * Definition of a value for dependency injection
  *
@@ -54,6 +52,20 @@ class ValueDefinition implements Definition
     public function getValue()
     {
         return $this->value;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function merge(Definition $definition)
+    {
+        if ($definition instanceof ValueDefinition) {
+            // The latter prevails
+            $this->value = $definition->getValue();
+        } else {
+            throw new DefinitionException("DI definition conflict: there are 2 different definitions for '"
+                . $definition->getName() . "' that are incompatible, they are not of the same type");
+        }
     }
 
 }

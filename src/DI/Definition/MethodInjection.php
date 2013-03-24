@@ -62,4 +62,25 @@ class MethodInjection
         $this->parameterInjections[$parameterInjection->getParameterName()] = $parameterInjection;
     }
 
+    /**
+     * Merge another definition into the current definition
+     *
+     * In case of conflicts, the latter prevails (i.e. the other definition)
+     *
+     * @param MethodInjection $methodInjection
+     */
+    public function merge(MethodInjection $methodInjection)
+    {
+        // Merge parameter injections
+        foreach ($methodInjection->getParameterInjections() as $parameterName => $parameterInjection) {
+            if (array_key_exists($parameterName, $this->parameterInjections)) {
+                // Merge
+                $this->parameterInjections[$parameterName]->merge($parameterInjection);
+            } else {
+                // Add
+                $this->parameterInjections[$parameterName] = $parameterInjection;
+            }
+        }
+    }
+
 }

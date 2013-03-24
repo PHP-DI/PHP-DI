@@ -79,4 +79,21 @@ class PropertyInjection
         $this->lazy = (boolean) $lazy;
     }
 
+    /**
+     * Merge another definition into the current definition
+     *
+     * In case of conflicts, the latter prevails (i.e. the other definition)
+     *
+     * @param PropertyInjection $propertyInjection
+     */
+    public function merge(PropertyInjection $propertyInjection)
+    {
+        if ($propertyInjection->entryName !== null) {
+            $this->entryName = $propertyInjection->entryName;
+        }
+        if ($propertyInjection->lazy !== null) {
+            $this->lazy = $propertyInjection->lazy;
+        }
+    }
+
 }

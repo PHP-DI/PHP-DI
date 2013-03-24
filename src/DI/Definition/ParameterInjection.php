@@ -55,4 +55,18 @@ class ParameterInjection
         return $this->entryName;
     }
 
+    /**
+     * Merge another definition into the current definition
+     *
+     * In case of conflicts, the latter prevails (i.e. the other definition)
+     *
+     * @param ParameterInjection $parameterInjection
+     */
+    public function merge(ParameterInjection $parameterInjection)
+    {
+        if ($parameterInjection->entryName !== null) {
+            $this->entryName = $parameterInjection->entryName;
+        }
+    }
+
 }
