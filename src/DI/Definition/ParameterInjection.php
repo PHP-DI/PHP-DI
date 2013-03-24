@@ -7,7 +7,7 @@
  * @license   http://www.opensource.org/licenses/mit-license.php MIT (see the LICENSE file)
  */
 
-namespace DI\Metadata;
+namespace DI\Definition;
 
 /**
  * Describe an injection through a method parameter

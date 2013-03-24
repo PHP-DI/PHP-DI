@@ -7,28 +7,26 @@
  * @license   http://www.opensource.org/licenses/mit-license.php MIT (see the LICENSE file)
  */
 
-namespace DI\Metadata;
+namespace DI\Definition;
 
 use Doctrine\Common\Cache\Cache;
 
 /**
- * Reads PHP class metadata such as @ Inject and @ var annotations
- *
- * Caches the results of another Metadata Reader
+ * Caches the results of another Definition Reader
  */
-class CachedMetadataReader implements MetadataReader
+class CachedDefinitionReader implements DefinitionReader
 {
 
     /**
      * Prefix for cache key, to avoid conflicts with other systems using the same cache
      * @var string
      */
-    private static $CACHE_PREFIX = 'DI\\MetadataReader';
+    private static $CACHE_PREFIX = 'DI\\Definition';
 
     /**
-     * @var MetadataReader
+     * @var DefinitionReader
      */
-    private $metadataReader;
+    private $definitionReader;
 
     /**
      * @var Cache
@@ -45,46 +43,44 @@ class CachedMetadataReader implements MetadataReader
     /**
      * Construct the cache
      *
-     * @param MetadataReader $metadataReader
-     * @param Cache          $cache
-     * @param boolean        $debug
+     * @param DefinitionReader $definitionReader
+     * @param Cache            $cache
+     * @param boolean          $debug
      */
-    public function __construct(MetadataReader $metadataReader, Cache $cache, $debug = false)
+    public function __construct(DefinitionReader $definitionReader, Cache $cache, $debug = false)
     {
-        $this->metadataReader = $metadataReader;
+        $this->definitionReader = $definitionReader;
         $this->cache = $cache;
         $this->debug = (boolean) $debug;
     }
 
     /**
-     * Returns DI annotations found in the class
-     * @param string $classname
-     * @return ClassMetadata
+     * {@inheritdoc}
      */
-    public function getClassMetadata($classname)
+    public function getDefinition($name)
     {
-        $result = $this->fetchFromCache($classname);
+        $result = $this->fetchFromCache($name);
         if (!$result) {
-            $result = $this->metadataReader->getClassMetadata($classname);
-            $this->saveToCache($classname, $result);
+            $result = $this->definitionReader->getDefinition($name);
+            $this->saveToCache($name, $result);
         }
         return $result;
     }
 
     /**
-     * @return MetadataReader
+     * @return DefinitionReader
      */
-    public function getMetadataReader()
+    public function getDefinitionReader()
     {
-        return $this->metadataReader;
+        return $this->definitionReader;
     }
 
     /**
-     * @param MetadataReader $reader
+     * @param DefinitionReader $reader
      */
-    public function setMetadataReader(MetadataReader $reader)
+    public function setDefinitionReader(DefinitionReader $reader)
     {
-        $this->metadataReader = $reader;
+        $this->definitionReader = $reader;
     }
 
     /**

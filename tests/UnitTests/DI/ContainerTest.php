@@ -151,13 +151,13 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
         $container->get('\UnitTests\DI\Fixtures\Class1CircularDependencies');
     }
 
-    public function testMetadataReader()
+    public function testDefinitionReader()
     {
         $container = Container::getInstance();
-        /** @var $reader \DI\Metadata\MetadataReader */
-        $reader = $this->getMockForAbstractClass('DI\\Metadata\\MetadataReader');
-        $container->setMetadataReader($reader);
-        $this->assertSame($reader, $container->getMetadataReader());
+        /** @var $reader \DI\Definition\DefinitionReader */
+        $reader = $this->getMockForAbstractClass('DI\\Definition\\DefinitionReader');
+        $container->setDefinitionReader($reader);
+        $this->assertSame($reader, $container->getDefinitionReader());
     }
 
     public function testAddConfigurationEmpty()

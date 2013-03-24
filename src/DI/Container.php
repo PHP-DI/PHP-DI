@@ -12,10 +12,10 @@ namespace DI;
 use ArrayAccess;
 use DI\Annotations\AnnotationException;
 use DI\Annotations\Inject;
-use DI\Metadata\AnnotationMetadataReader;
-use DI\Metadata\MetadataReader;
-use DI\Metadata\MethodInjection;
-use DI\Metadata\PropertyInjection;
+use DI\Definition\AnnotationDefinitionReader;
+use DI\Definition\DefinitionReader;
+use DI\Definition\MethodInjection;
+use DI\Definition\PropertyInjection;
 use DI\Proxy\Proxy;
 use ReflectionClass;
 use ReflectionMethod;
@@ -38,9 +38,9 @@ class Container implements ArrayAccess
     private $entries = array();
 
     /**
-     * @var MetadataReader
+     * @var DefinitionReader
      */
-    private $metadataReader;
+    private $definitionReader;
 
     /**
      * Array of classes being instantiated.
@@ -135,7 +135,7 @@ class Container implements ArrayAccess
                 return $this->getProxy($name);
             }
 
-            $scope = $this->getMetadataReader()->getClassMetadata($name)->getScope();
+            $scope = $this->getDefinitionReader()->getDefinition($name)->getScope();
             if ($scope == Scope::PROTOTYPE()) {
                 return $this->getNewInstance($name);
             }
@@ -174,37 +174,37 @@ class Container implements ArrayAccess
             throw new DependencyException("object instance expected");
         }
 
-        // Get the class metadata
-        $classMetadata = $this->getMetadataReader()->getClassMetadata(get_class($object));
+        // Get the class definition
+        $classDefinition = $this->getDefinitionReader()->getDefinition(get_class($object));
 
         // Process annotations on methods
-        foreach ($classMetadata->getMethodInjections() as $methodInjection) {
+        foreach ($classDefinition->getMethodInjections() as $methodInjection) {
             $this->injectMethod($object, $methodInjection);
         }
 
         // Process annotations on properties
-        foreach ($classMetadata->getPropertyInjections() as $propertyInjection) {
+        foreach ($classDefinition->getPropertyInjections() as $propertyInjection) {
             $this->injectProperty($object, $propertyInjection);
         }
     }
 
     /**
-     * @return MetadataReader The metadata reader
+     * @return DefinitionReader The definition reader
      */
-    public function getMetadataReader()
+    public function getDefinitionReader()
     {
-        if ($this->metadataReader == null) {
-            $this->metadataReader = new AnnotationMetadataReader();
+        if ($this->definitionReader == null) {
+            $this->definitionReader = new AnnotationDefinitionReader();
         }
-        return $this->metadataReader;
+        return $this->definitionReader;
     }
 
     /**
-     * @param MetadataReader $metadataReader The metadata reader
+     * @param DefinitionReader $definitionReader The definition reader
      */
-    public function setMetadataReader(MetadataReader $metadataReader)
+    public function setDefinitionReader(DefinitionReader $definitionReader)
     {
-        $this->metadataReader = $metadataReader;
+        $this->definitionReader = $definitionReader;
     }
 
     /**
@@ -348,6 +348,7 @@ class Container implements ArrayAccess
      */
     private function injectConstructor($object, ReflectionMethod $constructorReflection)
     {
+        // TODO use Definition
         $args = array();
         foreach ($constructorReflection->getParameters() as $parameter) {
             $parameterClass = $parameter->getClass();

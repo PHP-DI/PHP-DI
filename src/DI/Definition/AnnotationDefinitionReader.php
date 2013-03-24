@@ -7,7 +7,7 @@
  * @license   http://www.opensource.org/licenses/mit-license.php MIT (see the LICENSE file)
  */
 
-namespace DI\Metadata;
+namespace DI\Definition;
 
 use DI\Annotations\AnnotationException;
 use DI\Annotations\Inject;
@@ -18,11 +18,11 @@ use Doctrine\Common\Annotations\Reader;
 use InvalidArgumentException;
 
 /**
- * Reads PHP class metadata in annotations such as @ Inject and @ var annotations
+ * Reads DI class definitions in annotations such as @ Inject and @ var annotations
  *
  * Uses Reflection, Doctrine's Annotations and regex docblock parsing
  */
-class AnnotationMetadataReader implements MetadataReader
+class AnnotationDefinitionReader implements DefinitionReader
 {
 
     /**
@@ -42,25 +42,23 @@ class AnnotationMetadataReader implements MetadataReader
     }
 
     /**
-     * Returns DI annotations found in the class
-     * @param string $classname
+     * {@inheritdoc}
      * @throws \DI\Annotations\AnnotationException
      * @throws \InvalidArgumentException The class doesn't exist
-     * @return ClassMetadata
      */
-    public function getClassMetadata($classname)
+    public function getDefinition($name)
     {
-        if (!class_exists($classname)) {
-            throw new InvalidArgumentException("The class $classname doesn't exist");
+        if (!$this->classExists($name)) {
+            throw new InvalidArgumentException("The class $name doesn't exist");
         }
-        $reflectionClass = new \ReflectionClass($classname);
+        $reflectionClass = new \ReflectionClass($name);
 
-        $classMetadata = new ClassMetadata();
+        $classDefinition = new ClassDefinition($name);
 
         // Scope annotation
         $scopeAnnotation = $this->getAnnotationReader()->getClassAnnotation($reflectionClass, 'DI\Annotations\Scope');
         if ($scopeAnnotation !== null && $scopeAnnotation->value) {
-            $classMetadata->setScope($scopeAnnotation->value);
+            $classDefinition->setScope($scopeAnnotation->value);
         }
 
         // Browse the object's properties looking for annotated properties
@@ -80,13 +78,13 @@ class AnnotationMetadataReader implements MetadataReader
                     if ($annotation->name == null) {
                         $parameterType = $this->getPropertyType($reflectionClass, $property);
                         if ($parameterType == null) {
-                            throw new AnnotationException("@Inject was found on $classname::"
+                            throw new AnnotationException("@Inject was found on $name::"
                                 . $property->getName() . " but no (or empty) @var annotation");
                         }
                         $annotation->name = $parameterType;
                     }
                     $propertyInjection = new PropertyInjection($property->name, $annotation->name, $annotation->lazy);
-                    $classMetadata->addPropertyInjection($propertyInjection);
+                    $classDefinition->addPropertyInjection($propertyInjection);
                     break;
                 }
             }
@@ -111,7 +109,7 @@ class AnnotationMetadataReader implements MetadataReader
                         continue;
                     }
                     if ($method->getNumberOfParameters() != 1) {
-                        throw new AnnotationException("@Inject was found on $classname::"
+                        throw new AnnotationException("@Inject was found on $name::"
                             . $method->name . "(), the method should have exactly one parameter");
                     }
                     $parameters = $method->getParameters();
@@ -121,7 +119,7 @@ class AnnotationMetadataReader implements MetadataReader
                     if ($annotation->name == null) {
                         $parameterType = $this->getParameterType($reflectionClass, $method, $parameter);
                         if ($parameterType == null) {
-                            throw new AnnotationException("@Inject was found on $classname::"
+                            throw new AnnotationException("@Inject was found on $name::"
                                 . $method->name . "() but the parameter $" . $parameter->name
                                 . " has no type: impossible to deduce its type");
                         }
@@ -130,14 +128,14 @@ class AnnotationMetadataReader implements MetadataReader
                     // Only 1 parameter taken into account for now
                     $parameterInjection = new ParameterInjection($parameter->name, $annotation->name);
                     $methodInjection = new MethodInjection($method->name, array($parameterInjection));
-                    $classMetadata->addMethodInjection($methodInjection);
+                    $classDefinition->addMethodInjection($methodInjection);
                     break;
                 }
             }
 
         }
 
-        return $classMetadata;
+        return $classDefinition;
     }
 
     /**
