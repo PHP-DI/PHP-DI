@@ -40,6 +40,16 @@ class ArrayDefinitionReader implements DefinitionReader
                 return new ValueDefinition($name, $arrayDefinition);
             }
 
+            // Validate array keys
+            $validKeys = array('class', 'scope', 'lazy', 'constructor', 'properties', 'methods');
+            $keys = array_keys($arrayDefinition);
+            $unknownKeys = array_diff($keys, $validKeys);
+            if (count($unknownKeys) > 0) {
+                $firstKey = current($unknownKeys);
+                throw new DefinitionException("Invalid key '$firstKey' in definition of entry '$name'; Valid keys are: "
+                    . implode(', ', $validKeys));
+            }
+
             // It's a class
             if (array_key_exists('class', $arrayDefinition)) {
                 $className = $arrayDefinition['class'];

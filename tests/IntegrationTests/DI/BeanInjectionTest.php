@@ -28,10 +28,11 @@ class BeanInjectionTest extends \PHPUnit_Framework_TestCase
     {
         // Reset the singleton instance to ensure all tests are independent
         Container::reset();
-        Container::addConfiguration(
+        $container = Container::getInstance();
+        $container->getConfiguration()->addDefinitions(
             array(
-                'aliases' => array(
-                    '\IntegrationTests\DI\Fixtures\BeanInjectionTest\Interface1' => '\IntegrationTests\DI\Fixtures\BeanInjectionTest\Class3'
+                'IntegrationTests\DI\Fixtures\BeanInjectionTest\Interface1' => array(
+                    'class' => 'IntegrationTests\DI\Fixtures\BeanInjectionTest\Class3',
                 )
             )
         );
@@ -40,18 +41,20 @@ class BeanInjectionTest extends \PHPUnit_Framework_TestCase
 
     public function testBasicInjection()
     {
-        $class1 = new Class1();
+        $container = Container::getInstance();
+        $class1 = $container->get('IntegrationTests\DI\Fixtures\BeanInjectionTest\Class1');
         $dependency = $class1->getClass2();
         $this->assertNotNull($dependency);
-        $this->assertInstanceOf('\IntegrationTests\DI\Fixtures\BeanInjectionTest\Class2', $dependency);
+        $this->assertInstanceOf('IntegrationTests\DI\Fixtures\BeanInjectionTest\Class2', $dependency);
     }
 
     public function testInterfaceInjection()
     {
-        $class1 = new Class1();
+        $container = Container::getInstance();
+        $class1 = $container->get('IntegrationTests\DI\Fixtures\BeanInjectionTest\Class1');
         $dependency = $class1->getInterface1();
         $this->assertNotNull($dependency);
-        $this->assertInstanceOf('\IntegrationTests\DI\Fixtures\BeanInjectionTest\Class3', $dependency);
+        $this->assertInstanceOf('IntegrationTests\DI\Fixtures\BeanInjectionTest\Class3', $dependency);
     }
 
     /**
@@ -59,7 +62,9 @@ class BeanInjectionTest extends \PHPUnit_Framework_TestCase
      */
     public function testLazyInjection1()
     {
-        $class = new LazyInjectionClass();
+        $container = Container::getInstance();
+        /** @var $class LazyInjectionClass */
+        $class = $container->get('IntegrationTests\DI\Fixtures\BeanInjectionTest\LazyInjectionClass');
         $dependency = $class->getClass2();
         $this->assertNotNull($dependency);
         $this->assertInstanceOf('\DI\Proxy\Proxy', $dependency);

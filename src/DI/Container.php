@@ -11,11 +11,11 @@ namespace DI;
 
 use ArrayAccess;
 use DI\Definition\AnnotationException;
-use DI\Definition\AnnotationDefinitionReader;
 use DI\Definition\ClassDefinition;
 use DI\Definition\DefinitionReader;
 use DI\Definition\MethodInjection;
 use DI\Definition\PropertyInjection;
+use DI\Definition\ValueDefinition;
 use DI\Proxy\Proxy;
 use ReflectionClass;
 use ReflectionMethod;
@@ -38,9 +38,9 @@ class Container implements ArrayAccess
     private $entries = array();
 
     /**
-     * @var DefinitionReader
+     * @var Configuration
      */
-    private $definitionReader;
+    private $configuration;
 
     /**
      * Array of classes being instantiated.
@@ -73,6 +73,7 @@ class Container implements ArrayAccess
      * Applies the configuration given
      * @param array $configuration See the documentation
      * @todo Delete this method
+     * @deprecated
      */
     public static function addConfiguration(array $configuration)
     {
@@ -101,6 +102,17 @@ class Container implements ArrayAccess
      */
     protected function __construct()
     {
+        // Default configuration
+        $this->configuration = new Configuration();
+        $this->configuration->useAnnotations(true);
+    }
+
+    /**
+     * @return Configuration
+     */
+    public function getConfiguration()
+    {
+        return $this->configuration;
     }
 
     /**
@@ -131,22 +143,34 @@ class Container implements ArrayAccess
             return $entry;
         }
 
-        // Entry not found, use the factory if it's a class name
-        if (class_exists($name)) {
-            // Return a proxy class
-            if ($useProxy) {
-                return $this->getProxy($name);
-            }
+        // Entry not loaded, use the definitions
+        $definition = $this->getDefinitionReader()->getDefinition($name);
 
-            $scope = $this->getDefinitionReader()->getDefinition($name)->getScope();
-            if ($scope == Scope::PROTOTYPE()) {
-                return $this->getNewInstance($name);
-            }
-
-            // If it's a singleton, store the newly created instance
-            $this->entries[$name] = $this->getNewInstance($name);
+        // It's a value
+        if ($definition instanceof ValueDefinition) {
+            $this->entries[$name] = $definition->getValue();
             return $this->entries[$name];
         }
+
+        // It's a class
+        if ($definition instanceof ClassDefinition) {
+            // Return a proxy class
+            // TODO refactor
+            if ($useProxy) {
+                return $this->getProxy($definition->getClassName());
+            }
+
+            // Create the instance
+            $instance = $this->getNewInstance($definition->getClassName());
+
+            if ($definition->getScope() == Scope::SINGLETON()) {
+                // If it's a singleton, store the newly created instance
+                $this->entries[$name] = $instance;
+            }
+
+            return $instance;
+        }
+
         throw new NotFoundException("No bean, value or class found for '$name'");
     }
 
@@ -167,6 +191,8 @@ class Container implements ArrayAccess
      * @param mixed $object Object in which to resolve dependencies
      * @throws Definition\AnnotationException
      * @throws DependencyException
+     * @todo Make private
+     * @deprecated (until private)
      */
     public function injectAll($object)
     {
@@ -180,6 +206,10 @@ class Container implements ArrayAccess
         // Get the class definition
         /** @var $classDefinition ClassDefinition */
         $classDefinition = $this->getDefinitionReader()->getDefinition(get_class($object));
+
+        if ($classDefinition === null) {
+            return;
+        }
 
         // Process annotations on methods
         foreach ($classDefinition->getMethodInjections() as $methodInjection) {
@@ -197,18 +227,7 @@ class Container implements ArrayAccess
      */
     public function getDefinitionReader()
     {
-        if ($this->definitionReader == null) {
-            $this->definitionReader = new AnnotationDefinitionReader();
-        }
-        return $this->definitionReader;
-    }
-
-    /**
-     * @param DefinitionReader $definitionReader The definition reader
-     */
-    public function setDefinitionReader(DefinitionReader $definitionReader)
-    {
-        $this->definitionReader = $definitionReader;
+        return $this->configuration->getDefinitionReader();
     }
 
     /**
@@ -297,11 +316,20 @@ class Container implements ArrayAccess
 
         try {
             $classReflection = new ReflectionClass($classname);
+
+            if (!$classReflection->isInstantiable()) {
+                throw new DependencyException($classReflection->name . " is not instantiable");
+            }
+
             $constructorReflection = $classReflection->getConstructor();
             $instance = $this->newInstanceWithoutConstructor($classReflection);
 
             // Inject the dependencies
-            $this->injectAll($instance);
+            try {
+                $this->injectAll($instance);
+            } catch (DependencyException $e) {
+                throw new DependencyException("Error while injecting dependencies into $classname: " . $e->getMessage(), 0, $e);
+            }
 
             // Call the constructor
             if ($constructorReflection) {

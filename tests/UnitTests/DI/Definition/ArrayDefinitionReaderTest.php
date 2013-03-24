@@ -164,4 +164,21 @@ class ArrayDefinitionReaderTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('Foo2', $parameter2->getEntryName());
     }
 
+    /**
+     * @expectedException \DI\Definition\DefinitionException
+     * @expectedExceptionMessage Invalid key 'bar' in definition of entry 'foo'; Valid keys are: class, scope, lazy, constructor, properties, methods
+     */
+    public function testKeysValidation()
+    {
+        $reader = new ArrayDefinitionReader();
+        $reader->addDefinitions(
+            array(
+                'foo' => array(
+                    'bar' => true,
+                ),
+            )
+        );
+        $reader->getDefinition('foo');
+    }
+
 }

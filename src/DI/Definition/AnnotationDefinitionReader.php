@@ -48,7 +48,7 @@ class AnnotationDefinitionReader implements DefinitionReader
     public function getDefinition($name)
     {
         if (!$this->classExists($name)) {
-            throw new InvalidArgumentException("The class $name doesn't exist");
+            return null;
         }
         $reflectionClass = new \ReflectionClass($name);
 
@@ -173,7 +173,7 @@ class AnnotationDefinitionReader implements DefinitionReader
             return null;
         }
 
-        // If the class name is not fully qualified (FQN must start with a \)
+        // If the class name is not fully qualified (i.e. doesn't start with a \)
         if ($type[0] !== '\\') {
             $alias = (false === $pos = strpos($type, '\\')) ? $type : substr($type, 0, $pos);
             $loweredAlias = strtolower($alias);
@@ -213,6 +213,9 @@ class AnnotationDefinitionReader implements DefinitionReader
             throw new AnnotationException("The @var annotation on {$class->name}::" . $property->getName()
                 . " contains a non existent class");
         }
+
+        // Remove the leading \ (FQN shouldn't contain it)
+        $type = ltrim($type, '\\');
 
         return $type;
     }

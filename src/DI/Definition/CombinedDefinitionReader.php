@@ -58,6 +58,18 @@ class CombinedDefinitionReader implements DefinitionReader
     }
 
     /**
+     * @param DefinitionReader $reader
+     */
+    public function removeReader(DefinitionReader $reader)
+    {
+        foreach ($this->subReaders as $key => $subReader) {
+            if ($subReader === $reader) {
+                unset($this->subReaders[$key]);
+            }
+        }
+    }
+
+    /**
      * Add a definition reader to the stack
      * @param DefinitionReader $reader
      */

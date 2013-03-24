@@ -143,36 +143,12 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException \DI\DependencyException
-     * @expectedExceptionMessage Circular dependency detected while trying to instantiate class '\UnitTests\DI\Fixtures\Class1CircularDependencies'
+     * @expectedExceptionMessage Circular dependency detected while trying to instantiate class 'UnitTests\DI\Fixtures\Class1CircularDependencies'
      */
     public function testCircularDependenciesException()
     {
         $container = Container::getInstance();
-        $container->get('\UnitTests\DI\Fixtures\Class1CircularDependencies');
-    }
-
-    public function testDefinitionReader()
-    {
-        $container = Container::getInstance();
-        /** @var $reader \DI\Definition\DefinitionReader */
-        $reader = $this->getMockForAbstractClass('DI\\Definition\\DefinitionReader');
-        $container->setDefinitionReader($reader);
-        $this->assertSame($reader, $container->getDefinitionReader());
-    }
-
-    public function testAddConfigurationEmpty()
-    {
-        // Empty configuration, no errors
-        Container::addConfiguration(array());
-    }
-
-    public function testAddConfigurationEntries1()
-    {
-        Container::addConfiguration(
-            array(
-                'entries' => array(),
-            )
-        );
+        $container->get('UnitTests\DI\Fixtures\Class1CircularDependencies');
     }
 
     /**
@@ -180,11 +156,10 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
      */
     public function testAddConfigurationEntries2()
     {
-        Container::addConfiguration(
+        $container = Container::getInstance();
+        $container->getConfiguration()->addDefinitions(
             array(
-                'entries' => array(
-                    'test' => 'success',
-                ),
+                'test' => 'success',
             )
         );
         $container = Container::getInstance();

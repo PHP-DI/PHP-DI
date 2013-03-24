@@ -45,7 +45,8 @@ class CachedDefinitionReader implements DefinitionReader
      *
      * @param DefinitionReader $definitionReader
      * @param Cache            $cache
-     * @param boolean          $debug
+     * @param boolean          $debug If true, changes in the files will be tracked to update the cache automatically.
+     * Disable in production for better performances.
      */
     public function __construct(DefinitionReader $definitionReader, Cache $cache, $debug = false)
     {
@@ -100,6 +101,8 @@ class CachedDefinitionReader implements DefinitionReader
     }
 
     /**
+     * If true, changes in the files will be tracked to update the cache automatically.
+     * Disable in production for better performances.
      * @return boolean
      */
     public function getDebug()
