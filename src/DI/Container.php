@@ -402,23 +402,27 @@ class Container implements ArrayAccess
      */
     private function injectMethod($object, MethodInjection $methodInjection)
     {
-        $classname = get_class($object);
+        $className = get_class($object);
         $methodName = $methodInjection->getMethodName();
         // One 1-parameter methods supported for now
         $parameterInjections = $methodInjection->getParameterInjections();
-        $parameterInjection = $parameterInjections[0];
+        if (count($parameterInjections) !== 1) {
+            throw new DependencyException("Error while injecting into $className::$methodName(): "
+                . "the number of parameters of the method is != 1");
+        }
+        $parameterInjection = current($parameterInjections);
         $entryName = $parameterInjection->getEntryName();
         // Get the dependency
         try {
             $value = $this->get($entryName);
         } catch (NotFoundException $e) {
             // Better exception message
-            throw new NotFoundException("@Inject was found on $classname::$methodName(...)"
+            throw new NotFoundException("@Inject was found on $className::$methodName(...)"
                 . " but no bean or value '$entryName' was found");
         } catch (DependencyException $e) {
             throw $e;
         } catch (\Exception $e) {
-            throw new DependencyException("Error while injecting {$entryName} to $classname::$methodName(...). "
+            throw new DependencyException("Error while injecting {$entryName} to $className::$methodName(...). "
                 . $e->getMessage(), 0, $e);
         }
         // Inject the dependency by calling the method

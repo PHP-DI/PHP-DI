@@ -25,33 +25,30 @@ class ParameterInjection
 
     /**
      * Name of the entry that should be injected through the parameter
-     * @var string
+     * @var string|null
      */
     private $entryName;
 
     /**
-     * @param string $parameterName Parameter name
-     * @param string $entryName Name of the entry that should be injected through the parameter
+     * @param string      $parameterName Parameter name
+     * @param string|null $entryName Name of the entry that should be injected through the parameter
      */
-    public function __construct($parameterName, $entryName)
-    {
-        $this->parameterName = (string) $parameterName;
-        $this->entryName = (string) $entryName;
+    public function __construct($parameterName, $entryName = null) {
+        $this->parameterName = (string)$parameterName;
+        $this->entryName = $entryName;
     }
 
     /**
      * @return string Parameter name
      */
-    public function getParameterName()
-    {
+    public function getParameterName() {
         return $this->parameterName;
     }
 
     /**
-     * @return string Name of the entry that should be injected through the parameter
+     * @return string|null Name of the entry that should be injected through the parameter
      */
-    public function getEntryName()
-    {
+    public function getEntryName() {
         return $this->entryName;
     }
 
@@ -62,8 +59,7 @@ class ParameterInjection
      *
      * @param ParameterInjection $parameterInjection
      */
-    public function merge(ParameterInjection $parameterInjection)
-    {
+    public function merge(ParameterInjection $parameterInjection) {
         if ($parameterInjection->entryName !== null) {
             $this->entryName = $parameterInjection->entryName;
         }

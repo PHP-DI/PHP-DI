@@ -26,7 +26,7 @@ class MethodInjection
     /**
      * @var ParameterInjection[]
      */
-    private $parameterInjections;
+    private $parameterInjections = array();
 
     /**
      * @param string $methodName
@@ -35,7 +35,9 @@ class MethodInjection
     public function __construct($methodName, array $parameterInjections = array())
     {
         $this->methodName = (string) $methodName;
-        $this->parameterInjections = $parameterInjections;
+        foreach ($parameterInjections as $parameterInjection) {
+            $this->addParameterInjection($parameterInjection);
+        }
     }
 
     /**
