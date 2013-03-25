@@ -13,7 +13,6 @@ use DI\Container;
 use IntegrationTests\DI\Fixtures\SetterInjectionTest\Class1;
 use IntegrationTests\DI\Fixtures\SetterInjectionTest\NamedBean;
 use IntegrationTests\DI\Fixtures\SetterInjectionTest\NamedInjectionClass;
-use IntegrationTests\DI\Fixtures\SetterInjectionTest\NamedInjectionWithTypeMappingClass;
 
 /**
  * Test class for setter injection
@@ -25,10 +24,11 @@ class SetterInjectionTest extends \PHPUnit_Framework_TestCase
     {
         // Reset the singleton instance to ensure all tests are independent
         Container::reset();
-        Container::addConfiguration(
+        $container = Container::getInstance();
+        $container->getConfiguration()->addDefinitions(
             array(
-                'aliases' => array(
-                    'IntegrationTests\DI\Fixtures\SetterInjectionTest\Interface1' => 'IntegrationTests\DI\Fixtures\SetterInjectionTest\Class3'
+                'IntegrationTests\DI\Fixtures\SetterInjectionTest\Interface1' => array(
+                    'class' => 'IntegrationTests\DI\Fixtures\SetterInjectionTest\Class3',
                 )
             )
         );
@@ -81,30 +81,6 @@ class SetterInjectionTest extends \PHPUnit_Framework_TestCase
     {
         // Exception (bean not defined)
         new NamedInjectionClass();
-    }
-
-    /**
-     * Test that type mapping also works with named injections
-     */
-    public function testNamedInjectionWithTypeMapping()
-    {
-        $container = Container::getInstance();
-        Container::addConfiguration(
-            array(
-                'aliases' => array(
-                    'nonExistentDependencyName' => 'namedDependency'
-                )
-            )
-        );
-        // Configure the named bean
-        $bean = new NamedBean();
-        $container->set('namedDependency', $bean);
-        // Test
-        $class = new NamedInjectionWithTypeMappingClass();
-        $dependency = $class->getDependency();
-        $this->assertNotNull($dependency);
-        $this->assertInstanceOf('\IntegrationTests\DI\Fixtures\SetterInjectionTest\NamedBean', $dependency);
-        $this->assertSame($bean, $dependency);
     }
 
     /**

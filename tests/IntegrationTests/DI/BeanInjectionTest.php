@@ -10,13 +10,11 @@
 namespace IntegrationTests\DI;
 
 use \DI\Container;
-use \IntegrationTests\DI\Fixtures\BeanInjectionTest\Class1;
 use \IntegrationTests\DI\Fixtures\BeanInjectionTest\Class2;
-use \IntegrationTests\DI\Fixtures\BeanInjectionTest\Issue14;
+use IntegrationTests\DI\Fixtures\BeanInjectionTest\Issue14;
 use \IntegrationTests\DI\Fixtures\BeanInjectionTest\LazyInjectionClass;
 use \IntegrationTests\DI\Fixtures\BeanInjectionTest\NamedBean;
 use \IntegrationTests\DI\Fixtures\BeanInjectionTest\NamedInjectionClass;
-use \IntegrationTests\DI\Fixtures\BeanInjectionTest\NamedInjectionWithTypeMappingClass;
 
 /**
  * Test class for bean injection
@@ -111,36 +109,12 @@ class BeanInjectionTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Test that type mapping also works with named injections
-     */
-    public function testNamedInjectionWithTypeMapping()
-    {
-        $container = Container::getInstance();
-        Container::addConfiguration(
-            array(
-                'aliases' => array(
-                    'nonExistentDependencyName' => 'namedDependency'
-                )
-            )
-        );
-        // Configure the named bean
-        $bean = new NamedBean();
-        $container->set('namedDependency', $bean);
-        // Test
-        $class = new NamedInjectionWithTypeMappingClass();
-        $dependency = $class->getDependency();
-        $this->assertNotNull($dependency);
-        $this->assertInstanceOf('\IntegrationTests\DI\Fixtures\BeanInjectionTest\NamedBean', $dependency);
-        $this->assertSame($bean, $dependency);
-    }
-
-    /**
      * Check that if a dependency is already set, the container
      * will not overwrite it
      */
     public function testIssue14()
     {
-        $object = new \IntegrationTests\DI\Fixtures\BeanInjectionTest\Issue14();
+        $object = new Issue14();
         $class2 = new Class2();
         $object->setClass2($class2);
         Container::getInstance()->injectAll($object);

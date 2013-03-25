@@ -29,11 +29,10 @@ class ValueInjectionTest extends \PHPUnit_Framework_TestCase
      */
     public function testValue()
     {
-        Container::addConfiguration(
+        $container = Container::getInstance();
+        $container->getConfiguration()->addDefinitions(
             array(
-                'entries' => array(
-                    'db.host' => 'localhost'
-                )
+                'db.host' => 'localhost'
             )
         );
         $class = new ValueInjectionClass();

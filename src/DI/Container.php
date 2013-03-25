@@ -71,34 +71,6 @@ class Container implements ArrayAccess
     }
 
     /**
-     * Applies the configuration given
-     * @param array $configuration See the documentation
-     * @todo Delete this method
-     * @deprecated
-     */
-    public static function addConfiguration(array $configuration)
-    {
-        $container = self::getInstance();
-        // Entries
-        if (isset($configuration['entries'])) {
-            foreach ($configuration['entries'] as $name => $entry) {
-                $container->set($name, $entry);
-            }
-        }
-        // Aliases
-        if (isset($configuration['aliases'])) {
-            foreach ($configuration['aliases'] as $from => $to) {
-                $container->set(
-                    $from,
-                    function (Container $c) use ($to) {
-                        return $c->get($to);
-                    }
-                );
-            }
-        }
-    }
-
-    /**
      * Protected constructor because of singleton
      */
     protected function __construct()
