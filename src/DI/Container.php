@@ -19,7 +19,6 @@ use DI\Definition\PropertyInjection;
 use DI\Definition\ValueDefinition;
 use DI\Proxy\Proxy;
 use ReflectionClass;
-use ReflectionMethod;
 use ReflectionProperty;
 
 /**

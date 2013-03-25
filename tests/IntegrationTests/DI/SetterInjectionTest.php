@@ -65,7 +65,8 @@ class SetterInjectionTest extends \PHPUnit_Framework_TestCase
         $bean2->nameForTest = 'namedDependency2';
         $container->set('namedDependency2', $bean2);
         // Test
-        $class = new NamedInjectionClass();
+        /** @var $class NamedInjectionClass */
+        $class = Container::getInstance()->get('IntegrationTests\DI\Fixtures\SetterInjectionTest\NamedInjectionClass');
         $dependency = $class->getDependency();
         $this->assertNotNull($dependency);
         $this->assertInstanceOf('\IntegrationTests\DI\Fixtures\SetterInjectionTest\NamedBean', $dependency);
@@ -80,7 +81,7 @@ class SetterInjectionTest extends \PHPUnit_Framework_TestCase
     public function testNamedInjectionNotFound()
     {
         // Exception (bean not defined)
-        new NamedInjectionClass();
+        Container::getInstance()->get('IntegrationTests\DI\Fixtures\SetterInjectionTest\NamedInjectionClass');
     }
 
     /**

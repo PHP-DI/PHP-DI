@@ -243,24 +243,4 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
         $container->get(new stdClass());
     }
 
-    /**
-     * @expectedException \DI\DependencyException
-     * @expectedExceptionMessage null given, object instance expected
-     */
-    public function testInjectAllNull()
-    {
-        $container = Container::getInstance();
-        $container->injectAll(null);
-    }
-
-    /**
-     * @expectedException \DI\DependencyException
-     * @expectedExceptionMessage object instance expected
-     */
-    public function testInjectAllNotObject()
-    {
-        $container = Container::getInstance();
-        $container->injectAll("foo");
-    }
-
 }

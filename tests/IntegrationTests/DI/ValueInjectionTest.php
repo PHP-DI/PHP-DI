@@ -35,7 +35,8 @@ class ValueInjectionTest extends \PHPUnit_Framework_TestCase
                 'db.host' => 'localhost'
             )
         );
-        $class = new ValueInjectionClass();
+        /** @var $class ValueInjectionClass */
+        $class = $container->get('IntegrationTests\DI\Fixtures\ValueInjectionTest\ValueInjectionClass');
         $value = $class->getValue();
         $this->assertEquals('localhost', $value);
     }
@@ -45,8 +46,9 @@ class ValueInjectionTest extends \PHPUnit_Framework_TestCase
      */
     public function testValueException()
     {
-        $class = new ValueInjectionClass();
-        $class->getValue();
+        $container = Container::getInstance();
+        /** @var $class ValueInjectionClass */
+        $container->get('IntegrationTests\DI\Fixtures\ValueInjectionTest\ValueInjectionClass');
     }
 
 }
