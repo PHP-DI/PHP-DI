@@ -38,7 +38,7 @@ class ReflectionDefinitionReader implements DefinitionReader
         // Constructor
         $constructor = $reflectionClass->getConstructor();
 
-        if ($constructor->isPublic()) {
+        if ($constructor && $constructor->isPublic()) {
 
             $constructorInjection = new MethodInjection($constructor->name);
             $classDefinition->setConstructorInjection($constructorInjection);

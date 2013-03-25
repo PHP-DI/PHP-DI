@@ -12,6 +12,7 @@ namespace DI;
 use ArrayAccess;
 use DI\Definition\AnnotationException;
 use DI\Definition\ClassDefinition;
+use DI\Definition\DefinitionException;
 use DI\Definition\DefinitionReader;
 use DI\Definition\MethodInjection;
 use DI\Definition\PropertyInjection;
@@ -104,6 +105,7 @@ class Container implements ArrayAccess
     {
         // Default configuration
         $this->configuration = new Configuration();
+        $this->configuration->useReflection(true);
         $this->configuration->useAnnotations(true);
     }
 
@@ -161,7 +163,7 @@ class Container implements ArrayAccess
             }
 
             // Create the instance
-            $instance = $this->getNewInstance($definition->getClassName());
+            $instance = $this->getNewInstance($definition);
 
             if ($definition->getScope() == Scope::SINGLETON()) {
                 // If it's a singleton, store the newly created instance
@@ -302,13 +304,15 @@ class Container implements ArrayAccess
     /**
      * Create a new instance of the class
      *
-     * @param string $classname Class to instantiate
+     * @param ClassDefinition $classDefinition
      * @throws DependencyException
      * @throws \Exception
      * @return object the instance
      */
-    private function getNewInstance($classname)
+    private function getNewInstance(ClassDefinition $classDefinition)
     {
+        $classname = $classDefinition->getClassName();
+
         if (isset($this->classesBeingInstantiated[$classname])) {
             throw new DependencyException("Circular dependency detected while trying to instantiate class '$classname'");
         }
@@ -321,25 +325,18 @@ class Container implements ArrayAccess
                 throw new DependencyException($classReflection->name . " is not instantiable");
             }
 
-            $constructorReflection = $classReflection->getConstructor();
             $instance = $this->newInstanceWithoutConstructor($classReflection);
 
             // Inject the dependencies
+            // TODO inject properties, constructor, and then methods
             try {
                 $this->injectAll($instance);
             } catch (DependencyException $e) {
                 throw new DependencyException("Error while injecting dependencies into $classname: " . $e->getMessage(), 0, $e);
             }
 
-            // Call the constructor
-            if ($constructorReflection) {
-                if ($constructorReflection->getNumberOfRequiredParameters() > 0) {
-                    // Constructor injection
-                    $this->injectConstructor($instance, $constructorReflection);
-                } else {
-                    $constructorReflection->invoke($instance);
-                }
-            }
+            // Constructor injection
+            $this->injectConstructor($instance, $classReflection, $classDefinition->getConstructorInjection());
         } catch (\Exception $exception) {
             unset($this->classesBeingInstantiated[$classname]);
             throw $exception;
@@ -374,22 +371,44 @@ class Container implements ArrayAccess
 
     /**
      * Inject dependencies through the constructor
-     * @param mixed            $object
-     * @param ReflectionMethod $constructorReflection
+     * @param mixed                $object
+     * @param ReflectionClass      $classReflection
+     * @param MethodInjection|null $constructorInjection
      * @throws AnnotationException
      */
-    private function injectConstructor($object, ReflectionMethod $constructorReflection)
+    private function injectConstructor($object, ReflectionClass $classReflection, MethodInjection $constructorInjection = null)
     {
-        // TODO use Definition
-        $args = array();
-        foreach ($constructorReflection->getParameters() as $parameter) {
-            $parameterClass = $parameter->getClass();
-            if ($parameterClass === null) {
-                throw new AnnotationException("The parameter '{$parameter->name}' of the constructor of '"
-                    . get_class($object) . "' has no type: impossible to deduce its type");
-            }
-            $args[] = $this->get($parameterClass->name);
+        $constructorReflection = $classReflection->getConstructor();
+
+        // No constructor
+        if (! $constructorReflection) {
+            return;
         }
+
+        // Check the definition and the class parameter number match
+        $nbRequiredParameters = $constructorReflection->getNumberOfRequiredParameters();
+        $parameterInjections = $constructorInjection ? $constructorInjection->getParameterInjections() : array();
+        if (count($parameterInjections) < $nbRequiredParameters) {
+            throw new DefinitionException("The constructor of {$classReflection->name} takes $nbRequiredParameters parameters, "
+                . count($parameterInjections) . " defined or guessed");
+        }
+
+        if (count($parameterInjections) === 0) {
+            $constructorReflection->invoke($object);
+            return;
+        }
+
+        $args = array();
+        foreach ($parameterInjections as $parameterInjection) {
+            $entryName = $parameterInjection->getEntryName();
+            if ($entryName === null) {
+                throw new DefinitionException("The parameter '" . $parameterInjection->getParameterName()
+                    . "' of the constructor of '{$classReflection->name}' has no type defined or guessable");
+            }
+
+            $args[] = $this->get($entryName);
+        }
+
         $constructorReflection->invokeArgs($object, $args);
     }
 

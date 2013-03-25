@@ -14,6 +14,7 @@ use DI\Definition\ArrayDefinitionReader;
 use DI\Definition\CachedDefinitionReader;
 use DI\Definition\CombinedDefinitionReader;
 use DI\Definition\DefinitionReader;
+use DI\Definition\ReflectionDefinitionReader;
 use Doctrine\Common\Cache\Cache;
 
 /**
@@ -39,6 +40,12 @@ class Configuration
     private $combinedReader;
 
     /**
+     * Keep a reference to the reflection reader to ensure only one is used
+     * @var ReflectionDefinitionReader|null
+     */
+    private $reflectionReader;
+
+    /**
      * Keep a reference to the annotation reader to ensure only one is used
      * @var AnnotationDefinitionReader|null
      */
@@ -62,6 +69,28 @@ class Configuration
             return $this->cachedReader;
         } else {
             return $this->combinedReader;
+        }
+    }
+
+    /**
+     * Enable or disable the use of reflection
+     *
+     * @param boolean $bool
+     */
+    public function useReflection($bool)
+    {
+        if ($bool) {
+            // Enable
+            if ($this->reflectionReader === null) {
+                $this->reflectionReader = new ReflectionDefinitionReader();
+                $this->combinedReader->addReader($this->reflectionReader);
+            }
+        } else {
+            // Disable
+            if ($this->reflectionReader !== null) {
+                $this->combinedReader->removeReader($this->reflectionReader);
+                unset($this->reflectionReader);
+            }
         }
     }
 
