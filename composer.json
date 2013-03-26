@@ -8,7 +8,6 @@
     "autoload": {
         "psr-0": {
             "DI": "src/",
-            "Benchmarks": "tests/",
             "IntegrationTests": "tests/",
             "UnitTests": "tests/"
         }
@@ -18,8 +17,5 @@
         "doctrine/annotations": "1.*",
         "doctrine/cache": "1.*",
         "myclabs/php-enum": "*"
-    },
-    "require-dev": {
-        "mnapoli/phpbench": "dev-master"
     }
 }
