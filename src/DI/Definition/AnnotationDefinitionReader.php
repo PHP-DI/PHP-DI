@@ -74,15 +74,16 @@ class AnnotationDefinitionReader implements DefinitionReader
                 // @Inject
                 if ($annotation instanceof Inject) {
                     // Enrich @Inject annotation with @var content
-                    if ($annotation->name == null) {
+                    $entryName = $annotation->getName();
+                    if ($entryName == null) {
                         $parameterType = $this->getPropertyType($reflectionClass, $property);
                         if ($parameterType == null) {
                             throw new AnnotationException("@Inject was found on $name::"
                                 . $property->getName() . " but no (or empty) @var annotation");
                         }
-                        $annotation->name = $parameterType;
+                        $entryName = $parameterType;
                     }
-                    $propertyInjection = new PropertyInjection($property->name, $annotation->name, $annotation->lazy);
+                    $propertyInjection = new PropertyInjection($property->name, $entryName, $annotation->isLazy());
                     $classDefinition->addPropertyInjection($propertyInjection);
                     break;
                 }
@@ -115,17 +116,18 @@ class AnnotationDefinitionReader implements DefinitionReader
                     /** @var $parameter \ReflectionParameter */
                     $parameter = current($parameters);
                     // Enrich @Inject annotation with @var content
-                    if ($annotation->name == null) {
+                    $entryName = $annotation->getName();
+                    if ($entryName == null) {
                         $parameterType = $this->getParameterType($reflectionClass, $method, $parameter);
                         if ($parameterType == null) {
                             throw new AnnotationException("@Inject was found on $name::"
                                 . $method->name . "() but the parameter $" . $parameter->name
                                 . " has no type: impossible to deduce its type");
                         }
-                        $annotation->name = $parameterType;
+                        $entryName = $parameterType;
                     }
                     // Only 1 parameter taken into account for now
-                    $parameterInjection = new ParameterInjection($parameter->name, $annotation->name);
+                    $parameterInjection = new ParameterInjection($parameter->name, $entryName);
                     $methodInjection = new MethodInjection($method->name, array($parameterInjection));
                     $classDefinition->addMethodInjection($methodInjection);
                     break;
