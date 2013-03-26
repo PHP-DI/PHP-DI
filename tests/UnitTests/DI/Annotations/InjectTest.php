@@ -36,7 +36,7 @@ class InjectTest extends \PHPUnit_Framework_TestCase
     {
         $definitionReader = new AnnotationDefinitionReader();
         $this->annotationReader = $definitionReader->getAnnotationReader();
-        $this->reflectionClass = new ReflectionClass('UnitTests\DI\Fixtures\Annotations\InjectFixture');
+        $this->reflectionClass = new ReflectionClass('UnitTests\DI\Annotations\Fixtures\InjectFixture');
     }
 
     public function testProperty1()

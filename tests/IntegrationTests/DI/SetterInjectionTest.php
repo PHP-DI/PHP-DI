@@ -76,7 +76,8 @@ class SetterInjectionTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \DI\NotFoundException
+     * @expectedException \DI\DependencyException
+     * @expectedExceptionMessage Error while injecting dependency in IntegrationTests\DI\Fixtures\SetterInjectionTest\NamedInjectionClass::dependency. No bean, value or class found for 'namedDependency'
      */
     public function testNamedInjectionNotFound()
     {
@@ -85,8 +86,8 @@ class SetterInjectionTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \DI\Definition\AnnotationException
-     * @expectedExceptionMessage @Inject was found on IntegrationTests\DI\Fixtures\SetterInjectionTest\Buggy1::setDependency() but the parameter $dependency has no type: impossible to deduce its type
+     * @expectedException \DI\Definition\DefinitionException
+     * @expectedExceptionMessage The parameter 'dependency' of IntegrationTests\DI\Fixtures\SetterInjectionTest\Buggy1::setDependency has no type defined or guessable
      */
     public function testNonTypeHintedMethod()
     {
@@ -94,17 +95,8 @@ class SetterInjectionTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \DI\Definition\AnnotationException
-     * @expectedExceptionMessage @Inject was found on IntegrationTests\DI\Fixtures\SetterInjectionTest\Buggy2::setDependency(), the method should have exactly one parameter
-     */
-    public function testNoParametersMethod()
-    {
-        Container::getInstance()->get('IntegrationTests\DI\Fixtures\SetterInjectionTest\Buggy2');
-    }
-
-    /**
-     * @expectedException \DI\NotFoundException
-     * @expectedExceptionMessage @Inject was found on IntegrationTests\DI\Fixtures\SetterInjectionTest\Buggy3::setDependency(...) but no bean or value 'nonExistentBean' was found
+     * @expectedException \DI\DependencyException
+     * @expectedExceptionMessage Error while injecting dependencies into IntegrationTests\DI\Fixtures\SetterInjectionTest\Buggy3: No bean, value or class found for 'nonExistentBean'
      */
     public function testNamedUnknownBean()
     {

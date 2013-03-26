@@ -303,6 +303,10 @@ class Container implements ArrayAccess
             try {
                 $this->injectAll($instance);
             } catch (DependencyException $e) {
+                throw $e;
+            } catch (DefinitionException $e) {
+                throw $e;
+            } catch (\Exception $e) {
                 throw new DependencyException("Error while injecting dependencies into $classname: " . $e->getMessage(), 0, $e);
             }
 
@@ -392,31 +396,36 @@ class Container implements ArrayAccess
      */
     private function injectMethod($object, MethodInjection $methodInjection)
     {
-        $className = get_class($object);
         $methodName = $methodInjection->getMethodName();
-        // One 1-parameter methods supported for now
-        $parameterInjections = $methodInjection->getParameterInjections();
-        if (count($parameterInjections) !== 1) {
-            throw new DependencyException("Error while injecting into $className::$methodName(): "
-                . "the number of parameters of the method is != 1");
+        $classReflection = new ReflectionClass($object);
+        $methodReflection = $classReflection->getMethod($methodName);
+
+        // Check the definition and the class parameter number match
+        $nbRequiredParameters = $methodReflection->getNumberOfRequiredParameters();
+        $parameterInjections = $methodInjection ? $methodInjection->getParameterInjections() : array();
+        if (count($parameterInjections) < $nbRequiredParameters) {
+            throw new DefinitionException("{$classReflection->name}::$methodName takes $nbRequiredParameters parameters, "
+                . count($parameterInjections) . " defined or guessed");
         }
-        $parameterInjection = current($parameterInjections);
-        $entryName = $parameterInjection->getEntryName();
-        // Get the dependency
-        try {
-            $value = $this->get($entryName);
-        } catch (NotFoundException $e) {
-            // Better exception message
-            throw new NotFoundException("@Inject was found on $className::$methodName(...)"
-                . " but no bean or value '$entryName' was found");
-        } catch (DependencyException $e) {
-            throw $e;
-        } catch (\Exception $e) {
-            throw new DependencyException("Error while injecting {$entryName} to $className::$methodName(...). "
-                . $e->getMessage(), 0, $e);
+
+        // No parameters
+        if (count($parameterInjections) === 0) {
+            $methodReflection->invoke($object);
+            return;
         }
-        // Inject the dependency by calling the method
-        call_user_func_array(array($object, $methodName), array($value));
+
+        $args = array();
+        foreach ($parameterInjections as $parameterInjection) {
+            $entryName = $parameterInjection->getEntryName();
+            if ($entryName === null) {
+                throw new DefinitionException("The parameter '" . $parameterInjection->getParameterName()
+                    . "' of {$classReflection->name}::$methodName has no type defined or guessable");
+            }
+
+            $args[] = $this->get($entryName);
+        }
+
+        $methodReflection->invokeArgs($object, $args);
     }
 
     /**
@@ -436,19 +445,20 @@ class Container implements ArrayAccess
         if ($property->getValue($object) !== null) {
             return;
         }
+
+        $entryName = $propertyInjection->getEntryName();
+        if ($entryName === null) {
+            throw new DefinitionException(get_class($object) . "::$propertyName has no type defined or guessable");
+        }
+
         // Get the dependency
         try {
             $value = $this->get($propertyInjection->getEntryName(), $propertyInjection->isLazy());
-        } catch (NotFoundException $e) {
-            // Better exception message
-            throw new NotFoundException("@Inject was found on " . get_class($object) . "::" . $property->name
-                . " but no bean or value '$propertyName' was found");
         } catch (DependencyException $e) {
             throw $e;
         } catch (\Exception $e) {
             throw new DependencyException("Error while injecting $propertyName in "
-                . get_class($object) . "::" . $property->name . ". "
-                . $e->getMessage(), 0, $e);
+                . get_class($object) . "::" . $property->name . ". " . $e->getMessage(), 0, $e);
         }
         // Inject the dependency
         $property->setValue($object, $value);

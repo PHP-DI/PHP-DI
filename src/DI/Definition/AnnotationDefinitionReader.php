@@ -15,6 +15,10 @@ use Doctrine\Common\Annotations\AnnotationRegistry;
 use Doctrine\Common\Annotations\PhpParser;
 use Doctrine\Common\Annotations\Reader;
 use InvalidArgumentException;
+use ReflectionClass;
+use ReflectionMethod;
+use ReflectionParameter;
+use ReflectionProperty;
 
 /**
  * Reads DI class definitions in annotations such as @ Inject and @ var annotations
@@ -25,12 +29,12 @@ class AnnotationDefinitionReader implements DefinitionReader
 {
 
     /**
-     * @var \Doctrine\Common\Annotations\Reader
+     * @var Reader
      */
     private $annotationReader;
 
     /**
-     * @var \Doctrine\Common\Annotations\PhpParser
+     * @var PhpParser
      */
     private $phpParser;
 
@@ -50,7 +54,7 @@ class AnnotationDefinitionReader implements DefinitionReader
         if (!$this->classExists($name)) {
             return null;
         }
-        $reflectionClass = new \ReflectionClass($name);
+        $reflectionClass = new ReflectionClass($name);
 
         $classDefinition = new ClassDefinition($name);
 
@@ -60,7 +64,28 @@ class AnnotationDefinitionReader implements DefinitionReader
             $classDefinition->setScope($scopeAnnotation->value);
         }
 
-        // Browse the object's properties looking for annotated properties
+        // Browse the class properties looking for annotated properties
+        $this->readProperties($reflectionClass, $classDefinition);
+
+        // Look for annotated constructor
+        $constructor = $reflectionClass->getConstructor();
+        if ($constructor) {
+            $this->readConstructor($reflectionClass, $constructor, $classDefinition);
+        }
+
+        // Browse the object's methods looking for annotated methods
+        $this->readMethods($reflectionClass, $classDefinition);
+
+        return $classDefinition;
+    }
+
+    /**
+     * Browse the class properties looking for annotated properties
+     * @param ReflectionClass $reflectionClass
+     * @param ClassDefinition $classDefinition
+     */
+    private function readProperties(ReflectionClass $reflectionClass, ClassDefinition $classDefinition)
+    {
         foreach ($reflectionClass->getProperties() as $property) {
 
             // Ignore static properties
@@ -68,75 +93,124 @@ class AnnotationDefinitionReader implements DefinitionReader
                 continue;
             }
 
-            // Look for DI annotations
-            $propertyAnnotations = $this->getAnnotationReader()->getPropertyAnnotations($property);
-            foreach ($propertyAnnotations as $annotation) {
-                // @Inject
-                if ($annotation instanceof Inject) {
-                    // Enrich @Inject annotation with @var content
-                    $entryName = $annotation->getName();
-                    if ($entryName == null) {
-                        $parameterType = $this->getPropertyType($reflectionClass, $property);
-                        if ($parameterType == null) {
-                            throw new AnnotationException("@Inject was found on $name::"
-                                . $property->getName() . " but no (or empty) @var annotation");
-                        }
-                        $entryName = $parameterType;
-                    }
-                    $propertyInjection = new PropertyInjection($property->name, $entryName, $annotation->isLazy());
-                    $classDefinition->addPropertyInjection($propertyInjection);
-                    break;
+            // Look for @Inject annotation
+            $annotation = $this->getAnnotationReader()->getPropertyAnnotation($property, 'DI\Annotations\Inject');
+            if ($annotation !== null) {
+                /** @var $annotation Inject */
+
+                $entryName = $annotation->getName();
+                if ($entryName == null) {
+                    // Look for @var content
+                    $entryName = $this->getPropertyType($reflectionClass, $property);
                 }
+                $propertyInjection = new PropertyInjection($property->name, $entryName, $annotation->isLazy());
+                $classDefinition->addPropertyInjection($propertyInjection);
             }
 
         }
+    }
 
-        // Browse the object's methods looking for annotated methods
+    /**
+     * Browse the object's methods looking for annotated methods
+     * @param ReflectionClass $reflectionClass
+     * @param ClassDefinition $classDefinition
+     */
+    private function readConstructor(ReflectionClass $reflectionClass, ReflectionMethod $reflectionMethod, ClassDefinition $classDefinition)
+    {
+        // Look for @Inject annotation
+        /** @var $annotation Inject|null */
+        $annotation = $this->getAnnotationReader()->getMethodAnnotation($reflectionMethod, 'DI\Annotations\Inject');
+
+        if ($annotation) {
+            // @Inject found, create MethodInjection
+            $methodInjection = new MethodInjection($reflectionMethod->name);
+            $classDefinition->setConstructorInjection($methodInjection);
+
+            // Read method parameters annotations
+            $this->readMethodParameters($reflectionClass, $reflectionMethod, $annotation, $methodInjection);
+        }
+    }
+
+    /**
+     * Browse the object's methods looking for annotated methods
+     * @param ReflectionClass $reflectionClass
+     * @param ClassDefinition $classDefinition
+     */
+    private function readMethods(ReflectionClass $reflectionClass, ClassDefinition $classDefinition)
+    {
         foreach ($reflectionClass->getMethods(\ReflectionMethod::IS_PUBLIC) as $method) {
-
-            // Ignore static methods
-            if ($method->isStatic()) {
+            // Ignore constructor and static methods
+            if ($method->isStatic() || $method->isConstructor()) {
                 continue;
             }
 
-            // Look for DI annotations
-            $methodAnnotations = $this->getAnnotationReader()->getMethodAnnotations($method);
-            foreach ($methodAnnotations as $annotation) {
-                // @Inject
-                if ($annotation instanceof Inject) {
-                    // Ignore constructor
-                    if ($method->isConstructor()) {
-                        continue;
-                    }
-                    if ($method->getNumberOfParameters() != 1) {
-                        throw new AnnotationException("@Inject was found on $name::"
-                            . $method->name . "(), the method should have exactly one parameter");
-                    }
-                    $parameters = $method->getParameters();
-                    /** @var $parameter \ReflectionParameter */
-                    $parameter = current($parameters);
-                    // Enrich @Inject annotation with @var content
-                    $entryName = $annotation->getName();
-                    if ($entryName == null) {
-                        $parameterType = $this->getParameterType($reflectionClass, $method, $parameter);
-                        if ($parameterType == null) {
-                            throw new AnnotationException("@Inject was found on $name::"
-                                . $method->name . "() but the parameter $" . $parameter->name
-                                . " has no type: impossible to deduce its type");
-                        }
-                        $entryName = $parameterType;
-                    }
-                    // Only 1 parameter taken into account for now
-                    $parameterInjection = new ParameterInjection($parameter->name, $entryName);
-                    $methodInjection = new MethodInjection($method->name, array($parameterInjection));
-                    $classDefinition->addMethodInjection($methodInjection);
-                    break;
-                }
+            $this->readMethod($reflectionClass, $method, $classDefinition);
+        }
+    }
+
+    /**
+     * Browse the object's methods looking for annotated methods
+     * @param ReflectionClass $reflectionClass
+     * @param ClassDefinition $classDefinition
+     */
+    private function readMethod(ReflectionClass $reflectionClass, ReflectionMethod $reflectionMethod, ClassDefinition $classDefinition)
+    {
+        // Look for @Inject annotation
+        /** @var $annotation Inject|null */
+        $annotation = $this->getAnnotationReader()->getMethodAnnotation($reflectionMethod, 'DI\Annotations\Inject');
+
+        if ($annotation) {
+            // @Inject found, create MethodInjection
+            $methodInjection = new MethodInjection($reflectionMethod->name);
+            $classDefinition->addMethodInjection($methodInjection);
+
+            // Read method parameters annotations
+            $this->readMethodParameters($reflectionClass, $reflectionMethod, $annotation, $methodInjection);
+        }
+    }
+
+    /**
+     * @param ReflectionClass  $reflectionClass
+     * @param ReflectionMethod $method
+     * @param Inject           $annotation
+     * @param MethodInjection  $methodInjection
+     */
+    private function readMethodParameters(
+        ReflectionClass $reflectionClass,
+        ReflectionMethod $method,
+        Inject $annotation,
+        MethodInjection $methodInjection
+    ) {
+        $annotationParameters = $annotation->getParameters();
+
+        // For each param
+        $index = 0;
+        foreach ($method->getParameters() as $parameter) {
+
+            $entryName = null;
+
+            $annotationParameter = null;
+            // @Inject has definition for this parameter (not named)
+            if (isset($annotationParameters[$index])) {
+                $annotationParameter = $annotationParameters[$index];
+            }
+            // @Inject has definition for this parameter (named)
+            if (isset($annotationParameters[$parameter->name])) {
+                $annotationParameter = $annotationParameters[$parameter->name];
+            }
+            if (isset($annotationParameter['name'])) {
+                $entryName = $annotationParameter['name'];
             }
 
-        }
+            // Look for @param tag
+            if ($entryName === null) {
+                $entryName = $this->getParameterType($reflectionClass, $method, $parameter);
+            }
 
-        return $classDefinition;
+            $methodInjection->addParameterInjection(new ParameterInjection($parameter->name, $entryName));
+
+            $index++;
+        }
     }
 
     /**
@@ -161,12 +235,12 @@ class AnnotationDefinitionReader implements DefinitionReader
 
     /**
      * Parse the docblock of the property to get the var annotation
-     * @param \ReflectionClass    $class
-     * @param \ReflectionProperty $property
+     * @param ReflectionClass    $class
+     * @param ReflectionProperty $property
      * @throws AnnotationException
      * @return string|null Type of the property (content of var annotation)
      */
-    private function getPropertyType(\ReflectionClass $class, \ReflectionProperty $property)
+    private function getPropertyType(ReflectionClass $class, ReflectionProperty $property)
     {
         // Get the content of the @var annotation
         if (preg_match('/@var\s+([^\s]+)/', $property->getDocComment(), $matches)) {
@@ -223,18 +297,73 @@ class AnnotationDefinitionReader implements DefinitionReader
     }
 
     /**
-     * @param \ReflectionClass     $class
-     * @param \ReflectionMethod    $method
-     * @param \ReflectionParameter $parameter
-     * @return string|null Type of the parameter
+     * Parse the docblock of the property to get the param annotation
+     * @param ReflectionClass  $class
+     * @param ReflectionMethod $method
+     * @throws AnnotationException
+     * @return string|null Type of the property (content of var annotation)
      */
-    private function getParameterType(\ReflectionClass $class, \ReflectionMethod $method, \ReflectionParameter $parameter)
+    private function getParameterType(ReflectionClass $class, ReflectionMethod $method, ReflectionParameter $parameter)
     {
-        $reflectionClass = $parameter->getClass();
-        if ($reflectionClass === null) {
+        // Use reflection
+        $parameterClass = $parameter->getClass();
+        if ($parameterClass !== null) {
+            return $parameterClass->name;
+        }
+
+        $parameterName = $parameter->name;
+        // Get the content of the @param annotation
+        if (preg_match('/@param\s+([^\s]+)\s+\$' . $parameterName . '/', $method->getDocComment(), $matches)) {
+            list(, $type) = $matches;
+        } else {
             return null;
         }
-        return $reflectionClass->name;
+
+        // If the class name is not fully qualified (i.e. doesn't start with a \)
+        if ($type[0] !== '\\') {
+            $alias = (false === $pos = strpos($type, '\\')) ? $type : substr($type, 0, $pos);
+            $loweredAlias = strtolower($alias);
+
+            // Retrieve "use" statements
+            $uses = $this->phpParser->parseClass($method->getDeclaringClass());
+
+            $found = false;
+
+            if ($this->classExists($class->getNamespaceName() . '\\' . $type)) {
+                $type = $class->getNamespaceName() . '\\' . $type;
+                $found = true;
+            } elseif (isset($uses[$loweredAlias])) {
+                // Imported classes
+                if (false !== $pos) {
+                    $type = $uses[$loweredAlias] . substr($type, $pos);
+                } else {
+                    $type = $uses[$loweredAlias];
+                }
+                $found = true;
+            } elseif (isset($uses['__NAMESPACE__']) && $this->classExists($uses['__NAMESPACE__'] . '\\' . $type)) {
+                // Class namespace
+                $type = $uses['__NAMESPACE__'] . '\\' . $type;
+                $found = true;
+            } elseif ($this->classExists($type)) {
+                // No namespace
+                $found = true;
+            }
+
+            if (!$found) {
+                throw new AnnotationException("The @param annotation for parameter $parameterName of {$class->name}::" . $method->name
+                    . " contains a non existent class. Did you maybe forget to add a 'use' statement for this annotation?");
+            }
+        }
+
+        if (!$this->classExists($type)) {
+            throw new AnnotationException("The @param annotation for parameter $parameterName of {$class->name}::" . $method->name
+                . " contains a non existent class");
+        }
+
+        // Remove the leading \ (FQN shouldn't contain it)
+        $type = ltrim($type, '\\');
+
+        return $type;
     }
 
     /**

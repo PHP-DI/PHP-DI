@@ -7,7 +7,7 @@
  * @license   http://www.opensource.org/licenses/mit-license.php MIT (see the LICENSE file)
  */
 
-namespace UnitTests\DI\Fixtures\Annotations;
+namespace UnitTests\DI\Annotations\Fixtures;
 
 class InjectableFixture
 {

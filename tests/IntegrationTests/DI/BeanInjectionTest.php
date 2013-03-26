@@ -102,7 +102,7 @@ class BeanInjectionTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \DI\NotFoundException
+     * @expectedException \DI\DependencyException
      */
     public function testNamedInjectionNotFound()
     {

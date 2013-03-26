@@ -18,7 +18,7 @@ class Buggy3
 {
 
     /**
-     * @Inject(name="nonExistentBean")
+     * @Inject({"nonExistentBean"})
      * @param $dependency
      */
     public function setDependency($dependency)

@@ -42,7 +42,8 @@ class ValueInjectionTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \DI\NotFoundException
+     * @expectedException \DI\DependencyException
+     * @expectedExceptionMessage Error while injecting value in IntegrationTests\DI\Fixtures\ValueInjectionTest\ValueInjectionClass::value. No bean, value or class found for 'db.host'
      */
     public function testValueException()
     {
