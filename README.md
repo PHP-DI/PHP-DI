@@ -75,7 +75,7 @@ class Foo {
 In this example, a instance of the `Bar` class is created and injected in the `Foo` class. **No configuration needed**.
 
 *Note*: Of course, in the spirit of Dependency Injection, `Bar` will rather be an interface, and you will configure
-which implementation will be injected through [configuration](doc/configure.md).
+which implementation will be injected through [configuration](doc/definition.md).
 
 
 ## More

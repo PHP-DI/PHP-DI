@@ -22,14 +22,6 @@ class NamedInjectionClass
      */
     private $dependency;
 
-    /**
-     * Inject the dependencies
-     */
-    public function __construct()
-    {
-        \DI\Container::getInstance()->injectAll($this);
-    }
-
     public function getDependency()
     {
         return $this->dependency;

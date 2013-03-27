@@ -66,7 +66,7 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
         $container = Container::getInstance();
         $container->set(
             'key',
-            function (Container $c) {
+            function () {
                 return 'hello';
             }
         );
@@ -78,7 +78,7 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
         $container = Container::getInstance();
         $container->set(
             'key',
-            function (Container $c) {
+            function () {
                 return new stdClass();
             }
         );
@@ -137,42 +137,18 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
     public function testCircularDependencies()
     {
         $container = Container::getInstance();
-        $instance1 = $container->get('UnitTests\DI\Fixtures\Prototype');
-        $instance2 = $container->get('UnitTests\DI\Fixtures\Prototype');
+        $container->get('UnitTests\DI\Fixtures\Prototype');
+        $container->get('UnitTests\DI\Fixtures\Prototype');
     }
 
     /**
      * @expectedException \DI\DependencyException
-     * @expectedExceptionMessage Circular dependency detected while trying to instantiate class '\UnitTests\DI\Fixtures\Class1CircularDependencies'.
+     * @expectedExceptionMessage Circular dependency detected while trying to instantiate class 'UnitTests\DI\Fixtures\Class1CircularDependencies'
      */
     public function testCircularDependenciesException()
     {
         $container = Container::getInstance();
-        $container->get('\UnitTests\DI\Fixtures\Class1CircularDependencies');
-    }
-
-    public function testMetadataReader()
-    {
-        $container = Container::getInstance();
-        /** @var $reader \DI\MetadataReader\MetadataReader */
-        $reader = $this->getMockForAbstractClass('DI\\MetadataReader\\MetadataReader');
-        $container->setMetadataReader($reader);
-        $this->assertSame($reader, $container->getMetadataReader());
-    }
-
-    public function testAddConfigurationEmpty()
-    {
-        // Empty configuration, no errors
-        Container::addConfiguration(array());
-    }
-
-    public function testAddConfigurationEntries1()
-    {
-        Container::addConfiguration(
-            array(
-                'entries' => array(),
-            )
-        );
+        $container->get('UnitTests\DI\Fixtures\Class1CircularDependencies');
     }
 
     /**
@@ -180,11 +156,10 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
      */
     public function testAddConfigurationEntries2()
     {
-        Container::addConfiguration(
+        $container = Container::getInstance();
+        $container->getConfiguration()->addDefinitions(
             array(
-                'entries' => array(
-                    'test' => 'success',
-                ),
+                'test' => 'success',
             )
         );
         $container = Container::getInstance();
@@ -266,26 +241,6 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
     {
         $container = Container::getInstance();
         $container->get(new stdClass());
-    }
-
-    /**
-     * @expectedException \DI\DependencyException
-     * @expectedExceptionMessage null given, object instance expected
-     */
-    public function testInjectAllNull()
-    {
-        $container = Container::getInstance();
-        $container->injectAll(null);
-    }
-
-    /**
-     * @expectedException \DI\DependencyException
-     * @expectedExceptionMessage object instance expected
-     */
-    public function testInjectAllNotObject()
-    {
-        $container = Container::getInstance();
-        $container->injectAll("foo");
     }
 
 }

@@ -24,14 +24,6 @@ class LazyInjectionClass
     private $class2;
 
     /**
-     * Inject the dependencies
-     */
-    public function __construct()
-    {
-        \DI\Container::getInstance()->injectAll($this);
-    }
-
-    /**
      * @return Class2
      */
     public function getClass2()

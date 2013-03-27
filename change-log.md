@@ -4,7 +4,12 @@
 
 * Setter injection
 * Constructor injection
-* @Scope annotations
+* Scopes: singleton (share the same instance of the class) or prototype (create a new instance each time it is fetched). Defined at class level.
+* Configuration is reworked from scratch. Now every configuration backend can do 100% of the job.
+* Provided configuration backends:
+    * Annotations: @Inject, @Scope
+    * PHP code
+* As a consequence, annotations are not mandatory anymore, all functionalities can be used with or without annotations.
 * Code now follows PSR1 and PSR2 coding styles
 
 ## 2.1

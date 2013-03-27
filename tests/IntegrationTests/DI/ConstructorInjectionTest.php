@@ -22,10 +22,11 @@ class ConstructorInjectionTest extends \PHPUnit_Framework_TestCase
     {
         // Reset the singleton instance to ensure all tests are independent
         Container::reset();
-        Container::addConfiguration(
+        $container = Container::getInstance();
+        $container->getConfiguration()->addDefinitions(
             array(
-                'aliases' => array(
-                    'IntegrationTests\DI\Fixtures\ConstructorInjectionTest\Interface1' => 'IntegrationTests\DI\Fixtures\ConstructorInjectionTest\Class3'
+                'IntegrationTests\DI\Fixtures\ConstructorInjectionTest\Interface1' => array(
+                    'class' => 'IntegrationTests\DI\Fixtures\ConstructorInjectionTest\Class3',
                 )
             )
         );
@@ -49,8 +50,8 @@ class ConstructorInjectionTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \DI\Annotations\AnnotationException
-     * @expectedExceptionMessage The parameter 'dependency' of the constructor of 'IntegrationTests\DI\Fixtures\ConstructorInjectionTest\Buggy1' has no type: impossible to deduce its type
+     * @expectedException \DI\Definition\DefinitionException
+     * @expectedExceptionMessage The parameter 'dependency' of the constructor of 'IntegrationTests\DI\Fixtures\ConstructorInjectionTest\Buggy1' has no type defined or guessable
      */
     public function testNonTypeHintedMethod()
     {
@@ -58,8 +59,8 @@ class ConstructorInjectionTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \DI\Annotations\AnnotationException
-     * @expectedExceptionMessage The parameter 'dependency' of the constructor of 'IntegrationTests\DI\Fixtures\ConstructorInjectionTest\Buggy2' has no type: impossible to deduce its type
+     * @expectedException \DI\Definition\DefinitionException
+     * @expectedExceptionMessage The parameter 'dependency' of the constructor of 'IntegrationTests\DI\Fixtures\ConstructorInjectionTest\Buggy2' has no type defined or guessable
      */
     public function testNamedUnknownBean()
     {

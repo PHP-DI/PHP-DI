@@ -13,7 +13,6 @@ use DI\Container;
 use IntegrationTests\DI\Fixtures\SetterInjectionTest\Class1;
 use IntegrationTests\DI\Fixtures\SetterInjectionTest\NamedBean;
 use IntegrationTests\DI\Fixtures\SetterInjectionTest\NamedInjectionClass;
-use IntegrationTests\DI\Fixtures\SetterInjectionTest\NamedInjectionWithTypeMappingClass;
 
 /**
  * Test class for setter injection
@@ -25,10 +24,11 @@ class SetterInjectionTest extends \PHPUnit_Framework_TestCase
     {
         // Reset the singleton instance to ensure all tests are independent
         Container::reset();
-        Container::addConfiguration(
+        $container = Container::getInstance();
+        $container->getConfiguration()->addDefinitions(
             array(
-                'aliases' => array(
-                    'IntegrationTests\DI\Fixtures\SetterInjectionTest\Interface1' => 'IntegrationTests\DI\Fixtures\SetterInjectionTest\Class3'
+                'IntegrationTests\DI\Fixtures\SetterInjectionTest\Interface1' => array(
+                    'class' => 'IntegrationTests\DI\Fixtures\SetterInjectionTest\Class3',
                 )
             )
         );
@@ -65,7 +65,8 @@ class SetterInjectionTest extends \PHPUnit_Framework_TestCase
         $bean2->nameForTest = 'namedDependency2';
         $container->set('namedDependency2', $bean2);
         // Test
-        $class = new NamedInjectionClass();
+        /** @var $class NamedInjectionClass */
+        $class = Container::getInstance()->get('IntegrationTests\DI\Fixtures\SetterInjectionTest\NamedInjectionClass');
         $dependency = $class->getDependency();
         $this->assertNotNull($dependency);
         $this->assertInstanceOf('\IntegrationTests\DI\Fixtures\SetterInjectionTest\NamedBean', $dependency);
@@ -75,41 +76,18 @@ class SetterInjectionTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \DI\NotFoundException
+     * @expectedException \DI\DependencyException
+     * @expectedExceptionMessage Error while injecting dependency in IntegrationTests\DI\Fixtures\SetterInjectionTest\NamedInjectionClass::dependency. No bean, value or class found for 'namedDependency'
      */
     public function testNamedInjectionNotFound()
     {
         // Exception (bean not defined)
-        new NamedInjectionClass();
+        Container::getInstance()->get('IntegrationTests\DI\Fixtures\SetterInjectionTest\NamedInjectionClass');
     }
 
     /**
-     * Test that type mapping also works with named injections
-     */
-    public function testNamedInjectionWithTypeMapping()
-    {
-        $container = Container::getInstance();
-        Container::addConfiguration(
-            array(
-                'aliases' => array(
-                    'nonExistentDependencyName' => 'namedDependency'
-                )
-            )
-        );
-        // Configure the named bean
-        $bean = new NamedBean();
-        $container->set('namedDependency', $bean);
-        // Test
-        $class = new NamedInjectionWithTypeMappingClass();
-        $dependency = $class->getDependency();
-        $this->assertNotNull($dependency);
-        $this->assertInstanceOf('\IntegrationTests\DI\Fixtures\SetterInjectionTest\NamedBean', $dependency);
-        $this->assertSame($bean, $dependency);
-    }
-
-    /**
-     * @expectedException \DI\Annotations\AnnotationException
-     * @expectedExceptionMessage @Inject was found on IntegrationTests\DI\Fixtures\SetterInjectionTest\Buggy1::setDependency() but the parameter $dependency has no type: impossible to deduce its type
+     * @expectedException \DI\Definition\DefinitionException
+     * @expectedExceptionMessage The parameter 'dependency' of IntegrationTests\DI\Fixtures\SetterInjectionTest\Buggy1::setDependency has no type defined or guessable
      */
     public function testNonTypeHintedMethod()
     {
@@ -117,17 +95,8 @@ class SetterInjectionTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \DI\Annotations\AnnotationException
-     * @expectedExceptionMessage @Inject was found on IntegrationTests\DI\Fixtures\SetterInjectionTest\Buggy2::setDependency(), the method should have exactly one parameter
-     */
-    public function testNoParametersMethod()
-    {
-        Container::getInstance()->get('IntegrationTests\DI\Fixtures\SetterInjectionTest\Buggy2');
-    }
-
-    /**
-     * @expectedException \DI\NotFoundException
-     * @expectedExceptionMessage @Inject was found on IntegrationTests\DI\Fixtures\SetterInjectionTest\Buggy3::setDependency(...) but no bean or value 'nonExistentBean' was found
+     * @expectedException \DI\DependencyException
+     * @expectedExceptionMessage Error while injecting dependencies into IntegrationTests\DI\Fixtures\SetterInjectionTest\Buggy3: No bean, value or class found for 'nonExistentBean'
      */
     public function testNamedUnknownBean()
     {
