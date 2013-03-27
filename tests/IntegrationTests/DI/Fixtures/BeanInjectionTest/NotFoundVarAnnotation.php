@@ -9,7 +9,7 @@
 
 namespace IntegrationTests\DI\Fixtures\BeanInjectionTest;
 
-use \DI\Annotations\Inject;
+use \DI\Annotation\Inject;
 
 /**
  * Fixture class

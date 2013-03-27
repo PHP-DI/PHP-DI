@@ -9,7 +9,7 @@
 
 namespace IntegrationTests\DI\Fixtures\PreConstructorInjection;
 
-use DI\Annotations\Inject;
+use DI\Annotation\Inject;
 
 /**
  * Fixture class

@@ -10,8 +10,8 @@
 namespace UnitTests\DI\Fixtures;
 
 use Exception;
-use DI\Annotations\Scope;
-use DI\Annotations\Inject;
+use DI\Annotation\Scope;
+use DI\Annotation\Inject;
 
 /**
  * Fixture class for testing circular dependencies

@@ -56,7 +56,7 @@ $foo = DI\Container::get('Foo');
 PHP-DI provides useful annotations for Setter and Property injection:
 
 ```php
-use DI\Annotations\Inject;
+use DI\Annotation\Inject;
 
 class Foo {
     /**

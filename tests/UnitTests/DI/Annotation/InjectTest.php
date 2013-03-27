@@ -7,9 +7,9 @@
  * @license   http://www.opensource.org/licenses/mit-license.php MIT (see the LICENSE file)
  */
 
-namespace UnitTests\DI\Annotations;
+namespace UnitTests\DI\Annotation;
 
-use DI\Annotations\Inject;
+use DI\Annotation\Inject;
 use DI\Container;
 use DI\Definition\AnnotationDefinitionReader;
 use Doctrine\Common\Annotations\AnnotationReader;
@@ -36,16 +36,16 @@ class InjectTest extends \PHPUnit_Framework_TestCase
     {
         $definitionReader = new AnnotationDefinitionReader();
         $this->annotationReader = $definitionReader->getAnnotationReader();
-        $this->reflectionClass = new ReflectionClass('UnitTests\DI\Annotations\Fixtures\InjectFixture');
+        $this->reflectionClass = new ReflectionClass('UnitTests\DI\Annotation\Fixtures\InjectFixture');
     }
 
     public function testProperty1()
     {
         $property = $this->reflectionClass->getProperty('property1');
         /** @var $annotation Inject */
-        $annotation = $this->annotationReader->getPropertyAnnotation($property, 'DI\Annotations\Inject');
+        $annotation = $this->annotationReader->getPropertyAnnotation($property, 'DI\Annotation\Inject');
 
-        $this->assertInstanceOf('DI\Annotations\Inject', $annotation);
+        $this->assertInstanceOf('DI\Annotation\Inject', $annotation);
         $this->assertEquals('foo', $annotation->getName());
         $this->assertNull($annotation->isLazy());
     }
@@ -54,9 +54,9 @@ class InjectTest extends \PHPUnit_Framework_TestCase
     {
         $property = $this->reflectionClass->getProperty('property2');
         /** @var $annotation Inject */
-        $annotation = $this->annotationReader->getPropertyAnnotation($property, 'DI\Annotations\Inject');
+        $annotation = $this->annotationReader->getPropertyAnnotation($property, 'DI\Annotation\Inject');
 
-        $this->assertInstanceOf('DI\Annotations\Inject', $annotation);
+        $this->assertInstanceOf('DI\Annotation\Inject', $annotation);
         $this->assertNull($annotation->getName());
         $this->assertNull($annotation->isLazy());
     }
@@ -65,9 +65,9 @@ class InjectTest extends \PHPUnit_Framework_TestCase
     {
         $property = $this->reflectionClass->getProperty('property3');
         /** @var $annotation Inject */
-        $annotation = $this->annotationReader->getPropertyAnnotation($property, 'DI\Annotations\Inject');
+        $annotation = $this->annotationReader->getPropertyAnnotation($property, 'DI\Annotation\Inject');
 
-        $this->assertInstanceOf('DI\Annotations\Inject', $annotation);
+        $this->assertInstanceOf('DI\Annotation\Inject', $annotation);
         $this->assertEquals('foo', $annotation->getName());
         $this->assertTrue($annotation->isLazy());
     }
@@ -76,9 +76,9 @@ class InjectTest extends \PHPUnit_Framework_TestCase
     {
         $method = $this->reflectionClass->getMethod('method1');
         /** @var $annotation Inject */
-        $annotation = $this->annotationReader->getMethodAnnotation($method, 'DI\Annotations\Inject');
+        $annotation = $this->annotationReader->getMethodAnnotation($method, 'DI\Annotation\Inject');
 
-        $this->assertInstanceOf('DI\Annotations\Inject', $annotation);
+        $this->assertInstanceOf('DI\Annotation\Inject', $annotation);
         $this->assertEmpty($annotation->getParameters());
     }
 
@@ -86,10 +86,10 @@ class InjectTest extends \PHPUnit_Framework_TestCase
     {
         $method = $this->reflectionClass->getMethod('method2');
         /** @var $annotation Inject */
-        $annotation = $this->annotationReader->getMethodAnnotation($method, 'DI\Annotations\Inject');
+        $annotation = $this->annotationReader->getMethodAnnotation($method, 'DI\Annotation\Inject');
         $parameters = $annotation->getParameters();
 
-        $this->assertInstanceOf('DI\Annotations\Inject', $annotation);
+        $this->assertInstanceOf('DI\Annotation\Inject', $annotation);
         $this->assertCount(2, $parameters);
         $this->assertEquals('foo', $parameters[0]['name']);
         $this->assertEquals('bar', $parameters[1]['name']);
@@ -99,10 +99,10 @@ class InjectTest extends \PHPUnit_Framework_TestCase
     {
         $method = $this->reflectionClass->getMethod('method3');
         /** @var $annotation Inject */
-        $annotation = $this->annotationReader->getMethodAnnotation($method, 'DI\Annotations\Inject');
+        $annotation = $this->annotationReader->getMethodAnnotation($method, 'DI\Annotation\Inject');
         $parameters = $annotation->getParameters();
 
-        $this->assertInstanceOf('DI\Annotations\Inject', $annotation);
+        $this->assertInstanceOf('DI\Annotation\Inject', $annotation);
         $this->assertCount(2, $parameters);
 
         $this->assertEquals('foo', $parameters[0]['name']);
@@ -115,10 +115,10 @@ class InjectTest extends \PHPUnit_Framework_TestCase
     {
         $method = $this->reflectionClass->getMethod('method4');
         /** @var $annotation Inject */
-        $annotation = $this->annotationReader->getMethodAnnotation($method, 'DI\Annotations\Inject');
+        $annotation = $this->annotationReader->getMethodAnnotation($method, 'DI\Annotation\Inject');
         $parameters = $annotation->getParameters();
 
-        $this->assertInstanceOf('DI\Annotations\Inject', $annotation);
+        $this->assertInstanceOf('DI\Annotation\Inject', $annotation);
         $this->assertCount(1, $parameters);
 
         $this->assertArrayHasKey('str2', $parameters);
@@ -129,10 +129,10 @@ class InjectTest extends \PHPUnit_Framework_TestCase
     {
         $method = $this->reflectionClass->getMethod('method5');
         /** @var $annotation Inject */
-        $annotation = $this->annotationReader->getMethodAnnotation($method, 'DI\Annotations\Inject');
+        $annotation = $this->annotationReader->getMethodAnnotation($method, 'DI\Annotation\Inject');
         $parameters = $annotation->getParameters();
 
-        $this->assertInstanceOf('DI\Annotations\Inject', $annotation);
+        $this->assertInstanceOf('DI\Annotation\Inject', $annotation);
         $this->assertCount(1, $parameters);
 
         $this->assertArrayHasKey('str2', $parameters);

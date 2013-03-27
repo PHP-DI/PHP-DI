@@ -10,7 +10,7 @@
 namespace UnitTests\DI\Fixtures;
 
 use Exception;
-use DI\Annotations\Scope;
+use DI\Annotation\Scope;
 
 /**
  * Fixture class for testing Singleton scope

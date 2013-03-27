@@ -16,7 +16,7 @@ PHP-DI uses annotations to identify scopes. Specify the scope by applying the `@
 Singleton is the default scope and is therefore assumed if no `@Scope` annotation was found.
 
 ```php
-use DI\Annotations\Scope;
+use DI\Annotation\Scope;
 
 /**
  * A sample class

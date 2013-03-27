@@ -9,7 +9,7 @@
 
 namespace DI\Definition;
 
-use DI\Annotations\Inject;
+use DI\Annotation\Inject;
 use DI\Definition\Annotation\PhpDocParser;
 use Doctrine\Common\Annotations\AnnotationReader;
 use Doctrine\Common\Annotations\AnnotationRegistry;
@@ -62,7 +62,7 @@ class AnnotationDefinitionReader implements DefinitionReader
         $classDefinition = new ClassDefinition($name);
 
         // Scope annotation
-        $scopeAnnotation = $this->getAnnotationReader()->getClassAnnotation($reflectionClass, 'DI\Annotations\Scope');
+        $scopeAnnotation = $this->getAnnotationReader()->getClassAnnotation($reflectionClass, 'DI\Annotation\Scope');
         if ($scopeAnnotation !== null && $scopeAnnotation->value) {
             $classDefinition->setScope($scopeAnnotation->value);
         }
@@ -97,7 +97,7 @@ class AnnotationDefinitionReader implements DefinitionReader
             }
 
             // Look for @Inject annotation
-            $annotation = $this->getAnnotationReader()->getPropertyAnnotation($property, 'DI\Annotations\Inject');
+            $annotation = $this->getAnnotationReader()->getPropertyAnnotation($property, 'DI\Annotation\Inject');
             if ($annotation !== null) {
                 /** @var $annotation Inject */
 
@@ -122,7 +122,7 @@ class AnnotationDefinitionReader implements DefinitionReader
     {
         // Look for @Inject annotation
         /** @var $annotation Inject|null */
-        $annotation = $this->getAnnotationReader()->getMethodAnnotation($reflectionMethod, 'DI\Annotations\Inject');
+        $annotation = $this->getAnnotationReader()->getMethodAnnotation($reflectionMethod, 'DI\Annotation\Inject');
 
         if ($annotation) {
             // @Inject found, create MethodInjection
@@ -160,7 +160,7 @@ class AnnotationDefinitionReader implements DefinitionReader
     {
         // Look for @Inject annotation
         /** @var $annotation Inject|null */
-        $annotation = $this->getAnnotationReader()->getMethodAnnotation($reflectionMethod, 'DI\Annotations\Inject');
+        $annotation = $this->getAnnotationReader()->getMethodAnnotation($reflectionMethod, 'DI\Annotation\Inject');
 
         if ($annotation) {
             // @Inject found, create MethodInjection
@@ -222,7 +222,7 @@ class AnnotationDefinitionReader implements DefinitionReader
     public function getAnnotationReader()
     {
         if ($this->annotationReader == null) {
-            AnnotationRegistry::registerAutoloadNamespace('DI\Annotations', __DIR__ . '/../../');
+            AnnotationRegistry::registerAutoloadNamespace('DI\Annotation', __DIR__ . '/../../');
             $this->annotationReader = new AnnotationReader();
         }
         return $this->annotationReader;

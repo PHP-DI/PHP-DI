@@ -77,7 +77,7 @@ It can be used over:
 Here is an example of all possible uses of the `@Inject` annotation:
 
 ```php
-use DI\Annotations\Inject;
+use DI\Annotation\Inject;
 
 class Example {
     /**

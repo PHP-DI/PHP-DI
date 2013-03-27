@@ -9,7 +9,7 @@
 
 namespace UnitTests\DI\Definition\Fixtures;
 
-use DI\Annotations\Inject;
+use DI\Annotation\Inject;
 
 class AnnotationFixture
 {
