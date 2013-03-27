@@ -10,7 +10,7 @@
 
 The easiest way is to install PHP-DI with [Composer](http://getcomposer.org/doc/00-intro.md).
 
-First, create a file named `composer.json` in your project root:
+Create a file named `composer.json` in your project root:
 
 ```json
 {
@@ -27,14 +27,13 @@ $ curl -s http://getcomposer.org/installer | php
 $ php composer.phar install
 ```
 
-PHP-DI classes will be autoloaded by Composer if you use Composer's autoloading system (which is highly recommended).
-
 ## Usage
 
-* Read how you can [inject](doc/inject.md)
-* Read how you can [configure](doc/configure.md)
+Read how you can [define injections](doc/definition.md).
 
 ## Zend Framework 1 integration
+
+**Not up to date anymore since V3.0**
 
 Are you using Zend Framework 1? Check out the ZF quickstart with Dependency Injection already configured:
 [zf-quickstart-di](https://github.com/mnapoli/zf-quickstart-di).
