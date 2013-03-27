@@ -9,12 +9,15 @@
 
 namespace DI\Definition;
 
+use Closure;
+use DI\Container;
+
 /**
- * Definition of a value for dependency injection
+ * Definition of a value or class using a closure
  *
  * @author Matthieu Napoli <matthieu@mnapoli.fr>
  */
-class ValueDefinition implements Definition
+class ClosureDefinition implements Definition
 {
 
     /**
@@ -24,18 +27,19 @@ class ValueDefinition implements Definition
     private $name;
 
     /**
-     * @var mixed
+     * Anonymous function
+     * @var Closure
      */
-    private $value;
+    private $closure;
 
     /**
      * @param string $name Entry name
-     * @param mixed $value
+     * @param Closure $closure Anonymous function
      */
-    public function __construct($name, $value)
+    public function __construct($name, Closure $closure)
     {
         $this->name = $name;
-        $this->value = $value;
+        $this->closure = $closure;
     }
 
     /**
@@ -47,11 +51,22 @@ class ValueDefinition implements Definition
     }
 
     /**
+     * @return Closure
+     */
+    public function getClosure()
+    {
+        return $this->closure;
+    }
+
+    /**
+     * Returns the result of the anonymous function
+     * @param Container $container
      * @return mixed
      */
-    public function getValue()
+    public function getValue(Container $container)
     {
-        return $this->value;
+        $closure = $this->closure;
+        return $closure($container);
     }
 
     /**
@@ -59,9 +74,9 @@ class ValueDefinition implements Definition
      */
     public function merge(Definition $definition)
     {
-        if ($definition instanceof ValueDefinition) {
+        if ($definition instanceof ClosureDefinition) {
             // The latter prevails
-            $this->value = $definition->getValue();
+            $this->closure = $definition->getClosure();
         } else {
             throw new DefinitionException("DI definition conflict: there are 2 different definitions for '"
                 . $definition->getName() . "' that are incompatible, they are not of the same type");

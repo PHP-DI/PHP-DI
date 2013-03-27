@@ -203,7 +203,7 @@ class AnnotationDefinitionReader implements DefinitionReader
                 $entryName = $annotationParameter['name'];
             }
 
-            // Look for @param tag
+            // Look for @param tag or PHP type-hinting (only case where we use reflection)
             if ($entryName === null) {
                 $entryName = $this->phpDocParser->getParameterType($reflectionClass, $method, $parameter);
             }

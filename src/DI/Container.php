@@ -12,6 +12,7 @@ namespace DI;
 use ArrayAccess;
 use DI\Definition\AnnotationException;
 use DI\Definition\ClassDefinition;
+use DI\Definition\ClosureDefinition;
 use DI\Definition\DefinitionException;
 use DI\Definition\DefinitionReader;
 use DI\Definition\MethodInjection;
@@ -122,6 +123,12 @@ class Container implements ArrayAccess
         // It's a value
         if ($definition instanceof ValueDefinition) {
             $this->entries[$name] = $definition->getValue();
+            return $this->entries[$name];
+        }
+
+        // It's a closure
+        if ($definition instanceof ClosureDefinition) {
+            $this->entries[$name] = $definition->getValue($this);
             return $this->entries[$name];
         }
 

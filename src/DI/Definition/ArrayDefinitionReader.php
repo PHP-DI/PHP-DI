@@ -9,6 +9,7 @@
 
 namespace DI\Definition;
 
+use Closure;
 use DI\Scope;
 
 /**
@@ -34,6 +35,11 @@ class ArrayDefinitionReader implements DefinitionReader
 
         if (array_key_exists($name, $this->definitions)) {
             $arrayDefinition = $this->definitions[$name];
+
+            // Closure definition
+            if ($arrayDefinition instanceof Closure) {
+                return new ClosureDefinition($name, $arrayDefinition);
+            }
 
             // Value definition
             if (!is_array($arrayDefinition)) {

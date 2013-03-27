@@ -181,4 +181,24 @@ class ArrayDefinitionReaderTest extends \PHPUnit_Framework_TestCase
         $reader->getDefinition('foo');
     }
 
+    public function testClosureDefinition()
+    {
+        $reader = new ArrayDefinitionReader();
+        $reader->addDefinitions(
+            array(
+                'foo' => function() {
+                    return 'bar';
+                },
+            )
+        );
+        $definition = $reader->getDefinition('foo');
+        $this->assertInstanceOf('\\DI\\Definition\\ClosureDefinition', $definition);
+        $this->assertEquals('foo', $definition->getName());
+
+        $container = $this->getMockBuilder('DI\Container')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->assertEquals('bar', $definition->getValue($container));
+    }
+
 }

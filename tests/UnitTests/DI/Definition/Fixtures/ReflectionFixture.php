@@ -7,15 +7,15 @@
  * @license   http://www.opensource.org/licenses/mit-license.php MIT (see the LICENSE file)
  */
 
-namespace UnitTests\DI\Fixtures;
+namespace UnitTests\DI\Definition\Fixtures;
 
 /**
  * Fixture class for the ReflectionDefinitionReader tests
  */
-class ReflectionDefinition
+class ReflectionFixture
 {
 
-    public function __construct(ReflectionDefinition $param1, $param2, $param3 = null)
+    public function __construct(ReflectionFixture $param1, $param2, $param3 = null)
     {
     }
 
