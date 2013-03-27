@@ -10,7 +10,6 @@
 namespace IntegrationTests\DI\Fixtures\PreConstructorInjection;
 
 use DI\Annotations\Inject;
-use Exception;
 
 /**
  * Fixture class

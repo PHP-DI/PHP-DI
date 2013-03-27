@@ -29,25 +29,27 @@ class ValueInjectionTest extends \PHPUnit_Framework_TestCase
      */
     public function testValue()
     {
-        Container::addConfiguration(
+        $container = Container::getInstance();
+        $container->getConfiguration()->addDefinitions(
             array(
-                'entries' => array(
-                    'db.host' => 'localhost'
-                )
+                'db.host' => 'localhost'
             )
         );
-        $class = new ValueInjectionClass();
+        /** @var $class ValueInjectionClass */
+        $class = $container->get('IntegrationTests\DI\Fixtures\ValueInjectionTest\ValueInjectionClass');
         $value = $class->getValue();
         $this->assertEquals('localhost', $value);
     }
 
     /**
-     * @expectedException \DI\NotFoundException
+     * @expectedException \DI\DependencyException
+     * @expectedExceptionMessage Error while injecting value in IntegrationTests\DI\Fixtures\ValueInjectionTest\ValueInjectionClass::value. No bean, value or class found for 'db.host'
      */
     public function testValueException()
     {
-        $class = new ValueInjectionClass();
-        $class->getValue();
+        $container = Container::getInstance();
+        /** @var $class ValueInjectionClass */
+        $container->get('IntegrationTests\DI\Fixtures\ValueInjectionTest\ValueInjectionClass');
     }
 
 }

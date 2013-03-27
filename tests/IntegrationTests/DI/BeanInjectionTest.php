@@ -10,13 +10,11 @@
 namespace IntegrationTests\DI;
 
 use \DI\Container;
-use \IntegrationTests\DI\Fixtures\BeanInjectionTest\Class1;
 use \IntegrationTests\DI\Fixtures\BeanInjectionTest\Class2;
-use \IntegrationTests\DI\Fixtures\BeanInjectionTest\Issue14;
+use IntegrationTests\DI\Fixtures\BeanInjectionTest\Issue14;
 use \IntegrationTests\DI\Fixtures\BeanInjectionTest\LazyInjectionClass;
 use \IntegrationTests\DI\Fixtures\BeanInjectionTest\NamedBean;
 use \IntegrationTests\DI\Fixtures\BeanInjectionTest\NamedInjectionClass;
-use \IntegrationTests\DI\Fixtures\BeanInjectionTest\NamedInjectionWithTypeMappingClass;
 
 /**
  * Test class for bean injection
@@ -28,10 +26,11 @@ class BeanInjectionTest extends \PHPUnit_Framework_TestCase
     {
         // Reset the singleton instance to ensure all tests are independent
         Container::reset();
-        Container::addConfiguration(
+        $container = Container::getInstance();
+        $container->getConfiguration()->addDefinitions(
             array(
-                'aliases' => array(
-                    '\IntegrationTests\DI\Fixtures\BeanInjectionTest\Interface1' => '\IntegrationTests\DI\Fixtures\BeanInjectionTest\Class3'
+                'IntegrationTests\DI\Fixtures\BeanInjectionTest\Interface1' => array(
+                    'class' => 'IntegrationTests\DI\Fixtures\BeanInjectionTest\Class3',
                 )
             )
         );
@@ -40,18 +39,20 @@ class BeanInjectionTest extends \PHPUnit_Framework_TestCase
 
     public function testBasicInjection()
     {
-        $class1 = new Class1();
+        $container = Container::getInstance();
+        $class1 = $container->get('IntegrationTests\DI\Fixtures\BeanInjectionTest\Class1');
         $dependency = $class1->getClass2();
         $this->assertNotNull($dependency);
-        $this->assertInstanceOf('\IntegrationTests\DI\Fixtures\BeanInjectionTest\Class2', $dependency);
+        $this->assertInstanceOf('IntegrationTests\DI\Fixtures\BeanInjectionTest\Class2', $dependency);
     }
 
     public function testInterfaceInjection()
     {
-        $class1 = new Class1();
+        $container = Container::getInstance();
+        $class1 = $container->get('IntegrationTests\DI\Fixtures\BeanInjectionTest\Class1');
         $dependency = $class1->getInterface1();
         $this->assertNotNull($dependency);
-        $this->assertInstanceOf('\IntegrationTests\DI\Fixtures\BeanInjectionTest\Class3', $dependency);
+        $this->assertInstanceOf('IntegrationTests\DI\Fixtures\BeanInjectionTest\Class3', $dependency);
     }
 
     /**
@@ -59,7 +60,9 @@ class BeanInjectionTest extends \PHPUnit_Framework_TestCase
      */
     public function testLazyInjection1()
     {
-        $class = new LazyInjectionClass();
+        $container = Container::getInstance();
+        /** @var $class LazyInjectionClass */
+        $class = $container->get('IntegrationTests\DI\Fixtures\BeanInjectionTest\LazyInjectionClass');
         $dependency = $class->getClass2();
         $this->assertNotNull($dependency);
         $this->assertInstanceOf('\DI\Proxy\Proxy', $dependency);
@@ -69,7 +72,9 @@ class BeanInjectionTest extends \PHPUnit_Framework_TestCase
 
     public function testLazyInjection2()
     {
-        $class = new LazyInjectionClass();
+        $container = Container::getInstance();
+        /** @var $class LazyInjectionClass */
+        $class = $container->get('IntegrationTests\DI\Fixtures\BeanInjectionTest\LazyInjectionClass');
         $this->assertTrue($class->getDependencyAttribute());
     }
 
@@ -87,46 +92,23 @@ class BeanInjectionTest extends \PHPUnit_Framework_TestCase
         $bean2->nameForTest = 'namedDependency2';
         $container->set('namedDependency2', $bean2);
         // Test
-        $class = new NamedInjectionClass();
+        $class = $container->get('IntegrationTests\DI\Fixtures\BeanInjectionTest\NamedInjectionClass');
         $dependency = $class->getDependency();
         $this->assertNotNull($dependency);
-        $this->assertInstanceOf('\IntegrationTests\DI\Fixtures\BeanInjectionTest\NamedBean', $dependency);
+        $this->assertInstanceOf('IntegrationTests\DI\Fixtures\BeanInjectionTest\NamedBean', $dependency);
         $this->assertEquals('namedDependency', $dependency->nameForTest);
         $this->assertSame($bean, $dependency);
         $this->assertNotSame($bean2, $dependency);
     }
 
     /**
-     * @expectedException \DI\NotFoundException
+     * @expectedException \DI\DependencyException
      */
     public function testNamedInjectionNotFound()
     {
         // Exception (bean not defined)
-        new NamedInjectionClass();
-    }
-
-    /**
-     * Test that type mapping also works with named injections
-     */
-    public function testNamedInjectionWithTypeMapping()
-    {
         $container = Container::getInstance();
-        Container::addConfiguration(
-            array(
-                'aliases' => array(
-                    'nonExistentDependencyName' => 'namedDependency'
-                )
-            )
-        );
-        // Configure the named bean
-        $bean = new NamedBean();
-        $container->set('namedDependency', $bean);
-        // Test
-        $class = new NamedInjectionWithTypeMappingClass();
-        $dependency = $class->getDependency();
-        $this->assertNotNull($dependency);
-        $this->assertInstanceOf('\IntegrationTests\DI\Fixtures\BeanInjectionTest\NamedBean', $dependency);
-        $this->assertSame($bean, $dependency);
+        $container->get('IntegrationTests\DI\Fixtures\BeanInjectionTest\NamedInjectionClass');
     }
 
     /**
@@ -135,7 +117,7 @@ class BeanInjectionTest extends \PHPUnit_Framework_TestCase
      */
     public function testIssue14()
     {
-        $object = new \IntegrationTests\DI\Fixtures\BeanInjectionTest\Issue14();
+        $object = new Issue14();
         $class2 = new Class2();
         $object->setClass2($class2);
         Container::getInstance()->injectAll($object);
@@ -148,25 +130,25 @@ class BeanInjectionTest extends \PHPUnit_Framework_TestCase
     public function testIssue1()
     {
         /** @var $object \IntegrationTests\DI\Fixtures\BeanInjectionTest\Issue1 */
-        $object = Container::getInstance()->get('\IntegrationTests\DI\Fixtures\BeanInjectionTest\Issue1');
-        $this->assertInstanceOf('\IntegrationTests\DI\Fixtures\BeanInjectionTest\Class2', $object->class2);
-        $this->assertInstanceOf('\IntegrationTests\DI\Fixtures\BeanInjectionTest\Class2', $object->alias);
-        $this->assertInstanceOf('\IntegrationTests\DI\Fixtures\BeanInjectionTest\Class2', $object->namespaceAlias);
+        $object = Container::getInstance()->get('IntegrationTests\DI\Fixtures\BeanInjectionTest\Issue1');
+        $this->assertInstanceOf('IntegrationTests\DI\Fixtures\BeanInjectionTest\Class2', $object->class2);
+        $this->assertInstanceOf('IntegrationTests\DI\Fixtures\BeanInjectionTest\Class2', $object->alias);
+        $this->assertInstanceOf('IntegrationTests\DI\Fixtures\BeanInjectionTest\Class2', $object->namespaceAlias);
 
         /** @var $object \IntegrationTests\DI\Fixtures\BeanInjectionTest\Issue1\AnotherIssue1 */
-        $object = Container::getInstance()->get('\IntegrationTests\DI\Fixtures\BeanInjectionTest\Issue1\AnotherIssue1');
-        $this->assertInstanceOf('\IntegrationTests\DI\Fixtures\BeanInjectionTest\Class2', $object->dependency);
-        $this->assertInstanceOf('\IntegrationTests\DI\Fixtures\BeanInjectionTest\Issue1\Dependency', $object->sameNamespaceDependency);
+        $object = Container::getInstance()->get('IntegrationTests\DI\Fixtures\BeanInjectionTest\Issue1\AnotherIssue1');
+        $this->assertInstanceOf('IntegrationTests\DI\Fixtures\BeanInjectionTest\Class2', $object->dependency);
+        $this->assertInstanceOf('IntegrationTests\DI\Fixtures\BeanInjectionTest\Issue1\Dependency', $object->sameNamespaceDependency);
     }
 
     /**
      * Check error cases
-     * @expectedException \DI\Annotations\AnnotationException
+     * @expectedException \DI\Definition\AnnotationException
      */
     public function testNotFoundVarAnnotation()
     {
         /** @var $object \IntegrationTests\DI\Fixtures\BeanInjectionTest\NotFoundVarAnnotation */
-        Container::getInstance()->get('\IntegrationTests\DI\Fixtures\BeanInjectionTest\NotFoundVarAnnotation');
+        Container::getInstance()->get('IntegrationTests\DI\Fixtures\BeanInjectionTest\NotFoundVarAnnotation');
     }
 
 }

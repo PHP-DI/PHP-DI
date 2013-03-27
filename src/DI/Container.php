@@ -10,13 +10,16 @@
 namespace DI;
 
 use ArrayAccess;
-use DI\Annotations\AnnotationException;
-use DI\Annotations\Inject;
-use DI\MetadataReader\DefaultMetadataReader;
-use DI\MetadataReader\MetadataReader;
+use DI\Definition\AnnotationException;
+use DI\Definition\ClassDefinition;
+use DI\Definition\ClosureDefinition;
+use DI\Definition\DefinitionException;
+use DI\Definition\DefinitionReader;
+use DI\Definition\MethodInjection;
+use DI\Definition\PropertyInjection;
+use DI\Definition\ValueDefinition;
 use DI\Proxy\Proxy;
 use ReflectionClass;
-use ReflectionMethod;
 use ReflectionProperty;
 
 /**
@@ -36,9 +39,9 @@ class Container implements ArrayAccess
     private $entries = array();
 
     /**
-     * @var MetadataReader
+     * @var Configuration
      */
-    private $metadataReader;
+    private $configuration;
 
     /**
      * Array of classes being instantiated.
@@ -68,36 +71,22 @@ class Container implements ArrayAccess
     }
 
     /**
-     * Applies the configuration given
-     * @param array $configuration See the documentation
-     */
-    public static function addConfiguration(array $configuration)
-    {
-        $container = self::getInstance();
-        // Entries
-        if (isset($configuration['entries'])) {
-            foreach ($configuration['entries'] as $name => $entry) {
-                $container->set($name, $entry);
-            }
-        }
-        // Aliases
-        if (isset($configuration['aliases'])) {
-            foreach ($configuration['aliases'] as $from => $to) {
-                $container->set(
-                    $from,
-                    function (Container $c) use ($to) {
-                        return $c->get($to);
-                    }
-                );
-            }
-        }
-    }
-
-    /**
      * Protected constructor because of singleton
      */
     protected function __construct()
     {
+        // Default configuration
+        $this->configuration = new Configuration();
+        $this->configuration->useReflection(true);
+        $this->configuration->useAnnotations(true);
+    }
+
+    /**
+     * @return Configuration
+     */
+    public function getConfiguration()
+    {
+        return $this->configuration;
     }
 
     /**
@@ -116,6 +105,7 @@ class Container implements ArrayAccess
         if (!is_string($name)) {
             throw new \InvalidArgumentException("The name parameter must be of type string");
         }
+
         // Try to find the entry in the map
         if (array_key_exists($name, $this->entries)) {
             $entry = $this->entries[$name];
@@ -126,22 +116,41 @@ class Container implements ArrayAccess
             }
             return $entry;
         }
-        // Entry not found, use the factory if it's a class name
-        if (class_exists($name)) {
-            // Return a proxy class
-            if ($useProxy) {
-                return $this->getProxy($name);
-            }
 
-            $scope = $this->getMetadataReader()->getClassMetadata($name)->getScope();
-            if ($scope == Scope::PROTOTYPE()) {
-                return $this->getNewInstance($name);
-            }
+        // Entry not loaded, use the definitions
+        $definition = $this->getDefinitionReader()->getDefinition($name);
 
-            // If it's a singleton, store the newly created instance
-            $this->entries[$name] = $this->getNewInstance($name);
+        // It's a value
+        if ($definition instanceof ValueDefinition) {
+            $this->entries[$name] = $definition->getValue();
             return $this->entries[$name];
         }
+
+        // It's a closure
+        if ($definition instanceof ClosureDefinition) {
+            $this->entries[$name] = $definition->getValue($this);
+            return $this->entries[$name];
+        }
+
+        // It's a class
+        if ($definition instanceof ClassDefinition) {
+            // Return a proxy class
+            // TODO refactor
+            if ($useProxy) {
+                return $this->getProxy($definition->getClassName());
+            }
+
+            // Create the instance
+            $instance = $this->getNewInstance($definition);
+
+            if ($definition->getScope() == Scope::SINGLETON()) {
+                // If it's a singleton, store the newly created instance
+                $this->entries[$name] = $instance;
+            }
+
+            return $instance;
+        }
+
         throw new NotFoundException("No bean, value or class found for '$name'");
     }
 
@@ -160,8 +169,10 @@ class Container implements ArrayAccess
      * Inject the dependencies of the object (marked with the Inject annotation)
      *
      * @param mixed $object Object in which to resolve dependencies
-     * @throws Annotations\AnnotationException
+     * @throws Definition\AnnotationException
      * @throws DependencyException
+     * @todo Make private
+     * @deprecated (until private)
      */
     public function injectAll($object)
     {
@@ -172,45 +183,31 @@ class Container implements ArrayAccess
             throw new DependencyException("object instance expected");
         }
 
-        // Get the class metadata
-        $classMetadata = $this->getMetadataReader()->getClassMetadata(get_class($object));
+        // Get the class definition
+        /** @var $classDefinition ClassDefinition */
+        $classDefinition = $this->getDefinitionReader()->getDefinition(get_class($object));
+
+        if ($classDefinition === null) {
+            return;
+        }
 
         // Process annotations on methods
-        foreach ($classMetadata->getAllMethodAnnotations() as $methodName => $annotation) {
-            // Ignore constructor
-            if ($methodName === '__construct') {
-                continue;
-            }
-            if ($annotation instanceof Inject) {
-                $this->injectMethod($object, $methodName, $annotation);
-            }
+        foreach ($classDefinition->getMethodInjections() as $methodInjection) {
+            $this->injectMethod($object, $methodInjection);
         }
 
         // Process annotations on properties
-        foreach ($classMetadata->getAllPropertyAnnotations() as $propertyName => $annotation) {
-            if ($annotation instanceof Inject) {
-                $this->injectProperty($object, $propertyName, $annotation);
-            }
+        foreach ($classDefinition->getPropertyInjections() as $propertyInjection) {
+            $this->injectProperty($object, $propertyInjection);
         }
     }
 
     /**
-     * @return MetadataReader The metadata reader
+     * @return DefinitionReader The definition reader
      */
-    public function getMetadataReader()
+    public function getDefinitionReader()
     {
-        if ($this->metadataReader == null) {
-            $this->metadataReader = new DefaultMetadataReader();
-        }
-        return $this->metadataReader;
-    }
-
-    /**
-     * @param MetadataReader $metadataReader The metadata reader
-     */
-    public function setMetadataReader(MetadataReader $metadataReader)
-    {
-        $this->metadataReader = $metadataReader;
+        return $this->configuration->getDefinitionReader();
     }
 
     /**
@@ -285,35 +282,43 @@ class Container implements ArrayAccess
     /**
      * Create a new instance of the class
      *
-     * @param string $classname Class to instantiate
+     * @param ClassDefinition $classDefinition
      * @throws DependencyException
      * @throws \Exception
      * @return object the instance
      */
-    private function getNewInstance($classname)
+    private function getNewInstance(ClassDefinition $classDefinition)
     {
+        $classname = $classDefinition->getClassName();
+
         if (isset($this->classesBeingInstantiated[$classname])) {
-            throw new DependencyException("Circular dependency detected while trying to instantiate class '" . $classname . "'.");
+            throw new DependencyException("Circular dependency detected while trying to instantiate class '$classname'");
         }
         $this->classesBeingInstantiated[$classname] = true;
 
         try {
             $classReflection = new ReflectionClass($classname);
-            $constructorReflection = $classReflection->getConstructor();
+
+            if (!$classReflection->isInstantiable()) {
+                throw new DependencyException($classReflection->name . " is not instantiable");
+            }
+
             $instance = $this->newInstanceWithoutConstructor($classReflection);
 
             // Inject the dependencies
-            $this->injectAll($instance);
-
-            // Call the constructor
-            if ($constructorReflection) {
-                if ($constructorReflection->getNumberOfRequiredParameters() > 0) {
-                    // Constructor injection
-                    $this->injectConstructor($instance, $constructorReflection);
-                } else {
-                    $constructorReflection->invoke($instance);
-                }
+            // TODO inject properties, constructor, and then methods
+            try {
+                $this->injectAll($instance);
+            } catch (DependencyException $e) {
+                throw $e;
+            } catch (DefinitionException $e) {
+                throw $e;
+            } catch (\Exception $e) {
+                throw new DependencyException("Error while injecting dependencies into $classname: " . $e->getMessage(), 0, $e);
             }
+
+            // Constructor injection
+            $this->injectConstructor($instance, $classReflection, $classDefinition->getConstructorInjection());
         } catch (\Exception $exception) {
             unset($this->classesBeingInstantiated[$classname]);
             throw $exception;
@@ -348,62 +353,98 @@ class Container implements ArrayAccess
 
     /**
      * Inject dependencies through the constructor
-     * @param mixed            $object
-     * @param ReflectionMethod $constructorReflection
+     * @param mixed                $object
+     * @param ReflectionClass      $classReflection
+     * @param MethodInjection|null $constructorInjection
      * @throws AnnotationException
      */
-    private function injectConstructor($object, ReflectionMethod $constructorReflection)
+    private function injectConstructor($object, ReflectionClass $classReflection, MethodInjection $constructorInjection = null)
     {
-        $args = array();
-        foreach ($constructorReflection->getParameters() as $parameter) {
-            $parameterClass = $parameter->getClass();
-            if ($parameterClass === null) {
-                throw new AnnotationException("The parameter '{$parameter->name}' of the constructor of '" . get_class($object)
-                    . "' has no type: impossible to deduce its type");
-            }
-            $args[] = $this->get($parameterClass->name);
+        $constructorReflection = $classReflection->getConstructor();
+
+        // No constructor
+        if (! $constructorReflection) {
+            return;
         }
+
+        // Check the definition and the class parameter number match
+        $nbRequiredParameters = $constructorReflection->getNumberOfRequiredParameters();
+        $parameterInjections = $constructorInjection ? $constructorInjection->getParameterInjections() : array();
+        if (count($parameterInjections) < $nbRequiredParameters) {
+            throw new DefinitionException("The constructor of {$classReflection->name} takes $nbRequiredParameters parameters, "
+                . count($parameterInjections) . " defined or guessed");
+        }
+
+        if (count($parameterInjections) === 0) {
+            $constructorReflection->invoke($object);
+            return;
+        }
+
+        $args = array();
+        foreach ($parameterInjections as $parameterInjection) {
+            $entryName = $parameterInjection->getEntryName();
+            if ($entryName === null) {
+                throw new DefinitionException("The parameter '" . $parameterInjection->getParameterName()
+                    . "' of the constructor of '{$classReflection->name}' has no type defined or guessable");
+            }
+
+            $args[] = $this->get($entryName);
+        }
+
         $constructorReflection->invokeArgs($object, $args);
     }
 
     /**
      * Resolve the Inject annotation on a method
-     * @param mixed  $object Object to inject dependencies to
-     * @param string $methodName Name of the method annotated
-     * @param Inject $annotation Inject annotation
+     * @param mixed           $object Object to inject dependencies to
+     * @param MethodInjection $methodInjection
      * @throws DependencyException
      * @throws NotFoundException
      */
-    private function injectMethod($object, $methodName, Inject $annotation)
+    private function injectMethod($object, MethodInjection $methodInjection)
     {
-        $classname = get_class($object);
-        // Get the dependency
-        try {
-            $value = $this->get($annotation->name, $annotation->lazy);
-        } catch (NotFoundException $e) {
-            // Better exception message
-            throw new NotFoundException("@Inject was found on $classname::$methodName(...)"
-                . " but no bean or value '$annotation->name' was found");
-        } catch (DependencyException $e) {
-            throw $e;
-        } catch (\Exception $e) {
-            throw new DependencyException("Error while injecting {$annotation->name} to $classname::$methodName(...). "
-                . $e->getMessage(), 0, $e);
+        $methodName = $methodInjection->getMethodName();
+        $classReflection = new ReflectionClass($object);
+        $methodReflection = $classReflection->getMethod($methodName);
+
+        // Check the definition and the class parameter number match
+        $nbRequiredParameters = $methodReflection->getNumberOfRequiredParameters();
+        $parameterInjections = $methodInjection ? $methodInjection->getParameterInjections() : array();
+        if (count($parameterInjections) < $nbRequiredParameters) {
+            throw new DefinitionException("{$classReflection->name}::$methodName takes $nbRequiredParameters parameters, "
+                . count($parameterInjections) . " defined or guessed");
         }
-        // Inject the dependency by calling the method
-        call_user_func_array(array($object, $methodName), array($value));
+
+        // No parameters
+        if (count($parameterInjections) === 0) {
+            $methodReflection->invoke($object);
+            return;
+        }
+
+        $args = array();
+        foreach ($parameterInjections as $parameterInjection) {
+            $entryName = $parameterInjection->getEntryName();
+            if ($entryName === null) {
+                throw new DefinitionException("The parameter '" . $parameterInjection->getParameterName()
+                    . "' of {$classReflection->name}::$methodName has no type defined or guessable");
+            }
+
+            $args[] = $this->get($entryName);
+        }
+
+        $methodReflection->invokeArgs($object, $args);
     }
 
     /**
      * Resolve the Inject annotation on a property
-     * @param mixed  $object Object to inject dependencies to
-     * @param string $propertyName Name of the property annotated
-     * @param Inject $annotation Inject annotation
+     * @param mixed             $object Object to inject dependencies to
+     * @param PropertyInjection $propertyInjection Property injection definition
      * @throws DependencyException
      * @throws NotFoundException
      */
-    private function injectProperty($object, $propertyName, Inject $annotation)
+    private function injectProperty($object, PropertyInjection $propertyInjection)
     {
+        $propertyName = $propertyInjection->getPropertyName();
         $property = new ReflectionProperty(get_class($object), $propertyName);
         // Allow access to protected and private properties
         $property->setAccessible(true);
@@ -411,19 +452,20 @@ class Container implements ArrayAccess
         if ($property->getValue($object) !== null) {
             return;
         }
+
+        $entryName = $propertyInjection->getEntryName();
+        if ($entryName === null) {
+            throw new DefinitionException(get_class($object) . "::$propertyName has no type defined or guessable");
+        }
+
         // Get the dependency
         try {
-            $value = $this->get($annotation->name, $annotation->lazy);
-        } catch (NotFoundException $e) {
-            // Better exception message
-            throw new NotFoundException("@Inject was found on " . get_class($object) . "::" . $property->getName()
-                . " but no bean or value '$annotation->name' was found");
+            $value = $this->get($propertyInjection->getEntryName(), $propertyInjection->isLazy());
         } catch (DependencyException $e) {
             throw $e;
         } catch (\Exception $e) {
-            throw new DependencyException("Error while injecting $annotation->name in "
-                . get_class($object) . "::" . $property->getName() . ". "
-                . $e->getMessage(), 0, $e);
+            throw new DependencyException("Error while injecting $propertyName in "
+                . get_class($object) . "::" . $property->name . ". " . $e->getMessage(), 0, $e);
         }
         // Inject the dependency
         $property->setValue($object, $value);

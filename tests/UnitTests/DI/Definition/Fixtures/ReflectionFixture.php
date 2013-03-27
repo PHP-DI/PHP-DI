@@ -7,21 +7,15 @@
  * @license   http://www.opensource.org/licenses/mit-license.php MIT (see the LICENSE file)
  */
 
-namespace IntegrationTests\DI\Fixtures\SetterInjectionTest;
-
-use DI\Annotations\Inject;
+namespace UnitTests\DI\Definition\Fixtures;
 
 /**
- * Fixture class
+ * Fixture class for the ReflectionDefinitionReader tests
  */
-class Buggy3
+class ReflectionFixture
 {
 
-    /**
-     * @Inject({"nonExistentBean"})
-     * @param $dependency
-     */
-    public function setDependency($dependency)
+    public function __construct(ReflectionFixture $param1, $param2, $param3 = null)
     {
     }
 

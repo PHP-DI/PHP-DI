@@ -24,14 +24,6 @@ abstract class BaseClass
     protected $dependency;
 
     /**
-     * Inject the dependencies
-     */
-    public function __construct()
-    {
-        \DI\Container::getInstance()->injectAll($this);
-    }
-
-    /**
      * @return Dependency
      */
     public function getDependency()

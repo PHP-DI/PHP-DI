@@ -24,16 +24,16 @@ class InheritanceTest extends \PHPUnit_Framework_TestCase
         Container::reset();
     }
 
-
     /**
      * Injection in a base class
      */
     public function testInjectionExtends()
     {
-        $instance = new SubClass();
+        /** @var $object \IntegrationTests\DI\Fixtures\InheritanceTest\SubClass */
+        $instance = Container::getInstance()->get('IntegrationTests\DI\Fixtures\InheritanceTest\SubClass');
         $dependency = $instance->getDependency();
         $this->assertNotNull($dependency);
-        $this->assertInstanceOf('\IntegrationTests\DI\Fixtures\InheritanceTest\Dependency', $dependency);
+        $this->assertInstanceOf('IntegrationTests\DI\Fixtures\InheritanceTest\Dependency', $dependency);
     }
 
 }
