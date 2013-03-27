@@ -2,6 +2,8 @@
 
 ## 3.0
 
+Major compatibility breaks with 2.x.
+
 * Setter injection
 * Constructor injection
 * Scopes: singleton (share the same instance of the class) or prototype (create a new instance each time it is fetched). Defined at class level.
@@ -11,6 +13,7 @@
     * Annotations: @Inject, @Scope
     * PHP array
 * As a consequence, annotations are not mandatory anymore, all functionalities can be used with or without annotations.
+* Renamed `DI\Annotations\Inject` to `DI\Annotation\Inject`
 * Code now follows PSR1 and PSR2 coding styles
 
 ## 2.1
