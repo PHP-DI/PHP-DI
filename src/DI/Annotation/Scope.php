@@ -13,6 +13,8 @@ namespace DI\Annotation;
  * "Scope" annotation
  * @Annotation
  * @Target("CLASS")
+ *
+ * @author Domenic Muskulus <domenic@muskulus.eu>
  */
 final class Scope
 {
