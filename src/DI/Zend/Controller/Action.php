@@ -13,6 +13,8 @@ use DI\Container;
 
 /**
  * Zend Controller base class automatically injecting dependencies
+ *
+ * @author Matthieu Napoli <matthieu@mnapoli.fr>
  */
 abstract class Action extends \Zend_Controller_Action
 {

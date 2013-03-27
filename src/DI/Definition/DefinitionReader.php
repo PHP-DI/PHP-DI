@@ -11,6 +11,8 @@ namespace DI\Definition;
 
 /**
  * Reads DI class metadata
+ *
+ * @author Matthieu Napoli <matthieu@mnapoli.fr>
  */
 interface DefinitionReader
 {

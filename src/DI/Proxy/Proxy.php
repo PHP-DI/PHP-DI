@@ -12,7 +12,7 @@ namespace DI\Proxy;
 /**
  * Proxy class
  *
- * @author mnapoli
+ * @author Matthieu Napoli <matthieu@mnapoli.fr>
  */
 class Proxy
 {

@@ -13,6 +13,8 @@ namespace DI\Annotations;
  * "Inject" annotation
  * @Annotation
  * @Target({"METHOD","PROPERTY"})
+ *
+ * @author Matthieu Napoli <matthieu@mnapoli.fr>
  */
 final class Inject
 {

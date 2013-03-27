@@ -15,7 +15,7 @@ use ReflectionParameter;
 /**
  * Reads DI class definitions using only reflection
  *
- * Will guiss injection only on class constructors
+ * Will guess injection only on class constructors
  *
  * @author Matthieu Napoli <matthieu@mnapoli.fr>
  */

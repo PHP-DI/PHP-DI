@@ -26,6 +26,8 @@ use ReflectionProperty;
  * Container
  *
  * This class uses the resettable Singleton pattern (resettable for the tests).
+ *
+ * @author Matthieu Napoli <matthieu@mnapoli.fr>
  */
 class Container implements ArrayAccess
 {

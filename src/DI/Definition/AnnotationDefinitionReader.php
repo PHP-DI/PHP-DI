@@ -22,6 +22,8 @@ use ReflectionMethod;
  * Reads DI class definitions in annotations such as @ Inject and @ var annotations
  *
  * Uses Reflection, Doctrine's Annotations and regex docblock parsing
+ *
+ * @author Matthieu Napoli <matthieu@mnapoli.fr>
  */
 class AnnotationDefinitionReader implements DefinitionReader
 {

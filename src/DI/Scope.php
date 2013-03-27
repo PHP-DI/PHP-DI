@@ -13,6 +13,8 @@ use MyCLabs\Enum\Enum;
 
 /**
  * Scope enum
+ *
+ * @author Matthieu Napoli <matthieu@mnapoli.fr>
  */
 class Scope extends Enum
 {

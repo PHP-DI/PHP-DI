@@ -13,6 +13,8 @@ use Doctrine\Common\Cache\Cache;
 
 /**
  * Caches the results of another Definition Reader
+ *
+ * @author Matthieu Napoli <matthieu@mnapoli.fr>
  */
 class CachedDefinitionReader implements DefinitionReader
 {
