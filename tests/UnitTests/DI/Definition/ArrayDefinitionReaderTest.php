@@ -128,7 +128,7 @@ class ArrayDefinitionReaderTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($property2->isLazy());
     }
 
-    public function testMethodDefinition()
+    public function testMethodDefinition1()
     {
         $reader = new ArrayDefinitionReader();
         $reader->addDefinitions(
@@ -162,6 +162,64 @@ class ArrayDefinitionReaderTest extends \PHPUnit_Framework_TestCase
         $parameter2 = $parameters['param2'];
         $this->assertEquals('param2', $parameter2->getParameterName());
         $this->assertEquals('Foo2', $parameter2->getEntryName());
+    }
+
+    public function testMethodDefinition2()
+    {
+        $reader = new ArrayDefinitionReader();
+        $reader->addDefinitions(
+            array(
+                 'foo' => array(
+                     'methods' => array(
+                         'set1' => array('Foo1', 'Foo2'),
+                     ),
+                 ),
+            )
+        );
+        /** @var $definition ClassDefinition */
+        $definition = $reader->getDefinition('foo');
+        $methodInjections = $definition->getMethodInjections();
+        $this->assertCount(1, $methodInjections);
+
+        $method1 = $methodInjections['set1'];
+        $this->assertEquals('set1', $method1->getMethodName());
+
+        $parameters = $method1->getParameterInjections();
+
+        $parameter1 = $parameters[0];
+        $this->assertEquals(0, $parameter1->getParameterName());
+        $this->assertEquals('Foo1', $parameter1->getEntryName());
+
+        $parameter2 = $parameters[1];
+        $this->assertEquals(1, $parameter2->getParameterName());
+        $this->assertEquals('Foo2', $parameter2->getEntryName());
+    }
+
+    public function testMethodDefinition3()
+    {
+        $reader = new ArrayDefinitionReader();
+        $reader->addDefinitions(
+            array(
+                 'foo' => array(
+                     'methods' => array(
+                         'set1' => 'Foo1',
+                     ),
+                 ),
+            )
+        );
+        /** @var $definition ClassDefinition */
+        $definition = $reader->getDefinition('foo');
+        $methodInjections = $definition->getMethodInjections();
+        $this->assertCount(1, $methodInjections);
+
+        $method1 = $methodInjections['set1'];
+        $this->assertEquals('set1', $method1->getMethodName());
+
+        $parameters = $method1->getParameterInjections();
+
+        $parameter1 = $parameters[0];
+        $this->assertEquals(0, $parameter1->getParameterName());
+        $this->assertEquals('Foo1', $parameter1->getEntryName());
     }
 
     /**

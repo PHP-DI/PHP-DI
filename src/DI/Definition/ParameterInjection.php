@@ -18,8 +18,8 @@ class ParameterInjection
 {
 
     /**
-     * Parameter name
-     * @var string
+     * Parameter name or index
+     * @var string|int
      */
     private $parameterName;
 
@@ -30,16 +30,16 @@ class ParameterInjection
     private $entryName;
 
     /**
-     * @param string      $parameterName Parameter name
+     * @param string|int  $parameterName Parameter name or index
      * @param string|null $entryName Name of the entry that should be injected through the parameter
      */
     public function __construct($parameterName, $entryName = null) {
-        $this->parameterName = (string)$parameterName;
+        $this->parameterName = $parameterName;
         $this->entryName = $entryName;
     }
 
     /**
-     * @return string Parameter name
+     * @return string|int Parameter name or index
      */
     public function getParameterName() {
         return $this->parameterName;

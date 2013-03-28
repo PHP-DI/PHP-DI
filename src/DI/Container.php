@@ -286,7 +286,7 @@ class Container implements ArrayAccess
      *
      * @param ClassDefinition $classDefinition
      * @throws DependencyException
-     * @throws \Exception
+     * @throws DefinitionException
      * @return object the instance
      */
     private function getNewInstance(ClassDefinition $classDefinition)
@@ -358,7 +358,7 @@ class Container implements ArrayAccess
      * @param mixed                $object
      * @param ReflectionClass      $classReflection
      * @param MethodInjection|null $constructorInjection
-     * @throws AnnotationException
+     * @throws DefinitionException
      */
     private function injectConstructor($object, ReflectionClass $classReflection, MethodInjection $constructorInjection = null)
     {
@@ -401,7 +401,7 @@ class Container implements ArrayAccess
      * @param mixed           $object Object to inject dependencies to
      * @param MethodInjection $methodInjection
      * @throws DependencyException
-     * @throws NotFoundException
+     * @throws DefinitionException
      */
     private function injectMethod($object, MethodInjection $methodInjection)
     {
@@ -439,10 +439,10 @@ class Container implements ArrayAccess
 
     /**
      * Resolve the Inject annotation on a property
-     * @param mixed             $object Object to inject dependencies to
+     * @param mixed             $object            Object to inject dependencies to
      * @param PropertyInjection $propertyInjection Property injection definition
      * @throws DependencyException
-     * @throws NotFoundException
+     * @throws DefinitionException
      */
     private function injectProperty($object, PropertyInjection $propertyInjection)
     {

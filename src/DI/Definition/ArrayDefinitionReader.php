@@ -151,14 +151,14 @@ class ArrayDefinitionReader implements DefinitionReader
             }
 
             foreach ($arrayDefinition['methods'] as $methodName => $arrayMethodDefinition) {
-                if (!is_array($arrayMethodDefinition)) {
-                    throw new DefinitionException("Key '$methodName' in 'methods' for class " . $definition->getName()
-                        . " should be an array");
-                }
-
                 $methodInjection = new MethodInjection($methodName);
-                // Parameters
-                $this->readParameterInjections($definition, $methodInjection, $arrayMethodDefinition);
+
+                if (is_array($arrayMethodDefinition)) {
+                    $this->readParameterInjections($definition, $methodInjection, $arrayMethodDefinition);
+                } else {
+                    // String: shortcut for 1 parameter method
+                    $methodInjection->addParameterInjection(new ParameterInjection(0, $arrayMethodDefinition));
+                }
 
                 $definition->addMethodInjection($methodInjection);
             }
