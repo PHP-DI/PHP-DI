@@ -145,9 +145,14 @@ class ArrayDefinitionReader implements DefinitionReader
     private function readMethodInjections(ClassDefinition $definition, array $arrayDefinition)
     {
         if (array_key_exists('methods', $arrayDefinition)) {
+            if (!is_array($arrayDefinition['methods'])) {
+                throw new DefinitionException("Key 'methods' for class " . $definition->getName()
+                                                  . " should be an array");
+            }
+
             foreach ($arrayDefinition['methods'] as $methodName => $arrayMethodDefinition) {
                 if (!is_array($arrayMethodDefinition)) {
-                    throw new DefinitionException("Key 'methods' for class " . $definition->getName()
+                    throw new DefinitionException("Key '$methodName' in 'methods' for class " . $definition->getName()
                         . " should be an array");
                 }
 
