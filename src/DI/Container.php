@@ -73,11 +73,10 @@ class Container implements ArrayAccess
     }
 
     /**
-     * Protected constructor because of singleton
+     * Constructor creates a default configuration
      */
-    protected function __construct()
+    public function __construct()
     {
-        // Default configuration
         $this->configuration = new Configuration();
         $this->configuration->useReflection(true);
         $this->configuration->useAnnotations(true);
