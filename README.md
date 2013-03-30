@@ -1,36 +1,87 @@
-The aim of PHP-DI is to make [*Dependency Injection*](http://en.wikipedia.org/wiki/Dependency_injection)
-as simple as possible with PHP.
-
-Unlike Flow3, Zend\DI, Symfony Service Container or Pimple (though they are of a great inspiration), PHP-DI:
-
-* can be used by a monkey
-* is non-intrusive and compatible with any framework
-* is not limited to Services (anything can be injected)
-* uses annotations for code-readability and ease of use
-* can find and instantiate dependencies automatically without configuration
+PHP-DI is a Container that makes [*Dependency Injection*](http://en.wikipedia.org/wiki/Dependency_injection)
+as practical as possible.
 
 
 ## Features
 
-* Simple, yet full-featured
-* Uses **annotations** for simplicity, readability and auto-completion in your IDE
-* Automatic dependency resolution: you don't have to declare all your beans in configuration files
-* Optional **lazy-loading** of dependencies
-* **Cacheable** for optimal performances
-* Class aliases (interface-implementation mapping)
-* Easy installation with [**Composer**](http://getcomposer.org/doc/00-intro.md)
-and easy integration with **Zend Framework** (see [Getting started](doc/getting-started.md))
-* **Non-intrusive**: you can add PHP-DI into an existing project and use it *without impacting existing code*
+* Simple to start with
+* Can be configured with **Reflection**, **PHP code** or **annotations** (each one is optional)
+* You write the smallest configuration possible (thanks to reflection)
+* **Performances**: supports a large number of Caches
+* Can be used in an existing code base
+* Offers lazy injection: lazy-loading of dependencies
+* Integrates well into existing code
 
 
-## What is dependency injection, and why use it?
+## What is dependency injection, and why use PHP-DI
 
 Read the [introduction to dependency injection with an example](doc/example.md).
 
+Dependency injection and DI containers are separate notions, and one should use of a container only if it makes things more practical (which is not always the case).
 
-## Short example
+PHP-DI is about this: make dependency injection more practical.
 
-If you use dependency injection through your constructors:
+### How classic PHP code works
+
+Here is how a code **not** using DI will roughly work:
+
+* Application needs Foo (e.g. a controller), so:
+* Application creates Foo
+* Application calls Foo
+    * Foo needs Bar (e.g. a service), so:
+    * Foo creates Bar
+    * Foo calls Bar
+        * Bar needs Bim (a service, a repository, …), so:
+        * Bar creates Bim
+        * Bar does something
+
+### How Dependency Injection works
+
+Here is how a code using DI will roughly work:
+
+* Application needs Foo, which needs Bar, which needs Bim, so:
+* Application creates Bim
+* Application creates Bar and gives it Bim
+* Application creates Foo and gives it Bar
+* Application calls Foo
+    * Foo calls Bar
+        * Bar does something
+
+This is the pattern of **Inversion of Control**. The control of the dependencies is **inversed** from one being called to the one calling.
+
+The main advantage: the one at the end of the caller chain is always **you**. So you can control every dependencies: you have a complete control on how your application works. You can replace a dependency by another (one you made for example).
+
+For example that wouldn't be so easy if Library X uses Logger Y and you have to change the code of Library X to make it use your logger Z.
+
+### How code using PHP-DI works
+
+Now how does a code using PHP-DI works:
+
+* Application needs Foo so:
+* Application gets Foo from the Container
+* Application calls Foo
+    * Foo calls Bar
+        * Bar does something
+
+If we don't skip how PHP-DI works:
+
+* Application needs Foo so:
+* Application gets Foo from the Container, so:
+    * Container creates Bim
+    * Container creates Bar and gives it Bim
+    * Container creates Foo and gives it Bar
+* Application calls Foo
+    * Foo calls Bar
+        * Bar does something
+
+In short, PHP-DI takes away all the work of creating and injecting dependencies.
+
+
+## Usage
+
+### Reflection
+
+PHP-DI can use [PHP Reflection](http://fr.php.net/manual/fr/book.reflection.php) to understand what parameters a constructor needs:
 
 ```php
 class Foo {
@@ -42,18 +93,11 @@ class Foo {
 }
 ```
 
-PHP-DI will help you get an instance of `Foo`: it will create an instance of `Bar` and feed it through the constructor.
+**No configuration needed!**
 
-```php
-$foo = DI\Container::get('Foo');
-```
+### Annotations
 
-**No configuration needed**. That's as easy as possible!
-
-
-## Practical annotations
-
-PHP-DI provides useful annotations for Setter and Property injection:
+You can also use annotations to define injections, here is a short example:
 
 ```php
 use DI\Annotation\Inject;
@@ -63,74 +107,87 @@ class Foo {
      * @Inject
      * @var Bar
      */
-    private $bar;
+    protected $bar;
 
-    public function __construct() {
-    	// The dependency is injected
-        return $this->bar->sayHello();
+    /**
+     * @Inject
+     */
+    public function setBaz(Baz $bin) {
+    }
+
+    /**
+     * @Inject({"dbHost", "dbPort"})
+     */
+    public function setValues($param1, $param2) {
     }
 }
 ```
 
-In this example, a instance of the `Bar` class is created and injected in the `Foo` class. **No configuration needed**.
+See also the [complete documentation about annotations](doc/configure.md).
 
-*Note*: Of course, in the spirit of Dependency Injection, `Bar` will rather be an interface, and you will configure
-which implementation will be injected through [configuration](doc/definition.md).
+### PHP configuration
+
+You can define injections with a PHP array too:
+
+```php
+<?php
+return [
+
+    // Values (not classes)
+    'dbHost' => 'localhost',
+    'dbPort' => 5000,
+
+    'Foo' => [
+        'properties' => [
+            'bar' => 'Bar',
+        ],
+        'methods' => [
+            'setBaz' => 'Baz',
+            'setValues' => ['dbHost', 'dbPort'],
+        ],
+    ],
+
+    'My\Class' => function(Container $c) {
+        return new My\Class($c['dbHost']);
+    ],
+
+];
+```
+
+See also the [complete documentation about array configuration](doc/configure.md).
+
+### Getting started
+
+Once you have defined your dependencies, it's time to get an object from the container:
+
+```php
+$foo = $container->get('Foo');
+
+// or
+$foo = $container['Foo'];
+```
+
+But wait! Do not use this everywhere because this makes your code **dependent on the container**. This is an antipattern to dependency injection (it is like the service locator pattern: dependency *fetching* rather than *injection*).
+
+So PHP-DI container has to be called at the root of your application (in your Front Controller for example). To quote the Symfony docs about Dependency Injection:
+
+> You will need to get [an object] from the container at some point but this should be as few times as possible at the entry point to your application.
+
+For this reason, we provide integration with web frameworks (work in progress). Currently we offer integration with Zend Framework 1.
 
 
 ## More
 
-Do you want more? PHP-DI comes on top of a classic container:
-
-```php
-$container = DI\Container::getInstance();
-
-$container['dbAdapter'] = $myDbAdapter;
-// or
-$container->set('dbAdapter', $myDbAdapter);
-
-$myDbAdapter = $container['dbAdapter'];
-// or
-$myDbAdapter = $container->get('dbAdapter');
-```
-
-## Even more
-
-A more complete version of the previous example:
-
-```php
-$container = DI\Container::getInstance();
-$container['db.params'] = [
-	'dbname'   => 'foo',
-	'user'     => 'root',
-	'password' => '',
-];
-$container['dbAdapter'] = function(Container $c) {
-	return new MyDbAdapter($c['db.params']);
-};
-```
-
-and later:
-
-```php
-class Foo {
-    /**
-     * @Inject("dbAdapter")
-     */
-    private $dbAdapter;
-
-    public function foo() {
-        return $this->dbAdapter->query("");
-    }
-}
-```
+There is a [complete documentation](doc/) waiting for you.
 
 
 ## Contribute
 
 [![Build Status](https://secure.travis-ci.org/mnapoli/PHP-DI.png)](http://travis-ci.org/mnapoli/PHP-DI)
 
+Contributions to code and docs are welcomed!
+
 * PHP-DI sources are [on Github](https://github.com/mnapoli/PHP-DI).
 * Read the doc: [Contributing](CONTRIBUTING.md)
 
-PHP-DI is license under the MIT License.
+PHP-DI under the MIT License.

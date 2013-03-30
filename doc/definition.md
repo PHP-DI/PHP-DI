@@ -154,11 +154,10 @@ return [
     'db.host' => 'localhost',
     'db.port' => 5000,
 
-    // Direct mapping like that is not needed, PHP-DI automatically finds your class:
-    //'SomeClass' => new SomeClass(),
+    // Direct mapping (not needed if you enabled Reflection)
+    'SomeClass' => 'SomeClass',
 
-    // Direct mapping
-    // not recommended: will instantiate the class even when not used, prevents caching
+    // This is not recommended: will instantiate the class even when not used, prevents caching
     'SomeOtherClass' => new SomeOtherClass(1, "hello"),
 
     // Defines an instance of My\Class
