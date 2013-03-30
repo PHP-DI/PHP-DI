@@ -11,6 +11,9 @@ namespace DI\Annotation;
 
 /**
  * "Inject" annotation
+ *
+ * Marks a property or method as an injection point
+ *
  * @Annotation
  * @Target({"METHOD","PROPERTY"})
  *

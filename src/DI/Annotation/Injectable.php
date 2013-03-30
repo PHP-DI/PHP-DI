@@ -9,30 +9,44 @@
 
 namespace DI\Annotation;
 
+use DI\Scope;
+
 /**
- * "Scope" annotation
+ * "Injectable" annotation
+ *
+ * Marks a class as injectable
+ *
  * @Annotation
  * @Target("CLASS")
  *
  * @author Domenic Muskulus <domenic@muskulus.eu>
+ * @author Matthieu Napoli <matthieu@mnapoli.fr>
  */
-final class Scope
+final class Injectable
 {
 
     /**
-     * The scope of an object: prototype, singleton
+     * The scope of an class: prototype, singleton
      * @var Scope|null
      */
-    public $value;
+    private $scope;
 
     /**
      * @param array $values
      */
     public function __construct(array $values)
     {
-        if (isset($values['value'])) {
-            $this->value = new \DI\Scope($values['value']);
+        if (isset($values['scope'])) {
+            $this->scope = new Scope($values['scope']);
         }
+    }
+
+    /**
+     * @return Scope|null
+     */
+    public function getScope()
+    {
+        return $this->scope;
     }
 
 }

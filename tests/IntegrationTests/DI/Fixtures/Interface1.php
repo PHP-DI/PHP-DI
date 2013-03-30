@@ -9,11 +9,11 @@
 
 namespace IntegrationTests\DI\Fixtures;
 
-use DI\Annotation\Scope;
+use DI\Annotation\Injectable;
 
 /**
  * Fixture interface
- * @Scope("singleton")
+ * @Injectable(scope="singleton")
  */
 interface Interface1
 {

@@ -9,13 +9,12 @@
 
 namespace UnitTests\DI\Fixtures;
 
-use Exception;
-use DI\Annotation\Scope;
+use DI\Annotation\Injectable;
 
 /**
  * Fixture class for testing Singleton scope
  *
- * @Scope("prototype")
+ * @Injectable(scope="prototype")
  */
 class Prototype
 {

@@ -10,6 +10,7 @@
 namespace DI\Definition;
 
 use DI\Annotation\Inject;
+use DI\Annotation\Injectable;
 use DI\Definition\Annotation\PhpDocParser;
 use Doctrine\Common\Annotations\AnnotationReader;
 use Doctrine\Common\Annotations\AnnotationRegistry;
@@ -17,6 +18,7 @@ use Doctrine\Common\Annotations\Reader;
 use InvalidArgumentException;
 use ReflectionClass;
 use ReflectionMethod;
+use UnexpectedValueException;
 
 /**
  * Reads DI class definitions in annotations such as @ Inject and @ var annotations
@@ -61,10 +63,17 @@ class AnnotationDefinitionReader implements DefinitionReader
 
         $classDefinition = new ClassDefinition($name);
 
-        // Scope annotation
-        $scopeAnnotation = $this->getAnnotationReader()->getClassAnnotation($reflectionClass, 'DI\Annotation\Scope');
-        if ($scopeAnnotation !== null && $scopeAnnotation->value) {
-            $classDefinition->setScope($scopeAnnotation->value);
+        // Injectable annotation
+        /** @var $injectableAnnotation Injectable */
+        try {
+            $injectableAnnotation = $this->getAnnotationReader()->getClassAnnotation($reflectionClass, 'DI\Annotation\Injectable');
+        } catch (UnexpectedValueException $e) {
+            throw new DefinitionException("Error while reading @Injectable on $reflectionClass->name: "
+                . $e->getMessage());
+        }
+
+        if ($injectableAnnotation !== null && $injectableAnnotation->getScope()) {
+            $classDefinition->setScope($injectableAnnotation->getScope());
         }
 
         // Browse the class properties looking for annotated properties
@@ -98,6 +107,7 @@ class AnnotationDefinitionReader implements DefinitionReader
 
             // Look for @Inject annotation
             $annotation = $this->getAnnotationReader()->getPropertyAnnotation($property, 'DI\Annotation\Inject');
+
             if ($annotation !== null) {
                 /** @var $annotation Inject */
 

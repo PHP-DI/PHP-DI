@@ -96,7 +96,7 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
     public function testGetWithFactoryIsPrototype()
     {
         $container = Container::getInstance();
-        // With @Scope("prototype") annotation
+        // With @Injectable(scope="prototype") annotation
         $instance1 = $container->get('UnitTests\DI\Fixtures\Prototype');
         $instance2 = $container->get('UnitTests\DI\Fixtures\Prototype');
         $this->assertNotSame($instance1, $instance2);
@@ -105,19 +105,19 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
     public function testGetWithFactoryIsSingleton()
     {
         $container = Container::getInstance();
-        // Without @Scope annotation => default is Singleton
+        // Without @Injectable annotation => default is Singleton
         $instance1 = $container->get('stdClass');
         $instance2 = $container->get('stdClass');
         $this->assertSame($instance1, $instance2);
-        // With @Scope annotation
+        // With @Injectable(scope="singleton") annotation
         $instance3 = $container->get('UnitTests\DI\Fixtures\Singleton');
         $instance4 = $container->get('UnitTests\DI\Fixtures\Singleton');
         $this->assertSame($instance3, $instance4);
     }
 
     /**
-     * @expectedException \UnexpectedValueException
-     * @expectedExceptionMessage Value 'foobar' is not part of the enum DI\Scope
+     * @expectedException \DI\Definition\DefinitionException
+     * @expectedExceptionMessage Error while reading @Injectable on UnitTests\DI\Fixtures\InvalidScope: Value 'foobar' is not part of the enum DI\Scope
      */
     public function testGetWithInvalidScope()
     {
