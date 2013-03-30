@@ -9,6 +9,7 @@
 
 namespace IntegrationTests\DI;
 
+use DI\Scope;
 use DI\Container;
 use IntegrationTests\DI\Fixtures\Class1;
 
@@ -64,6 +65,7 @@ class InjectionTest extends \PHPUnit_Framework_TestCase
             array(
                 'foo' => 'bar',
                 'IntegrationTests\DI\Fixtures\Class1'          => array(
+                    'scope'       => Scope::PROTOTYPE(),
                     'properties'  => array(
                         'property1' => 'IntegrationTests\DI\Fixtures\Class2',
                         'property2' => 'IntegrationTests\DI\Fixtures\Interface1',
@@ -87,6 +89,7 @@ class InjectionTest extends \PHPUnit_Framework_TestCase
                 'IntegrationTests\DI\Fixtures\Implementation1' => array(),
                 'IntegrationTests\DI\Fixtures\Interface1'      => array(
                     'class' => 'IntegrationTests\DI\Fixtures\Implementation1',
+                    'scope' => 'singleton',
                 ),
                 'namedDependency' => array(
                     'class' => 'IntegrationTests\DI\Fixtures\Class2',
@@ -144,6 +147,26 @@ class InjectionTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf('IntegrationTests\DI\Fixtures\Implementation1', $class1->method2Param1);
         $this->assertInstanceOf('IntegrationTests\DI\Fixtures\Class2', $class1->method3Param1);
         $this->assertEquals('bar', $class1->method3Param2);
+    }
+
+    /**
+     * @dataProvider containerProvider
+     */
+    public function testScope($type, Container $container)
+    {
+        // Only constructor injection with reflection
+        if ($type == self::DEFINITION_REFLECTION) {
+            return;
+        }
+        $class1_1 = $container->get('IntegrationTests\DI\Fixtures\Class1');
+        $class1_2 = $container->get('IntegrationTests\DI\Fixtures\Class1');
+        $this->assertNotSame($class1_1, $class1_2);
+        $class2_1 = $container->get('IntegrationTests\DI\Fixtures\Class2');
+        $class2_2 = $container->get('IntegrationTests\DI\Fixtures\Class2');
+        $this->assertSame($class2_1, $class2_2);
+        $class3_1 = $container->get('IntegrationTests\DI\Fixtures\Interface1');
+        $class3_2 = $container->get('IntegrationTests\DI\Fixtures\Interface1');
+        $this->assertSame($class3_1, $class3_2);
     }
 
 }

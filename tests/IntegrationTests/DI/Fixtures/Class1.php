@@ -10,9 +10,11 @@
 namespace IntegrationTests\DI\Fixtures;
 
 use DI\Annotation\Inject;
+use DI\Annotation\Scope;
 
 /**
  * Fixture class
+ * @Scope("prototype")
  */
 class Class1
 {

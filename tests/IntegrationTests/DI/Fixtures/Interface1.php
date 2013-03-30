@@ -9,8 +9,11 @@
 
 namespace IntegrationTests\DI\Fixtures;
 
+use DI\Annotation\Scope;
+
 /**
  * Fixture interface
+ * @Scope("singleton")
  */
 interface Interface1
 {
