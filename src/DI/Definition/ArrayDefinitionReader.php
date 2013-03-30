@@ -81,6 +81,12 @@ class ArrayDefinitionReader implements DefinitionReader
             // Properties
             $this->readPropertyInjections($definition, $arrayDefinition);
 
+            // Constructor
+            if (array_key_exists('constructor', $arrayDefinition)) {
+                $constructorInjection = $this->readMethodInjection($definition, '__construct', $arrayDefinition['constructor']);
+                $definition->setConstructorInjection($constructorInjection);
+            }
+
             // Methods
             $this->readMethodInjections($definition, $arrayDefinition);
         }
@@ -151,18 +157,31 @@ class ArrayDefinitionReader implements DefinitionReader
             }
 
             foreach ($arrayDefinition['methods'] as $methodName => $arrayMethodDefinition) {
-                $methodInjection = new MethodInjection($methodName);
-
-                if (is_array($arrayMethodDefinition)) {
-                    $this->readParameterInjections($definition, $methodInjection, $arrayMethodDefinition);
-                } else {
-                    // String: shortcut for 1 parameter method
-                    $methodInjection->addParameterInjection(new ParameterInjection(0, $arrayMethodDefinition));
-                }
-
+                $methodInjection = $this->readMethodInjection($definition, $methodName, $arrayMethodDefinition);
                 $definition->addMethodInjection($methodInjection);
             }
         }
+    }
+
+    /**
+     * @param ClassDefinition $definition
+     * @param string          $methodName
+     * @param array|string    $arrayMethodDefinition
+     * @throws DefinitionException
+     * @return MethodInjection
+     */
+    private function readMethodInjection(ClassDefinition $definition, $methodName, $arrayMethodDefinition)
+    {
+        $methodInjection = new MethodInjection($methodName);
+
+        if (is_array($arrayMethodDefinition)) {
+            $this->readParameterInjections($definition, $methodInjection, $arrayMethodDefinition);
+        } else {
+            // String: shortcut for 1 parameter method
+            $methodInjection->addParameterInjection(new ParameterInjection(0, $arrayMethodDefinition));
+        }
+
+        return $methodInjection;
     }
 
     /**

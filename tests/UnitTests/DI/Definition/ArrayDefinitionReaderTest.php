@@ -222,6 +222,39 @@ class ArrayDefinitionReaderTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('Foo1', $parameter1->getEntryName());
     }
 
+    public function testConstructorDefinition1()
+    {
+        $reader = new ArrayDefinitionReader();
+        $reader->addDefinitions(
+            array(
+                'foo' => array(
+                    'constructor' => array(
+                        'param1' => 'Foo1',
+                        'param2' => array(
+                            'name' => 'Foo2',
+                        ),
+                    ),
+                ),
+            )
+        );
+        /** @var $definition ClassDefinition */
+        $definition = $reader->getDefinition('foo');
+        $constructorInjection = $definition->getConstructorInjection();
+
+        $this->assertNotNull($constructorInjection);
+        $this->assertEquals('__construct', $constructorInjection->getMethodName());
+
+        $parameters = $constructorInjection->getParameterInjections();
+
+        $parameter1 = $parameters['param1'];
+        $this->assertEquals('param1', $parameter1->getParameterName());
+        $this->assertEquals('Foo1', $parameter1->getEntryName());
+
+        $parameter2 = $parameters['param2'];
+        $this->assertEquals('param2', $parameter2->getParameterName());
+        $this->assertEquals('Foo2', $parameter2->getEntryName());
+    }
+
     /**
      * @expectedException \DI\Definition\DefinitionException
      * @expectedExceptionMessage Invalid key 'bar' in definition of entry 'foo'; Valid keys are: class, scope, lazy, constructor, properties, methods
