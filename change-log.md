@@ -10,7 +10,7 @@ Major compatibility breaks with 2.x.
 * Configuration is reworked from scratch. Now every configuration backend can do 100% of the job.
 * Provided configuration backends:
     * Reflection
-    * Annotations: @Inject, @Scope
+    * Annotations: @Inject, @Injectable
     * PHP array
 * As a consequence, annotations are not mandatory anymore, all functionalities can be used with or without annotations.
 * Renamed `DI\Annotations\Inject` to `DI\Annotation\Inject`
