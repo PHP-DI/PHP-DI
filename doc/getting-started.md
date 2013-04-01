@@ -15,7 +15,7 @@ Create a file named `composer.json` in your project root:
 ```json
 {
     "require": {
-        "mnapoli/php-di": "*",
+        "mnapoli/php-di": "3.0.*",
     }
 }
 ```

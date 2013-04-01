@@ -72,10 +72,39 @@ class ArrayDefinitionReaderTest extends \PHPUnit_Framework_TestCase
         );
         /** @var $definition ClassDefinition */
         $definition = $reader->getDefinition('foo');
-        $this->assertInstanceOf('\\DI\\Definition\\ClassDefinition', $definition);
+        $this->assertInstanceOf('DI\Definition\ClassDefinition', $definition);
         $this->assertEquals('foo', $definition->getName());
         $this->assertEquals('foo', $definition->getClassName());
         $this->assertTrue($definition->isLazy());
+        $this->assertEquals(Scope::PROTOTYPE(), $definition->getScope());
+    }
+
+    public function testScopeDefinition()
+    {
+        $reader = new ArrayDefinitionReader();
+        $reader->addDefinitions(
+            array(
+                'default' => array(
+                ),
+                'foo' => array(
+                    'scope' => 'prototype',
+                ),
+                'bar' => array(
+                    'scope' => Scope::PROTOTYPE,
+                ),
+                'bam' => array(
+                    'scope' => Scope::PROTOTYPE(),
+                ),
+            )
+        );
+        /** @var $definition ClassDefinition */
+        $definition = $reader->getDefinition('default');
+        $this->assertEquals(Scope::SINGLETON(), $definition->getScope());
+        $definition = $reader->getDefinition('foo');
+        $this->assertEquals(Scope::PROTOTYPE(), $definition->getScope());
+        $definition = $reader->getDefinition('bar');
+        $this->assertEquals(Scope::PROTOTYPE(), $definition->getScope());
+        $definition = $reader->getDefinition('bam');
         $this->assertEquals(Scope::PROTOTYPE(), $definition->getScope());
     }
 

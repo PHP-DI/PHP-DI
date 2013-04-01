@@ -124,6 +124,20 @@ class Example {
 }
 ```
 
+The `@Injectable` annotation let's you set options on injectable classes:
+
+```php
+use DI\Annotation\Injectable;
+
+/**
+ * @Injectable(scope="prototype")
+ */
+class Example {
+}
+```
+
+**The `@Injectable` annotation is optional: by default, all classes are injectable.**
+
 There are still things that can't be defined with annotations:
 
 - values (instead of classes)
