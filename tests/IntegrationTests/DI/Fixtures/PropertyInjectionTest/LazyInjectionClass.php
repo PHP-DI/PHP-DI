@@ -7,7 +7,7 @@
  * @license   http://www.opensource.org/licenses/mit-license.php MIT (see the LICENSE file)
  */
 
-namespace IntegrationTests\DI\Fixtures\BeanInjectionTest;
+namespace IntegrationTests\DI\Fixtures\PropertyInjectionTest;
 
 use DI\Annotation\Inject;
 
@@ -19,7 +19,7 @@ class LazyInjectionClass
 
     /**
      * @Inject(lazy=true)
-     * @var \IntegrationTests\DI\Fixtures\BeanInjectionTest\Class2
+     * @var \IntegrationTests\DI\Fixtures\PropertyInjectionTest\Class2
      */
     private $class2;
 

@@ -7,20 +7,12 @@
  * @license   http://www.opensource.org/licenses/mit-license.php MIT (see the LICENSE file)
  */
 
-namespace IntegrationTests\DI\Fixtures\BeanInjectionTest;
+namespace IntegrationTests\DI\Fixtures\PropertyInjectionTest\Issue1;
 
 /**
  * Fixture class
  */
-class Class2
+class Dependency
 {
-
-    /**
-     * @return boolean
-     */
-    public function getBoolean()
-    {
-        return true;
-    }
 
 }

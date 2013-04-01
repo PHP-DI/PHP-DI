@@ -20,13 +20,6 @@ use \DI\Container;
 class ContainerTest extends \PHPUnit_Framework_TestCase
 {
 
-    public function setUp()
-    {
-        // Reset the singleton instance to ensure all tests are independent
-        Container::reset();
-    }
-
-
     public function testGetInstance()
     {
         $instance = Container::getInstance();
@@ -35,18 +28,9 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($instance, $instance2);
     }
 
-    public function testResetInstance()
-    {
-        $instance = Container::getInstance();
-        $this->assertInstanceOf('\DI\Container', $instance);
-        Container::reset();
-        $instance2 = Container::getInstance();
-        $this->assertNotSame($instance, $instance2);
-    }
-
     public function testSetGet()
     {
-        $container = Container::getInstance();
+        $container = new Container();
         $dummy = new stdClass();
         $container->set('key', $dummy);
         $this->assertSame($dummy, $container->get('key'));
@@ -57,13 +41,13 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetNotFound()
     {
-        $container = Container::getInstance();
+        $container = new Container();
         $container->get('key');
     }
 
     public function testGetWithClosure()
     {
-        $container = Container::getInstance();
+        $container = new Container();
         $container->set(
             'key',
             function () {
@@ -75,7 +59,7 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
 
     public function testGetWithClosureIsCached()
     {
-        $container = Container::getInstance();
+        $container = new Container();
         $container->set(
             'key',
             function () {
@@ -87,24 +71,24 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($instance1, $instance2);
     }
 
-    public function testGetWithFactory()
+    public function testGetWithClassName()
     {
-        $container = Container::getInstance();
+        $container = new Container();
         $this->assertInstanceOf('stdClass', $container->get('stdClass'));
     }
 
-    public function testGetWithFactoryIsPrototype()
+    public function testGetWithPrototypeScope()
     {
-        $container = Container::getInstance();
+        $container = new Container();
         // With @Injectable(scope="prototype") annotation
         $instance1 = $container->get('UnitTests\DI\Fixtures\Prototype');
         $instance2 = $container->get('UnitTests\DI\Fixtures\Prototype');
         $this->assertNotSame($instance1, $instance2);
     }
 
-    public function testGetWithFactoryIsSingleton()
+    public function testGetWithSingletonScope()
     {
-        $container = Container::getInstance();
+        $container = new Container();
         // Without @Injectable annotation => default is Singleton
         $instance1 = $container->get('stdClass');
         $instance2 = $container->get('stdClass');
@@ -121,14 +105,14 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetWithInvalidScope()
     {
-        $container = Container::getInstance();
+        $container = new Container();
         $container->get('UnitTests\DI\Fixtures\InvalidScope');
     }
 
     public function testGetWithProxy()
     {
-        $container = Container::getInstance();
-        $this->assertInstanceOf('\DI\Proxy\Proxy', $container->get('stdClass', true));
+        $container = new Container();
+        $this->assertInstanceOf('DI\Proxy\Proxy', $container->get('stdClass', true));
     }
 
     /**
@@ -136,7 +120,7 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
      */
     public function testCircularDependencies()
     {
-        $container = Container::getInstance();
+        $container = new Container();
         $container->get('UnitTests\DI\Fixtures\Prototype');
         $container->get('UnitTests\DI\Fixtures\Prototype');
     }
@@ -147,23 +131,8 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
      */
     public function testCircularDependenciesException()
     {
-        $container = Container::getInstance();
+        $container = new Container();
         $container->get('UnitTests\DI\Fixtures\Class1CircularDependencies');
-    }
-
-    /**
-     * @depends testSetGet
-     */
-    public function testAddConfigurationEntries2()
-    {
-        $container = Container::getInstance();
-        $container->getConfiguration()->addDefinitions(
-            array(
-                'test' => 'success',
-            )
-        );
-        $container = Container::getInstance();
-        $this->assertEquals('success', $container->get('test'));
     }
 
     /**
@@ -171,7 +140,7 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
      */
     public function testArrayAccessGet()
     {
-        $container = Container::getInstance();
+        $container = new Container();
         $dummy = new stdClass();
         $container->set('key', $dummy);
         $this->assertSame($dummy, $container['key']);
@@ -182,7 +151,7 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
      */
     public function testArrayAccessSet()
     {
-        $container = Container::getInstance();
+        $container = new Container();
         $dummy = new stdClass();
         $container['key'] = $dummy;
         $this->assertSame($dummy, $container['key']);
@@ -193,7 +162,7 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
      */
     public function testArrayAccessExists()
     {
-        $container = Container::getInstance();
+        $container = new Container();
         $dummy = new stdClass();
         $this->assertFalse(isset($container['key']));
         $container['key'] = $dummy;
@@ -205,7 +174,7 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
      */
     public function testArrayAccessExistsWithClassName()
     {
-        $container = Container::getInstance();
+        $container = new Container();
         $this->assertTrue(isset($container['stdClass']));
     }
 
@@ -214,23 +183,11 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
      */
     public function testArrayAccessUnset()
     {
-        $container = Container::getInstance();
+        $container = new Container();
         $dummy = new stdClass();
         $container['key'] = $dummy;
         unset($container['key']);
         $this->assertFalse(isset($container['key']));
-    }
-
-    public function testNewInstanceWithoutConstructor()
-    {
-        $container = Container::getInstance();
-        $method = new ReflectionMethod(get_class($container), 'newInstanceWithoutConstructor');
-        $method->setAccessible(true);
-        $reflectionClass = new ReflectionClass('UnitTests\DI\Fixtures\NewInstanceWithoutConstructor');
-        $this->assertInstanceOf(
-            'UnitTests\DI\Fixtures\NewInstanceWithoutConstructor',
-            $method->invoke($container, $reflectionClass)
-        );
     }
 
     /**
@@ -239,7 +196,7 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetNonStringParameter()
     {
-        $container = Container::getInstance();
+        $container = new Container();
         $container->get(new stdClass());
     }
 

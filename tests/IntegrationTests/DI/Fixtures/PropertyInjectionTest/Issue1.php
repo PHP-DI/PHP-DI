@@ -7,12 +7,12 @@
  * @license   http://www.opensource.org/licenses/mit-license.php MIT (see the LICENSE file)
  */
 
-namespace IntegrationTests\DI\Fixtures\BeanInjectionTest;
+namespace IntegrationTests\DI\Fixtures\PropertyInjectionTest;
 
 use \DI\Annotation\Inject;
-use \IntegrationTests\DI\Fixtures\BeanInjectionTest\Class2;
-use \IntegrationTests\DI\Fixtures\BeanInjectionTest\Class2 as Alias;
-use \IntegrationTests\DI\Fixtures\BeanInjectionTest as NamespaceAlias;
+use \IntegrationTests\DI\Fixtures\PropertyInjectionTest\Class2;
+use \IntegrationTests\DI\Fixtures\PropertyInjectionTest\Class2 as Alias;
+use \IntegrationTests\DI\Fixtures\PropertyInjectionTest as NamespaceAlias;
 
 /**
  * Fixture class

@@ -7,26 +7,25 @@
  * @license   http://www.opensource.org/licenses/mit-license.php MIT (see the LICENSE file)
  */
 
-namespace IntegrationTests\DI\Fixtures\BeanInjectionTest;
+namespace IntegrationTests\DI\Fixtures\PropertyInjectionTest;
 
-use \DI\Annotation\Inject;
-use \IntegrationTests\DI\Fixtures\BeanInjectionTest\Class2;
+use DI\Annotation\Inject;
 
 /**
  * Fixture class
  */
-class Issue14
+class Class1
 {
 
     /**
      * @Inject
-     * @var \IntegrationTests\DI\Fixtures\BeanInjectionTest\Class2
+     * @var \IntegrationTests\DI\Fixtures\PropertyInjectionTest\Class2
      */
     private $class2;
 
     /**
      * @Inject
-     * @var \IntegrationTests\DI\Fixtures\BeanInjectionTest\Interface1
+     * @var \IntegrationTests\DI\Fixtures\PropertyInjectionTest\Interface1
      */
     private $interface1;
 
@@ -39,11 +38,11 @@ class Issue14
     }
 
     /**
-     * @param Class2 $class2
+     * @return Interface1
      */
-    public function setClass2($class2)
+    public function getInterface1()
     {
-        $this->class2 = $class2;
+        return $this->interface1;
     }
 
 }

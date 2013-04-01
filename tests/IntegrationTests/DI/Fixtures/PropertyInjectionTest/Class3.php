@@ -7,14 +7,12 @@
  * @license   http://www.opensource.org/licenses/mit-license.php MIT (see the LICENSE file)
  */
 
-namespace IntegrationTests\DI\Fixtures\BeanInjectionTest;
+namespace IntegrationTests\DI\Fixtures\PropertyInjectionTest;
 
 /**
  * Fixture class
  */
-class NamedBean
+class Class3 implements Interface1
 {
-
-    public $nameForTest;
 
 }
