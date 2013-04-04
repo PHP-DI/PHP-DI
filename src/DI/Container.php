@@ -12,7 +12,7 @@ namespace DI;
 use ArrayAccess;
 use DI\Definition\ClassDefinition;
 use DI\Definition\ClosureDefinition;
-use DI\Definition\DefinitionReader;
+use DI\Definition\Source\DefinitionSource;
 use DI\Definition\ValueDefinition;
 use DI\Proxy\Proxy;
 use Exception;
@@ -123,7 +123,7 @@ class Container implements ArrayAccess
         }
 
         // Entry not loaded, use the definitions
-        $definition = $this->getDefinitionReader()->getDefinition($name);
+        $definition = $this->getDefinitionSource()->getDefinition($name);
 
         // It's a value
         if ($definition instanceof ValueDefinition) {
@@ -171,11 +171,11 @@ class Container implements ArrayAccess
     }
 
     /**
-     * @return DefinitionReader The definition reader
+     * @return DefinitionSource The definition source
      */
-    public function getDefinitionReader()
+    public function getDefinitionSource()
     {
-        return $this->configuration->getDefinitionReader();
+        return $this->configuration->getDefinitionSource();
     }
 
     /**

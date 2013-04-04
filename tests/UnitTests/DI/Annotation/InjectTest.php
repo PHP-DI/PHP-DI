@@ -11,7 +11,7 @@ namespace UnitTests\DI\Annotation;
 
 use DI\Annotation\Inject;
 use DI\Container;
-use DI\Definition\AnnotationDefinitionReader;
+use DI\Definition\Source\AnnotationDefinitionSource;
 use Doctrine\Common\Annotations\AnnotationReader;
 use Doctrine\Common\Annotations\AnnotationRegistry;
 use ReflectionClass;
@@ -34,7 +34,7 @@ class InjectTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $definitionReader = new AnnotationDefinitionReader();
+        $definitionReader = new AnnotationDefinitionSource();
         $this->annotationReader = $definitionReader->getAnnotationReader();
         $this->reflectionClass = new ReflectionClass('UnitTests\DI\Annotation\Fixtures\InjectFixture');
     }

@@ -7,9 +7,9 @@
  * @license   http://www.opensource.org/licenses/mit-license.php MIT (see the LICENSE file)
  */
 
-namespace DI\Definition\Annotation;
+namespace DI\Definition\Source\Annotation;
 
-use DI\Definition\AnnotationException;
+use DI\Definition\Source\AnnotationException;
 use Doctrine\Common\Annotations\PhpParser;
 use ReflectionClass;
 use ReflectionMethod;

@@ -7,11 +7,16 @@
  * @license   http://www.opensource.org/licenses/mit-license.php MIT (see the LICENSE file)
  */
 
-namespace DI\Definition;
+namespace DI\Definition\Source;
 
 use DI\Annotation\Inject;
 use DI\Annotation\Injectable;
-use DI\Definition\Annotation\PhpDocParser;
+use DI\Definition\ClassDefinition;
+use DI\Definition\DefinitionException;
+use DI\Definition\MethodInjection;
+use DI\Definition\ParameterInjection;
+use DI\Definition\PropertyInjection;
+use DI\Definition\Source\Annotation\PhpDocParser;
 use Doctrine\Common\Annotations\AnnotationReader;
 use Doctrine\Common\Annotations\AnnotationRegistry;
 use Doctrine\Common\Annotations\Reader;
@@ -21,13 +26,13 @@ use ReflectionMethod;
 use UnexpectedValueException;
 
 /**
- * Reads DI class definitions in annotations such as @ Inject and @ var annotations
+ * Source of DI class definitions in annotations such as @ Inject and @ var annotations
  *
  * Uses Reflection, Doctrine's Annotations and regex docblock parsing
  *
  * @author Matthieu Napoli <matthieu@mnapoli.fr>
  */
-class AnnotationDefinitionReader implements DefinitionReader
+class AnnotationDefinitionSource implements DefinitionSource
 {
 
     /**
@@ -36,7 +41,7 @@ class AnnotationDefinitionReader implements DefinitionReader
     private $annotationReader;
 
     /**
-     * @var PhpDocParser
+     * @var \DI\Definition\Source\Annotation\PhpDocParser
      */
     private $phpDocParser;
 
@@ -232,7 +237,7 @@ class AnnotationDefinitionReader implements DefinitionReader
     public function getAnnotationReader()
     {
         if ($this->annotationReader == null) {
-            AnnotationRegistry::registerAutoloadNamespace('DI\Annotation', __DIR__ . '/../../');
+            AnnotationRegistry::registerAutoloadNamespace('DI\Annotation', __DIR__ . '/../../../');
             $this->annotationReader = new AnnotationReader();
         }
         return $this->annotationReader;

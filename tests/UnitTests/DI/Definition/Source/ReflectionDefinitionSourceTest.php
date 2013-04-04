@@ -7,26 +7,26 @@
  * @license   http://www.opensource.org/licenses/mit-license.php MIT (see the LICENSE file)
  */
 
-namespace UnitTests\DI\Definition;
+namespace UnitTests\DI\Definition\Source;
 
-use DI\Definition\ReflectionDefinitionReader;
+use DI\Definition\Source\ReflectionDefinitionSource;
 
 /**
- * Test class for ReflectionDefinitionReader
+ * Test class for ReflectionDefinitionSource
  */
-class ReflectionDefinitionReaderTest extends \PHPUnit_Framework_TestCase
+class ReflectionDefinitionSourceTest extends \PHPUnit_Framework_TestCase
 {
 
     public function testUnknownClass()
     {
-        $reader = new ReflectionDefinitionReader();
-        $this->assertNull($reader->getDefinition('foo'));
+        $source = new ReflectionDefinitionSource();
+        $this->assertNull($source->getDefinition('foo'));
     }
 
     public function testFixtureClass()
     {
-        $reader = new ReflectionDefinitionReader();
-        $definition = $reader->getDefinition('UnitTests\DI\Definition\Fixtures\ReflectionFixture');
+        $source = new ReflectionDefinitionSource();
+        $definition = $source->getDefinition('UnitTests\DI\Definition\Fixtures\ReflectionFixture');
         $this->assertInstanceOf('DI\Definition\Definition', $definition);
 
         $constructorInjection = $definition->getConstructorInjection();

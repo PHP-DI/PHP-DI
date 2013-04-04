@@ -10,7 +10,7 @@
 namespace UnitTests\DI\Definition\Fixtures;
 
 /**
- * Fixture class for the ReflectionDefinitionReader tests
+ * Fixture class for the ReflectionDefinitionSource tests
  */
 class ReflectionFixture
 {

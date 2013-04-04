@@ -7,14 +7,17 @@
  * @license   http://www.opensource.org/licenses/mit-license.php MIT (see the LICENSE file)
  */
 
-namespace DI\Definition;
+namespace DI\Definition\Source;
+
+use DI\Definition\Definition;
+use DI\Definition\DefinitionException;
 
 /**
- * Reads DI class metadata
+ * Source of Dependency Injection definitions
  *
  * @author Matthieu Napoli <matthieu@mnapoli.fr>
  */
-interface DefinitionReader
+interface DefinitionSource
 {
 
     /**

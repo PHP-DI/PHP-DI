@@ -9,12 +9,12 @@
 
 namespace DI;
 
-use DI\Definition\AnnotationDefinitionReader;
-use DI\Definition\ArrayDefinitionReader;
-use DI\Definition\CachedDefinitionReader;
-use DI\Definition\CombinedDefinitionReader;
-use DI\Definition\DefinitionReader;
-use DI\Definition\ReflectionDefinitionReader;
+use DI\Definition\Source\AnnotationDefinitionSource;
+use DI\Definition\Source\ArrayDefinitionSource;
+use DI\Definition\Source\CachedDefinitionSource;
+use DI\Definition\Source\CombinedDefinitionSource;
+use DI\Definition\Source\DefinitionSource;
+use DI\Definition\Source\ReflectionDefinitionSource;
 use Doctrine\Common\Cache\Cache;
 
 /**
@@ -28,47 +28,47 @@ class Configuration
     const CONFIGURATION_PHP = 'php';
 
     /**
-     * Reader merging definitions of sub-readers
-     * @var CachedDefinitionReader
+     * Caches the combinedSource
+     * @var CachedDefinitionSource
      */
-    private $cachedReader;
+    private $cachedSource;
 
     /**
-     * Reader merging definitions of sub-readers
-     * @var CombinedDefinitionReader
+     * Source merging definitions of sub-sources
+     * @var CombinedDefinitionSource
      */
-    private $combinedReader;
+    private $combinedSource;
 
     /**
-     * Keep a reference to the reflection reader to ensure only one is used
-     * @var ReflectionDefinitionReader|null
+     * Keep a reference to the reflection source to ensure only one is used
+     * @var ReflectionDefinitionSource|null
      */
-    private $reflectionReader;
+    private $reflectionSource;
 
     /**
-     * Keep a reference to the annotation reader to ensure only one is used
-     * @var AnnotationDefinitionReader|null
+     * Keep a reference to the annotation source to ensure only one is used
+     * @var AnnotationDefinitionSource|null
      */
-    private $annotationReader;
+    private $annotationSource;
 
     /**
      * Constructor
      */
     public function __construct()
     {
-        $this->combinedReader = new CombinedDefinitionReader();
+        $this->combinedSource = new CombinedDefinitionSource();
     }
 
     /**
-     * @return DefinitionReader
+     * @return DefinitionSource
      */
-    public function getDefinitionReader()
+    public function getDefinitionSource()
     {
         // If we use the cache
-        if ($this->cachedReader !== null) {
-            return $this->cachedReader;
+        if ($this->cachedSource !== null) {
+            return $this->cachedSource;
         } else {
-            return $this->combinedReader;
+            return $this->combinedSource;
         }
     }
 
@@ -81,15 +81,15 @@ class Configuration
     {
         if ($bool) {
             // Enable
-            if ($this->reflectionReader === null) {
-                $this->reflectionReader = new ReflectionDefinitionReader();
-                $this->combinedReader->addReader($this->reflectionReader);
+            if ($this->reflectionSource === null) {
+                $this->reflectionSource = new ReflectionDefinitionSource();
+                $this->combinedSource->addSource($this->reflectionSource);
             }
         } else {
             // Disable
-            if ($this->reflectionReader !== null) {
-                $this->combinedReader->removeReader($this->reflectionReader);
-                unset($this->reflectionReader);
+            if ($this->reflectionSource !== null) {
+                $this->combinedSource->removeSource($this->reflectionSource);
+                unset($this->reflectionSource);
             }
         }
     }
@@ -103,15 +103,15 @@ class Configuration
     {
         if ($bool) {
             // Enable
-            if ($this->annotationReader === null) {
-                $this->annotationReader = new AnnotationDefinitionReader();
-                $this->combinedReader->addReader($this->annotationReader);
+            if ($this->annotationSource === null) {
+                $this->annotationSource = new AnnotationDefinitionSource();
+                $this->combinedSource->addSource($this->annotationSource);
             }
         } else {
             // Disable
-            if ($this->annotationReader !== null) {
-                $this->combinedReader->removeReader($this->annotationReader);
-                unset($this->annotationReader);
+            if ($this->annotationSource !== null) {
+                $this->combinedSource->removeSource($this->annotationSource);
+                unset($this->annotationSource);
             }
         }
     }
@@ -123,9 +123,9 @@ class Configuration
      */
     public function addDefinitions(array $definitions)
     {
-        $reader = new ArrayDefinitionReader();
-        $reader->addDefinitions($definitions);
-        $this->combinedReader->addReader($reader);
+        $arraySource = new ArrayDefinitionSource();
+        $arraySource->addDefinitions($definitions);
+        $this->combinedSource->addSource($arraySource);
     }
 
     /**
@@ -150,9 +150,9 @@ class Configuration
                 throw new \Exception("The file '$filename' doesn't return a PHP array");
             }
 
-            $reader = new ArrayDefinitionReader();
-            $reader->addDefinitions($definitions);
-            $this->combinedReader->addReader($reader);
+            $source = new ArrayDefinitionSource();
+            $source->addDefinitions($definitions);
+            $this->combinedSource->addSource($source);
             return;
         }
 
@@ -170,16 +170,16 @@ class Configuration
     {
         if ($cache !== null) {
             // Enable
-            if ($this->cachedReader === null) {
-                $this->cachedReader = new CachedDefinitionReader($this->combinedReader, $cache, $debug);
+            if ($this->cachedSource === null) {
+                $this->cachedSource = new CachedDefinitionSource($this->combinedSource, $cache, $debug);
             } else {
-                $this->cachedReader->setCache($cache);
-                $this->cachedReader->setDebug($debug);
+                $this->cachedSource->setCache($cache);
+                $this->cachedSource->setDebug($debug);
             }
         } else {
             // Disable
-            if ($this->cachedReader !== null) {
-                unset($this->cachedReader);
+            if ($this->cachedSource !== null) {
+                unset($this->cachedSource);
             }
         }
     }

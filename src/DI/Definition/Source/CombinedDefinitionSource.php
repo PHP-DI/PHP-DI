@@ -7,21 +7,23 @@
  * @license   http://www.opensource.org/licenses/mit-license.php MIT (see the LICENSE file)
  */
 
-namespace DI\Definition;
+namespace DI\Definition\Source;
+
+use DI\Definition\Definition;
 
 /**
- * A reader that merges the definitions of several sub-readers
+ * A source that merges the definitions of several sub-sources
  *
  * @author Matthieu Napoli <matthieu@mnapoli.fr>
  */
-class CombinedDefinitionReader implements DefinitionReader
+class CombinedDefinitionSource implements DefinitionSource
 {
 
     /**
-     * Sub-readers
-     * @var DefinitionReader[]
+     * Sub-sources
+     * @var DefinitionSource[]
      */
-    private $subReaders = array();
+    private $subSources = array();
 
     /**
      * {@inheritdoc}
@@ -31,8 +33,8 @@ class CombinedDefinitionReader implements DefinitionReader
         /** @var $definition Definition|null */
         $definition = null;
 
-        foreach ($this->subReaders as $subReader) {
-            $subDefinition = $subReader->getDefinition($name);
+        foreach ($this->subSources as $subSource) {
+            $subDefinition = $subSource->getDefinition($name);
 
             if ($subDefinition) {
 
@@ -50,32 +52,32 @@ class CombinedDefinitionReader implements DefinitionReader
     }
 
     /**
-     * @return DefinitionReader[]
+     * @return DefinitionSource[]
      */
-    public function getReaders()
+    public function getSources()
     {
-        return $this->subReaders;
+        return $this->subSources;
     }
 
     /**
-     * @param DefinitionReader $reader
+     * @param DefinitionSource $source
      */
-    public function removeReader(DefinitionReader $reader)
+    public function removeSource(DefinitionSource $source)
     {
-        foreach ($this->subReaders as $key => $subReader) {
-            if ($subReader === $reader) {
-                unset($this->subReaders[$key]);
+        foreach ($this->subSources as $key => $subSource) {
+            if ($subSource === $source) {
+                unset($this->subSources[$key]);
             }
         }
     }
 
     /**
-     * Add a definition reader to the stack
-     * @param DefinitionReader $reader
+     * Add a definition source to the stack
+     * @param DefinitionSource $source
      */
-    public function addReader($reader)
+    public function addSource($source)
     {
-        $this->subReaders[] = $reader;
+        $this->subSources[] = $source;
     }
 
 }

@@ -7,9 +7,16 @@
  * @license   http://www.opensource.org/licenses/mit-license.php MIT (see the LICENSE file)
  */
 
-namespace DI\Definition;
+namespace DI\Definition\Source;
 
 use Closure;
+use DI\Definition\ClassDefinition;
+use DI\Definition\ClosureDefinition;
+use DI\Definition\DefinitionException;
+use DI\Definition\MethodInjection;
+use DI\Definition\ParameterInjection;
+use DI\Definition\PropertyInjection;
+use DI\Definition\ValueDefinition;
 use DI\Scope;
 
 /**
@@ -17,7 +24,7 @@ use DI\Scope;
  *
  * @author Matthieu Napoli <matthieu@mnapoli.fr>
  */
-class ArrayDefinitionReader implements DefinitionReader
+class ArrayDefinitionSource implements DefinitionSource
 {
 
     /**

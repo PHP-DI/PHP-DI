@@ -7,25 +7,25 @@
  * @license   http://www.opensource.org/licenses/mit-license.php MIT (see the LICENSE file)
  */
 
-namespace UnitTests\DI\Definition;
+namespace UnitTests\DI\Definition\Source;
 
-use DI\Definition\AnnotationDefinitionReader;
+use DI\Definition\Source\AnnotationDefinitionSource;
 
 /**
- * Test class for AnnotationDefinitionReader
+ * Test class for AnnotationDefinitionSource
  */
-class AnnotationDefinitionReaderTest extends \PHPUnit_Framework_TestCase
+class AnnotationDefinitionSourceTest extends \PHPUnit_Framework_TestCase
 {
 
     public function testUnknownClass()
     {
-        $reader = new AnnotationDefinitionReader();
+        $reader = new AnnotationDefinitionSource();
         $this->assertNull($reader->getDefinition('foo'));
     }
 
     public function testProperty1()
     {
-        $reader = new AnnotationDefinitionReader();
+        $reader = new AnnotationDefinitionSource();
         $definition = $reader->getDefinition('UnitTests\DI\Definition\Fixtures\AnnotationFixture');
         $this->assertInstanceOf('DI\Definition\Definition', $definition);
 
@@ -39,7 +39,7 @@ class AnnotationDefinitionReaderTest extends \PHPUnit_Framework_TestCase
 
     public function testConstructor()
     {
-        $reader = new AnnotationDefinitionReader();
+        $reader = new AnnotationDefinitionSource();
         $definition = $reader->getDefinition('UnitTests\DI\Definition\Fixtures\AnnotationFixture');
         $this->assertInstanceOf('DI\Definition\Definition', $definition);
 
@@ -60,7 +60,7 @@ class AnnotationDefinitionReaderTest extends \PHPUnit_Framework_TestCase
 
     public function testMethod1()
     {
-        $reader = new AnnotationDefinitionReader();
+        $reader = new AnnotationDefinitionSource();
         $definition = $reader->getDefinition('UnitTests\DI\Definition\Fixtures\AnnotationFixture');
         $this->assertInstanceOf('DI\Definition\Definition', $definition);
 
@@ -74,7 +74,7 @@ class AnnotationDefinitionReaderTest extends \PHPUnit_Framework_TestCase
 
     public function testMethod2()
     {
-        $reader = new AnnotationDefinitionReader();
+        $reader = new AnnotationDefinitionSource();
         $definition = $reader->getDefinition('UnitTests\DI\Definition\Fixtures\AnnotationFixture');
         $this->assertInstanceOf('DI\Definition\Definition', $definition);
 
@@ -96,7 +96,7 @@ class AnnotationDefinitionReaderTest extends \PHPUnit_Framework_TestCase
 
     public function testMethod3()
     {
-        $reader = new AnnotationDefinitionReader();
+        $reader = new AnnotationDefinitionSource();
         $definition = $reader->getDefinition('UnitTests\DI\Definition\Fixtures\AnnotationFixture');
         $this->assertInstanceOf('DI\Definition\Definition', $definition);
 
@@ -118,7 +118,7 @@ class AnnotationDefinitionReaderTest extends \PHPUnit_Framework_TestCase
 
     public function testMethod4()
     {
-        $reader = new AnnotationDefinitionReader();
+        $reader = new AnnotationDefinitionSource();
         $definition = $reader->getDefinition('UnitTests\DI\Definition\Fixtures\AnnotationFixture');
         $this->assertInstanceOf('DI\Definition\Definition', $definition);
 
@@ -136,7 +136,7 @@ class AnnotationDefinitionReaderTest extends \PHPUnit_Framework_TestCase
 
     public function testMethod5()
     {
-        $reader = new AnnotationDefinitionReader();
+        $reader = new AnnotationDefinitionSource();
         $definition = $reader->getDefinition('UnitTests\DI\Definition\Fixtures\AnnotationFixture');
         $this->assertInstanceOf('DI\Definition\Definition', $definition);
 
@@ -158,7 +158,7 @@ class AnnotationDefinitionReaderTest extends \PHPUnit_Framework_TestCase
 
     public function testMethod6()
     {
-        $reader = new AnnotationDefinitionReader();
+        $reader = new AnnotationDefinitionSource();
         $definition = $reader->getDefinition('UnitTests\DI\Definition\Fixtures\AnnotationFixture');
         $this->assertInstanceOf('DI\Definition\Definition', $definition);
 

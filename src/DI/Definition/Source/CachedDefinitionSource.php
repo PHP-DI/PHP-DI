@@ -7,16 +7,16 @@
  * @license   http://www.opensource.org/licenses/mit-license.php MIT (see the LICENSE file)
  */
 
-namespace DI\Definition;
+namespace DI\Definition\Source;
 
 use Doctrine\Common\Cache\Cache;
 
 /**
- * Caches the results of another Definition Reader
+ * Caches the results of another Definition source
  *
  * @author Matthieu Napoli <matthieu@mnapoli.fr>
  */
-class CachedDefinitionReader implements DefinitionReader
+class CachedDefinitionSource implements DefinitionSource
 {
 
     /**
@@ -26,9 +26,9 @@ class CachedDefinitionReader implements DefinitionReader
     private static $CACHE_PREFIX = 'DI\\Definition';
 
     /**
-     * @var DefinitionReader
+     * @var DefinitionSource
      */
-    private $definitionReader;
+    private $definitionSource;
 
     /**
      * @var Cache
@@ -45,14 +45,14 @@ class CachedDefinitionReader implements DefinitionReader
     /**
      * Construct the cache
      *
-     * @param DefinitionReader $definitionReader
+     * @param DefinitionSource $definitionSource
      * @param Cache            $cache
      * @param boolean          $debug If true, changes in the files will be tracked to update the cache automatically.
      * Disable in production for better performances.
      */
-    public function __construct(DefinitionReader $definitionReader, Cache $cache, $debug = false)
+    public function __construct(DefinitionSource $definitionSource, Cache $cache, $debug = false)
     {
-        $this->definitionReader = $definitionReader;
+        $this->definitionSource = $definitionSource;
         $this->cache = $cache;
         $this->debug = (boolean) $debug;
     }
@@ -64,26 +64,26 @@ class CachedDefinitionReader implements DefinitionReader
     {
         $result = $this->fetchFromCache($name);
         if (!$result) {
-            $result = $this->definitionReader->getDefinition($name);
+            $result = $this->definitionSource->getDefinition($name);
             $this->saveToCache($name, $result);
         }
         return $result;
     }
 
     /**
-     * @return DefinitionReader
+     * @return DefinitionSource
      */
-    public function getDefinitionReader()
+    public function getDefinitionSource()
     {
-        return $this->definitionReader;
+        return $this->definitionSource;
     }
 
     /**
-     * @param DefinitionReader $reader
+     * @param DefinitionSource $source
      */
-    public function setDefinitionReader(DefinitionReader $reader)
+    public function setDefinitionSource(DefinitionSource $source)
     {
-        $this->definitionReader = $reader;
+        $this->definitionSource = $source;
     }
 
     /**

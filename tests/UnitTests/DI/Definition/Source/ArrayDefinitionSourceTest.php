@@ -7,21 +7,21 @@
  * @license   http://www.opensource.org/licenses/mit-license.php MIT (see the LICENSE file)
  */
 
-namespace UnitTests\DI\Definition;
+namespace UnitTests\DI\Definition\Source;
 
-use DI\Definition\ArrayDefinitionReader;
+use DI\Definition\Source\ArrayDefinitionSource;
 use DI\Definition\ClassDefinition;
 use DI\Scope;
 
 /**
- * Test class for ArrayDefinitionReader
+ * Test class for ArrayDefinitionSource
  */
-class ArrayDefinitionReaderTest extends \PHPUnit_Framework_TestCase
+class ArrayDefinitionSourceTest extends \PHPUnit_Framework_TestCase
 {
 
     public function testValueDefinition()
     {
-        $reader = new ArrayDefinitionReader();
+        $reader = new ArrayDefinitionSource();
         $reader->addDefinitions(
             array(
                 'foo' => 'bar',
@@ -35,7 +35,7 @@ class ArrayDefinitionReaderTest extends \PHPUnit_Framework_TestCase
 
     public function testValueTypes()
     {
-        $reader = new ArrayDefinitionReader();
+        $reader = new ArrayDefinitionSource();
         $definitions = array(
             'integer' => 1,
             'string'  => 'test',
@@ -61,7 +61,7 @@ class ArrayDefinitionReaderTest extends \PHPUnit_Framework_TestCase
 
     public function testClassDefinition()
     {
-        $reader = new ArrayDefinitionReader();
+        $reader = new ArrayDefinitionSource();
         $reader->addDefinitions(
             array(
                 'foo' => array(
@@ -81,7 +81,7 @@ class ArrayDefinitionReaderTest extends \PHPUnit_Framework_TestCase
 
     public function testScopeDefinition()
     {
-        $reader = new ArrayDefinitionReader();
+        $reader = new ArrayDefinitionSource();
         $reader->addDefinitions(
             array(
                 'default' => array(
@@ -110,7 +110,7 @@ class ArrayDefinitionReaderTest extends \PHPUnit_Framework_TestCase
 
     public function testAliasDefinition()
     {
-        $reader = new ArrayDefinitionReader();
+        $reader = new ArrayDefinitionSource();
         $reader->addDefinitions(
             array(
                 'foo' => array(
@@ -120,14 +120,14 @@ class ArrayDefinitionReaderTest extends \PHPUnit_Framework_TestCase
         );
         /** @var $definition ClassDefinition */
         $definition = $reader->getDefinition('foo');
-        $this->assertInstanceOf('\\DI\\Definition\\ClassDefinition', $definition);
+        $this->assertInstanceOf('DI\Definition\ClassDefinition', $definition);
         $this->assertEquals('foo', $definition->getName());
         $this->assertEquals('Bar', $definition->getClassName());
     }
 
     public function testPropertyDefinition()
     {
-        $reader = new ArrayDefinitionReader();
+        $reader = new ArrayDefinitionSource();
         $reader->addDefinitions(
             array(
                 'foo' => array(
@@ -159,7 +159,7 @@ class ArrayDefinitionReaderTest extends \PHPUnit_Framework_TestCase
 
     public function testMethodDefinition1()
     {
-        $reader = new ArrayDefinitionReader();
+        $reader = new ArrayDefinitionSource();
         $reader->addDefinitions(
             array(
                 'foo' => array(
@@ -195,7 +195,7 @@ class ArrayDefinitionReaderTest extends \PHPUnit_Framework_TestCase
 
     public function testMethodDefinition2()
     {
-        $reader = new ArrayDefinitionReader();
+        $reader = new ArrayDefinitionSource();
         $reader->addDefinitions(
             array(
                  'foo' => array(
@@ -226,7 +226,7 @@ class ArrayDefinitionReaderTest extends \PHPUnit_Framework_TestCase
 
     public function testMethodDefinition3()
     {
-        $reader = new ArrayDefinitionReader();
+        $reader = new ArrayDefinitionSource();
         $reader->addDefinitions(
             array(
                  'foo' => array(
@@ -253,7 +253,7 @@ class ArrayDefinitionReaderTest extends \PHPUnit_Framework_TestCase
 
     public function testConstructorDefinition1()
     {
-        $reader = new ArrayDefinitionReader();
+        $reader = new ArrayDefinitionSource();
         $reader->addDefinitions(
             array(
                 'foo' => array(
@@ -290,7 +290,7 @@ class ArrayDefinitionReaderTest extends \PHPUnit_Framework_TestCase
      */
     public function testKeysValidation()
     {
-        $reader = new ArrayDefinitionReader();
+        $reader = new ArrayDefinitionSource();
         $reader->addDefinitions(
             array(
                 'foo' => array(
@@ -303,7 +303,7 @@ class ArrayDefinitionReaderTest extends \PHPUnit_Framework_TestCase
 
     public function testClosureDefinition()
     {
-        $reader = new ArrayDefinitionReader();
+        $reader = new ArrayDefinitionSource();
         $reader->addDefinitions(
             array(
                 'foo' => function() {

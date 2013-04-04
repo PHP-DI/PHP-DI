@@ -7,8 +7,11 @@
  * @license   http://www.opensource.org/licenses/mit-license.php MIT (see the LICENSE file)
  */
 
-namespace DI\Definition;
+namespace DI\Definition\Source;
 
+use DI\Definition\ClassDefinition;
+use DI\Definition\MethodInjection;
+use DI\Definition\ParameterInjection;
 use ReflectionClass;
 use ReflectionParameter;
 
@@ -19,7 +22,7 @@ use ReflectionParameter;
  *
  * @author Matthieu Napoli <matthieu@mnapoli.fr>
  */
-class ReflectionDefinitionReader implements DefinitionReader
+class ReflectionDefinitionSource implements DefinitionSource
 {
 
     /**
