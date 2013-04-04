@@ -1,0 +1,28 @@
+value1: abc
+value2: 123
+value3: true
+class1:
+  scope: singleton
+  lazy: true
+  constructor:
+    name1: argument1
+    name2: argument2
+    name3: argument3
+  methods:
+    method1:
+      name4: argument4
+      name5: argument5
+    method2:
+      name6: argument6
+    method3: [argument7, argument8]
+  properties:
+    property1: value1
+    property2:
+      name: interface1
+      lazy: true
+interface1:
+  class: class1
+  lazy: false
+interface2:
+  class: class2
+  scope: prototype

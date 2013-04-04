@@ -15,6 +15,7 @@ use DI\Definition\Source\CachedDefinitionSource;
 use DI\Definition\Source\CombinedDefinitionSource;
 use DI\Definition\Source\DefinitionSource;
 use DI\Definition\Source\ReflectionDefinitionSource;
+use DI\Loader\DefinitionFileLoader;
 use Doctrine\Common\Cache\Cache;
 
 /**
@@ -24,9 +25,6 @@ use Doctrine\Common\Cache\Cache;
  */
 class Configuration
 {
-
-    const CONFIGURATION_PHP = 'php';
-
     /**
      * Caches the combinedSource
      * @var CachedDefinitionSource
@@ -131,32 +129,20 @@ class Configuration
     /**
      * Add definitions contained in a file
      *
-     * @param string $filename PHP file returning an array
-     * @param string $type
+     * @param Loader\DefinitionFileLoader $definitionFileLoader
      * @throws \InvalidArgumentException
-     * @throws \Exception
      */
-    public function addDefinitionsFromFile($filename, $type = self::CONFIGURATION_PHP)
+    public function addDefinitionsFromFile(DefinitionFileLoader $definitionFileLoader)
     {
-        if (!file_exists($filename)) {
-            throw new \InvalidArgumentException("The file '$filename' doesn't exist");
+        $definitions = $definitionFileLoader->load();
+
+        if (!is_array($definitions)) {
+            throw new \InvalidArgumentException(get_class($definitionFileLoader) .  " must return an array.");
         }
 
-        if ($type === self::CONFIGURATION_PHP) {
-            // Read file
-            $definitions = include $filename;
-
-            if (!is_array($definitions)) {
-                throw new \Exception("The file '$filename' doesn't return a PHP array");
-            }
-
-            $source = new ArrayDefinitionSource();
-            $source->addDefinitions($definitions);
-            $this->combinedSource->addSource($source);
-            return;
-        }
-
-        throw new \InvalidArgumentException("Unknown configuration type '$type'");
+        $source = new ArrayDefinitionSource();
+        $source->addDefinitions($definitions);
+        $this->combinedSource->addSource($source);
     }
 
     /**
