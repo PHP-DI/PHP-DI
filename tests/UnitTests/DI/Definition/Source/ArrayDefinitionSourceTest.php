@@ -21,13 +21,13 @@ class ArrayDefinitionSourceTest extends \PHPUnit_Framework_TestCase
 
     public function testValueDefinition()
     {
-        $reader = new ArrayDefinitionSource();
-        $reader->addDefinitions(
+        $source = new ArrayDefinitionSource();
+        $source->addDefinitions(
             array(
                 'foo' => 'bar',
             )
         );
-        $definition = $reader->getDefinition('foo');
+        $definition = $source->getDefinition('foo');
         $this->assertInstanceOf('\\DI\\Definition\\ValueDefinition', $definition);
         $this->assertEquals('foo', $definition->getName());
         $this->assertEquals('bar', $definition->getValue());
@@ -35,25 +35,25 @@ class ArrayDefinitionSourceTest extends \PHPUnit_Framework_TestCase
 
     public function testValueTypes()
     {
-        $reader = new ArrayDefinitionSource();
+        $source = new ArrayDefinitionSource();
         $definitions = array(
             'integer' => 1,
             'string'  => 'test',
             'float'   => 1.0,
         );
-        $reader->addDefinitions($definitions);
+        $source->addDefinitions($definitions);
 
-        $definition = $reader->getDefinition('integer');
+        $definition = $source->getDefinition('integer');
         $this->assertNotNull($definition);
         $this->assertEquals(1, $definition->getValue());
         $this->assertInternalType('integer', $definition->getValue());
 
-        $definition = $reader->getDefinition('string');
+        $definition = $source->getDefinition('string');
         $this->assertNotNull($definition);
         $this->assertEquals('test', $definition->getValue());
         $this->assertInternalType('string', $definition->getValue());
 
-        $definition = $reader->getDefinition('float');
+        $definition = $source->getDefinition('float');
         $this->assertNotNull($definition);
         $this->assertEquals(1.0, $definition->getValue());
         $this->assertInternalType('float', $definition->getValue());
@@ -61,8 +61,8 @@ class ArrayDefinitionSourceTest extends \PHPUnit_Framework_TestCase
 
     public function testClassDefinition()
     {
-        $reader = new ArrayDefinitionSource();
-        $reader->addDefinitions(
+        $source = new ArrayDefinitionSource();
+        $source->addDefinitions(
             array(
                 'foo' => array(
                     'lazy'  => true,
@@ -71,7 +71,7 @@ class ArrayDefinitionSourceTest extends \PHPUnit_Framework_TestCase
             )
         );
         /** @var $definition ClassDefinition */
-        $definition = $reader->getDefinition('foo');
+        $definition = $source->getDefinition('foo');
         $this->assertInstanceOf('DI\Definition\ClassDefinition', $definition);
         $this->assertEquals('foo', $definition->getName());
         $this->assertEquals('foo', $definition->getClassName());
@@ -81,8 +81,8 @@ class ArrayDefinitionSourceTest extends \PHPUnit_Framework_TestCase
 
     public function testScopeDefinition()
     {
-        $reader = new ArrayDefinitionSource();
-        $reader->addDefinitions(
+        $source = new ArrayDefinitionSource();
+        $source->addDefinitions(
             array(
                 'default' => array(
                 ),
@@ -98,20 +98,20 @@ class ArrayDefinitionSourceTest extends \PHPUnit_Framework_TestCase
             )
         );
         /** @var $definition ClassDefinition */
-        $definition = $reader->getDefinition('default');
+        $definition = $source->getDefinition('default');
         $this->assertEquals(Scope::SINGLETON(), $definition->getScope());
-        $definition = $reader->getDefinition('foo');
+        $definition = $source->getDefinition('foo');
         $this->assertEquals(Scope::PROTOTYPE(), $definition->getScope());
-        $definition = $reader->getDefinition('bar');
+        $definition = $source->getDefinition('bar');
         $this->assertEquals(Scope::PROTOTYPE(), $definition->getScope());
-        $definition = $reader->getDefinition('bam');
+        $definition = $source->getDefinition('bam');
         $this->assertEquals(Scope::PROTOTYPE(), $definition->getScope());
     }
 
     public function testAliasDefinition()
     {
-        $reader = new ArrayDefinitionSource();
-        $reader->addDefinitions(
+        $source = new ArrayDefinitionSource();
+        $source->addDefinitions(
             array(
                 'foo' => array(
                     'class' => 'Bar',
@@ -119,7 +119,7 @@ class ArrayDefinitionSourceTest extends \PHPUnit_Framework_TestCase
             )
         );
         /** @var $definition ClassDefinition */
-        $definition = $reader->getDefinition('foo');
+        $definition = $source->getDefinition('foo');
         $this->assertInstanceOf('DI\Definition\ClassDefinition', $definition);
         $this->assertEquals('foo', $definition->getName());
         $this->assertEquals('Bar', $definition->getClassName());
@@ -127,8 +127,8 @@ class ArrayDefinitionSourceTest extends \PHPUnit_Framework_TestCase
 
     public function testPropertyDefinition()
     {
-        $reader = new ArrayDefinitionSource();
-        $reader->addDefinitions(
+        $source = new ArrayDefinitionSource();
+        $source->addDefinitions(
             array(
                 'foo' => array(
                     'properties' => array(
@@ -142,7 +142,7 @@ class ArrayDefinitionSourceTest extends \PHPUnit_Framework_TestCase
             )
         );
         /** @var $definition ClassDefinition */
-        $definition = $reader->getDefinition('foo');
+        $definition = $source->getDefinition('foo');
         $propertyInjections = $definition->getPropertyInjections();
         $this->assertCount(2, $propertyInjections);
 
@@ -159,8 +159,8 @@ class ArrayDefinitionSourceTest extends \PHPUnit_Framework_TestCase
 
     public function testMethodDefinition1()
     {
-        $reader = new ArrayDefinitionSource();
-        $reader->addDefinitions(
+        $source = new ArrayDefinitionSource();
+        $source->addDefinitions(
             array(
                 'foo' => array(
                     'methods' => array(
@@ -175,7 +175,7 @@ class ArrayDefinitionSourceTest extends \PHPUnit_Framework_TestCase
             )
         );
         /** @var $definition ClassDefinition */
-        $definition = $reader->getDefinition('foo');
+        $definition = $source->getDefinition('foo');
         $methodInjections = $definition->getMethodInjections();
         $this->assertCount(1, $methodInjections);
 
@@ -195,8 +195,8 @@ class ArrayDefinitionSourceTest extends \PHPUnit_Framework_TestCase
 
     public function testMethodDefinition2()
     {
-        $reader = new ArrayDefinitionSource();
-        $reader->addDefinitions(
+        $source = new ArrayDefinitionSource();
+        $source->addDefinitions(
             array(
                  'foo' => array(
                      'methods' => array(
@@ -206,7 +206,7 @@ class ArrayDefinitionSourceTest extends \PHPUnit_Framework_TestCase
             )
         );
         /** @var $definition ClassDefinition */
-        $definition = $reader->getDefinition('foo');
+        $definition = $source->getDefinition('foo');
         $methodInjections = $definition->getMethodInjections();
         $this->assertCount(1, $methodInjections);
 
@@ -226,8 +226,8 @@ class ArrayDefinitionSourceTest extends \PHPUnit_Framework_TestCase
 
     public function testMethodDefinition3()
     {
-        $reader = new ArrayDefinitionSource();
-        $reader->addDefinitions(
+        $source = new ArrayDefinitionSource();
+        $source->addDefinitions(
             array(
                  'foo' => array(
                      'methods' => array(
@@ -237,7 +237,7 @@ class ArrayDefinitionSourceTest extends \PHPUnit_Framework_TestCase
             )
         );
         /** @var $definition ClassDefinition */
-        $definition = $reader->getDefinition('foo');
+        $definition = $source->getDefinition('foo');
         $methodInjections = $definition->getMethodInjections();
         $this->assertCount(1, $methodInjections);
 
@@ -253,8 +253,8 @@ class ArrayDefinitionSourceTest extends \PHPUnit_Framework_TestCase
 
     public function testConstructorDefinition1()
     {
-        $reader = new ArrayDefinitionSource();
-        $reader->addDefinitions(
+        $source = new ArrayDefinitionSource();
+        $source->addDefinitions(
             array(
                 'foo' => array(
                     'constructor' => array(
@@ -267,7 +267,7 @@ class ArrayDefinitionSourceTest extends \PHPUnit_Framework_TestCase
             )
         );
         /** @var $definition ClassDefinition */
-        $definition = $reader->getDefinition('foo');
+        $definition = $source->getDefinition('foo');
         $constructorInjection = $definition->getConstructorInjection();
 
         $this->assertNotNull($constructorInjection);
@@ -290,28 +290,28 @@ class ArrayDefinitionSourceTest extends \PHPUnit_Framework_TestCase
      */
     public function testKeysValidation()
     {
-        $reader = new ArrayDefinitionSource();
-        $reader->addDefinitions(
+        $source = new ArrayDefinitionSource();
+        $source->addDefinitions(
             array(
                 'foo' => array(
                     'bar' => true,
                 ),
             )
         );
-        $reader->getDefinition('foo');
+        $source->getDefinition('foo');
     }
 
     public function testClosureDefinition()
     {
-        $reader = new ArrayDefinitionSource();
-        $reader->addDefinitions(
+        $source = new ArrayDefinitionSource();
+        $source->addDefinitions(
             array(
                 'foo' => function() {
                     return 'bar';
                 },
             )
         );
-        $definition = $reader->getDefinition('foo');
+        $definition = $source->getDefinition('foo');
         $this->assertInstanceOf('\\DI\\Definition\\ClosureDefinition', $definition);
         $this->assertEquals('foo', $definition->getName());
 

@@ -19,14 +19,14 @@ class AnnotationDefinitionSourceTest extends \PHPUnit_Framework_TestCase
 
     public function testUnknownClass()
     {
-        $reader = new AnnotationDefinitionSource();
-        $this->assertNull($reader->getDefinition('foo'));
+        $source = new AnnotationDefinitionSource();
+        $this->assertNull($source->getDefinition('foo'));
     }
 
     public function testProperty1()
     {
-        $reader = new AnnotationDefinitionSource();
-        $definition = $reader->getDefinition('UnitTests\DI\Definition\Fixtures\AnnotationFixture');
+        $source = new AnnotationDefinitionSource();
+        $definition = $source->getDefinition('UnitTests\DI\Definition\Fixtures\AnnotationFixture');
         $this->assertInstanceOf('DI\Definition\Definition', $definition);
 
         $properties = $definition->getPropertyInjections();
@@ -39,8 +39,8 @@ class AnnotationDefinitionSourceTest extends \PHPUnit_Framework_TestCase
 
     public function testConstructor()
     {
-        $reader = new AnnotationDefinitionSource();
-        $definition = $reader->getDefinition('UnitTests\DI\Definition\Fixtures\AnnotationFixture');
+        $source = new AnnotationDefinitionSource();
+        $definition = $source->getDefinition('UnitTests\DI\Definition\Fixtures\AnnotationFixture');
         $this->assertInstanceOf('DI\Definition\Definition', $definition);
 
         $constructorInjection = $definition->getConstructorInjection();
@@ -60,8 +60,8 @@ class AnnotationDefinitionSourceTest extends \PHPUnit_Framework_TestCase
 
     public function testMethod1()
     {
-        $reader = new AnnotationDefinitionSource();
-        $definition = $reader->getDefinition('UnitTests\DI\Definition\Fixtures\AnnotationFixture');
+        $source = new AnnotationDefinitionSource();
+        $definition = $source->getDefinition('UnitTests\DI\Definition\Fixtures\AnnotationFixture');
         $this->assertInstanceOf('DI\Definition\Definition', $definition);
 
         $methodInjections = $definition->getMethodInjections();
@@ -74,8 +74,8 @@ class AnnotationDefinitionSourceTest extends \PHPUnit_Framework_TestCase
 
     public function testMethod2()
     {
-        $reader = new AnnotationDefinitionSource();
-        $definition = $reader->getDefinition('UnitTests\DI\Definition\Fixtures\AnnotationFixture');
+        $source = new AnnotationDefinitionSource();
+        $definition = $source->getDefinition('UnitTests\DI\Definition\Fixtures\AnnotationFixture');
         $this->assertInstanceOf('DI\Definition\Definition', $definition);
 
         $methodInjections = $definition->getMethodInjections();
@@ -96,8 +96,8 @@ class AnnotationDefinitionSourceTest extends \PHPUnit_Framework_TestCase
 
     public function testMethod3()
     {
-        $reader = new AnnotationDefinitionSource();
-        $definition = $reader->getDefinition('UnitTests\DI\Definition\Fixtures\AnnotationFixture');
+        $source = new AnnotationDefinitionSource();
+        $definition = $source->getDefinition('UnitTests\DI\Definition\Fixtures\AnnotationFixture');
         $this->assertInstanceOf('DI\Definition\Definition', $definition);
 
         $methodInjections = $definition->getMethodInjections();
@@ -118,8 +118,8 @@ class AnnotationDefinitionSourceTest extends \PHPUnit_Framework_TestCase
 
     public function testMethod4()
     {
-        $reader = new AnnotationDefinitionSource();
-        $definition = $reader->getDefinition('UnitTests\DI\Definition\Fixtures\AnnotationFixture');
+        $source = new AnnotationDefinitionSource();
+        $definition = $source->getDefinition('UnitTests\DI\Definition\Fixtures\AnnotationFixture');
         $this->assertInstanceOf('DI\Definition\Definition', $definition);
 
         $methodInjections = $definition->getMethodInjections();
@@ -136,8 +136,8 @@ class AnnotationDefinitionSourceTest extends \PHPUnit_Framework_TestCase
 
     public function testMethod5()
     {
-        $reader = new AnnotationDefinitionSource();
-        $definition = $reader->getDefinition('UnitTests\DI\Definition\Fixtures\AnnotationFixture');
+        $source = new AnnotationDefinitionSource();
+        $definition = $source->getDefinition('UnitTests\DI\Definition\Fixtures\AnnotationFixture');
         $this->assertInstanceOf('DI\Definition\Definition', $definition);
 
         $methodInjections = $definition->getMethodInjections();
@@ -158,8 +158,8 @@ class AnnotationDefinitionSourceTest extends \PHPUnit_Framework_TestCase
 
     public function testMethod6()
     {
-        $reader = new AnnotationDefinitionSource();
-        $definition = $reader->getDefinition('UnitTests\DI\Definition\Fixtures\AnnotationFixture');
+        $source = new AnnotationDefinitionSource();
+        $definition = $source->getDefinition('UnitTests\DI\Definition\Fixtures\AnnotationFixture');
         $this->assertInstanceOf('DI\Definition\Definition', $definition);
 
         $methodInjections = $definition->getMethodInjections();

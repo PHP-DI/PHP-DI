@@ -20,14 +20,14 @@ class CombinedDefinitionSourceTest extends \PHPUnit_Framework_TestCase
 
     public function testSubSources()
     {
-        $reader = new CombinedDefinitionSource();
-        $this->assertEmpty($reader->getSources());
+        $source = new CombinedDefinitionSource();
+        $this->assertEmpty($source->getSources());
 
-        $reader->addSource(new ArrayDefinitionSource());
-        $this->assertCount(1, $reader->getSources());
+        $source->addSource(new ArrayDefinitionSource());
+        $this->assertCount(1, $source->getSources());
 
-        $reader->addSource(new ArrayDefinitionSource());
-        $this->assertCount(2, $reader->getSources());
+        $source->addSource(new ArrayDefinitionSource());
+        $this->assertCount(2, $source->getSources());
     }
 
     public function testSubSourcesCalled()

@@ -19,42 +19,42 @@ class CachedDefinitionSourceTest extends \PHPUnit_Framework_TestCase
 
     public function testGetters()
     {
-        $otherReader = $this->getMockForAbstractClass('DI\Definition\Source\DefinitionSource');
+        $otherSource = $this->getMockForAbstractClass('DI\Definition\Source\DefinitionSource');
         $cache = $this->getMockForAbstractClass('Doctrine\Common\Cache\Cache');
-        $cachedDefinitionReader = new CachedDefinitionSource($otherReader, $cache, true);
-        $this->assertSame($otherReader, $cachedDefinitionReader->getDefinitionSource());
-        $this->assertSame($cache, $cachedDefinitionReader->getCache());
-        $this->assertTrue($cachedDefinitionReader->getDebug());
+        $cachedDefinitionSource = new CachedDefinitionSource($otherSource, $cache, true);
+        $this->assertSame($otherSource, $cachedDefinitionSource->getDefinitionSource());
+        $this->assertSame($cache, $cachedDefinitionSource->getCache());
+        $this->assertTrue($cachedDefinitionSource->getDebug());
     }
 
     public function testGetClassDefinitionNotCached()
     {
-        // Reader
-        $otherReader = $this->getMockForAbstractClass('DI\Definition\Source\DefinitionSource');
-        $otherReader->expects($this->any())->method('getDefinition')->will($this->returnValue('test'));
+        // Source
+        $otherSource = $this->getMockForAbstractClass('DI\Definition\Source\DefinitionSource');
+        $otherSource->expects($this->any())->method('getDefinition')->will($this->returnValue('test'));
         // Cache
         $cache = $this->getMockForAbstractClass('Doctrine\Common\Cache\Cache');
         $cache->expects($this->any())->method('fetch')->will($this->returnValue(false));
-        // We expect that the cached reader will save data in the cache
+        // We expect that the cached source will save data in the cache
         $cache->expects($this->atLeastOnce())->method('save');
         // Test
-        $cachedDefinitionReader = new CachedDefinitionSource($otherReader, $cache, false);
-        $this->assertEquals('test', $cachedDefinitionReader->getDefinition('MyClass'));
+        $cachedDefinitionSource = new CachedDefinitionSource($otherSource, $cache, false);
+        $this->assertEquals('test', $cachedDefinitionSource->getDefinition('MyClass'));
     }
 
     public function testGetClassDefinitionCached()
     {
-        // Reader
-        $otherReader = $this->getMockForAbstractClass('DI\Definition\Source\DefinitionSource');
-        $otherReader->expects($this->any())->method('getClassDefinition')->will($this->returnValue('test'));
+        // Source
+        $otherSource = $this->getMockForAbstractClass('DI\Definition\Source\DefinitionSource');
+        $otherSource->expects($this->any())->method('getClassDefinition')->will($this->returnValue('test'));
         // Cache
         $cache = $this->getMockForAbstractClass('Doctrine\Common\Cache\Cache');
         $cache->expects($this->any())->method('fetch')->will($this->returnValue('foo'));
-        // We expect that the cached reader will save data in the cache
+        // We expect that the cached source will save data in the cache
         $cache->expects($this->never())->method('save');
         // Test
-        $cachedDefinitionReader = new CachedDefinitionSource($otherReader, $cache, false);
-        $this->assertEquals('foo', $cachedDefinitionReader->getDefinition('MyClass'));
+        $cachedDefinitionSource = new CachedDefinitionSource($otherSource, $cache, false);
+        $this->assertEquals('foo', $cachedDefinitionSource->getDefinition('MyClass'));
     }
 
 }
