@@ -17,7 +17,7 @@ as practical as possible.
 
 Read the [introduction to dependency injection with an example](doc/example.md).
 
-Dependency injection and DI containers are separate notions, and one should use of a container only if it makes things more practical (which is not always the case).
+Dependency injection and DI containers are separate notions, and one should use of a container only if it makes things more practical (which is not always the case depending on the container you use).
 
 PHP-DI is about this: make dependency injection more practical.
 
@@ -58,14 +58,6 @@ For example that wouldn't be so easy if Library X uses Logger Y and you have to 
 Now how does a code using PHP-DI works:
 
 * Application needs Foo so:
-* Application gets Foo from the Container
-* Application calls Foo
-    * Foo calls Bar
-        * Bar does something
-
-If we don't skip how PHP-DI works:
-
-* Application needs Foo so:
 * Application gets Foo from the Container, so:
     * Container creates Bim
     * Container creates Bar and gives it Bim
@@ -92,6 +84,8 @@ class Foo {
     }
 }
 ```
+
+PHP-DI will know that it should inject an instance of the `Bar` interface or class.
 
 **No configuration needed!**
 
@@ -158,7 +152,13 @@ See also the [complete documentation about array configuration](doc/configure.md
 
 ### Getting started
 
-Once you have defined your dependencies, it's time to get an object from the container:
+1. Define injections (see above, use reflection, annotations or file configuration)
+
+You will define a dependency graph between your objects, which we can represent like so (nodes are objects, links are dependencies):
+
+![](doc/graph.png)
+
+2. Get an object from the container:
 
 ```php
 $foo = $container->get('Foo');
@@ -169,11 +169,16 @@ $foo = $container['Foo'];
 
 But wait! Do not use this everywhere because this makes your code **dependent on the container**. This is an antipattern to dependency injection (it is like the service locator pattern: dependency *fetching* rather than *injection*).
 
-So PHP-DI container has to be called at the root of your application (in your Front Controller for example). To quote the Symfony docs about Dependency Injection:
+So PHP-DI container should be called at the root of your application (in your Front Controller for example). To quote the Symfony docs about Dependency Injection:
 
 > You will need to get [an object] from the container at some point but this should be as few times as possible at the entry point to your application.
 
-For this reason, we provide integration with web frameworks (work in progress). Currently we offer integration with Zend Framework 1.
+For this reason, we try to provide integration with MVC frameworks (work in progress).
+
+To sum up:
+
+- If you can, use `$container->get()` in you front controller ou router to get an instance of a controller class
+- Else, use `$container->get()` in your controllers (but avoid it in your services)
 
 
 ## More
