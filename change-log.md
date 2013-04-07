@@ -4,6 +4,7 @@
 
 Major compatibility breaks with 2.x.
 
+* The container is no longer a Singleton by default (but `Container::getInstance()` is still available for fools who like it)
 * Setter injection
 * Constructor injection
 * Scopes: singleton (share the same instance of the class) or prototype (create a new instance each time it is fetched). Defined at class level.
@@ -15,6 +16,7 @@ Major compatibility breaks with 2.x.
 * As a consequence, annotations are not mandatory anymore, all functionalities can be used with or without annotations.
 * Renamed `DI\Annotations\Inject` to `DI\Annotation\Inject`
 * Code now follows PSR1 and PSR2 coding styles
+* FIXED: #56 Getting a proxy of an alias didn't work
 
 ## 2.1
 
