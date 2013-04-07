@@ -18,19 +18,14 @@ use IntegrationTests\DI\Fixtures\ConstructorInjectionTest\Class1;
 class ConstructorInjectionTest extends \PHPUnit_Framework_TestCase
 {
 
-    public function setUp()
-    {
-        // Reset the singleton instance to ensure all tests are independent
-        Container::reset();
-    }
-
     /**
      * @expectedException \DI\Definition\DefinitionException
      * @expectedExceptionMessage The parameter 'dependency' of the constructor of 'IntegrationTests\DI\Fixtures\ConstructorInjectionTest\Buggy1' has no type defined or guessable
      */
     public function testNonTypeHintedMethod()
     {
-        Container::getInstance()->get('IntegrationTests\DI\Fixtures\ConstructorInjectionTest\Buggy1');
+        $container = new Container();
+        $container->get('IntegrationTests\DI\Fixtures\ConstructorInjectionTest\Buggy1');
     }
 
     /**
@@ -39,7 +34,8 @@ class ConstructorInjectionTest extends \PHPUnit_Framework_TestCase
      */
     public function testNamedUnknownBean()
     {
-        Container::getInstance()->get('IntegrationTests\DI\Fixtures\ConstructorInjectionTest\Buggy2');
+        $container = new Container();
+        $container->get('IntegrationTests\DI\Fixtures\ConstructorInjectionTest\Buggy2');
     }
 
 }

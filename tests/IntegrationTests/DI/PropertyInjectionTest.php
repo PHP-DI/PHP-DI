@@ -19,27 +19,12 @@ use \IntegrationTests\DI\Fixtures\PropertyInjectionTest\NamedBean;
 class PropertyInjectionTest extends \PHPUnit_Framework_TestCase
 {
 
-    public function setUp()
-    {
-        // Reset the singleton instance to ensure all tests are independent
-        Container::reset();
-        $container = Container::getInstance();
-        $container->getConfiguration()->addDefinitions(
-            array(
-                'IntegrationTests\DI\Fixtures\PropertyInjectionTest\Interface1' => array(
-                    'class' => 'IntegrationTests\DI\Fixtures\PropertyInjectionTest\Class3',
-                )
-            )
-        );
-    }
-
-
     /**
      * Injection with lazy enabled
      */
     public function testLazyInjection1()
     {
-        $container = Container::getInstance();
+        $container = new Container();
         /** @var $class LazyInjectionClass */
         $class = $container->get('IntegrationTests\DI\Fixtures\PropertyInjectionTest\LazyInjectionClass');
         $dependency = $class->getClass2();
@@ -51,7 +36,7 @@ class PropertyInjectionTest extends \PHPUnit_Framework_TestCase
 
     public function testLazyInjection2()
     {
-        $container = Container::getInstance();
+        $container = new Container();
         /** @var $class LazyInjectionClass */
         $class = $container->get('IntegrationTests\DI\Fixtures\PropertyInjectionTest\LazyInjectionClass');
         $this->assertTrue($class->getDependencyAttribute());
@@ -62,7 +47,7 @@ class PropertyInjectionTest extends \PHPUnit_Framework_TestCase
      */
     public function testNamedInjection()
     {
-        $container = Container::getInstance();
+        $container = new Container();
         // Configure the named bean
         $bean = new NamedBean();
         $bean->nameForTest = 'namedDependency';
@@ -86,7 +71,7 @@ class PropertyInjectionTest extends \PHPUnit_Framework_TestCase
     public function testNamedInjectionNotFound()
     {
         // Exception (bean not defined)
-        $container = Container::getInstance();
+        $container = new Container();
         $container->get('IntegrationTests\DI\Fixtures\PropertyInjectionTest\NamedInjectionClass');
     }
 
@@ -95,14 +80,15 @@ class PropertyInjectionTest extends \PHPUnit_Framework_TestCase
      */
     public function testIssue1()
     {
+        $container = new Container();
         /** @var $object \IntegrationTests\DI\Fixtures\PropertyInjectionTest\Issue1 */
-        $object = Container::getInstance()->get('IntegrationTests\DI\Fixtures\PropertyInjectionTest\Issue1');
+        $object = $container->get('IntegrationTests\DI\Fixtures\PropertyInjectionTest\Issue1');
         $this->assertInstanceOf('IntegrationTests\DI\Fixtures\PropertyInjectionTest\Class2', $object->class2);
         $this->assertInstanceOf('IntegrationTests\DI\Fixtures\PropertyInjectionTest\Class2', $object->alias);
         $this->assertInstanceOf('IntegrationTests\DI\Fixtures\PropertyInjectionTest\Class2', $object->namespaceAlias);
 
         /** @var $object \IntegrationTests\DI\Fixtures\PropertyInjectionTest\Issue1\AnotherIssue1 */
-        $object = Container::getInstance()->get('IntegrationTests\DI\Fixtures\PropertyInjectionTest\Issue1\AnotherIssue1');
+        $object = $container->get('IntegrationTests\DI\Fixtures\PropertyInjectionTest\Issue1\AnotherIssue1');
         $this->assertInstanceOf('IntegrationTests\DI\Fixtures\PropertyInjectionTest\Class2', $object->dependency);
         $this->assertInstanceOf('IntegrationTests\DI\Fixtures\PropertyInjectionTest\Issue1\Dependency', $object->sameNamespaceDependency);
     }
@@ -113,8 +99,9 @@ class PropertyInjectionTest extends \PHPUnit_Framework_TestCase
      */
     public function testNotFoundVarAnnotation()
     {
+        $container = new Container();
         /** @var $object \IntegrationTests\DI\Fixtures\PropertyInjectionTest\NotFoundVarAnnotation */
-        Container::getInstance()->get('IntegrationTests\DI\Fixtures\PropertyInjectionTest\NotFoundVarAnnotation');
+        $container->get('IntegrationTests\DI\Fixtures\PropertyInjectionTest\NotFoundVarAnnotation');
     }
 
 }
