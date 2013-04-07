@@ -38,64 +38,74 @@ class ArrayDefinitionSource implements DefinitionSource
      */
     public function getDefinition($name)
     {
-        $definition = null;
-
-        if (array_key_exists($name, $this->definitions)) {
-            $arrayDefinition = $this->definitions[$name];
-
-            // Closure definition
-            if ($arrayDefinition instanceof Closure) {
-                return new ClosureDefinition($name, $arrayDefinition);
-            }
-
-            // Value definition
-            if (!is_array($arrayDefinition)) {
-                return new ValueDefinition($name, $arrayDefinition);
-            }
-
-            // Validate array keys
-            $validKeys = array('class', 'scope', 'lazy', 'constructor', 'properties', 'methods');
-            $keys = array_keys($arrayDefinition);
-            $unknownKeys = array_diff($keys, $validKeys);
-            if (count($unknownKeys) > 0) {
-                $firstKey = current($unknownKeys);
-                throw new DefinitionException("Invalid key '$firstKey' in definition of entry '$name'; Valid keys are: "
-                    . implode(', ', $validKeys));
-            }
-
-            // It's a class
-            if (array_key_exists('class', $arrayDefinition)) {
-                $className = $arrayDefinition['class'];
-                $definition = new ClassDefinition($name, $className);
-            } else {
+        if (!array_key_exists($name, $this->definitions)) {
+            if (class_exists($name)) {
                 $definition = new ClassDefinition($name);
+                $this->mergeWithParents($name, $definition);
+                return $definition;
+            } else {
+                return null;
             }
+        }
+        $arrayDefinition = $this->definitions[$name];
 
-            // Class scope
-            if (array_key_exists('scope', $arrayDefinition)) {
-                $scope = $arrayDefinition['scope'];
-                if (!$scope instanceof Scope) {
-                    $scope = new Scope($scope);
-                }
-                $definition->setScope($scope);
+        // Closure definition
+        if ($arrayDefinition instanceof Closure) {
+            return new ClosureDefinition($name, $arrayDefinition);
+        }
+
+        // Value definition
+        if (!is_array($arrayDefinition)) {
+            return new ValueDefinition($name, $arrayDefinition);
+        }
+
+        // Validate array keys
+        $validKeys = array('class', 'scope', 'lazy', 'constructor', 'properties', 'methods');
+        $keys = array_keys($arrayDefinition);
+        $unknownKeys = array_diff($keys, $validKeys);
+        if (count($unknownKeys) > 0) {
+            $firstKey = current($unknownKeys);
+            throw new DefinitionException("Invalid key '$firstKey' in definition of entry '$name'; Valid keys are: "
+                . implode(', ', $validKeys));
+        }
+
+        // It's a class
+        if (array_key_exists('class', $arrayDefinition)) {
+            $className = $arrayDefinition['class'];
+            $definition = new ClassDefinition($name, $className);
+        } else {
+            $definition = new ClassDefinition($name);
+        }
+
+        // Class scope
+        if (array_key_exists('scope', $arrayDefinition)) {
+            $scope = $arrayDefinition['scope'];
+            if (!$scope instanceof Scope) {
+                $scope = new Scope($scope);
             }
+            $definition->setScope($scope);
+        }
 
-            // Lazy
-            if (array_key_exists('lazy', $arrayDefinition)) {
-                $definition->setLazy($arrayDefinition['lazy']);
-            }
+        // Lazy
+        if (array_key_exists('lazy', $arrayDefinition)) {
+            $definition->setLazy($arrayDefinition['lazy']);
+        }
 
-            // Properties
-            $this->readPropertyInjections($definition, $arrayDefinition);
+        // Properties
+        $this->readPropertyInjections($definition, $arrayDefinition);
 
-            // Constructor
-            if (array_key_exists('constructor', $arrayDefinition)) {
-                $constructorInjection = $this->readMethodInjection($definition, '__construct', $arrayDefinition['constructor']);
-                $definition->setConstructorInjection($constructorInjection);
-            }
+        // Constructor
+        if (array_key_exists('constructor', $arrayDefinition)) {
+            $constructorInjection = $this->readMethodInjection($definition, '__construct', $arrayDefinition['constructor']);
+            $definition->setConstructorInjection($constructorInjection);
+        }
 
-            // Methods
-            $this->readMethodInjections($definition, $arrayDefinition);
+        // Methods
+        $this->readMethodInjections($definition, $arrayDefinition);
+
+        // If it's a class, merge definitions from parent classes and interfaces
+        if ($definition instanceof ClassDefinition) {
+            $this->mergeWithParents($name, $definition);
         }
 
         return $definition;
@@ -160,7 +170,7 @@ class ArrayDefinitionSource implements DefinitionSource
         if (array_key_exists('methods', $arrayDefinition)) {
             if (!is_array($arrayDefinition['methods'])) {
                 throw new DefinitionException("Key 'methods' for class " . $definition->getName()
-                                                  . " should be an array");
+                    . " should be an array");
             }
 
             foreach ($arrayDefinition['methods'] as $methodName => $arrayMethodDefinition) {
@@ -223,6 +233,47 @@ class ArrayDefinitionSource implements DefinitionSource
                 $methodInjection->addParameterInjection($parameterInjection);
             }
 
+        }
+    }
+
+    /**
+     * Merge a class definition which the definitions of its parent classes and its interfaces
+     *
+     * @param string          $name
+     * @param ClassDefinition $definition
+     */
+    private function mergeWithParents($name, ClassDefinition $definition)
+    {
+        $className = $definition->getClassName();
+        if (!class_exists($className)) {
+            return;
+        }
+
+        // Parent class
+        $parentClass = get_parent_class($className);
+
+        // Avoids loops (if AbstractClass1 is an alias to Class1, which extends AbstractClass1)
+        if ($parentClass && $parentClass != $name) {
+            $parentDefinition = $this->getDefinition($parentClass);
+            if ($parentDefinition instanceof ClassDefinition) {
+                $definition->merge($this->getDefinition($parentClass));
+            }
+        }
+
+        // Interfaces
+        $interfaces = class_implements($className);
+
+        if (is_array($interfaces)) {
+            foreach ($interfaces as $interfaceName) {
+                // Avoids loops (if Interface1 is an alias to Class1, which implements Interface1)
+                if ($interfaceName == $name) {
+                    continue;
+                }
+                $interfaceDefinition = $this->getDefinition($interfaceName);
+                if ($interfaceDefinition instanceof ClassDefinition) {
+                    $definition->merge($interfaceDefinition);
+                }
+            }
         }
     }
 

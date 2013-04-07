@@ -23,9 +23,13 @@ class InjectionTest extends \PHPUnit_Framework_TestCase
     const DEFINITION_ANNOTATIONS = 2;
     const DEFINITION_ARRAY = 3;
 
+    /**
+     * PHPUnit data provider: generates container configurations for running the same tests for each configuration possible
+     * @return array
+     */
     public static function containerProvider()
     {
-        // Test with a container using annotations and reflection
+        // Test with a container using reflection
         $containerReflection = new Container();
         $containerReflection->getConfiguration()->useReflection(true);
         $containerReflection->getConfiguration()->useAnnotations(false);
@@ -41,7 +45,7 @@ class InjectionTest extends \PHPUnit_Framework_TestCase
             )
         );
 
-        // Test with a container using annotations
+        // Test with a container using annotations and reflection
         $containerAnnotations = new Container();
         $containerAnnotations->getConfiguration()->useReflection(true);
         $containerAnnotations->getConfiguration()->useAnnotations(true);

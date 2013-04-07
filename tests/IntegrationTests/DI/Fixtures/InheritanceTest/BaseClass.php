@@ -19,16 +19,35 @@ abstract class BaseClass
 
     /**
      * @Inject
-     * @var \IntegrationTests\DI\Fixtures\InheritanceTest\Dependency
+     * @var Dependency
      */
-    protected $dependency;
+    public $property1;
 
     /**
-     * @return Dependency
+     * @var Dependency
      */
-    public function getDependency()
+    public $property2;
+
+    /**
+     * @var Dependency
+     */
+    public $property3;
+
+    /**
+     * @param Dependency $param1
+     */
+    public function __construct(Dependency $param1)
     {
-        return $this->dependency;
+        $this->property3 = $param1;
+    }
+
+    /**
+     * @Inject
+     * @param Dependency $property2
+     */
+    public function setProperty2(Dependency $property2)
+    {
+        $this->property2 = $property2;
     }
 
 }

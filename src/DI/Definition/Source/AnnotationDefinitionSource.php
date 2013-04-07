@@ -41,7 +41,7 @@ class AnnotationDefinitionSource implements DefinitionSource
     private $annotationReader;
 
     /**
-     * @var \DI\Definition\Source\Annotation\PhpDocParser
+     * @var PhpDocParser
      */
     private $phpDocParser;
 
@@ -57,7 +57,7 @@ class AnnotationDefinitionSource implements DefinitionSource
     /**
      * {@inheritdoc}
      * @throws AnnotationException
-     * @throws \InvalidArgumentException The class doesn't exist
+     * @throws InvalidArgumentException The class doesn't exist
      */
     public function getDefinition($name)
     {

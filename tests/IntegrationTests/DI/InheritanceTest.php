@@ -18,22 +18,57 @@ use IntegrationTests\DI\Fixtures\InheritanceTest\SubClass;
 class InheritanceTest extends \PHPUnit_Framework_TestCase
 {
 
-    public function setUp()
+    /**
+     * Test a dependency is injected if the injection is defined on a parent class
+     *
+     * @dataProvider containerProvider
+     */
+    public function testInjectionOnParentClass(Container $container)
     {
-        // Reset the singleton instance to ensure all tests are independent
-        Container::reset();
+        /** @var $instance SubClass */
+        $instance = $container->get('IntegrationTests\DI\Fixtures\InheritanceTest\SubClass');
+
+        $this->assertInstanceOf('IntegrationTests\DI\Fixtures\InheritanceTest\Dependency', $instance->property1);
+        $this->assertInstanceOf('IntegrationTests\DI\Fixtures\InheritanceTest\Dependency', $instance->property2);
+        $this->assertInstanceOf('IntegrationTests\DI\Fixtures\InheritanceTest\Dependency', $instance->property3);
     }
 
+
     /**
-     * Injection in a base class
+     * PHPUnit data provider: generates container configurations for running the same tests for each configuration possible
+     * @return array
      */
-    public function testInjectionExtends()
+    public static function containerProvider()
     {
-        /** @var $object \IntegrationTests\DI\Fixtures\InheritanceTest\SubClass */
-        $instance = Container::getInstance()->get('IntegrationTests\DI\Fixtures\InheritanceTest\SubClass');
-        $dependency = $instance->getDependency();
-        $this->assertNotNull($dependency);
-        $this->assertInstanceOf('IntegrationTests\DI\Fixtures\InheritanceTest\Dependency', $dependency);
+        // Test with a container using annotations
+        $containerAnnotations = new Container();
+        $containerAnnotations->getConfiguration()->useReflection(true);
+        $containerAnnotations->getConfiguration()->useAnnotations(true);
+
+        // Test with a container using array configuration
+        $containerArray = new Container();
+        $containerArray->getConfiguration()->useReflection(true);
+        $containerArray->getConfiguration()->useAnnotations(false);
+        $containerArray->getConfiguration()->addDefinitions(
+            array(
+                'IntegrationTests\DI\Fixtures\InheritanceTest\BaseClass' => array(
+                    'properties'  => array(
+                        'property1' => 'IntegrationTests\DI\Fixtures\InheritanceTest\Dependency',
+                    ),
+                    'constructor' => array(
+                        'param1' => 'IntegrationTests\DI\Fixtures\InheritanceTest\Dependency',
+                    ),
+                    'methods'     => array(
+                        'setProperty2' => 'IntegrationTests\DI\Fixtures\InheritanceTest\Dependency',
+                    ),
+                ),
+            )
+        );
+
+        return array(
+            array($containerAnnotations),
+            array($containerArray),
+        );
     }
 
 }
