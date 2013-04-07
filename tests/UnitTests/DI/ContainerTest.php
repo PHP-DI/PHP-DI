@@ -116,6 +116,23 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * Issue #58
+     * @see https://github.com/mnapoli/PHP-DI/issues/58
+     */
+    public function testGetWithProxyWithAlias()
+    {
+        $container = new Container();
+        $container->getConfiguration()->addDefinitions(
+            array(
+                'foo' => array(
+                    'class' => 'stdClass',
+                ),
+            )
+        );
+        $this->assertInstanceOf('DI\Proxy\Proxy', $container->get('foo', true));
+    }
+
+    /**
      * Tests if instantiation unlock works. We should be able to create two instances of the same class.
      */
     public function testCircularDependencies()
