@@ -10,11 +10,8 @@
 namespace IntegrationTests\DI;
 
 use \DI\Container;
-use \IntegrationTests\DI\Fixtures\PropertyInjectionTest\Class2;
-use IntegrationTests\DI\Fixtures\PropertyInjectionTest\Issue14;
 use \IntegrationTests\DI\Fixtures\PropertyInjectionTest\LazyInjectionClass;
 use \IntegrationTests\DI\Fixtures\PropertyInjectionTest\NamedBean;
-use \IntegrationTests\DI\Fixtures\PropertyInjectionTest\NamedInjectionClass;
 
 /**
  * Test class for bean injection
@@ -36,24 +33,6 @@ class PropertyInjectionTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-
-    public function testBasicInjection()
-    {
-        $container = Container::getInstance();
-        $class1 = $container->get('IntegrationTests\DI\Fixtures\PropertyInjectionTest\Class1');
-        $dependency = $class1->getClass2();
-        $this->assertNotNull($dependency);
-        $this->assertInstanceOf('IntegrationTests\DI\Fixtures\PropertyInjectionTest\Class2', $dependency);
-    }
-
-    public function testInterfaceInjection()
-    {
-        $container = Container::getInstance();
-        $class1 = $container->get('IntegrationTests\DI\Fixtures\PropertyInjectionTest\Class1');
-        $dependency = $class1->getInterface1();
-        $this->assertNotNull($dependency);
-        $this->assertInstanceOf('IntegrationTests\DI\Fixtures\PropertyInjectionTest\Class3', $dependency);
-    }
 
     /**
      * Injection with lazy enabled

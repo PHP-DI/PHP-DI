@@ -22,31 +22,6 @@ class ConstructorInjectionTest extends \PHPUnit_Framework_TestCase
     {
         // Reset the singleton instance to ensure all tests are independent
         Container::reset();
-        $container = Container::getInstance();
-        $container->getConfiguration()->addDefinitions(
-            array(
-                'IntegrationTests\DI\Fixtures\ConstructorInjectionTest\Interface1' => array(
-                    'class' => 'IntegrationTests\DI\Fixtures\ConstructorInjectionTest\Class3',
-                )
-            )
-        );
-    }
-
-    public function testBasicInjection()
-    {
-        /** @var $class1 Class1 */
-        $class1 = Container::getInstance()->get('IntegrationTests\DI\Fixtures\ConstructorInjectionTest\Class1');
-        $dependency = $class1->getDependency();
-        $this->assertInstanceOf('IntegrationTests\DI\Fixtures\ConstructorInjectionTest\Class2', $dependency);
-    }
-
-    public function testInterfaceInjection()
-    {
-        /** @var $class1 Class1 */
-        $class1 = Container::getInstance()->get('IntegrationTests\DI\Fixtures\ConstructorInjectionTest\Class1');
-        $dependency = $class1->getInterface1();
-        $this->assertInstanceOf('IntegrationTests\DI\Fixtures\ConstructorInjectionTest\Interface1', $dependency);
-        $this->assertInstanceOf('IntegrationTests\DI\Fixtures\ConstructorInjectionTest\Class3', $dependency);
     }
 
     /**

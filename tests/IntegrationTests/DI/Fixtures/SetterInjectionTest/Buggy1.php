@@ -10,7 +10,6 @@
 namespace IntegrationTests\DI\Fixtures\SetterInjectionTest;
 
 use DI\Annotation\Inject;
-use IntegrationTests\DI\Fixtures\SetterInjectionTest\Class2;
 
 /**
  * Fixture class
@@ -19,25 +18,12 @@ class Buggy1
 {
 
     /**
-     * @var Class2
-     */
-    private $dependency;
-
-    /**
      * @Inject
      * @param $dependency
      */
     public function setDependency($dependency)
     {
         $this->dependency = $dependency;
-    }
-
-    /**
-     * @return Class2
-     */
-    public function getDependency()
-    {
-        return $this->dependency;
     }
 
 }

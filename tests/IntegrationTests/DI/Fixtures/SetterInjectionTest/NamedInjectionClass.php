@@ -20,11 +20,6 @@ class NamedInjectionClass
     /**
      * @Inject(name="namedDependency")
      */
-    private $dependency;
-
-    public function getDependency()
-    {
-        return $this->dependency;
-    }
+    public $dependency;
 
 }

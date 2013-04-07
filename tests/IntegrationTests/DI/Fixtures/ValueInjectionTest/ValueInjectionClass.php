@@ -21,14 +21,6 @@ class ValueInjectionClass
      * @Inject("db.host")
      * @var string
      */
-    private $value;
-
-    /**
-     * @return string
-     */
-    public function getValue()
-    {
-        return $this->value;
-    }
+    public $value;
 
 }
