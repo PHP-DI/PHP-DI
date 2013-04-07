@@ -1,6 +1,8 @@
 PHP-DI is a Container that makes [*Dependency Injection*](http://en.wikipedia.org/wiki/Dependency_injection)
 as practical as possible.
 
+PHP-DI also tries to avoid falling into the trap of the "Service Locator" antipattern and help you do *real* dependency injection.
+
 
 ## Features
 
@@ -173,12 +175,12 @@ So PHP-DI container should be called at the root of your application (in your Fr
 
 > You will need to get [an object] from the container at some point but this should be as few times as possible at the entry point to your application.
 
-For this reason, we try to provide integration with MVC frameworks (work in progress).
+For this reason, we are trying to provide integration with MVC frameworks (work in progress).
 
 To sum up:
 
-- If you can, use `$container->get()` in you front controller ou router to get an instance of a controller class
-- Else, use `$container->get()` in your controllers (but avoid it in your services)
+- If you can, use `$container->get()` in you root application class or front controller
+- Else, use `$container->get()` in your controllers (but avoid it in your services) but keep in mind that your controllers will be dependent on the container
 
 
 ## More
