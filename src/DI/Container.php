@@ -237,20 +237,6 @@ class Container implements ArrayAccess
     }
 
     /**
-     * Returns a proxy class
-     *
-     * @param string $classname
-     * @return Proxy Proxy instance
-     */
-    private function getProxy($classname)
-    {
-        $container = $this;
-        return new Proxy(function () use ($container, $classname) {
-            return $container->get($classname);
-        });
-    }
-
-    /**
      * @param FactoryInterface $factory
      */
     public function setFactory(FactoryInterface $factory)
@@ -288,6 +274,20 @@ class Container implements ArrayAccess
 
         unset($this->classesBeingInstantiated[$classname]);
         return $instance;
+    }
+
+    /**
+     * Returns a proxy class
+     *
+     * @param string $classname
+     * @return Proxy Proxy instance
+     */
+    private function getProxy($classname)
+    {
+        $container = $this;
+        return new Proxy(function () use ($container, $classname) {
+            return $container->get($classname);
+        });
     }
 
 }
