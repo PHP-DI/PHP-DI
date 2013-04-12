@@ -263,10 +263,6 @@ class Container implements ArrayAccess
         return $this->factory;
     }
 
-    private final function __clone()
-    {
-    }
-
     /**
      * @param ClassDefinition $classDefinition
      * @return object The instance
