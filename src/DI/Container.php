@@ -26,6 +26,10 @@ use InvalidArgumentException;
 class Container implements ArrayAccess
 {
 
+    /**
+     * Singleton instance
+     * @var self
+     */
     private static $singletonInstance = null;
 
     /**
@@ -140,7 +144,6 @@ class Container implements ArrayAccess
         // It's a class
         if ($definition instanceof ClassDefinition) {
             // Return a proxy class
-            // TODO refactor
             if ($useProxy) {
                 return $this->getProxy($definition->getClassName());
             }
