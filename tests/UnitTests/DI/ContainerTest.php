@@ -122,7 +122,7 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
     public function testGetWithProxyWithAlias()
     {
         $container = new Container();
-        $container->getConfiguration()->addDefinitions(
+        $container->addDefinitions(
             array(
                 'foo' => array(
                     'class' => 'stdClass',

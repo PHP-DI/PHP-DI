@@ -42,14 +42,14 @@ class InheritanceTest extends \PHPUnit_Framework_TestCase
     {
         // Test with a container using annotations
         $containerAnnotations = new Container();
-        $containerAnnotations->getConfiguration()->useReflection(true);
-        $containerAnnotations->getConfiguration()->useAnnotations(true);
+        $containerAnnotations->useReflection(true);
+        $containerAnnotations->useAnnotations(true);
 
         // Test with a container using array configuration
         $containerArray = new Container();
-        $containerArray->getConfiguration()->useReflection(true);
-        $containerArray->getConfiguration()->useAnnotations(false);
-        $containerArray->getConfiguration()->addDefinitions(
+        $containerArray->useReflection(true);
+        $containerArray->useAnnotations(false);
+        $containerArray->addDefinitions(
             array(
                 'IntegrationTests\DI\Fixtures\InheritanceTest\BaseClass' => array(
                     'properties'  => array(

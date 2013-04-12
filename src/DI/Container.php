@@ -91,14 +91,6 @@ class Container implements ArrayAccess
     }
 
     /**
-     * @return Configuration
-     */
-    public function getConfiguration()
-    {
-        return $this->configuration;
-    }
-
-    /**
      * Returns an instance by its name
      *
      * @param string $name Can be a bean name or a class name
@@ -163,7 +155,7 @@ class Container implements ArrayAccess
     }
 
     /**
-     * Define a bean or a value in the container
+     * Define an object or a value in the container
      *
      * @param string $name Name to use with Inject annotation
      * @param mixed  $entry Entry to store in the container (bean or value)
@@ -171,14 +163,6 @@ class Container implements ArrayAccess
     public function set($name, $entry)
     {
         $this->entries[$name] = $entry;
-    }
-
-    /**
-     * @return DefinitionSource The definition source
-     */
-    public function getDefinitionSource()
-    {
-        return $this->configuration->getDefinitionSource();
     }
 
     /**
@@ -234,6 +218,44 @@ class Container implements ArrayAccess
     public function offsetUnset($offset)
     {
         unset($this->entries[$offset]);
+    }
+
+    /**
+     * Enable or disable the use of reflection
+     *
+     * @param boolean $bool
+     */
+    public function useReflection($bool)
+    {
+        $this->configuration->useReflection($bool);
+    }
+
+    /**
+     * Enable or disable the use of annotations
+     *
+     * @param boolean $bool
+     */
+    public function useAnnotations($bool)
+    {
+        $this->configuration->useAnnotations($bool);
+    }
+
+    /**
+     * Add definitions from an array
+     *
+     * @param array $definitions
+     */
+    public function addDefinitions(array $definitions)
+    {
+        $this->configuration->addDefinitions($definitions);
+    }
+
+    /**
+     * @return DefinitionSource The definition source
+     */
+    public function getDefinitionSource()
+    {
+        return $this->configuration->getDefinitionSource();
     }
 
     /**

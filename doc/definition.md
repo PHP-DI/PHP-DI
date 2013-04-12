@@ -15,8 +15,7 @@ You can also combine these definitions if you want to.
 ## Reflection
 
 ```php
-$configuration = $container->getConfiguration();
-$configuration->useReflection(true);
+$container->useReflection(true);
 ```
 
 **Note: Reflection is enabled by default**
@@ -58,8 +57,7 @@ So use Reflection either:
 ## Annotations
 
 ```php
-$configuration = $container->getConfiguration();
-$configuration->useAnnotations(true);
+$container->useAnnotations(true);
 ```
 
 **Note: Annotations are enabled by default**
@@ -150,10 +148,9 @@ For that, see below (and don't forget you can use reflection, annotations and PH
 ## PHP array
 
 ```php
-$configuration = $container->getConfiguration();
-$configuration->addDefinitions($array);
+$container->addDefinitions($array);
 // or
-$configuration->addDefinitionsFromFile('config/di.php');
+$container->addDefinitionsFromFile('config/di.php');
 ```
 
 You can also define injections with a PHP array.

@@ -31,9 +31,9 @@ class InjectionTest extends \PHPUnit_Framework_TestCase
     {
         // Test with a container using reflection
         $containerReflection = new Container();
-        $containerReflection->getConfiguration()->useReflection(true);
-        $containerReflection->getConfiguration()->useAnnotations(false);
-        $containerReflection->getConfiguration()->addDefinitions(
+        $containerReflection->useReflection(true);
+        $containerReflection->useAnnotations(false);
+        $containerReflection->addDefinitions(
             array(
                 'foo' => 'bar',
                 'IntegrationTests\DI\Fixtures\Interface1' => array(
@@ -47,9 +47,9 @@ class InjectionTest extends \PHPUnit_Framework_TestCase
 
         // Test with a container using annotations and reflection
         $containerAnnotations = new Container();
-        $containerAnnotations->getConfiguration()->useReflection(true);
-        $containerAnnotations->getConfiguration()->useAnnotations(true);
-        $containerAnnotations->getConfiguration()->addDefinitions(
+        $containerAnnotations->useReflection(true);
+        $containerAnnotations->useAnnotations(true);
+        $containerAnnotations->addDefinitions(
             array(
                 'foo' => 'bar',
                 'IntegrationTests\DI\Fixtures\Interface1' => array(
@@ -63,9 +63,9 @@ class InjectionTest extends \PHPUnit_Framework_TestCase
 
         // Test with a container using array configuration
         $containerArray = new Container();
-        $containerArray->getConfiguration()->useReflection(false);
-        $containerArray->getConfiguration()->useAnnotations(false);
-        $containerArray->getConfiguration()->addDefinitions(
+        $containerArray->useReflection(false);
+        $containerArray->useAnnotations(false);
+        $containerArray->addDefinitions(
             array(
                 'foo' => 'bar',
                 'IntegrationTests\DI\Fixtures\Class1'          => array(
