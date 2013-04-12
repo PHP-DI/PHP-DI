@@ -10,8 +10,6 @@
 namespace UnitTests\DI;
 
 use stdClass;
-use ReflectionClass;
-use ReflectionMethod;
 use \DI\Container;
 
 /**
