@@ -36,25 +36,15 @@ class CachedDefinitionSource implements DefinitionSource
     private $cache;
 
     /**
-     * If true, changes in the files will be tracked to update the cache automatically.
-     * Disable in production for better performances.
-     * @var boolean
-     */
-    private $debug;
-
-    /**
      * Construct the cache
      *
      * @param DefinitionSource $definitionSource
      * @param Cache            $cache
-     * @param boolean          $debug If true, changes in the files will be tracked to update the cache automatically.
-     * Disable in production for better performances.
      */
-    public function __construct(DefinitionSource $definitionSource, Cache $cache, $debug = false)
+    public function __construct(DefinitionSource $definitionSource, Cache $cache)
     {
         $this->definitionSource = $definitionSource;
         $this->cache = $cache;
-        $this->debug = (boolean) $debug;
     }
 
     /**
@@ -105,38 +95,16 @@ class CachedDefinitionSource implements DefinitionSource
     }
 
     /**
-     * If true, changes in the files will be tracked to update the cache automatically.
-     * Disable in production for better performances.
-     * @return boolean
-     */
-    public function getDebug()
-    {
-        return $this->debug;
-    }
-
-    /**
-     * If true, changes in the files will be tracked to update the cache automatically.
-     * Disable in production for better performances.
-     * @param boolean $debug
-     */
-    public function setDebug($debug)
-    {
-        $this->debug = (boolean) $debug;
-    }
-
-    /**
      * Fetches a value from the cache
      *
-     * @param string $classname The class name
+     * @param string $name Entry name
      * @return mixed|boolean The cached value or false when the value is not in cache
      */
-    private function fetchFromCache($classname)
+    private function fetchFromCache($name)
     {
-        $cacheKey = self::$CACHE_PREFIX . $classname;
+        $cacheKey = self::$CACHE_PREFIX . $name;
         if (($data = $this->cache->fetch($cacheKey)) !== false) {
-            if (!$this->debug || $this->isCacheFresh($cacheKey, $classname)) {
-                return $data;
-            }
+            return $data;
         }
         return false;
     }
@@ -151,25 +119,6 @@ class CachedDefinitionSource implements DefinitionSource
     {
         $cacheKey = self::$CACHE_PREFIX . $classname;
         $this->cache->save($cacheKey, $value);
-        if ($this->debug) {
-            $this->cache->save('[C]' . $cacheKey, time());
-        }
-    }
-
-    /**
-     * Check if cache is fresh
-     *
-     * @param string $cacheKey
-     * @param string $classname
-     * @return boolean
-     */
-    private function isCacheFresh($cacheKey, $classname)
-    {
-        $class = new \ReflectionClass($classname);
-        if (false === $filename = $class->getFilename()) {
-            return true;
-        }
-        return $this->cache->fetch('[C]' . $cacheKey) >= filemtime($filename);
     }
 
 }

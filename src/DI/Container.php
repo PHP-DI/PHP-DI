@@ -16,6 +16,7 @@ use DI\Definition\Helper\ClassDefinitionHelper;
 use DI\Definition\Source\DefinitionSource;
 use DI\Definition\ValueDefinition;
 use DI\Proxy\Proxy;
+use Doctrine\Common\Cache\Cache;
 use Exception;
 use InvalidArgumentException;
 
@@ -221,6 +222,16 @@ class Container
     public function getDefinitionSource()
     {
         return $this->configuration->getDefinitionSource();
+    }
+
+    /**
+     * Enables the use of a cache for the definitions
+     *
+     * @param Cache $cache Cache backend to use
+     */
+    public function setDefinitionCache(Cache $cache)
+    {
+        $this->configuration->setCache($cache);
     }
 
     /**

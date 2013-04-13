@@ -21,10 +21,9 @@ class CachedDefinitionSourceTest extends \PHPUnit_Framework_TestCase
     {
         $otherSource = $this->getMockForAbstractClass('DI\Definition\Source\DefinitionSource');
         $cache = $this->getMockForAbstractClass('Doctrine\Common\Cache\Cache');
-        $cachedDefinitionSource = new CachedDefinitionSource($otherSource, $cache, true);
+        $cachedDefinitionSource = new CachedDefinitionSource($otherSource, $cache);
         $this->assertSame($otherSource, $cachedDefinitionSource->getDefinitionSource());
         $this->assertSame($cache, $cachedDefinitionSource->getCache());
-        $this->assertTrue($cachedDefinitionSource->getDebug());
     }
 
     /**
@@ -44,7 +43,7 @@ class CachedDefinitionSourceTest extends \PHPUnit_Framework_TestCase
         // We expect that the cached source will save data in the cache
         $cache->expects($this->atLeastOnce())->method('save');
         // Test
-        $cachedDefinitionSource = new CachedDefinitionSource($otherSource, $cache, false);
+        $cachedDefinitionSource = new CachedDefinitionSource($otherSource, $cache);
         $this->assertSame($definition, $cachedDefinitionSource->getDefinition('MyClass'));
     }
 
@@ -65,7 +64,7 @@ class CachedDefinitionSourceTest extends \PHPUnit_Framework_TestCase
         // We expect that the cached source will *not=* save data in the cache
         $cache->expects($this->never())->method('save');
         // Test
-        $cachedDefinitionSource = new CachedDefinitionSource($otherSource, $cache, false);
+        $cachedDefinitionSource = new CachedDefinitionSource($otherSource, $cache);
         $this->assertSame($definition, $cachedDefinitionSource->getDefinition('MyClass'));
     }
 
@@ -79,7 +78,7 @@ class CachedDefinitionSourceTest extends \PHPUnit_Framework_TestCase
         // We expect that the cached source will save data in the cache
         $cache->expects($this->never())->method('save');
         // Test
-        $cachedDefinitionSource = new CachedDefinitionSource($otherSource, $cache, false);
+        $cachedDefinitionSource = new CachedDefinitionSource($otherSource, $cache);
         $this->assertEquals('foo', $cachedDefinitionSource->getDefinition('MyClass'));
     }
 

@@ -183,18 +183,15 @@ class Configuration
      * Enables the use of a cache for all the other definition sources
      *
      * @param Cache|null $cache
-     * @param boolean    $debug If true, changes in the files will be tracked to update the cache automatically.
-     * Disable in production for better performances.
      */
-    public function setCache(Cache $cache = null, $debug = false)
+    public function setCache(Cache $cache = null)
     {
         if ($cache !== null) {
             // Enable
             if ($this->cachedSource === null) {
-                $this->cachedSource = new CachedDefinitionSource($this->combinedSource, $cache, $debug);
+                $this->cachedSource = new CachedDefinitionSource($this->combinedSource, $cache);
             } else {
                 $this->cachedSource->setCache($cache);
-                $this->cachedSource->setDebug($debug);
             }
         } else {
             // Disable
