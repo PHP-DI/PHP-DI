@@ -4,7 +4,7 @@
 
 Major compatibility breaks with 2.x.
 
-* The container is no longer a Singleton by default (but `Container::getInstance()` is still available for fools who like it)
+* The container is no longer a Singleton (but `ContainerSingleton::getInstance()` is available for fools who like it)
 * Setter injection
 * Constructor injection
 * Scopes: singleton (share the same instance of the class) or prototype (create a new instance each time it is fetched). Defined at class level.

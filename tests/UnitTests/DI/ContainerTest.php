@@ -10,21 +10,13 @@
 namespace UnitTests\DI;
 
 use stdClass;
-use \DI\Container;
+use DI\Container;
 
 /**
  * Test class for Container
  */
 class ContainerTest extends \PHPUnit_Framework_TestCase
 {
-
-    public function testGetInstance()
-    {
-        $instance = Container::getInstance();
-        $this->assertInstanceOf('\DI\Container', $instance);
-        $instance2 = Container::getInstance();
-        $this->assertSame($instance, $instance2);
-    }
 
     public function testSetGet()
     {

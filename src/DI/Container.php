@@ -29,12 +29,6 @@ class Container
 {
 
     /**
-     * Singleton instance
-     * @var self
-     */
-    private static $singletonInstance = null;
-
-    /**
      * Map of instances of entry with Singleton scope
      * @var array
      */
@@ -56,27 +50,6 @@ class Container
      * @var array
      */
     private $classesBeingInstantiated = array();
-
-    /**
-     * Returns an instance of the class (Singleton design pattern)
-     * The constructor is left public to allow usage as singleton or as new instance
-     * @return Container
-     */
-    public static function getInstance()
-    {
-        if (self::$singletonInstance == null) {
-            self::$singletonInstance = new self();
-        }
-        return self::$singletonInstance;
-    }
-
-    /**
-     * Reset the singleton instance, for the tests only
-     */
-    public static function reset()
-    {
-        self::$singletonInstance = null;
-    }
 
     /**
      * Constructor creates a default configuration
