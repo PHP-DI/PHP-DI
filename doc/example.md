@@ -115,4 +115,4 @@ Wait!
 
 What you saw is just a teeny tiny fraction of what PHP-DI can do.
 
-[Read more](doc/README.md)
+[Read more](README.md)

@@ -12,7 +12,7 @@ prototype | The object instance is not unique - each injection or call of the co
 
 ## Applying Scopes
 
-Scopes are part of the [definitions](doc/definition.md) of injections, so you can define them using annotations or PHP arrays.
+Scopes are part of the [definitions](definition.md) of injections, so you can define them using annotations or PHP arrays.
 
 ### Annotation
 
