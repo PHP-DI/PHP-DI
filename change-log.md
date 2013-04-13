@@ -17,6 +17,7 @@ Major compatibility breaks with 2.x.
 * As a consequence, annotations are not mandatory anymore, all functionalities can be used with or without annotations.
 * Renamed `DI\Annotations\Inject` to `DI\Annotation\Inject`
 * `Container` no longer implements ArrayAccess, use only `$container->get($key)` now
+* ZF1 integration broken and removed (work in progress for next releases)
 * Code now follows PSR1 and PSR2 coding styles
 * FIXED: #56 Getting a proxy of an alias didn't work
 
