@@ -7,7 +7,7 @@
  * @license   http://www.opensource.org/licenses/mit-license.php MIT (see the LICENSE file)
  */
 
-namespace DI\Definition;
+namespace DI\Definition\Exception;
 
 /**
  * Invalid DI definitions

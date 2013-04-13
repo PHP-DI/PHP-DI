@@ -7,12 +7,12 @@
  * @license   http://www.opensource.org/licenses/mit-license.php MIT (see the LICENSE file)
  */
 
-namespace DI\Definition\Source;
+namespace DI\Definition\Exception;
 
-use DI\Definition\DefinitionException;
+use DI\Definition\Exception\DefinitionException;
 
 /**
- * Exception for the annotations
+ * Exception in the definitions using annotations
  *
  * @author Matthieu Napoli <matthieu@mnapoli.fr>
  */

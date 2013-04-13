@@ -9,6 +9,7 @@
 
 namespace DI\Definition;
 
+use DI\Definition\Exception\DefinitionException;
 use DI\Scope;
 
 /**

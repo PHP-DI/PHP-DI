@@ -9,7 +9,7 @@
 
 namespace DI\Definition\Source\Annotation;
 
-use DI\Definition\Source\AnnotationException;
+use DI\Definition\Exception\AnnotationException;
 use Doctrine\Common\Annotations\PhpParser;
 use ReflectionClass;
 use ReflectionMethod;

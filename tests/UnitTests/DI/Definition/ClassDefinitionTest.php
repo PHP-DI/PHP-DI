@@ -10,7 +10,7 @@
 namespace UnitTests\DI\Definition;
 
 use DI\Definition\ClassDefinition;
-use DI\Definition\DefinitionException;
+use DI\Definition\Exception\DefinitionException;
 use DI\Definition\MethodInjection;
 use DI\Definition\PropertyInjection;
 use DI\Definition\ValueDefinition;
@@ -48,7 +48,7 @@ class ClassDefinitionTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \DI\Definition\DefinitionException
+     * @expectedException \DI\Definition\Exception\DefinitionException
      * @expectedExceptionMessage DI definition conflict: there are 2 different definitions for 'foo' that are incompatible, they are not of the same type
      */
     public function testMergeIncompatibleTypes()

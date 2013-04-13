@@ -95,7 +95,7 @@ class PropertyInjectionTest extends \PHPUnit_Framework_TestCase
 
     /**
      * Check error cases
-     * @expectedException \DI\Definition\Source\AnnotationException
+     * @expectedException \DI\Definition\Exception\AnnotationException
      */
     public function testNotFoundVarAnnotation()
     {

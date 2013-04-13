@@ -9,6 +9,8 @@
 
 namespace DI\Definition;
 
+use DI\Definition\Exception\DefinitionException;
+
 /**
  * Definition of a value for dependency injection
  *

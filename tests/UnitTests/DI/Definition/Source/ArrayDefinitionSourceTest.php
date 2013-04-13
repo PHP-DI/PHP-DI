@@ -285,7 +285,7 @@ class ArrayDefinitionSourceTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \DI\Definition\DefinitionException
+     * @expectedException \DI\Definition\Exception\DefinitionException
      * @expectedExceptionMessage Invalid key 'bar' in definition of entry 'foo'; Valid keys are: class, scope, lazy, constructor, properties, methods
      */
     public function testKeysValidation()

@@ -10,7 +10,7 @@
 namespace DI;
 
 use DI\Definition\ClassDefinition;
-use DI\Definition\DefinitionException;
+use DI\Definition\Exception\DefinitionException;
 use DI\Definition\MethodInjection;
 use DI\Definition\PropertyInjection;
 use Exception;
@@ -41,7 +41,7 @@ class Factory implements FactoryInterface
     /**
      * {@inheritdoc}
      * @throws DependencyException
-     * @throws DefinitionException
+     * @throws \DI\Definition\Exception\DefinitionException
      */
     public function createInstance(ClassDefinition $classDefinition)
     {
@@ -196,8 +196,8 @@ class Factory implements FactoryInterface
         } catch (DependencyException $e) {
             throw $e;
         } catch (Exception $e) {
-            throw new DependencyException("Error while injecting $propertyName in "
-                . get_class($object) . "::" . $property->name . ". " . $e->getMessage(), 0, $e);
+            throw new DependencyException("Error while injecting '" . $propertyInjection->getEntryName() . "' in "
+                . get_class($object) . "::$propertyName. " . $e->getMessage(), 0, $e);
         }
 
         // Allow access to protected and private properties

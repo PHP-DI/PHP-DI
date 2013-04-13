@@ -12,7 +12,7 @@ namespace DI\Definition\Source;
 use Closure;
 use DI\Definition\ClassDefinition;
 use DI\Definition\ClosureDefinition;
-use DI\Definition\DefinitionException;
+use DI\Definition\Exception\DefinitionException;
 use DI\Definition\MethodInjection;
 use DI\Definition\ParameterInjection;
 use DI\Definition\PropertyInjection;
@@ -163,7 +163,7 @@ class ArrayDefinitionSource implements DefinitionSource
     /**
      * @param ClassDefinition $definition
      * @param array           $arrayDefinition
-     * @throws DefinitionException
+     * @throws \DI\Definition\Exception\DefinitionException
      */
     private function readMethodInjections(ClassDefinition $definition, array $arrayDefinition)
     {
@@ -184,7 +184,7 @@ class ArrayDefinitionSource implements DefinitionSource
      * @param ClassDefinition $definition
      * @param string          $methodName
      * @param array|string    $arrayMethodDefinition
-     * @throws DefinitionException
+     * @throws \DI\Definition\Exception\DefinitionException
      * @return MethodInjection
      */
     private function readMethodInjection(ClassDefinition $definition, $methodName, $arrayMethodDefinition)

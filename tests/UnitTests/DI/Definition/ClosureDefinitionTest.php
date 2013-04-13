@@ -9,6 +9,7 @@
 
 namespace UnitTests\DI\Definition;
 
+use DI\Container;
 use DI\Definition\ClassDefinition;
 use DI\Definition\ClosureDefinition;
 
@@ -34,7 +35,7 @@ class ClosureDefinitionTest extends \PHPUnit_Framework_TestCase
 
     public function testGetValueWithContainer()
     {
-        $definition = new ClosureDefinition('foo', function($c) {
+        $definition = new ClosureDefinition('foo', function(Container $c) {
             return $c->get('bar');
         });
 
@@ -48,7 +49,7 @@ class ClosureDefinitionTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \DI\Definition\DefinitionException
+     * @expectedException \DI\Definition\Exception\DefinitionException
      * @expectedExceptionMessage DI definition conflict: there are 2 different definitions for 'foo' that are incompatible, they are not of the same type
      */
     public function testMergeIncompatibleTypes()
