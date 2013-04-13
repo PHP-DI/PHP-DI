@@ -21,14 +21,14 @@ class Proxy
      * Callback that will return the instance
      * @var callable
      */
-    private $beanInstanceLoader;
+    private $instanceLoader;
 
     /**
-     * Instance of the bean that is proxied
+     * Object that is proxied
      *
      * Lazy-loaded, i.e. the instance will be loaded only when the proxy is called
      */
-    private $beanInstance;
+    private $proxiedObject;
 
 
     /**
@@ -37,17 +37,17 @@ class Proxy
      */
     public function __construct($instanceLoader)
     {
-        $this->beanInstanceLoader = $instanceLoader;
+        $this->instanceLoader = $instanceLoader;
     }
 
     /**
-     * Load the instance of the bean (used for lazy-loading)
+     * Load the instance (used for lazy-loading)
      */
     private function __loadInstance()
     {
-        if ($this->beanInstance == null) {
-            $instanceLoader = $this->beanInstanceLoader;
-            $this->beanInstance = $instanceLoader();
+        if ($this->proxiedObject == null) {
+            $instanceLoader = $this->instanceLoader;
+            $this->proxiedObject = $instanceLoader();
         }
     }
 
@@ -55,21 +55,21 @@ class Proxy
     /*********  Proxy methods  *********/
 
     /**
-     * Magic method to catch calls to methods of the bean
+     * Magic method to catch calls to methods of the proxied object
      * @param string $name Name of the method called
      * @param array  $arguments Parameters passed to the method
      * @return mixed
      */
     public function __call($name, array $arguments)
     {
-        if ($this->beanInstance == null) {
+        if ($this->proxiedObject == null) {
             $this->__loadInstance();
         }
-        return call_user_func_array(array($this->beanInstance, $name), $arguments);
+        return call_user_func_array(array($this->proxiedObject, $name), $arguments);
     }
 
     /**
-     * Magic method to catch calls to static methods of the bean
+     * Magic method to catch calls to static methods of the proxied object
      * @param string $name Name of the method called
      * @param array  $arguments Parameters passed to the method
      * @throws ProxyException
@@ -90,10 +90,10 @@ class Proxy
      */
     public function __set($name, $value)
     {
-        if ($this->beanInstance == null) {
+        if ($this->proxiedObject == null) {
             $this->__loadInstance();
         }
-        $this->beanInstance->$name = $value;
+        $this->proxiedObject->$name = $value;
     }
 
     /**
@@ -103,10 +103,10 @@ class Proxy
      */
     public function __get($name)
     {
-        if ($this->beanInstance == null) {
+        if ($this->proxiedObject == null) {
             $this->__loadInstance();
         }
-        return $this->beanInstance->$name;
+        return $this->proxiedObject->$name;
     }
 
     /**
@@ -116,10 +116,10 @@ class Proxy
      */
     public function __isset($name)
     {
-        if ($this->beanInstance == null) {
+        if ($this->proxiedObject == null) {
             $this->__loadInstance();
         }
-        return isset($this->beanInstance->$name);
+        return isset($this->proxiedObject->$name);
     }
 
     /**
@@ -129,10 +129,10 @@ class Proxy
      */
     public function __unset($name)
     {
-        if ($this->beanInstance == null) {
+        if ($this->proxiedObject == null) {
             $this->__loadInstance();
         }
-        unset($this->beanInstance->$name);
+        unset($this->proxiedObject->$name);
     }
 
     /**
@@ -142,10 +142,10 @@ class Proxy
      */
     public function __invoke()
     {
-        if ($this->beanInstance == null) {
+        if ($this->proxiedObject == null) {
             $this->__loadInstance();
         }
-        $beanInstance = $this->beanInstance;
+        $beanInstance = $this->proxiedObject;
         return $beanInstance();
     }
 
@@ -174,11 +174,11 @@ class Proxy
      */
     public function __clone()
     {
-        if ($this->beanInstance == null) {
+        if ($this->proxiedObject == null) {
             $this->__loadInstance();
         }
-        $newInstance = clone $this->beanInstance;
-        $this->beanInstance = $newInstance;
+        $newInstance = clone $this->proxiedObject;
+        $this->proxiedObject = $newInstance;
     }
 
     /**
@@ -186,10 +186,10 @@ class Proxy
      */
     public function __toString()
     {
-        if ($this->beanInstance == null) {
+        if ($this->proxiedObject == null) {
             $this->__loadInstance();
         }
-        return (string) $this->beanInstance;
+        return (string) $this->proxiedObject;
     }
 
     /**

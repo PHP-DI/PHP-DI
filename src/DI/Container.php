@@ -93,7 +93,7 @@ class Container implements ArrayAccess
     /**
      * Returns an instance by its name
      *
-     * @param string $name Can be a bean name or a class name
+     * @param string $name Entry name or a class name
      * @param bool   $useProxy If true, returns a proxy class of the instance
      *                         if it is not already loaded
      * @throws InvalidArgumentException
@@ -110,7 +110,7 @@ class Container implements ArrayAccess
         // Try to find the entry in the map
         if (array_key_exists($name, $this->entries)) {
             $entry = $this->entries[$name];
-            // If it's a closure, resolve it and save the bean
+            // If it's a closure, resolve it and save the result
             if ($entry instanceof \Closure) {
                 $entry = $entry($this);
                 $this->entries[$name] = $entry;
@@ -151,14 +151,14 @@ class Container implements ArrayAccess
             return $instance;
         }
 
-        throw new NotFoundException("No bean, value or class found for '$name'");
+        throw new NotFoundException("No entry or class found for '$name'");
     }
 
     /**
      * Define an object or a value in the container
      *
      * @param string $name Name to use with Inject annotation
-     * @param mixed  $entry Entry to store in the container (bean or value)
+     * @param mixed  $entry Entry to store in the container (object or value)
      */
     public function set($name, $entry)
     {

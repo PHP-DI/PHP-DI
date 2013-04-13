@@ -23,12 +23,13 @@ final class Inject
 {
 
     /**
-     * Bean name
+     * Entry name
      * @var string
      */
     private $name;
 
     /**
+     * Use lazy loading
      * @var boolean
      */
     private $lazy;

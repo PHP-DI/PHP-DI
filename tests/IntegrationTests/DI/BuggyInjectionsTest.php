@@ -39,7 +39,7 @@ class BuggyInjectionsTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException \DI\DependencyException
-     * @expectedExceptionMessage Error while injecting 'namedDependency' in IntegrationTests\DI\Fixtures\SetterInjectionTest\NamedInjectionClass::dependency. No bean, value or class found for 'namedDependency'
+     * @expectedExceptionMessage Error while injecting 'namedDependency' in IntegrationTests\DI\Fixtures\SetterInjectionTest\NamedInjectionClass::dependency. No entry or class found for 'namedDependency'
      */
     public function testSetterNamedInjectionNotFound()
     {
@@ -60,7 +60,7 @@ class BuggyInjectionsTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException \DI\DependencyException
-     * @expectedExceptionMessage Error while injecting dependencies into IntegrationTests\DI\Fixtures\SetterInjectionTest\Buggy3: No bean, value or class found for 'nonExistentBean'
+     * @expectedExceptionMessage Error while injecting dependencies into IntegrationTests\DI\Fixtures\SetterInjectionTest\Buggy3: No entry or class found for 'nonExistentBean'
      */
     public function testSetterNamedUnknownBean()
     {
@@ -70,7 +70,7 @@ class BuggyInjectionsTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException \DI\DependencyException
-     * @expectedExceptionMessage Error while injecting 'db.host' in IntegrationTests\DI\Fixtures\ValueInjectionTest\ValueInjectionClass::value. No bean, value or class found for 'db.host'
+     * @expectedExceptionMessage Error while injecting 'db.host' in IntegrationTests\DI\Fixtures\ValueInjectionTest\ValueInjectionClass::value. No entry or class found for 'db.host'
      */
     public function testValueException()
     {
