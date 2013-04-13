@@ -208,7 +208,7 @@ return [
     // Defining a named instance
     'myNamedInstance' => [
         // Using an anonymous function
-        // not recommended: will prevent caching
+        // not recommended: will not be cached
         'function' => function(Container $c) {
             return new MyClass($c['db.host']);
         },

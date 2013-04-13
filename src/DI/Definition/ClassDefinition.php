@@ -236,4 +236,12 @@ class ClassDefinition implements Definition
         }
     }
 
+    /**
+     * {@inheritdoc}
+     */
+    public function isCacheable()
+    {
+        return true;
+    }
+
 }

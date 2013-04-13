@@ -70,4 +70,12 @@ class ValueDefinition implements Definition
         }
     }
 
+    /**
+     * {@inheritdoc}
+     */
+    public function isCacheable()
+    {
+        return true;
+    }
+
 }

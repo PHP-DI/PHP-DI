@@ -62,12 +62,14 @@ class CachedDefinitionSource implements DefinitionSource
      */
     public function getDefinition($name)
     {
-        $result = $this->fetchFromCache($name);
-        if (!$result) {
-            $result = $this->definitionSource->getDefinition($name);
-            $this->saveToCache($name, $result);
+        $definition = $this->fetchFromCache($name);
+        if (!$definition) {
+            $definition = $this->definitionSource->getDefinition($name);
+            if ($definition === null || ($definition && $definition->isCacheable())) {
+                $this->saveToCache($name, $definition);
+            }
         }
-        return $result;
+        return $definition;
     }
 
     /**

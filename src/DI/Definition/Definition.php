@@ -19,9 +19,10 @@ interface Definition
 
     /**
      * Returns the name of the entry in the container
+     *
      * @return string
      */
-    function getName();
+    public function getName();
 
     /**
      * Merge another definition into the current definition
@@ -30,6 +31,13 @@ interface Definition
      *
      * @param Definition $definition
      */
-    function merge(Definition $definition);
+    public function merge(Definition $definition);
+
+    /**
+     * Returns true if the definition can be cached, false otherwise
+     *
+     * @return bool
+     */
+    public function isCacheable();
 
 }

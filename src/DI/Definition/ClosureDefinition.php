@@ -84,4 +84,12 @@ class ClosureDefinition implements Definition
         }
     }
 
+    /**
+     * {@inheritdoc}
+     */
+    public function isCacheable()
+    {
+        return false;
+    }
+
 }
