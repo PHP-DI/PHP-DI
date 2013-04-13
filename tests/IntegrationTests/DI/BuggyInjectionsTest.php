@@ -28,10 +28,10 @@ class BuggyInjectionsTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \DI\Definition\Exception\DefinitionException
-     * @expectedExceptionMessage The parameter 'dependency' of the constructor of 'IntegrationTests\DI\Fixtures\ConstructorInjectionTest\Buggy2' has no type defined or guessable
+     * @expectedException \DI\DependencyException
+     * @expectedExceptionMessage Error while injecting dependencies into IntegrationTests\DI\Fixtures\ConstructorInjectionTest\Buggy2: No entry or class found for 'nonExistentEntry'
      */
-    public function testConstructorNamedUnknownBean()
+    public function testConstructorNonExistentEntry()
     {
         $container = new Container();
         $container->get('IntegrationTests\DI\Fixtures\ConstructorInjectionTest\Buggy2');

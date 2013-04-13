@@ -18,7 +18,7 @@ class Buggy2
 {
 
     /**
-     * @Inject(name="nonExistentBean")
+     * @Inject({"nonExistentEntry"})
      * @param $dependency
      */
     public function __construct($dependency)
