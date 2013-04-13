@@ -75,6 +75,9 @@ class ValueDefinition implements Definition
      */
     public function isCacheable()
     {
+        if (is_object($this->value)) {
+            return false;
+        }
         return true;
     }
 

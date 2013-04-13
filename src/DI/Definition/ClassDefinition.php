@@ -79,6 +79,14 @@ class ClassDefinition implements Definition
     }
 
     /**
+     * @param string $className
+     */
+    public function setClassName($className)
+    {
+        $this->className = $className;
+    }
+
+    /**
      * @return string Class name
      */
     public function getClassName()

@@ -9,9 +9,10 @@
 
 namespace DI;
 
-use ArrayAccess;
+use Closure;
 use DI\Definition\ClassDefinition;
 use DI\Definition\ClosureDefinition;
+use DI\Definition\Helper\ClassDefinitionHelper;
 use DI\Definition\Source\DefinitionSource;
 use DI\Definition\ValueDefinition;
 use DI\Proxy\Proxy;
@@ -23,7 +24,7 @@ use InvalidArgumentException;
  *
  * @author Matthieu Napoli <matthieu@mnapoli.fr>
  */
-class Container implements ArrayAccess
+class Container
 {
 
     /**
@@ -33,7 +34,7 @@ class Container implements ArrayAccess
     private static $singletonInstance = null;
 
     /**
-     * Map of instances and values that can be injected
+     * Map of instances of entry with Singleton scope
      * @var array
      */
     private $entries = array();
@@ -157,67 +158,31 @@ class Container implements ArrayAccess
     /**
      * Define an object or a value in the container
      *
-     * @param string $name Name to use with Inject annotation
-     * @param mixed  $entry Entry to store in the container (object or value)
-     */
-    public function set($name, $entry)
-    {
-        $this->entries[$name] = $entry;
-    }
-
-    /**
-     * Whether an offset exists
+     * @param string             $name Entry name
+     * @param mixed|Closure|null $value Value, Closure or if null, returns a ClassDefinitionHelper
      *
-     * @link http://php.net/manual/en/arrayaccess.offsetexists.php
-     * @param mixed $offset An offset to check for
-     * @return boolean true on success or false on failure
+     * @return null|ClassDefinitionHelper
      */
-    public function offsetExists($offset)
+    public function set($name, $value = null)
     {
-        // Try to find the entry in the map
-        if (array_key_exists($offset, $this->entries)) {
-            return true;
+        // Class definition
+        if ($value === null) {
+            $helper = new ClassDefinitionHelper($name);
+            $this->configuration->addDefinition($helper->getDefinition());
+            return $helper;
         }
-        // Entry not found, it's a class name
-        if (class_exists($offset)) {
-            return true;
+
+        // Closure definition
+        if ($value instanceof Closure) {
+            $definition = new ClosureDefinition($name, $value);
+            $this->configuration->addDefinition($definition);
+            return null;
         }
-        return false;
-    }
 
-    /**
-     * Offset to retrieve
-     *
-     * @link http://php.net/manual/en/arrayaccess.offsetget.php
-     * @param mixed $offset The offset to retrieve
-     * @return mixed Can return all value types
-     */
-    public function offsetGet($offset)
-    {
-        return $this->get($offset);
-    }
-
-    /**
-     * Offset to set
-     *
-     * @link http://php.net/manual/en/arrayaccess.offsetset.php
-     * @param mixed $offset The offset to assign the value to
-     * @param mixed $value The value to set
-     */
-    public function offsetSet($offset, $value)
-    {
-        $this->set($offset, $value);
-    }
-
-    /**
-     * Offset to unset
-     *
-     * @link http://php.net/manual/en/arrayaccess.offsetunset.php
-     * @param mixed $offset The offset to unset
-     */
-    public function offsetUnset($offset)
-    {
-        unset($this->entries[$offset]);
+        // Value definition
+        $definition = new ValueDefinition($name, $value);
+        $this->configuration->addDefinition($definition);
+        return null;
     }
 
     /**
@@ -247,7 +212,7 @@ class Container implements ArrayAccess
      */
     public function addDefinitions(array $definitions)
     {
-        $this->configuration->addDefinitions($definitions);
+        $this->configuration->addArrayDefinitions($definitions);
     }
 
     /**

@@ -151,61 +151,6 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @depends testSetGet
-     */
-    public function testArrayAccessGet()
-    {
-        $container = new Container();
-        $dummy = new stdClass();
-        $container->set('key', $dummy);
-        $this->assertSame($dummy, $container['key']);
-    }
-
-    /**
-     * @depends testArrayAccessGet
-     */
-    public function testArrayAccessSet()
-    {
-        $container = new Container();
-        $dummy = new stdClass();
-        $container['key'] = $dummy;
-        $this->assertSame($dummy, $container['key']);
-    }
-
-    /**
-     * @depends testArrayAccessGet
-     */
-    public function testArrayAccessExists()
-    {
-        $container = new Container();
-        $dummy = new stdClass();
-        $this->assertFalse(isset($container['key']));
-        $container['key'] = $dummy;
-        $this->assertTrue(isset($container['key']));
-    }
-
-    /**
-     * @depends testArrayAccessGet
-     */
-    public function testArrayAccessExistsWithClassName()
-    {
-        $container = new Container();
-        $this->assertTrue(isset($container['stdClass']));
-    }
-
-    /**
-     * @depends testArrayAccessGet
-     */
-    public function testArrayAccessUnset()
-    {
-        $container = new Container();
-        $dummy = new stdClass();
-        $container['key'] = $dummy;
-        unset($container['key']);
-        $this->assertFalse(isset($container['key']));
-    }
-
-    /**
      * @expectedException \InvalidArgumentException
      * @expectedExceptionMessage The name parameter must be of type string
      */

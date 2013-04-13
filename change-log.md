@@ -12,9 +12,11 @@ Major compatibility breaks with 2.x.
 * Provided configuration backends:
     * Reflection
     * Annotations: @Inject, @Injectable
+    * PHP code (`Container::set()`)
     * PHP array
 * As a consequence, annotations are not mandatory anymore, all functionalities can be used with or without annotations.
 * Renamed `DI\Annotations\Inject` to `DI\Annotation\Inject`
+* `Container` no longer implements ArrayAccess, use only `$container->get($key)` now
 * Code now follows PSR1 and PSR2 coding styles
 * FIXED: #56 Getting a proxy of an alias didn't work
 

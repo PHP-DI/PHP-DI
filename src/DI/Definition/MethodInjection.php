@@ -29,8 +29,8 @@ class MethodInjection
     private $parameterInjections = array();
 
     /**
-     * @param string $methodName
-     * @param array  $parameterInjections
+     * @param string               $methodName
+     * @param ParameterInjection[] $parameterInjections
      */
     public function __construct($methodName, array $parameterInjections = array())
     {

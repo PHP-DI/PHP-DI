@@ -9,12 +9,14 @@
 
 namespace DI;
 
+use DI\Definition\Definition;
 use DI\Definition\Source\AnnotationDefinitionSource;
 use DI\Definition\Source\ArrayDefinitionSource;
 use DI\Definition\Source\CachedDefinitionSource;
 use DI\Definition\Source\CombinedDefinitionSource;
 use DI\Definition\Source\DefinitionSource;
 use DI\Definition\Source\ReflectionDefinitionSource;
+use DI\Definition\Source\SimpleDefinitionSource;
 use Doctrine\Common\Cache\Cache;
 
 /**
@@ -40,6 +42,12 @@ class Configuration
     private $combinedSource;
 
     /**
+     * Keep a reference to the simple source to add definitions to it
+     * @var SimpleDefinitionSource
+     */
+    private $simpleSource;
+
+    /**
      * Keep a reference to the reflection source to ensure only one is used
      * @var ReflectionDefinitionSource|null
      */
@@ -57,6 +65,8 @@ class Configuration
     public function __construct()
     {
         $this->combinedSource = new CombinedDefinitionSource();
+        $this->simpleSource = new SimpleDefinitionSource();
+        $this->combinedSource->addSource($this->simpleSource);
     }
 
     /**
@@ -121,11 +131,21 @@ class Configuration
      *
      * @param array $definitions
      */
-    public function addDefinitions(array $definitions)
+    public function addArrayDefinitions(array $definitions)
     {
         $arraySource = new ArrayDefinitionSource();
         $arraySource->addDefinitions($definitions);
         $this->combinedSource->addSource($arraySource);
+    }
+
+    /**
+     * Add definitions from an array
+     *
+     * @param array $definitions
+     */
+    public function addDefinition(Definition $definition)
+    {
+        $this->simpleSource->addDefinition($definition);
     }
 
     /**
