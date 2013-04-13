@@ -7,8 +7,9 @@ To **define** where and how to inject stuff, you have several options:
 - let PHP-DI guess using [Reflection](http://www.php.net/manual/en/book.reflection.php)
 - use annotations
 - use a PHP array
+- use PHP code (using `Container::set()`)
 
-You can also combine these definitions if you want to.
+You can also use several or all these options at the same time if you want to.
 
 
 
@@ -165,8 +166,8 @@ return [
     'db.host' => 'localhost',
     'db.port' => 5000,
 
-    // Direct mapping (not needed if you enabled Reflection)
-    'SomeClass' => 'SomeClass',
+    // Direct mapping (not needed if you didn't disable Reflection)
+    'SomeClass' => array(),
 
     // This is not recommended: will instantiate the class even when not used, prevents caching
     'SomeOtherClass' => new SomeOtherClass(1, "hello"),
@@ -202,16 +203,11 @@ return [
     // Mapping an interface to an implementation
     'My\Interface' => [
         'class' => 'My\Implementation',
-        'scope' => Scope::SINGLETON(),
     ],
 
     // Defining a named instance
     'myNamedInstance' => [
-        // Using an anonymous function
-        // not recommended: will not be cached
-        'function' => function(Container $c) {
-            return new MyClass($c['db.host']);
-        },
+        'class' => 'My\Class',
     ],
 
     // Using an anonymous function
@@ -221,4 +217,58 @@ return [
     ],
 
 ];
+```
+
+
+## PHP code
+
+The container offers methods to quickly and easily define injections:
+
+```php
+$container = new Container();
+
+// Values (not classes)
+$container->set('db.host', 'localhost');
+$container->set('db.port', 5000);
+
+// Direct mapping (not needed if you didn't disable Reflection)
+$container->set('SomeClass');
+
+// This is not recommended: will instantiate the class even when not used, prevents caching
+$container->set('SomeClass', new SomeOtherClass(1, "hello"));
+
+// Defines an instance of My\Class
+$container->set('My\Class')
+	->withConstructor(array('db.host', 'My\OtherClass'));
+
+$container->set('My\OtherClass')
+	->withScope(Scope::PROTOTYPE())
+	->withConstructor(
+		array(
+			'host' => 'db.host',
+			'port' => 'db.port',
+		)
+	)
+	->withMethod('setFoo1', array('My\Foo1'))
+	->withMethod('setFoo2', array('My\Foo1', 'My\Foo2'))
+	->withMethod('setFoo3', array(
+			'param1' => 'My\Foo1',
+			'param2' => 'My\Foo2'
+		))
+	->withProperty('bar', 'My\Bar')
+	->withProperty('baz', 'My\Baz', true);
+
+// Mapping an interface to an implementation
+$container->set('My\Interface')
+	->bindTo('My\Implementation');
+
+// Defining a named instance
+$container->set('myNamedInstance')
+	->bindTo('My\Class');
+
+// Using an anonymous function
+// not recommended: will not be cached
+$container->set('My\Stuff', function(Container $c) {
+								return new MyClass($c['db.host']);
+							});
 ```

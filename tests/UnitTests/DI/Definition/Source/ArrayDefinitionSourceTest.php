@@ -312,7 +312,7 @@ class ArrayDefinitionSourceTest extends \PHPUnit_Framework_TestCase
             )
         );
         $definition = $source->getDefinition('foo');
-        $this->assertInstanceOf('\\DI\\Definition\\ClosureDefinition', $definition);
+        $this->assertInstanceOf('DI\Definition\ClosureDefinition', $definition);
         $this->assertEquals('foo', $definition->getName());
 
         $container = $this->getMockBuilder('DI\Container')
