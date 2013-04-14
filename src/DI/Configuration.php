@@ -24,6 +24,7 @@ use Doctrine\Common\Cache\Cache;
  * Configuration of the dependency injection container
  *
  * @author Matthieu Napoli <matthieu@mnapoli.fr>
+ * @author Domenic Muskulus <domenic@muskulus.eu>
  */
 class Configuration
 {
