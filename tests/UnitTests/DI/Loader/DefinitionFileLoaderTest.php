@@ -15,7 +15,7 @@ namespace UnitTests\DI\Loader;
 class DefinitionFileLoaderTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @expectedException \DI\Loader\Exception\NoSuchFileException
+     * @expectedException \DI\Loader\Exception\FileNotFoundException
      */
     public function testFileExists()
     {

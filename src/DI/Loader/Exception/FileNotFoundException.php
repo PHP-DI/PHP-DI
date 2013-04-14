@@ -14,7 +14,7 @@ namespace DI\Loader\Exception;
  *
  * @author Domenic Muskulus <domenic@muskulus.eu>
  */
-class NoSuchFileException extends \Exception
+class FileNotFoundException extends \Exception
 {
 
 }

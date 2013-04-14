@@ -9,7 +9,7 @@
 
 namespace DI\Loader;
 
-use DI\Loader\Exception\NoSuchFileException;
+use DI\Loader\Exception\FileNotFoundException;
 use DI\Loader\Exception\ParseException;
 
 /**
@@ -33,12 +33,12 @@ abstract class DefinitionFileLoader
      * @param string $pathAndFilename
      * @param bool $validateFile
      * @throws Exception\ParseException
-     * @throws Exception\NoSuchFileException
+     * @throws Exception\FileNotFoundException
      */
     public function __construct($pathAndFilename, $validateFile = true)
     {
         if (!file_exists($pathAndFilename)) {
-            throw new NoSuchFileException("The definition file '$pathAndFilename' has not been found.");
+            throw new FileNotFoundException("The definition file '$pathAndFilename' has not been found.");
         } elseif (!is_readable($pathAndFilename)) {
            throw new ParseException("The definition file '$pathAndFilename' is not readable.");
         }
