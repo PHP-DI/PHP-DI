@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<definitions xmlns="http://mnapoli.github.com/PHP-DI/schema/definitions">
+    <value name="value1">abc</value>
+    <value name="value2">123</value>
+    <value name="value3">true</value>
+    <class name="class1" scope="singleton" lazy="true">
+        <constructor>
+            <argument name="name1">argument1</argument>
+            <argument name="name2">argument2</argument>
+            <argument name="name3">argument3</argument>
+        </constructor>
+        <method name="method1">
+            <argument name="name4">argument4</argument>
+            <argument name="name5">argument5</argument>
+        </method>
+        <method name="method2">
+            <argument name="name6">argument6</argument>
+        </method>
+        <method name="method3">
+            <argument>argument7</argument>
+            <argument>argument8</argument>
+        </method>
+        <property name="property1">value1</property>
+        <property name="property2" lazy="true">interface1</property>
+    </class>
+    <interface name="interface1" class="class1" lazy="false" />
+    <interface name="interface2" class="class2" scope="prototype" />
+</definitions>
