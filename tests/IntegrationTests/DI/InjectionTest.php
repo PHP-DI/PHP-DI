@@ -9,7 +9,7 @@
 
 namespace IntegrationTests\DI;
 
-use DI\Definition\FileLoader\PhpDefinitionFileLoader;
+use DI\Definition\FileLoader\ArrayDefinitionFileLoader;
 use DI\Definition\FileLoader\YamlDefinitionFileLoader;
 use DI\Scope;
 use DI\Container;
@@ -105,7 +105,7 @@ class InjectionTest extends \PHPUnit_Framework_TestCase
         $containerArrayFromFile = new Container();
         $containerArrayFromFile->useReflection(false);
         $containerArrayFromFile->useAnnotations(false);
-        $containerArrayFromFile->addDefinitionsFromFile(new PhpDefinitionFileLoader(__DIR__ . '/Fixtures/definitions.php'));
+        $containerArrayFromFile->addDefinitionsFromFile(new ArrayDefinitionFileLoader(__DIR__ . '/Fixtures/definitions.php'));
 
         // Test with a container using array configuration loaded from file
         $containerYaml = new Container();

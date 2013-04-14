@@ -9,16 +9,16 @@
 
 namespace UnitTests\DI\Definition\FileLoader;
 
-use DI\Definition\FileLoader\PhpDefinitionFileLoader;
+use DI\Definition\FileLoader\ArrayDefinitionFileLoader;
 
 /**
- * Test class for PhpDefinitionFileLoader
+ * Test class for ArrayDefinitionFileLoader
  */
-class PhpDefinitionFileLoaderTest extends DefinitionFileLoaderBaseTestCase
+class ArrayDefinitionFileLoaderTest extends DefinitionFileLoaderBaseTestCase
 {
     public function testLoad()
     {
-        $loader = new PhpDefinitionFileLoader(__DIR__ . '/Fixtures/definitions.php');
+        $loader = new ArrayDefinitionFileLoader(__DIR__ . '/Fixtures/definitions.php');
         $definitions = $loader->load();
         $this->assertEquals(self::$definitionsReference, $definitions);
     }
@@ -28,7 +28,7 @@ class PhpDefinitionFileLoaderTest extends DefinitionFileLoaderBaseTestCase
      */
     public function testLoadInvalid()
     {
-        $loader = new PhpDefinitionFileLoader(__DIR__ . '/Fixtures/definitions_invalid.php');
+        $loader = new ArrayDefinitionFileLoader(__DIR__ . '/Fixtures/definitions_invalid.php');
         $loader->load();
     }
 }

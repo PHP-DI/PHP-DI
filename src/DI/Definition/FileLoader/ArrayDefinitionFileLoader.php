@@ -10,11 +10,11 @@
 namespace DI\Definition\FileLoader;
 
 /**
- * PhpDefinitionFileLoader loads PHP files definitions.
+ * Loads definition from an array in a PHP file
  *
  * @author Domenic Muskulus <domenic@muskulus.eu>
  */
-class PhpDefinitionFileLoader extends DefinitionFileLoader
+class ArrayDefinitionFileLoader extends DefinitionFileLoader
 {
 
     /**
