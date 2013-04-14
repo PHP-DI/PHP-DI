@@ -7,28 +7,28 @@
  * @license   http://www.opensource.org/licenses/mit-license.php MIT (see the LICENSE file)
  */
 
-namespace UnitTests\DI\Loader;
+namespace UnitTests\DI\Definition\FileLoader;
 
-use DI\Loader\YamlDefinitionFileLoader;
+use DI\Definition\FileLoader\PhpDefinitionFileLoader;
 
 /**
- * Test class for YamlDefinitionFileLoader
+ * Test class for PhpDefinitionFileLoader
  */
-class YamlDefinitionFileLoaderTest extends DefinitionFileLoaderBaseTestCase
+class PhpDefinitionFileLoaderTest extends DefinitionFileLoaderBaseTestCase
 {
     public function testLoad()
     {
-        $loader = new YamlDefinitionFileLoader(__DIR__ . '/Fixtures/definitions.yaml');
+        $loader = new PhpDefinitionFileLoader(__DIR__ . '/Fixtures/definitions.php');
         $definitions = $loader->load();
         $this->assertEquals(self::$definitionsReference, $definitions);
     }
 
     /**
-     * @expectedException \DI\Loader\Exception\ParseException
+     * @expectedException \DI\Definition\FileLoader\Exception\ParseException
      */
     public function testLoadInvalid()
     {
-        $loader = new YamlDefinitionFileLoader(__DIR__ . '/Fixtures/definitions_invalid.yaml');
+        $loader = new PhpDefinitionFileLoader(__DIR__ . '/Fixtures/definitions_invalid.php');
         $loader->load();
     }
 }

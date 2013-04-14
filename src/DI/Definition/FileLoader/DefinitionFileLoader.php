@@ -7,10 +7,10 @@
  * @license   http://www.opensource.org/licenses/mit-license.php MIT (see the LICENSE file)
  */
 
-namespace DI\Loader;
+namespace DI\Definition\FileLoader;
 
-use DI\Loader\Exception\FileNotFoundException;
-use DI\Loader\Exception\ParseException;
+use DI\Definition\FileLoader\Exception\FileNotFoundException;
+use DI\Definition\FileLoader\Exception\ParseException;
 
 /**
  * DefinitionFileLoader is the abstract class used by all built-in loaders that are file based.

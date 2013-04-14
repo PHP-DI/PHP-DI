@@ -9,8 +9,8 @@
 
 namespace IntegrationTests\DI;
 
-use DI\Loader\PhpDefinitionFileLoader;
-use DI\Loader\YamlDefinitionFileLoader;
+use DI\Definition\FileLoader\PhpDefinitionFileLoader;
+use DI\Definition\FileLoader\YamlDefinitionFileLoader;
 use DI\Scope;
 use DI\Container;
 use IntegrationTests\DI\Fixtures\Class1;

@@ -17,7 +17,7 @@ use DI\Definition\Source\CombinedDefinitionSource;
 use DI\Definition\Source\DefinitionSource;
 use DI\Definition\Source\ReflectionDefinitionSource;
 use DI\Definition\Source\SimpleDefinitionSource;
-use DI\Loader\DefinitionFileLoader;
+use DI\Definition\FileLoader\DefinitionFileLoader;
 use Doctrine\Common\Cache\Cache;
 
 /**
@@ -151,7 +151,7 @@ class Configuration
     /**
      * Add definitions contained in a file
      *
-     * @param DefinitionFileLoader $definitionFileLoader
+     * @param \DI\Definition\FileLoader\DefinitionFileLoader $definitionFileLoader
      * @throws \InvalidArgumentException
      */
     public function addDefinitionsFromFile(DefinitionFileLoader $definitionFileLoader)

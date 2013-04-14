@@ -151,7 +151,7 @@ For that, see below (and don't forget you can use reflection, annotations and PH
 ```php
 $container->addDefinitions($array);
 // or from a file
-$container->addDefinitionsFromFile(new \DI\Loader\PhpDefinitionFileLoader('config/di.php'));
+$container->addDefinitionsFromFile(new \DI\Definition\FileLoader\PhpDefinitionFileLoader('config/di.php'));
 ```
 
 You can also define injections with a PHP array.

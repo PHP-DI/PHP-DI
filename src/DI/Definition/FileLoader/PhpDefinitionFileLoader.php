@@ -7,17 +7,14 @@
  * @license   http://www.opensource.org/licenses/mit-license.php MIT (see the LICENSE file)
  */
 
-namespace DI\Loader;
-
-use DI\Loader\Exception\ParseException;
-use Symfony\Component\Yaml\Yaml;
+namespace DI\Definition\FileLoader;
 
 /**
- * YamlDefinitionFileLoader loads YAML files definitions.
+ * PhpDefinitionFileLoader loads PHP files definitions.
  *
  * @author Domenic Muskulus <domenic@muskulus.eu>
  */
-class YamlDefinitionFileLoader extends DefinitionFileLoader
+class PhpDefinitionFileLoader extends DefinitionFileLoader
 {
 
     /**
@@ -25,10 +22,10 @@ class YamlDefinitionFileLoader extends DefinitionFileLoader
      */
     public function load()
     {
-        try {
-            $definitions = Yaml::parse($this->definitionFile);
-        } catch (\Exception $e) {
-            throw new ParseException($e->getMessage());
+        $definitions = include $this->definitionFile;
+
+        if (!is_array($definitions)) {
+            throw new Exception\ParseException("The definition file '$this->definitionFile' doesn't return a PHP array");
         }
 
         return $definitions;

@@ -7,7 +7,7 @@
  * @license   http://www.opensource.org/licenses/mit-license.php MIT (see the LICENSE file)
  */
 
-namespace DI\Loader\Exception;
+namespace DI\Definition\FileLoader\Exception;
 
 /**
  * File was not found

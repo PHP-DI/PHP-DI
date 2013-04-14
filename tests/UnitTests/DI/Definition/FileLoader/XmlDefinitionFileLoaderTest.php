@@ -7,9 +7,9 @@
  * @license   http://www.opensource.org/licenses/mit-license.php MIT (see the LICENSE file)
  */
 
-namespace UnitTests\DI\Loader;
+namespace UnitTests\DI\Definition\FileLoader;
 
-use DI\Loader\XmlDefinitionFileLoader;
+use DI\Definition\FileLoader\XmlDefinitionFileLoader;
 
 /**
  * Test class for XmlDefinitionFileLoader
@@ -32,7 +32,7 @@ class XmlDefinitionFileLoaderTest extends DefinitionFileLoaderBaseTestCase
     }
 
     /**
-     * @expectedException \DI\Loader\Exception\ParseException
+     * @expectedException \DI\Definition\FileLoader\Exception\ParseException
      */
     public function testLoadValidateFail()
     {

@@ -7,7 +7,7 @@
  * @license   http://www.opensource.org/licenses/mit-license.php MIT (see the LICENSE file)
  */
 
-namespace UnitTests\DI\Loader;
+namespace UnitTests\DI\Definition\FileLoader;
 
 /**
  * Test class for DefinitionFileLoader
@@ -15,10 +15,10 @@ namespace UnitTests\DI\Loader;
 class DefinitionFileLoaderTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @expectedException \DI\Loader\Exception\FileNotFoundException
+     * @expectedException \DI\Definition\FileLoader\Exception\FileNotFoundException
      */
     public function testFileExists()
     {
-        $this->getMockForAbstractClass('DI\\Loader\\DefinitionFileLoader', array('abcFile.php'));
+        $this->getMockForAbstractClass('DI\Definition\FileLoader\DefinitionFileLoader', array('abcFile.php'));
     }
 }
