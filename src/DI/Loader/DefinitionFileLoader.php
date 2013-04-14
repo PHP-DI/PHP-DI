@@ -19,6 +19,7 @@ use DI\Loader\Exception\ParseException;
  */
 abstract class DefinitionFileLoader
 {
+
     /**
      * @var string
      */
@@ -31,16 +32,16 @@ abstract class DefinitionFileLoader
 
     /**
      * @param string $pathAndFilename
-     * @param bool $validateFile
-     * @throws Exception\ParseException
-     * @throws Exception\FileNotFoundException
+     * @param bool   $validateFile
+     * @throws ParseException
+     * @throws FileNotFoundException
      */
     public function __construct($pathAndFilename, $validateFile = true)
     {
         if (!file_exists($pathAndFilename)) {
-            throw new FileNotFoundException("The definition file '$pathAndFilename' has not been found.");
+            throw new FileNotFoundException("The definition file '$pathAndFilename' has not been found");
         } elseif (!is_readable($pathAndFilename)) {
-           throw new ParseException("The definition file '$pathAndFilename' is not readable.");
+            throw new ParseException("The definition file '$pathAndFilename' is not readable");
         }
         $this->definitionFile = $pathAndFilename;
         $this->validateFile = $validateFile;
@@ -49,7 +50,9 @@ abstract class DefinitionFileLoader
     /**
      * Loads the definitions from a definition file
      *
+     * @throws ParseException
      * @return array
      */
     abstract public function load();
+
 }

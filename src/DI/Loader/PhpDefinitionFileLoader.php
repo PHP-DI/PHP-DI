@@ -16,18 +16,19 @@ namespace DI\Loader;
  */
 class PhpDefinitionFileLoader extends DefinitionFileLoader
 {
+
     /**
-     * Loads definitions from a PHP file
-     *
-     * @return array The definition array
-     * @throws Exception\ParseException
+     * {@inheritdoc}
      */
     public function load()
     {
         $definitions = include $this->definitionFile;
+
         if (!is_array($definitions)) {
             throw new Exception\ParseException("The definition file '$this->definitionFile' doesn't return a PHP array");
         }
+
         return $definitions;
     }
+
 }

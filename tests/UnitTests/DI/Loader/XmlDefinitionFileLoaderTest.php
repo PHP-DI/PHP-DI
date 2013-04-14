@@ -16,6 +16,7 @@ use DI\Loader\XmlDefinitionFileLoader;
  */
 class XmlDefinitionFileLoaderTest extends DefinitionFileLoaderBaseTestCase
 {
+
     public function testLoad()
     {
         $loader = new XmlDefinitionFileLoader(__DIR__ . '/Fixtures/definitions.xml', false);
@@ -39,12 +40,4 @@ class XmlDefinitionFileLoaderTest extends DefinitionFileLoaderBaseTestCase
         $loader->load();
     }
 
-    /**
-     * @expectedException \DI\Loader\Exception\ParseException
-     */
-    public function testLoadInvalidXml()
-    {
-        $loader = new XmlDefinitionFileLoader(__DIR__ . '/Fixtures/definitions_invalid.xml', false);
-        $loader->load();
-    }
 }

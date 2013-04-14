@@ -19,11 +19,9 @@ use DI\Scope;
  */
 class XmlDefinitionFileLoader extends DefinitionFileLoader
 {
+
     /**
-     * Loads definitions from an XML file
-     *
-     * @throws ParseException
-     * @return array The definition array
+     * {@inheritdoc}
      */
     public function load()
     {
@@ -74,7 +72,7 @@ class XmlDefinitionFileLoader extends DefinitionFileLoader
     /**
      * Parses value definitions
      *
-     * @param array &$definitions
+     * @param array             &$definitions
      * @param \SimpleXMLElement $node
      */
     private function parseValueDefinition(&$definitions, $node)
@@ -85,7 +83,7 @@ class XmlDefinitionFileLoader extends DefinitionFileLoader
     /**
      * Parses a class definition
      *
-     * @param array &$definitions
+     * @param array             &$definitions
      * @param \SimpleXMLElement $node
      */
     private function parseClassDefinition(&$definitions, $node)
@@ -96,8 +94,8 @@ class XmlDefinitionFileLoader extends DefinitionFileLoader
 
         $classDefinition += array(
             'constructor' => array(),
-            'methods' => array(),
-            'properties' => array(),
+            'methods'     => array(),
+            'properties'  => array(),
         );
 
         foreach ($node->children() as $childNode) {
@@ -120,7 +118,7 @@ class XmlDefinitionFileLoader extends DefinitionFileLoader
     /**
      * Parses an interface definition/mapping
      *
-     * @param array &$definitions
+     * @param array             &$definitions
      * @param \SimpleXMLElement $node
      */
     private function parseInterfaceDefinition(&$definitions, $node)
@@ -132,7 +130,7 @@ class XmlDefinitionFileLoader extends DefinitionFileLoader
     /**
      * Parses a constructor definition
      *
-     * @param array $definitions
+     * @param array             $definitions
      * @param \SimpleXMLElement $node
      */
     private function parseConstructorDefinition(&$definitions, $node)
@@ -143,7 +141,7 @@ class XmlDefinitionFileLoader extends DefinitionFileLoader
     /**
      * Parses a method definition
      *
-     * @param array &$definitions
+     * @param array             &$definitions
      * @param \SimpleXMLElement $node
      */
     private function parseMethodDefinition(&$definitions, $node)
@@ -155,7 +153,7 @@ class XmlDefinitionFileLoader extends DefinitionFileLoader
     /**
      * Parses argument definitions of methods and constructors
      *
-     * @param array &$definitions
+     * @param array             &$definitions
      * @param \SimpleXMLElement $node
      */
     private function parseArgumentDefinitions(&$definitions, $node)
@@ -174,7 +172,7 @@ class XmlDefinitionFileLoader extends DefinitionFileLoader
     /**
      * Parses a property in class definition
      *
-     * @param array &$definitions
+     * @param array             &$definitions
      * @param \SimpleXMLElement $node
      */
     private function parsePropertyDefinition(&$definitions, $node)
@@ -190,9 +188,9 @@ class XmlDefinitionFileLoader extends DefinitionFileLoader
     /**
      * Parses all attributes of a node
      *
-     * @param array &$definition
+     * @param array             &$definition
      * @param \SimpleXMLElement $node
-     * @param array $exclude Array of attribute names to exclude from parsing
+     * @param array             $exclude Array of attribute names to exclude from parsing
      */
     private function parseAttributes(&$definition, $node, $exclude = array())
     {
@@ -204,23 +202,17 @@ class XmlDefinitionFileLoader extends DefinitionFileLoader
     }
 
     /**
-     * @param array &$definition
-     * @param string $attributeName
+     * @param array             &$definition
+     * @param string            $attributeName
      * @param \SimpleXMLElement $node
      * @return bool If a value was assigned
      */
     private function parseAttribute(&$definition, $attributeName, $node)
     {
         $attribute = $node[$attributeName];
-        if ($attributeName != 'scope') {
-            if ($attribute !== null) {
-                $definition[$attributeName] = $this->phpize($attribute);
-                return true;
-            }
-        } else {
-            if ($attribute !== null) {
-                return ($definition[$attributeName] = $this->parseScope((string) $attribute)) !== null;
-            }
+        if ($attribute !== null) {
+            $definition[$attributeName] = $this->phpize($attribute);
+            return true;
         }
         return false;
     }
@@ -292,29 +284,4 @@ class XmlDefinitionFileLoader extends DefinitionFileLoader
         return $errors;
     }
 
-    /**
-     * Creates Scope object. If $validateFile is true,
-     * thrown exceptions will be caught, so that an xml
-     * validation error can raise.
-     *
-     * @param string $scope
-     * @throws Exception\ParseException
-     * @return Scope|null
-     */
-    private function parseScope($scope)
-    {
-        try {
-            return new Scope($scope);
-        } catch (\UnexpectedValueException $e) {
-            if (!$this->validateFile) {
-                throw new ParseException(sprintf(
-                    'The scope value "%s" is not in the set of valid scopes [%s]. (in %s)',
-                    $scope,
-                    implode(', ', Scope::toArray()),
-                    basename($this->definitionFile)
-                ));
-            }
-        }
-        return null;
-    }
 }
