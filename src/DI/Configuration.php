@@ -151,7 +151,7 @@ class Configuration
     /**
      * Add definitions contained in a file
      *
-     * @param Loader\DefinitionFileLoader $definitionFileLoader
+     * @param DefinitionFileLoader $definitionFileLoader
      * @throws \InvalidArgumentException
      */
     public function addDefinitionsFromFile(DefinitionFileLoader $definitionFileLoader)

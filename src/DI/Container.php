@@ -15,6 +15,7 @@ use DI\Definition\ClosureDefinition;
 use DI\Definition\Helper\ClassDefinitionHelper;
 use DI\Definition\Source\DefinitionSource;
 use DI\Definition\ValueDefinition;
+use DI\Loader\DefinitionFileLoader;
 use DI\Proxy\Proxy;
 use Doctrine\Common\Cache\Cache;
 use Exception;
@@ -187,6 +188,17 @@ class Container
     public function addDefinitions(array $definitions)
     {
         $this->configuration->addArrayDefinitions($definitions);
+    }
+
+    /**
+     * Add definitions contained in a file
+     *
+     * @param DefinitionFileLoader $definitionFileLoader
+     * @throws \InvalidArgumentException
+     */
+    public function addDefinitionsFromFile(DefinitionFileLoader $definitionFileLoader)
+    {
+        $this->configuration->addDefinitionsFromFile($definitionFileLoader);
     }
 
     /**
