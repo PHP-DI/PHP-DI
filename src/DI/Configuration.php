@@ -60,6 +60,12 @@ class Configuration
     private $annotationSource;
 
     /**
+     * Enables/disable the validation of the definitions
+     * @var bool
+     */
+    private $definitionValidation = false;
+
+    /**
      * Constructor
      */
     public function __construct()
@@ -156,7 +162,7 @@ class Configuration
      */
     public function addDefinitionsFromFile(DefinitionFileLoader $definitionFileLoader)
     {
-        $definitions = $definitionFileLoader->load();
+        $definitions = $definitionFileLoader->load($this->definitionValidation);
 
         if (!is_array($definitions)) {
             throw new \InvalidArgumentException(get_class($definitionFileLoader) .  " must return an array.");
@@ -187,6 +193,17 @@ class Configuration
                 unset($this->cachedSource);
             }
         }
+    }
+
+    /**
+     * Enables/disables the validation of the definitions
+     *
+     * By default, disabled
+     * @param bool $bool
+     */
+    public function setDefinitionsValidation($bool)
+    {
+        $this->definitionValidation = (bool) $bool;
     }
 
 }

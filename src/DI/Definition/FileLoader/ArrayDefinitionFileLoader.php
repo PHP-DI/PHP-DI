@@ -20,7 +20,7 @@ class ArrayDefinitionFileLoader extends DefinitionFileLoader
     /**
      * {@inheritdoc}
      */
-    public function load()
+    public function load($validate = false)
     {
         $definitions = include $this->definitionFile;
 

@@ -19,7 +19,7 @@ class XmlDefinitionFileLoaderTest extends DefinitionFileLoaderBaseTestCase
 
     public function testLoad()
     {
-        $loader = new XmlDefinitionFileLoader(__DIR__ . '/Fixtures/definitions.xml', false);
+        $loader = new XmlDefinitionFileLoader(__DIR__ . '/Fixtures/definitions.xml');
         $definitions = $loader->load();
         $this->assertEquals(self::$definitionsReference, $definitions);
     }
@@ -27,7 +27,7 @@ class XmlDefinitionFileLoaderTest extends DefinitionFileLoaderBaseTestCase
     public function testLoadValidate()
     {
         $loader = new XmlDefinitionFileLoader(__DIR__ . '/Fixtures/definitions.xml');
-        $definitions = $loader->load();
+        $definitions = $loader->load(true);
         $this->assertEquals(self::$definitionsReference, $definitions);
     }
 
@@ -37,7 +37,7 @@ class XmlDefinitionFileLoaderTest extends DefinitionFileLoaderBaseTestCase
     public function testLoadValidateFail()
     {
         $loader = new XmlDefinitionFileLoader(__DIR__ . '/Fixtures/definitions_invalid.xml');
-        $loader->load();
+        $loader->load(true);
     }
 
 }

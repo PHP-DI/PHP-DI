@@ -220,6 +220,17 @@ class Container
     }
 
     /**
+     * Enables/disables the validation of the definitions
+     *
+     * By default, disabled
+     * @param bool $bool
+     */
+    public function setDefinitionsValidation($bool)
+    {
+        $this->configuration->setDefinitionsValidation($bool);
+    }
+
+    /**
      * @param FactoryInterface $factory
      */
     public function setFactory(FactoryInterface $factory)
