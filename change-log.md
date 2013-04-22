@@ -14,8 +14,10 @@ Major compatibility breaks with 2.x.
     * Annotations: @Inject, @Injectable
     * PHP code (`Container::set()`)
     * PHP array
+    * YAML file
+    * XML file
 * As a consequence, annotations are not mandatory anymore, all functionalities can be used with or without annotations.
-* Renamed `DI\Annotations\Inject` to `DI\Annotation\Inject`
+* Renamed `DI\Annotations\` to `DI\Annotation\`
 * `Container` no longer implements ArrayAccess, use only `$container->get($key)` now
 * ZF1 integration broken and removed (work in progress for next releases)
 * Code now follows PSR1 and PSR2 coding styles
