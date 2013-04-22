@@ -15,7 +15,6 @@ Major compatibility breaks with 2.x.
     * PHP code (`Container::set()`)
     * PHP array
     * YAML file
-    * XML file
 * As a consequence, annotations are not mandatory anymore, all functionalities can be used with or without annotations.
 * Renamed `DI\Annotations\` to `DI\Annotation\`
 * `Container` no longer implements ArrayAccess, use only `$container->get($key)` now
