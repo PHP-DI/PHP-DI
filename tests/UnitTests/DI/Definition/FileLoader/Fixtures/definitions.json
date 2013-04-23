@@ -2,15 +2,7 @@
 	"value3": true,
 	"value2": 123,
 	"value1": "abc",
-	"interface1": {
-		"lazy": false,
-		"class": "class1"
-	},
-	"interface2": {
-		"scope": "prototype",
-		"class": "class2"
-	},
-	"class1": {
+	"namespace\\class1": {
 		"scope": "singleton",
 		"lazy": true,
 		"constructor": {
@@ -38,5 +30,13 @@
 				"name5": "argument5"
 			}
 		}
-	}
+	},
+    "interface1": {
+        "lazy": false,
+        "class": "namespace\\class1"
+    },
+    "interface2": {
+        "scope": "prototype",
+        "class": "class2"
+    }
 }

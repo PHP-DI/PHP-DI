@@ -1,7 +1,7 @@
 value1: abc
 value2: 123
 value3: true
-class1:
+namespace\class1:
   scope: singleton
   lazy: true
   constructor:
@@ -21,7 +21,7 @@ class1:
       name: interface1
       lazy: true
 interface1:
-  class: class1
+  class: namespace\class1
   lazy: false
 interface2:
   class: class2

@@ -6,7 +6,7 @@ return array(
     'value1' => 'abc',
     'value2' => 123,
     'value3' => true,
-    'class1' => array(
+    'namespace\class1' => array(
         'scope' => Scope::SINGLETON(),
         'lazy' => true,
         'constructor' => array(
@@ -33,7 +33,7 @@ return array(
         )
     ),
     'interface1' => array(
-        'class' => 'class1',
+        'class' => 'namespace\\class1',
         'lazy' => false
     ),
     'interface2' => array(
