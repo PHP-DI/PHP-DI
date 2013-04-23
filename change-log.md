@@ -1,5 +1,27 @@
 # Change log
 
+## 3.0
+
+Major compatibility breaks with 2.x.
+
+* The container is no longer a Singleton (but `ContainerSingleton::getInstance()` is available for fools who like it)
+* Setter injection
+* Constructor injection
+* Scopes: singleton (share the same instance of the class) or prototype (create a new instance each time it is fetched). Defined at class level.
+* Configuration is reworked from scratch. Now every configuration backend can do 100% of the job.
+* Provided configuration backends:
+    * Reflection
+    * Annotations: @Inject, @Injectable
+    * PHP code (`Container::set()`)
+    * PHP array
+    * YAML file
+* As a consequence, annotations are not mandatory anymore, all functionalities can be used with or without annotations.
+* Renamed `DI\Annotations\` to `DI\Annotation\`
+* `Container` no longer implements ArrayAccess, use only `$container->get($key)` now
+* ZF1 integration broken and removed (work in progress for next releases)
+* Code now follows PSR1 and PSR2 coding styles
+* FIXED: #56 Getting a proxy of an alias didn't work
+
 ## 2.1
 
 * `use` statements to import classes from other namespaces are now taken into account with the `@var` annotation

@@ -2,38 +2,52 @@
 /**
  * PHP-DI
  *
- * @link      http://mnapoli.github.com/PHP-DI/
- * @copyright 2012 Matthieu Napoli (http://mnapoli.fr/)
+ * @link      http://mnapoli.github.io/PHP-DI/
+ * @copyright Matthieu Napoli (http://mnapoli.fr/)
  * @license   http://www.opensource.org/licenses/mit-license.php MIT (see the LICENSE file)
  */
 
 namespace IntegrationTests\DI\Fixtures\InheritanceTest;
 
-use DI\Annotations\Inject;
+use DI\Annotation\Inject;
 
 /**
  * Fixture class
  */
-abstract class BaseClass {
-
-	/**
-	 * @Inject
-	 * @var \IntegrationTests\DI\Fixtures\InheritanceTest\Dependency
-	 */
-	protected $dependency;
+abstract class BaseClass
+{
 
     /**
-     * Inject the dependencies
+     * @Inject
+     * @var Dependency
      */
-    public function __construct() {
-        \DI\Container::getInstance()->injectAll($this);
+    public $property1;
+
+    /**
+     * @var Dependency
+     */
+    public $property2;
+
+    /**
+     * @var Dependency
+     */
+    public $property3;
+
+    /**
+     * @param Dependency $param1
+     */
+    public function __construct(Dependency $param1)
+    {
+        $this->property3 = $param1;
     }
 
-	/**
-	 * @return Dependency
-	 */
-	public function getDependency() {
-		return $this->dependency;
-	}
+    /**
+     * @Inject
+     * @param Dependency $property2
+     */
+    public function setProperty2(Dependency $property2)
+    {
+        $this->property2 = $property2;
+    }
 
 }
