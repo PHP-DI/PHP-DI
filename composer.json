@@ -1,24 +1,22 @@
 {
-	"name": "mnapoli/php-di",
-	"type": "library",
-	"description": "PHP dependency injection using annotations",
-	"keywords": ["di","dependency injection", "container"],
-	"homepage": "http://mnapoli.github.com/PHP-DI/",
-	"license": "MIT",
-	"autoload": {
-		"psr-0": {
-			"DI": "src/",
-			"Benchmarks": "tests/",
-			"IntegrationTests": "tests/",
-			"UnitTests": "tests/"
-		}
-	},
-	"require": {
-		"php": ">=5.3.0",
-		"doctrine/annotations": "1.*",
-		"doctrine/cache": "1.*"
-	},
-    "require-dev" : {
-        "mnapoli/phpbench": "dev-master"
+    "name": "mnapoli/php-di",
+    "type": "library",
+    "description": "PHP dependency injection using annotations",
+    "keywords": ["di", "dependency injection", "container"],
+    "homepage": "http://mnapoli.github.com/PHP-DI/",
+    "license": "MIT",
+    "autoload": {
+        "psr-0": {
+            "DI": "src/",
+            "IntegrationTests": "tests/",
+            "UnitTests": "tests/"
+        }
+    },
+    "require": {
+        "php": ">=5.3.0",
+        "doctrine/annotations": "1.*",
+        "doctrine/cache": "1.*",
+        "myclabs/php-enum": "*",
+        "symfony/yaml": "v2.2.0"
     }
 }

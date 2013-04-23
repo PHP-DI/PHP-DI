@@ -1,5 +1,10 @@
 # Contributing
 
+[![Build Status](https://secure.travis-ci.org/mnapoli/PHP-DI.png)](http://travis-ci.org/mnapoli/PHP-DI)
+
+PHP-DI is license under the MIT License.
+
+
 ## Set up
 
 * Check out the sources using git or download them
@@ -19,10 +24,13 @@ If you are running Windows or are having trouble, read [the official documentati
 
 ## Run the tests
 
-The tests are run with [PHPUnit](http://www.phpunit.de/manual/current/en/installation.html).
-
-In order to run, you need to specify (in command line or by configuring your IDE) the configuration file:
+The tests are run with [PHPUnit](http://www.phpunit.de/manual/current/en/installation.html):
 
 ```bash
-$ phpunit -c phpunit.xml
+$ phpunit
 ```
+
+
+## Coding style
+
+The code follows PSR0, PSR1 and [PSR2](https://github.com/php-fig/fig-standards/blob/master/accepted/PSR-2-coding-style-guide.md).

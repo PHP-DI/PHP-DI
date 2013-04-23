@@ -1,11 +1,11 @@
 # Documentation
 
-* [Introduction to dependency injection with an example](doc/example)
-* [Getting started](doc/getting-started)
-* [Inject](doc/inject)
-* [Configure](doc/configure)
+* [Introduction to dependency injection with an example](example.md)
+* [Getting started](getting-started.md)
+* [Define injections](definition.md)
+* [Scopes](scopes.md)
 
 Extra topics:
 
-* [Performances](doc/performances)
-* [Contribute](CONTRIBUTING)
+* [Performances](performances.md)
+* [Contribute](../CONTRIBUTING.md)

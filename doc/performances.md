@@ -2,32 +2,21 @@
 
 ## Cache
 
-In order to work, PHP-DI has to parse your code to find annotations. This parsing is based on
-[Doctrine Annotations](http://docs.doctrine-project.org/projects/doctrine-common/en/latest/reference/annotations.html).
+PHP-DI uses the [definitions](definition.md) you configured to instantiate classes.
 
-Like Doctrine does, PHP-DI offers an easy and complete solution to put those data into a cache
-(and it is recommended to use it).
+Getting and parsing those definitions on each request is useless, so to improve performances you can cache these definitions.
+
+PHP-DI offers an easy and complete solution to put those data into a cache based on Doctrine caches (and it is recommended to use it).
+
 
 ### Setup
 
 ```php
-use DI\MetadataReader\CachedMetadataReader;
-use DI\MetadataReader\DefaultMetadataReader;
-
-$debug = true;
-
-$metadataReader = new CachedMetadataReader(
-	new DefaultMetadataReader(),
-	new Doctrine\Common\Cache\ArrayCache(),
-	$debug
-);
-
-$container->setMetadataReader($metadataReader);
+$container->setDefinitionCache(new Doctrine\Common\Cache\ArrayCache());
 ```
 
-The debug flag is used to invalidate the cache files when your code has changed.
-This flag should be set to `true` during development (this is the same flag than in
-[Doctrine annotation setup](http://docs.doctrine-project.org/projects/doctrine-common/en/latest/reference/annotations.html#setup-and-configuration)).
+Heads up: It is recommended not to use a cache in a development environment, else changes you make to the definitions (annotations, configuration files, etc.) may not be taken into account.
+
 
 ### Cache types
 
