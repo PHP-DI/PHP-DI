@@ -23,6 +23,7 @@
         <property name="property1">value1</property>
         <property name="property2" lazy="true">interface1</property>
     </class>
+    <class name="class3" />
     <interface name="interface1" class="namespace\class1" lazy="false" />
     <interface name="interface2" class="class2" scope="prototype" />
 </definitions>

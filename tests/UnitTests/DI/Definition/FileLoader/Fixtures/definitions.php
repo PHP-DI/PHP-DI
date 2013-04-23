@@ -40,4 +40,5 @@ return array(
         'class' => 'class2',
         'scope' => 'prototype',
     ),
+    'class3' => array(),
 );

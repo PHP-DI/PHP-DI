@@ -38,5 +38,6 @@
     "interface2": {
         "scope": "prototype",
         "class": "class2"
-    }
+    },
+    "class3": {}
 }
