@@ -1,5 +1,5 @@
-Here is real life example, comparing the classic implementation (`new`, singletons...)
-vs an implementation using dependency injection.
+Real life example comparing a classic implementation (`new`, singletons...)
+VS using dependency injection.
 
 
 ## Classic implementation
