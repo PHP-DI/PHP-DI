@@ -22,7 +22,7 @@ class XmlDefinitionFileLoader extends DefinitionFileLoader
     /**
      * {@inheritdoc}
      */
-    public function load()
+    public function load($validate = false)
     {
         $definitions = array();
 
@@ -38,7 +38,7 @@ class XmlDefinitionFileLoader extends DefinitionFileLoader
             LIBXML_NONET | (defined('LIBXML_COMPACT') ? LIBXML_COMPACT : 0)
         );
 
-        if ($this->validateFile) {
+        if ($validate) {
             $xmlReader->setSchema(__DIR__ . '/schema/definitions-1.0.xsd');
         }
 

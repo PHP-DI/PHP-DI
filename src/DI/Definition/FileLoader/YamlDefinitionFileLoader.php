@@ -23,7 +23,7 @@ class YamlDefinitionFileLoader extends DefinitionFileLoader
     /**
      * {@inheritdoc}
      */
-    public function load()
+    public function load($validate = false)
     {
         try {
             $definitions = Yaml::parse($this->definitionFile);

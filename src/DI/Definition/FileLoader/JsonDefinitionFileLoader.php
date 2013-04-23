@@ -22,7 +22,7 @@ class JsonDefinitionFileLoader extends DefinitionFileLoader
     /**
      * {@inheritdoc}
      */
-    public function load()
+    public function load($validate = false)
     {
         if (($definitions = json_decode(file_get_contents($this->definitionFile), true)) === null) {
             throw new ParseException("The file '$this->definitionFile' contains invalid JSON");

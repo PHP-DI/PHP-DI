@@ -17,19 +17,19 @@ use DI\Definition\FileLoader\XmlDefinitionFileLoader;
 class XmlDefinitionFileLoaderTest extends DefinitionFileLoaderBaseTestCase
 {
 
-//    public function testLoad()
-//    {
-//        $loader = new XmlDefinitionFileLoader(__DIR__ . '/Fixtures/definitions.xml', false);
-//        $definitions = $loader->load();
-//        $this->assertEquals(self::$definitionsReference, $definitions);
-//    }
-//
-//    public function testLoadValidate()
-//    {
-//        $loader = new XmlDefinitionFileLoader(__DIR__ . '/Fixtures/definitions.xml');
-//        $definitions = $loader->load();
-//        $this->assertEquals(self::$definitionsReference, $definitions);
-//    }
+    public function testLoad()
+    {
+        $loader = new XmlDefinitionFileLoader(__DIR__ . '/Fixtures/definitions.xml');
+        $definitions = $loader->load();
+        $this->assertEquals(self::$definitionsReference, $definitions);
+    }
+
+    public function testLoadValidate()
+    {
+        $loader = new XmlDefinitionFileLoader(__DIR__ . '/Fixtures/definitions.xml');
+        $definitions = $loader->load(true);
+        $this->assertEquals(self::$definitionsReference, $definitions);
+    }
 
     /**
      * @expectedException \DI\Definition\FileLoader\Exception\ParseException
@@ -37,7 +37,7 @@ class XmlDefinitionFileLoaderTest extends DefinitionFileLoaderBaseTestCase
     public function testLoadValidateFail()
     {
         $loader = new XmlDefinitionFileLoader(__DIR__ . '/Fixtures/definitions_invalid.xml');
-        $loader->load();
+        $loader->load(true);
     }
 
 }

@@ -16,6 +16,7 @@ use DI\Definition\FileLoader\Exception\ParseException;
  * DefinitionFileLoader is the abstract class used by all built-in loaders that are file based.
  *
  * @author Domenic Muskulus <domenic@muskulus.eu>
+ * @author Matthieu Napoli <matthieu@mnapoli.fr>
  */
 abstract class DefinitionFileLoader
 {
@@ -26,33 +27,27 @@ abstract class DefinitionFileLoader
     protected $definitionFile;
 
     /**
-     * @var bool
-     */
-    protected $validateFile;
-
-    /**
-     * @param string $pathAndFilename
-     * @param bool   $validateFile
+     * @param string $fileName
      * @throws ParseException
      * @throws FileNotFoundException
      */
-    public function __construct($pathAndFilename, $validateFile = true)
+    public function __construct($fileName)
     {
-        if (!file_exists($pathAndFilename)) {
-            throw new FileNotFoundException("The definition file '$pathAndFilename' has not been found");
-        } elseif (!is_readable($pathAndFilename)) {
-            throw new ParseException("The definition file '$pathAndFilename' is not readable");
+        if (!file_exists($fileName)) {
+            throw new FileNotFoundException("The definition file '$fileName' has not been found");
+        } elseif (!is_readable($fileName)) {
+            throw new ParseException("The definition file '$fileName' is not readable");
         }
-        $this->definitionFile = $pathAndFilename;
-        $this->validateFile = $validateFile;
+        $this->definitionFile = $fileName;
     }
 
     /**
      * Loads the definitions from a definition file
      *
+     * @param bool $validate Should the file and the definitions be validated
      * @throws ParseException
      * @return array
      */
-    abstract public function load();
+    abstract public function load($validate = false);
 
 }

@@ -110,7 +110,7 @@ $container->set('My\Interface')
 	->bindTo('My\Implementation');
 ```
 
-#### PHP configuration
+#### PHP array
 
 You can define injections with a PHP array too:
 
@@ -137,6 +137,26 @@ return [
 ```
 
 See also the [complete documentation about array configuration](definition.md).
+
+#### YAML file
+
+You can define injections with a YAML file too:
+
+```php
+# Values (not classes)
+dbHost: localhost
+dbPort: 5000
+
+# Class
+My\Foo:
+  properties:
+    bar: Bar
+  methods:
+    setBaz: Baz
+    setValues: [dbHost, dbPort]
+```
+
+See also the [complete documentation about YAML configuration](definition.md).
 
 
 ### 2: Get objects from the container
