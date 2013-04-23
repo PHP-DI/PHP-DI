@@ -31,6 +31,13 @@ class YamlDefinitionFileLoader extends DefinitionFileLoader
             throw new ParseException($e->getMessage());
         }
 
+        // Fix empty elements (to array)
+        foreach ($definitions as $key => $value) {
+            if ($value === null) {
+                $definitions[$key] = array();
+            }
+        }
+
         return $definitions;
     }
 
