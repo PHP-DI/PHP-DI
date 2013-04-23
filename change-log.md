@@ -20,7 +20,7 @@ Major compatibility breaks with 2.x.
 * `Container` no longer implements ArrayAccess, use only `$container->get($key)` now
 * ZF1 integration broken and removed (work in progress for next releases)
 * Code now follows PSR1 and PSR2 coding styles
-* FIXED: #56 Getting a proxy of an alias didn't work
+* FIXED: [#58](https://github.com/mnapoli/PHP-DI/issues/58) Getting a proxy of an alias didn't work
 
 ## 2.1
 
