@@ -17,17 +17,17 @@ use DI\Definition\Source\CombinedDefinitionSource;
 use DI\Definition\Source\DefinitionSource;
 use DI\Definition\Source\ReflectionDefinitionSource;
 use DI\Definition\Source\SimpleDefinitionSource;
+use DI\Definition\FileLoader\DefinitionFileLoader;
 use Doctrine\Common\Cache\Cache;
 
 /**
  * Configuration of the dependency injection container
  *
  * @author Matthieu Napoli <matthieu@mnapoli.fr>
+ * @author Domenic Muskulus <domenic@muskulus.eu>
  */
 class Configuration
 {
-
-    const CONFIGURATION_PHP = 'php';
 
     /**
      * Caches the combinedSource
@@ -58,6 +58,12 @@ class Configuration
      * @var AnnotationDefinitionSource|null
      */
     private $annotationSource;
+
+    /**
+     * Enables/disable the validation of the definitions
+     * @var bool
+     */
+    private $definitionValidation = false;
 
     /**
      * Constructor
@@ -151,32 +157,20 @@ class Configuration
     /**
      * Add definitions contained in a file
      *
-     * @param string $filename PHP file returning an array
-     * @param string $type
+     * @param \DI\Definition\FileLoader\DefinitionFileLoader $definitionFileLoader
      * @throws \InvalidArgumentException
-     * @throws \Exception
      */
-    public function addDefinitionsFromFile($filename, $type = self::CONFIGURATION_PHP)
+    public function addDefinitionsFromFile(DefinitionFileLoader $definitionFileLoader)
     {
-        if (!file_exists($filename)) {
-            throw new \InvalidArgumentException("The file '$filename' doesn't exist");
+        $definitions = $definitionFileLoader->load($this->definitionValidation);
+
+        if (!is_array($definitions)) {
+            throw new \InvalidArgumentException(get_class($definitionFileLoader) .  " must return an array.");
         }
 
-        if ($type === self::CONFIGURATION_PHP) {
-            // Read file
-            $definitions = include $filename;
-
-            if (!is_array($definitions)) {
-                throw new \Exception("The file '$filename' doesn't return a PHP array");
-            }
-
-            $source = new ArrayDefinitionSource();
-            $source->addDefinitions($definitions);
-            $this->combinedSource->addSource($source);
-            return;
-        }
-
-        throw new \InvalidArgumentException("Unknown configuration type '$type'");
+        $source = new ArrayDefinitionSource();
+        $source->addDefinitions($definitions);
+        $this->combinedSource->addSource($source);
     }
 
     /**
@@ -199,6 +193,17 @@ class Configuration
                 unset($this->cachedSource);
             }
         }
+    }
+
+    /**
+     * Enables/disables the validation of the definitions
+     *
+     * By default, disabled
+     * @param bool $bool
+     */
+    public function setDefinitionsValidation($bool)
+    {
+        $this->definitionValidation = (bool) $bool;
     }
 
 }

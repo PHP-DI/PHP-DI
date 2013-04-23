@@ -15,6 +15,7 @@ use DI\Definition\ClosureDefinition;
 use DI\Definition\Helper\ClassDefinitionHelper;
 use DI\Definition\Source\DefinitionSource;
 use DI\Definition\ValueDefinition;
+use DI\Definition\FileLoader\DefinitionFileLoader;
 use DI\Proxy\Proxy;
 use Doctrine\Common\Cache\Cache;
 use Exception;
@@ -190,6 +191,17 @@ class Container
     }
 
     /**
+     * Add definitions contained in a file
+     *
+     * @param \DI\Definition\FileLoader\DefinitionFileLoader $definitionFileLoader
+     * @throws \InvalidArgumentException
+     */
+    public function addDefinitionsFromFile(DefinitionFileLoader $definitionFileLoader)
+    {
+        $this->configuration->addDefinitionsFromFile($definitionFileLoader);
+    }
+
+    /**
      * @return DefinitionSource The definition source
      */
     public function getDefinitionSource()
@@ -205,6 +217,17 @@ class Container
     public function setDefinitionCache(Cache $cache)
     {
         $this->configuration->setCache($cache);
+    }
+
+    /**
+     * Enables/disables the validation of the definitions
+     *
+     * By default, disabled
+     * @param bool $bool
+     */
+    public function setDefinitionsValidation($bool)
+    {
+        $this->configuration->setDefinitionsValidation($bool);
     }
 
     /**
