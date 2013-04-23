@@ -1,163 +1,198 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PHP-DI : Dependency injection with annotations in PHP</title>
-    <meta name="description" content="PHP-DI is a PHP framework providing dependency injection using annotations">
 
-    <base href="http://mnapoli.github.com/PHP-DI/">
+    <title>PHP-DI - Dependency Injection Container for PHP</title>
+    <meta name="description" content="PHP-DI is a Dependency Injection Container for PHP that intends to be practical and powerful">
 
-    <!-- Le styles -->
-    <link href="css/bootstrap.min.css" rel="stylesheet">
-    <link href="css/bootstrap-responsive.min.css" rel="stylesheet">
-    <link href="css/bootstrap-docs.css" rel="stylesheet">
-    <link href="css/prettify-github.css" rel="stylesheet">
-    <link href="css/template.css" rel="stylesheet">
+    <link rel="stylesheet" href="http://mnapoli.github.io/PHP-DI/css/bootstrap.min.css">
+    <link rel="stylesheet" href="http://mnapoli.github.io/PHP-DI/css/bootstrap-responsive.min.css">
+    <link rel="stylesheet" href="http://mnapoli.github.io/PHP-DI/css/font-awesome.min.css">
+    <link rel="stylesheet" href="http://mnapoli.github.io/PHP-DI/css/prettify-github.css">
 
+    <link rel="stylesheet" href="http://mnapoli.github.io/PHP-DI/css/style.css">
+
+    <!-- HTML5 Support for IE -->
     <!--[if lt IE 9]>
-    <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <script src="http://html5shim.googlecode.com/svn/trunk/html5.js" type="text/javascript"></script>
     <![endif]-->
-
 </head>
 
 <body>
 
-	<header class="jumbotron subhead" id="overview">
-		<div class="container">
-			<h1>PHP-DI</h1>
-			<p class="lead">Dependency injection with annotations in PHP.</p>
-		</div>
-	</header>
+    <div class="navbar navbar-inverse navbar-fixed-top">
+        <div class="navbar-inner">
+            <div class="container">
+                <button type="button" class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="brand" href="http://mnapoli.github.io/PHP-DI/">PHP-DI</a>
 
-    <div class="container">
-	
-		<div class="subnav">
-			<ul class="nav nav-pills">
-				<li><a href="">Home</a></li>
-                <li><a href="doc/example">Example</a></li>
-                <li><a href="doc/getting-started">Getting started</a></li>
-				<li><a href="doc/">Documentation</a></li>
-                <li><a href="change-log">Change log</a></li>
-                <li class="pull-right"><a href="https://github.com/mnapoli/PHP-DI">Sources on Github</a></li>
-			</ul>
-		</div>
+                <div class="nav-collapse collapse">
+                    <ul class="nav pull-right">
+                        <li><a href="http://mnapoli.github.io/PHP-DI/">Home</a></li>
+                        <li><a href="http://mnapoli.github.io/PHP-DI/doc/example">Example</a></li>
+                        <li><a href="http://mnapoli.github.io/PHP-DI/doc/getting-started">Getting started</a></li>
+                        <li><a href="http://mnapoli.github.io/PHP-DI/doc/">Documentation</a></li>
+                        <li><a href="http://mnapoli.github.io/PHP-DI/change-log">Change log</a></li>
+                        <li><a href="https://github.com/mnapoli/PHP-DI"><i class="icon-github"></i>Github</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
 
-        <section>
-<p>The aim of PHP-DI is to make <a href="http://en.wikipedia.org/wiki/Dependency_injection"><em>Dependency Injection</em></a>
-as simple as possible with PHP.</p>
+    <header>
 
-<p>Unlike Flow3, Zend\DI, Symfony Service Container or Pimple (though they are of a great inspiration), PHP-DI:</p>
+        <div class="title">
 
-<ul>
-<li>can be used by a monkey</li>
-<li>is non-intrusive and compatible with any framework</li>
-<li>is not limited to Services (anything can be injected)</li>
-<li>uses annotations for code-readability and ease of use</li>
-<li>can find and instantiate dependencies automatically without configuration</li>
-</ul>
+            <h1>
+                PHP-DI
+                <small>Dependency Injection Container for PHP</small>
+            </h1>
+
+        </div>
+
+    </header>
+
+
+    <!-- Main Content starts -->
+
+    <div class="main">
+        <div class="container-fluid">
+<p>PHP-DI is a Container that makes <a href="http://en.wikipedia.org/wiki/Dependency_injection"><em>Dependency Injection</em></a>
+as practical as possible.</p>
+
+<p>PHP-DI also tries to avoid falling into the trap of the &quot;Service Locator&quot; antipattern and help you do <em>real</em> dependency injection.</p>
 
 <h2>Features</h2>
 
 <ul>
-<li>Simple, yet full-featured</li>
-<li>Uses <strong>annotations</strong> for simplicity, readability and auto-completion in your IDE</li>
-<li>Automatic dependency resolution: you don&#39;t have to declare all your beans in configuration files</li>
-<li>Optional <strong>lazy-loading</strong> of dependencies</li>
-<li><strong>Cacheable</strong> for optimal performances</li>
-<li>Class aliases (interface-implementation mapping)</li>
-<li>Easy installation with <a href="http://getcomposer.org/doc/00-intro.md"><strong>Composer</strong></a>
-and easy integration with <strong>Zend Framework</strong> (see <a href="doc/getting-started">Getting started</a>)</li>
-<li><strong>Non-intrusive</strong>: you can add PHP-DI into an existing project and use it <em>without impacting existing code</em></li>
-</ul>
-
-<h2>What is dependency injection, and why use it?</h2>
-
-<p>Read the <a href="doc/example">introduction to dependency injection with an example</a>.</p>
-
-<h2>Short example</h2>
-
-<pre><code class="php">&lt;?php
-use DI\Annotations\Inject;
-
-class Foo {
-    /**
-     * @Inject
-     * @var Bar
-     */
-    private $bar;
-
-    public function __construct() {
-        // The dependency is injected
-        return $this-&gt;bar-&gt;sayHello();
-    }
-}
-</code></pre>
-
-<p>In this example, a instance of the <code>Bar</code> class is created and injected in the <code>Foo</code> class. <strong>No configuration needed</strong>.</p>
-
-<p>That&#39;s as easy as possible!</p>
-
-<p>Of course, in the spirit of Dependency Injection, <code>Bar</code> will rather be an interface, and you will configure
-which implementation will be injected through <a href="doc/configure">configuration</a>.</p>
-
-<h2>More</h2>
-
-<p>Do you want more? PHP-DI comes on top of a classic, full-featured Dependency Injection container:</p>
-
-<pre><code class="php">$container = \DI\Container::getInstance();
-$container[&#39;dbAdapter&#39;] = $myDbAdapter;
-$myDbAdapter = $container[&#39;dbAdapter&#39;];
-</code></pre>
-
-<h2>Even more</h2>
-
-<p>A more complete version of the previous example:</p>
-
-<pre><code class="php">$container = \DI\Container::getInstance();
-$container[&#39;db.params&#39;] = [
-    &#39;dbname&#39;   =&gt; &#39;foo&#39;,
-    &#39;user&#39;     =&gt; &#39;root&#39;,
-    &#39;password&#39; =&gt; &#39;&#39;,
-];
-$container[&#39;dbAdapter&#39;] = function(Container $c) {
-    return new MyDbAdapter($c[&#39;db.params&#39;]);
-};
-</code></pre>
-
-<p>and later:</p>
-
-<pre><code class="php">class Foo {
-    /**
-     * @Inject(&quot;dbAdapter&quot;)
-     */
-    private $dbAdapter;
-
-    public function foo() {
-        return $this-&gt;dbAdapter-&gt;query(&quot;&quot;);
-    }
-}
-</code></pre>
-
-<h2>Contribute</h2>
-
-<p><a href="http://travis-ci.org/mnapoli/PHP-DI"><img src="https://secure.travis-ci.org/mnapoli/PHP-DI.png" alt="Build Status"></a></p>
+<li>Simple to start with</li>
+<li>Supports different configuration alternatives to suit every taste:
 
 <ul>
-<li>PHP-DI sources are <a href="https://github.com/mnapoli/PHP-DI">on Github</a>.</li>
-<li>Read the doc: <a href="CONTRIBUTING">Contributing</a></li>
+<li><strong>Reflection</strong>: zero configuration, intelligent guessing</li>
+<li><strong>Annotations</strong>: modern, practical and simple</li>
+<li><strong>PHP code</strong>: if you like complete control and auto-completion</li>
+<li><strong>PHP array</strong>: allows you to store it in a configuration file</li>
+<li><strong>YAML</strong>: elegant and concise</li>
+<li><strong>XML</strong> (work in progress): more verbose, but more classic</li>
+</ul></li>
+<li><strong>Performances</strong>: supports a large number of Caches</li>
+<li>Offers lazy injection: lazy-loading of dependencies (WIP)</li>
+<li>Supports constructor injection, setter injection and property injection</li>
 </ul>
 
-<p>PHP-DI is license under the MIT License.</p>
+<h2>Usage</h2>
 
-		</section>
+<p>Let&#39;s go to the <a href="doc/getting-started">Getting started guide</a>!</p>
 
-    </div><!-- /container -->
+<p>And there is a <a href="doc/">complete documentation</a> waiting for you.</p>
 
-    <footer class="footer">
-        <div class="container">
-            <p class="pull-right"><a href="#">Back to top</a></p>
+<h2>What is dependency injection, and why use PHP-DI</h2>
+
+<p>You can first read the <a href="doc/example">introduction to dependency injection with an example</a>.</p>
+
+<p>Dependency injection and DI containers are separate notions, and one should use of a container only if it makes things more practical (which is not always the case depending on the container you use).</p>
+
+<p>PHP-DI is about this: make dependency injection more practical.</p>
+
+<h3>How classic PHP code works</h3>
+
+<p>Here is how a code <strong>not</strong> using DI will roughly work:</p>
+
+<ul>
+<li>Application needs Foo (e.g. a controller), so:</li>
+<li>Application creates Foo</li>
+<li>Application calls Foo
+
+<ul>
+<li>Foo needs Bar (e.g. a service), so:</li>
+<li>Foo creates Bar</li>
+<li>Foo calls Bar
+
+<ul>
+<li>Bar needs Bim (a service, a repository, …), so:</li>
+<li>Bar creates Bim</li>
+<li>Bar does something</li>
+</ul></li>
+</ul></li>
+</ul>
+
+<h3>How Dependency Injection works</h3>
+
+<p>Here is how a code using DI will roughly work:</p>
+
+<ul>
+<li>Application needs Foo, which needs Bar, which needs Bim, so:</li>
+<li>Application creates Bim</li>
+<li>Application creates Bar and gives it Bim</li>
+<li>Application creates Foo and gives it Bar</li>
+<li>Application calls Foo
+
+<ul>
+<li>Foo calls Bar
+
+<ul>
+<li>Bar does something</li>
+</ul></li>
+</ul></li>
+</ul>
+
+<p>This is the pattern of <strong>Inversion of Control</strong>. The control of the dependencies is <strong>inversed</strong> from one being called to the one calling.</p>
+
+<p>The main advantage: the one at the end of the caller chain is always <strong>you</strong>. So you can control every dependencies: you have a complete control on how your application works. You can replace a dependency by another (one you made for example).</p>
+
+<p>For example that wouldn&#39;t be so easy if Library X uses Logger Y and you have to change the code of Library X to make it use your logger Z.</p>
+
+<h3>How code using PHP-DI works</h3>
+
+<p>Now how does a code using PHP-DI works:</p>
+
+<ul>
+<li>Application needs Foo so:</li>
+<li>Application gets Foo from the Container, so:
+
+<ul>
+<li>Container creates Bim</li>
+<li>Container creates Bar and gives it Bim</li>
+<li>Container creates Foo and gives it Bar</li>
+</ul></li>
+<li>Application calls Foo
+
+<ul>
+<li>Foo calls Bar
+
+<ul>
+<li>Bar does something</li>
+</ul></li>
+</ul></li>
+</ul>
+
+<p>In short, PHP-DI takes away all the work of creating and injecting dependencies.</p>
+            <div class="github">
+                PHP-DI is an open source project, you can contribute or seek help on
+                <a class="btn btn-mini" href="https://github.com/mnapoli/PHP-DI/" target="_blank">
+                    <i class="icon-github-alt"></i>
+                    Github</a>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Main content ends -->
+
+    <footer>
+        <div class="container-fluid">
+            <p class="copy">
+                Copyright &copy; 2013 | <a href="http://mnapoli.fr/">Matthieu Napoli</a>
+            </p>
             <p>
                 Documentation generated by
                 <a href="http://mnapoli.github.com/gh-pages-compiler/" target="_blank">gh-pages-compiler</a>.
@@ -165,10 +200,11 @@ $container[&#39;dbAdapter&#39;] = function(Container $c) {
         </div>
     </footer>
 
+    <!-- JS -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
     <script src="http://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/2.2.1/bootstrap.min.js"></script>
     <script src="http://cdnjs.cloudflare.com/ajax/libs/prettify/188.0.0/prettify.js"></script>
-    <script src="js/template.js"></script>
+    <script src="http://mnapoli.github.io/PHP-DI/js/template.js"></script>
 
     <script type="text/javascript">
         var _gaq = _gaq || [];

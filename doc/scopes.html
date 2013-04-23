@@ -65,42 +65,61 @@
 
     <div class="main">
         <div class="container-fluid">
-<h1>Performances</h1>
+<h1>Scopes</h1>
 
-<h2>Cache</h2>
+<p>By default, PHP-DI returns the same instance each time it supplies a value. This behaviour is configurable via scopes.
+Scopes allow you to reuse instances and gives you the flexibility to choose the scope of the objects you create through configuration instead of having to &#39;bake in&#39; the scope of an object at the PHP class level.</p>
 
-<p>PHP-DI uses the <a href="definition">definitions</a> you configured to instantiate classes.</p>
+<p>The scopes supported out of the box are listed below:</p>
 
-<p>Getting and parsing those definitions on each request is useless, so to improve performances you can cache these definitions.</p>
+<table><thead>
+<tr>
+<th>Scope</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>singleton (default)</td>
+<td>The object instance is unique during the container&#39;s lifecycle - each injection by the container or explicit call of <code>get()</code> returns the same instance.</td>
+</tr>
+<tr>
+<td>prototype</td>
+<td>The object instance is not unique - each injection or call of the container&#39;s <code>get()</code> method returns a fresh instance.</td>
+</tr>
+</tbody></table>
 
-<p>PHP-DI offers an easy and complete solution to put those data into a cache based on Doctrine caches (and it is recommended to use it).</p>
+<h2>Applying Scopes</h2>
 
-<h3>Setup</h3>
+<p>Scopes are part of the <a href="definition">definitions</a> of injections, so you can define them using annotations or PHP arrays.</p>
 
-<pre><code class="php">$container-&gt;setDefinitionCache(new Doctrine\Common\Cache\ArrayCache());
+<h3>Annotation</h3>
+
+<p>You can specify the scope by using the <code>@Injectable</code> annotation on the target class.
+Remember singleton is the scope used if it is not configured.</p>
+
+<pre><code class="php">use DI\Annotation\Injectable;
+
+/**
+ * @Injectable(scope=&quot;prototype&quot;)
+ */
+class MyService {
+    // ...
+}
 </code></pre>
 
-<p>Heads up: It is recommended not to use a cache in a development environment, else changes you make to the definitions (annotations, configuration files, etc.) may not be taken into account.</p>
+<h3>Array configuration</h3>
 
-<h3>Cache types</h3>
+<p>You can specify the scope by using the <code>scope</code> key in the array describing the class:</p>
 
-<p>The cache implementation is provided by Doctrine (because it works very well) and contains:</p>
-
-<ul>
-<li>ApcCache (requires ext/apc)</li>
-<li>ArrayCache (in memory, lifetime of the request)</li>
-<li>FilesystemCache (not optimal for high concurrency)</li>
-<li>MemcacheCache (requires ext/memcache)</li>
-<li>MemcachedCache (requires ext/memcached)</li>
-<li>PhpFileCache (not optimal for high concurrency)</li>
-<li>RedisCache.php (requires ext/phpredis)</li>
-<li>WinCacheCache.php (requires ext/wincache)</li>
-<li>XcacheCache.php (requires ext/xcache)</li>
-<li>ZendDataCache.php (requires Zend Server Platform)</li>
-</ul>
-
-<p>Read the <a href="http://docs.doctrine-project.org/projects/doctrine-common/en/latest/reference/caching.html">Doctrine documentation</a>
-for more details.</p>
+<pre><code class="php">&lt;?php
+return [
+    &#39;MyService&#39; =&gt; [
+        &#39;scope&#39; =&gt; Scope::PROTOTYPE(),
+        // or
+        &#39;scope&#39; =&gt; &#39;prototype&#39;,
+    ],
+];
+</code></pre>
             <div class="github">
                 PHP-DI is an open source project, you can contribute or seek help on
                 <a class="btn btn-mini" href="https://github.com/mnapoli/PHP-DI/" target="_blank">
