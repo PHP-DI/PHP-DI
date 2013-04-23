@@ -16,6 +16,7 @@
         "php": ">=5.3.0",
         "doctrine/annotations": "1.*",
         "doctrine/cache": "1.*",
-        "myclabs/php-enum": "*"
+        "myclabs/php-enum": "*",
+        "symfony/yaml": "v2.2.0"
     }
 }

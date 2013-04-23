@@ -9,6 +9,8 @@
 
 namespace IntegrationTests\DI;
 
+use DI\Definition\FileLoader\ArrayDefinitionFileLoader;
+use DI\Definition\FileLoader\YamlDefinitionFileLoader;
 use DI\Scope;
 use DI\Container;
 use IntegrationTests\DI\Fixtures\Class1;
@@ -23,6 +25,8 @@ class InjectionTest extends \PHPUnit_Framework_TestCase
     const DEFINITION_ANNOTATIONS = 2;
     const DEFINITION_ARRAY = 3;
     const DEFINITION_PHP = 4;
+    const DEFINITION_ARRAY_FROM_FILE = 5;
+    const DEFINITION_YAML = 6;
 
     /**
      * PHPUnit data provider: generates container configurations for running the same tests for each configuration possible
@@ -66,41 +70,8 @@ class InjectionTest extends \PHPUnit_Framework_TestCase
         $containerArray = new Container();
         $containerArray->useReflection(false);
         $containerArray->useAnnotations(false);
-        $containerArray->addDefinitions(
-            array(
-                'foo'                                          => 'bar',
-                'IntegrationTests\DI\Fixtures\Class1'          => array(
-                    'scope'       => Scope::PROTOTYPE(),
-                    'properties'  => array(
-                        'property1' => 'IntegrationTests\DI\Fixtures\Class2',
-                        'property2' => 'IntegrationTests\DI\Fixtures\Interface1',
-                        'property3' => 'namedDependency',
-                        'property4' => 'foo',
-                    ),
-                    'constructor' => array(
-                        'param1' => 'IntegrationTests\DI\Fixtures\Class2',
-                        'param2' => 'IntegrationTests\DI\Fixtures\Interface1',
-                    ),
-                    'methods'     => array(
-                        'method1' => 'IntegrationTests\DI\Fixtures\Class2',
-                        'method2' => array('IntegrationTests\DI\Fixtures\Interface1'),
-                        'method3' => array(
-                            'param1' => 'namedDependency',
-                            'param2' => 'foo',
-                        ),
-                    ),
-                ),
-                'IntegrationTests\DI\Fixtures\Class2'          => array(),
-                'IntegrationTests\DI\Fixtures\Implementation1' => array(),
-                'IntegrationTests\DI\Fixtures\Interface1'      => array(
-                    'class' => 'IntegrationTests\DI\Fixtures\Implementation1',
-                    'scope' => 'singleton',
-                ),
-                'namedDependency'                              => array(
-                    'class' => 'IntegrationTests\DI\Fixtures\Class2',
-                ),
-            )
-        );
+        $array = require __DIR__ . '/Fixtures/definitions.php';
+        $containerArray->addDefinitions($array);
 
         // Test with a container using PHP configuration
         $containerPHP = new Container();
@@ -130,11 +101,25 @@ class InjectionTest extends \PHPUnit_Framework_TestCase
         $containerPHP->set('namedDependency')
             ->bindTo('IntegrationTests\DI\Fixtures\Class2');
 
+        // Test with a container using array configuration loaded from file
+        $containerArrayFromFile = new Container();
+        $containerArrayFromFile->useReflection(false);
+        $containerArrayFromFile->useAnnotations(false);
+        $containerArrayFromFile->addDefinitionsFromFile(new ArrayDefinitionFileLoader(__DIR__ . '/Fixtures/definitions.php'));
+
+        // Test with a container using array configuration loaded from file
+        $containerYaml = new Container();
+        $containerYaml->useReflection(false);
+        $containerYaml->useAnnotations(false);
+        $containerYaml->addDefinitionsFromFile(new YamlDefinitionFileLoader(__DIR__ . '/Fixtures/definitions.yml'));
+
         return array(
             array(self::DEFINITION_REFLECTION, $containerReflection),
             array(self::DEFINITION_ANNOTATIONS, $containerAnnotations),
             array(self::DEFINITION_ARRAY, $containerArray),
             array(self::DEFINITION_PHP, $containerPHP),
+            array(self::DEFINITION_ARRAY_FROM_FILE, $containerArrayFromFile),
+            array(self::DEFINITION_YAML, $containerYaml),
         );
     }
 

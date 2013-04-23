@@ -1,0 +1,42 @@
+{
+	"value3": true,
+	"value2": 123,
+	"value1": "abc",
+	"interface1": {
+		"lazy": false,
+		"class": "class1"
+	},
+	"interface2": {
+		scope: "prototype",
+		"class": "class2"
+	},
+	"class1": {
+		"scope": "singleton",
+		"lazy": true,
+		"constructor": {
+			"name2": "argument2",
+			"name3": "argument3",
+			"name1": "argument1"
+		},
+		"properties": {
+			"property1": "value1",
+			"property2": {
+				"lazy": true,
+				"name": "interface1"
+			}
+		},
+		"methods": {
+			"method2": {
+				"name6": "argument6"
+			},
+			"method3": [
+				"argument7",
+				"argument8"
+			],
+			"method1": {
+				"name4": "argument4",
+				"name5": "argument5"
+			}
+		}
+	}
+}
