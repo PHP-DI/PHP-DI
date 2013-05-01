@@ -23,7 +23,7 @@ class InheritanceTest extends \PHPUnit_Framework_TestCase
      *
      * @dataProvider containerProvider
      */
-    public function testInjectionOnParentClass(Container $container)
+    public function testInjectionSubClass(Container $container)
     {
         /** @var $instance SubClass */
         $instance = $container->get('IntegrationTests\DI\Fixtures\InheritanceTest\SubClass');
@@ -31,6 +31,23 @@ class InheritanceTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf('IntegrationTests\DI\Fixtures\InheritanceTest\Dependency', $instance->property1);
         $this->assertInstanceOf('IntegrationTests\DI\Fixtures\InheritanceTest\Dependency', $instance->property2);
         $this->assertInstanceOf('IntegrationTests\DI\Fixtures\InheritanceTest\Dependency', $instance->property3);
+        $this->assertInstanceOf('IntegrationTests\DI\Fixtures\InheritanceTest\Dependency', $instance->property4);
+    }
+
+    /**
+     * Test a dependency is injected if the injection is defined on a child class
+     *
+     * @dataProvider containerProvider
+     */
+    public function testInjectionBaseClass(Container $container)
+    {
+        /** @var $instance SubClass */
+        $instance = $container->get('IntegrationTests\DI\Fixtures\InheritanceTest\BaseClass');
+
+        $this->assertInstanceOf('IntegrationTests\DI\Fixtures\InheritanceTest\Dependency', $instance->property1);
+        $this->assertInstanceOf('IntegrationTests\DI\Fixtures\InheritanceTest\Dependency', $instance->property2);
+        $this->assertInstanceOf('IntegrationTests\DI\Fixtures\InheritanceTest\Dependency', $instance->property3);
+        $this->assertInstanceOf('IntegrationTests\DI\Fixtures\InheritanceTest\Dependency', $instance->property4);
     }
 
 
@@ -44,16 +61,32 @@ class InheritanceTest extends \PHPUnit_Framework_TestCase
         $containerAnnotations = new Container();
         $containerAnnotations->useReflection(true);
         $containerAnnotations->useAnnotations(true);
+        $containerAnnotations->set('IntegrationTests\DI\Fixtures\InheritanceTest\BaseClass')
+            ->bindTo('IntegrationTests\DI\Fixtures\InheritanceTest\SubClass');
 
         // Test with a container using array configuration
-        $containerArray = new Container();
-        $containerArray->useReflection(true);
-        $containerArray->useAnnotations(false);
-        $containerArray->addDefinitions(
+        $containerFullArrayDefinitions = new Container();
+        $containerFullArrayDefinitions->useReflection(false);
+        $containerFullArrayDefinitions->useAnnotations(false);
+        $containerFullArrayDefinitions->addDefinitions(
             array(
                 'IntegrationTests\DI\Fixtures\InheritanceTest\BaseClass' => array(
+                    'class'       => 'IntegrationTests\DI\Fixtures\InheritanceTest\SubClass',
                     'properties'  => array(
                         'property1' => 'IntegrationTests\DI\Fixtures\InheritanceTest\Dependency',
+                        'property4' => 'IntegrationTests\DI\Fixtures\InheritanceTest\Dependency',
+                    ),
+                    'constructor' => array(
+                        'param1' => 'IntegrationTests\DI\Fixtures\InheritanceTest\Dependency',
+                    ),
+                    'methods'     => array(
+                        'setProperty2' => 'IntegrationTests\DI\Fixtures\InheritanceTest\Dependency',
+                    ),
+                ),
+                'IntegrationTests\DI\Fixtures\InheritanceTest\SubClass'  => array(
+                    'properties'  => array(
+                        'property1' => 'IntegrationTests\DI\Fixtures\InheritanceTest\Dependency',
+                        'property4' => 'IntegrationTests\DI\Fixtures\InheritanceTest\Dependency',
                     ),
                     'constructor' => array(
                         'param1' => 'IntegrationTests\DI\Fixtures\InheritanceTest\Dependency',
@@ -65,9 +98,36 @@ class InheritanceTest extends \PHPUnit_Framework_TestCase
             )
         );
 
+        // Test with a container using array configuration
+        $containerInheritanceDefinitions = new Container();
+        $containerInheritanceDefinitions->useReflection(false);
+        $containerInheritanceDefinitions->useAnnotations(false);
+        $containerInheritanceDefinitions->addDefinitions(
+            array(
+                'IntegrationTests\DI\Fixtures\InheritanceTest\BaseClass' => array(
+                    'class'       => 'IntegrationTests\DI\Fixtures\InheritanceTest\SubClass',
+                    'properties'  => array(
+                        'property1' => 'IntegrationTests\DI\Fixtures\InheritanceTest\Dependency',
+                    ),
+                    'constructor' => array(
+                        'param1' => 'IntegrationTests\DI\Fixtures\InheritanceTest\Dependency',
+                    ),
+                    'methods'     => array(
+                        'setProperty2' => 'IntegrationTests\DI\Fixtures\InheritanceTest\Dependency',
+                    ),
+                ),
+                'IntegrationTests\DI\Fixtures\InheritanceTest\SubClass'  => array(
+                    'properties' => array(
+                        'property4' => 'IntegrationTests\DI\Fixtures\InheritanceTest\Dependency',
+                    ),
+                ),
+            )
+        );
+
         return array(
             array($containerAnnotations),
-            array($containerArray),
+            array($containerFullArrayDefinitions),
+            array($containerInheritanceDefinitions),
         );
     }
 
