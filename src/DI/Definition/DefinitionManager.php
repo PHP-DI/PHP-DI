@@ -7,33 +7,36 @@
  * @license   http://www.opensource.org/licenses/mit-license.php MIT (see the LICENSE file)
  */
 
-namespace DI;
+namespace DI\Definition;
 
 use DI\Definition\Definition;
 use DI\Definition\Source\AnnotationDefinitionSource;
 use DI\Definition\Source\ArrayDefinitionSource;
-use DI\Definition\Source\CachedDefinitionSource;
 use DI\Definition\Source\CombinedDefinitionSource;
-use DI\Definition\Source\DefinitionSource;
 use DI\Definition\Source\ReflectionDefinitionSource;
 use DI\Definition\Source\SimpleDefinitionSource;
 use DI\Definition\FileLoader\DefinitionFileLoader;
 use Doctrine\Common\Cache\Cache;
 
 /**
- * Configuration of the dependency injection container
+ * Manages definitions
  *
  * @author Matthieu Napoli <matthieu@mnapoli.fr>
  * @author Domenic Muskulus <domenic@muskulus.eu>
  */
-class Configuration
+class DefinitionManager
 {
 
     /**
-     * Caches the combinedSource
-     * @var CachedDefinitionSource
+     * Prefix for cache key, to avoid conflicts with other systems using the same cache
+     * @var string
      */
-    private $cachedSource;
+    const CACHE_PREFIX = 'DI\\Definition';
+
+    /**
+     * @var Cache|null
+     */
+    private $cache;
 
     /**
      * Source merging definitions of sub-sources
@@ -76,16 +79,34 @@ class Configuration
     }
 
     /**
-     * @return DefinitionSource
+     * Returns DI definition for the entry name
+     * @param string $name
+     * @return Definition|null
      */
-    public function getDefinitionSource()
+    public function getDefinition($name)
     {
-        // If we use the cache
-        if ($this->cachedSource !== null) {
-            return $this->cachedSource;
-        } else {
-            return $this->combinedSource;
+        // Look in cache first
+        $definition = $this->fetchFromCache($name);
+
+        if ($definition === false) {
+            $definition = $this->combinedSource->getDefinition($name);
+
+            // If alias, merge definition with alias
+            if ($definition instanceof ClassDefinition && $definition->isAlias()) {
+                $implementationDefinition = $this->getDefinition($definition->getClassName());
+
+                if ($implementationDefinition) {
+                    $definition->merge($implementationDefinition);
+                }
+            }
+
+            // Save to cache
+            if ($definition === null || ($definition && $definition->isCacheable())) {
+                $this->saveToCache($name, $definition);
+            }
         }
+
+        return $definition;
     }
 
     /**
@@ -165,7 +186,7 @@ class Configuration
         $definitions = $definitionFileLoader->load($this->definitionValidation);
 
         if (!is_array($definitions)) {
-            throw new \InvalidArgumentException(get_class($definitionFileLoader) .  " must return an array.");
+            throw new \InvalidArgumentException(get_class($definitionFileLoader) . " must return an array.");
         }
 
         $source = new ArrayDefinitionSource();
@@ -174,25 +195,21 @@ class Configuration
     }
 
     /**
-     * Enables the use of a cache for all the other definition sources
+     * @return Cache|null
+     */
+    public function getCache()
+    {
+        return $this->cache;
+    }
+
+    /**
+     * Enables the use of a cache
      *
      * @param Cache|null $cache
      */
     public function setCache(Cache $cache = null)
     {
-        if ($cache !== null) {
-            // Enable
-            if ($this->cachedSource === null) {
-                $this->cachedSource = new CachedDefinitionSource($this->combinedSource, $cache);
-            } else {
-                $this->cachedSource->setCache($cache);
-            }
-        } else {
-            // Disable
-            if ($this->cachedSource !== null) {
-                unset($this->cachedSource);
-            }
-        }
+        $this->cache = $cache;
     }
 
     /**
@@ -204,6 +221,41 @@ class Configuration
     public function setDefinitionsValidation($bool)
     {
         $this->definitionValidation = (bool) $bool;
+    }
+
+    /**
+     * Fetches a definition from the cache
+     *
+     * @param string $name Entry name
+     * @return Definition|null|boolean The cached definition, null or false if the value is not already cached
+     */
+    private function fetchFromCache($name)
+    {
+        if ($this->cache === null) {
+            return false;
+        }
+
+        $cacheKey = self::CACHE_PREFIX . $name;
+        if (($data = $this->cache->fetch($cacheKey)) !== false) {
+            return $data;
+        }
+        return false;
+    }
+
+    /**
+     * Saves a definition to the cache
+     *
+     * @param string          $name Entry name
+     * @param Definition|null $definition
+     */
+    private function saveToCache($name, Definition $definition = null)
+    {
+        if ($this->cache === null) {
+            return;
+        }
+
+        $cacheKey = self::CACHE_PREFIX . $name;
+        $this->cache->save($cacheKey, $definition);
     }
 
 }

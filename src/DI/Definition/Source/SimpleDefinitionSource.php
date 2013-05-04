@@ -39,7 +39,6 @@ class SimpleDefinitionSource implements DefinitionSource
     /**
      * Add a definition
      *
-     * @param string     $name
      * @param Definition $definition
      */
     public function addDefinition(Definition $definition)

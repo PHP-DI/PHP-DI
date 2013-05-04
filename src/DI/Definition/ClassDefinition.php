@@ -98,6 +98,14 @@ class ClassDefinition implements Definition
     }
 
     /**
+     * @return bool True if the definition is an alias to another class
+     */
+    public function isAlias()
+    {
+        return $this->className !== null && $this->className !== $this->name;
+    }
+
+    /**
      * @return MethodInjection|null
      */
     public function getConstructorInjection()

@@ -12,8 +12,8 @@ namespace DI;
 use Closure;
 use DI\Definition\ClassDefinition;
 use DI\Definition\ClosureDefinition;
+use DI\Definition\DefinitionManager;
 use DI\Definition\Helper\ClassDefinitionHelper;
-use DI\Definition\Source\DefinitionSource;
 use DI\Definition\ValueDefinition;
 use DI\Definition\FileLoader\DefinitionFileLoader;
 use DI\Proxy\Proxy;
@@ -36,9 +36,9 @@ class Container
     private $entries = array();
 
     /**
-     * @var Configuration
+     * @var DefinitionManager
      */
-    private $configuration;
+    private $definitionManager;
 
     /**
      * @var FactoryInterface
@@ -58,9 +58,9 @@ class Container
     public function __construct()
     {
         // Default configuration
-        $this->configuration = new Configuration();
-        $this->configuration->useReflection(true);
-        $this->configuration->useAnnotations(true);
+        $this->definitionManager = new DefinitionManager();
+        $this->definitionManager->useReflection(true);
+        $this->definitionManager->useAnnotations(true);
 
         // Default factory
         $this->factory = new Factory($this);
@@ -95,7 +95,7 @@ class Container
         }
 
         // Entry not loaded, use the definitions
-        $definition = $this->getDefinitionSource()->getDefinition($name);
+        $definition = $this->definitionManager->getDefinition($name);
 
         // It's a value
         if ($definition instanceof ValueDefinition) {
@@ -143,20 +143,20 @@ class Container
         // Class definition
         if ($value === null) {
             $helper = new ClassDefinitionHelper($name);
-            $this->configuration->addDefinition($helper->getDefinition());
+            $this->definitionManager->addDefinition($helper->getDefinition());
             return $helper;
         }
 
         // Closure definition
         if ($value instanceof Closure) {
             $definition = new ClosureDefinition($name, $value);
-            $this->configuration->addDefinition($definition);
+            $this->definitionManager->addDefinition($definition);
             return null;
         }
 
         // Value definition
         $definition = new ValueDefinition($name, $value);
-        $this->configuration->addDefinition($definition);
+        $this->definitionManager->addDefinition($definition);
         return null;
     }
 
@@ -167,7 +167,7 @@ class Container
      */
     public function useReflection($bool)
     {
-        $this->configuration->useReflection($bool);
+        $this->definitionManager->useReflection($bool);
     }
 
     /**
@@ -177,7 +177,7 @@ class Container
      */
     public function useAnnotations($bool)
     {
-        $this->configuration->useAnnotations($bool);
+        $this->definitionManager->useAnnotations($bool);
     }
 
     /**
@@ -187,7 +187,7 @@ class Container
      */
     public function addDefinitions(array $definitions)
     {
-        $this->configuration->addArrayDefinitions($definitions);
+        $this->definitionManager->addArrayDefinitions($definitions);
     }
 
     /**
@@ -198,15 +198,7 @@ class Container
      */
     public function addDefinitionsFromFile(DefinitionFileLoader $definitionFileLoader)
     {
-        $this->configuration->addDefinitionsFromFile($definitionFileLoader);
-    }
-
-    /**
-     * @return DefinitionSource The definition source
-     */
-    public function getDefinitionSource()
-    {
-        return $this->configuration->getDefinitionSource();
+        $this->definitionManager->addDefinitionsFromFile($definitionFileLoader);
     }
 
     /**
@@ -216,7 +208,7 @@ class Container
      */
     public function setDefinitionCache(Cache $cache)
     {
-        $this->configuration->setCache($cache);
+        $this->definitionManager->setCache($cache);
     }
 
     /**
@@ -227,7 +219,7 @@ class Container
      */
     public function setDefinitionsValidation($bool)
     {
-        $this->configuration->setDefinitionsValidation($bool);
+        $this->definitionManager->setDefinitionsValidation($bool);
     }
 
     /**
