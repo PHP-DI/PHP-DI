@@ -54,27 +54,17 @@ class Factory implements FactoryInterface
         // Create an instance without calling its constructor
         $instance = $this->newInstanceWithoutConstructor($classReflection);
 
-        try {
+        // Property injections
+        foreach ($classDefinition->getPropertyInjections() as $propertyInjection) {
+            $this->injectProperty($instance, $propertyInjection);
+        }
 
-            // Property injections
-            foreach ($classDefinition->getPropertyInjections() as $propertyInjection) {
-                $this->injectProperty($instance, $propertyInjection);
-            }
+        // Constructor injection
+        $this->injectConstructor($instance, $classReflection, $classDefinition->getConstructorInjection());
 
-            // Constructor injection
-            $this->injectConstructor($instance, $classReflection, $classDefinition->getConstructorInjection());
-
-            // Method injections
-            foreach ($classDefinition->getMethodInjections() as $methodInjection) {
-                $this->injectMethod($instance, $methodInjection);
-            }
-
-        } catch (DependencyException $e) {
-            throw $e;
-        } catch (DefinitionException $e) {
-            throw $e;
-        } catch (Exception $e) {
-            throw new DependencyException("Error while injecting dependencies into $classReflection->name: " . $e->getMessage(), 0, $e);
+        // Method injections
+        foreach ($classDefinition->getMethodInjections() as $methodInjection) {
+            $this->injectMethod($instance, $methodInjection);
         }
 
         return $instance;
