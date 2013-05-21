@@ -28,7 +28,8 @@ class BuggyInjectionsTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \DI\NotFoundException
+     * @expectedException \DI\DependencyException
+     * @expectedExceptionMessage Error while injecting dependencies into IntegrationTests\DI\Fixtures\ConstructorInjectionTest\Buggy2: No entry or class found for 'nonExistentEntry'
      */
     public function testConstructorNonExistentEntry()
     {
@@ -37,7 +38,8 @@ class BuggyInjectionsTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \Exception
+     * @expectedException \DI\DependencyException
+     * @expectedExceptionMessage Error while injecting 'namedDependency' in IntegrationTests\DI\Fixtures\SetterInjectionTest\NamedInjectionClass::dependency. No entry or class found for 'namedDependency'
      */
     public function testSetterNamedInjectionNotFound()
     {
@@ -57,7 +59,8 @@ class BuggyInjectionsTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \DI\NotFoundException
+     * @expectedException \DI\DependencyException
+     * @expectedExceptionMessage Error while injecting dependencies into IntegrationTests\DI\Fixtures\SetterInjectionTest\Buggy3: No entry or class found for 'nonExistentBean'
      */
     public function testSetterNamedUnknownBean()
     {
