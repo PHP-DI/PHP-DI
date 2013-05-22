@@ -55,7 +55,6 @@ class Factory implements FactoryInterface
         $instance = $this->newInstanceWithoutConstructor($classReflection);
 
         try {
-
             // Property injections
             foreach ($classDefinition->getPropertyInjections() as $propertyInjection) {
                 $this->injectProperty($instance, $propertyInjection);
@@ -68,12 +67,11 @@ class Factory implements FactoryInterface
             foreach ($classDefinition->getMethodInjections() as $methodInjection) {
                 $this->injectMethod($instance, $methodInjection);
             }
-
         } catch (DependencyException $e) {
             throw $e;
         } catch (DefinitionException $e) {
             throw $e;
-        } catch (Exception $e) {
+        } catch (NotFoundException $e) {
             throw new DependencyException("Error while injecting dependencies into $classReflection->name: " . $e->getMessage(), 0, $e);
         }
 

@@ -1,5 +1,13 @@
 # Change log
 
+## 3.0.2
+
+* [#64](https://github.com/mnapoli/PHP-DI/issues/64): Non PHP-DI exceptions are not captured-rethrown anymore when injecting dependencies (cleaner stack trace)
+
+## 3.0.1
+
+* [#62](https://github.com/mnapoli/PHP-DI/issues/62): When using aliases, definitions are now merged
+
 ## 3.0
 
 Major compatibility breaks with 2.x.
