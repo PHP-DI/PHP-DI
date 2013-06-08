@@ -18,5 +18,8 @@
         "doctrine/cache": "1.*",
         "myclabs/php-enum": "*",
         "symfony/yaml": "v2.2.0"
+    },
+    "require-dev": {
+        "satooshi/php-coveralls": "dev-master"
     }
 }
