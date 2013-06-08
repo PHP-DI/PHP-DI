@@ -2,6 +2,8 @@
 
 [![Build Status](https://secure.travis-ci.org/mnapoli/PHP-DI.png)](http://travis-ci.org/mnapoli/PHP-DI)
 
+[![Coverage Status](https://coveralls.io/repos/mnapoli/PHP-DI/badge.png?branch=master)](https://coveralls.io/r/mnapoli/PHP-DI?branch=master)
+
 PHP-DI is license under the MIT License.
 
 
