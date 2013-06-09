@@ -102,7 +102,7 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
     public function testGetWithProxy()
     {
         $container = new Container();
-        $this->assertInstanceOf('DI\Proxy\Proxy', $container->get('stdClass', true));
+        $this->assertInstanceOf('stdClass', $container->get('stdClass', true));
     }
 
     /**
@@ -119,7 +119,7 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
                 ),
             )
         );
-        $this->assertInstanceOf('DI\Proxy\Proxy', $container->get('foo', true));
+        $this->assertInstanceOf('stdClass', $container->get('foo', true));
     }
 
     /**

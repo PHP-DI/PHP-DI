@@ -270,10 +270,24 @@ class Container
      */
     private function getProxy($classname)
     {
+        // TODO configure properly
+        $config = new \ProxyManager\Configuration();
+        $config->setAutoGenerateProxies(true);
+        $config->setGeneratorStrategy(new \ProxyManager\GeneratorStrategy\EvaluatingGeneratorStrategy());
+        $factory = new \ProxyManager\Factory\LazyLoadingValueHolderFactory($config);
+
         $container = $this;
-        return new Proxy(function () use ($container, $classname) {
-            return $container->get($classname);
-        });
+
+        $proxy = $factory->createProxy(
+            $classname,
+            function (& $wrappedObject, $proxy, $method, $parameters, & $initializer) use ($container, $classname) {
+                $wrappedObject = $container->get($classname);
+                $initializer = null; // turning off further lazy initialization
+                return true;
+            }
+        );
+
+        return $proxy;
     }
 
 }

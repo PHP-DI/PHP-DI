@@ -29,7 +29,7 @@ class PropertyInjectionTest extends \PHPUnit_Framework_TestCase
         $class = $container->get('IntegrationTests\DI\Fixtures\PropertyInjectionTest\LazyInjectionClass');
         $dependency = $class->getClass2();
         $this->assertNotNull($dependency);
-        $this->assertInstanceOf('\DI\Proxy\Proxy', $dependency);
+        $this->assertInstanceOf('IntegrationTests\DI\Fixtures\PropertyInjectionTest\Class2', $dependency);
         // Correct proxy resolution
         $this->assertTrue($dependency->getBoolean());
     }
