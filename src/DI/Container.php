@@ -16,7 +16,6 @@ use DI\Definition\DefinitionManager;
 use DI\Definition\Helper\ClassDefinitionHelper;
 use DI\Definition\ValueDefinition;
 use DI\Definition\FileLoader\DefinitionFileLoader;
-use DI\Proxy\Proxy;
 use Doctrine\Common\Cache\Cache;
 use Exception;
 use InvalidArgumentException;
