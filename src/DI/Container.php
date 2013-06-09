@@ -263,10 +263,10 @@ class Container
     }
 
     /**
-     * Returns a proxy class
+     * Returns a proxy instance
      *
      * @param string $classname
-     * @return Proxy Proxy instance
+     * @return object Proxy instance
      */
     private function getProxy($classname)
     {
