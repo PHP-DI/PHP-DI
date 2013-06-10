@@ -1,5 +1,9 @@
 # Change log
 
+## 3.0.4
+
+* FIXED[#69](https://github.com/mnapoli/PHP-DI/issues/69): YamlDefinitionFileLoader crashes if YAML file is empty
+
 ## 3.0.3
 
 * Fixed over-restrictive dependencies in composer.json
