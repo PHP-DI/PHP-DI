@@ -19,6 +19,8 @@ use DI\Definition\FileLoader\DefinitionFileLoader;
 use Doctrine\Common\Cache\Cache;
 use Exception;
 use InvalidArgumentException;
+use ProxyManager\Factory\LazyLoadingValueHolderFactory;
+use ProxyManager\GeneratorStrategy\EvaluatingGeneratorStrategy;
 
 /**
  * Dependency Injection Container
@@ -45,6 +47,11 @@ class Container
     private $factory;
 
     /**
+     * @var LazyLoadingValueHolderFactory
+     */
+    private $proxyFactory;
+
+    /**
      * Array of classes being instantiated.
      * Used to avoid circular dependencies.
      * @var array
@@ -52,14 +59,13 @@ class Container
     private $classesBeingInstantiated = array();
 
     /**
-     * Constructor creates a default configuration
+     * @param DefinitionManager|null             $definitionManager
+     * @param LazyLoadingValueHolderFactory|null $proxyFactory
      */
-    public function __construct()
+    public function __construct(DefinitionManager $definitionManager = null, LazyLoadingValueHolderFactory $proxyFactory = null)
     {
-        // Default configuration
-        $this->definitionManager = new DefinitionManager();
-        $this->definitionManager->useReflection(true);
-        $this->definitionManager->useAnnotations(true);
+        $this->definitionManager = $definitionManager ?: $this->createDefaultDefinitionManager();
+        $this->proxyFactory = $proxyFactory ?: $this->createDefaultProxyFactory();
 
         // Default factory
         $this->factory = new Factory($this);
@@ -238,6 +244,22 @@ class Container
     }
 
     /**
+     * @return LazyLoadingValueHolderFactory
+     */
+    public function getProxyFactory()
+    {
+        return $this->proxyFactory;
+    }
+
+    /**
+     * @param LazyLoadingValueHolderFactory $proxyFactory
+     */
+    public function setProxyFactory(LazyLoadingValueHolderFactory $proxyFactory)
+    {
+        $this->proxyFactory = $proxyFactory;
+    }
+
+    /**
      * @param ClassDefinition $classDefinition
      * @return object The instance
      */
@@ -269,15 +291,9 @@ class Container
      */
     private function getProxy($classname)
     {
-        // TODO configure properly
-        $config = new \ProxyManager\Configuration();
-        $config->setAutoGenerateProxies(true);
-        $config->setGeneratorStrategy(new \ProxyManager\GeneratorStrategy\EvaluatingGeneratorStrategy());
-        $factory = new \ProxyManager\Factory\LazyLoadingValueHolderFactory($config);
-
         $container = $this;
 
-        $proxy = $factory->createProxy(
+        $proxy = $this->proxyFactory->createProxy(
             $classname,
             function (& $wrappedObject, $proxy, $method, $parameters, & $initializer) use ($container, $classname) {
                 $wrappedObject = $container->get($classname);
@@ -287,6 +303,32 @@ class Container
         );
 
         return $proxy;
+    }
+
+    /**
+     * @return DefinitionManager
+     */
+    private function createDefaultDefinitionManager()
+    {
+        $definitionManager = new DefinitionManager();
+        $definitionManager->useReflection(true);
+        $definitionManager->useAnnotations(true);
+
+        return $definitionManager;
+    }
+
+    /**
+     * @return LazyLoadingValueHolderFactory
+     */
+    private function createDefaultProxyFactory()
+    {
+        // Proxy factory
+        $config = new \ProxyManager\Configuration();
+        // By default, auto-generate proxies and don't write them to file
+        $config->setAutoGenerateProxies(true);
+        $config->setGeneratorStrategy(new EvaluatingGeneratorStrategy());
+
+        return new LazyLoadingValueHolderFactory($config);
     }
 
 }
