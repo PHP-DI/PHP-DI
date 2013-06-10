@@ -1,5 +1,9 @@
 # Change log
 
+## 3.0.3
+
+* Fixed over-restrictive dependencies in composer.json
+
 ## 3.0.2
 
 * [#64](https://github.com/mnapoli/PHP-DI/issues/64): Non PHP-DI exceptions are not captured-rethrown anymore when injecting dependencies (cleaner stack trace)
