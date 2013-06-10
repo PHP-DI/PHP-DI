@@ -26,7 +26,7 @@ class YamlDefinitionFileLoader extends DefinitionFileLoader
     public function load($validate = false)
     {
         try {
-            $definitions = Yaml::parse($this->definitionFile);
+            $definitions = Yaml::parse($this->definitionFile) ?: array();
         } catch (\Exception $e) {
             throw new ParseException($e->getMessage());
         }
