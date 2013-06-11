@@ -11,6 +11,10 @@ return array(
             'property2' => 'IntegrationTests\DI\Fixtures\Interface1',
             'property3' => 'namedDependency',
             'property4' => 'foo',
+            'property5' => array(
+                'name' => 'IntegrationTests\DI\Fixtures\LazyDependency',
+                'lazy' => true,
+            ),
         ),
         'constructor' => array(
             'param1' => 'IntegrationTests\DI\Fixtures\Class2',
@@ -34,4 +38,5 @@ return array(
     'namedDependency'                              => array(
         'class' => 'IntegrationTests\DI\Fixtures\Class2',
     ),
+    'IntegrationTests\DI\Fixtures\LazyDependency' => array(),
 );

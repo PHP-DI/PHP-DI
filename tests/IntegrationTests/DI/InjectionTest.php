@@ -14,6 +14,7 @@ use DI\Definition\FileLoader\YamlDefinitionFileLoader;
 use DI\Scope;
 use DI\Container;
 use IntegrationTests\DI\Fixtures\Class1;
+use IntegrationTests\DI\Fixtures\LazyDependency;
 
 /**
  * Test class for injection
@@ -84,6 +85,7 @@ class InjectionTest extends \PHPUnit_Framework_TestCase
             ->withProperty('property2', 'IntegrationTests\DI\Fixtures\Interface1')
             ->withProperty('property3', 'namedDependency')
             ->withProperty('property4', 'foo')
+            ->withProperty('property5', 'IntegrationTests\DI\Fixtures\LazyDependency', true)
             ->withConstructor(
                 array(
                     'param1' => 'IntegrationTests\DI\Fixtures\Class2',
@@ -100,6 +102,7 @@ class InjectionTest extends \PHPUnit_Framework_TestCase
             ->withScope(Scope::SINGLETON());
         $containerPHP->set('namedDependency')
             ->bindTo('IntegrationTests\DI\Fixtures\Class2');
+        $containerPHP->set('IntegrationTests\DI\Fixtures\LazyDependency');
 
         // Test with a container using array configuration loaded from file
         $containerArrayFromFile = new Container();
@@ -151,6 +154,15 @@ class InjectionTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf('IntegrationTests\DI\Fixtures\Implementation1', $class1->property2);
         $this->assertInstanceOf('IntegrationTests\DI\Fixtures\Class2', $class1->property3);
         $this->assertEquals('bar', $class1->property4);
+        // Lazy injection
+        /** @var LazyDependency|\ProxyManager\Proxy\LazyLoadingInterface $proxy */
+        $proxy = $class1->property5;
+        $this->assertInstanceOf('IntegrationTests\DI\Fixtures\LazyDependency', $proxy);
+        $this->assertInstanceOf('ProxyManager\Proxy\LazyLoadingInterface', $proxy);
+        $this->assertFalse($proxy->isProxyInitialized());
+        // Correct proxy resolution
+        $this->assertTrue($proxy->getValue());
+        $this->assertTrue($proxy->isProxyInitialized());
     }
 
     /**

@@ -43,6 +43,12 @@ class Class1
      */
     public $property4;
 
+    /**
+     * @Inject(lazy=true)
+     * @var LazyDependency
+     */
+    public $property5;
+
     public $constructorParam1;
     public $constructorParam2;
 
