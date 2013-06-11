@@ -10,6 +10,7 @@
 namespace DI\Definition\Source;
 
 use DI\Definition\Definition;
+use DI\Definition\ValueDefinition;
 
 /**
  * A source that merges the definitions of several sub-sources
@@ -36,15 +37,21 @@ class CombinedDefinitionSource implements DefinitionSource
         foreach ($this->subSources as $subSource) {
             $subDefinition = $subSource->getDefinition($name);
 
-            if ($subDefinition) {
+            if (!$subDefinition) {
+                continue;
+            }
 
-                if ($definition === null) {
-                    $definition = $subDefinition;
-                } else {
-                    // Merge the definitions
-                    $definition->merge($subDefinition);
-                }
+            // A ValueDefinition always prevails on others
+            // @see https://github.com/mnapoli/PHP-DI/issues/70
+            if ($subDefinition instanceof ValueDefinition) {
+                return $subDefinition;
+            }
 
+            if ($definition === null) {
+                $definition = $subDefinition;
+            } else {
+                // Merge the definitions
+                $definition->merge($subDefinition);
             }
         }
 
