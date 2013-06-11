@@ -24,6 +24,16 @@ class YamlDefinitionFileLoaderTest extends DefinitionFileLoaderBaseTestCase
     }
 
     /**
+     * @see https://github.com/mnapoli/PHP-DI/issues/69
+     */
+    public function testLoadEmptyNoError()
+    {
+        $loader = new YamlDefinitionFileLoader(__DIR__ . '/Fixtures/definitions_empty.yaml');
+        $definitions = $loader->load();
+        $this->assertInternalType('array', $definitions);
+    }
+
+    /**
      * @expectedException \DI\Definition\FileLoader\Exception\ParseException
      */
     public function testLoadInvalid()
