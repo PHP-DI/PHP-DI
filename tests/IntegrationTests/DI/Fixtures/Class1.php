@@ -25,8 +25,6 @@ class Class1
      */
     public $property1;
 
-    public $isProperty1InjectedInConstructor = false;
-
     /**
      * @Inject
      * @var Interface1
@@ -67,10 +65,6 @@ class Class1
     {
         $this->constructorParam1 = $param1;
         $this->constructorParam2 = $param2;
-
-        if ($this->property1 instanceof Class2) {
-            $this->isProperty1InjectedInConstructor = true;
-        }
     }
 
     /**

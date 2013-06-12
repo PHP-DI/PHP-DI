@@ -149,8 +149,6 @@ class InjectionTest extends \PHPUnit_Framework_TestCase
         /** @var $class1 Class1 */
         $class1 = $container->get('IntegrationTests\DI\Fixtures\Class1');
         $this->assertInstanceOf('IntegrationTests\DI\Fixtures\Class2', $class1->property1);
-        // Make sure the properties are injected before the constructor is called
-        $this->assertTrue($class1->isProperty1InjectedInConstructor);
         $this->assertInstanceOf('IntegrationTests\DI\Fixtures\Implementation1', $class1->property2);
         $this->assertInstanceOf('IntegrationTests\DI\Fixtures\Class2', $class1->property3);
         $this->assertEquals('bar', $class1->property4);
