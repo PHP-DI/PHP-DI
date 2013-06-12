@@ -1,5 +1,14 @@
 # Change log
 
+## 3.1
+
+Small BC-break: PHP-DI 3.0 injected properties before calling the constructor. This was confusing and not supported for internal classes. From 3.1 and on, properties are injected after calling the constructor.
+
+* **Lazy injection**: it is now possible to use lazy injection on properties and methods (setters and constructors).
+* Lazy dependencies are now proxies that extend the class they proxy, so type-hinting works.
+* The container is now auto-registered (as 'DI\Container').
+* `ContainerBuilder` object that helps to create and configure a `Container`
+
 ## 3.0.5
 
 * FIXED[#69](https://github.com/mnapoli/PHP-DI/issues/69): Definition conflict when setting a value for a class name
