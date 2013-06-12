@@ -233,11 +233,47 @@ My\Foo:
 <li>If you can, use <code>$container-&gt;get()</code> in you root application class or front controller</li>
 <li>Else, use <code>$container-&gt;get()</code> in your controllers (but avoid it in your services) but keep in mind that your controllers will be dependent on the container</li>
 </ul>
+
+<h4>Zend Framework 1</h4>
+
+<p>If you are using ZF1, PHP-DI provides easy and clean integration so that you don&#39;t have to call the container (see above about the Service Locator pattern).</p>
+
+<p>First, install the bridge to ZF1:</p>
+
+<pre><code class="json">{
+    &quot;require&quot;: {
+        &quot;mnapoli/php-di&quot;: &quot;The version you want here&quot;,
+        &quot;mnapoli/php-di-zf1&quot;: &quot;*&quot;
+    }
+}
+</code></pre>
+
+<p>To use PHP-DI in your ZF1 application, you need to change the Dispatcher used by the Front Controller in the Bootstrap.</p>
+
+<pre><code class="php">    protected function _initDependencyInjection() {
+        $container = new \DI\Container();
+
+        $dispatcher = new \DI\ZendFramework1\Dispatcher();
+        $dispatcher-&gt;setContainer($container);
+
+        Zend_Controller_Front::getInstance()-&gt;setDispatcher($dispatcher);
+    }
+</code></pre>
+
+<p><strong>That&#39;s it!</strong></p>
+
+<p>Now you have dependency injection <strong>in your controllers</strong>.</p>
+
+<p>Read more on the <a href="https://github.com/mnapoli/PHP-DI-ZF1">PHP-DI-ZF1 project on Github</a>.</p>
             <div class="github">
                 PHP-DI is an open source project, you can contribute or seek help on
                 <a class="btn btn-mini" href="https://github.com/mnapoli/PHP-DI/" target="_blank">
                     <i class="icon-github-alt"></i>
                     Github</a>
+                or
+                <a class="btn btn-mini" href="https://twitter.com/PHPDI" target="_blank">
+                    <i class="icon-twitter"></i>
+                    Twitter</a>
             </div>
 
         </div>
