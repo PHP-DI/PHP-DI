@@ -69,6 +69,9 @@ class Container
 
         // Default factory
         $this->factory = new Factory($this);
+
+        // Auto-register the container
+        $this->entries[get_class($this)] = $this;
     }
 
     /**
