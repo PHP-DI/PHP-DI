@@ -226,7 +226,13 @@ class AnnotationDefinitionSource implements DefinitionSource
                 $entryName = $this->phpDocParser->getParameterType($reflectionClass, $method, $parameter);
             }
 
-            $methodInjection->addParameterInjection(new ParameterInjection($parameter->name, $entryName));
+            $parameterInjection = new ParameterInjection($parameter->name, $entryName);
+
+            if (isset($annotationParameter['lazy'])) {
+                $parameterInjection->setLazy($annotationParameter['lazy']);
+            }
+
+            $methodInjection->addParameterInjection($parameterInjection);
 
             $index++;
         }

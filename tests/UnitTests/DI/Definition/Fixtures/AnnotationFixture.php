@@ -86,4 +86,14 @@ class AnnotationFixture
     {
     }
 
+    /**
+     * @Inject({
+     *   "param1" = {"name" = "foo", "lazy" = true},
+     *   "param2" = {"name" = "bar"}
+     * })
+     */
+    public function method7($param1, $param2)
+    {
+    }
+
 }
