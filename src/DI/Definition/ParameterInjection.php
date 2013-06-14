@@ -91,6 +91,9 @@ class ParameterInjection
         if ($parameterInjection->entryName !== null) {
             $this->entryName = $parameterInjection->entryName;
         }
+        if ($parameterInjection->lazy !== null) {
+            $this->lazy = $parameterInjection->lazy;
+        }
     }
 
 }
