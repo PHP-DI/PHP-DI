@@ -152,4 +152,15 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
         $container->get(new stdClass());
     }
 
+    /**
+     * The container auto-registers itself
+     */
+    public function testContainerIsRegistered()
+    {
+        $container = new Container();
+        $otherContainer = $container->get('DI\Container');
+
+        $this->assertSame($container, $otherContainer);
+    }
+
 }
