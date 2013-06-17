@@ -94,7 +94,11 @@ class InjectionTest extends \PHPUnit_Framework_TestCase
             )
             ->withMethod('method1', array('IntegrationTests\DI\Fixtures\Class2'))
             ->withMethod('method2', array('IntegrationTests\DI\Fixtures\Interface1'))
-            ->withMethod('method3', array('param1' => 'namedDependency', 'param2' => 'foo'));
+            ->withMethod('method3', array('param1' => 'namedDependency', 'param2' => 'foo'))
+            ->withMethod('method4', array('param1' => array(
+                    'name' => 'IntegrationTests\DI\Fixtures\LazyDependency',
+                    'lazy' => true,
+                )));
         $containerPHP->set('IntegrationTests\DI\Fixtures\Class2');
         $containerPHP->set('IntegrationTests\DI\Fixtures\Implementation1');
         $containerPHP->set('IntegrationTests\DI\Fixtures\Interface1')
@@ -178,6 +182,15 @@ class InjectionTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf('IntegrationTests\DI\Fixtures\Implementation1', $class1->method2Param1);
         $this->assertInstanceOf('IntegrationTests\DI\Fixtures\Class2', $class1->method3Param1);
         $this->assertEquals('bar', $class1->method3Param2);
+        $this->assertInstanceOf('IntegrationTests\DI\Fixtures\LazyDependency', $class1->method4Param1);
+        $this->assertInstanceOf('ProxyManager\Proxy\LazyLoadingInterface', $class1->method4Param1);
+        // Lazy injection
+        /** @var LazyDependency|\ProxyManager\Proxy\LazyLoadingInterface $proxy */
+        $proxy = $class1->method4Param1;
+        $this->assertFalse($proxy->isProxyInitialized());
+        // Correct proxy resolution
+        $this->assertTrue($proxy->getValue());
+        $this->assertTrue($proxy->isProxyInitialized());
     }
 
     /**

@@ -21,6 +21,10 @@ IntegrationTests\DI\Fixtures\Class1:
     method3:
       param1: namedDependency
       param2: foo
+    method4:
+      param1:
+        name: IntegrationTests\DI\Fixtures\LazyDependency
+        lazy: true
 
 IntegrationTests\DI\Fixtures\Class2:
 

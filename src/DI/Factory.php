@@ -156,7 +156,11 @@ class Factory implements FactoryInterface
                     . "' of {$classReflection->name}::$methodName has no type defined or guessable");
             }
 
-            $args[] = $this->container->get($entryName);
+            if ($parameterInjection->isLazy()) {
+                $args[] = $this->container->get($entryName, true);
+            } else {
+                $args[] = $this->container->get($entryName);
+            }
         }
 
         $methodReflection->invokeArgs($object, $args);

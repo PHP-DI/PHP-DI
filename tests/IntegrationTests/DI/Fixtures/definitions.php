@@ -27,6 +27,10 @@ return array(
                 'param1' => 'namedDependency',
                 'param2' => 'foo',
             ),
+            'method4' => array(
+                'name' => 'IntegrationTests\DI\Fixtures\LazyDependency',
+                'lazy' => true,
+            ),
         ),
     ),
     'IntegrationTests\DI\Fixtures\Class2'          => array(),
