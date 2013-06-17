@@ -25,6 +25,12 @@
 				"argument7",
 				"argument8"
 			],
+            "method4": {
+                "name7": {
+                    "name": "argument7",
+                    "lazy": true
+                }
+            },
 			"method1": {
 				"name4": "argument4",
 				"name5": "argument5"

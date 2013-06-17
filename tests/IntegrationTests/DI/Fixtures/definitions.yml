@@ -9,6 +9,9 @@ IntegrationTests\DI\Fixtures\Class1:
     property2: IntegrationTests\DI\Fixtures\Interface1
     property3: namedDependency
     property4: foo
+    property5:
+      name: IntegrationTests\DI\Fixtures\LazyDependency
+      lazy: true
   constructor:
     param1: IntegrationTests\DI\Fixtures\Class2
     param2: IntegrationTests\DI\Fixtures\Interface1
@@ -18,6 +21,10 @@ IntegrationTests\DI\Fixtures\Class1:
     method3:
       param1: namedDependency
       param2: foo
+    method4:
+      param1:
+        name: IntegrationTests\DI\Fixtures\LazyDependency
+        lazy: true
 
 IntegrationTests\DI\Fixtures\Class2:
 
@@ -29,3 +36,5 @@ IntegrationTests\DI\Fixtures\Interface1:
 
 namedDependency:
   class: IntegrationTests\DI\Fixtures\Class2
+
+IntegrationTests\DI\Fixtures\LazyDependency:

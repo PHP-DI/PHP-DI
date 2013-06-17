@@ -168,6 +168,7 @@ class ArrayDefinitionSourceTest extends \PHPUnit_Framework_TestCase
                             'param1' => 'Foo1',
                             'param2' => array(
                                 'name' => 'Foo2',
+                                'lazy' => true,
                             ),
                         ),
                     ),
@@ -187,10 +188,12 @@ class ArrayDefinitionSourceTest extends \PHPUnit_Framework_TestCase
         $parameter1 = $parameters['param1'];
         $this->assertEquals('param1', $parameter1->getParameterName());
         $this->assertEquals('Foo1', $parameter1->getEntryName());
+        $this->assertFalse($parameter1->isLazy());
 
         $parameter2 = $parameters['param2'];
         $this->assertEquals('param2', $parameter2->getParameterName());
         $this->assertEquals('Foo2', $parameter2->getEntryName());
+        $this->assertTrue($parameter2->isLazy());
     }
 
     public function testMethodDefinition2()
