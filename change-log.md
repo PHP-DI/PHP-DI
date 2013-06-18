@@ -1,12 +1,16 @@
 # Change log
 
+## 3.0.6
+
+* FIXED [#76](https://github.com/mnapoli/PHP-DI/issues/76): Definition conflict when setting a closure for a class name
+
 ## 3.0.5
 
-* FIXED[#69](https://github.com/mnapoli/PHP-DI/issues/69): Definition conflict when setting a value for a class name
+* FIXED [#70](https://github.com/mnapoli/PHP-DI/issues/70): Definition conflict when setting a value for a class name
 
 ## 3.0.4
 
-* FIXED[#70](https://github.com/mnapoli/PHP-DI/issues/70): YamlDefinitionFileLoader crashes if YAML file is empty
+* FIXED [#69](https://github.com/mnapoli/PHP-DI/issues/69): YamlDefinitionFileLoader crashes if YAML file is empty
 
 ## 3.0.3
 
