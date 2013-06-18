@@ -18,18 +18,6 @@ class DefinitionManagerTest extends \PHPUnit_Framework_TestCase
 {
 
     /**
-     * Test that the manager prioritize correctly the different sources
-     * @test
-     */
-    public function shouldPrioritizeSources()
-    {
-        $definitionManager = new DefinitionManager();
-        $definitionManager->useReflection(true);
-        $definitionManager->useAnnotations(true);
-        // TODO
-    }
-
-    /**
      * @test
      */
     public function shouldUseCache()
