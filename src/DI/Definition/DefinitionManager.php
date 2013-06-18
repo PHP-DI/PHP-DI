@@ -63,6 +63,11 @@ class DefinitionManager
     private $annotationSource;
 
     /**
+     * @var ArrayDefinitionSource[]
+     */
+    private $arraySources = array();
+
+    /**
      * Enables/disable the validation of the definitions
      * @var bool
      */
@@ -73,9 +78,9 @@ class DefinitionManager
      */
     public function __construct()
     {
-        $this->combinedSource = new CombinedDefinitionSource();
         $this->simpleSource = new SimpleDefinitionSource();
-        $this->combinedSource->addSource($this->simpleSource);
+
+        $this->updateCombinedSource();
     }
 
     /**
@@ -116,18 +121,14 @@ class DefinitionManager
      */
     public function useReflection($bool)
     {
-        if ($bool) {
-            // Enable
-            if ($this->reflectionSource === null) {
-                $this->reflectionSource = new ReflectionDefinitionSource();
-                $this->combinedSource->addSource($this->reflectionSource);
-            }
-        } else {
-            // Disable
-            if ($this->reflectionSource !== null) {
-                $this->combinedSource->removeSource($this->reflectionSource);
-                unset($this->reflectionSource);
-            }
+        // Enable
+        if ($bool && $this->reflectionSource === null) {
+            $this->reflectionSource = new ReflectionDefinitionSource();
+            $this->updateCombinedSource();
+        // Disable
+        } elseif (!$bool && $this->reflectionSource !== null) {
+            $this->reflectionSource = null;
+            $this->updateCombinedSource();
         }
     }
 
@@ -138,18 +139,14 @@ class DefinitionManager
      */
     public function useAnnotations($bool)
     {
-        if ($bool) {
-            // Enable
-            if ($this->annotationSource === null) {
-                $this->annotationSource = new AnnotationDefinitionSource();
-                $this->combinedSource->addSource($this->annotationSource);
-            }
-        } else {
-            // Disable
-            if ($this->annotationSource !== null) {
-                $this->combinedSource->removeSource($this->annotationSource);
-                unset($this->annotationSource);
-            }
+        // Enable
+        if ($bool && $this->annotationSource === null) {
+            $this->annotationSource = new AnnotationDefinitionSource();
+            $this->updateCombinedSource();
+        // Disable
+        } elseif (!$bool && $this->annotationSource !== null) {
+            $this->annotationSource = null;
+            $this->updateCombinedSource();
         }
     }
 
@@ -162,7 +159,10 @@ class DefinitionManager
     {
         $arraySource = new ArrayDefinitionSource();
         $arraySource->addDefinitions($definitions);
-        $this->combinedSource->addSource($arraySource);
+
+        $this->arraySources[] = $arraySource;
+
+        $this->updateCombinedSource();
     }
 
     /**
@@ -189,9 +189,12 @@ class DefinitionManager
             throw new \InvalidArgumentException(get_class($definitionFileLoader) . " must return an array.");
         }
 
-        $source = new ArrayDefinitionSource();
-        $source->addDefinitions($definitions);
-        $this->combinedSource->addSource($source);
+        $arraySource = new ArrayDefinitionSource();
+        $arraySource->addDefinitions($definitions);
+
+        $this->arraySources[] = $arraySource;
+
+        $this->updateCombinedSource();
     }
 
     /**
@@ -256,6 +259,28 @@ class DefinitionManager
 
         $cacheKey = self::CACHE_PREFIX . $name;
         $this->cache->save($cacheKey, $definition);
+    }
+
+    /**
+     * Builds the combined source
+     *
+     * Builds from scratch every time because the order of the sources is important.
+     */
+    private function updateCombinedSource()
+    {
+        $this->combinedSource = new CombinedDefinitionSource();
+
+        // Sources are added from least priority to highest priority
+        if ($this->reflectionSource) {
+            $this->combinedSource->addSource($this->reflectionSource);
+        }
+        if ($this->annotationSource) {
+            $this->combinedSource->addSource($this->annotationSource);
+        }
+        foreach ($this->arraySources as $arraySource) {
+            $this->combinedSource->addSource($arraySource);
+        }
+        $this->combinedSource->addSource($this->simpleSource);
     }
 
 }
