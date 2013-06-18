@@ -54,9 +54,9 @@ class Issue70and76Test extends \PHPUnit_Framework_TestCase
         $container = new Container();
 
         $container->set('stdClass', 'foo');
-        $container->addDefinitions(['stdClass' => function() {
+        $container->addDefinitions(array('stdClass' => function() {
                 return 'foo';
-            }]);
+            }));
         $container->get('stdClass');
     }
 
