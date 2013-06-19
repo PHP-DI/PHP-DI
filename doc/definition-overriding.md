@@ -57,7 +57,7 @@ another.specific.service:
 $container->addDefinitionsFromFile(new YamlDefinitionFileLoader('config/di.yml'));
 ```
 
-And also, override the file-based definition by directly calling the container:
+Finally, you can also override the file-based definition by directly calling the container:
 
 ```php
 $container->set('Foo')
