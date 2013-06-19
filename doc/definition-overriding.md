@@ -12,41 +12,45 @@ From the highest priority to the least:
 
 ## Example
 
-Here is an example that wouldn't work with Reflection only:
+Given this simple example:
 
 ```php
 class Foo {
-    public function __construct(BarInterface $param1) {
+    public function __construct(Bar $param1) {
     }
 }
 ```
 
-PHP-DI cannot inject an interface, since it's not instantiable.
+PHP-DI would inject an instance of `Bar`. What if we wanted to inject a specific instance?
 
-While the Reflection definition says that `$param1` should take a `BarInterface` instance, we can use annotations to override that:
+While the Reflection definition says that `$param1` should take a `Bar` instance, we can use annotations to override that:
 
 ```php
 use DI\Annotation\Inject;
 
 class Foo {
     /**
-     * @Inject({"param1" = "BarImplementation"})
+     * @Inject({"param1" = "my.specific.service"})
      */
     public function __construct(BarInterface $param1) {
     }
 }
 ```
 
-As explained above, the Annotation definition (`BarImplementation` for `$param1`) has a higher priority
-than the Reflection definition (`BarInterface` for `$param1`).
+As explained above, the Annotation definition (`my.specific.service` for `$param1`) has a higher priority
+than the Reflection definition (`Bar` for `$param1`).
 
-You can go even further, but overriding this definition using file-based definitions:
+You can go even further by overriding this definition using file-based definitions:
 
 ```yaml
 # config/di.yml
 Foo:
   constructor:
-    param1: AnotherBarImplementation
+    param1: another.specific.service
+
+another.specific.service:
+  class: Bar
+  # ... (definition of my specific instance)
 ```
 
 ```php
@@ -57,5 +61,5 @@ And also, override the file-based definition by directly calling the container:
 
 ```php
 $container->set('Foo')
-    ->bindTo('YetAnotherBarImplementation');
+    ->withConstructor(array('param1' => 'yet.another.specific.service'));
 ```
