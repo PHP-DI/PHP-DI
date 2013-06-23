@@ -69,6 +69,8 @@ class GuestbookController extends Zend_Controller_Action
 }
 ```
 
+Read more about [Zend Framework 1 integration](https://github.com/mnapoli/PHP-DI-ZF1).
+
 ## Integration with other frameworks (Symfony, ZF2, …)
 
 Integration with other frameworks [are planned](https://github.com/mnapoli/PHP-DI/issues?state=open).
