@@ -65,61 +65,11 @@
 
     <div class="main">
         <div class="container-fluid">
-<h1>Scopes</h1>
+<h1>News</h1>
 
-<p>By default, PHP-DI returns the same instance each time it supplies a value. This behaviour is configurable via scopes.
-Scopes allow you to reuse instances and gives you the flexibility to choose the scope of the objects you create through configuration instead of having to &#39;bake in&#39; the scope of an object at the PHP class level.</p>
-
-<p>The scopes supported out of the box are listed below:</p>
-
-<table><thead>
-<tr>
-<th>Scope</th>
-<th>Description</th>
-</tr>
-</thead><tbody>
-<tr>
-<td>singleton (default)</td>
-<td>The object instance is unique during the container&#39;s lifecycle - each injection by the container or explicit call of <code>get()</code> returns the same instance.</td>
-</tr>
-<tr>
-<td>prototype</td>
-<td>The object instance is not unique - each injection or call of the container&#39;s <code>get()</code> method returns a fresh instance.</td>
-</tr>
-</tbody></table>
-
-<h2>Applying Scopes</h2>
-
-<p>Scopes are part of the <a href="definition">definitions</a> of injections, so you can define them using annotations or PHP arrays.</p>
-
-<h3>Annotation</h3>
-
-<p>You can specify the scope by using the <code>@Injectable</code> annotation on the target class.
-Remember singleton is the scope used if it is not configured.</p>
-
-<pre><code class="php">use DI\Annotation\Injectable;
-
-/**
- * @Injectable(scope=&quot;prototype&quot;)
- */
-class MyService {
-    // ...
-}
-</code></pre>
-
-<h3>Array configuration</h3>
-
-<p>You can specify the scope by using the <code>scope</code> key in the array describing the class:</p>
-
-<pre><code class="php">&lt;?php
-return [
-    &#39;MyService&#39; =&gt; [
-        &#39;scope&#39; =&gt; Scope::PROTOTYPE(),
-        // or
-        &#39;scope&#39; =&gt; &#39;prototype&#39;,
-    ],
-];
-</code></pre>
+<ul>
+<li>June 23rd 2013. <a href="01-php-di-3-1">PHP-DI 3.1 released</a></li>
+</ul>
             <div class="github">
                 PHP-DI is an open source project, you can contribute or seek help on
                 <a class="btn btn-mini" href="https://github.com/mnapoli/PHP-DI/" target="_blank">

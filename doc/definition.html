@@ -36,6 +36,7 @@
                 <div class="nav-collapse collapse">
                     <ul class="nav pull-right">
                         <li><a href="http://mnapoli.github.io/PHP-DI/">Home</a></li>
+                        <li><a href="http://mnapoli.github.io/PHP-DI/news/">News</a></li>
                         <li><a href="http://mnapoli.github.io/PHP-DI/doc/getting-started">Getting started</a></li>
                         <li><a href="http://mnapoli.github.io/PHP-DI/doc/">Documentation</a></li>
                         <li><a href="http://mnapoli.github.io/PHP-DI/change-log">Change log</a></li>
@@ -79,6 +80,17 @@
 </ul>
 
 <p>You can also use several or all these options at the same time if you want to.</p>
+
+<p>If you combine several sources, there are priorities that apply. From the highest priority to the least:</p>
+
+<ul>
+<li>Code definition (i.e. defined with <code>$container-&gt;set()</code>)</li>
+<li>File and array definitions (if A is added after B, then A prevails)</li>
+<li>Annotations</li>
+<li>Reflection</li>
+</ul>
+
+<p>Read more in the <a href="definition-overriding">Definition overriding documentation</a></p>
 
 <h2>Reflection</h2>
 

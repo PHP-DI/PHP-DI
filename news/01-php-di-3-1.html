@@ -65,61 +65,80 @@
 
     <div class="main">
         <div class="container-fluid">
-<h1>Scopes</h1>
+<h1>PHP-DI 3.1 released</h1>
 
-<p>By default, PHP-DI returns the same instance each time it supplies a value. This behaviour is configurable via scopes.
-Scopes allow you to reuse instances and gives you the flexibility to choose the scope of the objects you create through configuration instead of having to &#39;bake in&#39; the scope of an object at the PHP class level.</p>
+<p><em>Posted by <a href="https://github.com/mnapoli">Matthieu Napoli</a> on June 23rd 2013</em></p>
 
-<p>The scopes supported out of the box are listed below:</p>
+<p>I am happy to announce that I have just released PHP-DI version 3.1.</p>
 
-<table><thead>
-<tr>
-<th>Scope</th>
-<th>Description</th>
-</tr>
-</thead><tbody>
-<tr>
-<td>singleton (default)</td>
-<td>The object instance is unique during the container&#39;s lifecycle - each injection by the container or explicit call of <code>get()</code> returns the same instance.</td>
-</tr>
-<tr>
-<td>prototype</td>
-<td>The object instance is not unique - each injection or call of the container&#39;s <code>get()</code> method returns a fresh instance.</td>
-</tr>
-</tbody></table>
+<p>The major new feature is the <strong>Zend Framework 1 integration</strong>. You can now use PHP-DI very easily with ZF1, and the integration will provide you dependency injection into your controllers.</p>
 
-<h2>Applying Scopes</h2>
+<p>Mixing different definition sources (reflection, annotations, files, …) is now more reliable with orders and priorities. Sources are all now correctly priorized, allowing you to override definitions as you would expect. Read more in the <a href="doc/definition-overriding"><strong>Definition overriding</strong> documentation</a>.</p>
 
-<p>Scopes are part of the <a href="definition">definitions</a> of injections, so you can define them using annotations or PHP arrays.</p>
+<p>Finally, <a href="https://github.com/mnapoli/PHP-DI/issues/79">a small fix</a> to allow to <strong>define <code>null</code> entries</strong>:</p>
 
-<h3>Annotation</h3>
+<pre><code class="php">// Set a null value for &#39;foo&#39;
+$container-&gt;set(&#39;foo&#39;, null);
 
-<p>You can specify the scope by using the <code>@Injectable</code> annotation on the target class.
-Remember singleton is the scope used if it is not configured.</p>
+// No change: without a value given, returns a class definition helper
+$container-&gt;set(&#39;foo&#39;)
+    -&gt;bindTo(&#39;My\Foo\Class&#39;)
+    -&gt;withConstructor(array(&#39;SomeClass&#39;));
+</code></pre>
 
-<pre><code class="php">use DI\Annotation\Injectable;
+<h2>Zend Framework 1 integration</h2>
 
-/**
- * @Injectable(scope=&quot;prototype&quot;)
- */
-class MyService {
-    // ...
+<p>To set up your ZF1 project, you can install the dependencies with <a href="http://getcomposer.org/">Composer</a>:</p>
+
+<pre><code class="php">{
+    &quot;require&quot;: {
+        &quot;mnapoli/php-di&quot;: &quot;3.1.*&quot;,
+        &quot;mnapoli/php-di-zf1&quot;: &quot;*&quot;
+    }
 }
 </code></pre>
 
-<h3>Array configuration</h3>
+<p>In your bootstrap, you only need to replace the default Dispatcher with the one provided into <code>mnapoli/php-di-zf1</code>:</p>
 
-<p>You can specify the scope by using the <code>scope</code> key in the array describing the class:</p>
+<pre><code class="php">    protected function _initDependencyInjection() {
+        $container = new \DI\Container();
 
-<pre><code class="php">&lt;?php
-return [
-    &#39;MyService&#39; =&gt; [
-        &#39;scope&#39; =&gt; Scope::PROTOTYPE(),
-        // or
-        &#39;scope&#39; =&gt; &#39;prototype&#39;,
-    ],
-];
+        $dispatcher = new \DI\ZendFramework1\Dispatcher();
+        $dispatcher-&gt;setContainer($container);
+
+        Zend_Controller_Front::getInstance()-&gt;setDispatcher($dispatcher);
+    }
 </code></pre>
+
+<p>Easy right? Now you can inject dependencies into your controllers.</p>
+
+<p>Here is an example using annotations (you can&#39;t use constructor injection though since ZF1 controllers have a specific constructor):</p>
+
+<pre><code class="php">use DI\Annotation\Inject;
+
+class GuestbookController extends Zend_Controller_Action
+{
+    /**
+     * @Inject
+     * @var Application_Service_GuestbookService
+     */
+    private $guestbookService;
+
+    public function signAction()
+    {
+        $form = new Application_Form_Guestbook();
+        $this-&gt;guestbookService-&gt;addEntry($form-&gt;getValues());
+    }
+}
+</code></pre>
+
+<p>Read more about <a href="https://github.com/mnapoli/PHP-DI-ZF1">Zend Framework 1 integration</a>.</p>
+
+<h2>Integration with other frameworks (Symfony, ZF2, …)</h2>
+
+<p>Integration with other frameworks <a href="https://github.com/mnapoli/PHP-DI/issues?state=open">are planned</a>.</p>
+
+<p>If you want to help, feel free to submit a pull request or let&#39;s talk on <a href="https://twitter.com/PHPDI">Twitter</a>.</p>
             <div class="github">
                 PHP-DI is an open source project, you can contribute or seek help on
                 <a class="btn btn-mini" href="https://github.com/mnapoli/PHP-DI/" target="_blank">

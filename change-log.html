@@ -36,6 +36,7 @@
                 <div class="nav-collapse collapse">
                     <ul class="nav pull-right">
                         <li><a href="http://mnapoli.github.io/PHP-DI/">Home</a></li>
+                        <li><a href="http://mnapoli.github.io/PHP-DI/news/">News</a></li>
                         <li><a href="http://mnapoli.github.io/PHP-DI/doc/getting-started">Getting started</a></li>
                         <li><a href="http://mnapoli.github.io/PHP-DI/doc/">Documentation</a></li>
                         <li><a href="http://mnapoli.github.io/PHP-DI/change-log">Change log</a></li>
@@ -65,6 +66,17 @@
     <div class="main">
         <div class="container-fluid">
 <h1>Change log</h1>
+
+<h2>3.1</h2>
+
+<p>Read the <a href="news/01-php-di-3-1">news entry</a>.</p>
+
+<ul>
+<li>Zend Framework 1 integration through the <a href="https://github.com/mnapoli/PHP-DI-ZF1">PHP-DI-ZF1 project</a></li>
+<li>Fixed the order of priorities when you mix different definition sources (reflection, annotations, files, …). See <a href="doc/definition-overriding">Definition overriding</a></li>
+<li>Now possible to define null values with  <code>$container-&gt;set(&#39;foo&#39;, null)</code> (see <a href="https://github.com/mnapoli/PHP-DI/issues/79">#79</a>).</li>
+<li>Deprecated usage of <code>ContainerSingleton</code>, will be removed in next major version (4.0)</li>
+</ul>
 
 <h2>3.0.6</h2>
 

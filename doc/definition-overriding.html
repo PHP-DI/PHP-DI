@@ -65,60 +65,67 @@
 
     <div class="main">
         <div class="container-fluid">
-<h1>Scopes</h1>
+<h1>Definition overriding</h1>
 
-<p>By default, PHP-DI returns the same instance each time it supplies a value. This behaviour is configurable via scopes.
-Scopes allow you to reuse instances and gives you the flexibility to choose the scope of the objects you create through configuration instead of having to &#39;bake in&#39; the scope of an object at the PHP class level.</p>
+<p>PHP-DI provides different definition sources. As explained on the <a href="documentation">Definition documentation</a>,
+you can combine them by taking advantage of priorities that apply.</p>
 
-<p>The scopes supported out of the box are listed below:</p>
+<p>From the highest priority to the least:</p>
 
-<table><thead>
-<tr>
-<th>Scope</th>
-<th>Description</th>
-</tr>
-</thead><tbody>
-<tr>
-<td>singleton (default)</td>
-<td>The object instance is unique during the container&#39;s lifecycle - each injection by the container or explicit call of <code>get()</code> returns the same instance.</td>
-</tr>
-<tr>
-<td>prototype</td>
-<td>The object instance is not unique - each injection or call of the container&#39;s <code>get()</code> method returns a fresh instance.</td>
-</tr>
-</tbody></table>
+<ul>
+<li>Code definition (i.e. defined with <code>$container-&gt;set()</code>)</li>
+<li>File and array definitions (if A is added after B, then A prevails)</li>
+<li>Annotations</li>
+<li>Reflection</li>
+</ul>
 
-<h2>Applying Scopes</h2>
+<h2>Example</h2>
 
-<p>Scopes are part of the <a href="definition">definitions</a> of injections, so you can define them using annotations or PHP arrays.</p>
+<p>Given this simple example:</p>
 
-<h3>Annotation</h3>
-
-<p>You can specify the scope by using the <code>@Injectable</code> annotation on the target class.
-Remember singleton is the scope used if it is not configured.</p>
-
-<pre><code class="php">use DI\Annotation\Injectable;
-
-/**
- * @Injectable(scope=&quot;prototype&quot;)
- */
-class MyService {
-    // ...
+<pre><code class="php">class Foo {
+    public function __construct(Bar $param1) {
+    }
 }
 </code></pre>
 
-<h3>Array configuration</h3>
+<p>PHP-DI would inject an instance of <code>Bar</code>. What if we wanted to inject a specific instance?</p>
 
-<p>You can specify the scope by using the <code>scope</code> key in the array describing the class:</p>
+<p>While the Reflection definition says that <code>$param1</code> should take a <code>Bar</code> instance, we can use annotations to override that:</p>
 
-<pre><code class="php">&lt;?php
-return [
-    &#39;MyService&#39; =&gt; [
-        &#39;scope&#39; =&gt; Scope::PROTOTYPE(),
-        // or
-        &#39;scope&#39; =&gt; &#39;prototype&#39;,
-    ],
-];
+<pre><code class="php">use DI\Annotation\Inject;
+
+class Foo {
+    /**
+     * @Inject({&quot;param1&quot; = &quot;my.specific.service&quot;})
+     */
+    public function __construct(BarInterface $param1) {
+    }
+}
+</code></pre>
+
+<p>As explained above, the Annotation definition (<code>my.specific.service</code> for <code>$param1</code>) has a higher priority
+than the Reflection definition (<code>Bar</code> for <code>$param1</code>).</p>
+
+<p>You can go even further by overriding this definition using file-based definitions:</p>
+
+<pre><code class="yaml"># config/di.yml
+Foo:
+  constructor:
+    param1: another.specific.service
+
+another.specific.service:
+  class: Bar
+  # ... (definition of my specific instance)
+</code></pre>
+
+<pre><code class="php">$container-&gt;addDefinitionsFromFile(new YamlDefinitionFileLoader(&#39;config/di.yml&#39;));
+</code></pre>
+
+<p>Finally, you can also override the file-based definition by directly calling the container:</p>
+
+<pre><code class="php">$container-&gt;set(&#39;Foo&#39;)
+    -&gt;withConstructor(array(&#39;param1&#39; =&gt; &#39;yet.another.specific.service&#39;));
 </code></pre>
             <div class="github">
                 PHP-DI is an open source project, you can contribute or seek help on
