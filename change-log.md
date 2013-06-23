@@ -1,5 +1,14 @@
 # Change log
 
+## 3.1
+
+Read the [news entry](news/01-php-di-3-1.md).
+
+* Zend Framework 1 integration through the [PHP-DI-ZF1 project](https://github.com/mnapoli/PHP-DI-ZF1)
+* Fixed the order of priorities when you mix different definition sources (reflection, annotations, files, …). See [Definition overriding](doc/definition-overriding.md)
+* Now possible to define null values with  `$container->set('foo', null)` (see [#79](https://github.com/mnapoli/PHP-DI/issues/79)).
+* Deprecated usage of `ContainerSingleton`, will be removed in next major version (4.0)
+
 ## 3.0.6
 
 * FIXED [#76](https://github.com/mnapoli/PHP-DI/issues/76): Definition conflict when setting a closure for a class name
