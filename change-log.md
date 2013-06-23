@@ -1,5 +1,10 @@
 # Change log
 
+## 3.1
+
+* Zend Framework 1 integration through the [PHP-DI-ZF1 project](https://github.com/mnapoli/PHP-DI-ZF1)
+* Deprecated usage of `ContainerSingleton`, will be removed in next major version (4.0)
+
 ## 3.0.6
 
 * FIXED [#76](https://github.com/mnapoli/PHP-DI/issues/76): Definition conflict when setting a closure for a class name
