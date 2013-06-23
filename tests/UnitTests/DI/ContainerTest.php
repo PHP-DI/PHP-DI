@@ -152,4 +152,29 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
         $container->get(new stdClass());
     }
 
+    /**
+     * We should be able to set a null value
+     * @see https://github.com/mnapoli/PHP-DI/issues/79
+     */
+    public function testSetNullValue()
+    {
+        $container = new Container();
+        $return = $container->set('foo', null);
+
+        $this->assertNull($return);
+        $this->assertNull($container->get('foo'));
+    }
+
+    /**
+     * @see https://github.com/mnapoli/PHP-DI/issues/79
+     * @test
+     */
+    public function setWithoutValueShouldReturnClassDefinitionHelper()
+    {
+        $container = new Container();
+        $return = $container->set('foo');
+
+        $this->assertInstanceOf('DI\Definition\Helper\ClassDefinitionHelper', $return);
+    }
+
 }
