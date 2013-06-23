@@ -134,7 +134,10 @@ class Container
      * Define an object or a value in the container
      *
      * @param string             $name Entry name
-     * @param mixed|Closure|null $value Value, Closure or if null, returns a ClassDefinitionHelper
+     * @param mixed|Closure|null $value Value, Closure or if *not set*, returns a ClassDefinitionHelper
+     * If a null value is explicitly given ($container->set('foo', null)) then the null value is registered
+     * and no ClassDefinitionHelper is returned.
+     * Use $container->set('foo') to get a ClassDefinitionHelper.
      *
      * @return null|ClassDefinitionHelper
      */
@@ -142,6 +145,13 @@ class Container
     {
         // Class definition
         if ($value === null) {
+            // If a null value was explicitly given in the method call, then we register a null value
+            if (func_num_args() === 2) {
+                $definition = new ValueDefinition($name, $value);
+                $this->definitionManager->addDefinition($definition);
+                return null;
+            }
+
             $helper = new ClassDefinitionHelper($name);
             $this->definitionManager->addDefinition($helper->getDefinition());
             return $helper;

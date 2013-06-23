@@ -12,8 +12,8 @@ namespace DI;
 /**
  * Provides singleton access to the Container
  *
- * Usage of this class is discouraged, but left for situations where it's the only solution
- * (e.g. difficult integration in an existing codebase)
+ * @deprecated Usage of this class is discouraged, but left for situations where it's the only solution
+ * (e.g. difficult integration in an existing codebase). Will be removed in next major version (4.0).
  *
  * @author Matthieu Napoli <matthieu@mnapoli.fr>
  */

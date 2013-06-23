@@ -12,6 +12,14 @@ To **define** where and how to inject stuff, you have several options:
 
 You can also use several or all these options at the same time if you want to.
 
+If you combine several sources, there are priorities that apply. From the highest priority to the least:
+
+- Code definition (i.e. defined with `$container->set()`)
+- File and array definitions (if A is added after B, then A prevails)
+- Annotations
+- Reflection
+
+Read more in the [Definition overriding documentation](definition-overriding.md)
 
 
 ## Reflection
