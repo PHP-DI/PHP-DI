@@ -26,7 +26,8 @@ class ClassDefinitionHelperTest extends \PHPUnit_Framework_TestCase
             ->withScope(Scope::SINGLETON())
             ->withProperty('prop', 'bar')
             ->withConstructor(array('param1', 'param2'))
-            ->withMethod('test', array('p1' => 'param1'));
+            ->withMethod('test', array('p1' => 'param1'))
+            ->withMethod('test2', array('p1' => array('name' => 'param1', 'lazy' => true)));
 
         $definition = $helper->getDefinition();
 
@@ -57,7 +58,7 @@ class ClassDefinitionHelperTest extends \PHPUnit_Framework_TestCase
 
         // Method injection
         $methodInjections = $definition->getMethodInjections();
-        $this->assertCount(1, $methodInjections);
+        $this->assertCount(2, $methodInjections);
         $methodInjection = array_shift($methodInjections);
         $this->assertEquals('test', $methodInjection->getMethodName());
         $parameters = $methodInjection->getParameterInjections();
@@ -66,6 +67,17 @@ class ClassDefinitionHelperTest extends \PHPUnit_Framework_TestCase
         $parameter = array_shift($parameters);
         $this->assertEquals('p1', $parameter->getParameterName());
         $this->assertEquals('param1', $parameter->getEntryName());
+
+        // Method injection 2
+        $methodInjection = array_shift($methodInjections);
+        $this->assertEquals('test2', $methodInjection->getMethodName());
+        $parameters = $methodInjection->getParameterInjections();
+        $this->assertCount(1, $parameters);
+        /** @var $parameter ParameterInjection */
+        $parameter = array_shift($parameters);
+        $this->assertEquals('p1', $parameter->getParameterName());
+        $this->assertEquals('param1', $parameter->getEntryName());
+        $this->assertTrue($parameter->isLazy());
     }
 
 }
