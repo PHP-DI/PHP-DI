@@ -1,6 +1,6 @@
 # Change log
 
-## 3.1
+## 3.2
 
 Small BC-break: PHP-DI 3.0 injected properties before calling the constructor. This was confusing and not supported for internal classes. From 3.1 and on, properties are injected after calling the constructor.
 
@@ -9,13 +9,26 @@ Small BC-break: PHP-DI 3.0 injected properties before calling the constructor. T
 * The container is now auto-registered (as 'DI\Container').
 * `ContainerBuilder` object that helps to create and configure a `Container`
 
+## 3.1
+
+Read the [news entry](news/01-php-di-3-1.md).
+
+* Zend Framework 1 integration through the [PHP-DI-ZF1 project](https://github.com/mnapoli/PHP-DI-ZF1)
+* Fixed the order of priorities when you mix different definition sources (reflection, annotations, files, …). See [Definition overriding](doc/definition-overriding.md)
+* Now possible to define null values with  `$container->set('foo', null)` (see [#79](https://github.com/mnapoli/PHP-DI/issues/79)).
+* Deprecated usage of `ContainerSingleton`, will be removed in next major version (4.0)
+
+## 3.0.6
+
+* FIXED [#76](https://github.com/mnapoli/PHP-DI/issues/76): Definition conflict when setting a closure for a class name
+
 ## 3.0.5
 
-* FIXED[#69](https://github.com/mnapoli/PHP-DI/issues/69): Definition conflict when setting a value for a class name
+* FIXED [#70](https://github.com/mnapoli/PHP-DI/issues/70): Definition conflict when setting a value for a class name
 
 ## 3.0.4
 
-* FIXED[#70](https://github.com/mnapoli/PHP-DI/issues/70): YamlDefinitionFileLoader crashes if YAML file is empty
+* FIXED [#69](https://github.com/mnapoli/PHP-DI/issues/69): YamlDefinitionFileLoader crashes if YAML file is empty
 
 ## 3.0.3
 
