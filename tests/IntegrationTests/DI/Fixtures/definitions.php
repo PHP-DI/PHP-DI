@@ -28,8 +28,10 @@ return array(
                 'param2' => 'foo',
             ),
             'method4' => array(
-                'name' => 'IntegrationTests\DI\Fixtures\LazyDependency',
-                'lazy' => true,
+                'param1' => array(
+                    'name' => 'IntegrationTests\DI\Fixtures\LazyDependency',
+                    'lazy' => true,
+                ),
             ),
         ),
     ),
