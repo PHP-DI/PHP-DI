@@ -4,6 +4,7 @@
 * [Getting started](getting-started.md)
 * [Define injections](definition.md)
 * [Definition overriding](definition-overriding.md)
+* [Lazy injection](lazy-injection.md)
 * [Scopes](scopes.md)
 
 Extra topics:

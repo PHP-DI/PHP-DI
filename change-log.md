@@ -2,7 +2,8 @@
 
 ## 3.2
 
-Small BC-break: PHP-DI 3.0 injected properties before calling the constructor. This was confusing and not supported for internal classes. From 3.1 and on, properties are injected after calling the constructor.
+Small BC-break: PHP-DI 3.0 and 3.1 injected properties before calling the constructor. This was confusing and [not supported for internal classes](https://github.com/mnapoli/PHP-DI/issues/74).
+From 3.2 and on, properties are injected after calling the constructor.
 
 * **Lazy injection**: it is now possible to use lazy injection on properties and methods (setters and constructors).
 * Lazy dependencies are now proxies that extend the class they proxy, so type-hinting works.
