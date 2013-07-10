@@ -149,13 +149,13 @@ class ContainerBuilder
     /**
      * Configure the proxy generation
      *
-     * For dev environment, use setProxyGeneration(false) (default configuration)
-     * For production environment, use setProxyGeneration(true, 'tmp/proxies')
+     * For dev environment, use writeProxiesToFile(false) (default configuration)
+     * For production environment, use writeProxiesToFile(true, 'tmp/proxies')
      *
      * @param boolean     $writeToFile If true, write the proxies to disk to improve performances
      * @param string|null $proxyDirectory Directory where to write the proxies
      */
-    public function setProxyGeneration($writeToFile, $proxyDirectory = null)
+    public function writeProxiesToFile($writeToFile, $proxyDirectory = null)
     {
         $this->writeProxiesToFile = $writeToFile;
 
