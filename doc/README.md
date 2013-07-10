@@ -2,6 +2,7 @@
 
 * [Introduction to dependency injection with an example](example.md)
 * [Getting started](getting-started.md)
+* [Configure the container](container-configuration.md)
 * [Define injections](definition.md)
 * [Definition overriding](definition-overriding.md)
 * [Lazy injection](lazy-injection.md)
