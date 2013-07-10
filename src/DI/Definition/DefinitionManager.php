@@ -227,6 +227,17 @@ class DefinitionManager
     }
 
     /**
+     * Returns the state of the validation of the definitions
+     *
+     * By default, disabled
+     * @param bool $bool
+     */
+    public function getDefinitionsValidation()
+    {
+        return $this->definitionValidation;
+    }
+
+    /**
      * Fetches a definition from the cache
      *
      * @param string $name Entry name
