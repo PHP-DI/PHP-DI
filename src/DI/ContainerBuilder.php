@@ -20,6 +20,7 @@ use ProxyManager\GeneratorStrategy\EvaluatingGeneratorStrategy;
 /**
  * Helper to create a Container
  *
+ * @since 3.2
  * @author Matthieu Napoli <matthieu@mnapoli.fr>
  */
 class ContainerBuilder
