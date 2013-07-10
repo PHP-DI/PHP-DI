@@ -283,6 +283,14 @@ class Container
     }
 
     /**
+     * @return DefinitionManager
+     */
+    public function getDefinitionManager()
+    {
+        return $this->definitionManager;
+    }
+
+    /**
      * @param ClassDefinition $classDefinition
      * @return object The instance
      */
