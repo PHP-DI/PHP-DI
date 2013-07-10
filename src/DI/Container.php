@@ -60,15 +60,17 @@ class Container
 
     /**
      * @param DefinitionManager|null             $definitionManager
+     * @param FactoryInterface|null              $factory
      * @param LazyLoadingValueHolderFactory|null $proxyFactory
      */
-    public function __construct(DefinitionManager $definitionManager = null, LazyLoadingValueHolderFactory $proxyFactory = null)
-    {
+    public function __construct(
+        DefinitionManager $definitionManager = null,
+        FactoryInterface $factory = null,
+        LazyLoadingValueHolderFactory $proxyFactory = null
+    ) {
         $this->definitionManager = $definitionManager ?: $this->createDefaultDefinitionManager();
+        $this->factory = $factory ?: $this->createDefaultFactory();
         $this->proxyFactory = $proxyFactory ?: $this->createDefaultProxyFactory();
-
-        // Default factory
-        $this->factory = new Factory($this);
 
         // Auto-register the container
         $this->entries[get_class($this)] = $this;
@@ -182,6 +184,8 @@ class Container
      * Enable or disable the use of reflection
      *
      * @param boolean $bool
+     * @deprecated Use ContainerBuilder::useReflection instead. Will be removed in next major release (v4).
+     * @see ContainerBuilder::useReflection
      */
     public function useReflection($bool)
     {
@@ -192,6 +196,8 @@ class Container
      * Enable or disable the use of annotations
      *
      * @param boolean $bool
+     * @deprecated Use ContainerBuilder::useAnnotations instead. Will be removed in next major release (v4).
+     * @see ContainerBuilder::useAnnotations
      */
     public function useAnnotations($bool)
     {
@@ -223,6 +229,8 @@ class Container
      * Enables the use of a cache for the definitions
      *
      * @param Cache $cache Cache backend to use
+     * @deprecated Use ContainerBuilder::setDefinitionCache instead. Will be removed in next major release (v4).
+     * @see ContainerBuilder::setDefinitionCache
      */
     public function setDefinitionCache(Cache $cache)
     {
@@ -234,6 +242,8 @@ class Container
      *
      * By default, disabled
      * @param bool $bool
+     * @deprecated Use ContainerBuilder::setDefinitionsValidation instead. Will be removed in next major release (v4).
+     * @see ContainerBuilder::setDefinitionsValidation
      */
     public function setDefinitionsValidation($bool)
     {
@@ -328,6 +338,14 @@ class Container
         $definitionManager->useAnnotations(true);
 
         return $definitionManager;
+    }
+
+    /**
+     * @return FactoryInterface
+     */
+    private function createDefaultFactory()
+    {
+        return new Factory($this);
     }
 
     /**
