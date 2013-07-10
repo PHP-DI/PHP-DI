@@ -89,7 +89,7 @@ class ContainerBuilder
             $config->setGeneratorStrategy(new EvaluatingGeneratorStrategy());
         }
 
-        $container = new Container($definitionManager, new LazyLoadingValueHolderFactory($config));
+        $container = new Container($definitionManager, null, new LazyLoadingValueHolderFactory($config));
 
         return $container;
     }
