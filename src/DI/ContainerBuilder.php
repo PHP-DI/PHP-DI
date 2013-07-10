@@ -39,7 +39,7 @@ class ContainerBuilder
     /**
      * @var boolean
      */
-    private $definitionsValidation = false;
+    private $definitionsValidation;
 
     /**
      * @var Cache
@@ -72,6 +72,9 @@ class ContainerBuilder
         $definitionManager = new DefinitionManager();
         $definitionManager->useReflection($this->useReflection);
         $definitionManager->useAnnotations($this->useAnnotations);
+        if ($this->definitionsValidation) {
+            $definitionManager->setDefinitionsValidation($this->definitionsValidation);
+        }
         if ($this->cache) {
             $definitionManager->setCache($this->cache);
         }

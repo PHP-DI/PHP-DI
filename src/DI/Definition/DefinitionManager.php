@@ -73,9 +73,6 @@ class DefinitionManager
      */
     private $definitionsValidation = false;
 
-    /**
-     * Constructor
-     */
     public function __construct()
     {
         $this->simpleSource = new SimpleDefinitionSource();
