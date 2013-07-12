@@ -1,5 +1,10 @@
 # Change log
 
+## 3.1.1
+
+* Value definitions (`$container->set('foo', 80)`) are not cached anymore
+* FIXED [#82](https://github.com/mnapoli/PHP-DI/issues/82): Serialization error when using a cache
+
 ## 3.1
 
 Read the [news entry](news/01-php-di-3-1.md).
