@@ -56,4 +56,10 @@ class ValueDefinitionTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(1, $definition1->getValue());
     }
 
+    public function testCacheable()
+    {
+        $definition = new ValueDefinition('foo', 1);
+        $this->assertFalse($definition->isCacheable());
+    }
+
 }

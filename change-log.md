@@ -11,6 +11,11 @@ From 3.2 and on, properties are injected after calling the constructor.
 * Some methods for configuring the Container have gone **deprecated** in favor of the `ContainerBuilder`. Fear not, these deprecated methods will remain until next major version (4.0).
 * The container is now auto-registered (as 'DI\Container').
 
+## 3.1.1
+
+* Value definitions (`$container->set('foo', 80)`) are not cached anymore
+* FIXED [#82](https://github.com/mnapoli/PHP-DI/issues/82): Serialization error when using a cache
+
 ## 3.1
 
 Read the [news entry](news/01-php-di-3-1.md).

@@ -3,6 +3,8 @@ as practical as possible.
 
 PHP-DI also tries to avoid falling into the trap of the "Service Locator" antipattern and help you do *real* dependency injection.
 
+[![Latest Stable Version](https://poser.pugx.org/mnapoli/php-di/v/stable.png)](https://packagist.org/packages/mnapoli/php-di) [![Total Downloads](https://poser.pugx.org/mnapoli/php-di/downloads.png)](https://packagist.org/packages/mnapoli/php-di)
+
 
 ## Features
 
