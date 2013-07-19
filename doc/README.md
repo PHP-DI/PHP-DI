@@ -13,3 +13,7 @@ Extra topics:
 * [Performances](performances.md)
 * [Contribute](../CONTRIBUTING.md)
 * [How PHP-DI works](how-it-works.md)
+
+### License
+
+PHP-DI is under the MIT license.
