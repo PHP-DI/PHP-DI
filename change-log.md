@@ -1,5 +1,22 @@
 # Change log
 
+## 3.2
+
+Read the [news entry](news/02-php-di-3-2.md).
+
+Small BC-break: PHP-DI 3.0 and 3.1 injected properties before calling the constructor. This was confusing and [not supported for internal classes](https://github.com/mnapoli/PHP-DI/issues/74).
+From 3.2 and on, properties are injected after calling the constructor.
+
+* **[Lazy injection](doc/lazy-injection.md)**: it is now possible to use lazy injection on properties and methods (setters and constructors).
+* Lazy dependencies are now proxies that extend the class they proxy, so type-hinting works.
+* Addition of the **`ContainerBuilder`** object, that helps to [create and configure a `Container`](doc/container-configuration.md).
+* Some methods for configuring the Container have gone **deprecated** in favor of the `ContainerBuilder`. Fear not, these deprecated methods will remain until next major version (4.0).
+    * `Container::useReflection`, use ContainerBuilder::useReflection instead
+    * `Container::useAnnotations`, use ContainerBuilder::useAnnotations instead
+    * `Container::setDefinitionCache`, use ContainerBuilder::setDefinitionCache instead
+    * `Container::setDefinitionsValidation`, use ContainerBuilder::setDefinitionsValidation instead
+* The container is now auto-registered (as 'DI\Container'). You can now inject the container without registering it.
+
 ## 3.1.1
 
 * Value definitions (`$container->set('foo', 80)`) are not cached anymore

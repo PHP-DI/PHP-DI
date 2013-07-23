@@ -94,9 +94,20 @@ class ClassDefinitionHelper
     public function withMethod($methodName, array $params)
     {
         $paramInjections = array();
+
         foreach ($params as $key => $param) {
-            $paramInjections[] = new ParameterInjection($key, $param);
+            if (is_array($param)) {
+                $parameterInjection = new ParameterInjection($key, $param['name']);
+                // Lazy
+                if (array_key_exists('lazy', $param)) {
+                    $parameterInjection->setLazy($param['lazy']);
+                }
+            } else {
+                $parameterInjection = new ParameterInjection($key, $param);
+            }
+            $paramInjections[] = $parameterInjection;
         }
+
         $this->classDefinition->addMethodInjection(new MethodInjection($methodName, $paramInjections));
         return $this;
     }

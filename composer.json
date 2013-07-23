@@ -17,6 +17,7 @@
         "doctrine/annotations": "1.*",
         "doctrine/cache": "1.*",
         "myclabs/php-enum": "1.*",
-        "symfony/yaml": "2.*"
+        "symfony/yaml": "2.*",
+        "ocramius/proxy-manager": "0.3.*"
     }
 }

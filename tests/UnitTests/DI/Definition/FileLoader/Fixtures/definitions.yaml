@@ -15,6 +15,10 @@ namespace\class1:
     method2:
       name6: argument6
     method3: [argument7, argument8]
+    method4:
+      name7:
+        name: argument7
+        lazy: true
   properties:
     property1: value1
     property2:

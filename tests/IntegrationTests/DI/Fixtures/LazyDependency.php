@@ -7,12 +7,20 @@
  * @license   http://www.opensource.org/licenses/mit-license.php MIT (see the LICENSE file)
  */
 
-namespace DI\Proxy;
+namespace IntegrationTests\DI\Fixtures;
 
 /**
- * Exception for the Proxy
+ * Fixture class
  */
-class ProxyException extends \Exception
+class LazyDependency
 {
+
+    /**
+     * @return boolean
+     */
+    public function getValue()
+    {
+        return true;
+    }
 
 }

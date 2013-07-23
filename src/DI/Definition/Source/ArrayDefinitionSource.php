@@ -223,6 +223,11 @@ class ArrayDefinitionSource implements DefinitionSource
 
                 $parameterInjection = new ParameterInjection($parameterName, $name);
 
+                // Lazy
+                if (array_key_exists('lazy', $arrayParameterDefinition)) {
+                    $parameterInjection->setLazy($arrayParameterDefinition['lazy']);
+                }
+
                 $methodInjection->addParameterInjection($parameterInjection);
             }
 

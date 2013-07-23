@@ -25,8 +25,6 @@ class Class1
      */
     public $property1;
 
-    public $isProperty1InjectedInConstructor = false;
-
     /**
      * @Inject
      * @var Interface1
@@ -43,6 +41,12 @@ class Class1
      */
     public $property4;
 
+    /**
+     * @Inject(lazy=true)
+     * @var LazyDependency
+     */
+    public $property5;
+
     public $constructorParam1;
     public $constructorParam2;
 
@@ -53,6 +57,8 @@ class Class1
     public $method3Param1;
     public $method3Param2;
 
+    public $method4Param1;
+
     /**
      * @param Class2     $param1
      * @param Interface1 $param2
@@ -61,10 +67,6 @@ class Class1
     {
         $this->constructorParam1 = $param1;
         $this->constructorParam2 = $param2;
-
-        if ($this->property1 instanceof Class2) {
-            $this->isProperty1InjectedInConstructor = true;
-        }
     }
 
     /**
@@ -93,6 +95,15 @@ class Class1
     {
         $this->method3Param1 = $param1;
         $this->method3Param2 = $param2;
+    }
+
+    /**
+     * @Inject({"param1" = {"lazy" = true}})
+     * @param string $param1
+     */
+    public function method4(LazyDependency $param1)
+    {
+        $this->method4Param1 = $param1;
     }
 
 }

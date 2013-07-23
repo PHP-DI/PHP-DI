@@ -71,11 +71,8 @@ class DefinitionManager
      * Enables/disable the validation of the definitions
      * @var bool
      */
-    private $definitionValidation = false;
+    private $definitionsValidation = false;
 
-    /**
-     * Constructor
-     */
     public function __construct()
     {
         $this->simpleSource = new SimpleDefinitionSource();
@@ -183,7 +180,7 @@ class DefinitionManager
      */
     public function addDefinitionsFromFile(DefinitionFileLoader $definitionFileLoader)
     {
-        $definitions = $definitionFileLoader->load($this->definitionValidation);
+        $definitions = $definitionFileLoader->load($this->definitionsValidation);
 
         if (!is_array($definitions)) {
             throw new \InvalidArgumentException(get_class($definitionFileLoader) . " must return an array.");
@@ -223,7 +220,18 @@ class DefinitionManager
      */
     public function setDefinitionsValidation($bool)
     {
-        $this->definitionValidation = (bool) $bool;
+        $this->definitionsValidation = (bool) $bool;
+    }
+
+    /**
+     * Returns the state of the validation of the definitions
+     *
+     * By default, disabled
+     * @param bool $bool
+     */
+    public function getDefinitionsValidation()
+    {
+        return $this->definitionsValidation;
     }
 
     /**

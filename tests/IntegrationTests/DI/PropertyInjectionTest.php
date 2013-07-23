@@ -20,29 +20,6 @@ class PropertyInjectionTest extends \PHPUnit_Framework_TestCase
 {
 
     /**
-     * Injection with lazy enabled
-     */
-    public function testLazyInjection1()
-    {
-        $container = new Container();
-        /** @var $class LazyInjectionClass */
-        $class = $container->get('IntegrationTests\DI\Fixtures\PropertyInjectionTest\LazyInjectionClass');
-        $dependency = $class->getClass2();
-        $this->assertNotNull($dependency);
-        $this->assertInstanceOf('\DI\Proxy\Proxy', $dependency);
-        // Correct proxy resolution
-        $this->assertTrue($dependency->getBoolean());
-    }
-
-    public function testLazyInjection2()
-    {
-        $container = new Container();
-        /** @var $class LazyInjectionClass */
-        $class = $container->get('IntegrationTests\DI\Fixtures\PropertyInjectionTest\LazyInjectionClass');
-        $this->assertTrue($class->getDependencyAttribute());
-    }
-
-    /**
      * Injection of named beans
      */
     public function testNamedInjection()
