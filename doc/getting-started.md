@@ -210,4 +210,10 @@ To use PHP-DI in your ZF1 application, you need to change the Dispatcher used by
 
 Now you have dependency injection **in your controllers**.
 
+**Warning**: if you use Zend's autoloader (and not Composer), you will need to configure it:
+
+```php
+$autoloader->suppressNotFoundWarnings(true);
+```
+
 Read more on the [PHP-DI-ZF1 project on Github](https://github.com/mnapoli/PHP-DI-ZF1).
