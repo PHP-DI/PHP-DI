@@ -2,11 +2,12 @@ body{
     padding-top: 60px;
     background: #fff url("../img/back.png") repeat;
     font-size: 15px;
-    color: #333;
+    color: #666;
     font-weight: 300;
 }
 
 h1,h2,h3,h4,h5,h6{
+    color: #333;
     margin: 0;
     padding: 0;
     font-weight: 600;
@@ -251,6 +252,7 @@ header .title {
 }
 
 header .title h1 {
+    color: #fff;
     font-size: 50px;
     line-height: 60px;
     font-weight: 700;

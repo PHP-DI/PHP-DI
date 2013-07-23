@@ -23,6 +23,12 @@ return array(
                 'name6' => 'argument6',
             ),
             'method3' => array('argument7', 'argument8'),
+            'method4' => array(
+                'name7' => array(
+                    'name' => 'argument7',
+                    'lazy' => true,
+                ),
+            ),
         ),
         'properties' => array(
             'property1' => 'value1',

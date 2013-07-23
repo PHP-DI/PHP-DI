@@ -178,4 +178,28 @@ class AnnotationDefinitionSourceTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('bar', $param2->getEntryName());
     }
 
+    public function testMethod7()
+    {
+        $source = new AnnotationDefinitionSource();
+        $definition = $source->getDefinition('UnitTests\DI\Definition\Fixtures\AnnotationFixture');
+        $this->assertInstanceOf('DI\Definition\Definition', $definition);
+
+        $methodInjections = $definition->getMethodInjections();
+        $methodInjection = $methodInjections['method7'];
+        $this->assertInstanceOf('DI\Definition\MethodInjection', $methodInjection);
+
+        $parameterInjections = $methodInjection->getParameterInjections();
+        $this->assertCount(2, $parameterInjections);
+
+        $param1 = $parameterInjections['param1'];
+        $this->assertEquals('param1', $param1->getParameterName());
+        $this->assertEquals('foo', $param1->getEntryName());
+        $this->assertTrue($param1->isLazy());
+
+        $param2 = $parameterInjections['param2'];
+        $this->assertEquals('param2', $param2->getParameterName());
+        $this->assertEquals('bar', $param2->getEntryName());
+        $this->assertFalse($param2->isLazy());
+    }
+
 }

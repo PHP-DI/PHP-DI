@@ -51,17 +51,14 @@ class Factory implements FactoryInterface
             throw new DependencyException("$classReflection->name is not instantiable");
         }
 
-        // Create an instance without calling its constructor
-        $instance = $this->newInstanceWithoutConstructor($classReflection);
-
         try {
+            // Constructor injection
+            $instance = $this->injectConstructor($classReflection, $classDefinition->getConstructorInjection());
+
             // Property injections
             foreach ($classDefinition->getPropertyInjections() as $propertyInjection) {
                 $this->injectProperty($instance, $propertyInjection);
             }
-
-            // Constructor injection
-            $this->injectConstructor($instance, $classReflection, $classDefinition->getConstructorInjection());
 
             // Method injections
             foreach ($classDefinition->getMethodInjections() as $methodInjection) {
@@ -79,24 +76,21 @@ class Factory implements FactoryInterface
     }
 
     /**
-     * Inject dependencies through the constructor
+     * Creates an instance and inject dependencies through the constructor
      *
-     * @param object               $object Object to inject dependencies into
      * @param ReflectionClass      $classReflection
      * @param MethodInjection|null $constructorInjection
      *
      * @throws DefinitionException
+     * @return object
      */
-    private function injectConstructor(
-        $object,
-        ReflectionClass $classReflection,
-        MethodInjection $constructorInjection = null
-    ) {
+    private function injectConstructor(ReflectionClass $classReflection, MethodInjection $constructorInjection = null)
+    {
         $constructorReflection = $classReflection->getConstructor();
 
         // No constructor
         if (!$constructorReflection) {
-            return;
+            return $classReflection->newInstance();
         }
 
         // Check the definition and the class parameter number match
@@ -108,8 +102,7 @@ class Factory implements FactoryInterface
         }
 
         if (count($parameterInjections) === 0) {
-            $constructorReflection->invoke($object);
-            return;
+            return $classReflection->newInstance();
         }
 
         $args = array();
@@ -123,7 +116,7 @@ class Factory implements FactoryInterface
             $args[] = $this->container->get($entryName);
         }
 
-        $constructorReflection->invokeArgs($object, $args);
+        return $classReflection->newInstanceArgs($args);
     }
 
     /**
@@ -163,7 +156,11 @@ class Factory implements FactoryInterface
                     . "' of {$classReflection->name}::$methodName has no type defined or guessable");
             }
 
-            $args[] = $this->container->get($entryName);
+            if ($parameterInjection->isLazy()) {
+                $args[] = $this->container->get($entryName, true);
+            } else {
+                $args[] = $this->container->get($entryName);
+            }
         }
 
         $methodReflection->invokeArgs($object, $args);
@@ -203,30 +200,6 @@ class Factory implements FactoryInterface
 
         // Inject the dependency
         $property->setValue($object, $value);
-    }
-
-    /**
-     * Creates a new instance of a class without calling its constructor
-     *
-     * @param ReflectionClass $classReflection
-     *
-     * @return mixed
-     */
-    private function newInstanceWithoutConstructor(ReflectionClass $classReflection)
-    {
-        if (version_compare(PHP_VERSION, '5.4.0') >= 0) {
-            // Create a new class instance without calling the constructor (PHP 5.4 magic)
-            return $classReflection->newInstanceWithoutConstructor();
-        } else {
-            $classname = $classReflection->name;
-            return unserialize(
-                sprintf(
-                    'O:%d:"%s":0:{}',
-                    strlen($classname),
-                    $classname
-                )
-            );
-        }
     }
 
 }

@@ -15,9 +15,8 @@ PHP-DI also tries to avoid falling into the trap of the "Service Locator" antipa
     * **PHP code**: if you like complete control and auto-completion
     * **PHP array**: allows you to store it in a configuration file
     * **YAML**: elegant and concise
-    * **XML** (work in progress): more verbose, but more classic
 * **Performances**: supports a large number of Caches
-* Offers lazy injection: lazy-loading of dependencies (WIP)
+* Lazy injection: lazy-loading of dependencies
 * Supports constructor injection, setter injection and property injection
 
 

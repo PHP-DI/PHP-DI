@@ -16,10 +16,11 @@ use DI\Definition\DefinitionManager;
 use DI\Definition\Helper\ClassDefinitionHelper;
 use DI\Definition\ValueDefinition;
 use DI\Definition\FileLoader\DefinitionFileLoader;
-use DI\Proxy\Proxy;
 use Doctrine\Common\Cache\Cache;
 use Exception;
 use InvalidArgumentException;
+use ProxyManager\Factory\LazyLoadingValueHolderFactory;
+use ProxyManager\GeneratorStrategy\EvaluatingGeneratorStrategy;
 
 /**
  * Dependency Injection Container
@@ -46,6 +47,11 @@ class Container
     private $factory;
 
     /**
+     * @var LazyLoadingValueHolderFactory
+     */
+    private $proxyFactory;
+
+    /**
      * Array of classes being instantiated.
      * Used to avoid circular dependencies.
      * @var array
@@ -53,17 +59,21 @@ class Container
     private $classesBeingInstantiated = array();
 
     /**
-     * Constructor creates a default configuration
+     * @param DefinitionManager|null             $definitionManager
+     * @param FactoryInterface|null              $factory
+     * @param LazyLoadingValueHolderFactory|null $proxyFactory
      */
-    public function __construct()
-    {
-        // Default configuration
-        $this->definitionManager = new DefinitionManager();
-        $this->definitionManager->useReflection(true);
-        $this->definitionManager->useAnnotations(true);
+    public function __construct(
+        DefinitionManager $definitionManager = null,
+        FactoryInterface $factory = null,
+        LazyLoadingValueHolderFactory $proxyFactory = null
+    ) {
+        $this->definitionManager = $definitionManager ?: $this->createDefaultDefinitionManager();
+        $this->factory = $factory ?: $this->createDefaultFactory();
+        $this->proxyFactory = $proxyFactory ?: $this->createDefaultProxyFactory();
 
-        // Default factory
-        $this->factory = new Factory($this);
+        // Auto-register the container
+        $this->entries[get_class($this)] = $this;
     }
 
     /**
@@ -174,6 +184,8 @@ class Container
      * Enable or disable the use of reflection
      *
      * @param boolean $bool
+     * @deprecated Use ContainerBuilder::useReflection instead. Will be removed in next major release (v4).
+     * @see ContainerBuilder::useReflection
      */
     public function useReflection($bool)
     {
@@ -184,6 +196,8 @@ class Container
      * Enable or disable the use of annotations
      *
      * @param boolean $bool
+     * @deprecated Use ContainerBuilder::useAnnotations instead. Will be removed in next major release (v4).
+     * @see ContainerBuilder::useAnnotations
      */
     public function useAnnotations($bool)
     {
@@ -215,6 +229,8 @@ class Container
      * Enables the use of a cache for the definitions
      *
      * @param Cache $cache Cache backend to use
+     * @deprecated Use ContainerBuilder::setDefinitionCache instead. Will be removed in next major release (v4).
+     * @see ContainerBuilder::setDefinitionCache
      */
     public function setDefinitionCache(Cache $cache)
     {
@@ -226,6 +242,8 @@ class Container
      *
      * By default, disabled
      * @param bool $bool
+     * @deprecated Use ContainerBuilder::setDefinitionsValidation instead. Will be removed in next major release (v4).
+     * @see ContainerBuilder::setDefinitionsValidation
      */
     public function setDefinitionsValidation($bool)
     {
@@ -246,6 +264,30 @@ class Container
     public function getFactory()
     {
         return $this->factory;
+    }
+
+    /**
+     * @return LazyLoadingValueHolderFactory
+     */
+    public function getProxyFactory()
+    {
+        return $this->proxyFactory;
+    }
+
+    /**
+     * @param LazyLoadingValueHolderFactory $proxyFactory
+     */
+    public function setProxyFactory(LazyLoadingValueHolderFactory $proxyFactory)
+    {
+        $this->proxyFactory = $proxyFactory;
+    }
+
+    /**
+     * @return DefinitionManager
+     */
+    public function getDefinitionManager()
+    {
+        return $this->definitionManager;
     }
 
     /**
@@ -273,17 +315,59 @@ class Container
     }
 
     /**
-     * Returns a proxy class
+     * Returns a proxy instance
      *
      * @param string $classname
-     * @return Proxy Proxy instance
+     * @return object Proxy instance
      */
     private function getProxy($classname)
     {
         $container = $this;
-        return new Proxy(function () use ($container, $classname) {
-            return $container->get($classname);
-        });
+
+        $proxy = $this->proxyFactory->createProxy(
+            $classname,
+            function (& $wrappedObject, $proxy, $method, $parameters, & $initializer) use ($container, $classname) {
+                $wrappedObject = $container->get($classname);
+                $initializer = null; // turning off further lazy initialization
+                return true;
+            }
+        );
+
+        return $proxy;
+    }
+
+    /**
+     * @return DefinitionManager
+     */
+    private function createDefaultDefinitionManager()
+    {
+        $definitionManager = new DefinitionManager();
+        $definitionManager->useReflection(true);
+        $definitionManager->useAnnotations(true);
+
+        return $definitionManager;
+    }
+
+    /**
+     * @return FactoryInterface
+     */
+    private function createDefaultFactory()
+    {
+        return new Factory($this);
+    }
+
+    /**
+     * @return LazyLoadingValueHolderFactory
+     */
+    private function createDefaultProxyFactory()
+    {
+        // Proxy factory
+        $config = new \ProxyManager\Configuration();
+        // By default, auto-generate proxies and don't write them to file
+        $config->setAutoGenerateProxies(true);
+        $config->setGeneratorStrategy(new EvaluatingGeneratorStrategy());
+
+        return new LazyLoadingValueHolderFactory($config);
     }
 
 }

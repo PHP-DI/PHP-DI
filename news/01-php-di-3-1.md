@@ -6,7 +6,7 @@ I am happy to announce that I have just released PHP-DI version 3.1.
 
 The major new feature is the **Zend Framework 1 integration**. You can now use PHP-DI very easily with ZF1, and the integration will provide you dependency injection into your controllers.
 
-Mixing different definition sources (reflection, annotations, files, …) is now more reliable with orders and priorities. Sources are all now correctly priorized, allowing you to override definitions as you would expect. Read more in the [**Definition overriding** documentation](doc/definition-overriding.md).
+Mixing different definition sources (reflection, annotations, files, …) is now more reliable with orders and priorities. Sources are all now correctly priorized, allowing you to override definitions as you would expect. Read more in the [**Definition overriding** documentation](../doc/definition-overriding.md).
 
 Finally, [a small fix](https://github.com/mnapoli/PHP-DI/issues/79) to allow to **define `null` entries**:
 
