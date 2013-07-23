@@ -77,7 +77,8 @@
 
 <p>The <code>ContainerBuilder</code> is an object helping you to configure and create your container.</p>
 
-<pre><code class="php">$builder = new \DI\ContainerBuilder();
+<pre><code class="php">&lt;?php
+$builder = new \DI\ContainerBuilder();
 $builder-&gt;setDefinitionCache(new Doctrine\Common\Cache\ArrayCache());
 $builder-&gt;setDefinitionsValidation(true);
 
@@ -108,7 +109,8 @@ $container = $builder-&gt;build();
 
 <p>You can mark dependencies to be lazily injected, here is an example using annotations:</p>
 
-<pre><code class="php">use DI\Annotation\Inject;
+<pre><code class="php">&lt;?php
+use DI\Annotation\Inject;
 
 class Example {
     /**
