@@ -2,6 +2,8 @@
 
 ## 3.2
 
+Read the [news entry](news/02-php-di-3-2.md).
+
 Small BC-break: PHP-DI 3.0 and 3.1 injected properties before calling the constructor. This was confusing and [not supported for internal classes](https://github.com/mnapoli/PHP-DI/issues/74).
 From 3.2 and on, properties are injected after calling the constructor.
 
