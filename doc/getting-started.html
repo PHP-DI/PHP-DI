@@ -77,7 +77,7 @@
 
 <pre><code class="json">{
     &quot;require&quot;: {
-        &quot;mnapoli/php-di&quot;: &quot;3.0.*&quot;
+        &quot;mnapoli/php-di&quot;: &quot;3.2.*&quot;
     }
 }
 </code></pre>
@@ -264,6 +264,11 @@ My\Foo:
 <p><strong>That&#39;s it!</strong></p>
 
 <p>Now you have dependency injection <strong>in your controllers</strong>.</p>
+
+<p><strong>Warning</strong>: if you use Zend&#39;s autoloader (and not Composer), you will need to configure it:</p>
+
+<pre><code class="php">$autoloader-&gt;suppressNotFoundWarnings(true);
+</code></pre>
 
 <p>Read more on the <a href="https://github.com/mnapoli/PHP-DI-ZF1">PHP-DI-ZF1 project on Github</a>.</p>
             <div class="github">

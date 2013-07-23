@@ -65,12 +65,85 @@
 
     <div class="main">
         <div class="container-fluid">
-<h1>News</h1>
+<h1>PHP-DI 3.2 released</h1>
+
+<p><em>Posted by <a href="https://github.com/mnapoli">Matthieu Napoli</a> on July 23rd 2013</em></p>
+
+<p>I am happy to announce that I have just released PHP-DI version 3.2.</p>
+
+<p>The major new feature is the full support of <strong>Lazy Injection</strong>. But first, let&#39;s talk about the <code>ContainerBuilder</code>.</p>
+
+<h2>ContainerBuilder</h2>
+
+<p>The <code>ContainerBuilder</code> is an object helping you to configure and create your container.</p>
+
+<pre><code class="php">$builder = new \DI\ContainerBuilder();
+$builder-&gt;setDefinitionCache(new Doctrine\Common\Cache\ArrayCache());
+$builder-&gt;setDefinitionsValidation(true);
+
+$container = $builder-&gt;build();
+</code></pre>
+
+<p>The documentation now presents 3 different configuration templates:</p>
 
 <ul>
-<li><p>July 23rd 2013. <a href="02-php-di-3-2">PHP-DI 3.2 released</a></p></li>
-<li><p>June 23rd 2013. <a href="01-php-di-3-1">PHP-DI 3.1 released</a></p></li>
+<li>development configuration</li>
+<li>production configuration</li>
+<li>lightweight configuration</li>
 </ul>
+
+<p>Read the documentation: <a href="../doc/container-configuration">Configuring the container</a>.</p>
+
+<h2>Lazy injection</h2>
+
+<p>Until v3.1, PHP-DI offered limited support for injecting dependencies lazily: it was restricted to property injection. Up from v3.2, there are no restrictions anymore: you can now inject lazily in constructors, setters or properties.</p>
+
+<p>To achieve lazy dependencies, PHP-DI injects <strong>proxies</strong>. These proxies behave and look just like the real object, expect they delay loading this object until it is really used.</p>
+
+<p>This can be really helpful to improve performances if you tend to inject unused dependencies.</p>
+
+<p><strong>Credits</strong>: lazy injection relies on creating proxy classes. PHP-DI uses <a href="https://github.com/Ocramius/ProxyManager">ProxyManager</a> by Marco Pivetta, the library now used by Symfony, Zend Framework, …. A big thanks to him.</p>
+
+<h3>Example</h3>
+
+<p>You can mark dependencies to be lazily injected, here is an example using annotations:</p>
+
+<pre><code class="php">use DI\Annotation\Inject;
+
+class Example {
+    /**
+     * @Inject(lazy=true)
+     * @var My\Class
+     */
+    protected $property;
+
+    /**
+     * @Inject({ &quot;param1&quot; = {&quot;lazy&quot;=true} })
+     */
+    public function method(My\Class $param1) {
+    }
+}
+</code></pre>
+
+<p>Here is an example using YAML:</p>
+
+<pre><code class="yaml">Example:
+  properties:
+    property:
+      name: My\Class
+      lazy: true
+  methods:
+    method:
+      param1:
+        name: My\Class
+        lazy: true
+</code></pre>
+
+<p>Read the full documentation: <a href="../doc/lazy-injection">Lazy injection</a>.</p>
+
+<h2>Change log</h2>
+
+<p>Read all the changes in the <a href="../change-log">change log</a>.</p>
             <div class="github">
                 PHP-DI is an open source project, you can contribute or seek help on
                 <a class="btn btn-mini" href="https://github.com/mnapoli/PHP-DI/" target="_blank">

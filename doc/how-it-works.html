@@ -65,12 +65,80 @@
 
     <div class="main">
         <div class="container-fluid">
-<h1>News</h1>
+<h1>How PHP-DI works</h1>
+
+<p>Do you want to help out improving PHP-DI? Or are you simply curious? Here is a short presentation of how PHP-DI works.</p>
+
+<h2>Global architecture</h2>
+
+<p>The main component is the <code>Container</code> class.</p>
+
+<p>It is the entry point from the user&#39;s point of view, it is also the component that coordinates all other sub-components.</p>
+
+<p>Its main role is to return <strong>entries</strong> by their <strong>entry name</strong>:</p>
+
+<pre><code class="php">$entry = $container-&gt;get(&#39;entryName&#39;);
+</code></pre>
+
+<p>A container instance has the following sub-components:</p>
 
 <ul>
-<li><p>July 23rd 2013. <a href="02-php-di-3-2">PHP-DI 3.2 released</a></p></li>
-<li><p>June 23rd 2013. <a href="01-php-di-3-1">PHP-DI 3.1 released</a></p></li>
+<li>a <code>DefinitionManager</code> that returns a <code>Definition</code> for an entry name</li>
+<li>a <code>Factory</code> to create instances from the definitions</li>
 </ul>
+
+<h3>Definitions</h3>
+
+<p>A definition defines what is an entry:</p>
+
+<ul>
+<li><strong>a simple value</strong> (string, number, object instance…): <code>ValueDefinition</code></li>
+<li><strong>a closure returning the value</strong>: <code>ClosureDefinition</code></li>
+<li><strong>a definition of a class</strong>: <code>ClassDefinition</code></li>
+</ul>
+
+<p>The last type (class definition) describes how the container should create a class instance (what parameters the constructor takes, …).</p>
+
+<h3>Definition sources</h3>
+
+<p>All definition sources implement the <code>DefinitionSource</code> interface.</p>
+
+<p>Their role is to return a <code>Definition</code> for an entry name.</p>
+
+<p>Implementations are:</p>
+
+<ul>
+<li><code>SimpleDefinitionSource</code>, contains definitions in an array in memory (for definitions created on the fly)</li>
+<li><code>ArrayDefinitionSource</code> parses definitions from a PHP array</li>
+<li><code>ReflectionDefinitionSource</code> uses <a href="http://fr.php.net/manual/en/book.reflection.php">PHP reflection</a> to guess constructors parameters</li>
+<li><code>AnnotationDefinitionSource</code> parses code annotations using <a href="http://docs.doctrine-project.org/projects/doctrine-common/en/latest/reference/annotations.html">Doctrine annotations library</a></li>
+<li><code>CombinedDefinitionSource</code> wraps a list of other definition sources and merges definitions from them</li>
+</ul>
+
+<h3>File loaders</h3>
+
+<p>File loaders extend the <code>DefinitionFileLoader</code> abstract class.</p>
+
+<p>Their goal is to read a file containing definitions (PHP, YAML, XML, …) and return a PHP array that will be read by the <code>ArrayDefinitionSource</code>.</p>
+
+<h3>Definition manager</h3>
+
+<p>The <code>DefinitionManager</code> sits on top of the definition sources to manage them.</p>
+
+<p>The container uses a definition manager to add sources and to get a <code>Definition</code> for an entry name.</p>
+
+<p>It answers the following needs:</p>
+
+<ul>
+<li>prioritize correctly the sources (e.g. annotations should override reflection): read more about <a href="definition-overriding">definition overriding</a></li>
+<li>cache the definitions (if configured)</li>
+</ul>
+
+<p><em>This could be improved by splitting this into 2 separate classes to follow the <a href="http://en.wikipedia.org/wiki/Single_responsibility_principle">Single Responsibility Principle</a>.</em></p>
+
+<h3>Factory</h3>
+
+<p>The role of the <code>Factory</code> is to return an object instance from a <code>ClassDefinition</code>.</p>
             <div class="github">
                 PHP-DI is an open source project, you can contribute or seek help on
                 <a class="btn btn-mini" href="https://github.com/mnapoli/PHP-DI/" target="_blank">
