@@ -9,7 +9,11 @@ From 3.2 and on, properties are injected after calling the constructor.
 * Lazy dependencies are now proxies that extend the class they proxy, so type-hinting works.
 * Addition of the **`ContainerBuilder`** object, that helps to [create and configure a `Container`](doc/container-configuration.md).
 * Some methods for configuring the Container have gone **deprecated** in favor of the `ContainerBuilder`. Fear not, these deprecated methods will remain until next major version (4.0).
-* The container is now auto-registered (as 'DI\Container').
+    * `Container::useReflection`, use ContainerBuilder::useReflection instead
+    * `Container::useAnnotations`, use ContainerBuilder::useAnnotations instead
+    * `Container::setDefinitionCache`, use ContainerBuilder::setDefinitionCache instead
+    * `Container::setDefinitionsValidation`, use ContainerBuilder::setDefinitionsValidation instead
+* The container is now auto-registered (as 'DI\Container'). You can now inject the container without registering it.
 
 ## 3.1.1
 
