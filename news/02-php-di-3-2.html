@@ -99,7 +99,7 @@ $container = $builder-&gt;build();
 
 <p>Until v3.1, PHP-DI offered limited support for injecting dependencies lazily: it was restricted to property injection. Up from v3.2, there are no restrictions anymore: you can now inject lazily in constructors, setters or properties.</p>
 
-<p>To achieve lazy dependencies, PHP-DI injects <strong>proxies</strong>. These proxies behave and look just like the real object, expect they delay loading this object until it is really used.</p>
+<p>To achieve lazy dependencies, PHP-DI injects <strong>proxies</strong>. These proxies behave and look just like the real object, except they delay loading this object until it is really used.</p>
 
 <p>This can be really helpful to improve performances if you tend to inject unused dependencies.</p>
 
