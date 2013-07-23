@@ -11,6 +11,7 @@ The major new feature is the full support of **Lazy Injection**. But first, let'
 The `ContainerBuilder` is an object helping you to configure and create your container.
 
 ```php
+<?php
 $builder = new \DI\ContainerBuilder();
 $builder->setDefinitionCache(new Doctrine\Common\Cache\ArrayCache());
 $builder->setDefinitionsValidation(true);
@@ -41,6 +42,7 @@ This can be really helpful to improve performances if you tend to inject unused 
 You can mark dependencies to be lazily injected, here is an example using annotations:
 
 ```php
+<?php
 use DI\Annotation\Inject;
 
 class Example {
