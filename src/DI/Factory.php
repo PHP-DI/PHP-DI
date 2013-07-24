@@ -76,6 +76,34 @@ class Factory implements FactoryInterface
     }
 
     /**
+     * {@inheritdoc}
+     * @throws DependencyException
+     * @throws \DI\Definition\Exception\DefinitionException
+    */
+    public function injectInstance(ClassDefinition $classDefinition, $instance)
+    {
+        try {
+            // Property injections
+            foreach ($classDefinition->getPropertyInjections() as $propertyInjection) {
+                $this->injectProperty($instance, $propertyInjection);
+            }
+
+            // Method injections
+            foreach ($classDefinition->getMethodInjections() as $methodInjection) {
+                $this->injectMethod($instance, $methodInjection);
+            }
+        } catch (DependencyException $e) {
+            throw $e;
+        } catch (DefinitionException $e) {
+            throw $e;
+        } catch (NotFoundException $e) {
+            throw new DependencyException("Error while injecting dependencies into " . $classDefinition->getClassName() . ": " . $e->getMessage(), 0, $e);
+        }
+
+        return $instance;
+    }
+
+    /**
      * Creates an instance and inject dependencies through the constructor
      *
      * @param ReflectionClass      $classReflection
