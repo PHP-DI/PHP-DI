@@ -141,6 +141,28 @@ class Container
     }
 
     /**
+     * Performs injection on an existing instance
+     *
+     * @param object $instance Object to perform injection upon
+     * @throws InvalidArgumentException
+     * @throws DependencyException
+     * @return object $instance
+     */
+    public function inject($instance)
+    {
+        $className = get_class($instance);
+        $definition = $this->definitionManager->getDefinition($className);
+
+        // It's a class
+        if ($definition instanceof ClassDefinition) {
+            $instance = $this->injectExistingInstance($definition, $instance);
+            return $instance;
+        }
+        else
+            return $instance;
+    }
+
+    /**
      * Define an object or a value in the container
      *
      * @param string             $name Entry name
@@ -305,6 +327,31 @@ class Container
 
         try {
             $instance = $this->factory->createInstance($classDefinition);
+        } catch (Exception $exception) {
+            unset($this->classesBeingInstantiated[$classname]);
+            throw $exception;
+        }
+
+        unset($this->classesBeingInstantiated[$classname]);
+        return $instance;
+    }
+
+    /**
+     * @param ClassDefinition $classDefinition
+     * @param object $instance
+     * @return object $instance
+     */
+    private function injectExistingInstance(ClassDefinition $classDefinition, $instance)
+    {
+        $classname = $classDefinition->getClassName();
+
+        if (isset($this->classesBeingInstantiated[$classname])) {
+            throw new DependencyException("Circular dependency detected while trying to instantiate class '$classname'");
+        }
+        $this->classesBeingInstantiated[$classname] = true;
+
+        try {
+            $instance = $this->factory->injectInstance($classDefinition, $instance);
         } catch (Exception $exception) {
             unset($this->classesBeingInstantiated[$classname]);
             throw $exception;
