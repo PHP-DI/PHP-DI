@@ -153,6 +153,29 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * Test that injecting an existing object returns the same reference to that object
+     */
+    public function testInjectMaintainsReferentialEquality()
+    {
+        $container = new Container();
+        $instance = new stdClass();
+        $result = $container->inject($instance);
+
+        $this->assertSame($instance, $result);
+    }
+
+    /**
+     * Test that injection on null yields null
+     */
+    public function testInjectNull()
+    {
+        $container = new Container();
+        $result = $container->inject(null);
+
+        $this->assertEquals($result, null);
+    }
+
+    /**
      * We should be able to set a null value
      * @see https://github.com/mnapoli/PHP-DI/issues/79
      */

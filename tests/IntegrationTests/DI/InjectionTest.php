@@ -14,6 +14,8 @@ use DI\Definition\FileLoader\YamlDefinitionFileLoader;
 use DI\Scope;
 use DI\Container;
 use IntegrationTests\DI\Fixtures\Class1;
+use IntegrationTests\DI\Fixtures\Class2;
+use IntegrationTests\DI\Fixtures\Implementation1;
 use IntegrationTests\DI\Fixtures\LazyDependency;
 
 /**
@@ -170,6 +172,33 @@ class InjectionTest extends \PHPUnit_Framework_TestCase
     /**
      * @dataProvider containerProvider
      */
+    public function testPropertyInjectionExistingObject($type, Container $container)
+    {
+        // Only constructor injection with reflection
+        if ($type == self::DEFINITION_REFLECTION) {
+            return;
+        }
+        /** @var $class1 Class1 */
+        $class1 = new Class1(new Class2(), new Implementation1());
+        $container->inject($class1);
+        $this->assertInstanceOf('IntegrationTests\DI\Fixtures\Class2', $class1->property1);
+        $this->assertInstanceOf('IntegrationTests\DI\Fixtures\Implementation1', $class1->property2);
+        $this->assertInstanceOf('IntegrationTests\DI\Fixtures\Class2', $class1->property3);
+        $this->assertEquals('bar', $class1->property4);
+        // Lazy injection
+        /** @var LazyDependency|\ProxyManager\Proxy\LazyLoadingInterface $proxy */
+        $proxy = $class1->property5;
+        $this->assertInstanceOf('IntegrationTests\DI\Fixtures\LazyDependency', $proxy);
+        $this->assertInstanceOf('ProxyManager\Proxy\LazyLoadingInterface', $proxy);
+        $this->assertFalse($proxy->isProxyInitialized());
+        // Correct proxy resolution
+        $this->assertTrue($proxy->getValue());
+        $this->assertTrue($proxy->isProxyInitialized());
+    }
+
+    /**
+     * @dataProvider containerProvider
+     */
     public function testMethodInjection($type, Container $container)
     {
         // Only constructor injection with reflection
@@ -178,6 +207,33 @@ class InjectionTest extends \PHPUnit_Framework_TestCase
         }
         /** @var $class1 Class1 */
         $class1 = $container->get('IntegrationTests\DI\Fixtures\Class1');
+        $this->assertInstanceOf('IntegrationTests\DI\Fixtures\Class2', $class1->method1Param1);
+        $this->assertInstanceOf('IntegrationTests\DI\Fixtures\Implementation1', $class1->method2Param1);
+        $this->assertInstanceOf('IntegrationTests\DI\Fixtures\Class2', $class1->method3Param1);
+        $this->assertEquals('bar', $class1->method3Param2);
+        $this->assertInstanceOf('IntegrationTests\DI\Fixtures\LazyDependency', $class1->method4Param1);
+        $this->assertInstanceOf('ProxyManager\Proxy\LazyLoadingInterface', $class1->method4Param1);
+        // Lazy injection
+        /** @var LazyDependency|\ProxyManager\Proxy\LazyLoadingInterface $proxy */
+        $proxy = $class1->method4Param1;
+        $this->assertFalse($proxy->isProxyInitialized());
+        // Correct proxy resolution
+        $this->assertTrue($proxy->getValue());
+        $this->assertTrue($proxy->isProxyInitialized());
+    }
+
+    /**
+     * @dataProvider containerProvider
+     */
+    public function testMethodInjectionExistingObject($type, Container $container)
+    {
+        // Only constructor injection with reflection
+        if ($type == self::DEFINITION_REFLECTION) {
+            return;
+        }
+        /** @var $class1 Class1 */
+        $class1 = new Class1(new Class2(), new Implementation1());
+        $container->inject($class1);
         $this->assertInstanceOf('IntegrationTests\DI\Fixtures\Class2', $class1->method1Param1);
         $this->assertInstanceOf('IntegrationTests\DI\Fixtures\Implementation1', $class1->method2Param1);
         $this->assertInstanceOf('IntegrationTests\DI\Fixtures\Class2', $class1->method3Param1);
