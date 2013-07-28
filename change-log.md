@@ -1,5 +1,10 @@
 # Change log
 
+## 3.3
+
+* Inject dependencies on an existing instance with `Container::injectAll` (work from Jeff Flitton: [#89](https://github.com/mnapoli/PHP-DI/pull/89)).
+* [#86](https://github.com/mnapoli/PHP-DI/issues/86): Optimized definition lookup (faster)
+
 ## 3.2
 
 Read the [news entry](news/02-php-di-3-2.md).
