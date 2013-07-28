@@ -27,5 +27,13 @@ interface FactoryInterface
      * @return object The instance
      */
     function createInstance(ClassDefinition $classDefinition);
+
+    /**
+     * @param ClassDefinition $classDefinition
+     * @param object          $instance
+     *
+     * @return object The instance
+     */
     function injectInstance(ClassDefinition $classDefinition, $instance);
+
 }

@@ -155,11 +155,11 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
     /**
      * Test that injecting an existing object returns the same reference to that object
      */
-    public function testInjectMaintainsReferentialEquality()
+    public function testInjectAllMaintainsReferentialEquality()
     {
         $container = new Container();
         $instance = new stdClass();
-        $result = $container->inject($instance);
+        $result = $container->injectAll($instance);
 
         $this->assertSame($instance, $result);
     }
@@ -170,7 +170,7 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
     public function testInjectNull()
     {
         $container = new Container();
-        $result = $container->inject(null);
+        $result = $container->injectAll(null);
 
         $this->assertEquals($result, null);
     }

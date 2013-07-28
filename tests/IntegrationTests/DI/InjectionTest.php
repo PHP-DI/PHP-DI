@@ -180,7 +180,7 @@ class InjectionTest extends \PHPUnit_Framework_TestCase
         }
         /** @var $class1 Class1 */
         $class1 = new Class1(new Class2(), new Implementation1());
-        $container->inject($class1);
+        $container->injectAll($class1);
         $this->assertInstanceOf('IntegrationTests\DI\Fixtures\Class2', $class1->property1);
         $this->assertInstanceOf('IntegrationTests\DI\Fixtures\Implementation1', $class1->property2);
         $this->assertInstanceOf('IntegrationTests\DI\Fixtures\Class2', $class1->property3);
@@ -233,7 +233,7 @@ class InjectionTest extends \PHPUnit_Framework_TestCase
         }
         /** @var $class1 Class1 */
         $class1 = new Class1(new Class2(), new Implementation1());
-        $container->inject($class1);
+        $container->injectAll($class1);
         $this->assertInstanceOf('IntegrationTests\DI\Fixtures\Class2', $class1->method1Param1);
         $this->assertInstanceOf('IntegrationTests\DI\Fixtures\Implementation1', $class1->method2Param1);
         $this->assertInstanceOf('IntegrationTests\DI\Fixtures\Class2', $class1->method3Param1);

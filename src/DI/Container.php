@@ -148,12 +148,15 @@ class Container
      * @throws DependencyException
      * @return object $instance
      */
-    public function inject($instance)
+    public function injectAll($instance)
     {
-        $className = get_class($instance);
-        $definition = $this->definitionManager->getDefinition($className);
+        $definition = $this->definitionManager->getDefinition(get_class($instance));
 
-        $instance = $this->factory->injectInstance($definition, $instance);
+        // Check that the definition is a class definition
+        if ($definition instanceof ClassDefinition) {
+            $instance = $this->factory->injectInstance($definition, $instance);
+        }
+
         return $instance;
     }
 
