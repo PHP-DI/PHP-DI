@@ -260,4 +260,12 @@ class ClassDefinition implements Definition
         return true;
     }
 
+    /**
+     * {@inheritdoc}
+     */
+    public static function isMergeable()
+    {
+        return true;
+    }
+
 }

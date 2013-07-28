@@ -26,40 +26,25 @@ class ValueDefinitionTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(1, $definition->getValue());
     }
 
-    /**
-     * @expectedException \DI\Definition\Exception\DefinitionException
-     * @expectedExceptionMessage DI definition conflict: there are 2 different definitions for 'foo' that are incompatible, they are not of the same type
-     */
-    public function testMergeIncompatibleTypes()
-    {
-        $definition = new ValueDefinition('foo', 1);
-        $definition->merge(new ClassDefinition('foo', 'bar'));
-    }
-
-    public function testMerge1()
-    {
-        $definition1 = new ValueDefinition('foo', 1);
-        $definition2 = new ValueDefinition('foo', 2);
-
-        $definition1->merge($definition2);
-
-        $this->assertEquals(2, $definition1->getValue());
-    }
-
-    public function testMerge2()
-    {
-        $definition1 = new ValueDefinition('foo', 2);
-        $definition2 = new ValueDefinition('foo', 1);
-
-        $definition1->merge($definition2);
-
-        $this->assertEquals(1, $definition1->getValue());
-    }
-
     public function testCacheable()
     {
         $definition = new ValueDefinition('foo', 1);
         $this->assertFalse($definition->isCacheable());
+    }
+
+    public function testMergeable()
+    {
+        $this->assertFalse(ValueDefinition::isMergeable());
+    }
+
+    /**
+     * @expectedException \BadMethodCallException
+     */
+    public function testMerge()
+    {
+        $definition1 = new ValueDefinition('foo', 1);
+        $definition2 = new ValueDefinition('foo', 2);
+        $definition1->merge($definition2);
     }
 
 }
