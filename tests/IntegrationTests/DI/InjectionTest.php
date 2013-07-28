@@ -9,6 +9,7 @@
 
 namespace IntegrationTests\DI;
 
+use DI\ContainerBuilder;
 use DI\Definition\FileLoader\ArrayDefinitionFileLoader;
 use DI\Definition\FileLoader\YamlDefinitionFileLoader;
 use DI\Scope;
@@ -38,9 +39,10 @@ class InjectionTest extends \PHPUnit_Framework_TestCase
     public static function containerProvider()
     {
         // Test with a container using reflection
-        $containerReflection = new Container();
-        $containerReflection->useReflection(true);
-        $containerReflection->useAnnotations(false);
+        $builder = new ContainerBuilder();
+        $builder->useReflection(true);
+        $builder->useAnnotations(false);
+        $containerReflection = $builder->build();
         $containerReflection->addDefinitions(
             array(
                 'foo'                                     => 'bar',
@@ -54,9 +56,10 @@ class InjectionTest extends \PHPUnit_Framework_TestCase
         );
 
         // Test with a container using annotations and reflection
-        $containerAnnotations = new Container();
-        $containerAnnotations->useReflection(true);
-        $containerAnnotations->useAnnotations(true);
+        $builder = new ContainerBuilder();
+        $builder->useReflection(true);
+        $builder->useAnnotations(true);
+        $containerAnnotations = $builder->build();
         $containerAnnotations->addDefinitions(
             array(
                 'foo'                                     => 'bar',
@@ -70,16 +73,18 @@ class InjectionTest extends \PHPUnit_Framework_TestCase
         );
 
         // Test with a container using array configuration
-        $containerArray = new Container();
-        $containerArray->useReflection(false);
-        $containerArray->useAnnotations(false);
+        $builder = new ContainerBuilder();
+        $builder->useReflection(false);
+        $builder->useAnnotations(false);
+        $containerArray = $builder->build();
         $array = require __DIR__ . '/Fixtures/definitions.php';
         $containerArray->addDefinitions($array);
 
         // Test with a container using PHP configuration
-        $containerPHP = new Container();
-        $containerPHP->useReflection(false);
-        $containerPHP->useAnnotations(false);
+        $builder = new ContainerBuilder();
+        $builder->useReflection(false);
+        $builder->useAnnotations(false);
+        $containerPHP = $builder->build();
         $containerPHP->set('foo', 'bar');
         $containerPHP->set('IntegrationTests\DI\Fixtures\Class1')
             ->withScope(Scope::PROTOTYPE())
@@ -111,16 +116,18 @@ class InjectionTest extends \PHPUnit_Framework_TestCase
         $containerPHP->set('IntegrationTests\DI\Fixtures\LazyDependency');
 
         // Test with a container using array configuration loaded from file
-        $containerArrayFromFile = new Container();
-        $containerArrayFromFile->useReflection(false);
-        $containerArrayFromFile->useAnnotations(false);
-        $containerArrayFromFile->addDefinitionsFromFile(new ArrayDefinitionFileLoader(__DIR__ . '/Fixtures/definitions.php'));
+        $builder = new ContainerBuilder();
+        $builder->useReflection(false);
+        $builder->useAnnotations(false);
+        $builder->addDefinitionsFromFile(new ArrayDefinitionFileLoader(__DIR__ . '/Fixtures/definitions.php'));
+        $containerArrayFromFile = $builder->build();
 
         // Test with a container using array configuration loaded from file
-        $containerYaml = new Container();
-        $containerYaml->useReflection(false);
-        $containerYaml->useAnnotations(false);
-        $containerYaml->addDefinitionsFromFile(new YamlDefinitionFileLoader(__DIR__ . '/Fixtures/definitions.yml'));
+        $builder = new ContainerBuilder();
+        $builder->useReflection(false);
+        $builder->useAnnotations(false);
+        $builder->addDefinitionsFromFile(new YamlDefinitionFileLoader(__DIR__ . '/Fixtures/definitions.yml'));
+        $containerYaml = $builder->build();
 
         return array(
             array(self::DEFINITION_REFLECTION, $containerReflection),
