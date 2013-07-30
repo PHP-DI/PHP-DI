@@ -9,11 +9,7 @@
 
 namespace UnitTests\DI\Definition\Source\Annotation\Fixtures;
 
-
-
 class SomeDependencyFixture
 {
-
-
 
 }

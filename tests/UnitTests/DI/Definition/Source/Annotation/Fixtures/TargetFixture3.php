@@ -9,7 +9,6 @@
 
 namespace UnitTests\DI\Definition\Source\Annotation\Fixtures;
 
-
 /**
  * Has a dependency in the local namespace
  *
@@ -24,12 +23,10 @@ class TargetFixture3
      */
     protected $dependency1;
 
-
     /**
      * @var Subspace\SomeDependencyFixture2
      */
     protected $dependency2;
-
 
     /**
      * @param SomeDependencyFixture $dependency1
@@ -37,7 +34,6 @@ class TargetFixture3
      */
     public function SomeMethod($dependency1, $dependency2)
     {
-
     }
 
 }

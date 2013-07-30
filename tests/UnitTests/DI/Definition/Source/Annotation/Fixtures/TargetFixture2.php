@@ -9,7 +9,6 @@
 
 namespace UnitTests\DI\Definition\Source\Annotation\Fixtures;
 
-
 use UnitTests\DI\Definition\Source\Annotation\Fixtures\Subspace\SomeDependencyFixture2 as SomeDependencyFixture;
 
 /**
@@ -26,12 +25,10 @@ class TargetFixture2
      */
     protected $dependency1;
 
-
     /**
      * @var Subspace\SomeDependencyFixture2
      */
     protected $dependency2;
-
 
     /**
      * @param SomeDependencyFixture $dependency1
@@ -39,7 +36,6 @@ class TargetFixture2
      */
     public function SomeMethod($dependency1, $dependency2)
     {
-
     }
 
 }

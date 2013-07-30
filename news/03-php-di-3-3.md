@@ -6,7 +6,11 @@ I am happy to announce that PHP-DI version 3.3 has just been released.
 
 The major new feature is the possibility to inject all dependencies of **an existing instance**.
 
+But before jumping into that, did you know there's an article on [how PHP-DI works](../doc/how-it-works.md).
+
 ## Container::injectOn()
+
+*Read the full documentation [here](../doc/inject-on-instance.md)*
 
 ```php
 $myObject = new MyClass();

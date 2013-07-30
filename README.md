@@ -18,6 +18,7 @@ PHP-DI also tries to avoid falling into the trap of the "Service Locator" antipa
 * **Performances**: supports a large number of Caches
 * Lazy injection: lazy-loading of dependencies
 * Supports constructor injection, setter injection and property injection
+* Easy integration with any framework with [Injection over an existing instance](doc/inject-on-instance.md)
 
 
 ## Usage

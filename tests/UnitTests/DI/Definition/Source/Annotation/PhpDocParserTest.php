@@ -18,7 +18,9 @@ use Doctrine\Common\Annotations\Annotation\Target;
 class PhpDocParserTest extends \PHPUnit_Framework_TestCase
 {
 
-    //https://github.com/mnapoli/PHP-DI/issues/87
+    /**
+     * @see https://github.com/mnapoli/PHP-DI/issues/87
+     */
     public function testGetParameterTypeUseStatementBeforeLocalNamespace()
     {
         $parser = new PhpDocParser();
@@ -77,17 +79,15 @@ class PhpDocParserTest extends \PHPUnit_Framework_TestCase
 
         //this parameter should be unaffected by use namespace since it has a relative type path
         $this->assertEquals('UnitTests\DI\Definition\Source\Annotation\Fixtures\Subspace\SomeDependencyFixture2', $result);
-
-
-
     }
 
 
-    //This test ensures that use statements in class files take precedence in resolving type annotations
-    //see https://github.com/mnapoli/PHP-DI/issues/87
+    /**
+     * This test ensures that use statements in class files take precedence in resolving type annotations
+     * @see https://github.com/mnapoli/PHP-DI/issues/87
+     */
     public function testGetPropertyTypeUseStatementBeforeLocalNamespace()
     {
-
         $parser = new PhpDocParser();
 
         $target1 = new Fixtures\TargetFixture1();
@@ -147,8 +147,6 @@ class PhpDocParserTest extends \PHPUnit_Framework_TestCase
 
         //this property should be unaffected by use namespace since it has a relative type path
         $this->assertEquals('UnitTests\DI\Definition\Source\Annotation\Fixtures\Subspace\SomeDependencyFixture2', $result);
-
     }
-
 
 }
