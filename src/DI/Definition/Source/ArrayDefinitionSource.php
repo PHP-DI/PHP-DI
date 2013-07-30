@@ -43,9 +43,8 @@ class ArrayDefinitionSource implements DefinitionSource
                 $definition = new ClassDefinition($name);
                 $this->mergeWithParents($name, $definition);
                 return $definition;
-            } else {
-                return null;
             }
+            return null;
         }
         $arrayDefinition = $this->definitions[$name];
 
@@ -128,35 +127,36 @@ class ArrayDefinitionSource implements DefinitionSource
      */
     private function readPropertyInjections(ClassDefinition $definition, array $arrayDefinition)
     {
-        if (array_key_exists('properties', $arrayDefinition)) {
-            foreach ($arrayDefinition['properties'] as $propertyName => $arrayPropertyDefinition) {
+        if (!array_key_exists('properties', $arrayDefinition)) {
+            return;
+        }
+        foreach ($arrayDefinition['properties'] as $propertyName => $arrayPropertyDefinition) {
 
-                // Full definition: array
-                if (is_array($arrayPropertyDefinition)) {
-                    // Name
-                    if (!array_key_exists('name', $arrayPropertyDefinition)) {
-                        throw new DefinitionException("Key 'name' not found in array definition of "
-                            . $definition->getName() . "::$propertyName");
-                    }
-                    $name = $arrayPropertyDefinition['name'];
+            // Full definition: array
+            if (is_array($arrayPropertyDefinition)) {
+                // Name
+                if (!array_key_exists('name', $arrayPropertyDefinition)) {
+                    throw new DefinitionException("Key 'name' not found in array definition of "
+                        . $definition->getName() . "::$propertyName");
+                }
+                $name = $arrayPropertyDefinition['name'];
 
-                    $propertyInjection = new PropertyInjection($propertyName, $name);
+                $propertyInjection = new PropertyInjection($propertyName, $name);
 
-                    // Lazy
-                    if (array_key_exists('lazy', $arrayPropertyDefinition)) {
-                        $propertyInjection->setLazy($arrayPropertyDefinition['lazy']);
-                    }
-
-                    $definition->addPropertyInjection($propertyInjection);
+                // Lazy
+                if (array_key_exists('lazy', $arrayPropertyDefinition)) {
+                    $propertyInjection->setLazy($arrayPropertyDefinition['lazy']);
                 }
 
-                // Shortcut: string
-                if (is_string($arrayPropertyDefinition)) {
-                    $propertyInjection = new PropertyInjection($propertyName, $arrayPropertyDefinition);
-                    $definition->addPropertyInjection($propertyInjection);
-                }
-
+                $definition->addPropertyInjection($propertyInjection);
             }
+
+            // Shortcut: string
+            if (is_string($arrayPropertyDefinition)) {
+                $propertyInjection = new PropertyInjection($propertyName, $arrayPropertyDefinition);
+                $definition->addPropertyInjection($propertyInjection);
+            }
+
         }
     }
 
