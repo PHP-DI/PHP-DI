@@ -9,13 +9,12 @@
 
 namespace DI\Definition\Source;
 
-use DI\Definition\ClassDefinition;
-use DI\Definition\ClosureDefinition;
 use DI\Definition\Definition;
-use DI\Definition\ValueDefinition;
 
 /**
  * A source that merges the definitions of several sub-sources
+ *
+ * Priority is managed with order: highest (added first) to lowest (added last)
  *
  * @author Matthieu Napoli <matthieu@mnapoli.fr>
  */
@@ -43,7 +42,16 @@ class CombinedDefinitionSource implements DefinitionSource
                 continue;
             }
 
-            $definition = $this->mergeDefinitions($definition, $subDefinition);
+            // If the definition can't be merged with other definitions, then we stop looking further
+            if (! $subDefinition::isMergeable()) {
+                return $subDefinition;
+            }
+
+            if ($definition) {
+                $subDefinition->merge($definition);
+            }
+
+            $definition = $subDefinition;
         }
 
         return $definition;
@@ -76,37 +84,6 @@ class CombinedDefinitionSource implements DefinitionSource
     public function addSource($source)
     {
         $this->subSources[] = $source;
-    }
-
-    private function mergeDefinitions(Definition $definition1 = null, Definition $definition2 = null)
-    {
-        if ($definition1 === null) {
-            return $definition2;
-        }
-        if ($definition2 === null) {
-            return $definition1;
-        }
-
-        // A ValueDefinition always prevails on ClassDefinition
-        // @see https://github.com/mnapoli/PHP-DI/issues/70
-        if ($definition1 instanceof ValueDefinition && $definition2 instanceof ClassDefinition) {
-            return $definition1;
-        }
-        if ($definition1 instanceof ClassDefinition && $definition2 instanceof ValueDefinition) {
-            return $definition2;
-        }
-
-        // A ClosureDefinition always prevails on ClassDefinition
-        // @see https://github.com/mnapoli/PHP-DI/issues/76
-        if ($definition1 instanceof ClosureDefinition && $definition2 instanceof ClassDefinition) {
-            return $definition1;
-        }
-        if ($definition1 instanceof ClassDefinition && $definition2 instanceof ClosureDefinition) {
-            return $definition2;
-        }
-
-        $definition1->merge($definition2);
-        return $definition1;
     }
 
 }

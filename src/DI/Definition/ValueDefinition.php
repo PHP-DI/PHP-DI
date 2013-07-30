@@ -9,8 +9,6 @@
 
 namespace DI\Definition;
 
-use DI\Definition\Exception\DefinitionException;
-
 /**
  * Definition of a value for dependency injection
  *
@@ -61,19 +59,21 @@ class ValueDefinition implements Definition
      */
     public function merge(Definition $definition)
     {
-        if ($definition instanceof ValueDefinition) {
-            // The latter prevails
-            $this->value = $definition->getValue();
-        } else {
-            throw new DefinitionException("DI definition conflict: there are 2 different definitions for '"
-                . $definition->getName() . "' that are incompatible, they are not of the same type");
-        }
+        throw new \BadMethodCallException("Impossible to merge a ValueDefinition with another definition");
     }
 
     /**
      * {@inheritdoc}
      */
     public function isCacheable()
+    {
+        return false;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public static function isMergeable()
     {
         return false;
     }

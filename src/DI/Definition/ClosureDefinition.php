@@ -75,19 +75,21 @@ class ClosureDefinition implements Definition
      */
     public function merge(Definition $definition)
     {
-        if ($definition instanceof ClosureDefinition) {
-            // The latter prevails
-            $this->closure = $definition->getClosure();
-        } else {
-            throw new DefinitionException("DI definition conflict: there are 2 different definitions for '"
-                . $definition->getName() . "' that are incompatible, they are not of the same type");
-        }
+        throw new \BadMethodCallException("Impossible to merge a ClosureDefinition with another definition");
     }
 
     /**
      * {@inheritdoc}
      */
     public function isCacheable()
+    {
+        return false;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public static function isMergeable()
     {
         return false;
     }
