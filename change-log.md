@@ -2,8 +2,11 @@
 
 ## 3.3
 
-* Inject dependencies on an existing instance with `Container::injectAll` (work from Jeff Flitton: [#89](https://github.com/mnapoli/PHP-DI/pull/89)).
+Read the [news entry](news/03-php-di-3-3.md).
+
+* Inject dependencies on an existing instance with `Container::injectOn` (work from [Jeff Flitton](https://github.com/jflitton): [#89](https://github.com/mnapoli/PHP-DI/pull/89)).
 * [#86](https://github.com/mnapoli/PHP-DI/issues/86): Optimized definition lookup (faster)
+* FIXED [#87](https://github.com/mnapoli/PHP-DI/issues/87): Rare bug in the `PhpDocParser`, fixed by [drdamour](https://github.com/drdamour)
 
 ## 3.2
 

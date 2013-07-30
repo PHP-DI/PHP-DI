@@ -1,5 +1,7 @@
 # News
 
-- July 23rd 2013. [PHP-DI 3.2 released](02-php-di-3-2.md)
+- July 30th 2013. [PHP-DI 3.3 released](03-php-di-3-3.md): Inject dependencies into an existing instance and more…
 
-- June 23rd 2013. [PHP-DI 3.1 released](01-php-di-3-1.md)
+- July 23rd 2013. [PHP-DI 3.2 released](02-php-di-3-2.md): Lazy injection, `ContainerBuilder` and more…
+
+- June 23rd 2013. [PHP-DI 3.1 released](01-php-di-3-1.md): Zend Framework 1 integration and more…
