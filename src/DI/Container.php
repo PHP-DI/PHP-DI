@@ -141,14 +141,14 @@ class Container
     }
 
     /**
-     * Performs injection on an existing instance
+     * Inject all dependencies on an existing instance
      *
      * @param object $instance Object to perform injection upon
      * @throws InvalidArgumentException
      * @throws DependencyException
-     * @return object $instance
+     * @return object $instance Returns the same instance
      */
-    public function injectAll($instance)
+    public function injectOn($instance)
     {
         $definition = $this->definitionManager->getDefinition(get_class($instance));
 
