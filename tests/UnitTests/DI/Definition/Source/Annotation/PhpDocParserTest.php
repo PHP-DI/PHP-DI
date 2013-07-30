@@ -37,7 +37,7 @@ class PhpDocParserTest extends \PHPUnit_Framework_TestCase
 
         $result = $parser->getParameterType($target1ReflectionClass, $target1ReflectionMethod, $target1ReflectionParams[1]);
 
-        //this property should be unaffected by use namespace since it has a relative type path
+        //this parameter should be unaffected by use namespace since it has a relative type path
         $this->assertEquals('UnitTests\DI\Definition\Source\Annotation\Fixtures\Subspace\SomeDependencyFixture2', $result);
 
 
@@ -56,7 +56,7 @@ class PhpDocParserTest extends \PHPUnit_Framework_TestCase
 
         $result = $parser->getParameterType($target2ReflectionClass, $target2ReflectionMethod, $target2ReflectionParams[1]);
 
-        //this property should be unaffected by use namespace since it has a relative type path
+        //this parameter should be unaffected by use namespace since it has a relative type path
         $this->assertEquals('UnitTests\DI\Definition\Source\Annotation\Fixtures\Subspace\SomeDependencyFixture2', $result);
 
 
@@ -75,7 +75,7 @@ class PhpDocParserTest extends \PHPUnit_Framework_TestCase
 
         $result = $parser->getParameterType($target3ReflectionClass, $target3ReflectionMethod, $target3ReflectionParams[1]);
 
-        //this property should be unaffected by use namespace since it has a relative type path
+        //this parameter should be unaffected by use namespace since it has a relative type path
         $this->assertEquals('UnitTests\DI\Definition\Source\Annotation\Fixtures\Subspace\SomeDependencyFixture2', $result);
 
 
