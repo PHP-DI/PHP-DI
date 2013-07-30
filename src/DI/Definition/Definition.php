@@ -40,4 +40,11 @@ interface Definition
      */
     public function isCacheable();
 
+    /**
+     * Returns true if the definition is mergeable with other definitions
+     *
+     * @return bool
+     */
+    public static function isMergeable();
+
 }

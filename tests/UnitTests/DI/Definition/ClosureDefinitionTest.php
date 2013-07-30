@@ -48,19 +48,15 @@ class ClosureDefinitionTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(1, $definition->getValue($container));
     }
 
+    public function testMergeable()
+    {
+        $this->assertFalse(ClosureDefinition::isMergeable());
+    }
+
     /**
-     * @expectedException \DI\Definition\Exception\DefinitionException
-     * @expectedExceptionMessage DI definition conflict: there are 2 different definitions for 'foo' that are incompatible, they are not of the same type
+     * @expectedException \BadMethodCallException
      */
-    public function testMergeIncompatibleTypes()
-    {
-        $definition = new ClosureDefinition('foo', function() {
-            return 1;
-        });
-        $definition->merge(new ClassDefinition('foo', 'bar'));
-    }
-
-    public function testMerge1()
+    public function testMerge()
     {
         $definition1 = new ClosureDefinition('foo', function() {
             return 1;
@@ -68,30 +64,7 @@ class ClosureDefinitionTest extends \PHPUnit_Framework_TestCase
         $definition2 = new ClosureDefinition('foo', function() {
             return 2;
         });
-
         $definition1->merge($definition2);
-
-        $container = $this->getMockBuilder('DI\Container')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->assertEquals(2, $definition1->getValue($container));
-    }
-
-    public function testMerge2()
-    {
-        $definition1 = new ClosureDefinition('foo', function() {
-            return 2;
-        });
-        $definition2 = new ClosureDefinition('foo', function() {
-            return 1;
-        });
-
-        $definition1->merge($definition2);
-
-        $container = $this->getMockBuilder('DI\Container')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->assertEquals(1, $definition1->getValue($container));
     }
 
 }

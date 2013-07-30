@@ -41,7 +41,7 @@ class Factory implements FactoryInterface
     /**
      * {@inheritdoc}
      * @throws DependencyException
-     * @throws \DI\Definition\Exception\DefinitionException
+     * @throws DefinitionException
      */
     public function createInstance(ClassDefinition $classDefinition)
     {
@@ -52,24 +52,27 @@ class Factory implements FactoryInterface
         }
 
         try {
-            // Constructor injection
             $instance = $this->injectConstructor($classReflection, $classDefinition->getConstructorInjection());
 
-            // Property injections
-            foreach ($classDefinition->getPropertyInjections() as $propertyInjection) {
-                $this->injectProperty($instance, $propertyInjection);
-            }
-
-            // Method injections
-            foreach ($classDefinition->getMethodInjections() as $methodInjection) {
-                $this->injectMethod($instance, $methodInjection);
-            }
-        } catch (DependencyException $e) {
-            throw $e;
-        } catch (DefinitionException $e) {
-            throw $e;
+            $this->injectMethodsAndProperties($instance, $classDefinition);
         } catch (NotFoundException $e) {
             throw new DependencyException("Error while injecting dependencies into $classReflection->name: " . $e->getMessage(), 0, $e);
+        }
+
+        return $instance;
+    }
+
+    /**
+     * {@inheritdoc}
+     * @throws DependencyException
+     * @throws DefinitionException
+    */
+    public function injectInstance(ClassDefinition $classDefinition, $instance)
+    {
+        try {
+            $this->injectMethodsAndProperties($instance, $classDefinition);
+        } catch (NotFoundException $e) {
+            throw new DependencyException("Error while injecting dependencies into " . $classDefinition->getClassName() . ": " . $e->getMessage(), 0, $e);
         }
 
         return $instance;
@@ -117,6 +120,22 @@ class Factory implements FactoryInterface
         }
 
         return $classReflection->newInstanceArgs($args);
+    }
+
+    /**
+     * @param object          $instance
+     * @param ClassDefinition $classDefinition
+     */
+    private function injectMethodsAndProperties($instance, ClassDefinition $classDefinition)
+    {
+        // Property injections
+        foreach ($classDefinition->getPropertyInjections() as $propertyInjection) {
+            $this->injectProperty($instance, $propertyInjection);
+        }
+        // Method injections
+        foreach ($classDefinition->getMethodInjections() as $methodInjection) {
+            $this->injectMethod($instance, $methodInjection);
+        }
     }
 
     /**

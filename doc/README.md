@@ -11,6 +11,7 @@
 Extra topics:
 
 * [Performances](performances.md)
+* [Inject on an existing instance](inject-on-instance.md)
 * [Contribute](../CONTRIBUTING.md)
 * [How PHP-DI works](how-it-works.md)
 

@@ -276,19 +276,23 @@ class DefinitionManager
      */
     private function updateCombinedSource()
     {
+        // Sources are added from highest priority to least priority
         $this->combinedSource = new CombinedDefinitionSource();
 
-        // Sources are added from least priority to highest priority
-        if ($this->reflectionSource) {
-            $this->combinedSource->addSource($this->reflectionSource);
+        $this->combinedSource->addSource($this->simpleSource);
+
+        // Traverses the array reverse
+        foreach (array_reverse($this->arraySources) as $arraySource) {
+            $this->combinedSource->addSource($arraySource);
         }
+
         if ($this->annotationSource) {
             $this->combinedSource->addSource($this->annotationSource);
         }
-        foreach ($this->arraySources as $arraySource) {
-            $this->combinedSource->addSource($arraySource);
+
+        if ($this->reflectionSource) {
+            $this->combinedSource->addSource($this->reflectionSource);
         }
-        $this->combinedSource->addSource($this->simpleSource);
     }
 
 }

@@ -19,7 +19,6 @@ class Issue70and76Test extends \PHPUnit_Framework_TestCase
 {
 
     /**
-     * Should not throw a "DI definition conflict" exception
      * @test
      */
     public function valueDefinitionShouldOverrideReflectionDefinition()
@@ -31,7 +30,6 @@ class Issue70and76Test extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Should not throw a "DI definition conflict" exception
      * @test
      */
     public function closureDefinitionShouldOverrideReflectionDefinition()
@@ -42,22 +40,6 @@ class Issue70and76Test extends \PHPUnit_Framework_TestCase
                 return 'foo';
             });
         $this->assertEquals('foo', $container->get('stdClass'));
-    }
-
-    /**
-     * @test
-     * @expectedException \DI\Definition\Exception\DefinitionException
-     * @expectedExceptionMessage DI definition conflict
-     */
-    public function valueAndClosureDefinitionConflictShouldThrowException()
-    {
-        $container = new Container();
-
-        $container->set('stdClass', 'foo');
-        $container->addDefinitions(array('stdClass' => function() {
-                return 'foo';
-            }));
-        $container->get('stdClass');
     }
 
 }
