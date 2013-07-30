@@ -65,30 +65,61 @@
 
     <div class="main">
         <div class="container-fluid">
-<h1>Documentation</h1>
+<h1>PHP-DI 3.3 released</h1>
+
+<p><em>Posted by <a href="https://github.com/mnapoli">Matthieu Napoli</a> on July 30rd 2013</em></p>
+
+<p>I am happy to announce that PHP-DI version 3.3 has just been released.</p>
+
+<p>The major new feature is the possibility to inject all dependencies of <strong>an existing instance</strong>.</p>
+
+<p>But before jumping into that, did you know there&#39;s an article on <a href="../doc/how-it-works">how PHP-DI works</a>.</p>
+
+<h2>Container::injectOn()</h2>
+
+<p><em>Read the full documentation <a href="../doc/inject-on-instance">here</a></em></p>
+
+<pre><code class="php">$myObject = new MyClass();
+
+$container-&gt;injectOn($myObject);
+</code></pre>
+
+<p>Now, <code>$myObject</code> has all its dependencies injected (setter injections and property injections).</p>
+
+<p>It is basically the same as <code>$myObject = $container-&gt;get(&#39;MyClass&#39;)</code> except <strong>you</strong> create the instance.</p>
+
+<h3>Why?</h3>
+
+<p>Weird right? Well it&#39;s not supposed to be used everywhere.</p>
+
+<p>Hopefully, that will help <strong>a lot</strong> to integrate PHP-DI with other frameworks:</p>
 
 <ul>
-<li><a href="example">Introduction to dependency injection with an example</a></li>
-<li><a href="getting-started">Getting started</a></li>
-<li><a href="container-configuration">Configure the container</a></li>
-<li><a href="definition">Define injections</a></li>
-<li><a href="definition-overriding">Definition overriding</a></li>
-<li><a href="lazy-injection">Lazy injection</a></li>
-<li><a href="scopes">Scopes</a></li>
+<li><strong>MVC frameworks</strong> (Symfony 2, Zend Framework 2, …): inject dependencies of the controller, in the controller itself.</li>
+<li><strong>Tests</strong> (PHPUnit, …): inject tools in your test class, for example a logger, a timer (for performance test), <strong>the entity manager</strong> (for integration tests), …</li>
 </ul>
 
-<p>Extra topics:</p>
+<p>Example:</p>
 
-<ul>
-<li><a href="performances">Performances</a></li>
-<li><a href="inject-on-instance">Inject on an existing instance</a></li>
-<li><a href="../CONTRIBUTING">Contribute</a></li>
-<li><a href="how-it-works">How PHP-DI works</a></li>
-</ul>
+<pre><code class="php">class MyController {
+    public function __construct() {
+        // get container ...
+        $container-&gt;injectOn($this);
+    }
+}
+</code></pre>
 
-<h3>License</h3>
+<p><strong>Of course</strong>, the preferred method is still to use <code>$container-&gt;get()</code>. But sometimes you can&#39;t get to the root of the framework to intercept the creation of your objects (I&#39;m looking at you most MVC frameworks, PHPUnit &amp; …)</p>
 
-<p>PHP-DI is under the MIT license.</p>
+<h3>Good to know</h3>
+
+<p>PHP-DI will not perform any constructor injection. But of course most of the time you&#39;ll be using that feature is when you can&#39;t/don&#39;t want to use the constructor for getting your dependencies.</p>
+
+<h2>Change log</h2>
+
+<p>Except this feature, 3.3 contains an optimization for definition resolution and a bugfix for a rare situation.</p>
+
+<p>Read all the changes and their authors in the <a href="../change-log">change log</a>.</p>
             <div class="github">
                 PHP-DI is an open source project, you can contribute or seek help on
                 <a class="btn btn-mini" href="https://github.com/mnapoli/PHP-DI/" target="_blank">

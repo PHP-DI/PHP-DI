@@ -65,30 +65,58 @@
 
     <div class="main">
         <div class="container-fluid">
-<h1>Documentation</h1>
+<h1>Inject on an existing instance</h1>
+
+<p><em>Feature introduced in PHP-DI 3.3</em></p>
+
+<p>The standard way of using a container is to get an object from it, with all its dependencies injected:</p>
+
+<pre><code class="php">$object = $container-&gt;get(&#39;foo&#39;);
+</code></pre>
+
+<p>But in some situations, you don&#39;t have the control of the creation of an object, yet <strong>you want to resolve its dependencies</strong>.</p>
+
+<p>PHP-DI offers the <code>injectOn</code> method:</p>
+
+<pre><code class="php">// $object is an instance of some class
+
+$container-&gt;injectOn($object);
+</code></pre>
+
+<p>Now, <code>$object</code> has all its dependencies injected (through setter injections and property injections).</p>
+
+<h2>Constructor injection</h2>
+
+<p>PHP-DI will not perform any constructor injection (because the instance is already created).</p>
+
+<p>If you create the object yourself, you&#39;ll have to do the constructor injection yourself:</p>
+
+<pre><code class="php">$object = new MyClass($someDependency, $someOtherDependency);
+$container-&gt;injectOn($object);
+</code></pre>
+
+<p>If you get the object from some library/framework, then just call <code>injectOn()</code></p>
+
+<h3>Why?</h3>
+
+<p>Hopefully, that will help to integrate PHP-DI with other frameworks:</p>
 
 <ul>
-<li><a href="example">Introduction to dependency injection with an example</a></li>
-<li><a href="getting-started">Getting started</a></li>
-<li><a href="container-configuration">Configure the container</a></li>
-<li><a href="definition">Define injections</a></li>
-<li><a href="definition-overriding">Definition overriding</a></li>
-<li><a href="lazy-injection">Lazy injection</a></li>
-<li><a href="scopes">Scopes</a></li>
+<li><strong>MVC frameworks</strong> (Symfony 2, Zend Framework 2, …): inject dependencies of the controller, in the controller itself.</li>
+<li><strong>Tests</strong> (PHPUnit, …): inject tools in your test class, for example a logger, a timer (for performance test), <strong>the entity manager</strong> (for integration tests), …</li>
 </ul>
 
-<p>Extra topics:</p>
+<p>Example:</p>
 
-<ul>
-<li><a href="performances">Performances</a></li>
-<li><a href="inject-on-instance">Inject on an existing instance</a></li>
-<li><a href="../CONTRIBUTING">Contribute</a></li>
-<li><a href="how-it-works">How PHP-DI works</a></li>
-</ul>
+<pre><code class="php">class MyController {
+    public function __construct() {
+        // get container ...
+        $container-&gt;injectOn($this);
+    }
+}
+</code></pre>
 
-<h3>License</h3>
-
-<p>PHP-DI is under the MIT license.</p>
+<p><strong>Of course</strong>, the preferred method is still to use <code>$container-&gt;get()</code>. But sometimes you can&#39;t get to the root of the framework to intercept the creation of your objects.</p>
             <div class="github">
                 PHP-DI is an open source project, you can contribute or seek help on
                 <a class="btn btn-mini" href="https://github.com/mnapoli/PHP-DI/" target="_blank">
