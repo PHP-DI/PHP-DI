@@ -64,16 +64,16 @@ class PhpDocParser
 
             $found = false;
 
-            if ($this->classExists($class->getNamespaceName() . '\\' . $type)) {
-                $type = $class->getNamespaceName() . '\\' . $type;
-                $found = true;
-            } elseif (isset($uses[$loweredAlias])) {
+            if (isset($uses[$loweredAlias])) {
                 // Imported classes
                 if (false !== $pos) {
                     $type = $uses[$loweredAlias] . substr($type, $pos);
                 } else {
                     $type = $uses[$loweredAlias];
                 }
+                $found = true;
+            } elseif ($this->classExists($class->getNamespaceName() . '\\' . $type)) {
+                $type = $class->getNamespaceName() . '\\' . $type;
                 $found = true;
             } elseif (isset($uses['__NAMESPACE__']) && $this->classExists($uses['__NAMESPACE__'] . '\\' . $type)) {
                 // Class namespace
@@ -134,16 +134,16 @@ class PhpDocParser
 
             $found = false;
 
-            if ($this->classExists($class->getNamespaceName() . '\\' . $type)) {
-                $type = $class->getNamespaceName() . '\\' . $type;
-                $found = true;
-            } elseif (isset($uses[$loweredAlias])) {
+            if (isset($uses[$loweredAlias])) {
                 // Imported classes
                 if (false !== $pos) {
                     $type = $uses[$loweredAlias] . substr($type, $pos);
                 } else {
                     $type = $uses[$loweredAlias];
                 }
+                $found = true;
+            } elseif ($this->classExists($class->getNamespaceName() . '\\' . $type)) {
+                $type = $class->getNamespaceName() . '\\' . $type;
                 $found = true;
             } elseif (isset($uses['__NAMESPACE__']) && $this->classExists($uses['__NAMESPACE__'] . '\\' . $type)) {
                 // Class namespace
