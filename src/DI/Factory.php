@@ -116,6 +116,7 @@ class Factory implements FactoryInterface
                     . "' of the constructor of '{$classReflection->name}' has no type defined or guessable");
             }
 
+            // TODO handle lazy injections!
             $args[] = $this->container->get($entryName);
         }
 

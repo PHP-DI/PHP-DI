@@ -62,20 +62,30 @@ class Class1
     /**
      * @param Class2     $param1
      * @param Interface1 $param2
+     * @throws \Exception
      */
-    public function __construct(Class2 $param1, Interface1 $param2)
+    public function __construct(Class2 $param1, Interface1 $param2, $optional = true)
     {
         $this->constructorParam1 = $param1;
         $this->constructorParam2 = $param2;
+
+        if ($optional !== true) {
+            throw new \Exception("Expected optional parameter to not be defined");
+        }
     }
 
     /**
      * @Inject
      * @param Class2 $param1
+     * @throws \Exception
      */
-    public function method1(Class2 $param1)
+    public function method1(Class2 $param1, $optional = true)
     {
         $this->method1Param1 = $param1;
+
+        if ($optional !== true) {
+            throw new \Exception("Expected optional parameter to not be defined");
+        }
     }
 
     /**
