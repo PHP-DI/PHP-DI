@@ -34,3 +34,5 @@ $ phpunit
 ## Coding style
 
 The code follows PSR0, PSR1 and [PSR2](https://github.com/php-fig/fig-standards/blob/master/accepted/PSR-2-coding-style-guide.md).
+
+Also, do not hesitate to add your name to the author list of a class in the docblock if you improve it.
