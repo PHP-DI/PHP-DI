@@ -1,5 +1,7 @@
 # Change log
 
+## 3.4
+
 ## 3.3
 
 Read the [news entry](news/03-php-di-3-3.md).
