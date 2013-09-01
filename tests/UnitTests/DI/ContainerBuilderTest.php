@@ -48,4 +48,52 @@ class ContainerBuilderTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($container->getDefinitionManager()->getDefinitionsValidation());
     }
 
+    public function testFluentInterface()
+    {
+        $builder = new ContainerBuilder();
+
+
+        $result = $builder->useAnnotations(false);
+        $this->assertSame($builder, $result);
+
+        $result = $builder->useAnnotations(true);
+        $this->assertSame($builder, $result);
+
+
+
+        $result = $builder->useReflection(false);
+        $this->assertSame($builder, $result);
+
+        $result = $builder->useReflection(true);
+        $this->assertSame($builder, $result);
+
+
+
+        $result = $builder->writeProxiesToFile(true, 'somedir');
+        $this->assertSame($builder, $result);
+
+        $result = $builder->writeProxiesToFile(false);
+        $this->assertSame($builder, $result);
+
+
+
+        $result = $builder->setDefinitionsValidation(true);
+        $this->assertSame($builder, $result);
+
+        $result = $builder->setDefinitionsValidation(false);
+        $this->assertSame($builder, $result);
+
+
+        $mockCache = $this->getMockForAbstractClass('Doctrine\Common\Cache\Cache');
+        $result = $builder->setDefinitionCache($mockCache);
+        $this->assertSame($builder, $result);
+
+
+        $mockLoader = $this->getMock('DI\Definition\FileLoader\DefinitionFileLoader', array(), array(), '', false);
+        $result = $builder->addDefinitionsFromFile($mockLoader);
+        $this->assertSame($builder, $result);
+
+
+    }
+
 }
