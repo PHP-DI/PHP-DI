@@ -18,7 +18,7 @@ use ProxyManager\Factory\LazyLoadingValueHolderFactory;
 use ProxyManager\GeneratorStrategy\EvaluatingGeneratorStrategy;
 
 /**
- * Helper to create a Container
+ * Fluent helper to create a Container
  *
  * @since 3.2
  * @author Matthieu Napoli <matthieu@mnapoli.fr>
@@ -102,21 +102,25 @@ class ContainerBuilder
      *
      * By default, enabled
      * @param boolean $bool
+     * @return ContainerBuilder
      */
     public function useReflection($bool)
     {
         $this->useReflection = $bool;
+        return $this;
     }
 
     /**
      * Enable or disable the use of annotations
      *
      * By default, enabled
-     * @param boolean $bool
+     * @param $bool
+     * @return ContainerBuilder
      */
     public function useAnnotations($bool)
     {
         $this->useAnnotations = $bool;
+        return $this;
     }
 
     /**
@@ -124,30 +128,36 @@ class ContainerBuilder
      *
      * By default, disabled
      * @param bool $bool
+     * @return ContainerBuilder
      */
     public function setDefinitionsValidation($bool)
     {
         $this->definitionsValidation = $bool;
+        return $this;
     }
 
     /**
      * Enables the use of a cache for the definitions
      *
      * @param Cache $cache Cache backend to use
+     * @return ContainerBuilder
      */
     public function setDefinitionCache(Cache $cache)
     {
         $this->cache = $cache;
+        return $this;
     }
 
     /**
      * Add definitions contained in a file
      *
      * @param DefinitionFileLoader $definitionFileLoader
+     * @return ContainerBuilder
      */
     public function addDefinitionsFromFile(DefinitionFileLoader $definitionFileLoader)
     {
         $this->fileLoaders[] = $definitionFileLoader;
+        return $this;
     }
 
     /**
@@ -158,6 +168,9 @@ class ContainerBuilder
      *
      * @param boolean     $writeToFile If true, write the proxies to disk to improve performances
      * @param string|null $proxyDirectory Directory where to write the proxies
+     * @return ContainerBuilder
+     *
+     * @throws InvalidArgumentException when writeToFile is set to true and the proxy directory is null
      */
     public function writeProxiesToFile($writeToFile, $proxyDirectory = null)
     {
@@ -167,6 +180,8 @@ class ContainerBuilder
             throw new InvalidArgumentException("The proxy directory must be specified if you want to write proxies on disk");
         }
         $this->proxyDirectory = $proxyDirectory;
+
+        return $this;
     }
 
 }
