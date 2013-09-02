@@ -304,6 +304,17 @@ class ArrayDefinitionSourceTest extends \PHPUnit_Framework_TestCase
         $source->getDefinition('foo');
     }
 
+    public function testIndexedNonEmptyArrayAsValidValue()
+    {
+        $source = new ArrayDefinitionSource();
+        $source->addDefinitions(
+            array(
+                'foo' => array('a', 'b', 'c')
+            )
+        );
+        $source->getDefinition('foo');
+    }
+
     public function testClosureDefinition()
     {
         $source = new ArrayDefinitionSource();
