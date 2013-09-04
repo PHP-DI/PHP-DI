@@ -31,12 +31,17 @@ class DefinitionManager
      * Prefix for cache key, to avoid conflicts with other systems using the same cache
      * @var string
      */
-    const CACHE_PREFIX = 'DI\\Definition';
+    const CACHE_PREFIX = 'DI\\Definition\\';
 
     /**
      * @var Cache|null
      */
     private $cache;
+
+    /**
+     * @var string
+     */
+    private $cacheKeyPrefix = '';
 
     /**
      * Source merging definitions of sub-sources
@@ -175,7 +180,7 @@ class DefinitionManager
     /**
      * Add definitions contained in a file
      *
-     * @param \DI\Definition\FileLoader\DefinitionFileLoader $definitionFileLoader
+     * @param DefinitionFileLoader $definitionFileLoader
      * @throws \InvalidArgumentException
      */
     public function addDefinitionsFromFile(DefinitionFileLoader $definitionFileLoader)
@@ -203,13 +208,23 @@ class DefinitionManager
     }
 
     /**
+     * @return string
+     */
+    public function getCacheKeyPrefix()
+    {
+        return $this->cacheKeyPrefix;
+    }
+
+    /**
      * Enables the use of a cache
      *
      * @param Cache|null $cache
+     * @param string     $keyPrefix Optional key prefix to namespace cache entries
      */
-    public function setCache(Cache $cache = null)
+    public function setCache(Cache $cache = null, $keyPrefix = '')
     {
         $this->cache = $cache;
+        $this->cacheKeyPrefix = $keyPrefix;
     }
 
     /**
@@ -246,7 +261,12 @@ class DefinitionManager
             return false;
         }
 
-        $cacheKey = self::CACHE_PREFIX . $name;
+        $keyPrefix = self::CACHE_PREFIX . $this->cacheKeyPrefix;
+        if ($this->cacheKeyPrefix != '') {
+            $keyPrefix .= '\\';
+        }
+
+        $cacheKey = $keyPrefix . $name;
         if (($data = $this->cache->fetch($cacheKey)) !== false) {
             return $data;
         }
@@ -265,7 +285,12 @@ class DefinitionManager
             return;
         }
 
-        $cacheKey = self::CACHE_PREFIX . $name;
+        $keyPrefix = self::CACHE_PREFIX . $this->cacheKeyPrefix;
+        if ($this->cacheKeyPrefix != '') {
+            $keyPrefix .= '\\';
+        }
+
+        $cacheKey = $keyPrefix . $name;
         $this->cache->save($cacheKey, $definition);
     }
 

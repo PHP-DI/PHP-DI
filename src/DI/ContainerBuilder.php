@@ -47,6 +47,11 @@ class ContainerBuilder
     private $cache;
 
     /**
+     * @var string
+     */
+    private $cacheKeyPrefix = '';
+
+    /**
      * @var DefinitionFileLoader[]
      */
     private $fileLoaders = array();
@@ -76,7 +81,7 @@ class ContainerBuilder
             $definitionManager->setDefinitionsValidation($this->definitionsValidation);
         }
         if ($this->cache) {
-            $definitionManager->setCache($this->cache);
+            $definitionManager->setCache($this->cache, $this->cacheKeyPrefix);
         }
         foreach ($this->fileLoaders as $fileLoader) {
             $definitionManager->addDefinitionsFromFile($fileLoader);
@@ -139,12 +144,14 @@ class ContainerBuilder
     /**
      * Enables the use of a cache for the definitions
      *
-     * @param Cache $cache Cache backend to use
+     * @param Cache  $cache Cache backend to use
+     * @param string $keyPrefix Optional key prefix to namespace cache entries
      * @return ContainerBuilder
      */
-    public function setDefinitionCache(Cache $cache)
+    public function setDefinitionCache(Cache $cache, $keyPrefix = '')
     {
         $this->cache = $cache;
+        $this->cacheKeyPrefix = $keyPrefix;
         return $this;
     }
 

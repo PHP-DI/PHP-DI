@@ -34,4 +34,32 @@ class DefinitionManagerTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('foo', $definitionManager->getDefinition('foo'));
     }
 
+    public function testKeyPrefix()
+    {
+        $definitionManager = new DefinitionManager();
+
+        $cache = $this->getMockForAbstractClass('Doctrine\Common\Cache\Cache');
+        $cache->expects($this->once())
+            ->method('fetch')
+            ->with($this->equalTo('DI\\Definition\\foo'));
+
+        $definitionManager->setCache($cache);
+
+        $definitionManager->getDefinition('foo');
+    }
+
+    public function testUserDefinedKeyPrefix()
+    {
+        $definitionManager = new DefinitionManager();
+
+        $cache = $this->getMockForAbstractClass('Doctrine\Common\Cache\Cache');
+        $cache->expects($this->once())
+            ->method('fetch')
+            ->with($this->equalTo('DI\\Definition\\some-prefix\\foo'));
+
+        $definitionManager->setCache($cache, 'some-prefix');
+
+        $definitionManager->getDefinition('foo');
+    }
+
 }
