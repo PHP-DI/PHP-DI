@@ -312,7 +312,9 @@ class ArrayDefinitionSourceTest extends \PHPUnit_Framework_TestCase
                 'foo' => array('a', 'b', 'c')
             )
         );
-        $source->getDefinition('foo');
+        $definition = $source->getDefinition('foo');
+        $this->assertInstanceOf('\\DI\\Definition\\ValueDefinition', $definition);
+        $this->assertEquals(array('a', 'b', 'c'), $definition->getValue());
     }
 
     public function testClosureDefinition()

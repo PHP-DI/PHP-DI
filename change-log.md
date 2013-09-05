@@ -2,6 +2,8 @@
 
 ## 3.4
 
+* You can now define arrays of values (in YAML, PHP, …) [#106](https://github.com/mnapoli/PHP-DI/pull/106/)
+
 ## 3.3
 
 Read the [news entry](news/03-php-di-3-3.md).
