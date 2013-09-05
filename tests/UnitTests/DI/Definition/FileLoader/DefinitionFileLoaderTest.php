@@ -21,4 +21,12 @@ class DefinitionFileLoaderTest extends \PHPUnit_Framework_TestCase
     {
         $this->getMockForAbstractClass('DI\Definition\FileLoader\DefinitionFileLoader', array('abcFile.php'));
     }
+
+    /**
+     * @expectedException \DI\Definition\FileLoader\Exception\FileNotFoundException
+     */
+    public function testFileIsNotADir()
+    {
+        $this->getMockForAbstractClass('DI\Definition\FileLoader\DefinitionFileLoader', array(__DIR__));
+    }
 }

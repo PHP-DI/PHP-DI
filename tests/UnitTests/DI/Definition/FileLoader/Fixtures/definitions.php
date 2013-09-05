@@ -6,6 +6,7 @@ return array(
     'value1' => 'abc',
     'value2' => 123,
     'value3' => true,
+    'value4' => array('bob@acme.example.com', 'alice@acme.example.com'),
     'namespace\class1' => array(
         'scope' => 'singleton',
         'lazy' => true,
