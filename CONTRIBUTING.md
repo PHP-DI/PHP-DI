@@ -31,6 +31,14 @@ $ phpunit
 ```
 
 
+## To do
+
+- Add tests: pick up uncovered situations in the [code coverage report](https://coveralls.io/r/mnapoli/PHP-DI)
+- Resolve issues: [issue list](https://github.com/mnapoli/PHP-DI/issues)
+- Improve documentation
+- …
+
+
 ## Coding style
 
 The code follows PSR0, PSR1 and [PSR2](https://github.com/php-fig/fig-standards/blob/master/accepted/PSR-2-coding-style-guide.md).

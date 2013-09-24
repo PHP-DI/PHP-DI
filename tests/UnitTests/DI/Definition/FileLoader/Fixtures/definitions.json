@@ -1,4 +1,5 @@
 {
+	"value4": ["bob@acme.example.com", "alice@acme.example.com"],
 	"value3": true,
 	"value2": 123,
 	"value1": "abc",

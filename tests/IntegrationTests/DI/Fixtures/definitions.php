@@ -19,6 +19,10 @@ return array(
         'constructor' => array(
             'param1' => 'IntegrationTests\DI\Fixtures\Class2',
             'param2' => 'IntegrationTests\DI\Fixtures\Interface1',
+            'param3' => array(
+                'name' => 'IntegrationTests\DI\Fixtures\LazyDependency',
+                'lazy' => true,
+            ),
         ),
         'methods'     => array(
             'method1' => 'IntegrationTests\DI\Fixtures\Class2',
