@@ -15,6 +15,8 @@ use DI\Definition\FileLoader\Exception\ParseException;
  * XmlDefinitionFileLoader loads XML files definitions.
  *
  * @author Domenic Muskulus <domenic@muskulus.eu>
+ *
+ * @deprecated XML definitions are not maintained and documented, will be removed
  */
 class XmlDefinitionFileLoader extends DefinitionFileLoader
 {

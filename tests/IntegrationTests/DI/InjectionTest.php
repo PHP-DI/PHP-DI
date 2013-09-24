@@ -97,6 +97,10 @@ class InjectionTest extends \PHPUnit_Framework_TestCase
                 array(
                     'param1' => 'IntegrationTests\DI\Fixtures\Class2',
                     'param2' => 'IntegrationTests\DI\Fixtures\Interface1',
+                    'param3' => array(
+                        'name' => 'IntegrationTests\DI\Fixtures\LazyDependency',
+                        'lazy' => true,
+                    )
                 )
             )
             ->withMethod('method1', array('IntegrationTests\DI\Fixtures\Class2'))
@@ -149,6 +153,18 @@ class InjectionTest extends \PHPUnit_Framework_TestCase
 
         $this->assertInstanceOf('IntegrationTests\DI\Fixtures\Class2', $class1->constructorParam1);
         $this->assertInstanceOf('IntegrationTests\DI\Fixtures\Implementation1', $class1->constructorParam2);
+
+        // Test lazy injection (not possible using reflection)
+        if ($type != self::DEFINITION_REFLECTION) {
+            $this->assertInstanceOf('IntegrationTests\DI\Fixtures\LazyDependency', $class1->constructorParam3);
+            $this->assertInstanceOf('ProxyManager\Proxy\LazyLoadingInterface', $class1->constructorParam3);
+            /** @var LazyDependency|\ProxyManager\Proxy\LazyLoadingInterface $proxy */
+            $proxy = $class1->constructorParam3;
+            $this->assertFalse($proxy->isProxyInitialized());
+            // Correct proxy resolution
+            $this->assertTrue($proxy->getValue());
+            $this->assertTrue($proxy->isProxyInitialized());
+        }
     }
 
     /**
@@ -188,7 +204,7 @@ class InjectionTest extends \PHPUnit_Framework_TestCase
             return;
         }
         /** @var $class1 Class1 */
-        $class1 = new Class1(new Class2(), new Implementation1());
+        $class1 = new Class1(new Class2(), new Implementation1(), new LazyDependency());
         $container->injectOn($class1);
 
         $this->assertInstanceOf('IntegrationTests\DI\Fixtures\Class2', $class1->property1);
@@ -243,7 +259,7 @@ class InjectionTest extends \PHPUnit_Framework_TestCase
             return;
         }
         /** @var $class1 Class1 */
-        $class1 = new Class1(new Class2(), new Implementation1());
+        $class1 = new Class1(new Class2(), new Implementation1(), new LazyDependency());
         $container->injectOn($class1);
 
         $this->assertInstanceOf('IntegrationTests\DI\Fixtures\Class2', $class1->method1Param1);

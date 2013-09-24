@@ -54,7 +54,7 @@ class ArrayDefinitionSource implements DefinitionSource
         }
 
         // Value definition
-        if (!is_array($arrayDefinition)) {
+        if (!is_array($arrayDefinition) || ($arrayDefinition && array_values($arrayDefinition) === $arrayDefinition)) {
             return new ValueDefinition($name, $arrayDefinition);
         }
 
@@ -281,5 +281,4 @@ class ArrayDefinitionSource implements DefinitionSource
             }
         }
     }
-
 }

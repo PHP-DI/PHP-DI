@@ -166,6 +166,12 @@ $container = new Container();
 $container->set('db.host', 'localhost');
 $container->set('db.port', 5000);
 
+// Indexed non-empty array as value
+$container->set('report.recipients', array(
+	'bob@acme.example.com',
+	'alice@acme.example.com'
+));
+
 // Direct mapping (not needed if you didn't disable Reflection)
 $container->set('SomeClass');
 
@@ -230,8 +236,14 @@ return [
     'db.host' => 'localhost',
     'db.port' => 5000,
 
+    // Indexed non-empty array as value
+    'report.recipients' => [
+        'bob@acme.example.com',
+        'alice@acme.example.com'
+    ],
+
     // Direct mapping (not needed if you didn't disable Reflection)
-    'SomeClass' => array(),
+    'SomeClass' => [],
 
     // This is not recommended: will instantiate the class even when not used, prevents caching
     'SomeOtherClass' => new SomeOtherClass(1, "hello"),
@@ -298,6 +310,11 @@ Example of a `config/di.yml` file:
 db.host: localhost
 db.port: 5000
 
+# Indexed non-empty array as value
+report.recipients:
+    - bob@acme.example.com
+    - alice@acme.example.com
+
 # Direct mapping (not needed if you didn't disable Reflection)
 SomeClass:
 
@@ -330,3 +347,4 @@ My\Interface:
 myNamedInstance:
     class: My\Class
 ```
+

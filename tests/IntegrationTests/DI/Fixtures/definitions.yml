@@ -15,6 +15,9 @@ IntegrationTests\DI\Fixtures\Class1:
   constructor:
     param1: IntegrationTests\DI\Fixtures\Class2
     param2: IntegrationTests\DI\Fixtures\Interface1
+    param3:
+      name: IntegrationTests\DI\Fixtures\LazyDependency
+      lazy: true
   methods:
     method1: IntegrationTests\DI\Fixtures\Class2
     method2: [IntegrationTests\DI\Fixtures\Interface1]

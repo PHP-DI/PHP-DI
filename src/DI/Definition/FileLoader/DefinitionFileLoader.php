@@ -33,11 +33,12 @@ abstract class DefinitionFileLoader
      */
     public function __construct($fileName)
     {
-        if (!file_exists($fileName)) {
+        if (!is_file($fileName)) {
             throw new FileNotFoundException("The definition file '$fileName' has not been found");
         } elseif (!is_readable($fileName)) {
             throw new ParseException("The definition file '$fileName' is not readable");
         }
+
         $this->definitionFile = $fileName;
     }
 
