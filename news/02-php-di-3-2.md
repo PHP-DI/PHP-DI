@@ -1,6 +1,6 @@
 # PHP-DI 3.2 released
 
-*Posted by [Matthieu Napoli](https://github.com/mnapoli) on July 23rd 2013*
+*Posted by [Matthieu Napoli](http://mnapoli.fr) on July 23rd 2013*
 
 I am happy to announce that I have just released PHP-DI version 3.2.
 
