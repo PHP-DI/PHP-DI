@@ -15,7 +15,10 @@ use DI\Definition\MethodInjection;
 use DI\Definition\PropertyInjection;
 use Exception;
 use ReflectionClass;
+use ReflectionException;
+use ReflectionMethod;
 use ReflectionProperty;
+use ReflectionParameter;
 
 /**
  * Factory class, responsible of instantiating classes
@@ -104,14 +107,23 @@ class Factory implements FactoryInterface
                 . "$nbRequiredParameters parameters, " . count($parameterInjections) . " defined or guessed");
         }
 
+        // No parameters
         if (count($parameterInjections) === 0) {
             return $classReflection->newInstance();
         }
 
+        $parameters = $this->getMethodReflectionParameters($constructorReflection);
+
         $args = array();
         foreach ($parameterInjections as $parameterInjection) {
             $entryName = $parameterInjection->getEntryName();
+
             if ($entryName === null) {
+                // If the parameter is optional and wasn't specified, we take its default value
+                if ($parameters[$parameterInjection->getParameterName()]->isOptional()) {
+                    $args[] = $this->getParameterDefaultValue($parameters[$parameterInjection->getParameterName()], $constructorReflection);
+                    continue;
+                }
                 throw new DefinitionException("The parameter '" . $parameterInjection->getParameterName()
                     . "' of the constructor of '{$classReflection->name}' has no type defined or guessable");
             }
@@ -171,10 +183,18 @@ class Factory implements FactoryInterface
             return;
         }
 
+        $parameters = $this->getMethodReflectionParameters($methodReflection);
+
         $args = array();
         foreach ($parameterInjections as $parameterInjection) {
             $entryName = $parameterInjection->getEntryName();
+
             if ($entryName === null) {
+                // If the parameter is optional and wasn't specified, then we skip all next parameters
+                if ($parameters[$parameterInjection->getParameterName()]->isOptional()) {
+                    $args[] = $this->getParameterDefaultValue($parameters[$parameterInjection->getParameterName()], $methodReflection);
+                    continue;
+                }
                 throw new DefinitionException("The parameter '" . $parameterInjection->getParameterName()
                     . "' of {$classReflection->name}::$methodName has no type defined or guessable");
             }
@@ -223,6 +243,43 @@ class Factory implements FactoryInterface
 
         // Inject the dependency
         $property->setValue($object, $value);
+    }
+
+    /**
+     * Returns the ReflectionParameter of a method indexed by the parameters names
+     * @param ReflectionMethod $reflectionMethod
+     * @return ReflectionParameter[]
+     */
+    private function getMethodReflectionParameters(ReflectionMethod $reflectionMethod)
+    {
+        $parameters = $reflectionMethod->getParameters();
+
+        $keys = array_map(
+            function (ReflectionParameter $parameter) {
+                return $parameter->getName();
+            },
+            $parameters
+        );
+
+        return array_combine($keys, $parameters);
+    }
+
+    /**
+     * Returns the default value of a function parameter
+     * @param ReflectionParameter $reflectionParameter
+     * @param ReflectionMethod    $reflectionMethod
+     * @throws DefinitionException Can't get default values from PHP internal classes and methods
+     * @return mixed
+     */
+    private function getParameterDefaultValue(ReflectionParameter $reflectionParameter, ReflectionMethod $reflectionMethod)
+    {
+        try {
+            return $reflectionParameter->getDefaultValue();
+        } catch (ReflectionException $e) {
+            throw new DefinitionException("The parameter '{$reflectionParameter->getName()}'"
+            . " of {$reflectionMethod->getDeclaringClass()->getName()}::{$reflectionMethod->getName()} has no type defined or guessable."
+            . " It has a default value, but the default value can't be read through Reflection because it is a PHP internal class.");
+        }
     }
 
 }
