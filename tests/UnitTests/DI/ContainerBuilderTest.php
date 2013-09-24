@@ -36,19 +36,6 @@ class ContainerBuilderTest extends \PHPUnit_Framework_TestCase
         $container = $builder->build();
 
         $this->assertSame($cache, $container->getDefinitionManager()->getCache());
-        $this->assertEquals('', $container->getDefinitionManager()->getCacheKeyPrefix());
-    }
-
-    public function testSetCacheKeyPrefix()
-    {
-        $cache = $this->getMockForAbstractClass('Doctrine\Common\Cache\Cache');
-
-        $builder = new ContainerBuilder();
-        $builder->setDefinitionCache($cache, 'some-prefix');
-
-        $container = $builder->build();
-
-        $this->assertEquals('some-prefix', $container->getDefinitionManager()->getCacheKeyPrefix());
     }
 
     public function testSetDefinitionsValidation()
