@@ -77,7 +77,7 @@
 
 <pre><code class="json">{
     &quot;require&quot;: {
-        &quot;mnapoli/php-di&quot;: &quot;3.3.*&quot;
+        &quot;mnapoli/php-di&quot;: &quot;~3.4&quot;
     }
 }
 </code></pre>
@@ -110,7 +110,7 @@ $ php composer.phar install
     private $bar;
 
     public function __construct(Bar $bar) {
-        return $this-&gt;bar = $bar;
+        return $this->bar = $bar;
     }
 }
 </code></pre>
@@ -155,16 +155,16 @@ class Foo {
 <pre><code class="php">$container = new Container();
 
 // Values (not classes)
-$container-&gt;set(&#39;db.host&#39;, &#39;localhost&#39;);
-$container-&gt;set(&#39;db.port&#39;, 5000);
+$container->set(&#39;db.host&#39;, &#39;localhost&#39;);
+$container->set(&#39;db.port&#39;, 5000);
 
 // Defines an instance of My\Class
-$container-&gt;set(&#39;My\Class&#39;)
-    -&gt;withConstructor(array(&#39;db.host&#39;, &#39;My\Interface&#39;));
+$container->set(&#39;My\Class&#39;)
+    ->withConstructor(array(&#39;db.host&#39;, &#39;My\Interface&#39;));
 
 // Mapping an interface to an implementation
-$container-&gt;set(&#39;My\Interface&#39;)
-    -&gt;bindTo(&#39;My\Implementation&#39;);
+$container->set(&#39;My\Interface&#39;)
+    ->bindTo(&#39;My\Implementation&#39;);
 </code></pre>
 
 <h4>PHP array</h4>
@@ -215,7 +215,7 @@ My\Foo:
 
 <h3>2: Get objects from the container</h3>
 
-<pre><code class="php">$foo = $container-&gt;get(&#39;Foo&#39;);
+<pre><code class="php">$foo = $container->get(&#39;Foo&#39;);
 </code></pre>
 
 <p>But wait! Do not use this everywhere because this makes your code <strong>dependent on the container</strong>. This is an antipattern to dependency injection (it is like the service locator pattern: dependency <em>fetching</em> rather than <em>injection</em>).</p>
@@ -231,8 +231,8 @@ My\Foo:
 <p>To sum up:</p>
 
 <ul>
-<li>If you can, use <code>$container-&gt;get()</code> in you root application class or front controller</li>
-<li>Else, use <code>$container-&gt;get()</code> in your controllers (but avoid it in your services) but keep in mind that your controllers will be dependent on the container</li>
+<li>If you can, use <code>$container->get()</code> in you root application class or front controller</li>
+<li>Else, use <code>$container->get()</code> in your controllers (but avoid it in your services) but keep in mind that your controllers will be dependent on the container</li>
 </ul>
 
 <h4>Zend Framework 1</h4>
@@ -255,9 +255,9 @@ My\Foo:
         $container = new \DI\Container();
 
         $dispatcher = new \DI\ZendFramework1\Dispatcher();
-        $dispatcher-&gt;setContainer($container);
+        $dispatcher->setContainer($container);
 
-        Zend_Controller_Front::getInstance()-&gt;setDispatcher($dispatcher);
+        Zend_Controller_Front::getInstance()->setDispatcher($dispatcher);
     }
 </code></pre>
 
@@ -267,7 +267,7 @@ My\Foo:
 
 <p><strong>Warning</strong>: if you use Zend&#39;s autoloader (and not Composer), you will need to configure it:</p>
 
-<pre><code class="php">$autoloader-&gt;suppressNotFoundWarnings(true);
+<pre><code class="php">$autoloader->suppressNotFoundWarnings(true);
 </code></pre>
 
 <p>Read more on the <a href="https://github.com/mnapoli/PHP-DI-ZF1">PHP-DI-ZF1 project on Github</a>.</p>

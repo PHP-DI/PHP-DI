@@ -73,7 +73,7 @@ you can combine them by taking advantage of priorities that apply.</p>
 <p>From the highest priority to the least:</p>
 
 <ul>
-<li>Code definition (i.e. defined with <code>$container-&gt;set()</code>)</li>
+<li>Code definition (i.e. defined with <code>$container->set()</code>)</li>
 <li>File and array definitions (if A is added after B, then A prevails)</li>
 <li>Annotations</li>
 <li>Reflection</li>
@@ -119,13 +119,13 @@ another.specific.service:
   # ... (definition of my specific instance)
 </code></pre>
 
-<pre><code class="php">$container-&gt;addDefinitionsFromFile(new YamlDefinitionFileLoader(&#39;config/di.yml&#39;));
+<pre><code class="php">$container->addDefinitionsFromFile(new YamlDefinitionFileLoader(&#39;config/di.yml&#39;));
 </code></pre>
 
 <p>Finally, you can also override the file-based definition by directly calling the container:</p>
 
-<pre><code class="php">$container-&gt;set(&#39;Foo&#39;)
-    -&gt;withConstructor(array(&#39;param1&#39; =&gt; &#39;yet.another.specific.service&#39;));
+<pre><code class="php">$container->set(&#39;Foo&#39;)
+    ->withConstructor(array(&#39;param1&#39; =&gt; &#39;yet.another.specific.service&#39;));
 </code></pre>
             <div class="github">
                 PHP-DI is an open source project, you can contribute or seek help on

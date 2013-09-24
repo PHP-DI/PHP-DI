@@ -67,6 +67,18 @@
         <div class="container-fluid">
 <h1>Change log</h1>
 
+<h2>3.4</h2>
+
+<p>Read the <a href="news/04-php-di-3-4">news entry</a>.</p>
+
+<ul>
+<li><a href="https://github.com/mnapoli/PHP-DI/pull/106">#106</a> You can now define arrays of values (in YAML, PHP, …) thanks to <a href="https://github.com/unkind">@unkind</a></li>
+<li><a href="https://github.com/mnapoli/PHP-DI/issues/98">#98</a> <code>ContainerBuilder</code> is now fluent thanks to <a href="https://github.com/drdamour">@drdamour</a></li>
+<li><a href="https://github.com/mnapoli/PHP-DI/pull/101">#101</a> Optional parameters are now supported: if you don&#39;t define a value to inject, their default value will be used</li>
+<li>XML definitions have been deprecated, there weren&#39;t even documented and were not maintained. They will be removed in 4.0.</li>
+<li>FIXED <a href="https://github.com/mnapoli/PHP-DI/issues/100">#100</a>: bug for lazy injection in constructors</li>
+</ul>
+
 <h2>3.3</h2>
 
 <p>Read the <a href="news/03-php-di-3-3">news entry</a>.</p>
@@ -87,7 +99,7 @@ From 3.2 and on, properties are injected after calling the constructor.</p>
 <ul>
 <li><strong><a href="doc/lazy-injection">Lazy injection</a></strong>: it is now possible to use lazy injection on properties and methods (setters and constructors).</li>
 <li>Lazy dependencies are now proxies that extend the class they proxy, so type-hinting works.</li>
-<li>Addition of the **<code>ContainerBuilder</code>** object, that helps to <a href="doc/container-configuration">create and configure a <code>Container</code></a>.</li>
+<li>Addition of the <strong><code>ContainerBuilder</code></strong> object, that helps to <a href="doc/container-configuration">create and configure a <code>Container</code></a>.</li>
 <li>Some methods for configuring the Container have gone <strong>deprecated</strong> in favor of the <code>ContainerBuilder</code>. Fear not, these deprecated methods will remain until next major version (4.0).
 
 <ul>
@@ -102,7 +114,7 @@ From 3.2 and on, properties are injected after calling the constructor.</p>
 <h2>3.1.1</h2>
 
 <ul>
-<li>Value definitions (<code>$container-&gt;set(&#39;foo&#39;, 80)</code>) are not cached anymore</li>
+<li>Value definitions (<code>$container->set(&#39;foo&#39;, 80)</code>) are not cached anymore</li>
 <li>FIXED <a href="https://github.com/mnapoli/PHP-DI/issues/82">#82</a>: Serialization error when using a cache</li>
 </ul>
 
@@ -113,7 +125,7 @@ From 3.2 and on, properties are injected after calling the constructor.</p>
 <ul>
 <li>Zend Framework 1 integration through the <a href="https://github.com/mnapoli/PHP-DI-ZF1">PHP-DI-ZF1 project</a></li>
 <li>Fixed the order of priorities when you mix different definition sources (reflection, annotations, files, …). See <a href="doc/definition-overriding">Definition overriding</a></li>
-<li>Now possible to define null values with  <code>$container-&gt;set(&#39;foo&#39;, null)</code> (see <a href="https://github.com/mnapoli/PHP-DI/issues/79">#79</a>).</li>
+<li>Now possible to define null values with  <code>$container->set(&#39;foo&#39;, null)</code> (see <a href="https://github.com/mnapoli/PHP-DI/issues/79">#79</a>).</li>
 <li>Deprecated usage of <code>ContainerSingleton</code>, will be removed in next major version (4.0)</li>
 </ul>
 
@@ -174,7 +186,7 @@ From 3.2 and on, properties are injected after calling the constructor.</p>
 </ul></li>
 <li>As a consequence, annotations are not mandatory anymore, all functionalities can be used with or without annotations.</li>
 <li>Renamed <code>DI\Annotations\</code> to <code>DI\Annotation\</code></li>
-<li><code>Container</code> no longer implements ArrayAccess, use only <code>$container-&gt;get($key)</code> now</li>
+<li><code>Container</code> no longer implements ArrayAccess, use only <code>$container->get($key)</code> now</li>
 <li>ZF1 integration broken and removed (work in progress for next releases)</li>
 <li>Code now follows PSR1 and PSR2 coding styles</li>
 <li>FIXED: <a href="https://github.com/mnapoli/PHP-DI/issues/58">#58</a> Getting a proxy of an alias didn&#39;t work</li>

@@ -76,16 +76,16 @@ class Foo
     private $b;
 
     public function __construct(Foo $a, Bar $b) {
-        $this-&gt;a = $a;
-        $this-&gt;b = $b;
+        $this->a = $a;
+        $this->b = $b;
     }
 
     public function doSomething() {
-        $this-&gt;a-&gt;doStuff();
+        $this->a->doStuff();
     }
 
     public function doSomethingElse() {
-        $this-&gt;b-&gt;doStuff();
+        $this->b->doStuff();
     }
 }
 </code></pre>
@@ -115,12 +115,12 @@ class Foo
 
 <pre><code class="php">// $proxy is a Proxy object, it is not initialized
 // It is very lightweight in memory
-$proxy = $container-&gt;get(&#39;My\Class&#39;, true);
+$proxy = $container->get(&#39;My\Class&#39;, true);
 
 var_dump($proxy instanceof \My\Class); // true
 
 // Calling a method on the proxy will initialize it
-$proxy-&gt;doSomething(); // works if doSomething() is a method of My\Class
+$proxy->doSomething(); // works if doSomething() is a method of My\Class
 // Now the proxy is initialized, the real instance of My\Class has been created and called
 </code></pre>
 
@@ -151,9 +151,9 @@ class Example {
 <h3>PHP code</h3>
 
 <pre><code class="php">&lt;?php
-$containerPHP-&gt;set(&#39;Example&#39;)
-    -&gt;withProperty(&#39;property&#39;, &#39;My\Class&#39;, true)
-    -&gt;withMethod(&#39;method&#39;, array(&#39;param1&#39; =&gt; array(
+$containerPHP->set(&#39;Example&#39;)
+    ->withProperty(&#39;property&#39;, &#39;My\Class&#39;, true)
+    ->withMethod(&#39;method&#39;, array(&#39;param1&#39; =&gt; array(
             &#39;name&#39; =&gt; &#39;My\Class&#39;,
             &#39;lazy&#39; =&gt; true,
         )));

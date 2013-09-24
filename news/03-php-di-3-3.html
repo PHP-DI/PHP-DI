@@ -67,7 +67,7 @@
         <div class="container-fluid">
 <h1>PHP-DI 3.3 released</h1>
 
-<p><em>Posted by <a href="https://github.com/mnapoli">Matthieu Napoli</a> on July 30rd 2013</em></p>
+<p><em>Posted by <a href="http://mnapoli.fr">Matthieu Napoli</a> on July 30rd 2013</em></p>
 
 <p>I am happy to announce that PHP-DI version 3.3 has just been released.</p>
 
@@ -81,12 +81,12 @@
 
 <pre><code class="php">$myObject = new MyClass();
 
-$container-&gt;injectOn($myObject);
+$container->injectOn($myObject);
 </code></pre>
 
 <p>Now, <code>$myObject</code> has all its dependencies injected (setter injections and property injections).</p>
 
-<p>It is basically the same as <code>$myObject = $container-&gt;get(&#39;MyClass&#39;)</code> except <strong>you</strong> create the instance.</p>
+<p>It is basically the same as <code>$myObject = $container->get(&#39;MyClass&#39;)</code> except <strong>you</strong> create the instance.</p>
 
 <h3>Why?</h3>
 
@@ -104,12 +104,12 @@ $container-&gt;injectOn($myObject);
 <pre><code class="php">class MyController {
     public function __construct() {
         // get container ...
-        $container-&gt;injectOn($this);
+        $container->injectOn($this);
     }
 }
 </code></pre>
 
-<p><strong>Of course</strong>, the preferred method is still to use <code>$container-&gt;get()</code>. But sometimes you can&#39;t get to the root of the framework to intercept the creation of your objects (I&#39;m looking at you most MVC frameworks, PHPUnit &amp; …)</p>
+<p><strong>Of course</strong>, the preferred method is still to use <code>$container->get()</code>. But sometimes you can&#39;t get to the root of the framework to intercept the creation of your objects (I&#39;m looking at you most MVC frameworks, PHPUnit &amp; …)</p>
 
 <h3>Good to know</h3>
 

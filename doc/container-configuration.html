@@ -79,10 +79,10 @@
 <p>To improve performances, you may want to use a simple Array cache. This kind of cache is cleared on every request, so you will not need to empty it manually when you change the code. It is also recommended to enable definition validation to detect errors as soon as possible.</p>
 
 <pre><code class="php">$builder = new \DI\ContainerBuilder();
-$builder-&gt;setDefinitionCache(new Doctrine\Common\Cache\ArrayCache());
-$builder-&gt;setDefinitionsValidation(true);
+$builder->setDefinitionCache(new Doctrine\Common\Cache\ArrayCache());
+$builder->setDefinitionsValidation(true);
 
-$container = $builder-&gt;build();
+$container = $builder->build();
 </code></pre>
 
 <h3>Adding a definition file</h3>
@@ -91,13 +91,13 @@ $container = $builder-&gt;build();
 
 <pre><code class="php">use DI\Definition\FileLoader\YamlDefinitionFileLoader;
 
-$builder-&gt;addDefinitionsFromFile(new YamlDefinitionFileLoader(&#39;config/di.yml&#39;));
+$builder->addDefinitionsFromFile(new YamlDefinitionFileLoader(&#39;config/di.yml&#39;));
 </code></pre>
 
 <p>If you don&#39;t want to use Reflection or Annotations, disable them:</p>
 
-<pre><code class="php">$builder-&gt;useReflection(false);
-$builder-&gt;useAnnotations(false);
+<pre><code class="php">$builder->useReflection(false);
+$builder->useAnnotations(false);
 </code></pre>
 
 <p>Read more about <a href="definition">definitions</a>.</p>
@@ -107,11 +107,11 @@ $builder-&gt;useAnnotations(false);
 <p>In production environment, you will of course favor speed:</p>
 
 <pre><code class="php">$builder = new \DI\ContainerBuilder();
-$builder-&gt;setDefinitionCache($cache);
-$builder-&gt;writeProxiesToFile(true, &#39;tmp/proxies&#39;);
-$builder-&gt;setDefinitionsValidation(false);
+$builder->setDefinitionCache($cache);
+$builder->writeProxiesToFile(true, &#39;tmp/proxies&#39;);
+$builder->setDefinitionsValidation(false);
 
-$container = $builder-&gt;build();
+$container = $builder->build();
 </code></pre>
 
 <p>To choose a cache, read <a href="performances">the performances documentation</a>.</p>
@@ -121,11 +121,11 @@ $container = $builder-&gt;build();
 <p>If you want to use PHP-DI&#39;s container as a simple container, you will want to disable all extra features.</p>
 
 <pre><code class="php">$builder = new \DI\ContainerBuilder();
-$builder-&gt;useReflection(false);
-$builder-&gt;useAnnotations(false);
-$builder-&gt;setDefinitionsValidation(false);
+$builder->useReflection(false);
+$builder->useAnnotations(false);
+$builder->setDefinitionsValidation(false);
 
-$container = $builder-&gt;build();
+$container = $builder->build();
 </code></pre>
             <div class="github">
                 PHP-DI is an open source project, you can contribute or seek help on

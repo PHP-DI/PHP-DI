@@ -65,80 +65,49 @@
 
     <div class="main">
         <div class="container-fluid">
-<h1>PHP-DI 3.1 released</h1>
+<h1>PHP-DI 3.4 released</h1>
 
-<p><em>Posted by <a href="http://mnapoli.fr">Matthieu Napoli</a> on June 23rd 2013</em></p>
+<p><em>Posted by <a href="http://mnapoli.fr">Matthieu Napoli</a> on September 24rd 2013</em></p>
 
-<p>I am happy to announce that I have just released PHP-DI version 3.1.</p>
+<p>I am happy to announce that PHP-DI version 3.4 has just been released.</p>
 
-<p>The major new feature is the <strong>Zend Framework 1 integration</strong>. You can now use PHP-DI very easily with ZF1, and the integration will provide you dependency injection into your controllers.</p>
+<p>This time, several small improvements:</p>
 
-<p>Mixing different definition sources (reflection, annotations, files, …) is now more reliable with orders and priorities. Sources are all now correctly priorized, allowing you to override definitions as you would expect. Read more in the <a href="../doc/definition-overriding"><strong>Definition overriding</strong> documentation</a>.</p>
+<ul>
+<li>You can now define arrays of values thanks to <a href="https://github.com/unkind">@unkind</a></li>
+</ul>
 
-<p>Finally, <a href="https://github.com/mnapoli/PHP-DI/issues/79">a small fix</a> to allow to <strong>define <code>null</code> entries</strong>:</p>
+<p>Here is an example using YAML:</p>
 
-<pre><code class="php">// Set a null value for &#39;foo&#39;
-$container->set(&#39;foo&#39;, null);
-
-// No change: without a value given, returns a class definition helper
-$container->set(&#39;foo&#39;)
-    ->bindTo(&#39;My\Foo\Class&#39;)
-    ->withConstructor(array(&#39;SomeClass&#39;));
+<pre><code class="yaml">value4:
+  - bob@acme.example.com
+  - alice@acme.example.com
 </code></pre>
 
-<h2>Zend Framework 1 integration</h2>
+<p>Note that the arrays <em>have to be non-indexed</em>.</p>
 
-<p>To set up your ZF1 project, you can install the dependencies with <a href="http://getcomposer.org/">Composer</a>:</p>
+<ul>
+<li><code>ContainerBuilder</code> is now fluent thanks to <a href="https://github.com/drdamour">@drdamour</a>:</li>
+</ul>
 
-<pre><code class="php">{
-    &quot;require&quot;: {
-        &quot;mnapoli/php-di&quot;: &quot;3.1.*&quot;,
-        &quot;mnapoli/php-di-zf1&quot;: &quot;*&quot;
-    }
-}
+<pre><code class="php">$builder = new ContainerBuilder();
+$builder->useReflection(false)
+   ->useAnotations(true)
+   ->setCache(  ...cache );
 </code></pre>
 
-<p>In your bootstrap, you only need to replace the default Dispatcher with the one provided into <code>mnapoli/php-di-zf1</code>:</p>
+<ul>
+<li>Support for optional parameters (before 3.4, PHP-DI required that they were defined):</li>
+</ul>
 
-<pre><code class="php">    protected function _initDependencyInjection() {
-        $container = new \DI\Container();
-
-        $dispatcher = new \DI\ZendFramework1\Dispatcher();
-        $dispatcher->setContainer($container);
-
-        Zend_Controller_Front::getInstance()->setDispatcher($dispatcher);
-    }
+<pre><code class="php">public function __construct($name = &#39;foo&#39;)
 </code></pre>
 
-<p>Easy right? Now you can inject dependencies into your controllers.</p>
+<p>If the <code>$name</code> parameter is not defined, then its default value will be used, just like a standard PHP method call.</p>
 
-<p>Here is an example using annotations (you can&#39;t use constructor injection though since ZF1 controllers have a specific constructor):</p>
+<h2>Change log</h2>
 
-<pre><code class="php">use DI\Annotation\Inject;
-
-class GuestbookController extends Zend_Controller_Action
-{
-    /**
-     * @Inject
-     * @var Application_Service_GuestbookService
-     */
-    private $guestbookService;
-
-    public function signAction()
-    {
-        $form = new Application_Form_Guestbook();
-        $this->guestbookService->addEntry($form->getValues());
-    }
-}
-</code></pre>
-
-<p>Read more about <a href="https://github.com/mnapoli/PHP-DI-ZF1">Zend Framework 1 integration</a>.</p>
-
-<h2>Integration with other frameworks (Symfony, ZF2, …)</h2>
-
-<p>Integration with other frameworks <a href="https://github.com/mnapoli/PHP-DI/issues?state=open">are planned</a>.</p>
-
-<p>If you want to help, feel free to submit a pull request or let&#39;s talk on <a href="https://twitter.com/PHPDI">Twitter</a>.</p>
+<p>Read all the changes and their authors in the <a href="../change-log">change log</a>.</p>
             <div class="github">
                 PHP-DI is an open source project, you can contribute or seek help on
                 <a class="btn btn-mini" href="https://github.com/mnapoli/PHP-DI/" target="_blank">

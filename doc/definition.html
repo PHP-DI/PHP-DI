@@ -84,7 +84,7 @@
 <p>If you combine several sources, there are priorities that apply. From the highest priority to the least:</p>
 
 <ul>
-<li>Code definition (i.e. defined with <code>$container-&gt;set()</code>)</li>
+<li>Code definition (i.e. defined with <code>$container->set()</code>)</li>
 <li>File and array definitions (if A is added after B, then A prevails)</li>
 <li>Annotations</li>
 <li>Reflection</li>
@@ -94,7 +94,7 @@
 
 <h2>Reflection</h2>
 
-<pre><code class="php">$container-&gt;useReflection(true);
+<pre><code class="php">$container->useReflection(true);
 </code></pre>
 
 <p><strong>Note: Reflection is enabled by default</strong></p>
@@ -134,7 +134,7 @@
 
 <h2>Annotations</h2>
 
-<pre><code class="php">$container-&gt;useAnnotations(true);
+<pre><code class="php">$container->useAnnotations(true);
 </code></pre>
 
 <p><strong>Note: Annotations are enabled by default</strong></p>
@@ -230,57 +230,63 @@ class Example {
 <pre><code class="php">$container = new Container();
 
 // Values (not classes)
-$container-&gt;set(&#39;db.host&#39;, &#39;localhost&#39;);
-$container-&gt;set(&#39;db.port&#39;, 5000);
+$container->set(&#39;db.host&#39;, &#39;localhost&#39;);
+$container->set(&#39;db.port&#39;, 5000);
+
+// Indexed non-empty array as value
+$container->set(&#39;report.recipients&#39;, array(
+    &#39;bob@acme.example.com&#39;,
+    &#39;alice@acme.example.com&#39;
+));
 
 // Direct mapping (not needed if you didn&#39;t disable Reflection)
-$container-&gt;set(&#39;SomeClass&#39;);
+$container->set(&#39;SomeClass&#39;);
 
 // This is not recommended: will instantiate the class even when not used, prevents caching
-$container-&gt;set(&#39;SomeClass&#39;, new SomeOtherClass(1, &quot;hello&quot;));
+$container->set(&#39;SomeClass&#39;, new SomeOtherClass(1, &quot;hello&quot;));
 
 // Defines an instance of My\Class
-$container-&gt;set(&#39;My\Class&#39;)
-    -&gt;withConstructor(array(&#39;db.host&#39;, &#39;My\OtherClass&#39;));
+$container->set(&#39;My\Class&#39;)
+    ->withConstructor(array(&#39;db.host&#39;, &#39;My\OtherClass&#39;));
 
-$container-&gt;set(&#39;My\OtherClass&#39;)
-    -&gt;withScope(Scope::PROTOTYPE())
-    -&gt;withConstructor(
+$container->set(&#39;My\OtherClass&#39;)
+    ->withScope(Scope::PROTOTYPE())
+    ->withConstructor(
         array(
             &#39;host&#39; =&gt; &#39;db.host&#39;,
             &#39;port&#39; =&gt; &#39;db.port&#39;,
         )
     )
-    -&gt;withMethod(&#39;setFoo1&#39;, array(&#39;My\Foo1&#39;))
-    -&gt;withMethod(&#39;setFoo2&#39;, array(&#39;My\Foo1&#39;, &#39;My\Foo2&#39;))
-    -&gt;withMethod(&#39;setFoo3&#39;, array(
+    ->withMethod(&#39;setFoo1&#39;, array(&#39;My\Foo1&#39;))
+    ->withMethod(&#39;setFoo2&#39;, array(&#39;My\Foo1&#39;, &#39;My\Foo2&#39;))
+    ->withMethod(&#39;setFoo3&#39;, array(
             &#39;param1&#39; =&gt; &#39;My\Foo1&#39;,
             &#39;param2&#39; =&gt; &#39;My\Foo2&#39;
         ))
-    -&gt;withProperty(&#39;bar&#39;, &#39;My\Bar&#39;)
-    -&gt;withProperty(&#39;baz&#39;, &#39;My\Baz&#39;, true);
+    ->withProperty(&#39;bar&#39;, &#39;My\Bar&#39;)
+    ->withProperty(&#39;baz&#39;, &#39;My\Baz&#39;, true);
 
 // Mapping an interface to an implementation
-$container-&gt;set(&#39;My\Interface&#39;)
-    -&gt;bindTo(&#39;My\Implementation&#39;);
+$container->set(&#39;My\Interface&#39;)
+    ->bindTo(&#39;My\Implementation&#39;);
 
 // Defining a named instance
-$container-&gt;set(&#39;myNamedInstance&#39;)
-    -&gt;bindTo(&#39;My\Class&#39;);
+$container->set(&#39;myNamedInstance&#39;)
+    ->bindTo(&#39;My\Class&#39;);
 
 // Using an anonymous function
 // not recommended: will not be cached
-$container-&gt;set(&#39;My\Stuff&#39;, function(Container $c) {
+$container->set(&#39;My\Stuff&#39;, function(Container $c) {
                                 return new MyClass($c[&#39;db.host&#39;]);
                             });
 </code></pre>
 
 <h2>PHP array</h2>
 
-<pre><code class="php">$container-&gt;addDefinitions($array);
+<pre><code class="php">$container->addDefinitions($array);
 // or from a file
 use DI\Definition\FileLoader\ArrayDefinitionFileLoader;
-$container-&gt;addDefinitionsFromFile(new ArrayDefinitionFileLoader(&#39;config/di.php&#39;));
+$container->addDefinitionsFromFile(new ArrayDefinitionFileLoader(&#39;config/di.php&#39;));
 </code></pre>
 
 <p>You can also define injections with a PHP array.</p>
@@ -294,8 +300,14 @@ return [
     &#39;db.host&#39; =&gt; &#39;localhost&#39;,
     &#39;db.port&#39; =&gt; 5000,
 
+    // Indexed non-empty array as value
+    &#39;report.recipients&#39; =&gt; [
+        &#39;bob@acme.example.com&#39;,
+        &#39;alice@acme.example.com&#39;
+    ],
+
     // Direct mapping (not needed if you didn&#39;t disable Reflection)
-    &#39;SomeClass&#39; =&gt; array(),
+    &#39;SomeClass&#39; =&gt; [],
 
     // This is not recommended: will instantiate the class even when not used, prevents caching
     &#39;SomeOtherClass&#39; =&gt; new SomeOtherClass(1, &quot;hello&quot;),
@@ -350,7 +362,7 @@ return [
 <h2>YAML file</h2>
 
 <pre><code class="php">use DI\Definition\FileLoader\YamlDefinitionFileLoader;
-$container-&gt;addDefinitionsFromFile(new YamlDefinitionFileLoader(&#39;config/di.yml&#39;));
+$container->addDefinitionsFromFile(new YamlDefinitionFileLoader(&#39;config/di.yml&#39;));
 </code></pre>
 
 <p>Example of a <code>config/di.yml</code> file:</p>
@@ -358,6 +370,11 @@ $container-&gt;addDefinitionsFromFile(new YamlDefinitionFileLoader(&#39;config/d
 <pre><code class="yml"># Values (not classes)
 db.host: localhost
 db.port: 5000
+
+# Indexed non-empty array as value
+report.recipients:
+    - bob@acme.example.com
+    - alice@acme.example.com
 
 # Direct mapping (not needed if you didn&#39;t disable Reflection)
 SomeClass:

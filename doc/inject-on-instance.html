@@ -71,7 +71,7 @@
 
 <p>The standard way of using a container is to get an object from it, with all its dependencies injected:</p>
 
-<pre><code class="php">$object = $container-&gt;get(&#39;foo&#39;);
+<pre><code class="php">$object = $container->get(&#39;foo&#39;);
 </code></pre>
 
 <p>But in some situations, you don&#39;t have the control of the creation of an object, yet <strong>you want to resolve its dependencies</strong>.</p>
@@ -80,7 +80,7 @@
 
 <pre><code class="php">// $object is an instance of some class
 
-$container-&gt;injectOn($object);
+$container->injectOn($object);
 </code></pre>
 
 <p>Now, <code>$object</code> has all its dependencies injected (through setter injections and property injections).</p>
@@ -92,7 +92,7 @@ $container-&gt;injectOn($object);
 <p>If you create the object yourself, you&#39;ll have to do the constructor injection yourself:</p>
 
 <pre><code class="php">$object = new MyClass($someDependency, $someOtherDependency);
-$container-&gt;injectOn($object);
+$container->injectOn($object);
 </code></pre>
 
 <p>If you get the object from some library/framework, then just call <code>injectOn()</code></p>
@@ -111,12 +111,12 @@ $container-&gt;injectOn($object);
 <pre><code class="php">class MyController {
     public function __construct() {
         // get container ...
-        $container-&gt;injectOn($this);
+        $container->injectOn($this);
     }
 }
 </code></pre>
 
-<p><strong>Of course</strong>, the preferred method is still to use <code>$container-&gt;get()</code>. But sometimes you can&#39;t get to the root of the framework to intercept the creation of your objects.</p>
+<p><strong>Of course</strong>, the preferred method is still to use <code>$container->get()</code>. But sometimes you can&#39;t get to the root of the framework to intercept the creation of your objects.</p>
             <div class="github">
                 PHP-DI is an open source project, you can contribute or seek help on
                 <a class="btn btn-mini" href="https://github.com/mnapoli/PHP-DI/" target="_blank">

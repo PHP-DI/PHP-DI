@@ -94,7 +94,7 @@ class OpenStreetMap
         $geolocationService = new GoogleMaps();
         // or $geolocationService = GoogleMaps::getInstance() if you use singletons
 
-        return $geolocationService-&gt;getCoordinatesFromAddress($store-&gt;getAddress());
+        return $geolocationService->getCoordinatesFromAddress($store->getAddress());
     }
 }
 </code></pre>
@@ -112,11 +112,11 @@ We have to change the code of <code>StoreService</code>, and all the other class
     private $geolocationService;
 
     public function __construct(GeolocationService $geolocationService) {
-        $this-&gt;geolocationService = $geolocationService;
+        $this->geolocationService = $geolocationService;
     }
 
     public function getStoreCoordinates($store) {
-        return $this-&gt;geolocationService-&gt;getCoordinatesFromAddress($store-&gt;getAddress());
+        return $this->geolocationService->getCoordinatesFromAddress($store->getAddress());
     }
 }
 </code></pre>
@@ -150,7 +150,7 @@ $storeService = new StoreService($geolocationService);
 
 <p>You can write:</p>
 
-<pre><code class="php">$storeService = $container-&gt;get(&#39;StoreService&#39;);
+<pre><code class="php">$storeService = $container->get(&#39;StoreService&#39;);
 </code></pre>
 
 <p>and configure which GeolocationService PHP-DI should automatically inject in StoreService through configuration:</p>
