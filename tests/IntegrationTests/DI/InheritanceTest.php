@@ -10,6 +10,7 @@
 namespace IntegrationTests\DI;
 
 use DI\Container;
+use DI\ContainerBuilder;
 use IntegrationTests\DI\Fixtures\InheritanceTest\SubClass;
 
 /**
@@ -58,16 +59,18 @@ class InheritanceTest extends \PHPUnit_Framework_TestCase
     public static function containerProvider()
     {
         // Test with a container using annotations
-        $containerAnnotations = new Container();
-        $containerAnnotations->useReflection(true);
-        $containerAnnotations->useAnnotations(true);
+        $builder = new ContainerBuilder();
+        $builder->useReflection(true);
+        $builder->useAnnotations(true);
+        $containerAnnotations = $builder->build();
         $containerAnnotations->set('IntegrationTests\DI\Fixtures\InheritanceTest\BaseClass')
             ->bindTo('IntegrationTests\DI\Fixtures\InheritanceTest\SubClass');
 
         // Test with a container using array configuration
-        $containerFullArrayDefinitions = new Container();
-        $containerFullArrayDefinitions->useReflection(false);
-        $containerFullArrayDefinitions->useAnnotations(false);
+        $builder = new ContainerBuilder();
+        $builder->useReflection(false);
+        $builder->useAnnotations(false);
+        $containerFullArrayDefinitions = $builder->build();
         $containerFullArrayDefinitions->addDefinitions(
             array(
                 'IntegrationTests\DI\Fixtures\InheritanceTest\BaseClass' => array(
@@ -99,9 +102,10 @@ class InheritanceTest extends \PHPUnit_Framework_TestCase
         );
 
         // Test with a container using array configuration
-        $containerInheritanceDefinitions = new Container();
-        $containerInheritanceDefinitions->useReflection(false);
-        $containerInheritanceDefinitions->useAnnotations(false);
+        $builder = new ContainerBuilder();
+        $builder->useReflection(false);
+        $builder->useAnnotations(false);
+        $containerInheritanceDefinitions = $builder->build();
         $containerInheritanceDefinitions->addDefinitions(
             array(
                 'IntegrationTests\DI\Fixtures\InheritanceTest\BaseClass' => array(
