@@ -78,11 +78,7 @@ class ClassDefinitionHelper
      */
     public function withConstructor(array $params)
     {
-        $paramInjections = array();
-        foreach ($params as $key => $param) {
-            $paramInjections[] = new ParameterInjection($key, $param);
-        }
-        $this->classDefinition->setConstructorInjection(new MethodInjection('__construct', $paramInjections));
+        $this->classDefinition->setConstructorInjection($this->createMethodInjection('__construct', $params));
         return $this;
     }
 
@@ -92,6 +88,24 @@ class ClassDefinitionHelper
      * @return $this
      */
     public function withMethod($methodName, array $params)
+    {
+        $this->classDefinition->addMethodInjection($this->createMethodInjection($methodName, $params));
+        return $this;
+    }
+
+    /**
+     * @return ClassDefinition
+     */
+    public function getDefinition()
+    {
+        return $this->classDefinition;
+    }
+
+    /**
+     * @param string[] $params Parameters for the method: array of container entries names
+     * @return MethodInjection
+     */
+    private function createMethodInjection($methodName, array $params)
     {
         $paramInjections = array();
 
@@ -108,16 +122,7 @@ class ClassDefinitionHelper
             $paramInjections[] = $parameterInjection;
         }
 
-        $this->classDefinition->addMethodInjection(new MethodInjection($methodName, $paramInjections));
-        return $this;
-    }
-
-    /**
-     * @return ClassDefinition
-     */
-    public function getDefinition()
-    {
-        return $this->classDefinition;
+        return new MethodInjection($methodName, $paramInjections);
     }
 
 }

@@ -49,6 +49,7 @@ class Class1
 
     public $constructorParam1;
     public $constructorParam2;
+    public $constructorParam3;
 
     public $method1Param1;
 
@@ -60,13 +61,16 @@ class Class1
     public $method4Param1;
 
     /**
-     * @param Class2     $param1
-     * @param Interface1 $param2
+     * @Inject({"param3" = {"lazy" = true}})
+     * @param Class2         $param1
+     * @param Interface1     $param2
+     * @param LazyDependency $param3
      */
-    public function __construct(Class2 $param1, Interface1 $param2)
+    public function __construct(Class2 $param1, Interface1 $param2, LazyDependency $param3)
     {
         $this->constructorParam1 = $param1;
         $this->constructorParam2 = $param2;
+        $this->constructorParam3 = $param3;
     }
 
     /**
@@ -99,7 +103,7 @@ class Class1
 
     /**
      * @Inject({"param1" = {"lazy" = true}})
-     * @param string $param1
+     * @param LazyDependency $param1
      */
     public function method4(LazyDependency $param1)
     {
