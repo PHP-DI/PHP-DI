@@ -2,7 +2,10 @@
 
 ## 3.4
 
-* You can now define arrays of values (in YAML, PHP, …) [#106](https://github.com/mnapoli/PHP-DI/pull/106/)
+* [#106](https://github.com/mnapoli/PHP-DI/pull/106/) You can now define arrays of values (in YAML, PHP, …) thanks to [@unkind](https://github.com/unkind)
+* [#98](https://github.com/mnapoli/PHP-DI/issues/98) `ContainerBuilder` is now fluent thanks to [@drdamour](https://github.com/drdamour)
+* [#101](https://github.com/mnapoli/PHP-DI/pull/101) Optional parameters are now fully supported: if you don't define a value to inject, their default value will be used
+* XML definitions have been deprecated, there weren't even documented and were not maintained. They will be removed in 4.0.
 * FIXED [#100](https://github.com/mnapoli/PHP-DI/issues/100): bug for lazy injection in constructors
 
 ## 3.3
