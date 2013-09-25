@@ -16,7 +16,7 @@ value4:
   - alice@acme.example.com
 ```
 
-Note that the arrays *have to be non-indexed*.
+Note that the arrays can't be associative arrays, and must not be empty.
 
 - `ContainerBuilder` is now fluent thanks to [@drdamour](https://github.com/drdamour):
 
