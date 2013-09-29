@@ -47,7 +47,7 @@ Implementations are:
 
 File loaders extend the `DefinitionFileLoader` abstract class.
 
-Their goal is to read a file containing definitions (PHP, YAML, XML, …) and return a PHP array that will be read by the `ArrayDefinitionSource`.
+Their goal is to read a file containing definitions (PHP, YAML, …) and return a PHP array that will be read by the `ArrayDefinitionSource`.
 
 ### Definition manager
 
