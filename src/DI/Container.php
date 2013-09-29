@@ -141,6 +141,25 @@ class Container
     }
 
     /**
+     * Test if the container can provide something for the given name
+     *
+     * @param string $name Entry name or a class name
+     * @return bool
+     */
+    public function has($name)
+    {
+        if (! is_string($name)) {
+            throw new InvalidArgumentException("The name parameter must be of type string");
+        }
+
+        if (array_key_exists($name, $this->entries) || $this->definitionManager->getDefinition($name)) {
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
      * Inject all dependencies on an existing instance
      *
      * @param object $instance Object to perform injection upon

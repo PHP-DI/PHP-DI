@@ -1,5 +1,16 @@
 # Change log
 
+## 4.0
+
+BC-breaks:
+
+* XML definitions have been removed
+
+All changes:
+
+* [#115](https://github.com/mnapoli/PHP-DI/issues/115) Added `Container::has()`
+* [#110](https://github.com/mnapoli/PHP-DI/issues/110) XML definitions have been removed
+
 ## 3.4
 
 Read the [news entry](news/04-php-di-3-4.md).

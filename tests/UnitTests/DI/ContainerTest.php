@@ -152,6 +152,25 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
         $container->get(new stdClass());
     }
 
+    public function testHas()
+    {
+        $container = new Container();
+        $container->set('foo', 'bar');
+
+        $this->assertTrue($container->has('foo'));
+        $this->assertFalse($container->has('wow'));
+    }
+
+    /**
+     * @expectedException \InvalidArgumentException
+     * @expectedExceptionMessage The name parameter must be of type string
+     */
+    public function testHasNonStringParameter()
+    {
+        $container = new Container();
+        $container->get(new stdClass());
+    }
+
     /**
      * Test that injecting an existing object returns the same reference to that object
      */

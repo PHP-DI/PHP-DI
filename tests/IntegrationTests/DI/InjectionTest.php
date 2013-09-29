@@ -146,6 +146,18 @@ class InjectionTest extends \PHPUnit_Framework_TestCase
     /**
      * @dataProvider containerProvider
      */
+    public function testContainerHas($type, Container $container)
+    {
+        $this->assertTrue($container->has('IntegrationTests\DI\Fixtures\Class1'));
+        $this->assertTrue($container->has('IntegrationTests\DI\Fixtures\Class2'));
+        $this->assertTrue($container->has('IntegrationTests\DI\Fixtures\Interface1'));
+        $this->assertTrue($container->has('namedDependency'));
+        $this->assertTrue($container->has('IntegrationTests\DI\Fixtures\LazyDependency'));
+    }
+
+    /**
+     * @dataProvider containerProvider
+     */
     public function testConstructorInjection($type, Container $container)
     {
         /** @var $class1 Class1 */
