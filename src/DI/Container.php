@@ -59,6 +59,8 @@ class Container
     private $classesBeingInstantiated = array();
 
     /**
+     * Parameters are optional, use them to override a dependency.
+     *
      * @param DefinitionManager|null             $definitionManager
      * @param FactoryInterface|null              $factory
      * @param LazyLoadingValueHolderFactory|null $proxyFactory
@@ -95,13 +97,7 @@ class Container
 
         // Try to find the entry in the map
         if (array_key_exists($name, $this->entries)) {
-            $entry = $this->entries[$name];
-            // If it's a closure, resolve it and save the result
-            if ($entry instanceof \Closure) {
-                $entry = $entry($this);
-                $this->entries[$name] = $entry;
-            }
-            return $entry;
+            return $this->entries[$name];
         }
 
         // Entry not loaded, use the definitions
