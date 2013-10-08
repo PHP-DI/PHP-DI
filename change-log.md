@@ -4,12 +4,13 @@
 
 BC-breaks:
 
-* XML definitions have been removed
+* XML and JSON definitions have been removed
 
 All changes:
 
 * [#115](https://github.com/mnapoli/PHP-DI/issues/115) Added `Container::has()`
-* [#110](https://github.com/mnapoli/PHP-DI/issues/110) XML definitions have been removed
+* [#110](https://github.com/mnapoli/PHP-DI/issues/110) XML definitions are not supported anymore
+* [#122](https://github.com/mnapoli/PHP-DI/issues/122) JSON definitions are not supported anymore
 
 ## 3.4
 
