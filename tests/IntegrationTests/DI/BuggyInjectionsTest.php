@@ -21,7 +21,7 @@ class BuggyInjectionsTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @expectedException \DI\Definition\Exception\DefinitionException
-     * @expectedExceptionMessage The parameter 'dependency' of the constructor of 'IntegrationTests\DI\Fixtures\ConstructorInjectionTest\Buggy1' has no type defined or guessable
+     * @expectedExceptionMessage The parameter 'dependency' of IntegrationTests\DI\Fixtures\ConstructorInjectionTest\Buggy1::__construct has no value defined or guessable
      */
     public function testConstructorNonTypeHintedMethod()
     {
@@ -52,7 +52,7 @@ class BuggyInjectionsTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException \DI\Definition\Exception\DefinitionException
-     * @expectedExceptionMessage The parameter 'dependency' of IntegrationTests\DI\Fixtures\SetterInjectionTest\Buggy1::setDependency has no type defined or guessable
+     * @expectedExceptionMessage The parameter 'dependency' of IntegrationTests\DI\Fixtures\SetterInjectionTest\Buggy1::setDependency has no value defined or guessable
      */
     public function testSetterNonTypeHintedMethod()
     {

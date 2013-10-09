@@ -172,8 +172,8 @@ class Factory implements FactoryInterface
                     $args[] = $this->getParameterDefaultValue($reflectionParameters[$index], $methodReflection);
                     continue;
                 }
-                throw new DefinitionException("The parameter '" . ($index + 1)
-                    . "' of the constructor of '$className' has no value defined or guessable");
+                throw new DefinitionException("The parameter '" . $reflectionParameters[$index]->getName()
+                    . "' of $className::{$methodReflection->name} has no value defined or guessable");
             }
 
             if ($value instanceof EntryReference) {

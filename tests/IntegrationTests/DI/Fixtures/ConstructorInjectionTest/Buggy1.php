@@ -14,10 +14,8 @@ namespace IntegrationTests\DI\Fixtures\ConstructorInjectionTest;
  */
 class Buggy1
 {
-
     public function __construct($dependency)
     {
         $this->dependency = $dependency;
     }
-
 }
