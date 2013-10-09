@@ -12,6 +12,7 @@ namespace DI\Definition\Source;
 use DI\Definition\ClassDefinition;
 use DI\Definition\Definition;
 use DI\Definition\ValueDefinition;
+use DI\DefinitionHelper\DefinitionHelper;
 
 /**
  * Reads DI definitions from a PHP array
@@ -44,6 +45,10 @@ class ArrayDefinitionSource implements DefinitionSource
 
         if ($value instanceof Definition) {
             return $value;
+        }
+
+        if ($value instanceof DefinitionHelper) {
+            return $value->getDefinition($name);
         }
 
         return new ValueDefinition($name, $value);

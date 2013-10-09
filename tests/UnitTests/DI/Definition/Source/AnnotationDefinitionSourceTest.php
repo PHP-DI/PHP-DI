@@ -64,7 +64,7 @@ class AnnotationDefinitionSourceTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf(Definition::class, $definition);
 
         $methodInjections = $definition->getMethodInjections();
-        $methodInjection = $methodInjections[0];
+        $methodInjection = $methodInjections['method1'];
         $this->assertInstanceOf(MethodInjection::class, $methodInjection);
 
         $this->assertEmpty($methodInjection->getParameters());

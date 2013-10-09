@@ -13,7 +13,6 @@ use DI\Annotation\Inject;
 
 class AnnotationFixture
 {
-
     /**
      * @Inject("foo")
      */
@@ -95,5 +94,4 @@ class AnnotationFixture
     public function method7($param1, $param2)
     {
     }
-
 }
