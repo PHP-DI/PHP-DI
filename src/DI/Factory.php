@@ -92,18 +92,7 @@ class Factory implements FactoryInterface
      */
     private function injectConstructor(ReflectionClass $classReflection, MethodInjection $constructorInjection = null)
     {
-        $constructorReflection = $classReflection->getConstructor();
-
-        // No constructor
-        if (!$constructorReflection) {
-            return $classReflection->newInstance();
-        }
-
-        $args = $this->prepareMethodParameters(
-            $constructorInjection,
-            $constructorReflection,
-            $classReflection->getName()
-        );
+        $args = $this->prepareMethodParameters($constructorInjection, $classReflection->getConstructor());
 
         return $classReflection->newInstanceArgs($args);
     }
@@ -125,7 +114,7 @@ class Factory implements FactoryInterface
     }
 
     /**
-     * Inject dependencies through methods
+     * Inject dependencies through methods.
      *
      * @param object          $object Object to inject dependencies into
      * @param MethodInjection $methodInjection
@@ -135,25 +124,25 @@ class Factory implements FactoryInterface
      */
     private function injectMethod($object, MethodInjection $methodInjection)
     {
-        $classReflection = new ReflectionClass($object);
-        $methodReflection = $classReflection->getMethod($methodInjection->getMethodName());
+        $methodReflection = new ReflectionMethod($object, $methodInjection->getMethodName());
 
-        $args = $this->prepareMethodParameters(
-            $methodInjection,
-            $methodReflection,
-            $classReflection->getName()
-        );
+        $args = $this->prepareMethodParameters($methodInjection, $methodReflection);
 
         $methodReflection->invokeArgs($object, $args);
     }
 
-    private function prepareMethodParameters(MethodInjection $methodInjection, ReflectionMethod $methodReflection, $className)
+    private function prepareMethodParameters(MethodInjection $methodInjection = null, ReflectionMethod $methodReflection = null)
     {
+        if (!$methodReflection) {
+            return array();
+        }
+
         // Check the number of parameters match
         $nbRequiredParameters = $methodReflection->getNumberOfRequiredParameters();
-        $parameterInjections = $methodInjection->getParameters();
+        $parameterInjections = $methodInjection ? $methodInjection->getParameters() : array();
         if (count($parameterInjections) < $nbRequiredParameters) {
-            throw new DefinitionException("The constructor of $className takes $nbRequiredParameters"
+            $className = $methodReflection->getDeclaringClass()->getName();
+            throw new DefinitionException("$className::{$methodReflection->name} takes $nbRequiredParameters"
                 . " parameters, " . count($parameterInjections) . " defined or guessed");
         }
 
@@ -172,6 +161,7 @@ class Factory implements FactoryInterface
                     $args[] = $this->getParameterDefaultValue($reflectionParameters[$index], $methodReflection);
                     continue;
                 }
+                $className = $methodReflection->getDeclaringClass()->getName();
                 throw new DefinitionException("The parameter '" . $reflectionParameters[$index]->getName()
                     . "' of $className::{$methodReflection->name} has no value defined or guessable");
             }

@@ -20,7 +20,6 @@ use DI\Definition\Definition;
  */
 class CombinedDefinitionSource implements DefinitionSource
 {
-
     /**
      * Sub-sources
      * @var DefinitionSource[]
@@ -85,5 +84,4 @@ class CombinedDefinitionSource implements DefinitionSource
     {
         $this->subSources[] = $source;
     }
-
 }

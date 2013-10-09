@@ -72,36 +72,32 @@ class InheritanceTest extends \PHPUnit_Framework_TestCase
         $builder->useReflection(false);
         $builder->useAnnotations(false);
         $containerFullArrayDefinitions = $builder->build();
-        $containerFullArrayDefinitions->addDefinitions(
-            array(
-                BaseClass::class => Entry::object(SubClass::class)
-                    ->withProperty('property1', Entry::link(Dependency::class))
-                    ->withProperty('property4', Entry::link(Dependency::class))
-                    ->withConstructor(Entry::link(Dependency::class))
-                    ->withMethod('setProperty2', Entry::link(Dependency::class)),
-                SubClass::class => Entry::object()
-                    ->withProperty('property1', Entry::link(Dependency::class))
-                    ->withProperty('property4', Entry::link(Dependency::class))
-                    ->withConstructor(Entry::link(Dependency::class))
-                    ->withMethod('setProperty2', Entry::link(Dependency::class)),
-            )
-        );
+        $containerFullArrayDefinitions->addDefinitions([
+            BaseClass::class => Entry::object(SubClass::class)
+                ->withProperty('property1', Entry::link(Dependency::class))
+                ->withProperty('property4', Entry::link(Dependency::class))
+                ->withConstructor(Entry::link(Dependency::class))
+                ->withMethod('setProperty2', Entry::link(Dependency::class)),
+            SubClass::class => Entry::object()
+                ->withProperty('property1', Entry::link(Dependency::class))
+                ->withProperty('property4', Entry::link(Dependency::class))
+                ->withConstructor(Entry::link(Dependency::class))
+                ->withMethod('setProperty2', Entry::link(Dependency::class)),
+        ]);
 
         // Test with a container using array configuration
         $builder = new ContainerBuilder();
         $builder->useReflection(false);
         $builder->useAnnotations(false);
         $containerInheritanceDefinitions = $builder->build();
-        $containerInheritanceDefinitions->addDefinitions(
-            array(
-                 BaseClass::class => Entry::object(SubClass::class)
-                    ->withProperty('property1', Entry::link(Dependency::class))
-                    ->withConstructor(Entry::link(Dependency::class))
-                    ->withMethod('setProperty2', Entry::link(Dependency::class)),
-                SubClass::class => Entry::object()
-                    ->withProperty('property4', Entry::link(Dependency::class)),
-            )
-        );
+        $containerInheritanceDefinitions->addDefinitions([
+             BaseClass::class => Entry::object(SubClass::class)
+                ->withProperty('property1', Entry::link(Dependency::class))
+                ->withConstructor(Entry::link(Dependency::class))
+                ->withMethod('setProperty2', Entry::link(Dependency::class)),
+            SubClass::class => Entry::object()
+                ->withProperty('property4', Entry::link(Dependency::class)),
+        ]);
 
         return array(
             array($containerAnnotations),

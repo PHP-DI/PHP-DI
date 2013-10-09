@@ -41,17 +41,22 @@ class ArrayDefinitionSource implements DefinitionSource
             return null;
         }
 
-        $value = $this->definitions[$name];
+        $definition = $this->definitions[$name];
 
-        if ($value instanceof Definition) {
-            return $value;
+        if ($definition instanceof DefinitionHelper) {
+            $definition = $definition->getDefinition($name);
         }
 
-        if ($value instanceof DefinitionHelper) {
-            return $value->getDefinition($name);
+        if (! $definition instanceof Definition) {
+            $definition = new ValueDefinition($name, $definition);
         }
 
-        return new ValueDefinition($name, $value);
+        // If it's a class, merge definitions from parent classes and interfaces
+        if ($definition instanceof ClassDefinition) {
+            $this->mergeWithParents($name, $definition);
+        }
+
+        return $definition;
     }
 
     /**

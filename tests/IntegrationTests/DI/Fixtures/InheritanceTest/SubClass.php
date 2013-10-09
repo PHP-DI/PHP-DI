@@ -16,11 +16,9 @@ use DI\Annotation\Inject;
  */
 class SubClass extends BaseClass
 {
-
     /**
      * @Inject
      * @var Dependency
      */
     public $property4;
-
 }
