@@ -13,7 +13,6 @@ use DI\Annotation\Inject;
 
 class Class1
 {
-
     public $arg1;
 
     /**
@@ -23,5 +22,4 @@ class Class1
     {
         $this->arg1 = $arg1;
     }
-
 }

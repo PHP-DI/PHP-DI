@@ -58,7 +58,7 @@ class Issue72Test extends \PHPUnit_Framework_TestCase
                     return $value;
                 }),
                 Class1::class => Entry::object()
-                    ->withConstructor('service1'),
+                    ->withConstructor(Entry::link('service2')),
             ));
 
         /** @var Class1 $class1 */
@@ -84,11 +84,11 @@ class Issue72Test extends \PHPUnit_Framework_TestCase
                 return $value;
             }),
             Class1::class => Entry::object()
-                ->withConstructor('service1'),
+                ->withConstructor(Entry::link('service1')),
         ));
         // Override 'service1' to 'service2'
         $container->set(Class1::class, Entry::object()
-            ->withConstructor('service2'));
+            ->withConstructor(Entry::link('service2')));
 
         /** @var Class1 $class1 */
         $class1 = $container->get(Class1::class);
