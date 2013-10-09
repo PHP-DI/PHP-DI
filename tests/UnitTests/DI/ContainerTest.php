@@ -9,8 +9,10 @@
 
 namespace UnitTests\DI;
 
+use DI\Entry;
 use stdClass;
 use DI\Container;
+use UnitTests\DI\Fixtures\Class1CircularDependencies;
 
 /**
  * Test class for Container
@@ -34,30 +36,14 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
         $container->get('key');
     }
 
-    public function testGetWithClosure()
+    public function testClosureIsNotResolved()
     {
+        $closure = function () {
+            return 'hello';
+        };
         $container = new Container();
-        $container->set(
-            'key',
-            function () {
-                return 'hello';
-            }
-        );
-        $this->assertEquals('hello', $container->get('key'));
-    }
-
-    public function testGetWithClosureIsCached()
-    {
-        $container = new Container();
-        $container->set(
-            'key',
-            function () {
-                return new stdClass();
-            }
-        );
-        $instance1 = $container->get('key');
-        $instance2 = $container->get('key');
-        $this->assertSame($instance1, $instance2);
+        $container->set('key', $closure);
+        $this->assertSame($closure, $container->get('key'));
     }
 
     public function testGetWithClassName()
@@ -111,13 +97,7 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
     public function testGetWithProxyWithAlias()
     {
         $container = new Container();
-        $container->addDefinitions(
-            array(
-                'foo' => array(
-                    'class' => 'stdClass',
-                ),
-            )
-        );
+        $container->set('foo', Entry::object('stdClass'));
         $this->assertInstanceOf('stdClass', $container->get('foo', true));
     }
 
@@ -138,7 +118,7 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
     public function testCircularDependenciesException()
     {
         $container = new Container();
-        $container->get('UnitTests\DI\Fixtures\Class1CircularDependencies');
+        $container->get(Class1CircularDependencies::class);
     }
 
     /**

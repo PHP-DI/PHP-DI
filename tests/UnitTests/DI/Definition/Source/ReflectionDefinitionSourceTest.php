@@ -11,6 +11,7 @@ namespace UnitTests\DI\Definition\Source;
 
 use DI\Definition\EntryReference;
 use DI\Definition\Source\ReflectionDefinitionSource;
+use DI\Definition\UndefinedInjection;
 use UnitTests\DI\Definition\Fixtures\ReflectionFixture;
 
 class ReflectionDefinitionSourceTest extends \PHPUnit_Framework_TestCase
@@ -37,9 +38,9 @@ class ReflectionDefinitionSourceTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(new EntryReference(ReflectionFixture::class), $param1);
 
         $param2 = $parameters[1];
-        $this->assertNull($param2);
+        $this->assertEquals(new UndefinedInjection(), $param2);
 
         $param3 = $parameters[2];
-        $this->assertNull($param3);
+        $this->assertEquals(new UndefinedInjection(), $param3);
     }
 }

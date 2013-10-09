@@ -12,6 +12,7 @@ namespace DI\Definition\Source;
 use DI\Definition\ClassDefinition;
 use DI\Definition\EntryReference;
 use DI\Definition\MethodInjection;
+use DI\Definition\UndefinedInjection;
 use ReflectionClass;
 use ReflectionParameter;
 
@@ -44,10 +45,12 @@ class ReflectionDefinitionSource implements DefinitionSource
             $parameters = array();
             foreach ($constructor->getParameters() as $parameter) {
                 $parameterType = $this->getParameterType($parameter);
-                if (!$parameterType) {
-                    break;
+
+                if ($parameterType) {
+                    $parameters[] = new EntryReference($parameterType);
+                } else {
+                    $parameters[] = new UndefinedInjection();
                 }
-                $parameters[] = new EntryReference($parameterType);
             }
 
             $classDefinition->setConstructorInjection(

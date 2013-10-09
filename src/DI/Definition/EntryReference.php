@@ -10,7 +10,7 @@
 namespace DI\Definition;
 
 /**
- * References a container entry.
+ * Represents a reference to a container entry.
  *
  * @author Matthieu Napoli <matthieu@mnapoli.fr>
  */

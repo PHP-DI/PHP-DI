@@ -16,9 +16,8 @@ class CallableDefinitionHelperTest extends \PHPUnit_Framework_TestCase
 {
     public function testGetDefinition()
     {
-        $callable = function() {
-        };
-        $helper = new CallableDefinitionHelper(function() {});
+        $callable = function() {};
+        $helper = new CallableDefinitionHelper($callable);
         $definition = $helper->getDefinition('foo');
 
         $this->assertTrue($definition instanceof ClosureDefinition);

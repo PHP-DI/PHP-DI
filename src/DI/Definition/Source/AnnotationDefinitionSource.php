@@ -18,6 +18,7 @@ use DI\Definition\Exception\DefinitionException;
 use DI\Definition\MethodInjection;
 use DI\Definition\PropertyInjection;
 use DI\Definition\Source\Annotation\PhpDocParser;
+use DI\Definition\UndefinedInjection;
 use Doctrine\Common\Annotations\AnnotationReader;
 use Doctrine\Common\Annotations\AnnotationRegistry;
 use Doctrine\Common\Annotations\Reader;
@@ -104,7 +105,6 @@ class AnnotationDefinitionSource implements DefinitionSource
     private function readProperties(ReflectionClass $reflectionClass, ClassDefinition $classDefinition)
     {
         foreach ($reflectionClass->getProperties() as $property) {
-
             // Ignore static properties
             if ($property->isStatic()) {
                 continue;
@@ -112,19 +112,25 @@ class AnnotationDefinitionSource implements DefinitionSource
 
             // Look for @Inject annotation
             $annotation = $this->getAnnotationReader()->getPropertyAnnotation($property, 'DI\Annotation\Inject');
-
-            if ($annotation !== null) {
-                /** @var $annotation Inject */
-
-                $entryName = $annotation->getName();
-                if ($entryName == null) {
-                    // Look for @var content
-                    $entryName = $this->phpDocParser->getPropertyType($reflectionClass, $property);
-                }
-                $propertyInjection = new PropertyInjection($property->name, $entryName, $annotation->isLazy());
-                $classDefinition->addPropertyInjection($propertyInjection);
+            if ($annotation === null) {
+                continue;
             }
 
+            /** @var $annotation Inject */
+            $entryName = $annotation->getName();
+
+            // Look for @var content
+            $entryName = $entryName ?: $this->phpDocParser->getPropertyType($reflectionClass, $property);
+
+            if ($entryName === null) {
+                $value = new UndefinedInjection();
+            } else {
+                $value = new EntryReference($entryName);
+            }
+
+            $classDefinition->addPropertyInjection(
+                new PropertyInjection($property->name, $value, $annotation->isLazy())
+            );
         }
     }
 
@@ -225,6 +231,11 @@ class AnnotationDefinitionSource implements DefinitionSource
             // Look for @param tag or PHP type-hinting (only case where we use reflection)
             if ($entryName === null) {
                 $entryName = $this->phpDocParser->getParameterType($reflectionClass, $method, $parameter);
+            }
+
+            if ($entryName === null) {
+                $parameters[] = new UndefinedInjection();
+                continue;
             }
 
             $parameters[] = new EntryReference($entryName);

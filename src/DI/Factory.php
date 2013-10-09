@@ -14,6 +14,7 @@ use DI\Definition\EntryReference;
 use DI\Definition\Exception\DefinitionException;
 use DI\Definition\MethodInjection;
 use DI\Definition\PropertyInjection;
+use DI\Definition\UndefinedInjection;
 use Exception;
 use ReflectionClass;
 use ReflectionException;
@@ -165,7 +166,7 @@ class Factory implements FactoryInterface
 
         $args = array();
         foreach ($parameterInjections as $index => $value) {
-            if ($value === null) {
+            if ($value instanceof UndefinedInjection) {
                 // If the parameter is optional and wasn't specified, we take its default value
                 if ($reflectionParameters[$index]->isOptional()) {
                     $args[] = $this->getParameterDefaultValue($reflectionParameters[$index], $methodReflection);
@@ -200,6 +201,11 @@ class Factory implements FactoryInterface
         $property = new ReflectionProperty(get_class($object), $propertyName);
 
         $value = $propertyInjection->getValue();
+
+        if ($value instanceof UndefinedInjection) {
+            throw new DefinitionException("The property " . get_class($object) . "::"
+                . $propertyInjection->getPropertyName() . " has no value defined or guessable");
+        }
 
         if ($value instanceof EntryReference) {
             try {
