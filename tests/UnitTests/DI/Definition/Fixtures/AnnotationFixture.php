@@ -88,7 +88,7 @@ class AnnotationFixture
 
     /**
      * @Inject({
-     *   "param1" = {"name" = "foo", "lazy" = true},
+     *   "param1" = {"name" = "foo"},
      *   "param2" = {"name" = "bar"}
      * })
      */

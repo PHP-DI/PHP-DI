@@ -21,7 +21,6 @@ use DI\Scope;
  */
 class ClassDefinitionTest extends \PHPUnit_Framework_TestCase
 {
-
     public function testProperties()
     {
         $definition = new ClassDefinition('foo', 'bar');
@@ -103,5 +102,4 @@ class ClassDefinitionTest extends \PHPUnit_Framework_TestCase
             array($definition2, $definition1),
         );
     }
-
 }

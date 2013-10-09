@@ -9,14 +9,12 @@
 
 namespace DI;
 
-use Closure;
 use DI\Definition\ClassDefinition;
 use DI\Definition\ClosureDefinition;
 use DI\Definition\DefinitionManager;
-use DI\Definition\Helper\ClassDefinitionHelper;
 use DI\Definition\ValueDefinition;
 use DI\Definition\FileLoader\DefinitionFileLoader;
-use Doctrine\Common\Cache\Cache;
+use DI\DefinitionHelper\DefinitionHelper;
 use Exception;
 use InvalidArgumentException;
 use ProxyManager\Factory\LazyLoadingValueHolderFactory;
@@ -29,7 +27,6 @@ use ProxyManager\GeneratorStrategy\EvaluatingGeneratorStrategy;
  */
 class Container
 {
-
     /**
      * Map of instances of entry with Singleton scope
      * @var array
@@ -140,6 +137,7 @@ class Container
      * Test if the container can provide something for the given name
      *
      * @param string $name Entry name or a class name
+     * @throws \InvalidArgumentException
      * @return bool
      */
     public function has($name)
@@ -169,7 +167,7 @@ class Container
 
         // Check that the definition is a class definition
         if ($definition instanceof ClassDefinition) {
-            $instance = $this->factory->injectInstance($definition, $instance);
+            $instance = $this->factory->injectOnInstance($definition, $instance);
         }
 
         return $instance;
@@ -178,65 +176,18 @@ class Container
     /**
      * Define an object or a value in the container
      *
-     * @param string             $name Entry name
-     * @param mixed|Closure|null $value Value, Closure or if *not set*, returns a ClassDefinitionHelper
-     * If a null value is explicitly given ($container->set('foo', null)) then the null value is registered
-     * and no ClassDefinitionHelper is returned.
-     * Use $container->set('foo') to get a ClassDefinitionHelper.
-     *
-     * @return null|ClassDefinitionHelper
+     * @param string                 $name  Entry name
+     * @param mixed|DefinitionHelper $value Value, use definition helpers to define objects
      */
-    public function set($name, $value = null)
+    public function set($name, $value)
     {
-        // Class definition
-        if ($value === null) {
-            // If a null value was explicitly given in the method call, then we register a null value
-            if (func_num_args() === 2) {
-                $definition = new ValueDefinition($name, $value);
-                $this->definitionManager->addDefinition($definition);
-                return null;
-            }
-
-            $helper = new ClassDefinitionHelper($name);
-            $this->definitionManager->addDefinition($helper->getDefinition());
-            return $helper;
+        if ($value instanceof DefinitionHelper) {
+            $definition = $value->getDefinition($name);
+        } else {
+            $definition = new ValueDefinition($name, $value);
         }
 
-        // Closure definition
-        if ($value instanceof Closure) {
-            $definition = new ClosureDefinition($name, $value);
-            $this->definitionManager->addDefinition($definition);
-            return null;
-        }
-
-        // Value definition
-        $definition = new ValueDefinition($name, $value);
         $this->definitionManager->addDefinition($definition);
-        return null;
-    }
-
-    /**
-     * Enable or disable the use of reflection
-     *
-     * @param boolean $bool
-     * @deprecated Use ContainerBuilder::useReflection instead. Will be removed in next major release (v4).
-     * @see ContainerBuilder::useReflection
-     */
-    public function useReflection($bool)
-    {
-        $this->definitionManager->useReflection($bool);
-    }
-
-    /**
-     * Enable or disable the use of annotations
-     *
-     * @param boolean $bool
-     * @deprecated Use ContainerBuilder::useAnnotations instead. Will be removed in next major release (v4).
-     * @see ContainerBuilder::useAnnotations
-     */
-    public function useAnnotations($bool)
-    {
-        $this->definitionManager->useAnnotations($bool);
     }
 
     /**
@@ -252,37 +203,12 @@ class Container
     /**
      * Add definitions contained in a file
      *
-     * @param \DI\Definition\FileLoader\DefinitionFileLoader $definitionFileLoader
-     * @throws \InvalidArgumentException
+     * @param DefinitionFileLoader $definitionFileLoader
+     * @throws InvalidArgumentException
      */
     public function addDefinitionsFromFile(DefinitionFileLoader $definitionFileLoader)
     {
         $this->definitionManager->addDefinitionsFromFile($definitionFileLoader);
-    }
-
-    /**
-     * Enables the use of a cache for the definitions
-     *
-     * @param Cache $cache Cache backend to use
-     * @deprecated Use ContainerBuilder::setDefinitionCache instead. Will be removed in next major release (v4).
-     * @see ContainerBuilder::setDefinitionCache
-     */
-    public function setDefinitionCache(Cache $cache)
-    {
-        $this->definitionManager->setCache($cache);
-    }
-
-    /**
-     * Enables/disables the validation of the definitions
-     *
-     * By default, disabled
-     * @param bool $bool
-     * @deprecated Use ContainerBuilder::setDefinitionsValidation instead. Will be removed in next major release (v4).
-     * @see ContainerBuilder::setDefinitionsValidation
-     */
-    public function setDefinitionsValidation($bool)
-    {
-        $this->definitionManager->setDefinitionsValidation($bool);
     }
 
     /**
@@ -327,6 +253,8 @@ class Container
 
     /**
      * @param ClassDefinition $classDefinition
+     * @throws DependencyException
+     * @throws \Exception
      * @return object The instance
      */
     private function getNewInstance(ClassDefinition $classDefinition)
@@ -404,5 +332,4 @@ class Container
 
         return new LazyLoadingValueHolderFactory($config);
     }
-
 }

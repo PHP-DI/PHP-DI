@@ -21,7 +21,6 @@ use ReflectionClass;
  */
 class InjectTest extends \PHPUnit_Framework_TestCase
 {
-
     /**
      * @var AnnotationReader
      */
@@ -138,5 +137,4 @@ class InjectTest extends \PHPUnit_Framework_TestCase
         $this->assertArrayHasKey('str2', $parameters);
         $this->assertTrue($parameters['str2']['lazy']);
     }
-
 }

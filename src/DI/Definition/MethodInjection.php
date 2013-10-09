@@ -10,34 +10,30 @@
 namespace DI\Definition;
 
 /**
- * Describe an injection in a class method
+ * Describe an injection in a class method.
  *
  * @author Matthieu Napoli <matthieu@mnapoli.fr>
  */
 class MethodInjection
 {
-
     /**
-     * Method name
      * @var string
      */
     private $methodName;
 
     /**
-     * @var ParameterInjection[]
+     * @var array
      */
-    private $parameterInjections = array();
+    private $parameters = array();
 
     /**
-     * @param string               $methodName
-     * @param ParameterInjection[] $parameterInjections
+     * @param string $methodName
+     * @param array  $parameters
      */
-    public function __construct($methodName, array $parameterInjections = array())
+    public function __construct($methodName, array $parameters = array())
     {
         $this->methodName = (string) $methodName;
-        foreach ($parameterInjections as $parameterInjection) {
-            $this->addParameterInjection($parameterInjection);
-        }
+        $this->parameters = $parameters;
     }
 
     /**
@@ -49,23 +45,15 @@ class MethodInjection
     }
 
     /**
-     * @return ParameterInjection[]
+     * @return array
      */
-    public function getParameterInjections()
+    public function getParameters()
     {
-        return $this->parameterInjections;
+        return $this->parameters;
     }
 
     /**
-     * @param ParameterInjection $parameterInjection
-     */
-    public function addParameterInjection(ParameterInjection $parameterInjection)
-    {
-        $this->parameterInjections[$parameterInjection->getParameterName()] = $parameterInjection;
-    }
-
-    /**
-     * Merge another definition into the current definition
+     * Merge another definition into the current definition.
      *
      * In case of conflicts, the latter prevails (i.e. the other definition)
      *
@@ -73,16 +61,6 @@ class MethodInjection
      */
     public function merge(MethodInjection $methodInjection)
     {
-        // Merge parameter injections
-        foreach ($methodInjection->getParameterInjections() as $parameterName => $parameterInjection) {
-            if (array_key_exists($parameterName, $this->parameterInjections)) {
-                // Merge
-                $this->parameterInjections[$parameterName]->merge($parameterInjection);
-            } else {
-                // Add
-                $this->parameterInjections[$parameterName] = $parameterInjection;
-            }
-        }
+        $this->parameters = $methodInjection->parameters + $this->parameters;
     }
-
 }

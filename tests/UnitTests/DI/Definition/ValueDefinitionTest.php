@@ -17,7 +17,6 @@ use DI\Definition\ValueDefinition;
  */
 class ValueDefinitionTest extends \PHPUnit_Framework_TestCase
 {
-
     public function testGetters()
     {
         $definition = new ValueDefinition('foo', 1);
@@ -46,5 +45,4 @@ class ValueDefinitionTest extends \PHPUnit_Framework_TestCase
         $definition2 = new ValueDefinition('foo', 2);
         $definition1->merge($definition2);
     }
-
 }

@@ -18,7 +18,6 @@ use DI\Definition\ClosureDefinition;
  */
 class ClosureDefinitionTest extends \PHPUnit_Framework_TestCase
 {
-
     public function testGetters()
     {
         $definition = new ClosureDefinition('foo', function() {
@@ -66,5 +65,4 @@ class ClosureDefinitionTest extends \PHPUnit_Framework_TestCase
         });
         $definition1->merge($definition2);
     }
-
 }

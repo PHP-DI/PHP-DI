@@ -10,13 +10,15 @@
 namespace IntegrationTests\DI;
 
 use DI\Container;
+use IntegrationTests\DI\Fixtures\ConstructorInjectionTest\Buggy2;
+use IntegrationTests\DI\Fixtures\SetterInjectionTest\Buggy3;
+use IntegrationTests\DI\Fixtures\ValueInjectionTest\ValueInjectionClass;
 
 /**
  * Tests buggy cases
  */
 class BuggyInjectionsTest extends \PHPUnit_Framework_TestCase
 {
-
     /**
      * @expectedException \DI\Definition\Exception\DefinitionException
      * @expectedExceptionMessage The parameter 'dependency' of the constructor of 'IntegrationTests\DI\Fixtures\ConstructorInjectionTest\Buggy1' has no type defined or guessable
@@ -24,7 +26,7 @@ class BuggyInjectionsTest extends \PHPUnit_Framework_TestCase
     public function testConstructorNonTypeHintedMethod()
     {
         $container = new Container();
-        $container->get('IntegrationTests\DI\Fixtures\ConstructorInjectionTest\Buggy1');
+        $container->get(Fixtures\ConstructorInjectionTest\Buggy1::class);
     }
 
     /**
@@ -34,7 +36,7 @@ class BuggyInjectionsTest extends \PHPUnit_Framework_TestCase
     public function testConstructorNonExistentEntry()
     {
         $container = new Container();
-        $container->get('IntegrationTests\DI\Fixtures\ConstructorInjectionTest\Buggy2');
+        $container->get(Buggy2::class);
     }
 
     /**
@@ -55,7 +57,7 @@ class BuggyInjectionsTest extends \PHPUnit_Framework_TestCase
     public function testSetterNonTypeHintedMethod()
     {
         $container = new Container();
-        $container->get('IntegrationTests\DI\Fixtures\SetterInjectionTest\Buggy1');
+        $container->get(Fixtures\SetterInjectionTest\Buggy1::class);
     }
 
     /**
@@ -65,7 +67,7 @@ class BuggyInjectionsTest extends \PHPUnit_Framework_TestCase
     public function testSetterNamedUnknownBean()
     {
         $container = new Container();
-        $container->get('IntegrationTests\DI\Fixtures\SetterInjectionTest\Buggy3');
+        $container->get(Buggy3::class);
     }
 
     /**
@@ -75,7 +77,6 @@ class BuggyInjectionsTest extends \PHPUnit_Framework_TestCase
     public function testValueException()
     {
         $container = new Container();
-        $container->get('IntegrationTests\DI\Fixtures\ValueInjectionTest\ValueInjectionClass');
+        $container->get(ValueInjectionClass::class);
     }
-
 }

@@ -11,6 +11,9 @@ namespace IntegrationTests\DI;
 
 use DI\Container;
 use DI\ContainerBuilder;
+use DI\Entry;
+use IntegrationTests\DI\Fixtures\InheritanceTest\BaseClass;
+use IntegrationTests\DI\Fixtures\InheritanceTest\Dependency;
 use IntegrationTests\DI\Fixtures\InheritanceTest\SubClass;
 
 /**
@@ -18,7 +21,6 @@ use IntegrationTests\DI\Fixtures\InheritanceTest\SubClass;
  */
 class InheritanceTest extends \PHPUnit_Framework_TestCase
 {
-
     /**
      * Test a dependency is injected if the injection is defined on a parent class
      *
@@ -63,8 +65,7 @@ class InheritanceTest extends \PHPUnit_Framework_TestCase
         $builder->useReflection(true);
         $builder->useAnnotations(true);
         $containerAnnotations = $builder->build();
-        $containerAnnotations->set('IntegrationTests\DI\Fixtures\InheritanceTest\BaseClass')
-            ->bindTo('IntegrationTests\DI\Fixtures\InheritanceTest\SubClass');
+        $containerAnnotations->set(BaseClass::class, Entry::object(SubClass::class));
 
         // Test with a container using array configuration
         $builder = new ContainerBuilder();
@@ -73,31 +74,16 @@ class InheritanceTest extends \PHPUnit_Framework_TestCase
         $containerFullArrayDefinitions = $builder->build();
         $containerFullArrayDefinitions->addDefinitions(
             array(
-                'IntegrationTests\DI\Fixtures\InheritanceTest\BaseClass' => array(
-                    'class'       => 'IntegrationTests\DI\Fixtures\InheritanceTest\SubClass',
-                    'properties'  => array(
-                        'property1' => 'IntegrationTests\DI\Fixtures\InheritanceTest\Dependency',
-                        'property4' => 'IntegrationTests\DI\Fixtures\InheritanceTest\Dependency',
-                    ),
-                    'constructor' => array(
-                        'param1' => 'IntegrationTests\DI\Fixtures\InheritanceTest\Dependency',
-                    ),
-                    'methods'     => array(
-                        'setProperty2' => 'IntegrationTests\DI\Fixtures\InheritanceTest\Dependency',
-                    ),
-                ),
-                'IntegrationTests\DI\Fixtures\InheritanceTest\SubClass'  => array(
-                    'properties'  => array(
-                        'property1' => 'IntegrationTests\DI\Fixtures\InheritanceTest\Dependency',
-                        'property4' => 'IntegrationTests\DI\Fixtures\InheritanceTest\Dependency',
-                    ),
-                    'constructor' => array(
-                        'param1' => 'IntegrationTests\DI\Fixtures\InheritanceTest\Dependency',
-                    ),
-                    'methods'     => array(
-                        'setProperty2' => 'IntegrationTests\DI\Fixtures\InheritanceTest\Dependency',
-                    ),
-                ),
+                BaseClass::class => Entry::object(SubClass::class)
+                    ->withProperty('property1', Entry::link(Dependency::class))
+                    ->withProperty('property4', Entry::link(Dependency::class))
+                    ->withConstructor(Entry::link(Dependency::class))
+                    ->withMethod('setProperty2', Entry::link(Dependency::class)),
+                SubClass::class => Entry::object()
+                    ->withProperty('property1', Entry::link(Dependency::class))
+                    ->withProperty('property4', Entry::link(Dependency::class))
+                    ->withConstructor(Entry::link(Dependency::class))
+                    ->withMethod('setProperty2', Entry::link(Dependency::class)),
             )
         );
 
@@ -108,23 +94,12 @@ class InheritanceTest extends \PHPUnit_Framework_TestCase
         $containerInheritanceDefinitions = $builder->build();
         $containerInheritanceDefinitions->addDefinitions(
             array(
-                'IntegrationTests\DI\Fixtures\InheritanceTest\BaseClass' => array(
-                    'class'       => 'IntegrationTests\DI\Fixtures\InheritanceTest\SubClass',
-                    'properties'  => array(
-                        'property1' => 'IntegrationTests\DI\Fixtures\InheritanceTest\Dependency',
-                    ),
-                    'constructor' => array(
-                        'param1' => 'IntegrationTests\DI\Fixtures\InheritanceTest\Dependency',
-                    ),
-                    'methods'     => array(
-                        'setProperty2' => 'IntegrationTests\DI\Fixtures\InheritanceTest\Dependency',
-                    ),
-                ),
-                'IntegrationTests\DI\Fixtures\InheritanceTest\SubClass'  => array(
-                    'properties' => array(
-                        'property4' => 'IntegrationTests\DI\Fixtures\InheritanceTest\Dependency',
-                    ),
-                ),
+                 BaseClass::class => Entry::object(SubClass::class)
+                    ->withProperty('property1', Entry::link(Dependency::class))
+                    ->withConstructor(Entry::link(Dependency::class))
+                    ->withMethod('setProperty2', Entry::link(Dependency::class)),
+                SubClass::class => Entry::object()
+                    ->withProperty('property4', Entry::link(Dependency::class)),
             )
         );
 
@@ -134,5 +109,4 @@ class InheritanceTest extends \PHPUnit_Framework_TestCase
             array($containerInheritanceDefinitions),
         );
     }
-
 }

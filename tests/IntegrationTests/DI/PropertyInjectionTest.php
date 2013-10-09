@@ -18,7 +18,6 @@ use \IntegrationTests\DI\Fixtures\PropertyInjectionTest\NamedBean;
  */
 class PropertyInjectionTest extends \PHPUnit_Framework_TestCase
 {
-
     /**
      * Injection of named beans
      */
@@ -80,5 +79,4 @@ class PropertyInjectionTest extends \PHPUnit_Framework_TestCase
         /** @var $object \IntegrationTests\DI\Fixtures\PropertyInjectionTest\NotFoundVarAnnotation */
         $container->get('IntegrationTests\DI\Fixtures\PropertyInjectionTest\NotFoundVarAnnotation');
     }
-
 }

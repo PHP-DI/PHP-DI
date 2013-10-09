@@ -10,6 +10,7 @@
 namespace DI;
 
 use DI\Definition\ClassDefinition;
+use DI\Definition\EntryReference;
 use DI\Definition\Exception\DefinitionException;
 use DI\Definition\MethodInjection;
 use DI\Definition\PropertyInjection;
@@ -27,7 +28,6 @@ use ReflectionParameter;
  */
 class Factory implements FactoryInterface
 {
-
     /**
      * @var Container
      */
@@ -56,7 +56,6 @@ class Factory implements FactoryInterface
 
         try {
             $instance = $this->injectConstructor($classReflection, $classDefinition->getConstructorInjection());
-
             $this->injectMethodsAndProperties($instance, $classDefinition);
         } catch (NotFoundException $e) {
             throw new DependencyException("Error while injecting dependencies into $classReflection->name: " . $e->getMessage(), 0, $e);
@@ -70,7 +69,7 @@ class Factory implements FactoryInterface
      * @throws DependencyException
      * @throws DefinitionException
     */
-    public function injectInstance(ClassDefinition $classDefinition, $instance)
+    public function injectOnInstance(ClassDefinition $classDefinition, $instance)
     {
         try {
             $this->injectMethodsAndProperties($instance, $classDefinition);
@@ -99,41 +98,11 @@ class Factory implements FactoryInterface
             return $classReflection->newInstance();
         }
 
-        // Check the definition and the class parameter number match
-        $nbRequiredParameters = $constructorReflection->getNumberOfRequiredParameters();
-        $parameterInjections = $constructorInjection ? $constructorInjection->getParameterInjections() : array();
-        if (count($parameterInjections) < $nbRequiredParameters) {
-            throw new DefinitionException("The constructor of {$classReflection->name} takes "
-                . "$nbRequiredParameters parameters, " . count($parameterInjections) . " defined or guessed");
-        }
-
-        // No parameters
-        if (count($parameterInjections) === 0) {
-            return $classReflection->newInstance();
-        }
-
-        $parameters = $this->getMethodReflectionParameters($constructorReflection);
-
-        $args = array();
-        foreach ($parameterInjections as $parameterInjection) {
-            $entryName = $parameterInjection->getEntryName();
-
-            if ($entryName === null) {
-                // If the parameter is optional and wasn't specified, we take its default value
-                if ($parameters[$parameterInjection->getParameterName()]->isOptional()) {
-                    $args[] = $this->getParameterDefaultValue($parameters[$parameterInjection->getParameterName()], $constructorReflection);
-                    continue;
-                }
-                throw new DefinitionException("The parameter '" . $parameterInjection->getParameterName()
-                    . "' of the constructor of '{$classReflection->name}' has no type defined or guessable");
-            }
-
-            if ($parameterInjection->isLazy()) {
-                $args[] = $this->container->get($entryName, true);
-            } else {
-                $args[] = $this->container->get($entryName);
-            }
-        }
+        $args = $this->prepareMethodParameters(
+            $constructorInjection,
+            $constructorReflection,
+            $classReflection->getName()
+        );
 
         return $classReflection->newInstanceArgs($args);
     }
@@ -165,48 +134,55 @@ class Factory implements FactoryInterface
      */
     private function injectMethod($object, MethodInjection $methodInjection)
     {
-        $methodName = $methodInjection->getMethodName();
         $classReflection = new ReflectionClass($object);
-        $methodReflection = $classReflection->getMethod($methodName);
+        $methodReflection = $classReflection->getMethod($methodInjection->getMethodName());
 
-        // Check the definition and the class parameter number match
+        $args = $this->prepareMethodParameters(
+            $methodInjection,
+            $methodReflection,
+            $classReflection->getName()
+        );
+
+        $methodReflection->invokeArgs($object, $args);
+    }
+
+    private function prepareMethodParameters(MethodInjection $methodInjection, ReflectionMethod $methodReflection, $className)
+    {
+        // Check the number of parameters match
         $nbRequiredParameters = $methodReflection->getNumberOfRequiredParameters();
-        $parameterInjections = $methodInjection ? $methodInjection->getParameterInjections() : array();
+        $parameterInjections = $methodInjection->getParameters();
         if (count($parameterInjections) < $nbRequiredParameters) {
-            throw new DefinitionException("{$classReflection->name}::$methodName takes "
-                . "$nbRequiredParameters parameters, " . count($parameterInjections) . " defined or guessed");
+            throw new DefinitionException("The constructor of $className takes $nbRequiredParameters"
+                . " parameters, " . count($parameterInjections) . " defined or guessed");
         }
 
         // No parameters
-        if (count($parameterInjections) === 0) {
-            $methodReflection->invoke($object);
-            return;
+        if (empty($parameterInjections)) {
+            return array();
         }
 
-        $parameters = $this->getMethodReflectionParameters($methodReflection);
+        $reflectionParameters = $methodReflection->getParameters();
 
         $args = array();
-        foreach ($parameterInjections as $parameterInjection) {
-            $entryName = $parameterInjection->getEntryName();
-
-            if ($entryName === null) {
-                // If the parameter is optional and wasn't specified, then we skip all next parameters
-                if ($parameters[$parameterInjection->getParameterName()]->isOptional()) {
-                    $args[] = $this->getParameterDefaultValue($parameters[$parameterInjection->getParameterName()], $methodReflection);
+        foreach ($parameterInjections as $index => $value) {
+            if ($value === null) {
+                // If the parameter is optional and wasn't specified, we take its default value
+                if ($reflectionParameters[$index]->isOptional()) {
+                    $args[] = $this->getParameterDefaultValue($reflectionParameters[$index], $methodReflection);
                     continue;
                 }
-                throw new DefinitionException("The parameter '" . $parameterInjection->getParameterName()
-                    . "' of {$classReflection->name}::$methodName has no type defined or guessable");
+                throw new DefinitionException("The parameter '" . ($index + 1)
+                    . "' of the constructor of '$className' has no value defined or guessable");
             }
 
-            if ($parameterInjection->isLazy()) {
-                $args[] = $this->container->get($entryName, true);
+            if ($value instanceof EntryReference) {
+                $args[] = $this->container->get($value->getName());
             } else {
-                $args[] = $this->container->get($entryName);
+                $args[] = $value;
             }
         }
 
-        $methodReflection->invokeArgs($object, $args);
+        return $args;
     }
 
     /**
@@ -223,45 +199,21 @@ class Factory implements FactoryInterface
         $propertyName = $propertyInjection->getPropertyName();
         $property = new ReflectionProperty(get_class($object), $propertyName);
 
-        $entryName = $propertyInjection->getEntryName();
-        if ($entryName === null) {
-            throw new DefinitionException(get_class($object) . "::$propertyName has no type defined or guessable");
+        $value = $propertyInjection->getValue();
+
+        if ($value instanceof EntryReference) {
+            try {
+                $value = $this->container->get($value->getName());
+            } catch (DependencyException $e) {
+                throw $e;
+            } catch (Exception $e) {
+                throw new DependencyException("Error while injecting '" . $value->getName() . "' in "
+                    . get_class($object) . "::$propertyName. " . $e->getMessage(), 0, $e);
+            }
         }
 
-        // Get the dependency
-        try {
-            $value = $this->container->get($propertyInjection->getEntryName(), $propertyInjection->isLazy());
-        } catch (DependencyException $e) {
-            throw $e;
-        } catch (Exception $e) {
-            throw new DependencyException("Error while injecting '" . $propertyInjection->getEntryName() . "' in "
-                . get_class($object) . "::$propertyName. " . $e->getMessage(), 0, $e);
-        }
-
-        // Allow access to protected and private properties
         $property->setAccessible(true);
-
-        // Inject the dependency
         $property->setValue($object, $value);
-    }
-
-    /**
-     * Returns the ReflectionParameter of a method indexed by the parameters names
-     * @param ReflectionMethod $reflectionMethod
-     * @return ReflectionParameter[]
-     */
-    private function getMethodReflectionParameters(ReflectionMethod $reflectionMethod)
-    {
-        $parameters = $reflectionMethod->getParameters();
-
-        $keys = array_map(
-            function (ReflectionParameter $parameter) {
-                return $parameter->getName();
-            },
-            $parameters
-        );
-
-        return array_combine($keys, $parameters);
     }
 
     /**
@@ -281,5 +233,4 @@ class Factory implements FactoryInterface
             . " It has a default value, but the default value can't be read through Reflection because it is a PHP internal class.");
         }
     }
-
 }

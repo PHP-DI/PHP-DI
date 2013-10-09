@@ -10,13 +10,12 @@
 namespace DI\Definition;
 
 /**
- * Describe an injection in a class property
+ * Describe an injection in a class property.
  *
  * @author Matthieu Napoli <matthieu@mnapoli.fr>
  */
 class PropertyInjection
 {
-
     /**
      * Property name
      * @var string
@@ -24,27 +23,19 @@ class PropertyInjection
     private $propertyName;
 
     /**
-     * Name of the entry that should be injected in the property
-     * @var string
+     * Value that should be injected in the property
+     * @var mixed
      */
-    private $entryName;
+    private $value;
 
     /**
-     * If the injected object should be a proxy for lazy-loading
-     * @var boolean
+     * @param string $propertyName Property name
+     * @param mixed  $value Value that should be injected in the property
      */
-    private $lazy;
-
-    /**
-     * @param string  $propertyName Property name
-     * @param string  $entryName Name of the entry that should be injected in the property
-     * @param boolean $lazy If the injected object should be a proxy for lazy-loading
-     */
-    public function __construct($propertyName, $entryName, $lazy = false)
+    public function __construct($propertyName, $value)
     {
         $this->propertyName = (string) $propertyName;
-        $this->entryName = (string) $entryName;
-        $this->setLazy($lazy);
+        $this->value = $value;
     }
 
     /**
@@ -56,27 +47,11 @@ class PropertyInjection
     }
 
     /**
-     * @return string Name of the entry that should be injected in the property
+     * @return string Value that should be injected in the property
      */
-    public function getEntryName()
+    public function getValue()
     {
-        return $this->entryName;
-    }
-
-    /**
-     * @return boolean If the injected object should be a proxy for lazy-loading
-     */
-    public function isLazy()
-    {
-        return $this->lazy;
-    }
-
-    /**
-     * @param boolean $lazy If the injected object should be a proxy for lazy-loading
-     */
-    public function setLazy($lazy)
-    {
-        $this->lazy = (boolean) $lazy;
+        return $this->value;
     }
 
     /**
@@ -88,12 +63,8 @@ class PropertyInjection
      */
     public function merge(PropertyInjection $propertyInjection)
     {
-        if ($propertyInjection->entryName !== null) {
-            $this->entryName = $propertyInjection->entryName;
-        }
-        if ($propertyInjection->lazy !== null) {
-            $this->lazy = $propertyInjection->lazy;
+        if ($propertyInjection->value !== null) {
+            $this->value = $propertyInjection->value;
         }
     }
-
 }

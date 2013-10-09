@@ -17,7 +17,6 @@ use DI\Container;
  */
 class ContainerTest extends \PHPUnit_Framework_TestCase
 {
-
     public function testSetGet()
     {
         $container = new Container();
@@ -201,22 +200,9 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
     public function testSetNullValue()
     {
         $container = new Container();
-        $return = $container->set('foo', null);
+        $container->set('foo', null);
 
-        $this->assertNull($return);
         $this->assertNull($container->get('foo'));
-    }
-
-    /**
-     * @see https://github.com/mnapoli/PHP-DI/issues/79
-     * @test
-     */
-    public function setWithoutValueShouldReturnClassDefinitionHelper()
-    {
-        $container = new Container();
-        $return = $container->set('foo');
-
-        $this->assertInstanceOf('DI\Definition\Helper\ClassDefinitionHelper', $return);
     }
 
     /**
@@ -229,5 +215,4 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
 
         $this->assertSame($container, $otherContainer);
     }
-
 }

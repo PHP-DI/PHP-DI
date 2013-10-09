@@ -18,7 +18,6 @@ use DI\Definition\ClassDefinition;
  */
 interface FactoryInterface
 {
-
     /**
      * Create a new instance of the class
      *
@@ -34,6 +33,5 @@ interface FactoryInterface
      *
      * @return object The instance
      */
-    function injectInstance(ClassDefinition $classDefinition, $instance);
-
+    function injectOnInstance(ClassDefinition $classDefinition, $instance);
 }

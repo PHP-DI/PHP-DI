@@ -9,14 +9,12 @@
 
 namespace UnitTests\DI\Definition\Source;
 
+use DI\Definition\EntryReference;
 use DI\Definition\Source\ReflectionDefinitionSource;
+use UnitTests\DI\Definition\Fixtures\ReflectionFixture;
 
-/**
- * Test class for ReflectionDefinitionSource
- */
 class ReflectionDefinitionSourceTest extends \PHPUnit_Framework_TestCase
 {
-
     public function testUnknownClass()
     {
         $source = new ReflectionDefinitionSource();
@@ -26,26 +24,22 @@ class ReflectionDefinitionSourceTest extends \PHPUnit_Framework_TestCase
     public function testFixtureClass()
     {
         $source = new ReflectionDefinitionSource();
-        $definition = $source->getDefinition('UnitTests\DI\Definition\Fixtures\ReflectionFixture');
+        $definition = $source->getDefinition(ReflectionFixture::class);
         $this->assertInstanceOf('DI\Definition\Definition', $definition);
 
         $constructorInjection = $definition->getConstructorInjection();
         $this->assertInstanceOf('DI\Definition\MethodInjection', $constructorInjection);
 
-        $parameterInjections = $constructorInjection->getParameterInjections();
-        $this->assertCount(3, $parameterInjections);
+        $parameters = $constructorInjection->getParameters();
+        $this->assertCount(3, $parameters);
 
-        $param1 = $parameterInjections['param1'];
-        $this->assertEquals('param1', $param1->getParameterName());
-        $this->assertEquals('UnitTests\DI\Definition\Fixtures\ReflectionFixture', $param1->getEntryName());
+        $param1 = $parameters[0];
+        $this->assertEquals(new EntryReference(ReflectionFixture::class), $param1);
 
-        $param2 = $parameterInjections['param2'];
-        $this->assertEquals('param2', $param2->getParameterName());
-        $this->assertNull($param2->getEntryName());
+        $param2 = $parameters[1];
+        $this->assertNull($param2);
 
-        $param3 = $parameterInjections['param3'];
-        $this->assertEquals('param3', $param3->getParameterName());
-        $this->assertNull($param3->getEntryName());
+        $param3 = $parameters[2];
+        $this->assertNull($param3);
     }
-
 }

@@ -16,7 +16,6 @@ use DI\Definition\DefinitionManager;
  */
 class DefinitionManagerTest extends \PHPUnit_Framework_TestCase
 {
-
     /**
      * @test
      */
@@ -33,5 +32,4 @@ class DefinitionManagerTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals('foo', $definitionManager->getDefinition('foo'));
     }
-
 }
