@@ -10,6 +10,7 @@
 namespace IntegrationTests\DI\Issues;
 
 use DI\Container;
+use DI\Entry;
 
 /**
  * @see https://github.com/mnapoli/PHP-DI/issues/70
@@ -17,7 +18,6 @@ use DI\Container;
  */
 class Issue70and76Test extends \PHPUnit_Framework_TestCase
 {
-
     /**
      * @test
      */
@@ -36,10 +36,9 @@ class Issue70and76Test extends \PHPUnit_Framework_TestCase
     {
         $container = new Container();
 
-        $container->set('stdClass', function() {
+        $container->set('stdClass', Entry::factory(function() {
                 return 'foo';
-            });
+            }));
         $this->assertEquals('foo', $container->get('stdClass'));
     }
-
 }
