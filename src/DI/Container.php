@@ -146,11 +146,7 @@ class Container
             throw new InvalidArgumentException("The name parameter must be of type string");
         }
 
-        if (array_key_exists($name, $this->entries) || $this->definitionManager->getDefinition($name)) {
-            return true;
-        }
-
-        return false;
+        return array_key_exists($name, $this->entries) || $this->definitionManager->getDefinition($name);
     }
 
     /**
