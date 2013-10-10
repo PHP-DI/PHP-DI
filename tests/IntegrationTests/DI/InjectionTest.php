@@ -28,7 +28,6 @@ class InjectionTest extends \PHPUnit_Framework_TestCase
     const DEFINITION_ANNOTATIONS = 2;
     const DEFINITION_ARRAY = 3;
     const DEFINITION_PHP = 4;
-    const DEFINITION_ARRAY_FROM_FILE = 5;
 
     /**
      * PHPUnit data provider: generates container configurations for running the same tests for each configuration possible
@@ -42,9 +41,11 @@ class InjectionTest extends \PHPUnit_Framework_TestCase
         $builder->useAnnotations(false);
         $containerReflection = $builder->build();
         $containerReflection->addDefinitions([
-            'foo'             => 'bar',
-            Interface1::class => Entry::object(Implementation1::class),
-            'namedDependency' => Entry::object(Class2::class),
+            'foo'                 => 'bar',
+            Interface1::class     => Entry::object(Implementation1::class),
+            'namedDependency'     => Entry::object(Class2::class),
+            LazyDependency::class => Entry::object()
+                ->lazy(),
         ]);
 
         // Test with a container using annotations and reflection
@@ -92,21 +93,14 @@ class InjectionTest extends \PHPUnit_Framework_TestCase
         $containerPHP->set(Interface1::class, Entry::object(Implementation1::class)
             ->withScope(Scope::SINGLETON()));
         $containerPHP->set('namedDependency', Entry::object(Class2::class));
-        $containerPHP->set(LazyDependency::class, Entry::object());
-
-        // Test with a container using array configuration loaded from file
-        $builder = new ContainerBuilder();
-        $builder->useReflection(false);
-        $builder->useAnnotations(false);
-        $containerArrayFromFile = $builder->build();
-        $containerArrayFromFile->addDefinitions(require __DIR__ . '/Fixtures/definitions.php');
+        $containerPHP->set(LazyDependency::class, Entry::object()
+            ->lazy());
 
         return array(
             array(self::DEFINITION_REFLECTION, $containerReflection),
             array(self::DEFINITION_ANNOTATIONS, $containerAnnotations),
             array(self::DEFINITION_ARRAY, $containerArray),
             array(self::DEFINITION_PHP, $containerPHP),
-            array(self::DEFINITION_ARRAY_FROM_FILE, $containerArrayFromFile),
         );
     }
 
@@ -275,5 +269,4 @@ class InjectionTest extends \PHPUnit_Framework_TestCase
         $class3_2 = $container->get('IntegrationTests\DI\Fixtures\Interface1');
         $this->assertSame($class3_1, $class3_2);
     }
-
 }

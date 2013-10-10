@@ -37,5 +37,6 @@ return [
 
     'namedDependency'      => Entry::object(Class2::class),
 
-    LazyDependency::class  => Entry::object(),
+    LazyDependency::class => Entry::object()
+            ->lazy(),
 ];

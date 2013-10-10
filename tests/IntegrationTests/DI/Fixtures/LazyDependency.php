@@ -9,12 +9,14 @@
 
 namespace IntegrationTests\DI\Fixtures;
 
+use DI\Annotation\Injectable;
+
 /**
  * Fixture class
+ * @Injectable(lazy=true)
  */
 class LazyDependency
 {
-
     /**
      * @return boolean
      */
@@ -22,5 +24,4 @@ class LazyDependency
     {
         return true;
     }
-
 }

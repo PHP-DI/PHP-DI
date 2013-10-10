@@ -114,12 +114,11 @@ class Container
         // It's a class
         if ($definition instanceof ClassDefinition) {
             // Return a proxy class
-            if ($useProxy) {
-                return $this->getProxy($definition->getClassName());
+            if ($useProxy || $definition->isLazy()) {
+                $instance = $this->getProxy($definition);
+            } else {
+                $instance = $this->getNewInstance($definition);
             }
-
-            // Create the instance
-            $instance = $this->getNewInstance($definition);
 
             if ($definition->getScope() == Scope::SINGLETON()) {
                 // If it's a singleton, store the newly created instance
@@ -264,17 +263,15 @@ class Container
     /**
      * Returns a proxy instance
      *
-     * @param string $classname
+     * @param ClassDefinition $definition
      * @return object Proxy instance
      */
-    private function getProxy($classname)
+    private function getProxy(ClassDefinition $definition)
     {
-        $container = $this;
-
         $proxy = $this->proxyFactory->createProxy(
-            $classname,
-            function (& $wrappedObject, $proxy, $method, $parameters, & $initializer) use ($container, $classname) {
-                $wrappedObject = $container->get($classname);
+            $definition->getClassName(),
+            function (& $wrappedObject, $proxy, $method, $parameters, & $initializer) use ($definition) {
+                $wrappedObject = $this->getNewInstance($definition);
                 $initializer = null; // turning off further lazy initialization
                 return true;
             }

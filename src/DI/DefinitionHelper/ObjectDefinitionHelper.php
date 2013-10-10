@@ -27,6 +27,11 @@ class ObjectDefinitionHelper implements DefinitionHelper
     private $className;
 
     /**
+     * @var boolean|null
+     */
+    private $lazy;
+
+    /**
      * @var Scope|null
      */
     private $scope;
@@ -52,6 +57,12 @@ class ObjectDefinitionHelper implements DefinitionHelper
     public function __construct($className = null)
     {
         $this->className = $className;
+    }
+
+    public function lazy()
+    {
+        $this->lazy = true;
+        return $this;
     }
 
     public function withScope(Scope $scope)
@@ -88,6 +99,9 @@ class ObjectDefinitionHelper implements DefinitionHelper
     {
         $definition = new ClassDefinition($entryName, $this->className);
 
+        if ($this->lazy !== null) {
+            $definition->setLazy($this->lazy);
+        }
         if ($this->scope !== null) {
             $definition->setScope($this->scope);
         }

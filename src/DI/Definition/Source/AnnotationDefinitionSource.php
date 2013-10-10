@@ -78,8 +78,13 @@ class AnnotationDefinitionSource implements DefinitionSource
                 . $e->getMessage());
         }
 
-        if ($injectableAnnotation !== null && $injectableAnnotation->getScope()) {
-            $classDefinition->setScope($injectableAnnotation->getScope());
+        if ($injectableAnnotation) {
+            if ($injectableAnnotation->getScope()) {
+                $classDefinition->setScope($injectableAnnotation->getScope());
+            }
+            if ($injectableAnnotation->isLazy() !== null) {
+                $classDefinition->setLazy($injectableAnnotation->isLazy());
+            }
         }
 
         // Browse the class properties looking for annotated properties

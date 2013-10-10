@@ -24,12 +24,17 @@ use DI\Scope;
  */
 final class Injectable
 {
-
     /**
      * The scope of an class: prototype, singleton
      * @var Scope|null
      */
     private $scope;
+
+    /**
+     * Should the object be lazy-loaded
+     * @var boolean|null
+     */
+    private $lazy;
 
     /**
      * @param array $values
@@ -38,6 +43,9 @@ final class Injectable
     {
         if (isset($values['scope'])) {
             $this->scope = new Scope($values['scope']);
+        }
+        if (isset($values['lazy'])) {
+            $this->lazy = (boolean) $values['lazy'];
         }
     }
 
@@ -49,4 +57,11 @@ final class Injectable
         return $this->scope;
     }
 
+    /**
+     * @return boolean|null
+     */
+    public function isLazy()
+    {
+        return $this->lazy;
+    }
 }
