@@ -46,7 +46,6 @@ class InjectTest extends \PHPUnit_Framework_TestCase
 
         $this->assertInstanceOf('DI\Annotation\Inject', $annotation);
         $this->assertEquals('foo', $annotation->getName());
-        $this->assertNull($annotation->isLazy());
     }
 
     public function testProperty2()
@@ -57,7 +56,6 @@ class InjectTest extends \PHPUnit_Framework_TestCase
 
         $this->assertInstanceOf('DI\Annotation\Inject', $annotation);
         $this->assertNull($annotation->getName());
-        $this->assertNull($annotation->isLazy());
     }
 
     public function testProperty3()
@@ -68,7 +66,6 @@ class InjectTest extends \PHPUnit_Framework_TestCase
 
         $this->assertInstanceOf('DI\Annotation\Inject', $annotation);
         $this->assertEquals('foo', $annotation->getName());
-        $this->assertTrue($annotation->isLazy());
     }
 
     public function testMethod1()
@@ -90,51 +87,7 @@ class InjectTest extends \PHPUnit_Framework_TestCase
 
         $this->assertInstanceOf('DI\Annotation\Inject', $annotation);
         $this->assertCount(2, $parameters);
-        $this->assertEquals('foo', $parameters[0]['name']);
-        $this->assertEquals('bar', $parameters[1]['name']);
-    }
-
-    public function testMethod3()
-    {
-        $method = $this->reflectionClass->getMethod('method3');
-        /** @var $annotation Inject */
-        $annotation = $this->annotationReader->getMethodAnnotation($method, 'DI\Annotation\Inject');
-        $parameters = $annotation->getParameters();
-
-        $this->assertInstanceOf('DI\Annotation\Inject', $annotation);
-        $this->assertCount(2, $parameters);
-
-        $this->assertEquals('foo', $parameters[0]['name']);
-        $this->assertTrue($parameters[0]['lazy']);
-
-        $this->assertEquals('bar', $parameters[1]['name']);
-    }
-
-    public function testMethod4()
-    {
-        $method = $this->reflectionClass->getMethod('method4');
-        /** @var $annotation Inject */
-        $annotation = $this->annotationReader->getMethodAnnotation($method, 'DI\Annotation\Inject');
-        $parameters = $annotation->getParameters();
-
-        $this->assertInstanceOf('DI\Annotation\Inject', $annotation);
-        $this->assertCount(1, $parameters);
-
-        $this->assertArrayHasKey('str2', $parameters);
-        $this->assertEquals('foo', $parameters['str2']['name']);
-    }
-
-    public function testMethod5()
-    {
-        $method = $this->reflectionClass->getMethod('method5');
-        /** @var $annotation Inject */
-        $annotation = $this->annotationReader->getMethodAnnotation($method, 'DI\Annotation\Inject');
-        $parameters = $annotation->getParameters();
-
-        $this->assertInstanceOf('DI\Annotation\Inject', $annotation);
-        $this->assertCount(1, $parameters);
-
-        $this->assertArrayHasKey('str2', $parameters);
-        $this->assertTrue($parameters['str2']['lazy']);
+        $this->assertEquals('foo', $parameters[0]);
+        $this->assertEquals('bar', $parameters[1]);
     }
 }

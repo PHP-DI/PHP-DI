@@ -17,7 +17,6 @@ namespace UnitTests\DI\Definition\Source\Annotation\Fixtures;
  */
 class TargetFixture3
 {
-
     /**
      * @var SomeDependencyFixture
      */
@@ -35,5 +34,4 @@ class TargetFixture3
     public function SomeMethod($dependency1, $dependency2)
     {
     }
-
 }

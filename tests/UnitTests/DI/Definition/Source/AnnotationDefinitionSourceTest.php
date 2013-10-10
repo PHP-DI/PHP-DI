@@ -98,8 +98,9 @@ class AnnotationDefinitionSourceTest extends \PHPUnit_Framework_TestCase
 
         $parameters = $methodInjection->getParameters();
         $this->assertCount(2, $parameters);
-        $this->assertEquals(new EntryReference('foo'), $parameters[0]);
-        $this->assertEquals(new EntryReference('bar'), $parameters[1]);
+
+        $this->assertEquals(new EntryReference(AnnotationFixture2::class), $parameters[0]);
+        $this->assertEquals(new EntryReference(AnnotationFixture2::class), $parameters[1]);
     }
 
     public function testMethod4()
@@ -110,54 +111,6 @@ class AnnotationDefinitionSourceTest extends \PHPUnit_Framework_TestCase
 
         $methodInjections = $definition->getMethodInjections();
         $methodInjection = $methodInjections['method4'];
-        $this->assertInstanceOf(MethodInjection::class, $methodInjection);
-
-        $parameters = $methodInjection->getParameters();
-        $this->assertCount(2, $parameters);
-        $this->assertEquals(new EntryReference('bar'), $parameters[1]);
-    }
-
-    public function testMethod5()
-    {
-        $source = new AnnotationDefinitionSource();
-        $definition = $source->getDefinition(AnnotationFixture::class);
-        $this->assertInstanceOf(Definition::class, $definition);
-
-        $methodInjections = $definition->getMethodInjections();
-        $methodInjection = $methodInjections['method5'];
-        $this->assertInstanceOf(MethodInjection::class, $methodInjection);
-
-        $parameters = $methodInjection->getParameters();
-        $this->assertCount(2, $parameters);
-
-        $this->assertEquals(new EntryReference(AnnotationFixture2::class), $parameters[0]);
-        $this->assertEquals(new EntryReference(AnnotationFixture2::class), $parameters[1]);
-    }
-
-    public function testMethod6()
-    {
-        $source = new AnnotationDefinitionSource();
-        $definition = $source->getDefinition(AnnotationFixture::class);
-        $this->assertInstanceOf(Definition::class, $definition);
-
-        $methodInjections = $definition->getMethodInjections();
-        $methodInjection = $methodInjections['method6'];
-        $this->assertInstanceOf(MethodInjection::class, $methodInjection);
-
-        $parameters = $methodInjection->getParameters();
-        $this->assertCount(2, $parameters);
-        $this->assertEquals(new EntryReference('foo'), $parameters[0]);
-        $this->assertEquals(new EntryReference('bar'), $parameters[1]);
-    }
-
-    public function testMethod7()
-    {
-        $source = new AnnotationDefinitionSource();
-        $definition = $source->getDefinition(AnnotationFixture::class);
-        $this->assertInstanceOf(Definition::class, $definition);
-
-        $methodInjections = $definition->getMethodInjections();
-        $methodInjection = $methodInjections['method7'];
         $this->assertInstanceOf(MethodInjection::class, $methodInjection);
 
         $parameters = $methodInjection->getParameters();

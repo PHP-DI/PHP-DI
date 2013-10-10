@@ -19,7 +19,6 @@ use UnitTests\DI\Definition\Source\Annotation\Fixtures\Subspace\SomeDependencyFi
  */
 class TargetFixture2
 {
-
     /**
      * @var SomeDependencyFixture
      */
@@ -37,5 +36,4 @@ class TargetFixture2
     public function SomeMethod($dependency1, $dependency2)
     {
     }
-
 }

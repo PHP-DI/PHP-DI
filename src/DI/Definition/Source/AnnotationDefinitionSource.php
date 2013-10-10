@@ -134,7 +134,7 @@ class AnnotationDefinitionSource implements DefinitionSource
             }
 
             $classDefinition->addPropertyInjection(
-                new PropertyInjection($property->name, $value, $annotation->isLazy())
+                new PropertyInjection($property->name, $value)
             );
         }
     }
@@ -220,17 +220,9 @@ class AnnotationDefinitionSource implements DefinitionSource
 
             $entryName = null;
 
-            $annotationParameter = null;
-            // @Inject has definition for this parameter (not named)
+            // @Inject has definition for this parameter
             if (isset($annotationParameters[$index])) {
-                $annotationParameter = $annotationParameters[$index];
-            }
-            // @Inject has definition for this parameter (named)
-            if (isset($annotationParameters[$parameter->name])) {
-                $annotationParameter = $annotationParameters[$parameter->name];
-            }
-            if (isset($annotationParameter['name'])) {
-                $entryName = $annotationParameter['name'];
+                $entryName = $annotationParameters[$index];
             }
 
             // Look for @param tag or PHP type-hinting (only case where we use reflection)

@@ -11,5 +11,4 @@ namespace UnitTests\DI\Definition\Source\Annotation\Fixtures\Subspace;
 
 class SomeDependencyFixture
 {
-
 }
