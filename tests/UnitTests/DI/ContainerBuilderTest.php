@@ -79,10 +79,6 @@ class ContainerBuilderTest extends \PHPUnit_Framework_TestCase
         $mockCache = $this->getMockForAbstractClass('Doctrine\Common\Cache\Cache');
         $result = $builder->setDefinitionCache($mockCache);
         $this->assertSame($builder, $result);
-
-        $mockLoader = $this->getMock('DI\Definition\FileLoader\DefinitionFileLoader', array(), array(), '', false);
-        $result = $builder->addDefinitionsFromFile($mockLoader);
-        $this->assertSame($builder, $result);
     }
 
 }

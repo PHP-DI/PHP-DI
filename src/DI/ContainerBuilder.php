@@ -10,7 +10,6 @@
 namespace DI;
 
 use DI\Definition\DefinitionManager;
-use DI\Definition\FileLoader\DefinitionFileLoader;
 use Doctrine\Common\Cache\Cache;
 use InvalidArgumentException;
 use ProxyManager\Configuration;
@@ -47,11 +46,6 @@ class ContainerBuilder
     private $cache;
 
     /**
-     * @var DefinitionFileLoader[]
-     */
-    private $fileLoaders = array();
-
-    /**
      * If true, write the proxies to disk to improve performances.
      * @var boolean
      */
@@ -77,9 +71,6 @@ class ContainerBuilder
         }
         if ($this->cache) {
             $definitionManager->setCache($this->cache);
-        }
-        foreach ($this->fileLoaders as $fileLoader) {
-            $definitionManager->addDefinitionsFromFile($fileLoader);
         }
 
         // Proxy factory
@@ -145,18 +136,6 @@ class ContainerBuilder
     public function setDefinitionCache(Cache $cache)
     {
         $this->cache = $cache;
-        return $this;
-    }
-
-    /**
-     * Add definitions contained in a file
-     *
-     * @param DefinitionFileLoader $definitionFileLoader
-     * @return ContainerBuilder
-     */
-    public function addDefinitionsFromFile(DefinitionFileLoader $definitionFileLoader)
-    {
-        $this->fileLoaders[] = $definitionFileLoader;
         return $this;
     }
 

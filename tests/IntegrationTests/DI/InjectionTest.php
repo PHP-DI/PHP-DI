@@ -10,7 +10,6 @@
 namespace IntegrationTests\DI;
 
 use DI\ContainerBuilder;
-use DI\Definition\FileLoader\ArrayDefinitionFileLoader;
 use DI\Entry;
 use DI\Scope;
 use DI\Container;
@@ -99,8 +98,8 @@ class InjectionTest extends \PHPUnit_Framework_TestCase
         $builder = new ContainerBuilder();
         $builder->useReflection(false);
         $builder->useAnnotations(false);
-        $builder->addDefinitionsFromFile(new ArrayDefinitionFileLoader(__DIR__ . '/Fixtures/definitions.php'));
         $containerArrayFromFile = $builder->build();
+        $containerArrayFromFile->addDefinitions(require __DIR__ . '/Fixtures/definitions.php');
 
         return array(
             array(self::DEFINITION_REFLECTION, $containerReflection),

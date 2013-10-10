@@ -13,7 +13,6 @@ use DI\Definition\ClassDefinition;
 use DI\Definition\ClosureDefinition;
 use DI\Definition\DefinitionManager;
 use DI\Definition\ValueDefinition;
-use DI\Definition\FileLoader\DefinitionFileLoader;
 use DI\DefinitionHelper\DefinitionHelper;
 use Exception;
 use InvalidArgumentException;
@@ -194,17 +193,6 @@ class Container
     public function addDefinitions(array $definitions)
     {
         $this->definitionManager->addArrayDefinitions($definitions);
-    }
-
-    /**
-     * Add definitions contained in a file
-     *
-     * @param DefinitionFileLoader $definitionFileLoader
-     * @throws InvalidArgumentException
-     */
-    public function addDefinitionsFromFile(DefinitionFileLoader $definitionFileLoader)
-    {
-        $this->definitionManager->addDefinitionsFromFile($definitionFileLoader);
     }
 
     /**
