@@ -52,7 +52,7 @@ class InjectionTest extends \PHPUnit_Framework_TestCase
         $builder->useReflection(true);
         $builder->useAnnotations(true);
         $containerAnnotations = $builder->build();
-        $containerReflection->addDefinitions([
+        $containerAnnotations->addDefinitions([
             'foo'             => 'bar',
             Interface1::class => Entry::object(Implementation1::class),
             'namedDependency' => Entry::object(Class2::class),
