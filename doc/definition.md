@@ -8,14 +8,13 @@ To **define** where and how to inject stuff, you have several options:
 - use annotations
 - use PHP code (using `Container::set()`)
 - use a PHP array
-- use YAML files
 
 You can also use several or all these options at the same time if you want to.
 
 If you combine several sources, there are priorities that apply. From the highest priority to the least:
 
 - Code definition (i.e. defined with `$container->set()`)
-- File and array definitions (if A is added after B, then A prevails)
+- Array definitions (if A is added after B, then A prevails)
 - Annotations
 - Reflection
 
@@ -97,10 +96,6 @@ class Example {
      * @Inject("db.host")
      */
     protected $property2;
-    /**
-     * @Inject(name="dbAdapter", lazy=true)
-     */
-    protected $property3;
 
     /**
      * @Inject
@@ -121,14 +116,6 @@ class Example {
      */
     public function method2($param1, $param2) {
     }
-
-    /**
-     * @Inject({"param2" = "bar"})
-     * @param Foo    $param1
-     * @param string $param2
-     */
-    public function method3(Foo $param1, $param2) {
-    }
 }
 ```
 
@@ -138,7 +125,7 @@ The `@Injectable` annotation let's you set options on injectable classes:
 use DI\Annotation\Injectable;
 
 /**
- * @Injectable(scope="prototype")
+ * @Injectable(scope="prototype", lazy=true)
  */
 class Example {
 }
@@ -152,7 +139,7 @@ There are still things that can't be defined with annotations:
 - mapping interfaces to implementations
 - defining entries with an anonymous function
 
-For that, you can combine annotations with definitions in YAML files or PHP arrays (see below).
+For that, you can combine annotations with definitions in PHP (see below).
 
 
 ## PHP code
@@ -165,8 +152,6 @@ $container = new Container();
 // Values (not classes)
 $container->set('db.host', 'localhost');
 $container->set('db.port', 5000);
-
-// Indexed non-empty array as value
 $container->set('report.recipients', array(
 	'bob@acme.example.com',
 	'alice@acme.example.com'
@@ -294,57 +279,3 @@ return [
 
 ];
 ```
-
-
-## YAML file
-
-```php
-use DI\Definition\FileLoader\YamlDefinitionFileLoader;
-$container->addDefinitionsFromFile(new YamlDefinitionFileLoader('config/di.yml'));
-```
-
-Example of a `config/di.yml` file:
-
-```yml
-# Values (not classes)
-db.host: localhost
-db.port: 5000
-
-# Indexed non-empty array as value
-report.recipients:
-    - bob@acme.example.com
-    - alice@acme.example.com
-
-# Direct mapping (not needed if you didn't disable Reflection)
-SomeClass:
-
-# Defines an instance of My\Class
-My\Class:
-  constructor: [db.host, My\OtherClass]
-
-My\OtherClass:
-  scope: prototype
-  constructor:
-    host: db.host
-    port: db.port
-  methods:
-    setFoo1: My\Foo1
-    setFoo2: [My\Foo1, My\Foo2]
-    setFoo3:
-      param1: My\Foo1
-      param2: My\Foo2
-    properties:
-      bar: My\Bar
-      baz:
-        name: My\Baz
-        lazy: true
-
-# Mapping an interface to an implementation
-My\Interface:
-  class: My\Implementation
-
-# Defining a named instance
-myNamedInstance:
-    class: My\Class
-```
-

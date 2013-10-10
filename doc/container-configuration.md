@@ -21,23 +21,6 @@ $builder->setDefinitionsValidation(true);
 $container = $builder->build();
 ```
 
-### Adding a definition file
-
-If you defining injections in a file, use the container builder:
-
-```php
-use DI\Definition\FileLoader\YamlDefinitionFileLoader;
-
-$builder->addDefinitionsFromFile(new YamlDefinitionFileLoader('config/di.yml'));
-```
-
-If you don't want to use Reflection or Annotations, disable them:
-
-```php
-$builder->useReflection(false);
-$builder->useAnnotations(false);
-```
-
 Read more about [definitions](definition.md).
 
 ## Production environment

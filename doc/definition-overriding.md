@@ -30,7 +30,7 @@ use DI\Annotation\Inject;
 
 class Foo {
     /**
-     * @Inject({"param1" = "my.specific.service"})
+     * @Inject({"my.specific.service"})
      */
     public function __construct(BarInterface $param1) {
     }

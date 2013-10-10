@@ -3,7 +3,7 @@
 
 ## Installation
 
-Requires **PHP 5.3.0** or higher.
+Requires **PHP 5.4.0** or higher.
 
 The easiest way is to install PHP-DI with [Composer](http://getcomposer.org/doc/00-intro.md).
 
@@ -12,7 +12,7 @@ Create a file named `composer.json` in your project root:
 ```json
 {
     "require": {
-        "mnapoli/php-di": "~3.4"
+        "mnapoli/php-di": "~4.0"
     }
 }
 ```
@@ -137,26 +137,6 @@ return [
 ```
 
 See also the [complete documentation about array configuration](definition.md).
-
-#### YAML file
-
-You can define injections with a YAML file too:
-
-```php
-# Values (not classes)
-dbHost: localhost
-dbPort: 5000
-
-# Class
-My\Foo:
-  properties:
-    bar: Bar
-  methods:
-    setBaz: Baz
-    setValues: [dbHost, dbPort]
-```
-
-See also the [complete documentation about YAML configuration](definition.md).
 
 
 ### 2: Get objects from the container

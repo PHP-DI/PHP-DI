@@ -12,9 +12,8 @@ PHP-DI also tries to avoid falling into the trap of the "Service Locator" antipa
 * Supports different configuration alternatives to suit every taste:
     * **Reflection**: zero configuration, intelligent guessing
     * **Annotations**: modern, practical and simple
-    * **PHP code**: if you like complete control and auto-completion
+    * **PHP code**: for complete control and auto-completion
     * **PHP array**: allows you to store it in a configuration file
-    * **YAML**: elegant and concise
 * **Performances**: supports a large number of Caches
 * Lazy injection: lazy-loading of dependencies
 * Supports constructor injection, setter injection and property injection
