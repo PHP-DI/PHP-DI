@@ -20,8 +20,6 @@ You can specify the scope by using the `@Injectable` annotation on the target cl
 Remember singleton is the scope used if it is not configured.
 
 ```php
-use DI\Annotation\Injectable;
-
 /**
  * @Injectable(scope="prototype")
  */

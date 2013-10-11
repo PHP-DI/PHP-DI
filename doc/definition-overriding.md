@@ -26,8 +26,6 @@ PHP-DI would inject an instance of `Bar`. What if we wanted to inject a specific
 While the Reflection definition says that `$param1` should take a `Bar` instance, we can use annotations to override that:
 
 ```php
-use DI\Annotation\Inject;
-
 class Foo {
     /**
      * @Inject({"param1" = "my.specific.service"})
