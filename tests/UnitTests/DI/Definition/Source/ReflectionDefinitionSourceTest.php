@@ -26,7 +26,7 @@ class ReflectionDefinitionSourceTest extends \PHPUnit_Framework_TestCase
     public function testFixtureClass()
     {
         $source = new ReflectionDefinitionSource();
-        $definition = $source->getDefinition('UnitTests\DI\Definition\Fixtures\ReflectionFixture');
+        $definition = $source->getDefinition('UnitTests\DI\Definition\Source\Fixtures\ReflectionFixture');
         $this->assertInstanceOf('DI\Definition\Definition', $definition);
 
         $constructorInjection = $definition->getConstructorInjection();
@@ -37,7 +37,7 @@ class ReflectionDefinitionSourceTest extends \PHPUnit_Framework_TestCase
 
         $param1 = $parameterInjections['param1'];
         $this->assertEquals('param1', $param1->getParameterName());
-        $this->assertEquals('UnitTests\DI\Definition\Fixtures\ReflectionFixture', $param1->getEntryName());
+        $this->assertEquals('UnitTests\DI\Definition\Source\Fixtures\ReflectionFixture', $param1->getEntryName());
 
         $param2 = $parameterInjections['param2'];
         $this->assertEquals('param2', $param2->getParameterName());

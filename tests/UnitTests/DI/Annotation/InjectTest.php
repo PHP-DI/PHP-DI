@@ -10,10 +10,8 @@
 namespace UnitTests\DI\Annotation;
 
 use DI\Annotation\Inject;
-use DI\Container;
 use DI\Definition\Source\AnnotationDefinitionSource;
 use Doctrine\Common\Annotations\AnnotationReader;
-use Doctrine\Common\Annotations\AnnotationRegistry;
 use ReflectionClass;
 
 /**

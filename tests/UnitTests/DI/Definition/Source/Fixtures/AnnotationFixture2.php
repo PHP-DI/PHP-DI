@@ -7,7 +7,7 @@
  * @license   http://www.opensource.org/licenses/mit-license.php MIT (see the LICENSE file)
  */
 
-namespace UnitTests\DI\Definition\Fixtures;
+namespace UnitTests\DI\Definition\Source\Fixtures;
 
 class AnnotationFixture2
 {

@@ -26,7 +26,7 @@ class AnnotationDefinitionSourceTest extends \PHPUnit_Framework_TestCase
     public function testProperty1()
     {
         $source = new AnnotationDefinitionSource();
-        $definition = $source->getDefinition('UnitTests\DI\Definition\Fixtures\AnnotationFixture');
+        $definition = $source->getDefinition('UnitTests\DI\Definition\Source\Fixtures\AnnotationFixture');
         $this->assertInstanceOf('DI\Definition\Definition', $definition);
 
         $properties = $definition->getPropertyInjections();
@@ -40,7 +40,7 @@ class AnnotationDefinitionSourceTest extends \PHPUnit_Framework_TestCase
     public function testConstructor()
     {
         $source = new AnnotationDefinitionSource();
-        $definition = $source->getDefinition('UnitTests\DI\Definition\Fixtures\AnnotationFixture');
+        $definition = $source->getDefinition('UnitTests\DI\Definition\Source\Fixtures\AnnotationFixture');
         $this->assertInstanceOf('DI\Definition\Definition', $definition);
 
         $constructorInjection = $definition->getConstructorInjection();
@@ -61,7 +61,7 @@ class AnnotationDefinitionSourceTest extends \PHPUnit_Framework_TestCase
     public function testMethod1()
     {
         $source = new AnnotationDefinitionSource();
-        $definition = $source->getDefinition('UnitTests\DI\Definition\Fixtures\AnnotationFixture');
+        $definition = $source->getDefinition('UnitTests\DI\Definition\Source\Fixtures\AnnotationFixture');
         $this->assertInstanceOf('DI\Definition\Definition', $definition);
 
         $methodInjections = $definition->getMethodInjections();
@@ -75,7 +75,7 @@ class AnnotationDefinitionSourceTest extends \PHPUnit_Framework_TestCase
     public function testMethod2()
     {
         $source = new AnnotationDefinitionSource();
-        $definition = $source->getDefinition('UnitTests\DI\Definition\Fixtures\AnnotationFixture');
+        $definition = $source->getDefinition('UnitTests\DI\Definition\Source\Fixtures\AnnotationFixture');
         $this->assertInstanceOf('DI\Definition\Definition', $definition);
 
         $methodInjections = $definition->getMethodInjections();
@@ -97,7 +97,7 @@ class AnnotationDefinitionSourceTest extends \PHPUnit_Framework_TestCase
     public function testMethod3()
     {
         $source = new AnnotationDefinitionSource();
-        $definition = $source->getDefinition('UnitTests\DI\Definition\Fixtures\AnnotationFixture');
+        $definition = $source->getDefinition('UnitTests\DI\Definition\Source\Fixtures\AnnotationFixture');
         $this->assertInstanceOf('DI\Definition\Definition', $definition);
 
         $methodInjections = $definition->getMethodInjections();
@@ -119,7 +119,7 @@ class AnnotationDefinitionSourceTest extends \PHPUnit_Framework_TestCase
     public function testMethod4()
     {
         $source = new AnnotationDefinitionSource();
-        $definition = $source->getDefinition('UnitTests\DI\Definition\Fixtures\AnnotationFixture');
+        $definition = $source->getDefinition('UnitTests\DI\Definition\Source\Fixtures\AnnotationFixture');
         $this->assertInstanceOf('DI\Definition\Definition', $definition);
 
         $methodInjections = $definition->getMethodInjections();
@@ -137,7 +137,7 @@ class AnnotationDefinitionSourceTest extends \PHPUnit_Framework_TestCase
     public function testMethod5()
     {
         $source = new AnnotationDefinitionSource();
-        $definition = $source->getDefinition('UnitTests\DI\Definition\Fixtures\AnnotationFixture');
+        $definition = $source->getDefinition('UnitTests\DI\Definition\Source\Fixtures\AnnotationFixture');
         $this->assertInstanceOf('DI\Definition\Definition', $definition);
 
         $methodInjections = $definition->getMethodInjections();
@@ -149,17 +149,17 @@ class AnnotationDefinitionSourceTest extends \PHPUnit_Framework_TestCase
 
         $param1 = $parameterInjections['param1'];
         $this->assertEquals('param1', $param1->getParameterName());
-        $this->assertEquals('UnitTests\DI\Definition\Fixtures\AnnotationFixture2', $param1->getEntryName());
+        $this->assertEquals('UnitTests\DI\Definition\Source\Fixtures\AnnotationFixture2', $param1->getEntryName());
 
         $param2 = $parameterInjections['param2'];
         $this->assertEquals('param2', $param2->getParameterName());
-        $this->assertEquals('UnitTests\DI\Definition\Fixtures\AnnotationFixture2', $param2->getEntryName());
+        $this->assertEquals('UnitTests\DI\Definition\Source\Fixtures\AnnotationFixture2', $param2->getEntryName());
     }
 
     public function testMethod6()
     {
         $source = new AnnotationDefinitionSource();
-        $definition = $source->getDefinition('UnitTests\DI\Definition\Fixtures\AnnotationFixture');
+        $definition = $source->getDefinition('UnitTests\DI\Definition\Source\Fixtures\AnnotationFixture');
         $this->assertInstanceOf('DI\Definition\Definition', $definition);
 
         $methodInjections = $definition->getMethodInjections();
@@ -181,7 +181,7 @@ class AnnotationDefinitionSourceTest extends \PHPUnit_Framework_TestCase
     public function testMethod7()
     {
         $source = new AnnotationDefinitionSource();
-        $definition = $source->getDefinition('UnitTests\DI\Definition\Fixtures\AnnotationFixture');
+        $definition = $source->getDefinition('UnitTests\DI\Definition\Source\Fixtures\AnnotationFixture');
         $this->assertInstanceOf('DI\Definition\Definition', $definition);
 
         $methodInjections = $definition->getMethodInjections();
