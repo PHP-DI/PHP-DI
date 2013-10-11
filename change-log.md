@@ -1,5 +1,12 @@
 # Change log
 
+## 3.5
+
+Read the [news entry](news/05-php-di-3-5.md).
+
+* Importing `@Inject` and `@Injectable` annotations is now optional! It means that you don't have to write `use DI\Annotation\Inject` anymore
+* FIXED [#124](https://github.com/mnapoli/PHP-DI/issues/124): `@Injects` annotation conflicts with other annotations
+
 ## 3.4
 
 Read the [news entry](news/04-php-di-3-4.md).
