@@ -93,9 +93,7 @@ you can combine them by taking advantage of priorities that apply.</p>
 
 <p>While the Reflection definition says that <code>$param1</code> should take a <code>Bar</code> instance, we can use annotations to override that:</p>
 
-<pre><code class="php">use DI\Annotation\Inject;
-
-class Foo {
+<pre><code class="php">class Foo {
     /**
      * @Inject({&quot;param1&quot; = &quot;my.specific.service&quot;})
      */

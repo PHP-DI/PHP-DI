@@ -97,9 +97,7 @@ Scopes allow you to reuse instances and gives you the flexibility to choose the 
 <p>You can specify the scope by using the <code>@Injectable</code> annotation on the target class.
 Remember singleton is the scope used if it is not configured.</p>
 
-<pre><code class="php">use DI\Annotation\Injectable;
-
-/**
+<pre><code class="php">/**
  * @Injectable(scope=&quot;prototype&quot;)
  */
 class MyService {

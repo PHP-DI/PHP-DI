@@ -65,134 +65,60 @@
 
     <div class="main">
         <div class="container-fluid">
-<h1>Lazy injection</h1>
+<h1>PHP-DI 3.5 released</h1>
 
-<p>Consider the following example:</p>
+<p><em>Posted by <a href="http://mnapoli.fr">Matthieu Napoli</a> on October 11th 2013</em></p>
+
+<p>I am happy to announce that PHP-DI version 3.5 has just been released.</p>
+
+<p>It features a minor but amazing improvement: <strong>you don&#39;t have to import annotations anymore</strong>!</p>
+
+<p><strong>Before</strong>:</p>
 
 <pre><code class="php">&lt;?php
-class Foo
+
+use DI\Annotation\Inject;
+
+class ProductController
 {
-    private $a;
-    private $b;
+    /**
+     * @Inject
+     * @var ProductService
+     */
+    private $productService;
 
-    public function __construct(Foo $a, Bar $b) {
-        $this->a = $a;
-        $this->b = $b;
-    }
-
-    public function doSomething() {
-        $this->a->doStuff();
-    }
-
-    public function doSomethingElse() {
-        $this->b->doStuff();
-    }
+    // ...
 }
 </code></pre>
 
-<p><code>a</code> is used only when <code>doSomething()</code> is called, and <code>b</code> only when <code>doSomethingElse()</code> is called.</p>
-
-<p>You may wonder then: why injecting <code>a</code> <strong>and</strong> <code>b</code> if they may not be used? Especially if creating those objects is heavy in time or memory.</p>
-
-<p>That&#39;s where lazy injection can help.</p>
-
-<h2>How it works</h2>
-
-<p>If you define a dependency as &quot;lazy&quot;, PHP-DI will inject:</p>
-
-<ul>
-<li>the object, if it has already been created</li>
-<li>or else a <strong>proxy</strong> to the object, if it is not yet created</li>
-</ul>
-
-<p>The proxy is a special kind of object that <strong>looks and behave exactly like the original object</strong>, so you can&#39;t tell the difference. The proxy will instantiate the original object only when needed.</p>
-
-<p>Creating a proxy is complex. For this, PHP-DI relies on <a href="https://github.com/Ocramius/ProxyManager">ProxyManager</a>, the (amazing) library used by Doctrine, Symfony and Zend.</p>
-
-<h3>Example</h3>
-
-<p>For the simplicity of the example, we will not inject a lazy object, but we will ask the container to return one:</p>
-
-<pre><code class="php">// $proxy is a Proxy object, it is not initialized
-// It is very lightweight in memory
-$proxy = $container->get(&#39;My\Class&#39;, true);
-
-var_dump($proxy instanceof \My\Class); // true
-
-// Calling a method on the proxy will initialize it
-$proxy->doSomething(); // works if doSomething() is a method of My\Class
-// Now the proxy is initialized, the real instance of My\Class has been created and called
-</code></pre>
-
-<h2>How to use</h2>
-
-<p>Here is how you can define lazy injections depending on the configuration you use.</p>
-
-<h3>Annotations</h3>
+<p><strong>After</strong>:</p>
 
 <pre><code class="php">&lt;?php
-class Example {
-    /**
-     * @Inject(lazy=true)
-     * @var My\Class
-     */
-    protected $property;
 
+class ProductController
+{
     /**
-     * @Inject({ &quot;param1&quot; = {&quot;lazy&quot;=true} })
+     * @Inject
+     * @var ProductService
      */
-    public function method(My\Class $param1) {
-    }
+    private $productService;
+
+    // ...
 }
 </code></pre>
 
-<h3>PHP code</h3>
+<p>Of course, you don&#39;t have to change you code, everything will still work if you import annotations.</p>
 
-<pre><code class="php">&lt;?php
-$containerPHP->set(&#39;Example&#39;)
-    ->withProperty(&#39;property&#39;, &#39;My\Class&#39;, true)
-    ->withMethod(&#39;method&#39;, array(&#39;param1&#39; =&gt; array(
-            &#39;name&#39; =&gt; &#39;My\Class&#39;,
-            &#39;lazy&#39; =&gt; true,
-        )));
-</code></pre>
+<p>This is made possible thanks to the amazing <a href="https://github.com/doctrine/annotations">Doctrine Annotation</a> library.</p>
 
-<h3>PHP array</h3>
+<p>Related to the same change, <a href="https://github.com/mnapoli/PHP-DI/issues/124">#124</a> is now fixed, that means <strong>there is
+no conflict with other annotations anymore</strong>.</p>
 
-<pre><code class="php">&lt;?php
-return array(
-    &#39;Example&#39; =&gt; array(
-        &#39;properties&#39;  =&gt; array(
-            &#39;property&#39; =&gt; array(
-                &#39;name&#39; =&gt; &#39;My\Class&#39;,
-                &#39;lazy&#39; =&gt; true,
-            ),
-        ),
-        &#39;methods&#39;     =&gt; array(
-            &#39;method&#39; =&gt; array(
-                &#39;param1&#39; =&gt; array(
-                    &#39;name&#39; =&gt; &#39;My\Class&#39;,
-                    &#39;lazy&#39; =&gt; true,
-                ),
-            ),
-        ),
-    ),
-);
-</code></pre>
+<p>For example, you can now use <code>@Inject</code> in PHPUnit, the <code>@test</code> and <code>@expectedException</code> annotations are not a problem.</p>
 
-<h3>YAML</h3>
+<h2>Change log</h2>
 
-<pre><code class="yaml">Example:
-  properties:
-    property:
-      name: My\Class
-      lazy: true
-  methods:
-    method:
-      param1:
-        name: My\Class
-        lazy: true
-</code></pre>
+<p>You can also read the complete <a href="../change-log">change log</a>.</p>
             <div class="github">
                 PHP-DI is an open source project, you can contribute or seek help on
                 <a class="btn btn-mini" href="https://github.com/mnapoli/PHP-DI/" target="_blank">

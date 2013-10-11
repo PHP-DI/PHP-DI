@@ -153,9 +153,7 @@
 
 <p>Here is an example of all possible uses of the <code>@Inject</code> annotation:</p>
 
-<pre><code class="php">use DI\Annotation\Inject;
-
-class Example {
+<pre><code class="php">class Example {
     /**
      * @Inject
      * @var Foo
@@ -200,11 +198,11 @@ class Example {
 }
 </code></pre>
 
+<p><em>Note</em>: importing annotations with <code>use DI\Annotation\Inject;</code> is optional since v3.5.</p>
+
 <p>The <code>@Injectable</code> annotation let&#39;s you set options on injectable classes:</p>
 
-<pre><code class="php">use DI\Annotation\Injectable;
-
-/**
+<pre><code class="php">/**
  * @Injectable(scope=&quot;prototype&quot;)
  */
 class Example {
