@@ -152,51 +152,40 @@ $container = new Container();
 // Values (not classes)
 $container->set('db.host', 'localhost');
 $container->set('db.port', 5000);
-$container->set('report.recipients', array(
-	'bob@acme.example.com',
-	'alice@acme.example.com'
-));
+$container->set('report.recipients', [
+    'bob@acme.example.com',
+    'alice@acme.example.com'
+]);
 
 // Direct mapping (not needed if you didn't disable Reflection)
-$container->set('SomeClass');
+$container->set('SomeClass', Entry::object());
 
-// This is not recommended: will instantiate the class even when not used, prevents caching
+// This is not recommended: will instantiate the class on every request, even when not used
 $container->set('SomeClass', new SomeOtherClass(1, "hello"));
 
 // Defines an instance of My\Class
-$container->set('My\Class')
-	->withConstructor(array('db.host', 'My\OtherClass'));
+$container->set('My\Class', Entry::object()
+    ->withConstructor('some raw value', Entry::link('My\OtherClass'))
+);
 
-$container->set('My\OtherClass')
-	->withScope(Scope::PROTOTYPE())
-	->withConstructor(
-		array(
-			'host' => 'db.host',
-			'port' => 'db.port',
-		)
-	)
-	->withMethod('setFoo1', array('My\Foo1'))
-	->withMethod('setFoo2', array('My\Foo1', 'My\Foo2'))
-	->withMethod('setFoo3', array(
-			'param1' => 'My\Foo1',
-			'param2' => 'My\Foo2'
-		))
-	->withProperty('bar', 'My\Bar')
-	->withProperty('baz', 'My\Baz', true);
+$container->set('My\OtherClass', Entry::object()
+    ->withScope(Scope::PROTOTYPE())
+    ->withConstructor(Entry::link('db.host'), Entry('db.port'))
+    ->withMethod('setFoo2', Entry::link('My\Foo1'), Entry::link('My\Foo2'))
+    ->withProperty('bar', 'My\Bar')
+);
 
 // Mapping an interface to an implementation
-$container->set('My\Interface')
-	->bindTo('My\Implementation');
+$container->set('My\Interface', Entry::object('My\Implementation'));
 
 // Defining a named instance
-$container->set('myNamedInstance')
-	->bindTo('My\Class');
+$container->set('myNamedInstance', Entry::object('My\Class'));
 
 // Using an anonymous function
 // not recommended: will not be cached
-$container->set('My\Stuff', function(Container $c) {
-								return new MyClass($c['db.host']);
-							});
+$container->set('My\Stuff', Entry::factory(function(Container $c) {
+    return new MyClass($c->get('db.host'));
+}));
 ```
 
 
@@ -215,67 +204,44 @@ Example of a `config/di.php` file (using [PHP 5.4 short arrays](http://php.net/m
 
 ```php
 <?php
+use DI\Entry;
+
 return [
 
     // Values (not classes)
-    'db.host' => 'localhost',
-    'db.port' => 5000,
-
-    // Indexed non-empty array as value
+    'db.host'           => 'localhost',
+    'db.port'           => 5000,
     'report.recipients' => [
         'bob@acme.example.com',
         'alice@acme.example.com'
     ],
 
     // Direct mapping (not needed if you didn't disable Reflection)
-    'SomeClass' => [],
+    'SomeClass' => Entry::object(),
 
-    // This is not recommended: will instantiate the class even when not used, prevents caching
+    // This is not recommended: will instantiate the class on every request, even when not used
     'SomeOtherClass' => new SomeOtherClass(1, "hello"),
 
     // Defines an instance of My\Class
-    'My\Class' => [
-        'constructor' => ['db.host', 'My\OtherClass'],
-    ],
+    'My\Class' => Entry::object()
+        ->withConstructor(Entry::link('db.host'), Entry::link('My\OtherClass')),
 
-    'My\OtherClass' => [
-        'scope' => Scope::PROTOTYPE(),
-        'constructor' => [
-            'host' => 'db.host',
-            'port' => 'db.port',
-        ],
-        'methods' => [
-            'setFoo1' => 'My\Foo1',
-            'setFoo2' => ['My\Foo1', 'My\Foo2'],
-            'setFoo3' => [
-                'param1' => 'My\Foo1',
-                'param2' => 'My\Foo2',
-            ],
-        ],
-        'properties' => [
-            'bar' => 'My\Bar',
-            'baz' => [
-                'name' => 'My\Baz',
-                'lazy' => true,
-            ],
-        ],
-    ],
+    'My\OtherClass' => Entry::object()
+        ->withScope(Scope::PROTOTYPE())
+        ->withConstructor(Entry::link('db.host'), Entry('db.port'))
+        ->withMethod('setFoo2', Entry::link('My\Foo1'), Entry::link('My\Foo2'))
+        ->withProperty('bar', 'My\Bar')
 
     // Mapping an interface to an implementation
-    'My\Interface' => [
-        'class' => 'My\Implementation',
-    ],
+    'My\Interface' => Entry::object('My\Implementation'),
 
     // Defining a named instance
-    'myNamedInstance' => [
-        'class' => 'My\Class',
-    ],
+    'myNamedInstance' => Entry::object('My\Class'),
 
     // Using an anonymous function
-    // not recommended: will prevent caching
-    'My\Stuff' => function(Container $c) {
-        return new MyClass($c['db.host']);
-    ],
+    'My\Stuff' => Entry::factory(function(Container $c) {
+        return new MyClass($c->get('db.host'));
+    }),
 
 ];
 ```
