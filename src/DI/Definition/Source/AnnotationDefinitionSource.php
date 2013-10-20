@@ -17,12 +17,12 @@ use DI\Definition\Exception\AnnotationException;
 use DI\Definition\Exception\DefinitionException;
 use DI\Definition\MethodInjection;
 use DI\Definition\PropertyInjection;
-use DI\Definition\Source\Annotation\PhpDocParser;
 use DI\Definition\UndefinedInjection;
 use Doctrine\Common\Annotations\AnnotationReader;
 use Doctrine\Common\Annotations\AnnotationRegistry;
 use Doctrine\Common\Annotations\Reader;
 use InvalidArgumentException;
+use PhpDocReader\PhpDocReader;
 use ReflectionClass;
 use ReflectionMethod;
 use UnexpectedValueException;
@@ -42,17 +42,14 @@ class AnnotationDefinitionSource implements DefinitionSource
     private $annotationReader;
 
     /**
-     * @var PhpDocParser
+     * @var PhpDocReader
      */
     private $phpDocParser;
 
 
-    /**
-     * Constructor
-     */
     public function __construct()
     {
-        $this->phpDocParser = new PhpDocParser();
+        $this->phpDocParser = new PhpDocReader();
     }
 
     /**
@@ -125,7 +122,7 @@ class AnnotationDefinitionSource implements DefinitionSource
             $entryName = $annotation->getName();
 
             // Look for @var content
-            $entryName = $entryName ?: $this->phpDocParser->getPropertyType($reflectionClass, $property);
+            $entryName = $entryName ?: $this->phpDocParser->getPropertyType($property);
 
             if ($entryName === null) {
                 $value = new UndefinedInjection();
@@ -227,7 +224,7 @@ class AnnotationDefinitionSource implements DefinitionSource
 
             // Look for @param tag or PHP type-hinting (only case where we use reflection)
             if ($entryName === null) {
-                $entryName = $this->phpDocParser->getParameterType($reflectionClass, $method, $parameter);
+                $entryName = $this->phpDocParser->getParameterType($parameter);
             }
 
             if ($entryName === null) {

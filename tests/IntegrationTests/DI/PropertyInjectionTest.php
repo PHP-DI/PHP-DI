@@ -9,9 +9,14 @@
 
 namespace IntegrationTests\DI;
 
-use \DI\Container;
-use \IntegrationTests\DI\Fixtures\PropertyInjectionTest\LazyInjectionClass;
-use \IntegrationTests\DI\Fixtures\PropertyInjectionTest\NamedBean;
+use DI\Container;
+use IntegrationTests\DI\Fixtures\PropertyInjectionTest\Class2;
+use IntegrationTests\DI\Fixtures\PropertyInjectionTest\Issue1\AnotherIssue1;
+use IntegrationTests\DI\Fixtures\PropertyInjectionTest\Issue1\Dependency;
+use IntegrationTests\DI\Fixtures\PropertyInjectionTest\Issue1;
+use IntegrationTests\DI\Fixtures\PropertyInjectionTest\NamedBean;
+use IntegrationTests\DI\Fixtures\PropertyInjectionTest\NamedInjectionClass;
+use IntegrationTests\DI\Fixtures\PropertyInjectionTest\NotFoundVarAnnotation;
 
 /**
  * Test class for bean injection
@@ -32,10 +37,10 @@ class PropertyInjectionTest extends \PHPUnit_Framework_TestCase
         $bean2->nameForTest = 'namedDependency2';
         $container->set('namedDependency2', $bean2);
         // Test
-        $class = $container->get('IntegrationTests\DI\Fixtures\PropertyInjectionTest\NamedInjectionClass');
+        $class = $container->get(NamedInjectionClass::class);
         $dependency = $class->getDependency();
         $this->assertNotNull($dependency);
-        $this->assertInstanceOf('IntegrationTests\DI\Fixtures\PropertyInjectionTest\NamedBean', $dependency);
+        $this->assertInstanceOf(NamedBean::class, $dependency);
         $this->assertEquals('namedDependency', $dependency->nameForTest);
         $this->assertSame($bean, $dependency);
         $this->assertNotSame($bean2, $dependency);
@@ -48,7 +53,7 @@ class PropertyInjectionTest extends \PHPUnit_Framework_TestCase
     {
         // Exception (bean not defined)
         $container = new Container();
-        $container->get('IntegrationTests\DI\Fixtures\PropertyInjectionTest\NamedInjectionClass');
+        $container->get(NamedInjectionClass::class);
     }
 
     /**
@@ -57,26 +62,25 @@ class PropertyInjectionTest extends \PHPUnit_Framework_TestCase
     public function testIssue1()
     {
         $container = new Container();
-        /** @var $object \IntegrationTests\DI\Fixtures\PropertyInjectionTest\Issue1 */
-        $object = $container->get('IntegrationTests\DI\Fixtures\PropertyInjectionTest\Issue1');
-        $this->assertInstanceOf('IntegrationTests\DI\Fixtures\PropertyInjectionTest\Class2', $object->class2);
-        $this->assertInstanceOf('IntegrationTests\DI\Fixtures\PropertyInjectionTest\Class2', $object->alias);
-        $this->assertInstanceOf('IntegrationTests\DI\Fixtures\PropertyInjectionTest\Class2', $object->namespaceAlias);
+        /** @var $object Issue1 */
+        $object = $container->get(Issue1::class);
+        $this->assertInstanceOf(Class2::class, $object->class2);
+        $this->assertInstanceOf(Class2::class, $object->alias);
+        $this->assertInstanceOf(Class2::class, $object->namespaceAlias);
 
-        /** @var $object \IntegrationTests\DI\Fixtures\PropertyInjectionTest\Issue1\AnotherIssue1 */
-        $object = $container->get('IntegrationTests\DI\Fixtures\PropertyInjectionTest\Issue1\AnotherIssue1');
-        $this->assertInstanceOf('IntegrationTests\DI\Fixtures\PropertyInjectionTest\Class2', $object->dependency);
-        $this->assertInstanceOf('IntegrationTests\DI\Fixtures\PropertyInjectionTest\Issue1\Dependency', $object->sameNamespaceDependency);
+        /** @var $object AnotherIssue1 */
+        $object = $container->get(AnotherIssue1::class);
+        $this->assertInstanceOf(Class2::class, $object->dependency);
+        $this->assertInstanceOf(Dependency::class, $object->sameNamespaceDependency);
     }
 
     /**
      * Check error cases
-     * @expectedException \DI\Definition\Exception\AnnotationException
+     * @expectedException \PhpDocReader\AnnotationException
      */
     public function testNotFoundVarAnnotation()
     {
         $container = new Container();
-        /** @var $object \IntegrationTests\DI\Fixtures\PropertyInjectionTest\NotFoundVarAnnotation */
-        $container->get('IntegrationTests\DI\Fixtures\PropertyInjectionTest\NotFoundVarAnnotation');
+        $container->get(NotFoundVarAnnotation::class);
     }
 }

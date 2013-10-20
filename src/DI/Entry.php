@@ -14,7 +14,7 @@ use DI\DefinitionHelper\CallableDefinitionHelper;
 use DI\DefinitionHelper\ObjectDefinitionHelper;
 
 /**
- * Helps defining a container entry
+ * Helps defining a container entry.
  *
  * @author Matthieu Napoli <matthieu@mnapoli.fr>
  */
@@ -42,7 +42,7 @@ class Entry
      * @param string|callable $callable Can be either the name of a static method, or a callable
      * @return CallableDefinitionHelper
      */
-    public static function factory($callable)
+    public static function factory(callable $callable)
     {
         return new CallableDefinitionHelper($callable);
     }
