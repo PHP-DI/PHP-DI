@@ -16,6 +16,7 @@ use DI\Definition\ValueDefinition;
 use DI\DefinitionHelper\DefinitionHelper;
 use Exception;
 use InvalidArgumentException;
+use ProxyManager\Configuration as ProxyManagerConfiguration;
 use ProxyManager\Factory\LazyLoadingValueHolderFactory;
 use ProxyManager\GeneratorStrategy\EvaluatingGeneratorStrategy;
 
@@ -66,8 +67,8 @@ class Container
         Injector $injector = null,
         LazyLoadingValueHolderFactory $proxyFactory = null
     ) {
-        $this->definitionManager = $definitionManager ?: $this->createDefaultDefinitionManager();
-        $this->injector = $injector ?: $this->createDefaultInjector();
+        $this->definitionManager = $definitionManager ?: new DefinitionManager(true, true);
+        $this->injector = $injector ?: new DefaultInjector($this);
         $this->proxyFactory = $proxyFactory ?: $this->createDefaultProxyFactory();
 
         // Auto-register the container
@@ -281,32 +282,12 @@ class Container
     }
 
     /**
-     * @return DefinitionManager
-     */
-    private function createDefaultDefinitionManager()
-    {
-        $definitionManager = new DefinitionManager();
-        $definitionManager->useReflection(true);
-        $definitionManager->useAnnotations(true);
-
-        return $definitionManager;
-    }
-
-    /**
-     * @return Injector
-     */
-    private function createDefaultInjector()
-    {
-        return new DefaultInjector($this);
-    }
-
-    /**
      * @return LazyLoadingValueHolderFactory
      */
     private function createDefaultProxyFactory()
     {
         // Proxy factory
-        $config = new \ProxyManager\Configuration();
+        $config = new ProxyManagerConfiguration();
         // By default, auto-generate proxies and don't write them to file
         $config->setAutoGenerateProxies(true);
         $config->setGeneratorStrategy(new EvaluatingGeneratorStrategy());

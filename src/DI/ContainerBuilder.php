@@ -24,7 +24,6 @@ use ProxyManager\GeneratorStrategy\EvaluatingGeneratorStrategy;
  */
 class ContainerBuilder
 {
-
     /**
      * @var boolean
      */
@@ -63,9 +62,7 @@ class ContainerBuilder
     public function build()
     {
         // Definition manager
-        $definitionManager = new DefinitionManager();
-        $definitionManager->useReflection($this->useReflection);
-        $definitionManager->useAnnotations($this->useAnnotations);
+        $definitionManager = new DefinitionManager($this->useReflection, $this->useAnnotations);
         if ($this->definitionsValidation) {
             $definitionManager->setDefinitionsValidation($this->definitionsValidation);
         }
@@ -162,5 +159,4 @@ class ContainerBuilder
 
         return $this;
     }
-
 }

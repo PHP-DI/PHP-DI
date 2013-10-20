@@ -14,8 +14,8 @@ use DI\Definition\ClassDefinition;
 /**
  * Component responsible of creating and injecting dependencies as defined in Definitions.
  *
- * @author Matthieu Napoli <matthieu@mnapoli.fr>
  * @since 4.0
+ * @author Matthieu Napoli <matthieu@mnapoli.fr>
  */
 interface Injector
 {

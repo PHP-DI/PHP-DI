@@ -25,8 +25,8 @@ use ReflectionParameter;
 /**
  * Component responsible of creating and injecting dependencies as defined in Definitions.
  *
- * @author Matthieu Napoli <matthieu@mnapoli.fr>
  * @since 4.0
+ * @author Matthieu Napoli <matthieu@mnapoli.fr>
  */
 class DefaultInjector implements Injector
 {
