@@ -23,11 +23,12 @@ use ReflectionProperty;
 use ReflectionParameter;
 
 /**
- * Factory class, responsible of instantiating classes
+ * Component responsible of creating and injecting dependencies as defined in Definitions.
  *
  * @author Matthieu Napoli <matthieu@mnapoli.fr>
+ * @since 4.0
  */
-class Factory implements FactoryInterface
+class DefaultInjector implements Injector
 {
     /**
      * @var Container
@@ -82,7 +83,7 @@ class Factory implements FactoryInterface
     }
 
     /**
-     * Creates an instance and inject dependencies through the constructor
+     * Creates an instance and inject dependencies through the constructor.
      *
      * @param ReflectionClass      $classReflection
      * @param MethodInjection|null $constructorInjection
@@ -177,7 +178,7 @@ class Factory implements FactoryInterface
     }
 
     /**
-     * Inject dependencies into properties
+     * Inject dependencies into properties.
      *
      * @param object            $object            Object to inject dependencies into
      * @param PropertyInjection $propertyInjection Property injection definition
@@ -213,9 +214,11 @@ class Factory implements FactoryInterface
     }
 
     /**
-     * Returns the default value of a function parameter
+     * Returns the default value of a function parameter.
+     *
      * @param ReflectionParameter $reflectionParameter
      * @param ReflectionMethod    $reflectionMethod
+     *
      * @throws DefinitionException Can't get default values from PHP internal classes and methods
      * @return mixed
      */

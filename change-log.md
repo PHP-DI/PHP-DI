@@ -13,6 +13,7 @@ All changes:
 * [#110](https://github.com/mnapoli/PHP-DI/issues/110) XML definitions are not supported anymore
 * [#122](https://github.com/mnapoli/PHP-DI/issues/122) JSON definitions are not supported anymore
 * `ContainerSingleton` has finally been removed
+* `FactoryInterface` has been renamed to `Injector`, only people implementing their own factory/injector should care
 
 ## 3.4
 

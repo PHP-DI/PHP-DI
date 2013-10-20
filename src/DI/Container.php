@@ -38,9 +38,9 @@ class Container
     private $definitionManager;
 
     /**
-     * @var FactoryInterface
+     * @var Injector
      */
-    private $factory;
+    private $injector;
 
     /**
      * @var LazyLoadingValueHolderFactory
@@ -58,16 +58,16 @@ class Container
      * Parameters are optional, use them to override a dependency.
      *
      * @param DefinitionManager|null             $definitionManager
-     * @param FactoryInterface|null              $factory
+     * @param Injector|null              $injector
      * @param LazyLoadingValueHolderFactory|null $proxyFactory
      */
     public function __construct(
         DefinitionManager $definitionManager = null,
-        FactoryInterface $factory = null,
+        Injector $injector = null,
         LazyLoadingValueHolderFactory $proxyFactory = null
     ) {
         $this->definitionManager = $definitionManager ?: $this->createDefaultDefinitionManager();
-        $this->factory = $factory ?: $this->createDefaultFactory();
+        $this->injector = $injector ?: $this->createDefaultInjector();
         $this->proxyFactory = $proxyFactory ?: $this->createDefaultProxyFactory();
 
         // Auto-register the container
@@ -161,7 +161,7 @@ class Container
 
         // Check that the definition is a class definition
         if ($definition instanceof ClassDefinition) {
-            $instance = $this->factory->injectOnInstance($definition, $instance);
+            $instance = $this->injector->injectOnInstance($definition, $instance);
         }
 
         return $instance;
@@ -195,19 +195,19 @@ class Container
     }
 
     /**
-     * @param FactoryInterface $factory
+     * @param Injector $injector
      */
-    public function setFactory(FactoryInterface $factory)
+    public function setInjector(Injector $injector)
     {
-        $this->factory = $factory;
+        $this->injector = $injector;
     }
 
     /**
-     * @return FactoryInterface
+     * @return Injector
      */
-    public function getFactory()
+    public function getInjector()
     {
-        return $this->factory;
+        return $this->injector;
     }
 
     /**
@@ -250,7 +250,7 @@ class Container
         $this->classesBeingInstantiated[$classname] = true;
 
         try {
-            $instance = $this->factory->createInstance($classDefinition);
+            $instance = $this->injector->createInstance($classDefinition);
         } catch (Exception $exception) {
             unset($this->classesBeingInstantiated[$classname]);
             throw $exception;
@@ -293,11 +293,11 @@ class Container
     }
 
     /**
-     * @return FactoryInterface
+     * @return Injector
      */
-    private function createDefaultFactory()
+    private function createDefaultInjector()
     {
-        return new Factory($this);
+        return new DefaultInjector($this);
     }
 
     /**

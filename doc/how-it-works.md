@@ -17,7 +17,7 @@ $entry = $container->get('entryName');
 A container instance has the following sub-components:
 
 - a `DefinitionManager` that returns a `Definition` for an entry name
-- a `Factory` to create instances from the definitions
+- an `Injector` to create instances from the definitions
 
 ### Definitions
 
@@ -62,6 +62,9 @@ It answers the following needs:
 
 *This could be improved by splitting this into 2 separate classes to follow the [Single Responsibility Principle](http://en.wikipedia.org/wiki/Single_responsibility_principle).*
 
-### Factory
+### Injector
 
-The role of the `Factory` is to return an object instance from a `ClassDefinition`.
+The role of the `Injector` is to process "Definitions".
+
+It can return a new instance (with dependencies injected) from a `ClassDefinition`, or also inject dependencies on an
+existing instance.
