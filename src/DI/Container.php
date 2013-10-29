@@ -173,6 +173,11 @@ class Container
      */
     public function set($name, $value = null)
     {
+        // Clear existing entry if it exists
+        if (array_key_exists($name, $this->entries)) {
+            unset($this->entries[$name]);
+        }
+
         // Class definition
         if ($value === null) {
             // If a null value was explicitly given in the method call, then we register a null value
