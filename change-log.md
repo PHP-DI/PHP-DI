@@ -1,5 +1,9 @@
 # Change log
 
+## 3.5.1
+
+* FIXED [#126](https://github.com/mnapoli/PHP-DI/issues/126): `Container::set` without effect if a value has already been set and retrieved
+
 ## 3.5
 
 Read the [news entry](news/05-php-di-3-5.md).
