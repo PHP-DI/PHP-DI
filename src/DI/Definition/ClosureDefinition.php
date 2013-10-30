@@ -11,7 +11,6 @@ namespace DI\Definition;
 
 use Closure;
 use DI\Container;
-use DI\Definition\Exception\DefinitionException;
 
 /**
  * Definition of a value or class using a closure
