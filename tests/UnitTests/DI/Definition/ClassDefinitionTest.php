@@ -10,7 +10,6 @@
 namespace UnitTests\DI\Definition;
 
 use DI\Definition\ClassDefinition;
-use DI\Definition\Exception\DefinitionException;
 use DI\Definition\MethodInjection;
 use DI\Definition\PropertyInjection;
 use DI\Definition\ValueDefinition;

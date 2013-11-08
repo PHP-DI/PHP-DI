@@ -10,7 +10,6 @@
 namespace UnitTests\DI\Definition;
 
 use DI\Container;
-use DI\Definition\ClassDefinition;
 use DI\Definition\ClosureDefinition;
 
 /**

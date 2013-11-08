@@ -13,6 +13,9 @@ use DI\Annotation\Inject;
 use DI\Definition\Source\AnnotationDefinitionSource;
 use Doctrine\Common\Annotations\AnnotationReader;
 use ReflectionClass;
+use UnitTests\DI\Annotation\Fixtures\InjectFixture;
+use UnitTests\DI\Annotation\Fixtures\MixedAnnotationsFixture;
+use UnitTests\DI\Annotation\Fixtures\NonImportedInjectFixture;
 
 /**
  * Inject annotation test class
@@ -33,16 +36,16 @@ class InjectTest extends \PHPUnit_Framework_TestCase
     {
         $definitionReader = new AnnotationDefinitionSource();
         $this->annotationReader = $definitionReader->getAnnotationReader();
-        $this->reflectionClass = new ReflectionClass('UnitTests\DI\Annotation\Fixtures\InjectFixture');
+        $this->reflectionClass = new ReflectionClass(InjectFixture::class);
     }
 
     public function testProperty1()
     {
         $property = $this->reflectionClass->getProperty('property1');
         /** @var $annotation Inject */
-        $annotation = $this->annotationReader->getPropertyAnnotation($property, 'DI\Annotation\Inject');
+        $annotation = $this->annotationReader->getPropertyAnnotation($property, Inject::class);
 
-        $this->assertInstanceOf('DI\Annotation\Inject', $annotation);
+        $this->assertInstanceOf(Inject::class, $annotation);
         $this->assertEquals('foo', $annotation->getName());
     }
 
@@ -50,9 +53,9 @@ class InjectTest extends \PHPUnit_Framework_TestCase
     {
         $property = $this->reflectionClass->getProperty('property2');
         /** @var $annotation Inject */
-        $annotation = $this->annotationReader->getPropertyAnnotation($property, 'DI\Annotation\Inject');
+        $annotation = $this->annotationReader->getPropertyAnnotation($property, Inject::class);
 
-        $this->assertInstanceOf('DI\Annotation\Inject', $annotation);
+        $this->assertInstanceOf(Inject::class, $annotation);
         $this->assertNull($annotation->getName());
     }
 
@@ -60,9 +63,9 @@ class InjectTest extends \PHPUnit_Framework_TestCase
     {
         $property = $this->reflectionClass->getProperty('property3');
         /** @var $annotation Inject */
-        $annotation = $this->annotationReader->getPropertyAnnotation($property, 'DI\Annotation\Inject');
+        $annotation = $this->annotationReader->getPropertyAnnotation($property, Inject::class);
 
-        $this->assertInstanceOf('DI\Annotation\Inject', $annotation);
+        $this->assertInstanceOf(Inject::class, $annotation);
         $this->assertEquals('foo', $annotation->getName());
     }
 
@@ -70,9 +73,9 @@ class InjectTest extends \PHPUnit_Framework_TestCase
     {
         $method = $this->reflectionClass->getMethod('method1');
         /** @var $annotation Inject */
-        $annotation = $this->annotationReader->getMethodAnnotation($method, 'DI\Annotation\Inject');
+        $annotation = $this->annotationReader->getMethodAnnotation($method, Inject::class);
 
-        $this->assertInstanceOf('DI\Annotation\Inject', $annotation);
+        $this->assertInstanceOf(Inject::class, $annotation);
         $this->assertEmpty($annotation->getParameters());
     }
 
@@ -80,10 +83,10 @@ class InjectTest extends \PHPUnit_Framework_TestCase
     {
         $method = $this->reflectionClass->getMethod('method2');
         /** @var $annotation Inject */
-        $annotation = $this->annotationReader->getMethodAnnotation($method, 'DI\Annotation\Inject');
+        $annotation = $this->annotationReader->getMethodAnnotation($method, Inject::class);
         $parameters = $annotation->getParameters();
 
-        $this->assertInstanceOf('DI\Annotation\Inject', $annotation);
+        $this->assertInstanceOf(Inject::class, $annotation);
         $this->assertCount(2, $parameters);
         $this->assertEquals('foo', $parameters[0]);
         $this->assertEquals('bar', $parameters[1]);
@@ -94,12 +97,12 @@ class InjectTest extends \PHPUnit_Framework_TestCase
      */
     public function testNonImportedAnnotation()
     {
-        $class = new ReflectionClass('UnitTests\DI\Annotation\Fixtures\NonImportedInjectFixture');
+        $class = new ReflectionClass(NonImportedInjectFixture::class);
         $property = $class->getProperty('property1');
         /** @var $annotation Inject */
-        $annotation = $this->annotationReader->getPropertyAnnotation($property, 'DI\Annotation\Inject');
+        $annotation = $this->annotationReader->getPropertyAnnotation($property, Inject::class);
 
-        $this->assertInstanceOf('DI\Annotation\Inject', $annotation);
+        $this->assertInstanceOf(Inject::class, $annotation);
     }
 
     /**
@@ -107,11 +110,11 @@ class InjectTest extends \PHPUnit_Framework_TestCase
      */
     public function testMixedAnnotations()
     {
-        $class = new ReflectionClass('UnitTests\DI\Annotation\Fixtures\MixedAnnotationsFixture');
+        $class = new ReflectionClass(MixedAnnotationsFixture::class);
         $property = $class->getProperty('property1');
         /** @var $annotation Inject */
-        $annotation = $this->annotationReader->getPropertyAnnotation($property, 'DI\Annotation\Inject');
+        $annotation = $this->annotationReader->getPropertyAnnotation($property, Inject::class);
 
-        $this->assertInstanceOf('DI\Annotation\Inject', $annotation);
+        $this->assertInstanceOf(Inject::class, $annotation);
     }
 }
