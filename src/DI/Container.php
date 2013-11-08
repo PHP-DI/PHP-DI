@@ -176,6 +176,11 @@ class Container
      */
     public function set($name, $value)
     {
+        // Clear existing entry if it exists
+        if (array_key_exists($name, $this->entries)) {
+            unset($this->entries[$name]);
+        }
+
         if ($value instanceof DefinitionHelper) {
             $definition = $value->getDefinition($name);
         } else {

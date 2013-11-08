@@ -12,7 +12,7 @@ namespace UnitTests\DI\Definition\Source;
 use DI\Definition\EntryReference;
 use DI\Definition\Source\ReflectionDefinitionSource;
 use DI\Definition\UndefinedInjection;
-use UnitTests\DI\Definition\Fixtures\ReflectionFixture;
+use UnitTests\DI\Definition\Source\Fixtures\ReflectionFixture;
 
 class ReflectionDefinitionSourceTest extends \PHPUnit_Framework_TestCase
 {

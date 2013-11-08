@@ -21,6 +21,7 @@ use DI\Definition\UndefinedInjection;
 use Doctrine\Common\Annotations\AnnotationReader;
 use Doctrine\Common\Annotations\AnnotationRegistry;
 use Doctrine\Common\Annotations\Reader;
+use Doctrine\Common\Annotations\SimpleAnnotationReader;
 use InvalidArgumentException;
 use PhpDocReader\PhpDocReader;
 use ReflectionClass;
@@ -245,7 +246,8 @@ class AnnotationDefinitionSource implements DefinitionSource
     {
         if ($this->annotationReader == null) {
             AnnotationRegistry::registerAutoloadNamespace('DI\Annotation', __DIR__ . '/../../../');
-            $this->annotationReader = new AnnotationReader();
+            $this->annotationReader = new SimpleAnnotationReader();
+            $this->annotationReader->addNamespace('DI\Annotation');
         }
         return $this->annotationReader;
     }

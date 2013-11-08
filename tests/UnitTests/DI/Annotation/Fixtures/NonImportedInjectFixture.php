@@ -7,8 +7,12 @@
  * @license   http://www.opensource.org/licenses/mit-license.php MIT (see the LICENSE file)
  */
 
-namespace UnitTests\DI\Definition\Fixtures;
+namespace UnitTests\DI\Annotation\Fixtures;
 
-class AnnotationFixture2
+class NonImportedInjectFixture
 {
+    /**
+     * @Inject("foo")
+     */
+    protected $property1;
 }

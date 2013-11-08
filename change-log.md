@@ -15,6 +15,17 @@ All changes:
 * `ContainerSingleton` has finally been removed
 * `FactoryInterface` has been renamed to `Injector`, only people implementing their own factory/injector should care
 
+## 3.5.1
+
+* FIXED [#126](https://github.com/mnapoli/PHP-DI/issues/126): `Container::set` without effect if a value has already been set and retrieved
+
+## 3.5
+
+Read the [news entry](news/05-php-di-3-5.md).
+
+* Importing `@Inject` and `@Injectable` annotations is now optional! It means that you don't have to write `use DI\Annotation\Inject` anymore
+* FIXED [#124](https://github.com/mnapoli/PHP-DI/issues/124): `@Injects` annotation conflicts with other annotations
+
 ## 3.4
 
 Read the [news entry](news/04-php-di-3-4.md).

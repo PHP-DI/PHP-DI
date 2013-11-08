@@ -10,10 +10,8 @@
 namespace UnitTests\DI\Annotation;
 
 use DI\Annotation\Inject;
-use DI\Container;
 use DI\Definition\Source\AnnotationDefinitionSource;
 use Doctrine\Common\Annotations\AnnotationReader;
-use Doctrine\Common\Annotations\AnnotationRegistry;
 use ReflectionClass;
 
 /**
@@ -89,5 +87,31 @@ class InjectTest extends \PHPUnit_Framework_TestCase
         $this->assertCount(2, $parameters);
         $this->assertEquals('foo', $parameters[0]);
         $this->assertEquals('bar', $parameters[1]);
+    }
+
+    /**
+     * Inject annotation should work even if not imported
+     */
+    public function testNonImportedAnnotation()
+    {
+        $class = new ReflectionClass('UnitTests\DI\Annotation\Fixtures\NonImportedInjectFixture');
+        $property = $class->getProperty('property1');
+        /** @var $annotation Inject */
+        $annotation = $this->annotationReader->getPropertyAnnotation($property, 'DI\Annotation\Inject');
+
+        $this->assertInstanceOf('DI\Annotation\Inject', $annotation);
+    }
+
+    /**
+     * Inject annotation should work even if there are other weird annotations in the file
+     */
+    public function testMixedAnnotations()
+    {
+        $class = new ReflectionClass('UnitTests\DI\Annotation\Fixtures\MixedAnnotationsFixture');
+        $property = $class->getProperty('property1');
+        /** @var $annotation Inject */
+        $annotation = $this->annotationReader->getPropertyAnnotation($property, 'DI\Annotation\Inject');
+
+        $this->assertInstanceOf('DI\Annotation\Inject', $annotation);
     }
 }
