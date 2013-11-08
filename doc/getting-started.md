@@ -12,7 +12,7 @@ Create a file named `composer.json` in your project root:
 ```json
 {
     "require": {
-        "mnapoli/php-di": "~3.4"
+        "mnapoli/php-di": "~3.5"
     }
 }
 ```
@@ -67,7 +67,7 @@ Of course, this is limited to constructor injection.
 You can also use annotations to define injections, here is a short example:
 
 ```php
-use DI\Annotation\Inject;
+<?php
 
 class Foo {
     /**
@@ -103,11 +103,11 @@ $container->set('db.port', 5000);
 
 // Defines an instance of My\Class
 $container->set('My\Class')
-	->withConstructor(array('db.host', 'My\Interface'));
+    ->withConstructor(array('db.host', 'My\Interface'));
 
 // Mapping an interface to an implementation
 $container->set('My\Interface')
-	->bindTo('My\Implementation');
+    ->bindTo('My\Implementation');
 ```
 
 #### PHP array
@@ -197,13 +197,13 @@ To use PHP-DI in your ZF1 application, you need to change the Dispatcher used by
 
 ```php
     protected function _initDependencyInjection() {
-		$container = new \DI\Container();
+        $container = new \DI\Container();
 
         $dispatcher = new \DI\ZendFramework1\Dispatcher();
         $dispatcher->setContainer($container);
 
         Zend_Controller_Front::getInstance()->setDispatcher($dispatcher);
-	}
+    }
 ```
 
 **That's it!**

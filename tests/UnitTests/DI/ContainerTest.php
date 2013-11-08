@@ -230,4 +230,19 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($container, $otherContainer);
     }
 
+    /**
+     * @see https://github.com/mnapoli/PHP-DI/issues/126
+     * @test
+     */
+    public function testSetGetSetGet()
+    {
+        $container = new Container();
+
+        $container->set('foo', 'bar');
+        $container->get('foo');
+        $container->set('foo', 'hello');
+        
+        $this->assertSame('hello', $container->get('foo'));
+    }
+
 }

@@ -85,8 +85,6 @@ It can be used over:
 Here is an example of all possible uses of the `@Inject` annotation:
 
 ```php
-use DI\Annotation\Inject;
-
 class Example {
     /**
      * @Inject
@@ -132,11 +130,11 @@ class Example {
 }
 ```
 
+*Note*: importing annotations with `use DI\Annotation\Inject;` is optional since v3.5.
+
 The `@Injectable` annotation let's you set options on injectable classes:
 
 ```php
-use DI\Annotation\Injectable;
-
 /**
  * @Injectable(scope="prototype")
  */
