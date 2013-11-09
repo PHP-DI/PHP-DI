@@ -51,10 +51,15 @@ class ContainerBuilder
     private $writeProxiesToFile = false;
 
     /**
-     * Directory where to write the proxies (if $writeProxiesToFile is enabled)
+     * Directory where to write the proxies (if $writeProxiesToFile is enabled).
      * @var string
      */
     private $proxyDirectory;
+
+    /**
+     * If PHP-DI is wrapped in another container, this references the wrapper.
+     */
+    private $wrapperContainer;
 
     /**
      * @return Container
@@ -70,6 +75,9 @@ class ContainerBuilder
             $definitionManager->setCache($this->cache);
         }
 
+        // Injector
+        $injector = $this->wrapperContainer ? new DefaultInjector($this->wrapperContainer) : null;
+
         // Proxy factory
         $config = new Configuration();
         $config->setAutoGenerateProxies(true);
@@ -80,7 +88,7 @@ class ContainerBuilder
             $config->setGeneratorStrategy(new EvaluatingGeneratorStrategy());
         }
 
-        $container = new Container($definitionManager, null, new LazyLoadingValueHolderFactory($config));
+        $container = new Container($definitionManager, $injector, new LazyLoadingValueHolderFactory($config));
 
         return $container;
     }
@@ -156,6 +164,20 @@ class ContainerBuilder
             throw new InvalidArgumentException("The proxy directory must be specified if you want to write proxies on disk");
         }
         $this->proxyDirectory = $proxyDirectory;
+
+        return $this;
+    }
+
+    /**
+     * If PHP-DI's container is wrapped by another container (for example Acclimate), we can
+     * set this so that PHP-DI will use the wrapper rather than itself for building objects.
+     *
+     * @param object $otherContainer This container only need to implement the get($name) method
+     * @return $this
+     */
+    public function wrapContainer($otherContainer)
+    {
+        $this->wrapperContainer = $otherContainer;
 
         return $this;
     }

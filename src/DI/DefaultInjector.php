@@ -30,15 +30,12 @@ use ReflectionParameter;
  */
 class DefaultInjector implements Injector
 {
-    /**
-     * @var Container
-     */
-    protected $container;
+    private $container;
 
     /**
-     * @param Container $container
+     * @param object $container This container must implement at least the get($name) method.
      */
-    public function __construct(Container $container)
+    public function __construct($container)
     {
         $this->container = $container;
     }
@@ -231,5 +228,13 @@ class DefaultInjector implements Injector
             . " of {$reflectionMethod->getDeclaringClass()->getName()}::{$reflectionMethod->getName()} has no type defined or guessable."
             . " It has a default value, but the default value can't be read through Reflection because it is a PHP internal class.");
         }
+    }
+
+    /**
+     * @return object Container implementing at least the get($name) method
+     */
+    public function getContainer()
+    {
+        return $this->container;
     }
 }
