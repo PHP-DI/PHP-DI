@@ -10,6 +10,7 @@
 namespace UnitTests\DI;
 
 use DI\ContainerBuilder;
+use DI\DefaultInjector;
 
 /**
  * Test class for ContainerBuilder
@@ -24,6 +25,11 @@ class ContainerBuilderTest extends \PHPUnit_Framework_TestCase
 
         $this->assertNull($container->getDefinitionManager()->getCache());
         $this->assertFalse($container->getDefinitionManager()->getDefinitionsValidation());
+
+        /** @var DefaultInjector $injector */
+        $injector = $container->getInjector();
+        $this->assertInstanceOf(DefaultInjector::class, $injector);
+        $this->assertSame($container, $injector->getContainer());
     }
 
     public function testSetCache()
@@ -46,6 +52,22 @@ class ContainerBuilderTest extends \PHPUnit_Framework_TestCase
         $container = $builder->build();
 
         $this->assertTrue($container->getDefinitionManager()->getDefinitionsValidation());
+    }
+
+    public function testWrapContainer()
+    {
+        $otherContainer = new \stdClass();
+
+        $builder = new ContainerBuilder();
+        $builder->wrapContainer($otherContainer);
+
+        $container = $builder->build();
+
+        /** @var DefaultInjector $injector */
+        $injector = $container->getInjector();
+
+        $this->assertInstanceOf(DefaultInjector::class, $injector);
+        $this->assertSame($otherContainer, $injector->getContainer());
     }
 
     public function testFluentInterface()
@@ -80,8 +102,7 @@ class ContainerBuilderTest extends \PHPUnit_Framework_TestCase
         $result = $builder->setDefinitionCache($mockCache);
         $this->assertSame($builder, $result);
 
-        $mockLoader = $this->getMock('DI\Definition\FileLoader\DefinitionFileLoader', array(), array(), '', false);
-        $result = $builder->addDefinitionsFromFile($mockLoader);
+        $result = $builder->wrapContainer(null);
         $this->assertSame($builder, $result);
     }
 

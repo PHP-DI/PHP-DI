@@ -10,7 +10,6 @@
 namespace DI;
 
 use DI\Definition\DefinitionManager;
-use DI\Definition\FileLoader\DefinitionFileLoader;
 use Doctrine\Common\Cache\Cache;
 use InvalidArgumentException;
 use ProxyManager\Configuration;
@@ -25,7 +24,6 @@ use ProxyManager\GeneratorStrategy\EvaluatingGeneratorStrategy;
  */
 class ContainerBuilder
 {
-
     /**
      * @var boolean
      */
@@ -47,21 +45,21 @@ class ContainerBuilder
     private $cache;
 
     /**
-     * @var DefinitionFileLoader[]
-     */
-    private $fileLoaders = array();
-
-    /**
      * If true, write the proxies to disk to improve performances.
      * @var boolean
      */
     private $writeProxiesToFile = false;
 
     /**
-     * Directory where to write the proxies (if $writeProxiesToFile is enabled)
+     * Directory where to write the proxies (if $writeProxiesToFile is enabled).
      * @var string
      */
     private $proxyDirectory;
+
+    /**
+     * If PHP-DI is wrapped in another container, this references the wrapper.
+     */
+    private $wrapperContainer;
 
     /**
      * @return Container
@@ -69,18 +67,16 @@ class ContainerBuilder
     public function build()
     {
         // Definition manager
-        $definitionManager = new DefinitionManager();
-        $definitionManager->useReflection($this->useReflection);
-        $definitionManager->useAnnotations($this->useAnnotations);
+        $definitionManager = new DefinitionManager($this->useReflection, $this->useAnnotations);
         if ($this->definitionsValidation) {
             $definitionManager->setDefinitionsValidation($this->definitionsValidation);
         }
         if ($this->cache) {
             $definitionManager->setCache($this->cache);
         }
-        foreach ($this->fileLoaders as $fileLoader) {
-            $definitionManager->addDefinitionsFromFile($fileLoader);
-        }
+
+        // Injector
+        $injector = $this->wrapperContainer ? new DefaultInjector($this->wrapperContainer) : null;
 
         // Proxy factory
         $config = new Configuration();
@@ -92,7 +88,7 @@ class ContainerBuilder
             $config->setGeneratorStrategy(new EvaluatingGeneratorStrategy());
         }
 
-        $container = new Container($definitionManager, null, new LazyLoadingValueHolderFactory($config));
+        $container = new Container($definitionManager, $injector, new LazyLoadingValueHolderFactory($config));
 
         return $container;
     }
@@ -149,18 +145,6 @@ class ContainerBuilder
     }
 
     /**
-     * Add definitions contained in a file
-     *
-     * @param DefinitionFileLoader $definitionFileLoader
-     * @return ContainerBuilder
-     */
-    public function addDefinitionsFromFile(DefinitionFileLoader $definitionFileLoader)
-    {
-        $this->fileLoaders[] = $definitionFileLoader;
-        return $this;
-    }
-
-    /**
      * Configure the proxy generation
      *
      * For dev environment, use writeProxiesToFile(false) (default configuration)
@@ -184,4 +168,17 @@ class ContainerBuilder
         return $this;
     }
 
+    /**
+     * If PHP-DI's container is wrapped by another container (for example Acclimate), we can
+     * set this so that PHP-DI will use the wrapper rather than itself for building objects.
+     *
+     * @param object $otherContainer This container only need to implement the get($name) method
+     * @return $this
+     */
+    public function wrapContainer($otherContainer)
+    {
+        $this->wrapperContainer = $otherContainer;
+
+        return $this;
+    }
 }

@@ -12,28 +12,29 @@ namespace DI;
 use DI\Definition\ClassDefinition;
 
 /**
- * Factory class, responsible of instantiating classes
+ * Component responsible of creating and injecting dependencies as defined in Definitions.
  *
+ * @since 4.0
  * @author Matthieu Napoli <matthieu@mnapoli.fr>
  */
-interface FactoryInterface
+interface Injector
 {
-
     /**
-     * Create a new instance of the class
+     * Create a new instance of a class and injects all dependencies.
      *
      * @param ClassDefinition $classDefinition
      *
      * @return object The instance
      */
-    function createInstance(ClassDefinition $classDefinition);
+    public function createInstance(ClassDefinition $classDefinition);
 
     /**
+     * Injects dependencies on an existing instance.
+     *
      * @param ClassDefinition $classDefinition
      * @param object          $instance
      *
      * @return object The instance
      */
-    function injectInstance(ClassDefinition $classDefinition, $instance);
-
+    public function injectOnInstance(ClassDefinition $classDefinition, $instance);
 }

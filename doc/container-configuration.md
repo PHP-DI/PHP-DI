@@ -21,23 +21,6 @@ $builder->setDefinitionsValidation(true);
 $container = $builder->build();
 ```
 
-### Adding a definition file
-
-If you defining injections in a file, use the container builder:
-
-```php
-use DI\Definition\FileLoader\YamlDefinitionFileLoader;
-
-$builder->addDefinitionsFromFile(new YamlDefinitionFileLoader('config/di.yml'));
-```
-
-If you don't want to use Reflection or Annotations, disable them:
-
-```php
-$builder->useReflection(false);
-$builder->useAnnotations(false);
-```
-
 Read more about [definitions](definition.md).
 
 ## Production environment
@@ -66,4 +49,32 @@ $builder->useAnnotations(false);
 $builder->setDefinitionsValidation(false);
 
 $container = $builder->build();
+```
+
+## Using PHP-DI with other containers
+
+If you want to use several containers at once, for example to use PHP-DI in ZF2 or Symfony 2, you can
+use a tool like [Acclimate](https://github.com/jeremeamia/acclimate).
+
+You will just need to tell PHP-DI to look into the composite container, else PHP-DI will be unaware
+of Symfony's container entries.
+
+Example with Acclimate:
+
+```php
+$container = new CompositeContainer();
+
+// Add Symfony's container
+$container->addContainer($acclimate->adaptContainer($symfonyContainer));
+
+// Configure PHP-DI container
+$builder = new ContainerBuilder();
+$builder->wrapContainer($container);
+
+// Add PHP-DI container
+$phpdiContainer = $builder->build();
+$container->addContainer($acclimate->adaptContainer($phpdiContainer));
+
+// Good to go!
+$foo = $container->get('foo');
 ```

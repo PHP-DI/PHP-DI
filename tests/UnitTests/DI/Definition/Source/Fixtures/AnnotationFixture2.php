@@ -11,5 +11,4 @@ namespace UnitTests\DI\Definition\Source\Fixtures;
 
 class AnnotationFixture2
 {
-
 }

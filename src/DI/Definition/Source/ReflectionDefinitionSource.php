@@ -10,8 +10,9 @@
 namespace DI\Definition\Source;
 
 use DI\Definition\ClassDefinition;
+use DI\Definition\EntryReference;
 use DI\Definition\MethodInjection;
-use DI\Definition\ParameterInjection;
+use DI\Definition\UndefinedInjection;
 use ReflectionClass;
 use ReflectionParameter;
 
@@ -24,7 +25,6 @@ use ReflectionParameter;
  */
 class ReflectionDefinitionSource implements DefinitionSource
 {
-
     /**
      * {@inheritdoc}
      */
@@ -42,19 +42,20 @@ class ReflectionDefinitionSource implements DefinitionSource
         $constructor = $reflectionClass->getConstructor();
 
         if ($constructor && $constructor->isPublic()) {
-
-            $constructorInjection = new MethodInjection($constructor->name);
-            $classDefinition->setConstructorInjection($constructorInjection);
-
+            $parameters = array();
             foreach ($constructor->getParameters() as $parameter) {
                 $parameterType = $this->getParameterType($parameter);
+
                 if ($parameterType) {
-                    $parameterInjection = new ParameterInjection($parameter->name, $parameterType);
+                    $parameters[] = new EntryReference($parameterType);
                 } else {
-                    $parameterInjection = new ParameterInjection($parameter->name);
+                    $parameters[] = new UndefinedInjection();
                 }
-                $constructorInjection->addParameterInjection($parameterInjection);
             }
+
+            $classDefinition->setConstructorInjection(
+                new MethodInjection($constructor->name, $parameters)
+            );
         }
 
         return $classDefinition;
@@ -81,5 +82,4 @@ class ReflectionDefinitionSource implements DefinitionSource
     {
         return class_exists($class) || interface_exists($class);
     }
-
 }

@@ -10,7 +10,6 @@
 namespace UnitTests\DI\Definition;
 
 use DI\Definition\ClassDefinition;
-use DI\Definition\Exception\DefinitionException;
 use DI\Definition\MethodInjection;
 use DI\Definition\PropertyInjection;
 use DI\Definition\ValueDefinition;
@@ -21,7 +20,6 @@ use DI\Scope;
  */
 class ClassDefinitionTest extends \PHPUnit_Framework_TestCase
 {
-
     public function testProperties()
     {
         $definition = new ClassDefinition('foo', 'bar');
@@ -103,5 +101,4 @@ class ClassDefinitionTest extends \PHPUnit_Framework_TestCase
             array($definition2, $definition1),
         );
     }
-
 }

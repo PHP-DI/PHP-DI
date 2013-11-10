@@ -16,7 +16,6 @@ namespace DI\Definition;
  */
 interface Definition
 {
-
     /**
      * Returns the name of the entry in the container
      *
@@ -46,5 +45,4 @@ interface Definition
      * @return bool
      */
     public static function isMergeable();
-
 }

@@ -19,7 +19,6 @@ use DI\Scope;
  */
 class ClassDefinition implements Definition
 {
-
     /**
      * Entry name (most of the time, same as $classname)
      * @var string
@@ -202,7 +201,7 @@ class ClassDefinition implements Definition
     {
         if (!$definition instanceof ClassDefinition) {
             throw new DefinitionException("DI definition conflict: there are 2 different definitions for '"
-            . $definition->getName() . "' that are incompatible, they are not of the same type");
+                . $definition->getName() . "' that are incompatible, they are not of the same type");
         }
 
         // The latter prevails
@@ -265,5 +264,4 @@ class ClassDefinition implements Definition
     {
         return true;
     }
-
 }

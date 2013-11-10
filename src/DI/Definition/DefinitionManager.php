@@ -9,13 +9,11 @@
 
 namespace DI\Definition;
 
-use DI\Definition\Definition;
 use DI\Definition\Source\AnnotationDefinitionSource;
 use DI\Definition\Source\ArrayDefinitionSource;
 use DI\Definition\Source\CombinedDefinitionSource;
 use DI\Definition\Source\ReflectionDefinitionSource;
 use DI\Definition\Source\SimpleDefinitionSource;
-use DI\Definition\FileLoader\DefinitionFileLoader;
 use Doctrine\Common\Cache\Cache;
 
 /**
@@ -26,7 +24,6 @@ use Doctrine\Common\Cache\Cache;
  */
 class DefinitionManager
 {
-
     /**
      * Prefix for cache key, to avoid conflicts with other systems using the same cache
      * @var string
@@ -73,9 +70,15 @@ class DefinitionManager
      */
     private $definitionsValidation = false;
 
-    public function __construct()
+    public function __construct($useReflection = true, $useAnnotations = true)
     {
         $this->simpleSource = new SimpleDefinitionSource();
+        if ($useReflection) {
+            $this->reflectionSource = new ReflectionDefinitionSource();
+        }
+        if ($useAnnotations) {
+            $this->annotationSource = new AnnotationDefinitionSource();
+        }
 
         $this->updateCombinedSource();
     }
@@ -163,35 +166,13 @@ class DefinitionManager
     }
 
     /**
-     * Add definitions from an array
+     * Add a single definition
      *
-     * @param array $definitions
+     * @param Definition $definition
      */
     public function addDefinition(Definition $definition)
     {
         $this->simpleSource->addDefinition($definition);
-    }
-
-    /**
-     * Add definitions contained in a file
-     *
-     * @param \DI\Definition\FileLoader\DefinitionFileLoader $definitionFileLoader
-     * @throws \InvalidArgumentException
-     */
-    public function addDefinitionsFromFile(DefinitionFileLoader $definitionFileLoader)
-    {
-        $definitions = $definitionFileLoader->load($this->definitionsValidation);
-
-        if (!is_array($definitions)) {
-            throw new \InvalidArgumentException(get_class($definitionFileLoader) . " must return an array.");
-        }
-
-        $arraySource = new ArrayDefinitionSource();
-        $arraySource->addDefinitions($definitions);
-
-        $this->arraySources[] = $arraySource;
-
-        $this->updateCombinedSource();
     }
 
     /**
@@ -227,7 +208,7 @@ class DefinitionManager
      * Returns the state of the validation of the definitions
      *
      * By default, disabled
-     * @param bool $bool
+     * @return bool
      */
     public function getDefinitionsValidation()
     {
@@ -294,5 +275,4 @@ class DefinitionManager
             $this->combinedSource->addSource($this->reflectionSource);
         }
     }
-
 }

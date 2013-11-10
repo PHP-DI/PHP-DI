@@ -9,31 +9,30 @@
 
 namespace UnitTests\DI\Definition;
 
-use DI\Definition\ClassDefinition;
-use DI\Definition\ValueDefinition;
+use DI\Definition\AliasDefinition;
 
 /**
- * Test class for ValueDefinition
+ * Test class for AliasDefinition
  */
-class ValueDefinitionTest extends \PHPUnit_Framework_TestCase
+class AliasDefinitionTest extends \PHPUnit_Framework_TestCase
 {
     public function testGetters()
     {
-        $definition = new ValueDefinition('foo', 1);
+        $definition = new AliasDefinition('foo', 'bar');
 
         $this->assertEquals('foo', $definition->getName());
-        $this->assertEquals(1, $definition->getValue());
+        $this->assertEquals('bar', $definition->getTargetEntryName());
     }
 
     public function testCacheable()
     {
-        $definition = new ValueDefinition('foo', 1);
-        $this->assertFalse($definition->isCacheable());
+        $definition = new AliasDefinition('foo', 'bar');
+        $this->assertTrue($definition->isCacheable());
     }
 
     public function testMergeable()
     {
-        $this->assertFalse(ValueDefinition::isMergeable());
+        $this->assertFalse(AliasDefinition::isMergeable());
     }
 
     /**
@@ -41,8 +40,8 @@ class ValueDefinitionTest extends \PHPUnit_Framework_TestCase
      */
     public function testMerge()
     {
-        $definition1 = new ValueDefinition('foo', 1);
-        $definition2 = new ValueDefinition('foo', 2);
+        $definition1 = new AliasDefinition('foo', 'bar');
+        $definition2 = new AliasDefinition('foo', 'baz');
         $definition1->merge($definition2);
     }
 }

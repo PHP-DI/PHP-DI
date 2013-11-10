@@ -28,7 +28,7 @@ While the Reflection definition says that `$param1` should take a `Bar` instance
 ```php
 class Foo {
     /**
-     * @Inject({"param1" = "my.specific.service"})
+     * @Inject({"my.specific.service"})
      */
     public function __construct(BarInterface $param1) {
     }

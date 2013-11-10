@@ -18,7 +18,6 @@ use DI\Annotation\Injectable;
  */
 class Class1
 {
-
     /**
      * @Inject
      * @var Class2
@@ -119,5 +118,4 @@ class Class1
     {
         $this->method4Param1 = $param1;
     }
-
 }

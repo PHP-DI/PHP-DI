@@ -9,8 +9,8 @@
 
 namespace IntegrationTests\DI\Issues;
 
-use DI\Container;
-use DI\Definition\DefinitionManager;
+use DI\ContainerBuilder;
+use DI\Entry;
 use IntegrationTests\DI\Issues\Issue72\Class1;
 
 /**
@@ -20,22 +20,22 @@ use IntegrationTests\DI\Issues\Issue72\Class1;
  */
 class Issue72Test extends \PHPUnit_Framework_TestCase
 {
-
     /**
      * @test
      */
     public function annotationDefinitionShouldOverrideReflectionDefinition()
     {
-        $container = new Container();
-        $container->useReflection(true);
-        $container->useAnnotations(true);
+        $builder = new ContainerBuilder();
+        $builder->useReflection(true);
+        $builder->useAnnotations(true);
+        $container = $builder->build();
 
         $value = new \stdClass();
         $value->foo = 'bar';
         $container->set('service1', $value);
 
         /** @var Class1 $class1 */
-        $class1 = $container->get('IntegrationTests\DI\Issues\Issue72\Class1');
+        $class1 = $container->get(Class1::class);
 
         $this->assertEquals('bar', $class1->arg1->foo);
     }
@@ -45,24 +45,24 @@ class Issue72Test extends \PHPUnit_Framework_TestCase
      */
     public function arrayDefinitionShouldOverrideAnnotationDefinition()
     {
-        $container = new Container();
-        $container->useReflection(false);
+        $builder = new ContainerBuilder();
+        $builder->useReflection(false);
+        $builder->useAnnotations(true);
+        $container = $builder->build();
 
-        $container->useAnnotations(true);
         // Override 'service1' to 'service2'
         $container->addDefinitions(array(
-                'service2' => function() {
+                'service2' => Entry::factory(function() {
                     $value = new \stdClass();
                     $value->foo = 'bar';
                     return $value;
-                },
-                'IntegrationTests\DI\Issues\Issue72\Class1' => array(
-                    'constructor' => array('arg1' => 'service2'),
-                ),
+                }),
+                Class1::class => Entry::object()
+                    ->withConstructor(Entry::link('service2')),
             ));
 
         /** @var Class1 $class1 */
-        $class1 = $container->get('IntegrationTests\DI\Issues\Issue72\Class1');
+        $class1 = $container->get(Class1::class);
 
         $this->assertEquals('bar', $class1->arg1->foo);
     }
@@ -72,28 +72,27 @@ class Issue72Test extends \PHPUnit_Framework_TestCase
      */
     public function simpleDefinitionShouldOverrideArrayDefinition()
     {
-        $container = new Container();
-        $container->useReflection(false);
-        $container->useAnnotations(false);
+        $builder = new ContainerBuilder();
+        $builder->useReflection(false);
+        $builder->useAnnotations(false);
+        $container = $builder->build();
 
         $container->addDefinitions(array(
-                'service2' => function() {
-                    $value = new \stdClass();
-                    $value->foo = 'bar';
-                    return $value;
-                },
-                'IntegrationTests\DI\Issues\Issue72\Class1' => array(
-                    'constructor' => array('arg1' => 'service1'),
-                ),
-            ));
+            'service2' => Entry::factory(function() {
+                $value = new \stdClass();
+                $value->foo = 'bar';
+                return $value;
+            }),
+            Class1::class => Entry::object()
+                ->withConstructor(Entry::link('service1')),
+        ));
         // Override 'service1' to 'service2'
-        $container->set('IntegrationTests\DI\Issues\Issue72\Class1')
-            ->withConstructor(array('arg1' => 'service2'));
+        $container->set(Class1::class, Entry::object()
+            ->withConstructor(Entry::link('service2')));
 
         /** @var Class1 $class1 */
-        $class1 = $container->get('IntegrationTests\DI\Issues\Issue72\Class1');
+        $class1 = $container->get(Class1::class);
 
         $this->assertEquals('bar', $class1->arg1->foo);
     }
-
 }
