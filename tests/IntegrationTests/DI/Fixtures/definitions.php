@@ -39,4 +39,6 @@ return [
 
     LazyDependency::class => Entry::object()
             ->lazy(),
+
+    'alias'               => Entry::link('namedDependency'),
 ];

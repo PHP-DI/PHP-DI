@@ -18,6 +18,7 @@ use IntegrationTests\DI\Fixtures\Class2;
 use IntegrationTests\DI\Fixtures\Implementation1;
 use IntegrationTests\DI\Fixtures\Interface1;
 use IntegrationTests\DI\Fixtures\LazyDependency;
+use ProxyManager\Proxy\LazyLoadingInterface;
 
 /**
  * Test class for injection
@@ -44,8 +45,8 @@ class InjectionTest extends \PHPUnit_Framework_TestCase
             'foo'                 => 'bar',
             Interface1::class     => Entry::object(Implementation1::class),
             'namedDependency'     => Entry::object(Class2::class),
-            LazyDependency::class => Entry::object()
-                ->lazy(),
+            LazyDependency::class => Entry::object()->lazy(),
+            'alias'               => Entry::link('namedDependency'),
         ]);
 
         // Test with a container using annotations and reflection
@@ -57,6 +58,7 @@ class InjectionTest extends \PHPUnit_Framework_TestCase
             'foo'             => 'bar',
             Interface1::class => Entry::object(Implementation1::class),
             'namedDependency' => Entry::object(Class2::class),
+            'alias'           => Entry::link('namedDependency'),
         ]);
 
         // Test with a container using array configuration
@@ -93,8 +95,8 @@ class InjectionTest extends \PHPUnit_Framework_TestCase
         $containerPHP->set(Interface1::class, Entry::object(Implementation1::class)
             ->withScope(Scope::SINGLETON()));
         $containerPHP->set('namedDependency', Entry::object(Class2::class));
-        $containerPHP->set(LazyDependency::class, Entry::object()
-            ->lazy());
+        $containerPHP->set(LazyDependency::class, Entry::object()->lazy());
+        $containerPHP->set('alias', Entry::link('namedDependency'));
 
         return array(
             array(self::DEFINITION_REFLECTION, $containerReflection),
@@ -268,5 +270,13 @@ class InjectionTest extends \PHPUnit_Framework_TestCase
         $class3_1 = $container->get('IntegrationTests\DI\Fixtures\Interface1');
         $class3_2 = $container->get('IntegrationTests\DI\Fixtures\Interface1');
         $this->assertSame($class3_1, $class3_2);
+    }
+
+    /**
+     * @dataProvider containerProvider
+     */
+    public function testAlias($type, Container $container)
+    {
+        $this->assertInstanceOf(Class2::class, $container->get('alias'));
     }
 }

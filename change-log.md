@@ -11,6 +11,7 @@ All changes:
 
 * [#115](https://github.com/mnapoli/PHP-DI/issues/115) Added `Container::has()`
 * [#127](https://github.com/mnapoli/PHP-DI/issues/127) Added support for cases where PHP-DI is wrapped by another container (like Acclimate): PHP-DI can now use the wrapping container to perform injections
+* [#128](https://github.com/mnapoli/PHP-DI/issues/128) Configure entry aliases
 * [#110](https://github.com/mnapoli/PHP-DI/issues/110) XML definitions are not supported anymore
 * [#122](https://github.com/mnapoli/PHP-DI/issues/122) JSON definitions are not supported anymore
 * `ContainerSingleton` has finally been removed

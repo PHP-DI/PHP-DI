@@ -9,12 +9,14 @@
 
 namespace DI\Definition;
 
+use DI\DefinitionHelper\DefinitionHelper;
+
 /**
  * Represents a reference to a container entry.
  *
  * @author Matthieu Napoli <matthieu@mnapoli.fr>
  */
-class EntryReference
+class EntryReference implements DefinitionHelper
 {
     /**
      * Entry name
@@ -36,5 +38,13 @@ class EntryReference
     public function getName()
     {
         return $this->name;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getDefinition($entryName)
+    {
+        return new AliasDefinition($entryName, $this->name);
     }
 }

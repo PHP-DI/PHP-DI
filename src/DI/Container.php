@@ -9,6 +9,7 @@
 
 namespace DI;
 
+use DI\Definition\AliasDefinition;
 use DI\Definition\ClassDefinition;
 use DI\Definition\ClosureDefinition;
 use DI\Definition\DefinitionManager;
@@ -110,6 +111,11 @@ class Container
         if ($definition instanceof ClosureDefinition) {
             $this->entries[$name] = $definition->getValue($this);
             return $this->entries[$name];
+        }
+
+        // It's an alias
+        if ($definition instanceof AliasDefinition) {
+            return $this->get($definition->getTargetEntryName(), $useProxy);
         }
 
         // It's a class
