@@ -9,7 +9,7 @@
 
 namespace DI\DefinitionHelper;
 
-use DI\Definition\ClosureDefinition;
+use DI\Definition\CallableDefinition;
 
 /**
  * Helps defining how to create an instance of a class using a callable.
@@ -30,10 +30,10 @@ class CallableDefinitionHelper implements DefinitionHelper
 
     /**
      * @param string $entryName Container entry name
-     * @return ClosureDefinition
+     * @return CallableDefinition
      */
     public function getDefinition($entryName)
     {
-        return new ClosureDefinition($entryName, $this->callable);
+        return new CallableDefinition($entryName, $this->callable);
     }
 }

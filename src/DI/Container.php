@@ -11,7 +11,7 @@ namespace DI;
 
 use DI\Definition\AliasDefinition;
 use DI\Definition\ClassDefinition;
-use DI\Definition\ClosureDefinition;
+use DI\Definition\CallableDefinition;
 use DI\Definition\DefinitionManager;
 use DI\Definition\ValueDefinition;
 use DI\DefinitionHelper\DefinitionHelper;
@@ -108,8 +108,9 @@ class Container
         }
 
         // It's a closure
-        if ($definition instanceof ClosureDefinition) {
-            $this->entries[$name] = $definition->getValue($this);
+        if ($definition instanceof CallableDefinition) {
+            $callable = $definition->getCallable();
+            $this->entries[$name] = $callable($this);
             return $this->entries[$name];
         }
 

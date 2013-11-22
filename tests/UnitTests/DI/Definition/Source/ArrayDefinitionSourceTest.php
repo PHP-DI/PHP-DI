@@ -10,7 +10,7 @@
 namespace UnitTests\DI\Definition\Source;
 
 use Closure;
-use DI\Definition\ClosureDefinition;
+use DI\Definition\CallableDefinition;
 use DI\Definition\Source\ArrayDefinitionSource;
 use DI\Definition\ClassDefinition;
 use DI\Definition\ValueDefinition;
@@ -93,19 +93,17 @@ class ArrayDefinitionSourceTest extends \PHPUnit_Framework_TestCase
 
     public function testClosureDefinition()
     {
+        $callable = function () {
+            return 'bar';
+        };
         $source = new ArrayDefinitionSource();
         $source->addDefinitions([
-            'foo' => Entry::factory(function() {
-                return 'bar';
-            }),
+            'foo' => Entry::factory($callable),
         ]);
+        /** @var CallableDefinition $definition */
         $definition = $source->getDefinition('foo');
-        $this->assertInstanceOf(ClosureDefinition::class, $definition);
+        $this->assertInstanceOf(CallableDefinition::class, $definition);
         $this->assertEquals('foo', $definition->getName());
-
-        $container = $this->getMockBuilder('DI\Container')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->assertEquals('bar', $definition->getValue($container));
+        $this->assertEquals($callable, $definition->getCallable());
     }
 }

@@ -9,19 +9,20 @@
 
 namespace UnitTests\DI\DefinitionHelper;
 
-use DI\Definition\ClosureDefinition;
+use DI\Definition\CallableDefinition;
 use DI\DefinitionHelper\CallableDefinitionHelper;
 
 class CallableDefinitionHelperTest extends \PHPUnit_Framework_TestCase
 {
     public function testGetDefinition()
     {
-        $callable = function() {};
+        $callable = function () {
+        };
         $helper = new CallableDefinitionHelper($callable);
         $definition = $helper->getDefinition('foo');
 
-        $this->assertTrue($definition instanceof ClosureDefinition);
+        $this->assertTrue($definition instanceof CallableDefinition);
         $this->assertSame('foo', $definition->getName());
-        $this->assertSame($callable, $definition->getClosure());
+        $this->assertSame($callable, $definition->getCallable());
     }
 }
