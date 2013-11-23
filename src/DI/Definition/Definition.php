@@ -9,6 +9,8 @@
 
 namespace DI\Definition;
 
+use DI\Scope;
+
 /**
  * Definition
  *
@@ -22,6 +24,13 @@ interface Definition
      * @return string
      */
     public function getName();
+
+    /**
+     * Returns the scope of the entry
+     *
+     * @return Scope
+     */
+    public function getScope();
 
     /**
      * Merge another definition into the current definition

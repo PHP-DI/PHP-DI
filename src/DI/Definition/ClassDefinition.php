@@ -165,12 +165,7 @@ class ClassDefinition implements Definition
      */
     public function getScope()
     {
-        if ($this->scope !== null) {
-            return $this->scope;
-        } else {
-            // Default scope
-            return Scope::SINGLETON();
-        }
+        return $this->scope ?: Scope::SINGLETON();
     }
 
     /**

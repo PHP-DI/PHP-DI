@@ -9,8 +9,8 @@
 
 namespace UnitTests\DI\Definition;
 
-use DI\Definition\ClassDefinition;
 use DI\Definition\ValueDefinition;
+use DI\Scope;
 
 /**
  * Test class for ValueDefinition
@@ -28,12 +28,20 @@ class ValueDefinitionTest extends \PHPUnit_Framework_TestCase
     public function testCacheable()
     {
         $definition = new ValueDefinition('foo', 1);
+
         $this->assertFalse($definition->isCacheable());
     }
 
     public function testMergeable()
     {
         $this->assertFalse(ValueDefinition::isMergeable());
+    }
+
+    public function testScope()
+    {
+        $definition = new ValueDefinition('foo', 1);
+
+        $this->assertEquals(Scope::SINGLETON(), $definition->getScope());
     }
 
     /**

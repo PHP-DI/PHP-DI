@@ -10,64 +10,76 @@
 namespace UnitTests\DI;
 
 use DI\ContainerBuilder;
-use DI\DefaultInjector;
+use DI\DefinitionResolver\AliasDefinitionResolver;
+use DI\DefinitionResolver\CallableDefinitionResolver;
+use DI\DefinitionResolver\ClassDefinitionResolver;
+use UnitTests\DI\Fixtures\FakeContainer;
 
 /**
  * Test class for ContainerBuilder
  */
 class ContainerBuilderTest extends \PHPUnit_Framework_TestCase
 {
-
     public function testDefaultConfiguration()
     {
-        $builder = new ContainerBuilder();
+        // Make the ContainerBuilder use our fake class to catch constructor parameters
+        $builder = new ContainerBuilder('UnitTests\DI\Fixtures\FakeContainer');
+        /** @var FakeContainer $container */
         $container = $builder->build();
 
-        $this->assertNull($container->getDefinitionManager()->getCache());
-        $this->assertFalse($container->getDefinitionManager()->getDefinitionsValidation());
-
-        /** @var DefaultInjector $injector */
-        $injector = $container->getInjector();
-        $this->assertInstanceOf(DefaultInjector::class, $injector);
-        $this->assertSame($container, $injector->getContainer());
+        // No cache
+        $this->assertNull($container->definitionManager->getCache());
+        // No definition validation
+        $this->assertFalse($container->definitionManager->getDefinitionsValidation());
     }
 
     public function testSetCache()
     {
         $cache = $this->getMockForAbstractClass('Doctrine\Common\Cache\Cache');
 
-        $builder = new ContainerBuilder();
+        $builder = new ContainerBuilder('UnitTests\DI\Fixtures\FakeContainer');
         $builder->setDefinitionCache($cache);
 
+        /** @var FakeContainer $container */
         $container = $builder->build();
 
-        $this->assertSame($cache, $container->getDefinitionManager()->getCache());
+        $this->assertSame($cache, $container->definitionManager->getCache());
     }
 
     public function testSetDefinitionsValidation()
     {
-        $builder = new ContainerBuilder();
+        $builder = new ContainerBuilder('UnitTests\DI\Fixtures\FakeContainer');
         $builder->setDefinitionsValidation(true);
 
+        /** @var FakeContainer $container */
         $container = $builder->build();
 
-        $this->assertTrue($container->getDefinitionManager()->getDefinitionsValidation());
+        $this->assertTrue($container->definitionManager->getDefinitionsValidation());
     }
 
-    public function testWrapContainer()
+    /**
+     * By default, the definition resolvers should not be overridden
+     */
+    public function testContainerNotWrapped()
     {
-        $otherContainer = new \stdClass();
-
-        $builder = new ContainerBuilder();
-        $builder->wrapContainer($otherContainer);
-
+        $builder = new ContainerBuilder('UnitTests\DI\Fixtures\FakeContainer');
+        /** @var FakeContainer $container */
         $container = $builder->build();
 
-        /** @var DefaultInjector $injector */
-        $injector = $container->getInjector();
+        $this->assertNull($container->wrapperContainer);
+    }
 
-        $this->assertInstanceOf(DefaultInjector::class, $injector);
-        $this->assertSame($otherContainer, $injector->getContainer());
+    public function testContainerWrapped()
+    {
+        $otherContainer = $this->getMockForAbstractClass('DI\ContainerInterface');
+
+        $builder = new ContainerBuilder('UnitTests\DI\Fixtures\FakeContainer');
+        $builder->wrapContainer($otherContainer);
+
+        /** @var FakeContainer $container */
+        $container = $builder->build();
+
+        $this->assertSame($otherContainer, $container->wrapperContainer);
     }
 
     public function testFluentInterface()
@@ -102,8 +114,7 @@ class ContainerBuilderTest extends \PHPUnit_Framework_TestCase
         $result = $builder->setDefinitionCache($mockCache);
         $this->assertSame($builder, $result);
 
-        $result = $builder->wrapContainer(null);
+        $result = $builder->wrapContainer($this->getMockForAbstractClass('DI\ContainerInterface'));
         $this->assertSame($builder, $result);
     }
-
 }

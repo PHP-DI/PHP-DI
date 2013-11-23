@@ -9,6 +9,8 @@
 
 namespace DI\Definition;
 
+use DI\Scope;
+
 /**
  * Defines an alias from an entry to another
  *
@@ -44,6 +46,14 @@ class AliasDefinition implements Definition
     public function getName()
     {
         return $this->name;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getScope()
+    {
+        return Scope::PROTOTYPE();
     }
 
     /**

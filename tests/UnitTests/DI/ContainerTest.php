@@ -9,6 +9,7 @@
 
 namespace UnitTests\DI;
 
+use DI\ContainerBuilder;
 use DI\Entry;
 use stdClass;
 use DI\Container;
@@ -21,7 +22,7 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
 {
     public function testSetGet()
     {
-        $container = new Container();
+        $container = ContainerBuilder::buildDevContainer();
         $dummy = new stdClass();
         $container->set('key', $dummy);
         $this->assertSame($dummy, $container->get('key'));
@@ -32,7 +33,7 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetNotFound()
     {
-        $container = new Container();
+        $container = ContainerBuilder::buildDevContainer();
         $container->get('key');
     }
 
@@ -41,20 +42,20 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
         $closure = function () {
             return 'hello';
         };
-        $container = new Container();
+        $container = ContainerBuilder::buildDevContainer();
         $container->set('key', $closure);
         $this->assertSame($closure, $container->get('key'));
     }
 
     public function testGetWithClassName()
     {
-        $container = new Container();
+        $container = ContainerBuilder::buildDevContainer();
         $this->assertInstanceOf('stdClass', $container->get('stdClass'));
     }
 
     public function testGetWithPrototypeScope()
     {
-        $container = new Container();
+        $container = ContainerBuilder::buildDevContainer();
         // With @Injectable(scope="prototype") annotation
         $instance1 = $container->get('UnitTests\DI\Fixtures\Prototype');
         $instance2 = $container->get('UnitTests\DI\Fixtures\Prototype');
@@ -63,7 +64,7 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
 
     public function testGetWithSingletonScope()
     {
-        $container = new Container();
+        $container = ContainerBuilder::buildDevContainer();
         // Without @Injectable annotation => default is Singleton
         $instance1 = $container->get('stdClass');
         $instance2 = $container->get('stdClass');
@@ -80,13 +81,13 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetWithInvalidScope()
     {
-        $container = new Container();
+        $container = ContainerBuilder::buildDevContainer();
         $container->get('UnitTests\DI\Fixtures\InvalidScope');
     }
 
     public function testGetWithProxy()
     {
-        $container = new Container();
+        $container = ContainerBuilder::buildDevContainer();
         $this->assertInstanceOf('stdClass', $container->get('stdClass', true));
     }
 
@@ -96,7 +97,7 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetWithProxyWithAlias()
     {
-        $container = new Container();
+        $container = ContainerBuilder::buildDevContainer();
         $container->set('foo', Entry::object('stdClass'));
         $this->assertInstanceOf('stdClass', $container->get('foo', true));
     }
@@ -106,19 +107,31 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
      */
     public function testCircularDependencies()
     {
-        $container = new Container();
+        $container = ContainerBuilder::buildDevContainer();
         $container->get('UnitTests\DI\Fixtures\Prototype');
         $container->get('UnitTests\DI\Fixtures\Prototype');
     }
 
     /**
      * @expectedException \DI\DependencyException
-     * @expectedExceptionMessage Circular dependency detected while trying to instantiate class 'UnitTests\DI\Fixtures\Class1CircularDependencies'
+     * @expectedExceptionMessage Circular dependency detected while trying to get entry 'UnitTests\DI\Fixtures\Class1CircularDependencies'
      */
-    public function testCircularDependenciesException()
+    public function testCircularDependencyException()
     {
-        $container = new Container();
+        $container = ContainerBuilder::buildDevContainer();
         $container->get(Class1CircularDependencies::class);
+    }
+
+    /**
+     * @expectedException \DI\DependencyException
+     * @expectedExceptionMessage Circular dependency detected while trying to get entry 'foo'
+     */
+    public function testCircularDependencyExceptionWithAlias()
+    {
+        $container = ContainerBuilder::buildDevContainer();
+        // Alias to itself -> infinite recursive loop
+        $container->set('foo', Entry::link('foo'));
+        $container->get('foo');
     }
 
     /**
@@ -127,13 +140,13 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetNonStringParameter()
     {
-        $container = new Container();
+        $container = ContainerBuilder::buildDevContainer();
         $container->get(new stdClass());
     }
 
     public function testHas()
     {
-        $container = new Container();
+        $container = ContainerBuilder::buildDevContainer();
         $container->set('foo', 'bar');
 
         $this->assertTrue($container->has('foo'));
@@ -146,7 +159,7 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
      */
     public function testHasNonStringParameter()
     {
-        $container = new Container();
+        $container = ContainerBuilder::buildDevContainer();
         $container->get(new stdClass());
     }
 
@@ -155,7 +168,7 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
      */
     public function testInjectOnMaintainsReferentialEquality()
     {
-        $container = new Container();
+        $container = ContainerBuilder::buildDevContainer();
         $instance = new stdClass();
         $result = $container->injectOn($instance);
 
@@ -167,7 +180,7 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
      */
     public function testInjectNull()
     {
-        $container = new Container();
+        $container = ContainerBuilder::buildDevContainer();
         $result = $container->injectOn(null);
 
         $this->assertEquals($result, null);
@@ -179,7 +192,7 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
      */
     public function testSetNullValue()
     {
-        $container = new Container();
+        $container = ContainerBuilder::buildDevContainer();
         $container->set('foo', null);
 
         $this->assertNull($container->get('foo'));
@@ -190,7 +203,7 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
      */
     public function testContainerIsRegistered()
     {
-        $container = new Container();
+        $container = ContainerBuilder::buildDevContainer();
         $otherContainer = $container->get('DI\Container');
 
         $this->assertSame($container, $otherContainer);
@@ -202,7 +215,7 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
      */
     public function testSetGetSetGet()
     {
-        $container = new Container();
+        $container = ContainerBuilder::buildDevContainer();
 
         $container->set('foo', 'bar');
         $container->get('foo');

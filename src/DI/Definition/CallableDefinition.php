@@ -9,6 +9,8 @@
 
 namespace DI\Definition;
 
+use DI\Scope;
+
 /**
  * Definition of a value or class using a callable.
  *
@@ -23,19 +25,26 @@ class CallableDefinition implements Definition
     private $name;
 
     /**
+     * @var Scope
+     */
+    private $scope;
+
+    /**
      * Callable that returns the value.
      * @var callable
      */
     private $callable;
 
     /**
-     * @param string   $name     Entry name
-     * @param callable $callable Callable that returns the value associated to the entry name.
+     * @param string     $name     Entry name
+     * @param callable   $callable Callable that returns the value associated to the entry name.
+     * @param Scope|null $scope
      */
-    public function __construct($name, $callable)
+    public function __construct($name, $callable, Scope $scope = null)
     {
         $this->name = $name;
         $this->callable = $callable;
+        $this->scope = $scope;
     }
 
     /**
@@ -44,6 +53,16 @@ class CallableDefinition implements Definition
     public function getName()
     {
         return $this->name;
+    }
+
+    /**
+     * Default scope is singleton: the callable is called once and the result is shared.
+     *
+     * {@inheritdoc}
+     */
+    public function getScope()
+    {
+        return $this->scope ?: Scope::SINGLETON();
     }
 
     /**

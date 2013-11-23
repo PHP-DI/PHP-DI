@@ -10,6 +10,7 @@
 namespace UnitTests\DI\Definition;
 
 use DI\Definition\AliasDefinition;
+use DI\Scope;
 
 /**
  * Test class for AliasDefinition
@@ -22,6 +23,13 @@ class AliasDefinitionTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals('foo', $definition->getName());
         $this->assertEquals('bar', $definition->getTargetEntryName());
+    }
+
+    public function testScope()
+    {
+        $definition = new AliasDefinition('foo', 'bar');
+
+        $this->assertEquals(Scope::PROTOTYPE(), $definition->getScope());
     }
 
     public function testCacheable()

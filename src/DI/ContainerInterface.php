@@ -11,7 +11,7 @@ namespace DI;
 
 /**
  * Describes the basic interface on a container.
- * 
+ *
  * Focuses only on methods allowing to use the container, not configure it or configure entries.
  *
  * @since 4.0

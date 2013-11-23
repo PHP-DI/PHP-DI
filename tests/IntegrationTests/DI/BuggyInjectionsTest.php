@@ -9,7 +9,7 @@
 
 namespace IntegrationTests\DI;
 
-use DI\Container;
+use DI\ContainerBuilder;
 use IntegrationTests\DI\Fixtures\ConstructorInjectionTest\Buggy2;
 use IntegrationTests\DI\Fixtures\SetterInjectionTest\Buggy3;
 use IntegrationTests\DI\Fixtures\ValueInjectionTest\ValueInjectionClass;
@@ -25,7 +25,7 @@ class BuggyInjectionsTest extends \PHPUnit_Framework_TestCase
      */
     public function testConstructorNonTypeHintedMethod()
     {
-        $container = new Container();
+        $container = ContainerBuilder::buildDevContainer();
         $container->get(Fixtures\ConstructorInjectionTest\Buggy1::class);
     }
 
@@ -35,7 +35,7 @@ class BuggyInjectionsTest extends \PHPUnit_Framework_TestCase
      */
     public function testConstructorNonExistentEntry()
     {
-        $container = new Container();
+        $container = ContainerBuilder::buildDevContainer();
         $container->get(Buggy2::class);
     }
 
@@ -45,7 +45,7 @@ class BuggyInjectionsTest extends \PHPUnit_Framework_TestCase
      */
     public function testSetterNamedInjectionNotFound()
     {
-        $container = new Container();
+        $container = ContainerBuilder::buildDevContainer();
         // Exception (bean not defined)
         $container->get('IntegrationTests\DI\Fixtures\SetterInjectionTest\NamedInjectionClass');
     }
@@ -56,7 +56,7 @@ class BuggyInjectionsTest extends \PHPUnit_Framework_TestCase
      */
     public function testSetterNonTypeHintedMethod()
     {
-        $container = new Container();
+        $container = ContainerBuilder::buildDevContainer();
         $container->get(Fixtures\SetterInjectionTest\Buggy1::class);
     }
 
@@ -66,7 +66,7 @@ class BuggyInjectionsTest extends \PHPUnit_Framework_TestCase
      */
     public function testSetterNamedUnknownBean()
     {
-        $container = new Container();
+        $container = ContainerBuilder::buildDevContainer();
         $container->get(Buggy3::class);
     }
 
@@ -76,7 +76,7 @@ class BuggyInjectionsTest extends \PHPUnit_Framework_TestCase
      */
     public function testValueException()
     {
-        $container = new Container();
+        $container = ContainerBuilder::buildDevContainer();
         $container->get(ValueInjectionClass::class);
     }
 }
