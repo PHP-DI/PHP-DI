@@ -9,6 +9,8 @@
 
 namespace DI\Definition;
 
+use DI\Definition\ClassInjection\MethodInjection;
+use DI\Definition\ClassInjection\PropertyInjection;
 use DI\Definition\Exception\DefinitionException;
 use DI\Scope;
 

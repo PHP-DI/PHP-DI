@@ -11,8 +11,8 @@ namespace UnitTests\DI\Definition\Source;
 
 use Closure;
 use DI\Definition\CallableDefinition;
-use DI\Definition\Source\ArrayDefinitionSource;
 use DI\Definition\ClassDefinition;
+use DI\Definition\Source\ArrayDefinitionSource;
 use DI\Definition\ValueDefinition;
 use DI\Entry;
 
@@ -44,7 +44,8 @@ class ArrayDefinitionSourceTest extends \PHPUnit_Framework_TestCase
             'float'   => 1.0,
             'array'   => ['a', 'b', 'c'],
             'assoc'   => ['a' => 'b'],
-            'closure' => function() {},
+            'closure' => function () {
+            },
         );
         $source->addDefinitions($definitions);
 

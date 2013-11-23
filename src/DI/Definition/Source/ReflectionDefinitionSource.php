@@ -11,8 +11,8 @@ namespace DI\Definition\Source;
 
 use DI\Definition\ClassDefinition;
 use DI\Definition\EntryReference;
-use DI\Definition\MethodInjection;
-use DI\Definition\UndefinedInjection;
+use DI\Definition\ClassInjection\MethodInjection;
+use DI\Definition\ClassInjection\UndefinedInjection;
 use ReflectionClass;
 use ReflectionParameter;
 

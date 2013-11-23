@@ -11,8 +11,8 @@ namespace UnitTests\DI\Definition\Source;
 
 use DI\Definition\Definition;
 use DI\Definition\EntryReference;
-use DI\Definition\MethodInjection;
-use DI\Definition\PropertyInjection;
+use DI\Definition\ClassInjection\MethodInjection;
+use DI\Definition\ClassInjection\PropertyInjection;
 use DI\Definition\Source\AnnotationDefinitionSource;
 use UnitTests\DI\Definition\Source\Fixtures\AnnotationFixture;
 use UnitTests\DI\Definition\Source\Fixtures\AnnotationFixture2;

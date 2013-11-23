@@ -10,8 +10,8 @@
 namespace DI\DefinitionHelper;
 
 use DI\Definition\ClassDefinition;
-use DI\Definition\MethodInjection;
-use DI\Definition\PropertyInjection;
+use DI\Definition\ClassInjection\MethodInjection;
+use DI\Definition\ClassInjection\PropertyInjection;
 use DI\Scope;
 
 /**

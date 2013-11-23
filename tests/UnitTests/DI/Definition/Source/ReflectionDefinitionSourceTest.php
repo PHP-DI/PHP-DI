@@ -11,7 +11,7 @@ namespace UnitTests\DI\Definition\Source;
 
 use DI\Definition\EntryReference;
 use DI\Definition\Source\ReflectionDefinitionSource;
-use DI\Definition\UndefinedInjection;
+use DI\Definition\ClassInjection\UndefinedInjection;
 use UnitTests\DI\Definition\Source\Fixtures\ReflectionFixture;
 
 class ReflectionDefinitionSourceTest extends \PHPUnit_Framework_TestCase
@@ -29,7 +29,7 @@ class ReflectionDefinitionSourceTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf('DI\Definition\Definition', $definition);
 
         $constructorInjection = $definition->getConstructorInjection();
-        $this->assertInstanceOf('DI\Definition\MethodInjection', $constructorInjection);
+        $this->assertInstanceOf('DI\Definition\ClassInjection\MethodInjection', $constructorInjection);
 
         $parameters = $constructorInjection->getParameters();
         $this->assertCount(3, $parameters);

@@ -14,9 +14,9 @@ use DI\Definition\ClassDefinition;
 use DI\Definition\Definition;
 use DI\Definition\EntryReference;
 use DI\Definition\Exception\DefinitionException;
-use DI\Definition\MethodInjection;
-use DI\Definition\PropertyInjection;
-use DI\Definition\UndefinedInjection;
+use DI\Definition\ClassInjection\MethodInjection;
+use DI\Definition\ClassInjection\PropertyInjection;
+use DI\Definition\ClassInjection\UndefinedInjection;
 use DI\DependencyException;
 use DI\NotFoundException;
 use Exception;
@@ -267,7 +267,7 @@ class ClassDefinitionResolver implements DefinitionResolver
      * Inject dependencies into properties.
      *
      * @param object            $object            Object to inject dependencies into
-     * @param PropertyInjection $propertyInjection Property injection definition
+     * @param \DI\Definition\ClassInjection\PropertyInjection $propertyInjection Property injection definition
      *
      * @throws DependencyException
      * @throws DefinitionException
