@@ -1,7 +1,7 @@
-PHP-DI is a Container that makes [*Dependency Injection*](http://en.wikipedia.org/wiki/Dependency_injection)
-as practical as possible.
+PHP-DI as a Dependency Injection Container made for humans.
 
-PHP-DI also tries to avoid falling into the trap of the "Service Locator" antipattern and help you do *real* dependency injection.
+Its goal is to help you using [dependency injection](http://en.wikipedia.org/wiki/Dependency_injection)
+in your application, without writing boilerplate code or falling into the trap of the "Service Locator" antipattern.
 
 [![Latest Stable Version](https://poser.pugx.org/mnapoli/php-di/v/stable.png)](https://packagist.org/packages/mnapoli/php-di) [![Total Downloads](https://poser.pugx.org/mnapoli/php-di/downloads.png)](https://packagist.org/packages/mnapoli/php-di)
 
