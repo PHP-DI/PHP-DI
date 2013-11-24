@@ -30,12 +30,10 @@ class ValueDefinitionResolver implements DefinitionResolver
     public function resolve(Definition $definition)
     {
         if (! $definition instanceof ValueDefinition) {
-            throw new \InvalidArgumentException(
-                sprintf(
-                    'This definition resolver is only compatible with ValueDefinition objects, %s given',
-                    get_class($definition)
-                )
-            );
+            throw new \InvalidArgumentException(sprintf(
+                'This definition resolver is only compatible with ValueDefinition objects, %s given',
+                get_class($definition)
+            ));
         }
 
         return $definition->getValue();

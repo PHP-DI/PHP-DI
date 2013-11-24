@@ -48,12 +48,10 @@ class AliasDefinitionResolver implements DefinitionResolver
     public function resolve(Definition $definition)
     {
         if (! $definition instanceof AliasDefinition) {
-            throw new \InvalidArgumentException(
-                sprintf(
-                    'This definition resolver is only compatible with AliasDefinition objects, %s given',
-                    get_class($definition)
-                )
-            );
+            throw new \InvalidArgumentException(sprintf(
+                'This definition resolver is only compatible with AliasDefinition objects, %s given',
+                get_class($definition)
+            ));
         }
 
         return $this->container->get($definition->getTargetEntryName());

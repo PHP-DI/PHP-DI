@@ -47,12 +47,10 @@ class CallableDefinitionResolver implements DefinitionResolver
     public function resolve(Definition $definition)
     {
         if (! $definition instanceof CallableDefinition) {
-            throw new \InvalidArgumentException(
-                sprintf(
-                    'This definition resolver is only compatible with CallableDefinition objects, %s given',
-                    get_class($definition)
-                )
-            );
+            throw new \InvalidArgumentException(sprintf(
+                'This definition resolver is only compatible with CallableDefinition objects, %s given',
+                get_class($definition)
+            ));
         }
 
         $callable = $definition->getCallable();
