@@ -11,7 +11,6 @@ namespace UnitTests\DI\Fixtures;
 
 use DI\ContainerInterface;
 use DI\Definition\DefinitionManager;
-use DI\DefinitionResolver\DefinitionResolver;
 use ProxyManager\Factory\LazyLoadingValueHolderFactory;
 
 /**

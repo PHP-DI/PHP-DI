@@ -61,7 +61,7 @@ Here is how a code using DI will roughly work:
     * Foo calls Bar
         * Bar does something
 
-This is the pattern of **Inversion of Control**. The control of the dependencies is **inversed** from one being called to the one calling.
+This is the pattern of **Inversion of Control**. The control of the dependencies is **inverted** from one being called to the one calling.
 
 The main advantage: the one at the end of the caller chain is always **you**. So you can control every dependencies: you have a complete control on how your application works. You can replace a dependency by another (one you made for example).
 

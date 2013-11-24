@@ -10,9 +10,6 @@
 namespace UnitTests\DI;
 
 use DI\ContainerBuilder;
-use DI\DefinitionResolver\AliasDefinitionResolver;
-use DI\DefinitionResolver\CallableDefinitionResolver;
-use DI\DefinitionResolver\ClassDefinitionResolver;
 use UnitTests\DI\Fixtures\FakeContainer;
 
 /**

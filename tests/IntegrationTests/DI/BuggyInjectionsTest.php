@@ -10,9 +10,6 @@
 namespace IntegrationTests\DI;
 
 use DI\ContainerBuilder;
-use IntegrationTests\DI\Fixtures\ConstructorInjectionTest\Buggy2;
-use IntegrationTests\DI\Fixtures\SetterInjectionTest\Buggy3;
-use IntegrationTests\DI\Fixtures\ValueInjectionTest\ValueInjectionClass;
 
 /**
  * Tests buggy cases
@@ -26,7 +23,7 @@ class BuggyInjectionsTest extends \PHPUnit_Framework_TestCase
     public function testConstructorNonTypeHintedMethod()
     {
         $container = ContainerBuilder::buildDevContainer();
-        $container->get(Fixtures\ConstructorInjectionTest\Buggy1::class);
+        $container->get('IntegrationTests\DI\Fixtures\ConstructorInjectionTest\Buggy1');
     }
 
     /**
@@ -36,7 +33,7 @@ class BuggyInjectionsTest extends \PHPUnit_Framework_TestCase
     public function testConstructorNonExistentEntry()
     {
         $container = ContainerBuilder::buildDevContainer();
-        $container->get(Buggy2::class);
+        $container->get('IntegrationTests\DI\Fixtures\ConstructorInjectionTest\Buggy2');
     }
 
     /**
@@ -57,7 +54,7 @@ class BuggyInjectionsTest extends \PHPUnit_Framework_TestCase
     public function testSetterNonTypeHintedMethod()
     {
         $container = ContainerBuilder::buildDevContainer();
-        $container->get(Fixtures\SetterInjectionTest\Buggy1::class);
+        $container->get('IntegrationTests\DI\Fixtures\SetterInjectionTest\Buggy1');
     }
 
     /**
@@ -67,7 +64,7 @@ class BuggyInjectionsTest extends \PHPUnit_Framework_TestCase
     public function testSetterNamedUnknownBean()
     {
         $container = ContainerBuilder::buildDevContainer();
-        $container->get(Buggy3::class);
+        $container->get('IntegrationTests\DI\Fixtures\SetterInjectionTest\Buggy3');
     }
 
     /**
@@ -77,6 +74,6 @@ class BuggyInjectionsTest extends \PHPUnit_Framework_TestCase
     public function testValueException()
     {
         $container = ContainerBuilder::buildDevContainer();
-        $container->get(ValueInjectionClass::class);
+        $container->get('IntegrationTests\DI\Fixtures\ValueInjectionTest\ValueInjectionClass');
     }
 }

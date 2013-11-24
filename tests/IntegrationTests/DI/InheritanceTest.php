@@ -12,8 +12,6 @@ namespace IntegrationTests\DI;
 use DI\Container;
 use DI\ContainerBuilder;
 use DI\Entry;
-use IntegrationTests\DI\Fixtures\InheritanceTest\BaseClass;
-use IntegrationTests\DI\Fixtures\InheritanceTest\Dependency;
 use IntegrationTests\DI\Fixtures\InheritanceTest\SubClass;
 
 /**
@@ -65,39 +63,39 @@ class InheritanceTest extends \PHPUnit_Framework_TestCase
         $builder->useReflection(true);
         $builder->useAnnotations(true);
         $containerAnnotations = $builder->build();
-        $containerAnnotations->set(BaseClass::class, Entry::object(SubClass::class));
+        $containerAnnotations->set('IntegrationTests\DI\Fixtures\InheritanceTest\BaseClass', Entry::object('IntegrationTests\DI\Fixtures\InheritanceTest\SubClass'));
 
         // Test with a container using array configuration
         $builder = new ContainerBuilder();
         $builder->useReflection(false);
         $builder->useAnnotations(false);
         $containerFullArrayDefinitions = $builder->build();
-        $containerFullArrayDefinitions->addDefinitions([
-            BaseClass::class => Entry::object(SubClass::class)
-                ->withProperty('property1', Entry::link(Dependency::class))
-                ->withProperty('property4', Entry::link(Dependency::class))
-                ->withConstructor(Entry::link(Dependency::class))
-                ->withMethod('setProperty2', Entry::link(Dependency::class)),
-            SubClass::class => Entry::object()
-                ->withProperty('property1', Entry::link(Dependency::class))
-                ->withProperty('property4', Entry::link(Dependency::class))
-                ->withConstructor(Entry::link(Dependency::class))
-                ->withMethod('setProperty2', Entry::link(Dependency::class)),
-        ]);
+        $containerFullArrayDefinitions->addDefinitions(array(
+            'IntegrationTests\DI\Fixtures\InheritanceTest\BaseClass' => Entry::object('IntegrationTests\DI\Fixtures\InheritanceTest\SubClass')
+                ->withProperty('property1', Entry::link('IntegrationTests\DI\Fixtures\InheritanceTest\Dependency'))
+                ->withProperty('property4', Entry::link('IntegrationTests\DI\Fixtures\InheritanceTest\Dependency'))
+                ->withConstructor(Entry::link('IntegrationTests\DI\Fixtures\InheritanceTest\Dependency'))
+                ->withMethod('setProperty2', Entry::link('IntegrationTests\DI\Fixtures\InheritanceTest\Dependency')),
+            'IntegrationTests\DI\Fixtures\InheritanceTest\SubClass' => Entry::object()
+                ->withProperty('property1', Entry::link('IntegrationTests\DI\Fixtures\InheritanceTest\Dependency'))
+                ->withProperty('property4', Entry::link('IntegrationTests\DI\Fixtures\InheritanceTest\Dependency'))
+                ->withConstructor(Entry::link('IntegrationTests\DI\Fixtures\InheritanceTest\Dependency'))
+                ->withMethod('setProperty2', Entry::link('IntegrationTests\DI\Fixtures\InheritanceTest\Dependency')),
+        ));
 
         // Test with a container using array configuration
         $builder = new ContainerBuilder();
         $builder->useReflection(false);
         $builder->useAnnotations(false);
         $containerInheritanceDefinitions = $builder->build();
-        $containerInheritanceDefinitions->addDefinitions([
-             BaseClass::class => Entry::object(SubClass::class)
-                ->withProperty('property1', Entry::link(Dependency::class))
-                ->withConstructor(Entry::link(Dependency::class))
-                ->withMethod('setProperty2', Entry::link(Dependency::class)),
-            SubClass::class => Entry::object()
-                ->withProperty('property4', Entry::link(Dependency::class)),
-        ]);
+        $containerInheritanceDefinitions->addDefinitions(array(
+             'IntegrationTests\DI\Fixtures\InheritanceTest\BaseClass' => Entry::object('IntegrationTests\DI\Fixtures\InheritanceTest\SubClass')
+                ->withProperty('property1', Entry::link('IntegrationTests\DI\Fixtures\InheritanceTest\Dependency'))
+                ->withConstructor(Entry::link('IntegrationTests\DI\Fixtures\InheritanceTest\Dependency'))
+                ->withMethod('setProperty2', Entry::link('IntegrationTests\DI\Fixtures\InheritanceTest\Dependency')),
+             'IntegrationTests\DI\Fixtures\InheritanceTest\SubClass' => Entry::object()
+                ->withProperty('property4', Entry::link('IntegrationTests\DI\Fixtures\InheritanceTest\Dependency')),
+        ));
 
         return array(
             array($containerAnnotations),

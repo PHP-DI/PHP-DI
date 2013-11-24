@@ -9,11 +9,9 @@
 
 namespace UnitTests\DI\Definition\Source;
 
-use Closure;
 use DI\Definition\CallableDefinition;
 use DI\Definition\ClassDefinition;
 use DI\Definition\Source\ArrayDefinitionSource;
-use DI\Definition\ValueDefinition;
 use DI\Entry;
 
 /**
@@ -30,7 +28,7 @@ class ArrayDefinitionSourceTest extends \PHPUnit_Framework_TestCase
             )
         );
         $definition = $source->getDefinition('foo');
-        $this->assertInstanceOf(ValueDefinition::class, $definition);
+        $this->assertInstanceOf('DI\Definition\ValueDefinition', $definition);
         $this->assertEquals('foo', $definition->getName());
         $this->assertEquals('bar', $definition->getValue());
     }
@@ -42,8 +40,8 @@ class ArrayDefinitionSourceTest extends \PHPUnit_Framework_TestCase
             'integer' => 1,
             'string'  => 'test',
             'float'   => 1.0,
-            'array'   => ['a', 'b', 'c'],
-            'assoc'   => ['a' => 'b'],
+            'array'   => array('a', 'b', 'c'),
+            'assoc'   => array('a' => 'b'),
             'closure' => function () {
             },
         );
@@ -66,28 +64,28 @@ class ArrayDefinitionSourceTest extends \PHPUnit_Framework_TestCase
 
         $definition = $source->getDefinition('array');
         $this->assertNotNull($definition);
-        $this->assertEquals(['a', 'b', 'c'], $definition->getValue());
+        $this->assertEquals(array('a', 'b', 'c'), $definition->getValue());
         $this->assertInternalType('array', $definition->getValue());
 
         $definition = $source->getDefinition('assoc');
         $this->assertNotNull($definition);
-        $this->assertEquals(['a' => 'b'], $definition->getValue());
+        $this->assertEquals(array('a' => 'b'), $definition->getValue());
         $this->assertInternalType('array', $definition->getValue());
 
         $definition = $source->getDefinition('closure');
         $this->assertNotNull($definition);
-        $this->assertInstanceOf(Closure::class, $definition->getValue());
+        $this->assertInstanceOf('Closure', $definition->getValue());
     }
 
     public function testClassDefinition()
     {
         $source = new ArrayDefinitionSource();
-        $source->addDefinitions([
+        $source->addDefinitions(array(
             'foo' => Entry::object(),
-        ]);
+        ));
         /** @var $definition ClassDefinition */
         $definition = $source->getDefinition('foo');
-        $this->assertInstanceOf(ClassDefinition::class, $definition);
+        $this->assertInstanceOf('DI\Definition\ClassDefinition', $definition);
         $this->assertEquals('foo', $definition->getName());
         $this->assertEquals('foo', $definition->getClassName());
     }
@@ -98,12 +96,12 @@ class ArrayDefinitionSourceTest extends \PHPUnit_Framework_TestCase
             return 'bar';
         };
         $source = new ArrayDefinitionSource();
-        $source->addDefinitions([
+        $source->addDefinitions(array(
             'foo' => Entry::factory($callable),
-        ]);
+        ));
         /** @var CallableDefinition $definition */
         $definition = $source->getDefinition('foo');
-        $this->assertInstanceOf(CallableDefinition::class, $definition);
+        $this->assertInstanceOf('DI\Definition\CallableDefinition', $definition);
         $this->assertEquals('foo', $definition->getName());
         $this->assertEquals($callable, $definition->getCallable());
     }

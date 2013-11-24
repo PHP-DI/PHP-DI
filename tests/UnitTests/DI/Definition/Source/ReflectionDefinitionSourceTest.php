@@ -12,7 +12,6 @@ namespace UnitTests\DI\Definition\Source;
 use DI\Definition\EntryReference;
 use DI\Definition\Source\ReflectionDefinitionSource;
 use DI\Definition\ClassInjection\UndefinedInjection;
-use UnitTests\DI\Definition\Source\Fixtures\ReflectionFixture;
 
 class ReflectionDefinitionSourceTest extends \PHPUnit_Framework_TestCase
 {
@@ -25,7 +24,7 @@ class ReflectionDefinitionSourceTest extends \PHPUnit_Framework_TestCase
     public function testFixtureClass()
     {
         $source = new ReflectionDefinitionSource();
-        $definition = $source->getDefinition(ReflectionFixture::class);
+        $definition = $source->getDefinition('UnitTests\DI\Definition\Source\Fixtures\ReflectionFixture');
         $this->assertInstanceOf('DI\Definition\Definition', $definition);
 
         $constructorInjection = $definition->getConstructorInjection();
@@ -35,7 +34,7 @@ class ReflectionDefinitionSourceTest extends \PHPUnit_Framework_TestCase
         $this->assertCount(3, $parameters);
 
         $param1 = $parameters[0];
-        $this->assertEquals(new EntryReference(ReflectionFixture::class), $param1);
+        $this->assertEquals(new EntryReference('UnitTests\DI\Definition\Source\Fixtures\ReflectionFixture'), $param1);
 
         $param2 = $parameters[1];
         $this->assertEquals(new UndefinedInjection(), $param2);

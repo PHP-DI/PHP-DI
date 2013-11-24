@@ -12,8 +12,6 @@ namespace UnitTests\DI;
 use DI\ContainerBuilder;
 use DI\Entry;
 use stdClass;
-use DI\Container;
-use UnitTests\DI\Fixtures\Class1CircularDependencies;
 
 /**
  * Test class for Container
@@ -119,7 +117,7 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
     public function testCircularDependencyException()
     {
         $container = ContainerBuilder::buildDevContainer();
-        $container->get(Class1CircularDependencies::class);
+        $container->get('UnitTests\DI\Fixtures\Class1CircularDependencies');
     }
 
     /**

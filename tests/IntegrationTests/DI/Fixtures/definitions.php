@@ -2,43 +2,38 @@
 
 use DI\Entry;
 use DI\Scope;
-use IntegrationTests\DI\Fixtures\Class1;
-use IntegrationTests\DI\Fixtures\Class2;
-use IntegrationTests\DI\Fixtures\Implementation1;
-use IntegrationTests\DI\Fixtures\Interface1;
-use IntegrationTests\DI\Fixtures\LazyDependency;
 
-return [
+return array(
     'foo' => 'bar',
 
-    Class1::class          => Entry::object()
+    'IntegrationTests\DI\Fixtures\Class1' => Entry::object()
             ->withScope(Scope::PROTOTYPE())
-            ->withProperty('property1', Entry::link(Class2::class))
-            ->withProperty('property2', Entry::link(Interface1::class))
+            ->withProperty('property1', Entry::link('IntegrationTests\DI\Fixtures\Class2'))
+            ->withProperty('property2', Entry::link('IntegrationTests\DI\Fixtures\Interface1'))
             ->withProperty('property3', Entry::link('namedDependency'))
             ->withProperty('property4', Entry::link('foo'))
-            ->withProperty('property5', Entry::link(LazyDependency::class))
+            ->withProperty('property5', Entry::link('IntegrationTests\DI\Fixtures\LazyDependency'))
             ->withConstructor(
-                Entry::link(Class2::class),
-                Entry::link(Interface1::class),
-                Entry::link(LazyDependency::class)
+                Entry::link('IntegrationTests\DI\Fixtures\Class2'),
+                Entry::link('IntegrationTests\DI\Fixtures\Interface1'),
+                Entry::link('IntegrationTests\DI\Fixtures\LazyDependency')
             )
-            ->withMethod('method1', Entry::link(Class2::class))
-            ->withMethod('method2', Entry::link(Interface1::class))
+            ->withMethod('method1', Entry::link('IntegrationTests\DI\Fixtures\Class2'))
+            ->withMethod('method2', Entry::link('IntegrationTests\DI\Fixtures\Interface1'))
             ->withMethod('method3', Entry::link('namedDependency'), Entry::link('foo'))
-            ->withMethod('method4', Entry::link(LazyDependency::class)),
+            ->withMethod('method4', Entry::link('IntegrationTests\DI\Fixtures\LazyDependency')),
 
-    Class2::class          => Entry::object(),
+    'IntegrationTests\DI\Fixtures\Class2' => Entry::object(),
 
-    Implementation1::class => Entry::object(),
+    'IntegrationTests\DI\Fixtures\Implementation1' => Entry::object(),
 
-    Interface1::class      => Entry::object(Implementation1::class)
+    'IntegrationTests\DI\Fixtures\Interface1' => Entry::object('IntegrationTests\DI\Fixtures\Implementation1')
             ->withScope(Scope::SINGLETON()),
 
-    'namedDependency'      => Entry::object(Class2::class),
+    'namedDependency' => Entry::object('IntegrationTests\DI\Fixtures\Class2'),
 
-    LazyDependency::class => Entry::object()
+    'IntegrationTests\DI\Fixtures\LazyDependency' => Entry::object()
             ->lazy(),
 
-    'alias'               => Entry::link('namedDependency'),
-];
+    'alias' => Entry::link('namedDependency'),
+);

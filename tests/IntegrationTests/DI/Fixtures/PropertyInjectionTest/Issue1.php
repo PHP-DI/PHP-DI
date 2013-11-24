@@ -10,7 +10,6 @@
 namespace IntegrationTests\DI\Fixtures\PropertyInjectionTest;
 
 use \DI\Annotation\Inject;
-use \IntegrationTests\DI\Fixtures\PropertyInjectionTest\Class2;
 use \IntegrationTests\DI\Fixtures\PropertyInjectionTest\Class2 as Alias;
 use \IntegrationTests\DI\Fixtures\PropertyInjectionTest as NamespaceAlias;
 
