@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>PHP-DI - Dependency Injection Container for PHP</title>
+    <meta name="description" content="PHP-DI is a Dependency Injection Container for PHP that intends to be practical and powerful">
+
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Asap:400,700,400italic,700italic">
+    <link rel="stylesheet" href="http://yandex.st/highlightjs/7.5/styles/default.min.css">
+    <link rel="stylesheet" href="css/highlight.github.css">
+
+    <link rel="stylesheet" href="css/style.css">
+
+    <!-- HTML5 Support for IE -->
+    <!--[if lt IE 9]>
+    <script src="http://html5shim.googlecode.com/svn/trunk/html5.js" type="text/javascript"></script>
+    <![endif]-->
+</head>
+
+<body>
+
+    <nav class="navbar navbar-fixed-top">
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#my-navbar">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="index.html">PHP-DI</a>
+            </div>
+
+            <div class="collapse navbar-collapse" id="my-navbar">
+                <ul class="nav navbar-nav navbar-right">
+                    <li><a href="">Home</a></li>
+                    <li><a href="doc/example">Example</a></li>
+                    <li><a href="doc/getting-started">Getting started</a></li>
+                    <li><a href="doc/">Documentation</a></li>
+                    <li><a href="change-log">Change log</a></li>
+                    <li><a href="https://github.com/mnapoli/PHP-DI"><i class="icon-github"></i>Github</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+
+    <div class="jumbotron">
+        <h1>
+            PHP-DI 4
+        </h1>
+        <p class="lead">The dependency injection container for humans</p>
+    </div>
+
+    <p>
+        PHP-DI's goal is to help you using
+        <a href="http://en.wikipedia.org/wiki/Dependency_injection">dependency injection</a>
+        in your application, without writing boilerplate code or
+        falling into the trap of the <em>Service Locator</em> anti-pattern.
+    </p>
+
+
+    <div class="row text-center">
+
+        <div class="col-md-12">
+            <h2>
+                Open
+            </h2>
+        </div>
+
+        <div class="col-md-4">
+            <ul class="list-inline">
+                <li>
+                    <a href="https://github.com/mnapoli/PHP-DI-ZF1">ZF 1 integration</a>
+                </li>
+                <li>
+                    <a href="https://github.com/mnapoli/PHP-DI-ZF2">ZF 2 integration</a>
+                </li>
+            </ul>
+            <p>
+                <img class="framework-logo" src="img/zf-logo.png" alt="Zend Framework 1 & 2">
+            </p>
+        </div>
+
+        <div class="col-md-4">
+            <p>
+                Integrates easily to your project or your framework.
+            </p>
+            <p>
+                It was also designed to be able to work along with other containers.
+            </p>
+        </div>
+
+        <div class="col-md-4">
+            <p>
+                <a href="https://github.com/mnapoli/PHP-DI-Symfony2">PHP-DI Bundle</a>
+            </p>
+            <p>
+                <img class="framework-logo" src="img/symfony-logo.png" alt="Symfony 2">
+            </p>
+        </div>
+
+    </div>
+
+
+    <div class="row">
+
+        <div class="col-md-12 text-center">
+            <h2>
+                Practical
+            </h2>
+        </div>
+
+        <div class="col-md-4">
+            <h3>
+                Autowiring
+            </h3>
+            <p>
+                80% of the use cases for 0 configuration!
+            </p>
+<pre><code class="php small">class Foo
+{
+    private $bar;
+
+    public function __construct(Bar $bar) {
+        return $this->bar = $bar;
+    }
+}
+</code></pre>
+        </div>
+
+        <div class="col-md-4">
+            <h3>
+                Annotations
+            </h3>
+            <p>
+                Makes your life so easy in your controllers!
+            </p>
+<pre><code class="php small">class Foo
+{
+    /**
+    * @Inject
+    * @var Bar
+    */
+    private $bar;
+}
+</code></pre>
+        </div>
+
+        <div class="col-md-4">
+            <h3>
+                Configuration
+            </h3>
+            <p>
+                For full control!
+            </p>
+<pre><code class="php small">$configuration = [
+
+    Bar::class => DI\object(),
+
+    Foo::class => DI\object()
+        ->withConstructor(DI\link(Bar::class))
+
+];
+</code></pre>
+        </div>
+
+    </div>
+
+    <p class="text-muted">
+        Features are "à la carte": mix them all, disable annotation support, do whatever you want.
+    </p>
+
+
+    <h2 class="text-center">
+        Modern
+    </h2>
+
+    <p>
+        PHP-DI reinvented itself for v4.0.
+        Its configuration format has been thought through for the future: PHP 5.4, 5.5 and beyond!
+    </p>
+
+    <p>
+        We dropped the YAML format because we do no longer believe it's the most appropriate since:
+    </p>
+
+    <div class="row">
+
+        <div class="col-md-4">
+            <h3>
+                PHP 5.4
+            </h3>
+            <p>
+                Short arrays:
+            </p>
+<pre><code class="php small">return [
+
+
+];
+</code></pre>
+        </div>
+
+        <div class="col-md-4">
+            <h3>
+                PHP 5.5
+            </h3>
+            <p>
+                Class name resolution via <code>::class</code>:
+            </p>
+<pre><code class="php small">return [
+    Foo::class => DI\object(),
+
+];
+</code></pre>
+        </div>
+
+        <div class="col-md-4">
+            <h3>
+                Future PHP 5.6
+            </h3>
+            <p>
+                Import functions:
+            </p>
+<pre><code class="php small">return [
+    Foo::class => object()
+        ->withConstructor(link(Bar::class))
+];
+</code></pre>
+        </div>
+
+    </div>
+
+    <p>
+        Furthermore, using PHP instead of YAML comes with other advantages:
+    </p>
+
+    <ul>
+        <li>
+            Auto-completion and refactoring support
+        </li>
+        <li>
+            Define services using callbacks (à la Pimple)
+        </li>
+        <li>
+            You can actually use PHP code like constants, operations, …
+            <span class="text-muted">
+                (instead of writing <a href="https://github.com/symfony/expression-language">a custom language</a>
+                that developers have to learn)
+            </span>
+        </li>
+    </ul>
+
+    <p class="text-muted">
+        Yes, PHP-DI is still compatible with PHP 5.3
+        (but seriously, upgrade!)
+    </p>
+
+
+    <h2 class="text-center">
+        Fast
+    </h2>
+
+    <div class="row">
+
+        <div class="col-md-4">
+            <h3>
+                Lazy-loading
+            </h3>
+            <p>
+                Are you injecting a service that is expensive to build?
+            </p>
+            <p>
+                Just mark it as <code>lazy</code> and it will be created
+                only when it is used.
+            </p>
+        </div>
+
+        <div class="col-md-4">
+            <h3>
+                Configuration caching
+            </h3>
+            <p>
+                Autowiring (reflection), annotations or PHP configuration have the same
+                impact.
+            </p>
+            <p>
+                Every definition is cached so that is it not recomputed on each request.
+            </p>
+        </div>
+
+        <div class="col-md-4">
+            <h3>
+                Container compilation
+            </h3>
+            <p class="text-danger">
+                Woops, that's not there yet! It's coming soon!
+            </p>
+            <p>
+                Let's compile all those abstract "service" definitions to PHP code.
+                It will be as fast as if there was no container.
+            </p>
+        </div>
+
+    </div>
+
+
+    <footer class="footer text-center">
+        <hr>
+        <p class="copy">
+            Copyright &copy; 2013 | <a href="http://mnapoli.fr/">Matthieu Napoli</a>
+        </p>
+        <p>
+            Website generated with
+            <a href="http://mnapoli.github.com/gh-pages-compiler/" target="_blank">gh-pages-compiler</a>.
+        </p>
+    </footer>
+
+</div>
+
+<!-- JS -->
+<script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
+<script src="http://netdna.bootstrapcdn.com/bootstrap/3.0.2/js/bootstrap.min.js"></script>
+<script src="http://yandex.st/highlightjs/7.5/highlight.min.js"></script>
+<script src="js/template.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
+</body>
+</html>

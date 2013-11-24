@@ -1,4 +1,4 @@
-PHP-DI as a Dependency Injection Container made for humans.
+PHP-DI is a Dependency Injection Container made for humans.
 
 Its goal is to help you using [dependency injection](http://en.wikipedia.org/wiki/Dependency_injection)
 in your application, without writing boilerplate code or falling into the trap of the "Service Locator" antipattern.
