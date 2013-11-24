@@ -39,10 +39,10 @@ class Entry
     }
 
     /**
-     * @param string|callable $callable Can be either the name of a static method, or a callable
+     * @param callable $callable
      * @return CallableDefinitionHelper
      */
-    public static function factory(callable $callable)
+    public static function factory($callable)
     {
         return new CallableDefinitionHelper($callable);
     }

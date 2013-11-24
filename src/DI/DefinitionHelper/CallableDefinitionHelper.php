@@ -23,7 +23,10 @@ class CallableDefinitionHelper implements DefinitionHelper
      */
     private $callable;
 
-    public function __construct(callable $callable)
+    /**
+     * @param callable $callable
+     */
+    public function __construct($callable)
     {
         $this->callable = $callable;
     }
