@@ -4,30 +4,29 @@ PHP-DI injects stuff into objects.
 
 To **define** where and how to inject stuff, you have several options:
 
-- let PHP-DI guess using [Reflection](http://www.php.net/manual/en/book.reflection.php)
+- use autowiring: let PHP-DI guess using [Reflection](http://www.php.net/manual/en/book.reflection.php)
 - use annotations
-- use PHP code (using `Container::set()`)
-- use a PHP array
+- use PHP configuration
 
 You can also use several or all these options at the same time if you want to.
 
 If you combine several sources, there are priorities that apply. From the highest priority to the least:
 
-- Code definition (i.e. defined with `$container->set()`)
-- Array definitions (if A is added after B, then A prevails)
+- Explicit definition on the container (i.e. defined with `$container->set()`)
+- PHP file definitions (if A is added after B, then A prevails)
 - Annotations
-- Reflection
+- Autowiring
 
 Read more in the [Definition overriding documentation](definition-overriding.md)
 
 
-## Reflection
+## Autowiring
 
 ```php
 $container->useReflection(true);
 ```
 
-**Note: Reflection is enabled by default**
+**Note: autowiring is enabled by default**
 
 This solution is the simplest, but also restricted.
 
@@ -57,7 +56,7 @@ class Foo {
 
 It will not know what parameters to give to the constructor, and `setStuff()` will not be called.
 
-So use Reflection either:
+So use autowiring either:
 
 - if you also use other definition options (annotations, file configuration…)
 - if you only need constructor injection, and if you always use type-hinting
@@ -155,7 +154,7 @@ $container->set('report.recipients', [
     'alice@acme.example.com'
 ]);
 
-// Direct mapping (not needed if you didn't disable Reflection)
+// Direct mapping (not needed if you didn't disable autowiring)
 $container->set('SomeClass', Entry::object());
 
 // This is not recommended: will instantiate the class on every request, even when not used
@@ -214,7 +213,7 @@ return [
         'alice@acme.example.com'
     ],
 
-    // Direct mapping (not needed if you didn't disable Reflection)
+    // Direct mapping (not needed if you didn't disable autowiring)
     'SomeClass' => Entry::object(),
 
     // This is not recommended: will instantiate the class on every request, even when not used

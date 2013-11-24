@@ -42,7 +42,7 @@ PHP-DI offers several ways to define dependencies, so use which ones you like.
 Below is a quick introduction to some options, but you can also read [the full documentation](definition.md).
 
 
-#### Reflection
+#### Autowiring
 
 PHP-DI can use [PHP Reflection](http://fr.php.net/manual/fr/book.reflection.php) to understand what parameters a constructor needs:
 
