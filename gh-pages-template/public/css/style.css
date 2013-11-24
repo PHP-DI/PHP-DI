@@ -3,7 +3,8 @@ body {
     font-family: 'Asap', sans-serif;
     padding-top: 60px;
 }
-body p, body ul {
+
+p, ul {
     font-size: 18px;
     line-height: 1.5;
 }
@@ -85,6 +86,10 @@ h2 {
 .jumbotron {
     text-align: center;
     background-color: transparent;
+}
+.jumbotron p.lead {
+    font-size: 30px;
+    font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 
 .footer {
