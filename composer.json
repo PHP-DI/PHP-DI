@@ -13,7 +13,7 @@
         }
     },
     "require": {
-        "php": ">=5.4.0",
+        "php": ">=5.3.3",
         "doctrine/annotations": "1.*",
         "doctrine/cache": "1.*",
         "mnapoli/phpdocreader": "1.0.*",
