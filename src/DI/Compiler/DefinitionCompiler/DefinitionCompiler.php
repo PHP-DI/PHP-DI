@@ -23,7 +23,8 @@ interface DefinitionCompiler
      * Compile a definition to PHP code.
      *
      * @param Definition $definition Object that defines how the value should be obtained.
-     * @return string PHP code resolving the definition.
+     *
+     * @return string PHP code able to resolve the definition.
      */
     public function compile(Definition $definition);
 }
