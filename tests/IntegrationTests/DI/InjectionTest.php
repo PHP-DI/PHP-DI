@@ -32,7 +32,7 @@ class InjectionTest extends \PHPUnit_Framework_TestCase
 
     /**
      * PHPUnit data provider: generates container configurations for running the same tests
-     * for each configuration possible
+     * for each possible configuration
      * @return array
      */
     public static function containerProvider()
