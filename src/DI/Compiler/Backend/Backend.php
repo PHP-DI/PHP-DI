@@ -10,6 +10,7 @@
 namespace DI\Compiler\Backend;
 
 use DI\ContainerInterface;
+use DI\NotFoundException;
 
 /**
  * Backend where a compiler can store compiled definitions.
@@ -39,6 +40,7 @@ interface Backend
      * @param string             $entryName Name of the entry to retrieve.
      * @param ContainerInterface $container Container used to retrieve dependencies of the entry.
      *
+     * @throws NotFoundException No entry found for the given name.
      * @return mixed Entry (value, object, ...)
      */
     public function readCompiledEntry($entryName, ContainerInterface $container);

@@ -10,6 +10,7 @@
 namespace DI\Compiler\Backend;
 
 use DI\ContainerInterface;
+use DI\NotFoundException;
 
 /**
  * Stores compiled definitions to PHP files.
@@ -69,16 +70,19 @@ class FileBackend implements Backend, ContainerInterface
     }
 
     /**
-     * Reads a compiled entry and return it.
+     * Reads an entry from a PHP file named after the entry name.
      *
-     * @param string             $entryName Name of the entry to retrieve.
-     * @param ContainerInterface $container Container used to retrieve dependencies of the entry.
+     * Just include that file.
      *
-     * @return mixed Entry (value, object, ...)
+     * {@inheritdoc}
      */
     public function readCompiledEntry($entryName, ContainerInterface $container)
     {
         $fileName = $this->getFileName($entryName);
+
+        if (! file_exists($fileName)) {
+            throw new NotFoundException("No entry or class found for '$entryName'");
+        }
 
         // Set the container so that the included file can use $this->get and $this->has
         $this->container = $container;

@@ -105,6 +105,20 @@ PHP;
     }
 
     /**
+     * @expectedException \DI\NotFoundException
+     * @expectedExceptionMessage No entry or class found for 'foo'
+     */
+    public function testReadUnknownEntry()
+    {
+        /** @var ContainerInterface $container */
+        $container = $this->getMockForAbstractClass('DI\ContainerInterface');
+
+        $backend = new FileBackend(__DIR__ . '/definitions');
+
+        $backend->readCompiledEntry('foo', $container);
+    }
+
+    /**
      * @expectedException \InvalidArgumentException
      * @expectedExceptionMessage The path /foobar is not writable, impossible to use it to store the compiled container
      */
