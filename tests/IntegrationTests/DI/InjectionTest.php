@@ -44,6 +44,7 @@ class InjectionTest extends \PHPUnit_Framework_TestCase
         $containerReflection = $builder->build();
         // We have to define some entries for the test because reflection on itself doesn't make it possible
         $containerReflection->set('foo', 'bar');
+        $containerReflection->set('IntegrationTests\DI\Fixtures\Class1', \DI\object()->withScope(Scope::PROTOTYPE()));
         $containerReflection->set(
             'IntegrationTests\DI\Fixtures\Interface1',
             \DI\object('IntegrationTests\DI\Fixtures\Implementation1')
@@ -116,6 +117,28 @@ class InjectionTest extends \PHPUnit_Framework_TestCase
             'annotation' => array(self::DEFINITION_ANNOTATIONS, $containerAnnotations),
             'array'      => array(self::DEFINITION_ARRAY, $containerArray),
             'php'        => array(self::DEFINITION_PHP, $containerPHP),
+        );
+    }
+
+    /**
+     * @dataProvider containerProvider
+     */
+    public function testContainerGetSingleton($type, Container $container)
+    {
+        $this->assertSame(
+            $container->get('IntegrationTests\DI\Fixtures\Class2'),
+            $container->get('IntegrationTests\DI\Fixtures\Class2')
+        );
+    }
+
+    /**
+     * @dataProvider containerProvider
+     */
+    public function testContainerGetPrototype($type, Container $container)
+    {
+        $this->assertNotSame(
+            $container->get('IntegrationTests\DI\Fixtures\Class1'),
+            $container->get('IntegrationTests\DI\Fixtures\Class1')
         );
     }
 
