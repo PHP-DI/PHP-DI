@@ -11,22 +11,23 @@ namespace UnitTests\DI\Compiler\Backend;
 
 use DI\Compiler\Backend\FileBackend;
 use DI\ContainerInterface;
+use ProxyManager\Factory\LazyLoadingValueHolderFactory;
 
 class FileBackendTest extends \PHPUnit_Framework_TestCase
 {
     public function setUp()
     {
-        $this->clearDirectory();
-    }
-
-    public function tearDown()
-    {
-        $this->clearDirectory();
+        // Clear all files in directory
+        foreach (glob(__DIR__ . '/definitions/*.php') as $file) {
+            if (is_file($file)) {
+                unlink($file);
+            }
+        }
     }
 
     public function testWrite()
     {
-        $backend = new FileBackend(__DIR__ . '/definitions');
+        $backend = new FileBackend(__DIR__ . '/definitions', $this->getProxyFactory());
 
         $this->assertFileNotExists(__DIR__ . '/definitions/foo.php');
 
@@ -44,7 +45,7 @@ PHP;
 
     public function testHas()
     {
-        $backend = new FileBackend(__DIR__ . '/definitions');
+        $backend = new FileBackend(__DIR__ . '/definitions', $this->getProxyFactory());
 
         $this->assertFalse($backend->hasCompiledEntry('foo'));
 
@@ -58,7 +59,7 @@ PHP;
         /** @var ContainerInterface $container */
         $container = $this->getMockForAbstractClass('DI\ContainerInterface');
 
-        $backend = new FileBackend(__DIR__ . '/definitions');
+        $backend = new FileBackend(__DIR__ . '/definitions', $this->getProxyFactory());
 
         $backend->writeCompiledEntry('foo', "return 'bar';");
 
@@ -80,7 +81,7 @@ PHP;
             ->with('bar')
             ->will($this->returnValue(42));
 
-        $backend = new FileBackend(__DIR__ . '/definitions');
+        $backend = new FileBackend(__DIR__ . '/definitions', $this->getProxyFactory());
 
         $backend->writeCompiledEntry('foo', "return \$this->has('bar') ? \$this->get('bar') : 0;");
 
@@ -92,7 +93,7 @@ PHP;
      */
     public function testEscapeFileName()
     {
-        $backend = new FileBackend(__DIR__ . '/definitions');
+        $backend = new FileBackend(__DIR__ . '/definitions', $this->getProxyFactory());
 
         $entryName = 'aB1-_.1\\2/3*4$5%6[7]8';
         $escapedName = 'aB1-__1_2_3_4_5_6_7_8';
@@ -113,7 +114,7 @@ PHP;
         /** @var ContainerInterface $container */
         $container = $this->getMockForAbstractClass('DI\ContainerInterface');
 
-        $backend = new FileBackend(__DIR__ . '/definitions');
+        $backend = new FileBackend(__DIR__ . '/definitions', $this->getProxyFactory());
 
         $backend->readCompiledEntry('foo', $container);
     }
@@ -125,16 +126,14 @@ PHP;
     public function testNotWritablePath()
     {
         // Please don't have a /foobar directory ;)
-        new FileBackend('/foobar');
+        new FileBackend('/foobar', $this->getProxyFactory());
     }
 
-    private function clearDirectory()
+    /**
+     * @return LazyLoadingValueHolderFactory
+     */
+    private function getProxyFactory()
     {
-        // Clear all files in directory
-        foreach (glob(__DIR__ . '/definitions/*.php') as $file) {
-            if (is_file($file)) {
-                unlink($file);
-            }
-        }
+        return $this->getMock('ProxyManager\Factory\LazyLoadingValueHolderFactory', array(), array(), '', false);
     }
 }

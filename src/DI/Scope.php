@@ -44,4 +44,14 @@ class Scope extends Enum
     {
         return new static(self::PROTOTYPE);
     }
+
+    /**
+     * Exports the object to valid PHP code.
+     *
+     * @return string
+     */
+    public function exportToPHP()
+    {
+        return sprintf('new \DI\Scope(%s)', var_export($this->value, true));
+    }
 }

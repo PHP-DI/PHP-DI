@@ -9,17 +9,18 @@
 
 namespace UnitTests\DI;
 
+use DI\Compiler\CompiledContainer;
+use DI\Container;
 use DI\ContainerBuilder;
 use UnitTests\DI\Fixtures\FakeContainer;
 
 /**
  * Test class for ContainerBuilder
+ *
+ * @covers \DI\ContainerBuilder
  */
 class ContainerBuilderTest extends \PHPUnit_Framework_TestCase
 {
-    /**
-     * @covers \DI\ContainerBuilder
-     */
     public function testDefaultConfiguration()
     {
         // Make the ContainerBuilder use our fake class to catch constructor parameters
@@ -31,9 +32,6 @@ class ContainerBuilderTest extends \PHPUnit_Framework_TestCase
         $this->assertNull($container->definitionManager->getCache());
     }
 
-    /**
-     * @covers \DI\ContainerBuilder
-     */
     public function testSetCache()
     {
         $cache = $this->getMockForAbstractClass('Doctrine\Common\Cache\Cache');
@@ -49,7 +47,6 @@ class ContainerBuilderTest extends \PHPUnit_Framework_TestCase
 
     /**
      * By default, the definition resolvers should not be overridden
-     * @covers \DI\ContainerBuilder
      */
     public function testContainerNotWrapped()
     {
@@ -60,9 +57,6 @@ class ContainerBuilderTest extends \PHPUnit_Framework_TestCase
         $this->assertNull($container->wrapperContainer);
     }
 
-    /**
-     * @covers \DI\ContainerBuilder
-     */
     public function testContainerWrapped()
     {
         $otherContainer = $this->getMockForAbstractClass('DI\ContainerInterface');
@@ -76,9 +70,18 @@ class ContainerBuilderTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($otherContainer, $container->wrapperContainer);
     }
 
-    /**
-     * @covers \DI\ContainerBuilder
-     */
+    public function testCompiledContainer()
+    {
+        $builder = new ContainerBuilder();
+        $builder->compileContainer(__DIR__ . '/Fixtures/writableDirectory');
+
+        $container = $builder->build();
+
+        // TODO do more tests
+        $this->assertTrue($container instanceof Container);
+        $this->assertTrue($container instanceof CompiledContainer);
+    }
+
     public function testFluentInterface()
     {
         $builder = new ContainerBuilder();

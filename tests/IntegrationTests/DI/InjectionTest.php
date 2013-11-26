@@ -25,10 +25,21 @@ use IntegrationTests\DI\Fixtures\LazyDependency;
  */
 class InjectionTest extends \PHPUnit_Framework_TestCase
 {
-    const DEFINITION_REFLECTION = 1;
-    const DEFINITION_ANNOTATIONS = 2;
-    const DEFINITION_ARRAY = 3;
-    const DEFINITION_PHP = 4;
+    const DEFINITION_REFLECTION = 0;
+    const DEFINITION_ANNOTATIONS = 1;
+    const DEFINITION_ARRAY = 2;
+    const DEFINITION_PHP = 3;
+    const DEFINITION_COMPILED_REFLECTION = 4;
+
+    public function setUp()
+    {
+        // Clear all files in directory
+        foreach (glob(__DIR__ . '/compiled/*.php') as $file) {
+            if (is_file($file)) {
+                unlink($file);
+            }
+        }
+    }
 
     /**
      * PHPUnit data provider: generates container configurations for running the same tests
@@ -44,7 +55,6 @@ class InjectionTest extends \PHPUnit_Framework_TestCase
         $containerReflection = $builder->build();
         // We have to define some entries for the test because reflection on itself doesn't make it possible
         $containerReflection->set('foo', 'bar');
-        $containerReflection->set('IntegrationTests\DI\Fixtures\Class1', \DI\object()->withScope(Scope::PROTOTYPE()));
         $containerReflection->set(
             'IntegrationTests\DI\Fixtures\Interface1',
             \DI\object('IntegrationTests\DI\Fixtures\Implementation1')
@@ -112,33 +122,27 @@ class InjectionTest extends \PHPUnit_Framework_TestCase
         $containerPHP->set('IntegrationTests\DI\Fixtures\LazyDependency', \DI\object()->lazy());
         $containerPHP->set('alias', \DI\link('namedDependency'));
 
+        // Test with a compiled container using reflection
+        $builder = new ContainerBuilder();
+        $builder->compileContainer(__DIR__ . '/compiled');
+        $builder->useReflection(true);
+        $builder->useAnnotations(false);
+        $compiledContainerReflection = $builder->build();
+        $compiledContainerReflection->addDefinitions(array(
+            'foo'                 => 'bar',
+            'IntegrationTests\DI\Fixtures\Class1'     => Entry::object()->withScope(Scope::PROTOTYPE()),
+            'IntegrationTests\DI\Fixtures\Interface1' => Entry::object('IntegrationTests\DI\Fixtures\Implementation1'),
+            'namedDependency'     => Entry::object('IntegrationTests\DI\Fixtures\Class2'),
+            'IntegrationTests\DI\Fixtures\LazyDependency' => Entry::object()->lazy(),
+            'alias'               => Entry::link('namedDependency'),
+        ));
+
         return array(
-            'autowiring' => array(self::DEFINITION_REFLECTION, $containerReflection),
-            'annotation' => array(self::DEFINITION_ANNOTATIONS, $containerAnnotations),
-            'array'      => array(self::DEFINITION_ARRAY, $containerArray),
-            'php'        => array(self::DEFINITION_PHP, $containerPHP),
-        );
-    }
-
-    /**
-     * @dataProvider containerProvider
-     */
-    public function testContainerGetSingleton($type, Container $container)
-    {
-        $this->assertSame(
-            $container->get('IntegrationTests\DI\Fixtures\Class2'),
-            $container->get('IntegrationTests\DI\Fixtures\Class2')
-        );
-    }
-
-    /**
-     * @dataProvider containerProvider
-     */
-    public function testContainerGetPrototype($type, Container $container)
-    {
-        $this->assertNotSame(
-            $container->get('IntegrationTests\DI\Fixtures\Class1'),
-            $container->get('IntegrationTests\DI\Fixtures\Class1')
+            'autowiring'   => array(self::DEFINITION_REFLECTION, $containerReflection),
+            'annotation'   => array(self::DEFINITION_ANNOTATIONS, $containerAnnotations),
+            'array'        => array(self::DEFINITION_ARRAY, $containerArray),
+            'php'          => array(self::DEFINITION_PHP, $containerPHP),
+            'php-compiled' => array(self::DEFINITION_COMPILED_REFLECTION, $compiledContainerReflection),
         );
     }
 
@@ -184,7 +188,7 @@ class InjectionTest extends \PHPUnit_Framework_TestCase
     public function testPropertyInjection($type, Container $container)
     {
         // Only constructor injection with reflection
-        if ($type == self::DEFINITION_REFLECTION) {
+        if ($type == self::DEFINITION_REFLECTION || $type == self::DEFINITION_COMPILED_REFLECTION) {
             return;
         }
         /** @var $class1 Class1 */
@@ -211,7 +215,7 @@ class InjectionTest extends \PHPUnit_Framework_TestCase
     public function testPropertyInjectionExistingObject($type, Container $container)
     {
         // Only constructor injection with reflection
-        if ($type == self::DEFINITION_REFLECTION) {
+        if ($type == self::DEFINITION_REFLECTION || $type == self::DEFINITION_COMPILED_REFLECTION) {
             return;
         }
         /** @var $class1 Class1 */
@@ -239,7 +243,7 @@ class InjectionTest extends \PHPUnit_Framework_TestCase
     public function testMethodInjection($type, Container $container)
     {
         // Only constructor injection with reflection
-        if ($type == self::DEFINITION_REFLECTION) {
+        if ($type == self::DEFINITION_REFLECTION || $type == self::DEFINITION_COMPILED_REFLECTION) {
             return;
         }
         /** @var $class1 Class1 */
@@ -277,7 +281,7 @@ class InjectionTest extends \PHPUnit_Framework_TestCase
     public function testMethodInjectionExistingObject($type, Container $container)
     {
         // Only constructor injection with reflection
-        if ($type == self::DEFINITION_REFLECTION) {
+        if ($type == self::DEFINITION_REFLECTION || $type == self::DEFINITION_COMPILED_REFLECTION) {
             return;
         }
         /** @var $class1 Class1 */
@@ -294,7 +298,7 @@ class InjectionTest extends \PHPUnit_Framework_TestCase
     public function testScope($type, Container $container)
     {
         // Only constructor injection with reflection
-        if ($type == self::DEFINITION_REFLECTION) {
+        if ($type == self::DEFINITION_REFLECTION || $type == self::DEFINITION_COMPILED_REFLECTION) {
             return;
         }
         $class1_1 = $container->get('IntegrationTests\DI\Fixtures\Class1');

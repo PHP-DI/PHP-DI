@@ -114,6 +114,7 @@ class ClassDefinitionResolver implements DefinitionResolver
      */
     private function createProxy(ClassDefinition $definition)
     {
+        // Because of PHP 5.3
         $resolver = $this;
 
         /** @noinspection PhpUnusedParameterInspection */

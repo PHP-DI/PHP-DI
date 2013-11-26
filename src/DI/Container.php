@@ -34,25 +34,25 @@ class Container implements ContainerInterface
      * Map of entries with Singleton scope
      * @var array
      */
-    private $resolvedEntries = array();
+    protected $resolvedEntries = array();
 
     /**
      * @var DefinitionManager
      */
-    private $definitionManager;
+    protected $definitionManager;
 
     /**
      * Map of definition resolvers, indexed by the classname of the definition it resolves.
      *
      * @var DefinitionResolver[]
      */
-    private $definitionResolvers;
+    protected $definitionResolvers;
 
     /**
      * Array of entries being resolved. Used to avoid circular dependencies and infinite loops.
      * @var array
      */
-    private $entriesBeingResolved = array();
+    protected $entriesBeingResolved = array();
 
     /**
      * Use the ContainerBuilder to ease constructing the Container.
