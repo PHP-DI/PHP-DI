@@ -20,7 +20,7 @@ class ClassDefinitionCompilerMethodTest extends \PHPUnit_Framework_TestCase
 {
     public function testEmptyConstructor()
     {
-        $entry = Entry::object('UnitTests\DI\Compiler\DefinitionCompiler\Fixtures\Class2')
+        $entry = \DI\object('UnitTests\DI\Compiler\DefinitionCompiler\Fixtures\Class2')
             ->withScope(Scope::PROTOTYPE())
             ->withMethod('setThing');
 
@@ -38,11 +38,11 @@ PHP;
 
     public function testWithParameters()
     {
-        $entry = Entry::object('UnitTests\DI\Compiler\DefinitionCompiler\Fixtures\Class2')
+        $entry = \DI\object('UnitTests\DI\Compiler\DefinitionCompiler\Fixtures\Class2')
             ->withScope(Scope::PROTOTYPE())
             ->withMethod(
                 'setWithParams',
-                Entry::link('UnitTests\DI\Compiler\DefinitionCompiler\Fixtures\Class2'),
+                \DI\link('UnitTests\DI\Compiler\DefinitionCompiler\Fixtures\Class2'),
                 'foo'
             );
 
@@ -63,7 +63,7 @@ PHP;
 
     public function testDefaultValues()
     {
-        $entry = Entry::object('UnitTests\DI\Compiler\DefinitionCompiler\Fixtures\Class2')
+        $entry = \DI\object('UnitTests\DI\Compiler\DefinitionCompiler\Fixtures\Class2')
             ->withScope(Scope::PROTOTYPE())
             ->withMethod('setWithDefaultValues');
 
@@ -85,7 +85,7 @@ PHP;
      */
     public function testWrongNumberOfParameters()
     {
-        $entry = Entry::object('UnitTests\DI\Compiler\DefinitionCompiler\Fixtures\Class1');
+        $entry = \DI\object('UnitTests\DI\Compiler\DefinitionCompiler\Fixtures\Class1');
 
         $resolver = new ClassDefinitionCompiler();
         $resolver->compile($entry->getDefinition('class1'));

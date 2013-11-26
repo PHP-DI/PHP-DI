@@ -19,7 +19,7 @@ class ClassDefinitionCompilerProxyTest extends \PHPUnit_Framework_TestCase
 {
     public function testSimpleProxy()
     {
-        $entry = Entry::object('UnitTests\DI\Compiler\DefinitionCompiler\Fixtures\Class2')
+        $entry = \DI\object('UnitTests\DI\Compiler\DefinitionCompiler\Fixtures\Class2')
             ->lazy();
 
         $resolver = new ClassDefinitionCompiler();

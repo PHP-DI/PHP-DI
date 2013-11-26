@@ -18,7 +18,7 @@ class ClassDefinitionCompilerTest extends \PHPUnit_Framework_TestCase
 {
     public function testPrototype()
     {
-        $entry = Entry::object('UnitTests\DI\Compiler\DefinitionCompiler\Fixtures\Class2')
+        $entry = \DI\object('UnitTests\DI\Compiler\DefinitionCompiler\Fixtures\Class2')
             ->withScope(Scope::PROTOTYPE());
 
         $resolver = new ClassDefinitionCompiler();
@@ -34,7 +34,7 @@ PHP;
 
     public function testSingleton()
     {
-        $entry = Entry::object('UnitTests\DI\Compiler\DefinitionCompiler\Fixtures\Class2')
+        $entry = \DI\object('UnitTests\DI\Compiler\DefinitionCompiler\Fixtures\Class2')
             ->withScope(Scope::SINGLETON());
 
         $resolver = new ClassDefinitionCompiler();
