@@ -37,4 +37,8 @@ return array(
             ->lazy(),
 
     'alias' => DI\link('namedDependency'),
+
+    'factory' => DI\factory(function () {
+        return 42;
+    }),
 );
