@@ -17,6 +17,7 @@ use DI\Definition\Definition;
 use DI\Definition\EntryReference;
 use DI\Definition\Exception\DefinitionException;
 use DI\DependencyException;
+use DI\Scope;
 use ReflectionClass;
 use ReflectionException;
 use ReflectionMethod;
@@ -48,12 +49,6 @@ class ClassDefinitionCompiler implements DefinitionCompiler
             throw new DependencyException("$classReflection->name is not instantiable");
         }
 
-        // Lazy?
-        if ($definition->isLazy()) {
-            // TODO
-            throw new \Exception("TODO");
-        }
-
         // Constructor
         $code = $this->compileConstructor($classReflection, $definition->getConstructorInjection());
 
@@ -67,9 +62,17 @@ class ClassDefinitionCompiler implements DefinitionCompiler
             $code .= PHP_EOL . $this->compileMethod($classReflection, $methodInjection);
         }
 
-        $code .= PHP_EOL . 'return $object;';
+        // Lazy -> proxy
+        if ($definition->isLazy()) {
+            return $this->compileProxy($definition, $code);
+        }
 
-        return $code;
+        // Singleton
+        if ($definition->getScope() == Scope::SINGLETON()) {
+            return $code . PHP_EOL . 'return new \DI\Compiler\SharedEntry($object);';
+        }
+
+        return $code . PHP_EOL . 'return $object;';
     }
 
     private function compileConstructor(ReflectionClass $classReflection, MethodInjection $constructorInjection = null)
@@ -160,18 +163,18 @@ PHP;
 
         $args = array();
         foreach ($parameterInjections as $index => $value) {
+            // If the parameter is optional and wasn't specified, we take its default value
             if ($value instanceof UndefinedInjection) {
-                // If the parameter is optional and wasn't specified, we take its default value
                 if ($reflectionParameters[$index]->isOptional()) {
-                    $args[] = $this->getParameterDefaultValue($reflectionParameters[$index], $methodReflection);
-                    continue;
+                    $value = $this->getParameterDefaultValue($reflectionParameters[$index], $methodReflection);
+                } else {
+                    throw new DefinitionException(sprintf(
+                        "The parameter '%s' of %s::%s has no value defined or guessable",
+                        $reflectionParameters[$index]->getName(),
+                        $methodReflection->getDeclaringClass()->getName(),
+                        $methodReflection->getName()
+                    ));
                 }
-                throw new DefinitionException(sprintf(
-                    "The parameter '%s' of %s::%s has no value defined or guessable",
-                    $reflectionParameters[$index]->getName(),
-                    $methodReflection->getDeclaringClass()->getName(),
-                    $methodReflection->getName()
-                ));
             }
 
             if ($value instanceof EntryReference) {
@@ -208,6 +211,30 @@ PHP;
                 $reflectionMethod->getName()
             ));
         }
+    }
+
+    /**
+     * Compile a class definition in a proxy.
+     *
+     * @param ClassDefinition $definition
+     * @param string          $code
+     *
+     * @return string
+     */
+    private function compileProxy(ClassDefinition $definition, $code)
+    {
+        $code = $this->indent($code);
+        $className = $definition->getClassName();
+
+        return <<<PHP
+\$resolver = function (& \$wrappedObject, \$proxy, \$method, \$parameters, & \$initializer) {
+$code
+    \$wrappedObject = \$object;
+    \$initializer = null;
+    return true;
+};
+return \$this->createProxy('$className', \$resolver);
+PHP;
     }
 
     /**

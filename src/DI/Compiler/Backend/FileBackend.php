@@ -9,8 +9,10 @@
 
 namespace DI\Compiler\Backend;
 
+use Closure;
 use DI\ContainerInterface;
 use DI\NotFoundException;
+use ProxyManager\Factory\LazyLoadingValueHolderFactory;
 
 /**
  * Stores compiled definitions to PHP files.
@@ -24,14 +26,21 @@ class FileBackend implements Backend, ContainerInterface
     private $path;
 
     /**
+     * @var LazyLoadingValueHolderFactory
+     */
+    private $proxyFactory;
+
+    /**
      * @var ContainerInterface|null
      */
     private $container;
 
     /**
-     * @param string $path Directory in which to write and read the files. The process must have read and write access.
+     * @param string                        $path         Directory in which to write and read the files.
+     *                                                    The process must have read and write access.
+     * @param LazyLoadingValueHolderFactory $proxyFactory Used to create proxies for lazy injections.
      */
-    public function __construct($path)
+    public function __construct($path, LazyLoadingValueHolderFactory $proxyFactory)
     {
         if (! is_writable($path)) {
             throw new \InvalidArgumentException(sprintf(
@@ -41,6 +50,7 @@ class FileBackend implements Backend, ContainerInterface
         }
 
         $this->path = $path;
+        $this->proxyFactory = $proxyFactory;
     }
 
     /**
@@ -72,7 +82,7 @@ class FileBackend implements Backend, ContainerInterface
     /**
      * Reads an entry from a PHP file named after the entry name.
      *
-     * Just include that file.
+     * Just include the file.
      *
      * {@inheritdoc}
      */
@@ -89,8 +99,6 @@ class FileBackend implements Backend, ContainerInterface
 
         // Include the PHP file, which should return a value
         $entry = include $fileName;
-
-        $this->container = null;
 
         return $entry;
     }
@@ -133,5 +141,18 @@ class FileBackend implements Backend, ContainerInterface
     public function has($name)
     {
         return $this->container->has($name);
+    }
+
+    /**
+     * Creates and returns a proxy instance.
+     *
+     * @param string  $className
+     * @param Closure $initializer
+     *
+     * @return object Proxy instance
+     */
+    private function createProxy($className, Closure $initializer)
+    {
+        return $this->proxyFactory->createProxy($className, $initializer);
     }
 }

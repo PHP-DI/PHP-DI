@@ -11,6 +11,7 @@ namespace UnitTests\DI\Compiler\DefinitionCompiler;
 
 use DI\Compiler\DefinitionCompiler\ClassDefinitionCompiler;
 use DI\Entry;
+use DI\Scope;
 
 /**
  * Tests only the generation of setters
@@ -20,6 +21,7 @@ class ClassDefinitionCompilerMethodTest extends \PHPUnit_Framework_TestCase
     public function testEmptyConstructor()
     {
         $entry = Entry::object('UnitTests\DI\Compiler\DefinitionCompiler\Fixtures\Class2')
+            ->withScope(Scope::PROTOTYPE())
             ->withMethod('setThing');
 
         $resolver = new ClassDefinitionCompiler();
@@ -37,6 +39,7 @@ PHP;
     public function testWithParameters()
     {
         $entry = Entry::object('UnitTests\DI\Compiler\DefinitionCompiler\Fixtures\Class2')
+            ->withScope(Scope::PROTOTYPE())
             ->withMethod(
                 'setWithParams',
                 Entry::link('UnitTests\DI\Compiler\DefinitionCompiler\Fixtures\Class2'),
@@ -61,6 +64,7 @@ PHP;
     public function testDefaultValues()
     {
         $entry = Entry::object('UnitTests\DI\Compiler\DefinitionCompiler\Fixtures\Class2')
+            ->withScope(Scope::PROTOTYPE())
             ->withMethod('setWithDefaultValues');
 
         $resolver = new ClassDefinitionCompiler();
