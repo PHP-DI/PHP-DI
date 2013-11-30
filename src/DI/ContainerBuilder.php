@@ -10,6 +10,7 @@
 namespace DI;
 
 use DI\Definition\DefinitionManager;
+use DI\Definition\Source\DefinitionSource;
 use Doctrine\Common\Cache\Cache;
 use InvalidArgumentException;
 use ProxyManager\Configuration;
@@ -71,6 +72,12 @@ class ContainerBuilder
     private $wrapperContainer;
 
     /**
+     * Source of definitions for the container.
+     * @var DefinitionSource[]
+     */
+    private $definitionSources = array();
+
+    /**
      * Build a container configured for the dev environment.
      *
      * @return Container
@@ -101,6 +108,9 @@ class ContainerBuilder
         }
         if ($this->cache) {
             $definitionManager->setCache($this->cache);
+        }
+        foreach ($this->definitionSources as $definitionSource) {
+            $definitionManager->addDefinitionSource($definitionSource);
         }
 
         // Proxy factory
@@ -200,6 +210,19 @@ class ContainerBuilder
         $this->wrapperContainer = $otherContainer;
 
         return $this;
+    }
+
+    /**
+     * Add definitions to the container by adding a source of definitions.
+     *
+     * Do not add ReflectionDefinitionSource or AnnotationDefinitionSource manually, they should be
+     * handled with useReflection() and useAnnotations().
+     *
+     * @param DefinitionSource $definitionSource
+     */
+    public function addDefinitions(DefinitionSource $definitionSource)
+    {
+        $this->definitionSources[] = $definitionSource;
     }
 
     /**

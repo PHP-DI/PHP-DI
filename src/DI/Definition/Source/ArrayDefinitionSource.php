@@ -11,16 +11,28 @@ namespace DI\Definition\Source;
 
 use DI\Definition\ClassDefinition;
 use DI\Definition\Definition;
+use DI\Definition\Exception\DefinitionException;
 use DI\Definition\ValueDefinition;
 use DI\DefinitionHelper\DefinitionHelper;
 
 /**
- * Reads DI definitions from a PHP array
+ * Reads DI definitions from a PHP array, or a file returning a PHP array.
  *
  * @author Matthieu Napoli <matthieu@mnapoli.fr>
  */
 class ArrayDefinitionSource implements DefinitionSource
 {
+    /**
+     * @var bool
+     */
+    private $initialized;
+
+    /**
+     * File containing definitions, or null if the definitions are given as a PHP array.
+     * @var string|null
+     */
+    private $file;
+
     /**
      * DI definitions in a PHP array
      * @var array
@@ -28,10 +40,31 @@ class ArrayDefinitionSource implements DefinitionSource
     private $definitions = array();
 
     /**
+     * @param string|null $file File in which the definitions are returned as an array.
+     */
+    public function __construct($file = null)
+    {
+        if (! $file) {
+            $this->initialized = true;
+            return;
+        }
+
+        if (! is_readable($file)) {
+            throw new DefinitionException("File $file doesn't exist or is not readable");
+        }
+
+        // If we are given a file containing an array, we lazy-load it to improve performance
+        $this->initialized = false;
+        $this->file = $file;
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function getDefinition($name)
     {
+        $this->initialize();
+
         if (!array_key_exists($name, $this->definitions)) {
             if (class_exists($name)) {
                 $definition = new ClassDefinition($name);
@@ -60,7 +93,7 @@ class ArrayDefinitionSource implements DefinitionSource
     }
 
     /**
-     * @param array $definitions DI definitions in a PHP array
+     * @param array $definitions DI definitions in a PHP array.
      */
     public function addDefinitions(array $definitions)
     {
@@ -70,7 +103,28 @@ class ArrayDefinitionSource implements DefinitionSource
     }
 
     /**
-     * Merge a class definition which the definitions of its parent classes and its interfaces
+     * Lazy-loading of the definitions.
+     * @throws DefinitionException
+     */
+    private function initialize()
+    {
+        if ($this->initialized === true) {
+            return;
+        }
+
+        $definitions = require $this->file;
+
+        if (! is_array($definitions)) {
+            throw new DefinitionException("File {$this->file} should return an array of definitions");
+        }
+
+        $this->addDefinitions($definitions);
+
+        $this->initialized = true;
+    }
+
+    /**
+     * Merge a class definition which the definitions of its parent classes and its interfaces.
      *
      * @param string          $name
      * @param ClassDefinition $definition
