@@ -28,9 +28,9 @@ use ReflectionMethod;
 use UnexpectedValueException;
 
 /**
- * Source of DI class definitions in annotations such as @ Inject and @ var annotations
+ * Source of DI class definitions in annotations such as @ Inject and @ var annotations.
  *
- * Uses Reflection, Doctrine's Annotations and regex docblock parsing
+ * Uses Reflection, Doctrine's Annotations and regex docblock parsing.
  *
  * @author Matthieu Napoli <matthieu@mnapoli.fr>
  */
@@ -44,13 +44,7 @@ class AnnotationDefinitionSource implements DefinitionSource
     /**
      * @var PhpDocReader
      */
-    private $phpDocParser;
-
-
-    public function __construct()
-    {
-        $this->phpDocParser = new PhpDocReader();
-    }
+    private $phpDocReader;
 
     /**
      * {@inheritdoc}
@@ -62,17 +56,21 @@ class AnnotationDefinitionSource implements DefinitionSource
         if (!$this->classExists($name)) {
             return null;
         }
-        $reflectionClass = new ReflectionClass($name);
 
+        $reflectionClass = new ReflectionClass($name);
         $classDefinition = new ClassDefinition($name);
 
         // Injectable annotation
         /** @var $injectableAnnotation Injectable */
         try {
-            $injectableAnnotation = $this->getAnnotationReader()->getClassAnnotation($reflectionClass, 'DI\Annotation\Injectable');
+            $injectableAnnotation = $this->getAnnotationReader()
+                ->getClassAnnotation($reflectionClass, 'DI\Annotation\Injectable');
         } catch (UnexpectedValueException $e) {
-            throw new DefinitionException("Error while reading @Injectable on $reflectionClass->name: "
-                . $e->getMessage());
+            throw new DefinitionException(sprintf(
+                'Error while reading @Injectable on %s: %s',
+                $reflectionClass->getName(),
+                $e->getMessage()
+            ));
         }
 
         if ($injectableAnnotation) {
@@ -90,7 +88,7 @@ class AnnotationDefinitionSource implements DefinitionSource
         // Look for annotated constructor
         $constructor = $reflectionClass->getConstructor();
         if ($constructor) {
-            $this->readConstructor($reflectionClass, $constructor, $classDefinition);
+            $this->readConstructor($constructor, $classDefinition);
         }
 
         // Browse the object's methods looking for annotated methods
@@ -100,7 +98,8 @@ class AnnotationDefinitionSource implements DefinitionSource
     }
 
     /**
-     * Browse the class properties looking for annotated properties
+     * Browse the class properties looking for annotated properties.
+     *
      * @param ReflectionClass $reflectionClass
      * @param ClassDefinition $classDefinition
      */
@@ -122,7 +121,7 @@ class AnnotationDefinitionSource implements DefinitionSource
             $entryName = $annotation->getName();
 
             // Look for @var content
-            $entryName = $entryName ?: $this->phpDocParser->getPropertyType($property);
+            $entryName = $entryName ?: $this->getPhpDocReader()->getPropertyType($property);
 
             if ($entryName === null) {
                 $value = new UndefinedInjection();
@@ -137,12 +136,10 @@ class AnnotationDefinitionSource implements DefinitionSource
     }
 
     /**
-     * Browse the object's methods looking for annotated methods
-     * @param ReflectionClass   $reflectionClass
      * @param ReflectionMethod $reflectionMethod
-     * @param ClassDefinition   $classDefinition
+     * @param ClassDefinition  $classDefinition
      */
-    private function readConstructor(ReflectionClass $reflectionClass, ReflectionMethod $reflectionMethod, ClassDefinition $classDefinition)
+    private function readConstructor(ReflectionMethod $reflectionMethod, ClassDefinition $classDefinition)
     {
         // Look for @Inject annotation
         /** @var $annotation Inject|null */
@@ -150,7 +147,7 @@ class AnnotationDefinitionSource implements DefinitionSource
 
         if ($annotation) {
             // @Inject found, create MethodInjection
-            $parameters = $this->readMethodParameters($reflectionClass, $reflectionMethod, $annotation);
+            $parameters = $this->readMethodParameters($reflectionMethod, $annotation);
             $classDefinition->setConstructorInjection(
                 new MethodInjection($reflectionMethod->name, $parameters)
             );
@@ -158,7 +155,8 @@ class AnnotationDefinitionSource implements DefinitionSource
     }
 
     /**
-     * Browse the object's methods looking for annotated methods
+     * Browse the object's methods looking for annotated methods.
+     *
      * @param ReflectionClass $reflectionClass
      * @param ClassDefinition $classDefinition
      */
@@ -170,28 +168,25 @@ class AnnotationDefinitionSource implements DefinitionSource
                 continue;
             }
 
-            $this->readMethod($reflectionClass, $method, $classDefinition);
+            $this->readMethod($method, $classDefinition);
         }
     }
 
     /**
-     * Browse the object's methods looking for annotated methods
-     * @param ReflectionClass   $reflectionClass
+     * Browse the object's methods looking for annotated methods.
+     *
      * @param ReflectionMethod $reflectionMethod
-     * @param ClassDefinition   $classDefinition
+     * @param ClassDefinition  $classDefinition
      */
-    private function readMethod(
-        ReflectionClass $reflectionClass,
-        ReflectionMethod $reflectionMethod,
-        ClassDefinition $classDefinition
-    ) {
+    private function readMethod(ReflectionMethod $reflectionMethod, ClassDefinition $classDefinition)
+    {
         // Look for @Inject annotation
         /** @var $annotation Inject|null */
         $annotation = $this->getAnnotationReader()->getMethodAnnotation($reflectionMethod, 'DI\Annotation\Inject');
 
         if ($annotation) {
             // @Inject found, create MethodInjection
-            $parameters = $this->readMethodParameters($reflectionClass, $reflectionMethod, $annotation);
+            $parameters = $this->readMethodParameters($reflectionMethod, $annotation);
             $classDefinition->addMethodInjection(
                 new MethodInjection($reflectionMethod->name, $parameters)
             );
@@ -199,17 +194,13 @@ class AnnotationDefinitionSource implements DefinitionSource
     }
 
     /**
-     * @param ReflectionClass  $reflectionClass
      * @param ReflectionMethod $method
      * @param Inject           $annotation
      *
      * @return array
      */
-    private function readMethodParameters(
-        ReflectionClass $reflectionClass,
-        ReflectionMethod $method,
-        Inject $annotation
-    ) {
+    private function readMethodParameters(ReflectionMethod $method, Inject $annotation)
+    {
         $annotationParameters = $annotation->getParameters();
 
         $parameters = array();
@@ -224,7 +215,7 @@ class AnnotationDefinitionSource implements DefinitionSource
 
             // Look for @param tag or PHP type-hinting (only case where we use reflection)
             if ($entryName === null) {
-                $entryName = $this->phpDocParser->getParameterType($parameter);
+                $entryName = $this->getPhpDocReader()->getParameterType($parameter);
             }
 
             if ($entryName === null) {
@@ -248,6 +239,7 @@ class AnnotationDefinitionSource implements DefinitionSource
             $this->annotationReader = new SimpleAnnotationReader();
             $this->annotationReader->addNamespace('DI\Annotation');
         }
+
         return $this->annotationReader;
     }
 
@@ -266,5 +258,17 @@ class AnnotationDefinitionSource implements DefinitionSource
     private function classExists($class)
     {
         return class_exists($class) || interface_exists($class);
+    }
+
+    /**
+     * @return PhpDocReader
+     */
+    private function getPhpDocReader()
+    {
+        if ($this->phpDocReader === null) {
+            $this->phpDocReader = new PhpDocReader();
+        }
+
+        return $this->phpDocReader;
     }
 }
