@@ -65,12 +65,6 @@ class DefinitionManager
      */
     private $otherSources = array();
 
-    /**
-     * Enables/disable the validation of the definitions
-     * @var bool
-     */
-    private $definitionsValidation = false;
-
     public function __construct($useReflection = true, $useAnnotations = true)
     {
         $this->simpleSource = new SimpleDefinitionSource();
@@ -204,28 +198,6 @@ class DefinitionManager
     public function setCache(Cache $cache = null)
     {
         $this->cache = $cache;
-    }
-
-    /**
-     * Enables/disables the validation of the definitions
-     *
-     * By default, disabled
-     * @param bool $bool
-     */
-    public function setDefinitionsValidation($bool)
-    {
-        $this->definitionsValidation = (bool) $bool;
-    }
-
-    /**
-     * Returns the state of the validation of the definitions
-     *
-     * By default, disabled
-     * @return bool
-     */
-    public function getDefinitionsValidation()
-    {
-        return $this->definitionsValidation;
     }
 
     /**

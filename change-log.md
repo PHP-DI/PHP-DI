@@ -12,6 +12,7 @@ BC-breaks:
 * `ContainerSingleton` has been removed
 * You cannot configure an injection as lazy anymore, you can only configure a container entry as lazy
 * The Container constructor now takes mandatory parameters. Use the ContainerBuilder to create a Container.
+* Removed `ContainerBuilder::setDefinitionsValidation()` (no definition validation anymore)
 
 All changes:
 

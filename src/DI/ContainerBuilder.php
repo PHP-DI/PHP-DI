@@ -44,11 +44,6 @@ class ContainerBuilder
     private $useAnnotations = true;
 
     /**
-     * @var boolean
-     */
-    private $definitionsValidation;
-
-    /**
      * @var Cache
      */
     private $cache;
@@ -103,9 +98,6 @@ class ContainerBuilder
     {
         // Definition manager
         $definitionManager = new DefinitionManager($this->useReflection, $this->useAnnotations);
-        if ($this->definitionsValidation) {
-            $definitionManager->setDefinitionsValidation($this->definitionsValidation);
-        }
         if ($this->cache) {
             $definitionManager->setCache($this->cache);
         }
@@ -144,19 +136,6 @@ class ContainerBuilder
     public function useAnnotations($bool)
     {
         $this->useAnnotations = $bool;
-        return $this;
-    }
-
-    /**
-     * Enables/disables the validation of the definitions
-     *
-     * By default, disabled
-     * @param bool $bool
-     * @return ContainerBuilder
-     */
-    public function setDefinitionsValidation($bool)
-    {
-        $this->definitionsValidation = $bool;
         return $this;
     }
 

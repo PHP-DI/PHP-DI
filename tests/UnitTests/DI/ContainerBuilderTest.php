@@ -26,8 +26,6 @@ class ContainerBuilderTest extends \PHPUnit_Framework_TestCase
 
         // No cache
         $this->assertNull($container->definitionManager->getCache());
-        // No definition validation
-        $this->assertFalse($container->definitionManager->getDefinitionsValidation());
     }
 
     public function testSetCache()
@@ -41,17 +39,6 @@ class ContainerBuilderTest extends \PHPUnit_Framework_TestCase
         $container = $builder->build();
 
         $this->assertSame($cache, $container->definitionManager->getCache());
-    }
-
-    public function testSetDefinitionsValidation()
-    {
-        $builder = new ContainerBuilder('UnitTests\DI\Fixtures\FakeContainer');
-        $builder->setDefinitionsValidation(true);
-
-        /** @var FakeContainer $container */
-        $container = $builder->build();
-
-        $this->assertTrue($container->definitionManager->getDefinitionsValidation());
     }
 
     /**
@@ -99,12 +86,6 @@ class ContainerBuilderTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($builder, $result);
 
         $result = $builder->writeProxiesToFile(false);
-        $this->assertSame($builder, $result);
-
-        $result = $builder->setDefinitionsValidation(true);
-        $this->assertSame($builder, $result);
-
-        $result = $builder->setDefinitionsValidation(false);
         $this->assertSame($builder, $result);
 
         $mockCache = $this->getMockForAbstractClass('Doctrine\Common\Cache\Cache');
