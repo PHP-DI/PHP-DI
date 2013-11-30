@@ -3,10 +3,9 @@
 
 ## Installation
 
-Requires **PHP 5.4.0** or higher.
+PHP-DI works with **PHP 5.3** or higher. But seriously, use 5.4 or even 5.5.
 
 The easiest way is to install PHP-DI with [Composer](http://getcomposer.org/doc/00-intro.md).
-
 Create a file named `composer.json` in your project root:
 
 ```json
@@ -24,7 +23,7 @@ $ curl -s http://getcomposer.org/installer | php
 $ php composer.phar install
 ```
 
-If you don't use Composer, you can directly [download](https://github.com/mnapoli/PHP-DI/tags) the sources and configure it with your autoloader.
+If you don't use Composer, you can directly [download](https://github.com/mnapoli/PHP-DI/releases) the sources and configure it with your autoloader.
 
 
 ## Usage
@@ -83,7 +82,7 @@ class Foo {
     }
 
     /**
-     * @Inject({"dbHost", "dbPort"})
+     * @Inject({"db.host", "db.port"})
      */
     public function setValues($param1, $param2) {
     }
@@ -92,51 +91,35 @@ class Foo {
 
 See also the [complete documentation about annotations](definition.md).
 
-#### PHP code
-
-```php
-$container = new Container();
-
-// Values (not classes)
-$container->set('db.host', 'localhost');
-$container->set('db.port', 5000);
-
-// Defines an instance of My\Class
-$container->set('My\Class')
-    ->withConstructor(array('db.host', 'My\Interface'));
-
-// Mapping an interface to an implementation
-$container->set('My\Interface')
-    ->bindTo('My\Implementation');
-```
-
 #### PHP array
 
-You can define injections with a PHP array too:
+You can define injections with a PHP array too (this example uses PHP 5.4 and 5.5 features):
 
 ```php
 <?php
 return [
 
-    // Values (not classes)
-    'dbHost' => 'localhost',
-    'dbPort' => 5000,
+    // Values
+    'db.host' => 'localhost',
+    'db.port' => 5000,
 
     // Class
-    'My\Foo' => [
-        'properties' => [
-            'bar' => 'Bar',
-        ],
-        'methods' => [
-            'setBaz' => 'Baz',
-            'setValues' => ['dbHost', 'dbPort'],
-        ],
-    ],
+    MyDbAdapter::class => DI\object()
+        ->withConstructor(DI\link('db.host'), DI\link('db.port')),
 
 ];
 ```
 
 See also the [complete documentation about array configuration](definition.md).
+
+You need to configure the container to import this file:
+
+```php
+$builder = new ContainerBuilder();
+$builder->addDefinitions(new ArrayDefinitionSource('config.php'));
+
+$container = $builder->build();
+```
 
 
 ### 2: Get objects from the container
@@ -145,55 +128,21 @@ See also the [complete documentation about array configuration](definition.md).
 $foo = $container->get('Foo');
 ```
 
-But wait! Do not use this everywhere because this makes your code **dependent on the container**. This is an antipattern to dependency injection (it is like the service locator pattern: dependency *fetching* rather than *injection*).
+But wait! Do not use this everywhere because this makes your code **dependent on the container**.
+This is an antipattern to dependency injection (it is like the service locator pattern: dependency *fetching* rather than *injection*).
 
-So PHP-DI container should be called at the root of your application (in your Front Controller for example). To quote the Symfony docs about Dependency Injection:
+So PHP-DI container should be called at the root of your application (in your Front Controller for example).
+To quote the Symfony docs about Dependency Injection:
 
 > You will need to get [an object] from the container at some point but this should be as few times as possible at the entry point to your application.
 
-For this reason, we are trying to provide integration with MVC frameworks (work in progress).
+For this reason, we are trying to provide integration with MVC frameworks (see below).
 
 To sum up:
 
 - If you can, use `$container->get()` in you root application class or front controller
 - Else, use `$container->get()` in your controllers (but avoid it in your services) but keep in mind that your controllers will be dependent on the container
 
-#### Zend Framework 1
+#### Frameworks integration
 
-If you are using ZF1, PHP-DI provides easy and clean integration so that you don't have to call the container (see above about the Service Locator pattern).
-
-First, install the bridge to ZF1:
-
-```json
-{
-    "require": {
-        "mnapoli/php-di": "The version you want here",
-        "mnapoli/php-di-zf1": "*"
-    }
-}
-```
-
-To use PHP-DI in your ZF1 application, you need to change the Dispatcher used by the Front Controller in the Bootstrap.
-
-```php
-    protected function _initDependencyInjection() {
-        $container = new \DI\Container();
-
-        $dispatcher = new \DI\ZendFramework1\Dispatcher();
-        $dispatcher->setContainer($container);
-
-        Zend_Controller_Front::getInstance()->setDispatcher($dispatcher);
-    }
-```
-
-**That's it!**
-
-Now you have dependency injection **in your controllers**.
-
-**Warning**: if you use Zend's autoloader (and not Composer), you will need to configure it:
-
-```php
-$autoloader->suppressNotFoundWarnings(true);
-```
-
-Read more on the [PHP-DI-ZF1 project on Github](https://github.com/mnapoli/PHP-DI-ZF1).
+- [Zend Framework 1](frameworks/zf1.md)
