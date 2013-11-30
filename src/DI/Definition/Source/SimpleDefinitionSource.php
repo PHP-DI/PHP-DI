@@ -12,13 +12,12 @@ namespace DI\Definition\Source;
 use DI\Definition\Definition;
 
 /**
- * Simple container of Definitions
+ * Simple container of definitions, for definitions set on the fly.
  *
  * @author Matthieu Napoli <matthieu@mnapoli.fr>
  */
 class SimpleDefinitionSource implements DefinitionSource
 {
-
     /**
      * @var Definition[]
      */
@@ -45,5 +44,4 @@ class SimpleDefinitionSource implements DefinitionSource
     {
         $this->definitions[$definition->getName()] = $definition;
     }
-
 }
