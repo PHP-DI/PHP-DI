@@ -26,10 +26,7 @@ $ php composer.phar install
 If you don't use Composer, you can directly [download](https://github.com/mnapoli/PHP-DI/releases) the sources and configure it with your autoloader.
 
 
-## Usage
-
-
-### 1: Define dependencies
+## Define dependencies
 
 
 You have to define a dependency graph between your objects, which we can represent like so (nodes are objects, links are dependencies):
@@ -41,7 +38,7 @@ PHP-DI offers several ways to define dependencies, so use which ones you like.
 Below is a quick introduction to some options, but you can also read [the full documentation](definition.md).
 
 
-#### Autowiring
+### Autowiring
 
 PHP-DI can use [PHP Reflection](http://fr.php.net/manual/fr/book.reflection.php) to understand what parameters a constructor needs:
 
@@ -59,9 +56,15 @@ PHP-DI will know that it should inject an instance of the `Bar` interface or cla
 
 **No configuration needed!**
 
-Of course, this is limited to constructor injection.
+Of course, this comes with limitations:
 
-#### Annotations
+- only works with constructor injection
+- only works if your parameters are classes, and are typed (else PHP-DI can't guess what you expect)
+- if the type of the parameter is an interface, you will need to configure which implementation to use in the config file (see below)
+
+However, autowiring generally covers 80% of the cases.
+
+### Annotations
 
 You can also use annotations to define injections, here is a short example:
 
@@ -91,7 +94,7 @@ class Foo {
 
 See also the [complete documentation about annotations](definition.md).
 
-#### PHP array
+### PHP array
 
 You can define injections with a PHP array too (this example uses PHP 5.4 and 5.5 features):
 
@@ -122,7 +125,7 @@ $container = $builder->build();
 ```
 
 
-### 2: Get objects from the container
+## Get objects from the container
 
 ```php
 $foo = $container->get('Foo');
@@ -146,3 +149,13 @@ To sum up:
 #### Frameworks integration
 
 - [Zend Framework 1](frameworks/zf1.md)
+
+
+## What's next
+
+You can head over to [the documentation](README.md).
+
+Here are some topics that might interest you right now:
+
+- [Configuring the container](container-configuration.md)
+- [Define injections](definition.md)
