@@ -11,7 +11,6 @@ namespace IntegrationTests\DI;
 
 use DI\ContainerBuilder;
 use DI\Definition\Source\ArrayDefinitionSource;
-use DI\Entry;
 use DI\Scope;
 use DI\Container;
 use IntegrationTests\DI\Fixtures\Class1;
@@ -43,10 +42,10 @@ class InjectionTest extends \PHPUnit_Framework_TestCase
         $containerReflection = $builder->build();
         $containerReflection->addDefinitions(array(
             'foo'                 => 'bar',
-            'IntegrationTests\DI\Fixtures\Interface1' => Entry::object('IntegrationTests\DI\Fixtures\Implementation1'),
-            'namedDependency'     => Entry::object('IntegrationTests\DI\Fixtures\Class2'),
-            'IntegrationTests\DI\Fixtures\LazyDependency' => Entry::object()->lazy(),
-            'alias'               => Entry::link('namedDependency'),
+            'IntegrationTests\DI\Fixtures\Interface1' => \DI\object('IntegrationTests\DI\Fixtures\Implementation1'),
+            'namedDependency'     => \DI\object('IntegrationTests\DI\Fixtures\Class2'),
+            'IntegrationTests\DI\Fixtures\LazyDependency' => \DI\object()->lazy(),
+            'alias'               => \DI\link('namedDependency'),
         ));
 
         // Test with a container using annotations and reflection
@@ -56,9 +55,9 @@ class InjectionTest extends \PHPUnit_Framework_TestCase
         $containerAnnotations = $builder->build();
         $containerAnnotations->addDefinitions(array(
             'foo'             => 'bar',
-            'IntegrationTests\DI\Fixtures\Interface1' => Entry::object('IntegrationTests\DI\Fixtures\Implementation1'),
-            'namedDependency' => Entry::object('IntegrationTests\DI\Fixtures\Class2'),
-            'alias'           => Entry::link('namedDependency'),
+            'IntegrationTests\DI\Fixtures\Interface1' => \DI\object('IntegrationTests\DI\Fixtures\Implementation1'),
+            'namedDependency' => \DI\object('IntegrationTests\DI\Fixtures\Class2'),
+            'alias'           => \DI\link('namedDependency'),
         ));
 
         // Test with a container using array configuration
@@ -76,33 +75,33 @@ class InjectionTest extends \PHPUnit_Framework_TestCase
         $containerPHP->set('foo', 'bar');
         $containerPHP->set(
             'IntegrationTests\DI\Fixtures\Class1',
-            Entry::object()
+            \DI\object()
                 ->withScope(Scope::PROTOTYPE())
-                ->withProperty('property1', Entry::link('IntegrationTests\DI\Fixtures\Class2'))
-                ->withProperty('property2', Entry::link('IntegrationTests\DI\Fixtures\Interface1'))
-                ->withProperty('property3', Entry::link('namedDependency'))
-                ->withProperty('property4', Entry::link('foo'))
-                ->withProperty('property5', Entry::link('IntegrationTests\DI\Fixtures\LazyDependency'))
+                ->withProperty('property1', \DI\link('IntegrationTests\DI\Fixtures\Class2'))
+                ->withProperty('property2', \DI\link('IntegrationTests\DI\Fixtures\Interface1'))
+                ->withProperty('property3', \DI\link('namedDependency'))
+                ->withProperty('property4', \DI\link('foo'))
+                ->withProperty('property5', \DI\link('IntegrationTests\DI\Fixtures\LazyDependency'))
                 ->withConstructor(
-                    Entry::link('IntegrationTests\DI\Fixtures\Class2'),
-                    Entry::link('IntegrationTests\DI\Fixtures\Interface1'),
-                    Entry::link('IntegrationTests\DI\Fixtures\LazyDependency')
+                    \DI\link('IntegrationTests\DI\Fixtures\Class2'),
+                    \DI\link('IntegrationTests\DI\Fixtures\Interface1'),
+                    \DI\link('IntegrationTests\DI\Fixtures\LazyDependency')
                 )
-                ->withMethod('method1', Entry::link('IntegrationTests\DI\Fixtures\Class2'))
-                ->withMethod('method2', Entry::link('IntegrationTests\DI\Fixtures\Interface1'))
-                ->withMethod('method3', Entry::link('namedDependency'), Entry::link('foo'))
-                ->withMethod('method4', Entry::link('IntegrationTests\DI\Fixtures\LazyDependency'))
+                ->withMethod('method1', \DI\link('IntegrationTests\DI\Fixtures\Class2'))
+                ->withMethod('method2', \DI\link('IntegrationTests\DI\Fixtures\Interface1'))
+                ->withMethod('method3', \DI\link('namedDependency'), \DI\link('foo'))
+                ->withMethod('method4', \DI\link('IntegrationTests\DI\Fixtures\LazyDependency'))
         );
-        $containerPHP->set('IntegrationTests\DI\Fixtures\Class2', Entry::object());
-        $containerPHP->set('IntegrationTests\DI\Fixtures\Implementation1', Entry::object());
+        $containerPHP->set('IntegrationTests\DI\Fixtures\Class2', \DI\object());
+        $containerPHP->set('IntegrationTests\DI\Fixtures\Implementation1', \DI\object());
         $containerPHP->set(
             'IntegrationTests\DI\Fixtures\Interface1',
-            Entry::object('IntegrationTests\DI\Fixtures\Implementation1')
+            \DI\object('IntegrationTests\DI\Fixtures\Implementation1')
                 ->withScope(Scope::SINGLETON())
         );
-        $containerPHP->set('namedDependency', Entry::object('IntegrationTests\DI\Fixtures\Class2'));
-        $containerPHP->set('IntegrationTests\DI\Fixtures\LazyDependency', Entry::object()->lazy());
-        $containerPHP->set('alias', Entry::link('namedDependency'));
+        $containerPHP->set('namedDependency', \DI\object('IntegrationTests\DI\Fixtures\Class2'));
+        $containerPHP->set('IntegrationTests\DI\Fixtures\LazyDependency', \DI\object()->lazy());
+        $containerPHP->set('alias', \DI\link('namedDependency'));
 
         return array(
             array(self::DEFINITION_REFLECTION, $containerReflection),

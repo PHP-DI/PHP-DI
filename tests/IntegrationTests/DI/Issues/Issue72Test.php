@@ -10,7 +10,6 @@
 namespace IntegrationTests\DI\Issues;
 
 use DI\ContainerBuilder;
-use DI\Entry;
 use IntegrationTests\DI\Issues\Issue72\Class1;
 
 /**
@@ -52,13 +51,13 @@ class Issue72Test extends \PHPUnit_Framework_TestCase
 
         // Override 'service1' to 'service2'
         $container->addDefinitions(array(
-            'service2' => Entry::factory(function () {
+            'service2' => \DI\factory(function () {
                 $value = new \stdClass();
                 $value->foo = 'bar';
                 return $value;
             }),
-            'IntegrationTests\DI\Issues\Issue72\Class1' => Entry::object()
-                    ->withConstructor(Entry::link('service2')),
+            'IntegrationTests\DI\Issues\Issue72\Class1' => \DI\object()
+                    ->withConstructor(\DI\link('service2')),
         ));
 
         /** @var Class1 $class1 */
@@ -78,19 +77,19 @@ class Issue72Test extends \PHPUnit_Framework_TestCase
         $container = $builder->build();
 
         $container->addDefinitions(array(
-            'service2' => Entry::factory(function () {
+            'service2' => \DI\factory(function () {
                 $value = new \stdClass();
                 $value->foo = 'bar';
                 return $value;
             }),
-            'IntegrationTests\DI\Issues\Issue72\Class1' => Entry::object()
-                ->withConstructor(Entry::link('service1')),
+            'IntegrationTests\DI\Issues\Issue72\Class1' => \DI\object()
+                ->withConstructor(\DI\link('service1')),
         ));
         // Override 'service1' to 'service2'
         $container->set(
             'IntegrationTests\DI\Issues\Issue72\Class1',
-            Entry::object()
-                ->withConstructor(Entry::link('service2'))
+            \DI\object()
+                ->withConstructor(\DI\link('service2'))
         );
 
         /** @var Class1 $class1 */

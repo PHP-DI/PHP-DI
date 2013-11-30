@@ -10,7 +10,10 @@
             "DI": "src/",
             "IntegrationTests": "tests/",
             "UnitTests": "tests/"
-        }
+        },
+        "files": [
+            "src/DI/functions.php"
+        ]
     },
     "require": {
         "php": ">=5.3.3",

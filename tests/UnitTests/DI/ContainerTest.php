@@ -10,7 +10,6 @@
 namespace UnitTests\DI;
 
 use DI\ContainerBuilder;
-use DI\Entry;
 use stdClass;
 
 /**
@@ -96,7 +95,7 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
     public function testGetWithProxyWithAlias()
     {
         $container = ContainerBuilder::buildDevContainer();
-        $container->set('foo', Entry::object('stdClass'));
+        $container->set('foo', \DI\object('stdClass'));
         $this->assertInstanceOf('stdClass', $container->get('foo', true));
     }
 
@@ -128,7 +127,7 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
     {
         $container = ContainerBuilder::buildDevContainer();
         // Alias to itself -> infinite recursive loop
-        $container->set('foo', Entry::link('foo'));
+        $container->set('foo', \DI\link('foo'));
         $container->get('foo');
     }
 

@@ -12,7 +12,6 @@ namespace UnitTests\DI\Definition\Source;
 use DI\Definition\CallableDefinition;
 use DI\Definition\ClassDefinition;
 use DI\Definition\Source\ArrayDefinitionSource;
-use DI\Entry;
 
 /**
  * Test class for ArrayDefinitionSource
@@ -81,7 +80,7 @@ class ArrayDefinitionSourceTest extends \PHPUnit_Framework_TestCase
     {
         $source = new ArrayDefinitionSource();
         $source->addDefinitions(array(
-            'foo' => Entry::object(),
+            'foo' => \DI\object(),
         ));
         /** @var $definition ClassDefinition */
         $definition = $source->getDefinition('foo');
@@ -97,7 +96,7 @@ class ArrayDefinitionSourceTest extends \PHPUnit_Framework_TestCase
         };
         $source = new ArrayDefinitionSource();
         $source->addDefinitions(array(
-            'foo' => Entry::factory($callable),
+            'foo' => \DI\factory($callable),
         ));
         /** @var CallableDefinition $definition */
         $definition = $source->getDefinition('foo');
