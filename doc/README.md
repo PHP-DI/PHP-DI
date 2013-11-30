@@ -17,6 +17,7 @@
 
 * [Performances](performances.md)
 * [Inject on an existing instance](inject-on-instance.md)
+* [Injections depending on the environment](environments.md)
 
 ## Internals
 
