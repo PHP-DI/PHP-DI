@@ -11,7 +11,6 @@ namespace UnitTests\DI\Compiler\DefinitionCompiler;
 
 use DI\Compiler\DefinitionCompiler\ClassDefinitionCompiler;
 use DI\Definition\CallableDefinition;
-use DI\Entry;
 use DI\Scope;
 
 class ClassDefinitionCompilerTest extends \PHPUnit_Framework_TestCase

@@ -10,7 +10,6 @@
 namespace UnitTests\DI\Compiler\DefinitionCompiler;
 
 use DI\Compiler\DefinitionCompiler\ClassDefinitionCompiler;
-use DI\Entry;
 
 /**
  * Tests the generation for classes marked as lazy
