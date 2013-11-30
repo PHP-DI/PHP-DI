@@ -201,7 +201,6 @@ Example of a `config/di.php` file (using [PHP 5.4 short arrays](http://php.net/m
 
 ```php
 <?php
-use DI\Entry;
 
 return [
 
@@ -214,29 +213,29 @@ return [
     ],
 
     // Direct mapping (not needed if you didn't disable autowiring)
-    'SomeClass' => Entry::object(),
+    'SomeClass' => DI\object(),
 
     // This is not recommended: will instantiate the class on every request, even when not used
     'SomeOtherClass' => new SomeOtherClass(1, "hello"),
 
     // Defines an instance of My\Class
-    'My\Class' => Entry::object()
-        ->withConstructor(Entry::link('db.host'), Entry::link('My\OtherClass')),
+    'My\Class' => DI\object()
+        ->withConstructor(DI\link('db.host'), DI\link('My\OtherClass')),
 
-    'My\OtherClass' => Entry::object()
+    'My\OtherClass' => DI\object()
         ->withScope(Scope::PROTOTYPE())
-        ->withConstructor(Entry::link('db.host'), Entry('db.port'))
-        ->withMethod('setFoo2', Entry::link('My\Foo1'), Entry::link('My\Foo2'))
+        ->withConstructor(DI\link('db.host'), DI\link('db.port'))
+        ->withMethod('setFoo2', DI\link('My\Foo1'), DI\link('My\Foo2'))
         ->withProperty('bar', 'My\Bar')
 
     // Mapping an interface to an implementation
-    'My\Interface' => Entry::object('My\Implementation'),
+    'My\Interface' => DI\object('My\Implementation'),
 
     // Defining a named instance
-    'myNamedInstance' => Entry::object('My\Class'),
+    'myNamedInstance' => DI\object('My\Class'),
 
     // Using an anonymous function
-    'My\Stuff' => Entry::factory(function(Container $c) {
+    'My\Stuff' => DI\factory(function (Container $c) {
         return new MyClass($c->get('db.host'));
     }),
 
