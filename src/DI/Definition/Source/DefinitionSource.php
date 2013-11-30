@@ -19,7 +19,6 @@ use DI\Definition\Exception\DefinitionException;
  */
 interface DefinitionSource
 {
-
     /**
      * Returns DI definition for the entry name
      * @param string $name
@@ -27,5 +26,4 @@ interface DefinitionSource
      * @return Definition|null
      */
     public function getDefinition($name);
-
 }
