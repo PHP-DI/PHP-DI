@@ -12,12 +12,14 @@ IntegrationTests\DI\Fixtures\Class1:
     property5:
       name: IntegrationTests\DI\Fixtures\LazyDependency
       lazy: true
+    property6: simpleValueDependency
   constructor:
     param1: IntegrationTests\DI\Fixtures\Class2
     param2: IntegrationTests\DI\Fixtures\Interface1
     param3:
       name: IntegrationTests\DI\Fixtures\LazyDependency
       lazy: true
+    simpleValueDependency: simpleValueDependency
   methods:
     method1: IntegrationTests\DI\Fixtures\Class2
     method2: [IntegrationTests\DI\Fixtures\Interface1]
@@ -28,6 +30,8 @@ IntegrationTests\DI\Fixtures\Class1:
       param1:
         name: IntegrationTests\DI\Fixtures\LazyDependency
         lazy: true
+    method5:
+      param1: simpleValueDependency
 
 IntegrationTests\DI\Fixtures\Class2:
 

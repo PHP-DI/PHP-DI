@@ -119,10 +119,20 @@ class Factory implements FactoryInterface
             $entryName = $parameterInjection->getEntryName();
 
             if ($entryName === null) {
-                // If the parameter is optional and wasn't specified, we take its default value
-                if ($parameters[$parameterInjection->getParameterName()]->isOptional()) {
-                    $args[] = $this->getParameterDefaultValue($parameters[$parameterInjection->getParameterName()], $constructorReflection);
-                    continue;
+                // Check the container to see if it contains a simple value matching the parameter name
+                try {
+                    $parameterValue = $this->container->get($parameterInjection->getParameterName());
+                    if ($parameterValue !== null) {
+                        $args[] = $parameterValue;
+                        continue;
+                    }
+                }
+                catch (NotFoundException $e) {
+                    // If the parameter is optional and wasn't specified, we take its default value
+                    if ($parameters[$parameterInjection->getParameterName()]->isOptional()) {
+                        $args[] = $this->getParameterDefaultValue($parameters[$parameterInjection->getParameterName()], $constructorReflection);
+                        continue;
+                    }
                 }
                 throw new DefinitionException("The parameter '" . $parameterInjection->getParameterName()
                     . "' of the constructor of '{$classReflection->name}' has no type defined or guessable");
