@@ -85,12 +85,6 @@ class AnnotationDefinitionSource implements DefinitionSource
         // Browse the class properties looking for annotated properties
         $this->readProperties($reflectionClass, $classDefinition);
 
-        // Look for annotated constructor
-        $constructor = $reflectionClass->getConstructor();
-        if ($constructor) {
-            $this->readConstructor($constructor, $classDefinition);
-        }
-
         // Browse the object's methods looking for annotated methods
         $this->readMethods($reflectionClass, $classDefinition);
 
@@ -136,25 +130,6 @@ class AnnotationDefinitionSource implements DefinitionSource
     }
 
     /**
-     * @param ReflectionMethod $reflectionMethod
-     * @param ClassDefinition  $classDefinition
-     */
-    private function readConstructor(ReflectionMethod $reflectionMethod, ClassDefinition $classDefinition)
-    {
-        // Look for @Inject annotation
-        /** @var $annotation Inject|null */
-        $annotation = $this->getAnnotationReader()->getMethodAnnotation($reflectionMethod, 'DI\Annotation\Inject');
-
-        if ($annotation) {
-            // @Inject found, create MethodInjection
-            $parameters = $this->readMethodParameters($reflectionMethod, $annotation);
-            $classDefinition->setConstructorInjection(
-                new MethodInjection($reflectionMethod->name, $parameters)
-            );
-        }
-    }
-
-    /**
      * Browse the object's methods looking for annotated methods.
      *
      * @param ReflectionClass $reflectionClass
@@ -163,8 +138,8 @@ class AnnotationDefinitionSource implements DefinitionSource
     private function readMethods(ReflectionClass $reflectionClass, ClassDefinition $classDefinition)
     {
         foreach ($reflectionClass->getMethods(\ReflectionMethod::IS_PUBLIC) as $method) {
-            // Ignore constructor and static methods
-            if ($method->isStatic() || $method->isConstructor()) {
+            // Ignore static methods
+            if ($method->isStatic()) {
                 continue;
             }
 
@@ -187,9 +162,14 @@ class AnnotationDefinitionSource implements DefinitionSource
         if ($annotation) {
             // @Inject found, create MethodInjection
             $parameters = $this->readMethodParameters($reflectionMethod, $annotation);
-            $classDefinition->addMethodInjection(
-                new MethodInjection($reflectionMethod->name, $parameters)
-            );
+
+            $methodInjection = new MethodInjection($reflectionMethod->name, $parameters);
+
+            if ($reflectionMethod->isConstructor()) {
+                $classDefinition->setConstructorInjection($methodInjection);
+            } else {
+                $classDefinition->addMethodInjection($methodInjection);
+            }
         }
     }
 
