@@ -89,6 +89,20 @@ class InjectTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('bar', $parameters[1]);
     }
 
+    public function testMethod3()
+    {
+        $method = $this->reflectionClass->getMethod('method3');
+        /** @var $annotation Inject */
+        $annotation = $this->annotationReader->getMethodAnnotation($method, 'DI\Annotation\Inject');
+        $parameters = $annotation->getParameters();
+
+        $this->assertInstanceOf('DI\Annotation\Inject', $annotation);
+        $this->assertCount(1, $parameters);
+
+        $this->assertArrayHasKey('str1', $parameters);
+        $this->assertEquals('foo', $parameters['str1']);
+    }
+
     /**
      * Inject annotation should work even if not imported
      */
