@@ -4,6 +4,7 @@
 
 * [Introduction to dependency injection with an example](example.md)
 * [Getting started](getting-started.md)
+* [Best practices guide](best-practices.md)
 
 ## PHP-DI's documentation
 
