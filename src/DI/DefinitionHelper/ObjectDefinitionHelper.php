@@ -91,6 +91,15 @@ class ObjectDefinitionHelper implements DefinitionHelper
         return $this;
     }
 
+    public function withMethodParameter($method, $parameter, $value)
+    {
+        if (! isset($this->methods[$method])) {
+            $this->methods[$method] = array();
+        }
+        $this->methods[$method][$parameter] = $value;
+        return $this;
+    }
+
     /**
      * @param string $entryName Container entry name
      * @return ClassDefinition

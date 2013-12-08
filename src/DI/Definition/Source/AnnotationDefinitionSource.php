@@ -157,7 +157,16 @@ class AnnotationDefinitionSource implements DefinitionSource
     {
         // Look for @Inject annotation
         /** @var $annotation Inject|null */
-        $annotation = $this->getAnnotationReader()->getMethodAnnotation($reflectionMethod, 'DI\Annotation\Inject');
+        try {
+            $annotation = $this->getAnnotationReader()->getMethodAnnotation($reflectionMethod, 'DI\Annotation\Inject');
+        } catch (AnnotationException $e) {
+            throw new AnnotationException(sprintf(
+                '@Inject annotation on %s::%s is malformed. %s',
+                $reflectionMethod->getDeclaringClass()->getName(),
+                $reflectionMethod->getName(),
+                $e->getMessage()
+            ), 0, $e);
+        }
 
         if ($annotation) {
             // @Inject found, create MethodInjection
@@ -188,8 +197,10 @@ class AnnotationDefinitionSource implements DefinitionSource
 
             $entryName = null;
 
-            // @Inject has definition for this parameter
-            if (isset($annotationParameters[$index])) {
+            // @Inject has definition for this parameter (check name based or index based)
+            if (isset($annotationParameters[$parameter->getName()])) {
+                $entryName = $annotationParameters[$parameter->getName()];
+            } elseif (isset($annotationParameters[$index])) {
                 $entryName = $annotationParameters[$index];
             }
 
@@ -199,11 +210,11 @@ class AnnotationDefinitionSource implements DefinitionSource
             }
 
             if ($entryName === null) {
-                $parameters[] = new UndefinedInjection();
+                $parameters[$index] = new UndefinedInjection();
                 continue;
             }
 
-            $parameters[] = new EntryReference($entryName);
+            $parameters[$index] = new EntryReference($entryName);
         }
 
         return $parameters;

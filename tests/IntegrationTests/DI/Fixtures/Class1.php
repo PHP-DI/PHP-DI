@@ -59,6 +59,9 @@ class Class1
 
     public $method4Param1;
 
+    public $method5Param1;
+    public $method5Param2;
+
     /**
      * @Inject
      * @param Class2         $param1
@@ -78,6 +81,8 @@ class Class1
     }
 
     /**
+     * Tests optional parameter is not overridden.
+     *
      * @Inject
      * @param Class2 $param1
      * @throws \Exception
@@ -92,6 +97,8 @@ class Class1
     }
 
     /**
+     * Tests automatic resolution of parameter based on the type-hinting.
+     *
      * @Inject
      * @param Interface1 $param1
      */
@@ -101,6 +108,8 @@ class Class1
     }
 
     /**
+     * Tests defining parameters.
+     *
      * @Inject({"namedDependency", "foo"})
      * @param string $param1
      */
@@ -111,11 +120,24 @@ class Class1
     }
 
     /**
+     * Tests injecting a lazy dependency.
+     *
      * @Inject
      * @param LazyDependency $param1
      */
     public function method4(LazyDependency $param1)
     {
         $this->method4Param1 = $param1;
+    }
+
+    /**
+     * Tests defining a parameter by its name.
+     *
+     * @Inject({"param2" = "foo"})
+     */
+    public function method5(Interface1 $param1, $param2)
+    {
+        $this->method5Param1 = $param1;
+        $this->method5Param2 = $param2;
     }
 }
