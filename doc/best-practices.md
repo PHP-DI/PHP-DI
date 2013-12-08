@@ -5,7 +5,7 @@ This is an opinionated guide on how to use PHP-DI and dependency injection for t
 While it may not cover every case, and satisfy everybody, it can serve as a canvas to help you
 getting started with dependency injection.
 
-If you disagree with anything explained in that guide, it's OK. It's opinionated, and you
+If you disagree with anything explained in that guide, that's OK. It's opinionated, and you
 should make your own opinion on all these subjects ;). It shouldn't prevent you to use PHP-DI
 the way you want.
 
@@ -15,31 +15,27 @@ Here are some basic rules to follow:
 
 1. never get an entry from the container directly (always use dependency injection)
 2. more generally, write code decoupled from the container
-3. type-hint against interfaces, configure which implementation to use in the container configuration
+3. type-hint against interfaces, configure which implementation to use in the container's configuration
 
 
 ## Writing controllers
 
 Using dependency injection in controllers is usually where it is the most painful.
 
-Sometimes you will end up injecting so many dependencies your constructor will be bloated.
-And sometimes, your MVC framework will not even let you use the controller's constructor
-because it is already using it for injecting stuff from the framework.
-
 If we take Symfony 2 as an example (but this generally applies to every framework), here are your options:
 
 - inject the container in the controllers, and call `$container->get(...)`
 
--> this is bad, see the rule n°1 at the top of this guide.
+This is bad, see the rule n°1.
 
 - inject dependencies in the constructor ([controller as a service in Symfony](http://symfony.com/doc/current/cookbook/controller/service.html))
 
--> this is painful when you have more than 5 dependencies, and your constructor is just
-[10 lines long of boilerplate code](http://www.whitewashing.de/2013/06/27/extending_symfony2__controller_utilities.html)
+This is painful when you have more than 5 dependencies, and your constructor is
+[15 lines of boilerplate code](http://www.whitewashing.de/2013/06/27/extending_symfony2__controller_utilities.html)
 
-- inject dependencies in properties
+- **inject dependencies in properties**
 
-This is the solution we recommend, no we are not insane, read our arguments ;).
+This is the solution we recommend.
 
 Example:
 
@@ -66,7 +62,7 @@ Property injection is generally frowned upon, and for good reasons:
 
 - injecting in a private property breaks encapsulation
 - it is not an explicit dependency: there is no contract saying your class need the property to be set to work
-- if you use annotations to mark the dependency to be injected, your class is dependent on the container (see the 2nd rule above)
+- if you use PHP-DI's annotations to mark the dependency to be injected, your class is dependent on the container (see the 2nd rule above)
 
 BUT
 
@@ -78,20 +74,18 @@ So:
 - you will not unit-test it (that doesn’t mean you won’t write functional tests on the interface though)
 - you will not need to reuse it elsewhere
 - if you change the framework, you may have to rewrite it (or parts of it) anyway
-(because most dependencies like Request, Response, view, etc. will have changed)
+(because most dependencies like Request, Response, templating system, etc. will have changed)
 
-As a consequence, **we recommend using annotations in controllers**.
+This solution offers many benefits for no major drawback, so
+**we recommend using annotations in controllers**.
 
 
 ## Writing services
 
-By service, we mean a class that offers one or several operations through public methods.
-A service is stateless, i.e. unlike a model class, it does not store data in properties.
-
 Given a service is intended to be reused, tested and independent of your framework, **we do not recommend
 using annotations for injecting dependencies**.
 
-Instead, we recommend using **constructor injection**:
+Instead, we recommend using **constructor injection and autowiring**:
 
 ```php
 class OrderService implements OrderServiceInterface
@@ -110,16 +104,16 @@ class OrderService implements OrderServiceInterface
 }
 ```
 
-By configuring PHP-DI to use autowiring (enabled by default), you can save yourself binding every argument
+By using autowiring (enabled by default), you save yourself binding every parameter
 of the constructor in the configuration. PHP-DI will guess which object it needs to inject by checking
 the types of your parameters.
 
 Side note: as explained in rule n°3, we recommend **type-hinting against interfaces**. In that case,
-you will need to map interfaces to the implementation the container should use:
+you will need to map interfaces to the implementation the container should use in the configuration:
 
 ```php
 <?php
-// configuration.php
+// config.php
 return [
     // ...
     OrderServiceInterface::class => DI\object(OrderService::class),
@@ -135,13 +129,14 @@ In that case, we advise you to define these dependencies in your configuration f
 We also recommend using an anonymous function when the configuration gets a bit complex.
 
 **The anonymous function allows you to write real PHP code**, which is great, because you
-can use the library's documentation, you get IDE support, and you are a PHP developer after all ;).
+can use the library's documentation, you get IDE support, and you are a PHP developer so
+you already know the language ;).
 
 Here is an example with [Monolog](https://github.com/Seldaek/monolog), a PHP logger:
 
 ```php
 <?php
-// configuration.php
+// config.php
 
 use Monolog\Logger;
 use Monolog\Handler\StreamHandler;
