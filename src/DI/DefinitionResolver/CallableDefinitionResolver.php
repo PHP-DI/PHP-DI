@@ -9,9 +9,9 @@
 
 namespace DI\DefinitionResolver;
 
-use DI\ContainerInterface;
 use DI\Definition\CallableDefinition;
 use DI\Definition\Definition;
+use Interop\DI\ReadableContainerInterface;
 
 /**
  * Resolves a callable definition to a value.
@@ -22,7 +22,7 @@ use DI\Definition\Definition;
 class CallableDefinitionResolver implements DefinitionResolver
 {
     /**
-     * @var ContainerInterface
+     * @var ReadableContainerInterface
      */
     private $container;
 
@@ -30,9 +30,9 @@ class CallableDefinitionResolver implements DefinitionResolver
      * The resolver needs a container. This container will be passed to the callable as a parameter
      * so that the callable can access other entries of the container.
      *
-     * @param ContainerInterface $container
+     * @param ReadableContainerInterface $container
      */
-    public function __construct(ContainerInterface $container)
+    public function __construct(ReadableContainerInterface $container)
     {
         $this->container = $container;
     }
@@ -61,7 +61,7 @@ class CallableDefinitionResolver implements DefinitionResolver
     }
 
     /**
-     * @return ContainerInterface
+     * @return ReadableContainerInterface
      */
     public function getContainer()
     {

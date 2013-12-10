@@ -55,7 +55,7 @@ class ContainerBuilderTest extends \PHPUnit_Framework_TestCase
 
     public function testContainerWrapped()
     {
-        $otherContainer = $this->getMockForAbstractClass('DI\ContainerInterface');
+        $otherContainer = $this->getMockForAbstractClass('Interop\DI\ReadableContainerInterface');
 
         $builder = new ContainerBuilder('UnitTests\DI\Fixtures\FakeContainer');
         $builder->wrapContainer($otherContainer);
@@ -92,7 +92,7 @@ class ContainerBuilderTest extends \PHPUnit_Framework_TestCase
         $result = $builder->setDefinitionCache($mockCache);
         $this->assertSame($builder, $result);
 
-        $result = $builder->wrapContainer($this->getMockForAbstractClass('DI\ContainerInterface'));
+        $result = $builder->wrapContainer($this->getMockForAbstractClass('Interop\DI\ReadableContainerInterface'));
         $this->assertSame($builder, $result);
     }
 }
