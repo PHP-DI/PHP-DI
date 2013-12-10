@@ -49,10 +49,6 @@ class ArrayDefinitionSource implements DefinitionSource
             return;
         }
 
-        if (! is_readable($file)) {
-            throw new DefinitionException("File $file doesn't exist or is not readable");
-        }
-
         // If we are given a file containing an array, we lazy-load it to improve performance
         $this->initialized = false;
         $this->file = $file;
@@ -110,6 +106,10 @@ class ArrayDefinitionSource implements DefinitionSource
     {
         if ($this->initialized === true) {
             return;
+        }
+
+        if (! is_readable($this->file)) {
+            throw new DefinitionException("File {$this->file} doesn't exist or is not readable");
         }
 
         $definitions = require $this->file;
