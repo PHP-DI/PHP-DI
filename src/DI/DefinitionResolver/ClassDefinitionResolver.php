@@ -9,7 +9,6 @@
 
 namespace DI\DefinitionResolver;
 
-use DI\ContainerInterface;
 use DI\Definition\ClassDefinition;
 use DI\Definition\Definition;
 use DI\Definition\EntryReference;
@@ -20,6 +19,7 @@ use DI\Definition\ClassInjection\UndefinedInjection;
 use DI\DependencyException;
 use DI\NotFoundException;
 use Exception;
+use Interop\DI\ReadableContainerInterface;
 use ProxyManager\Factory\LazyLoadingValueHolderFactory;
 use ReflectionClass;
 use ReflectionException;
@@ -36,7 +36,7 @@ use ReflectionProperty;
 class ClassDefinitionResolver implements DefinitionResolver
 {
     /**
-     * @var ContainerInterface
+     * @var ReadableContainerInterface
      */
     private $container;
 
@@ -49,10 +49,10 @@ class ClassDefinitionResolver implements DefinitionResolver
      * The resolver needs a container.
      * This container will be used to get the entry to which the alias points to.
      *
-     * @param ContainerInterface            $container
+     * @param ReadableContainerInterface    $container
      * @param LazyLoadingValueHolderFactory $proxyFactory Used to create proxies for lazy injections.
      */
-    public function __construct(ContainerInterface $container, LazyLoadingValueHolderFactory $proxyFactory)
+    public function __construct(ReadableContainerInterface $container, LazyLoadingValueHolderFactory $proxyFactory)
     {
         $this->container = $container;
         $this->proxyFactory = $proxyFactory;
@@ -338,7 +338,7 @@ class ClassDefinitionResolver implements DefinitionResolver
     }
 
     /**
-     * @return ContainerInterface
+     * @return ReadableContainerInterface
      */
     public function getContainer()
     {

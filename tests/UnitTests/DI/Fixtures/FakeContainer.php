@@ -9,8 +9,8 @@
 
 namespace UnitTests\DI\Fixtures;
 
-use DI\ContainerInterface;
 use DI\Definition\DefinitionManager;
+use Interop\DI\ReadableContainerInterface;
 use ProxyManager\Factory\LazyLoadingValueHolderFactory;
 
 /**
@@ -31,14 +31,14 @@ class FakeContainer
     public $proxyFactory;
 
     /**
-     * @var ContainerInterface
+     * @var ReadableContainerInterface
      */
     public $wrapperContainer;
 
     public function __construct(
         DefinitionManager $definitionManager,
         LazyLoadingValueHolderFactory $proxyFactory,
-        ContainerInterface $wrapperContainer = null
+        ReadableContainerInterface $wrapperContainer = null
     ) {
         $this->definitionManager = $definitionManager;
         $this->proxyFactory = $proxyFactory;

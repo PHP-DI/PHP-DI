@@ -17,6 +17,7 @@
     },
     "require": {
         "php": ">=5.3.3",
+        "di-interop/di": "dev-master",
         "doctrine/annotations": "1.*",
         "doctrine/cache": "1.*",
         "mnapoli/phpdocreader": "1.0.*",
