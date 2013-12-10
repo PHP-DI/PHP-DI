@@ -39,7 +39,7 @@ class ReflectionDefinitionSource implements DefinitionSource, ClassDefinitionSou
         $constructor = $class->getConstructor();
 
         if ($constructor && $constructor->isPublic()) {
-            $classDefinition->setConstructorInjection($this->getMethodInjection($class, $constructor));
+            $classDefinition->setConstructorInjection($this->getMethodInjection($name, $constructor));
         }
 
         return $classDefinition;
@@ -48,7 +48,7 @@ class ReflectionDefinitionSource implements DefinitionSource, ClassDefinitionSou
     /**
      * {@inheritdoc}
      */
-    public function getPropertyInjection(ReflectionProperty $property)
+    public function getPropertyInjection($entryName, ReflectionProperty $property)
     {
         // Nothing to guess on properties
         return null;
@@ -57,7 +57,7 @@ class ReflectionDefinitionSource implements DefinitionSource, ClassDefinitionSou
     /**
      * {@inheritdoc}
      */
-    public function getMethodInjection(ReflectionClass $class, ReflectionMethod $method)
+    public function getMethodInjection($entryName, ReflectionMethod $method)
     {
         $parameters = array();
 

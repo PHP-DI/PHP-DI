@@ -197,16 +197,6 @@ class Container implements ContainerInterface
     }
 
     /**
-     * Add definitions from an array
-     *
-     * @param array $definitions
-     */
-    public function addDefinitions(array $definitions)
-    {
-        $this->definitionManager->addArrayDefinitions($definitions);
-    }
-
-    /**
      * @return DefinitionManager
      */
     public function getDefinitionManager()

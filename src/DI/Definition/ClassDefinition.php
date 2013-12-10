@@ -131,6 +131,15 @@ class ClassDefinition implements Definition
     }
 
     /**
+     * @param string $propertyName
+     * @return PropertyInjection
+     */
+    public function getPropertyInjection($propertyName)
+    {
+        return isset($this->propertyInjections[$propertyName]) ? $this->propertyInjections[$propertyName] : null;
+    }
+
+    /**
      * @param PropertyInjection $propertyInjection
      */
     public function addPropertyInjection(PropertyInjection $propertyInjection)
@@ -144,6 +153,15 @@ class ClassDefinition implements Definition
     public function getMethodInjections()
     {
         return $this->methodInjections;
+    }
+
+    /**
+     * @param string $methodName
+     * @return MethodInjection
+     */
+    public function getMethodInjection($methodName)
+    {
+        return isset($this->methodInjections[$methodName]) ? $this->methodInjections[$methodName] : null;
     }
 
     /**

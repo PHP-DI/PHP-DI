@@ -18,6 +18,9 @@ use DI\Definition\Source\ArrayDefinitionSource;
  */
 class ArrayDefinitionSourceTest extends \PHPUnit_Framework_TestCase
 {
+    /**
+     * @covers \DI\Definition\Source\ArrayDefinitionSource
+     */
     public function testValueDefinition()
     {
         $source = new ArrayDefinitionSource();
@@ -32,6 +35,9 @@ class ArrayDefinitionSourceTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('bar', $definition->getValue());
     }
 
+    /**
+     * @covers \DI\Definition\Source\ArrayDefinitionSource
+     */
     public function testValueTypes()
     {
         $source = new ArrayDefinitionSource();
@@ -76,6 +82,9 @@ class ArrayDefinitionSourceTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf('Closure', $definition->getValue());
     }
 
+    /**
+     * @covers \DI\Definition\Source\ArrayDefinitionSource
+     */
     public function testClassDefinition()
     {
         $source = new ArrayDefinitionSource();
@@ -89,6 +98,9 @@ class ArrayDefinitionSourceTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('foo', $definition->getClassName());
     }
 
+    /**
+     * @covers \DI\Definition\Source\ArrayDefinitionSource
+     */
     public function testClosureDefinition()
     {
         $callable = function () {
@@ -105,6 +117,9 @@ class ArrayDefinitionSourceTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($callable, $definition->getCallable());
     }
 
+    /**
+     * @covers \DI\Definition\Source\ArrayDefinitionSource
+     */
     public function testLoadFromFile()
     {
         $source = new ArrayDefinitionSource(__DIR__ . '/Fixtures/definitions.php');
@@ -119,5 +134,24 @@ class ArrayDefinitionSourceTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf('DI\Definition\ClassDefinition', $definition);
         $this->assertEquals('bim', $definition->getName());
         $this->assertEquals('bim', $definition->getClassName());
+    }
+
+    /**
+     * @covers \DI\Definition\Source\ArrayDefinitionSource::getDefinition
+     * @covers \DI\Definition\Source\ArrayDefinitionSource::chain
+     */
+    public function testChainableSource()
+    {
+        $source = new ArrayDefinitionSource(__DIR__ . '/Fixtures/definitions.php');
+
+        $otherSource = $this->getMockForAbstractClass('DI\Definition\Source\DefinitionSource');
+        $otherSource->expects($this->once())
+            ->method('getDefinition')
+            ->with('some unknown entry')
+            ->will($this->returnValue(42));
+
+        $source->chain($otherSource);
+
+        $this->assertEquals(42, $source->getDefinition('some unknown entry'));
     }
 }

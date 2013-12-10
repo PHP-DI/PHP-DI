@@ -26,19 +26,20 @@ interface ClassDefinitionSource
     /**
      * Returns the injection definition for the given property.
      *
+     * @param string             $entryName
      * @param ReflectionProperty $property
      *
      * @return PropertyInjection|null
      */
-    public function getPropertyInjection(ReflectionProperty $property);
+    public function getPropertyInjection($entryName, ReflectionProperty $property);
 
     /**
      * Returns the injection definition for the given method.
      *
-     * @param ReflectionClass  $class
+     * @param string           $entryName
      * @param ReflectionMethod $method
      *
      * @return MethodInjection|null
      */
-    public function getMethodInjection(ReflectionClass $class, ReflectionMethod $method);
+    public function getMethodInjection($entryName, ReflectionMethod $method);
 }

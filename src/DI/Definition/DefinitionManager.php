@@ -9,12 +9,8 @@
 
 namespace DI\Definition;
 
-use DI\Definition\Source\AnnotationDefinitionSource;
-use DI\Definition\Source\ArrayDefinitionSource;
-use DI\Definition\Source\CombinedDefinitionSource;
 use DI\Definition\Source\DefinitionSource;
-use DI\Definition\Source\ReflectionDefinitionSource;
-use DI\Definition\Source\SimpleDefinitionSource;
+use DI\Definition\Source\InMemoryDefinitionSource;
 use Doctrine\Common\Cache\Cache;
 
 /**
@@ -37,45 +33,17 @@ class DefinitionManager
     private $cache;
 
     /**
-     * Source merging definitions of sub-sources
-     * @var CombinedDefinitionSource
+     * @var InMemoryDefinitionSource
      */
-    private $combinedSource;
+    private $source;
 
-    /**
-     * Keep a reference to the simple source to add definitions to it
-     * @var SimpleDefinitionSource
-     */
-    private $simpleSource;
-
-    /**
-     * Keep a reference to the reflection source to ensure only one is used
-     * @var ReflectionDefinitionSource|null
-     */
-    private $reflectionSource;
-
-    /**
-     * Keep a reference to the annotation source to ensure only one is used
-     * @var AnnotationDefinitionSource|null
-     */
-    private $annotationSource;
-
-    /**
-     * @var DefinitionSource[]
-     */
-    private $otherSources = array();
-
-    public function __construct($useReflection = true, $useAnnotations = true)
+    public function __construct(DefinitionSource $source = null)
     {
-        $this->simpleSource = new SimpleDefinitionSource();
-        if ($useReflection) {
-            $this->reflectionSource = new ReflectionDefinitionSource();
-        }
-        if ($useAnnotations) {
-            $this->annotationSource = new AnnotationDefinitionSource();
-        }
+        $this->source = new InMemoryDefinitionSource();
 
-        $this->updateCombinedSource();
+        if ($source) {
+            $this->source->chain($source);
+        }
     }
 
     /**
@@ -85,20 +53,11 @@ class DefinitionManager
      */
     public function getDefinition($name)
     {
-        // Look in cache first
+        // Look in cache
         $definition = $this->fetchFromCache($name);
 
         if ($definition === false) {
-            $definition = $this->combinedSource->getDefinition($name);
-
-            // If alias, merge definition with alias
-            if ($definition instanceof ClassDefinition && $definition->isAlias()) {
-                $implementationDefinition = $this->getDefinition($definition->getClassName());
-
-                if ($implementationDefinition) {
-                    $definition->merge($implementationDefinition);
-                }
-            }
+            $definition = $this->source->getDefinition($name);
 
             // Save to cache
             if ($definition === null || ($definition && $definition->isCacheable())) {
@@ -110,76 +69,13 @@ class DefinitionManager
     }
 
     /**
-     * Enable or disable the use of reflection
-     *
-     * @param boolean $bool
-     */
-    public function useReflection($bool)
-    {
-        // Enable
-        if ($bool && $this->reflectionSource === null) {
-            $this->reflectionSource = new ReflectionDefinitionSource();
-            $this->updateCombinedSource();
-        // Disable
-        } elseif (!$bool && $this->reflectionSource !== null) {
-            $this->reflectionSource = null;
-            $this->updateCombinedSource();
-        }
-    }
-
-    /**
-     * Enable or disable the use of annotations
-     *
-     * @param boolean $bool
-     */
-    public function useAnnotations($bool)
-    {
-        // Enable
-        if ($bool && $this->annotationSource === null) {
-            $this->annotationSource = new AnnotationDefinitionSource();
-            $this->updateCombinedSource();
-        // Disable
-        } elseif (!$bool && $this->annotationSource !== null) {
-            $this->annotationSource = null;
-            $this->updateCombinedSource();
-        }
-    }
-
-    /**
-     * Add a source of definitions
-     *
-     * @param DefinitionSource $definitionSource
-     */
-    public function addDefinitionSource(DefinitionSource $definitionSource)
-    {
-        $this->otherSources[] = $definitionSource;
-
-        $this->updateCombinedSource();
-    }
-
-    /**
-     * Add definitions from an array
-     *
-     * @param array $definitions
-     */
-    public function addArrayDefinitions(array $definitions)
-    {
-        $arraySource = new ArrayDefinitionSource();
-        $arraySource->addDefinitions($definitions);
-
-        $this->otherSources[] = $arraySource;
-
-        $this->updateCombinedSource();
-    }
-
-    /**
      * Add a single definition
      *
      * @param Definition $definition
      */
     public function addDefinition(Definition $definition)
     {
-        $this->simpleSource->addDefinition($definition);
+        $this->source->addDefinition($definition);
     }
 
     /**
@@ -233,31 +129,5 @@ class DefinitionManager
 
         $cacheKey = self::CACHE_PREFIX . $name;
         $this->cache->save($cacheKey, $definition);
-    }
-
-    /**
-     * Builds the combined source
-     *
-     * Builds from scratch every time because the order of the sources is important.
-     */
-    private function updateCombinedSource()
-    {
-        // Sources are added from highest priority to least priority
-        $this->combinedSource = new CombinedDefinitionSource();
-
-        $this->combinedSource->addSource($this->simpleSource);
-
-        // Traverses the array reversed so that the latest added is first
-        foreach (array_reverse($this->otherSources) as $arraySource) {
-            $this->combinedSource->addSource($arraySource);
-        }
-
-        if ($this->annotationSource) {
-            $this->combinedSource->addSource($this->annotationSource);
-        }
-
-        if ($this->reflectionSource) {
-            $this->combinedSource->addSource($this->reflectionSource);
-        }
     }
 }

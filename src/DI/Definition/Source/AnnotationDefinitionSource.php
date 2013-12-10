@@ -108,14 +108,14 @@ class AnnotationDefinitionSource implements DefinitionSource, ClassDefinitionSou
                 continue;
             }
 
-            $classDefinition->addPropertyInjection($this->getPropertyInjection($property));
+            $classDefinition->addPropertyInjection($this->getPropertyInjection($reflectionClass->getName(), $property));
         }
     }
 
     /**
      * {@inheritdoc}
      */
-    public function getPropertyInjection(ReflectionProperty $property)
+    public function getPropertyInjection($entryName, ReflectionProperty $property)
     {
         // Look for @Inject annotation
         /** @var $annotation Inject */
@@ -148,7 +148,7 @@ class AnnotationDefinitionSource implements DefinitionSource, ClassDefinitionSou
                 continue;
             }
 
-            $methodInjection = $this->getMethodInjection($class, $method);
+            $methodInjection = $this->getMethodInjection($class->getName(), $method);
 
             if (! $methodInjection) {
                 continue;
@@ -165,7 +165,7 @@ class AnnotationDefinitionSource implements DefinitionSource, ClassDefinitionSou
     /**
      * {@inheritdoc}
      */
-    public function getMethodInjection(ReflectionClass $class, ReflectionMethod $method)
+    public function getMethodInjection($entryName, ReflectionMethod $method)
     {
         // Look for @Inject annotation
         /** @var $annotation Inject|null */

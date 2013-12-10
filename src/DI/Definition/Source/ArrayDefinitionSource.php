@@ -14,14 +14,21 @@ use DI\Definition\Definition;
 use DI\Definition\Exception\DefinitionException;
 use DI\Definition\ValueDefinition;
 use DI\DefinitionHelper\DefinitionHelper;
+use ReflectionMethod;
+use ReflectionProperty;
 
 /**
  * Reads DI definitions from a PHP array, or a file returning a PHP array.
  *
  * @author Matthieu Napoli <matthieu@mnapoli.fr>
  */
-class ArrayDefinitionSource implements DefinitionSource
+class ArrayDefinitionSource implements DefinitionSource, ChainableDefinitionSource, ClassDefinitionSource
 {
+    /**
+     * @var DefinitionSource
+     */
+    private $chainedSource;
+
     /**
      * @var bool
      */
@@ -61,11 +68,10 @@ class ArrayDefinitionSource implements DefinitionSource
     {
         $this->initialize();
 
-        if (!array_key_exists($name, $this->definitions)) {
-            if (class_exists($name)) {
-                $definition = new ClassDefinition($name);
-                $this->mergeWithParents($name, $definition);
-                return $definition;
+        if (! array_key_exists($name, $this->definitions)) {
+            // Not found, we use the chain or return null
+            if ($this->chainedSource) {
+                return $this->chainedSource->getDefinition($name);
             }
             return null;
         }
@@ -80,12 +86,39 @@ class ArrayDefinitionSource implements DefinitionSource
             $definition = new ValueDefinition($name, $definition);
         }
 
-        // If it's a class, merge definitions from parent classes and interfaces
         if ($definition instanceof ClassDefinition) {
-            $this->mergeWithParents($name, $definition);
+            // TODO merge properties and methods with sub-sources
         }
 
         return $definition;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getPropertyInjection($entryName, ReflectionProperty $property)
+    {
+        $definition = $this->getDefinition($entryName);
+
+        if ($definition && $definition instanceof ClassDefinition) {
+            return $definition->getPropertyInjection($property->getName());
+        }
+
+        return null;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getMethodInjection($entryName, ReflectionMethod $method)
+    {
+        $definition = $this->getDefinition($entryName);
+
+        if ($definition && $definition instanceof ClassDefinition) {
+            return $definition->getMethodInjection($method->getName());
+        }
+
+        return null;
     }
 
     /**
@@ -124,43 +157,10 @@ class ArrayDefinitionSource implements DefinitionSource
     }
 
     /**
-     * Merge a class definition which the definitions of its parent classes and its interfaces.
-     *
-     * @param string          $name
-     * @param ClassDefinition $definition
+     * {@inheritdoc}
      */
-    private function mergeWithParents($name, ClassDefinition $definition)
+    public function chain(DefinitionSource $source)
     {
-        $className = $definition->getClassName();
-        if (!class_exists($className)) {
-            return;
-        }
-
-        // Parent class
-        $parentClass = get_parent_class($className);
-
-        // Avoids loops (if AbstractClass1 is an alias to Class1, which extends AbstractClass1)
-        if ($parentClass && $parentClass != $name) {
-            $parentDefinition = $this->getDefinition($parentClass);
-            if ($parentDefinition instanceof ClassDefinition) {
-                $definition->merge($this->getDefinition($parentClass));
-            }
-        }
-
-        // Interfaces
-        $interfaces = class_implements($className);
-
-        if (is_array($interfaces)) {
-            foreach ($interfaces as $interfaceName) {
-                // Avoids loops (if Interface1 is an alias to Class1, which implements Interface1)
-                if ($interfaceName == $name) {
-                    continue;
-                }
-                $interfaceDefinition = $this->getDefinition($interfaceName);
-                if ($interfaceDefinition instanceof ClassDefinition) {
-                    $definition->merge($interfaceDefinition);
-                }
-            }
-        }
+        $this->chainedSource = $source;
     }
 }

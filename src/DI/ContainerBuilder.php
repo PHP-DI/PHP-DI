@@ -10,7 +10,9 @@
 namespace DI;
 
 use DI\Definition\DefinitionManager;
-use DI\Definition\Source\DefinitionSource;
+use DI\Definition\Source\AnnotationDefinitionSource;
+use DI\Definition\Source\ChainableDefinitionSource;
+use DI\Definition\Source\ReflectionDefinitionSource;
 use Doctrine\Common\Cache\Cache;
 use InvalidArgumentException;
 use ProxyManager\Configuration;
@@ -68,7 +70,7 @@ class ContainerBuilder
 
     /**
      * Source of definitions for the container.
-     * @var DefinitionSource[]
+     * @var ChainableDefinitionSource[]
      */
     private $definitionSources = array();
 
@@ -96,13 +98,32 @@ class ContainerBuilder
      */
     public function build()
     {
+        // Definition sources
+        $source = null;
+        foreach ($this->definitionSources as $definitionSource) {
+            if ($source instanceof ChainableDefinitionSource) {
+                $definitionSource->chain($source);
+            }
+            $source = $definitionSource;
+        }
+        if ($this->useAnnotations) {
+            if ($source) {
+                $source->chain(new AnnotationDefinitionSource());
+            } else {
+                $source = new AnnotationDefinitionSource();
+            }
+        } elseif ($this->useReflection) {
+            if ($source) {
+                $source->chain(new ReflectionDefinitionSource());
+            } else {
+                $source = new ReflectionDefinitionSource();
+            }
+        }
+
         // Definition manager
-        $definitionManager = new DefinitionManager($this->useReflection, $this->useAnnotations);
+        $definitionManager = new DefinitionManager($source);
         if ($this->cache) {
             $definitionManager->setCache($this->cache);
-        }
-        foreach ($this->definitionSources as $definitionSource) {
-            $definitionManager->addDefinitionSource($definitionSource);
         }
 
         // Proxy factory
@@ -197,9 +218,9 @@ class ContainerBuilder
      * Do not add ReflectionDefinitionSource or AnnotationDefinitionSource manually, they should be
      * handled with useReflection() and useAnnotations().
      *
-     * @param DefinitionSource $definitionSource
+     * @param ChainableDefinitionSource $definitionSource
      */
-    public function addDefinitions(DefinitionSource $definitionSource)
+    public function addDefinitions(ChainableDefinitionSource $definitionSource)
     {
         $this->definitionSources[] = $definitionSource;
     }
