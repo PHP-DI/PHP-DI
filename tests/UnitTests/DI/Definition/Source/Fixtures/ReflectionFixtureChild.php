@@ -7,13 +7,11 @@
  * @license   http://www.opensource.org/licenses/mit-license.php MIT (see the LICENSE file)
  */
 
-namespace DI\Definition\ClassInjection;
+namespace UnitTests\DI\Definition\Source\Fixtures;
 
 /**
- * Represents an injection not yet defined (e.g. a constructor parameter not defined).
- *
- * @author Matthieu Napoli <matthieu@mnapoli.fr>
+ * Fixture class for the ReflectionDefinitionSource tests
  */
-class UndefinedInjection
+class ReflectionFixtureChild extends ReflectionFixture
 {
 }

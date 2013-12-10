@@ -13,16 +13,18 @@ use DI\Definition\Definition;
 use DI\Definition\Exception\DefinitionException;
 
 /**
- * Source of Dependency Injection definitions
+ * Source of definitions for entries of the container.
  *
  * @author Matthieu Napoli <matthieu@mnapoli.fr>
  */
 interface DefinitionSource
 {
     /**
-     * Returns DI definition for the entry name
+     * Returns the DI definition for the entry name.
+     *
      * @param string $name
-     * @throws DefinitionException Invalid DI definitions
+     *
+     * @throws DefinitionException An invalid definition was found.
      * @return Definition|null
      */
     public function getDefinition($name);

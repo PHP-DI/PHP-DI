@@ -17,12 +17,18 @@ use DI\Definition\Source\AnnotationDefinitionSource;
  */
 class AnnotationDefinitionSourceTest extends \PHPUnit_Framework_TestCase
 {
+    /**
+     * @covers \DI\Definition\Source\AnnotationDefinitionSource::getDefinition
+     */
     public function testUnknownClass()
     {
         $source = new AnnotationDefinitionSource();
         $this->assertNull($source->getDefinition('foo'));
     }
 
+    /**
+     * @covers \DI\Definition\Source\AnnotationDefinitionSource
+     */
     public function testProperty1()
     {
         $source = new AnnotationDefinitionSource();
@@ -37,6 +43,9 @@ class AnnotationDefinitionSourceTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(new EntryReference('foo'), $property->getValue());
     }
 
+    /**
+     * @covers \DI\Definition\Source\AnnotationDefinitionSource
+     */
     public function testConstructor()
     {
         $source = new AnnotationDefinitionSource();
@@ -48,10 +57,13 @@ class AnnotationDefinitionSourceTest extends \PHPUnit_Framework_TestCase
 
         $parameters = $constructorInjection->getParameters();
         $this->assertCount(2, $parameters);
-        $this->assertEquals(new EntryReference('foo'), $parameters[0]);
-        $this->assertEquals(new EntryReference('bar'), $parameters[1]);
+        $this->assertEquals(new EntryReference('foo'), $parameters['param1']);
+        $this->assertEquals(new EntryReference('bar'), $parameters['param2']);
     }
 
+    /**
+     * @covers \DI\Definition\Source\AnnotationDefinitionSource
+     */
     public function testMethod1()
     {
         $source = new AnnotationDefinitionSource();
@@ -65,6 +77,9 @@ class AnnotationDefinitionSourceTest extends \PHPUnit_Framework_TestCase
         $this->assertEmpty($methodInjection->getParameters());
     }
 
+    /**
+     * @covers \DI\Definition\Source\AnnotationDefinitionSource
+     */
     public function testMethod2()
     {
         $source = new AnnotationDefinitionSource();
@@ -77,10 +92,13 @@ class AnnotationDefinitionSourceTest extends \PHPUnit_Framework_TestCase
 
         $parameters = $methodInjection->getParameters();
         $this->assertCount(2, $parameters);
-        $this->assertEquals(new EntryReference('foo'), $parameters[0]);
-        $this->assertEquals(new EntryReference('bar'), $parameters[1]);
+        $this->assertEquals(new EntryReference('foo'), $parameters['param1']);
+        $this->assertEquals(new EntryReference('bar'), $parameters['param2']);
     }
 
+    /**
+     * @covers \DI\Definition\Source\AnnotationDefinitionSource
+     */
     public function testMethod3()
     {
         $source = new AnnotationDefinitionSource();
@@ -94,10 +112,14 @@ class AnnotationDefinitionSourceTest extends \PHPUnit_Framework_TestCase
         $parameters = $methodInjection->getParameters();
         $this->assertCount(2, $parameters);
 
-        $this->assertEquals(new EntryReference('UnitTests\DI\Definition\Source\Fixtures\AnnotationFixture2'), $parameters[0]);
-        $this->assertEquals(new EntryReference('UnitTests\DI\Definition\Source\Fixtures\AnnotationFixture2'), $parameters[1]);
+        $reference = new EntryReference('UnitTests\DI\Definition\Source\Fixtures\AnnotationFixture2');
+        $this->assertEquals($reference, $parameters['param1']);
+        $this->assertEquals($reference, $parameters['param2']);
     }
 
+    /**
+     * @covers \DI\Definition\Source\AnnotationDefinitionSource
+     */
     public function testMethod4()
     {
         $source = new AnnotationDefinitionSource();
@@ -110,7 +132,26 @@ class AnnotationDefinitionSourceTest extends \PHPUnit_Framework_TestCase
 
         $parameters = $methodInjection->getParameters();
         $this->assertCount(2, $parameters);
-        $this->assertEquals(new EntryReference('foo'), $parameters[0]);
-        $this->assertEquals(new EntryReference('bar'), $parameters[1]);
+        $this->assertEquals(new EntryReference('foo'), $parameters['param1']);
+        $this->assertEquals(new EntryReference('bar'), $parameters['param2']);
+    }
+
+    /**
+     * @covers \DI\Definition\Source\AnnotationDefinitionSource
+     */
+    public function testMethod5()
+    {
+        $source = new AnnotationDefinitionSource();
+        $definition = $source->getDefinition('UnitTests\DI\Definition\Source\Fixtures\AnnotationFixture');
+        $this->assertInstanceOf('DI\Definition\Definition', $definition);
+
+        $methodInjections = $definition->getMethodInjections();
+        $methodInjection = $methodInjections['method5'];
+        $this->assertInstanceOf('DI\Definition\ClassInjection\MethodInjection', $methodInjection);
+
+        $parameters = $methodInjection->getParameters();
+        $this->assertCount(1, $parameters);
+
+        $this->assertEquals(new EntryReference('bar'), $parameters['param2']);
     }
 }

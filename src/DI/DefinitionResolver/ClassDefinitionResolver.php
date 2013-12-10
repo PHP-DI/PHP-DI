@@ -16,7 +16,6 @@ use DI\Definition\EntryReference;
 use DI\Definition\Exception\DefinitionException;
 use DI\Definition\ClassInjection\MethodInjection;
 use DI\Definition\ClassInjection\PropertyInjection;
-use DI\Definition\ClassInjection\UndefinedInjection;
 use DI\DependencyException;
 use DI\NotFoundException;
 use Exception;

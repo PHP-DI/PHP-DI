@@ -12,74 +12,63 @@ namespace DI\Definition\Source;
 use DI\Definition\ClassDefinition;
 use DI\Definition\EntryReference;
 use DI\Definition\ClassInjection\MethodInjection;
-use DI\Definition\ClassInjection\UndefinedInjection;
 use ReflectionClass;
-use ReflectionParameter;
+use ReflectionMethod;
+use ReflectionProperty;
 
 /**
- * Reads DI class definitions using only reflection
- *
- * Will guess injection only on class constructors
+ * Reads DI class definitions using reflection.
  *
  * @author Matthieu Napoli <matthieu@mnapoli.fr>
  */
-class ReflectionDefinitionSource implements DefinitionSource
+class ReflectionDefinitionSource implements DefinitionSource, ClassDefinitionSource
 {
     /**
      * {@inheritdoc}
      */
     public function getDefinition($name)
     {
-        if (!$this->classExists($name)) {
+        if (!class_exists($name) && !interface_exists($name)) {
             return null;
         }
 
-        $reflectionClass = new ReflectionClass($name);
-
+        $class = new ReflectionClass($name);
         $classDefinition = new ClassDefinition($name);
 
         // Constructor
-        $constructor = $reflectionClass->getConstructor();
+        $constructor = $class->getConstructor();
 
         if ($constructor && $constructor->isPublic()) {
-            $parameters = array();
-            foreach ($constructor->getParameters() as $parameter) {
-                $parameterType = $this->getParameterType($parameter);
-
-                if ($parameterType) {
-                    $parameters[] = new EntryReference($parameterType);
-                } else {
-                    $parameters[] = new UndefinedInjection();
-                }
-            }
-
-            $classDefinition->setConstructorInjection(
-                new MethodInjection($constructor->name, $parameters)
-            );
+            $classDefinition->setConstructorInjection($this->getMethodInjection($class, $constructor));
         }
 
         return $classDefinition;
     }
 
     /**
-     * @param ReflectionParameter $parameter
-     * @return string|null Type of the parameter
+     * {@inheritdoc}
      */
-    private function getParameterType(ReflectionParameter $parameter)
+    public function getPropertyInjection(ReflectionProperty $property)
     {
-        $reflectionClass = $parameter->getClass();
-        if ($reflectionClass === null) {
-            return null;
-        }
-        return $reflectionClass->name;
+        // Nothing to guess on properties
+        return null;
     }
 
     /**
-     * @param string $class
-     * @return bool
+     * {@inheritdoc}
      */
-    private function classExists($class)
+    public function getMethodInjection(ReflectionClass $class, ReflectionMethod $method)
     {
-        return class_exists($class) || interface_exists($class);
+        $parameters = array();
+
+        foreach ($method->getParameters() as $parameter) {
+            $parameterClass = $parameter->getClass();
+
+            if ($parameterClass) {
+                $parameters[$parameter->getName()] = new EntryReference($parameterClass->getName());
+            }
+        }
+
+        return new MethodInjection($method->getName(), $parameters);
     }
 }

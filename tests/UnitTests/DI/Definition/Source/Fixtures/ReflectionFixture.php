@@ -14,9 +14,7 @@ namespace UnitTests\DI\Definition\Source\Fixtures;
  */
 class ReflectionFixture
 {
-
     public function __construct(ReflectionFixture $param1, $param2, $param3 = null)
     {
     }
-
 }

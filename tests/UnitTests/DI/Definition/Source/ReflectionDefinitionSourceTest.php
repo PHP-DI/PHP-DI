@@ -11,35 +11,65 @@ namespace UnitTests\DI\Definition\Source;
 
 use DI\Definition\EntryReference;
 use DI\Definition\Source\ReflectionDefinitionSource;
-use DI\Definition\ClassInjection\UndefinedInjection;
 
 class ReflectionDefinitionSourceTest extends \PHPUnit_Framework_TestCase
 {
+    /**
+     * @covers \DI\Definition\Source\ReflectionDefinitionSource::getDefinition
+     */
     public function testUnknownClass()
     {
         $source = new ReflectionDefinitionSource();
         $this->assertNull($source->getDefinition('foo'));
     }
 
-    public function testFixtureClass()
+    /**
+     * @covers \DI\Definition\Source\ReflectionDefinitionSource::getDefinition
+     * @covers \DI\Definition\Source\ReflectionDefinitionSource::getMethodInjection
+     */
+    public function testConstructor()
     {
         $source = new ReflectionDefinitionSource();
         $definition = $source->getDefinition('UnitTests\DI\Definition\Source\Fixtures\ReflectionFixture');
-        $this->assertInstanceOf('DI\Definition\Definition', $definition);
+        $this->assertInstanceOf('DI\Definition\ClassDefinition', $definition);
 
         $constructorInjection = $definition->getConstructorInjection();
         $this->assertInstanceOf('DI\Definition\ClassInjection\MethodInjection', $constructorInjection);
 
         $parameters = $constructorInjection->getParameters();
-        $this->assertCount(3, $parameters);
+        $this->assertCount(1, $parameters);
 
-        $param1 = $parameters[0];
+        $param1 = $parameters['param1'];
         $this->assertEquals(new EntryReference('UnitTests\DI\Definition\Source\Fixtures\ReflectionFixture'), $param1);
+    }
 
-        $param2 = $parameters[1];
-        $this->assertEquals(new UndefinedInjection(), $param2);
+    /**
+     * @covers \DI\Definition\Source\ReflectionDefinitionSource::getDefinition
+     */
+    public function testConstructorInParentClass()
+    {
+        $source = new ReflectionDefinitionSource();
+        $definition = $source->getDefinition('UnitTests\DI\Definition\Source\Fixtures\ReflectionFixtureChild');
+        $this->assertInstanceOf('DI\Definition\ClassDefinition', $definition);
 
-        $param3 = $parameters[2];
-        $this->assertEquals(new UndefinedInjection(), $param3);
+        $constructorInjection = $definition->getConstructorInjection();
+        $this->assertInstanceOf('DI\Definition\ClassInjection\MethodInjection', $constructorInjection);
+
+        $parameters = $constructorInjection->getParameters();
+        $this->assertCount(1, $parameters);
+
+        $param1 = $parameters['param1'];
+        $this->assertEquals(new EntryReference('UnitTests\DI\Definition\Source\Fixtures\ReflectionFixture'), $param1);
+    }
+
+    /**
+     * @covers \DI\Definition\Source\ReflectionDefinitionSource::getPropertyInjection
+     */
+    public function testGetPropertyInjection()
+    {
+        $property = $this->getMock('\ReflectionProperty', null, array(), '', false);
+
+        $source = new ReflectionDefinitionSource();
+        $this->assertNull($source->getPropertyInjection($property));
     }
 }
