@@ -108,7 +108,11 @@ class AnnotationDefinitionSource implements DefinitionSource, ClassDefinitionSou
                 continue;
             }
 
-            $classDefinition->addPropertyInjection($this->getPropertyInjection($reflectionClass->getName(), $property));
+            $propertyInjection = $this->getPropertyInjection($reflectionClass->getName(), $property);
+
+            if ($propertyInjection) {
+                $classDefinition->addPropertyInjection($propertyInjection);
+            }
         }
     }
 
