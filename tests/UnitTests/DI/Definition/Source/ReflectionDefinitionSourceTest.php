@@ -70,6 +70,6 @@ class ReflectionDefinitionSourceTest extends \PHPUnit_Framework_TestCase
         $property = $this->getMock('\ReflectionProperty', null, array(), '', false);
 
         $source = new ReflectionDefinitionSource();
-        $this->assertNull($source->getPropertyInjection($property));
+        $this->assertNull($source->getPropertyInjection('foo', $property));
     }
 }
