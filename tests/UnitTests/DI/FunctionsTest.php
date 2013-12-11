@@ -14,6 +14,9 @@ namespace UnitTests\DI;
  */
 class FunctionsTest extends \PHPUnit_Framework_TestCase
 {
+    /**
+     * @covers ::\DI\object
+     */
     public function testObject()
     {
         $definition = \DI\object();
@@ -27,6 +30,9 @@ class FunctionsTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('foo', $definition->getDefinition('entry')->getClassName());
     }
 
+    /**
+     * @covers ::\DI\factory
+     */
     public function testFactory()
     {
         $definition = \DI\factory(function () {
@@ -38,6 +44,9 @@ class FunctionsTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(42, $callable());
     }
 
+    /**
+     * @covers ::\DI\link
+     */
     public function testLink()
     {
         $reference = \DI\link('foo');
