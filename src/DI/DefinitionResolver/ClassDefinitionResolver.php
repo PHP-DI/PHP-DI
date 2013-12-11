@@ -216,41 +216,26 @@ class ClassDefinitionResolver implements DefinitionResolver
         MethodInjection $methodInjection = null,
         ReflectionMethod $methodReflection = null
     ) {
-        if (!$methodReflection) {
+        if (! $methodReflection) {
             return array();
         }
-
-        // Check the number of parameters match
-        $nbRequiredParameters = $methodReflection->getNumberOfRequiredParameters();
-        $parameterInjections = $methodInjection ? $methodInjection->getParameters() : array();
-        if (count($parameterInjections) < $nbRequiredParameters) {
-            throw new DefinitionException(sprintf(
-                "%s::%s takes %d parameters, %d defined or guessed",
-                $methodReflection->getDeclaringClass()->getName(),
-                $methodReflection->getName(),
-                $nbRequiredParameters,
-                count($parameterInjections)
-            ));
-        }
-
-        // No parameters
-        if (empty($parameterInjections)) {
-            return array();
-        }
-
-        $reflectionParameters = $methodReflection->getParameters();
 
         $args = array();
-        foreach ($parameterInjections as $index => $value) {
-            if ($value instanceof UndefinedInjection) {
+
+        foreach ($methodReflection->getParameters() as $index => $parameter) {
+            $value = $methodInjection ? $methodInjection->getParameter($index) : null;
+
+            // Unknown injection
+            if ($value === null) {
                 // If the parameter is optional and wasn't specified, we take its default value
-                if ($reflectionParameters[$index]->isOptional()) {
-                    $args[] = $this->getParameterDefaultValue($reflectionParameters[$index], $methodReflection);
+                if ($parameter->isOptional()) {
+                    $args[] = $this->getParameterDefaultValue($parameter, $methodReflection);
                     continue;
                 }
+
                 throw new DefinitionException(sprintf(
                     "The parameter '%s' of %s::%s has no value defined or guessable",
-                    $reflectionParameters[$index]->getName(),
+                    $parameter->getName(),
                     $methodReflection->getDeclaringClass()->getName(),
                     $methodReflection->getName()
                 ));
@@ -270,7 +255,7 @@ class ClassDefinitionResolver implements DefinitionResolver
      * Inject dependencies into properties.
      *
      * @param object            $object            Object to inject dependencies into
-     * @param \DI\Definition\ClassInjection\PropertyInjection $propertyInjection Property injection definition
+     * @param PropertyInjection $propertyInjection Property injection definition
      *
      * @throws DependencyException
      * @throws DefinitionException
@@ -281,14 +266,6 @@ class ClassDefinitionResolver implements DefinitionResolver
         $property = new ReflectionProperty(get_class($object), $propertyName);
 
         $value = $propertyInjection->getValue();
-
-        if ($value instanceof UndefinedInjection) {
-            throw new DefinitionException(sprintf(
-                "The property %s::%s has no value defined or guessable",
-                get_class($object),
-                $propertyInjection->getPropertyName()
-            ));
-        }
 
         if ($value instanceof EntryReference) {
             try {
@@ -306,7 +283,9 @@ class ClassDefinitionResolver implements DefinitionResolver
             }
         }
 
-        $property->setAccessible(true);
+        if (! $property->isPublic()) {
+            $property->setAccessible(true);
+        }
         $property->setValue($object, $value);
     }
 

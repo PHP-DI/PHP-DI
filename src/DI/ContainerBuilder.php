@@ -219,6 +219,8 @@ class ContainerBuilder
      * handled with useReflection() and useAnnotations().
      *
      * @param ChainableDefinitionSource $definitionSource
+     *
+     * @todo Give file directly
      */
     public function addDefinitions(ChainableDefinitionSource $definitionSource)
     {
@@ -231,6 +233,7 @@ class ContainerBuilder
     private function buildProxyFactory()
     {
         $config = new Configuration();
+        // TODO use non-deprecated method
         $config->setAutoGenerateProxies(true);
 
         if ($this->writeProxiesToFile) {

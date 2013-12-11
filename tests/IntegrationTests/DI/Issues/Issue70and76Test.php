@@ -14,6 +14,8 @@ use DI\ContainerBuilder;
 /**
  * @see https://github.com/mnapoli/PHP-DI/issues/70
  * @see https://github.com/mnapoli/PHP-DI/issues/76
+ *
+ * @coversNothing
  */
 class Issue70and76Test extends \PHPUnit_Framework_TestCase
 {

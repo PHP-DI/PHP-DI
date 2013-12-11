@@ -12,21 +12,17 @@ namespace UnitTests\DI\Definition\Source;
 use DI\Definition\EntryReference;
 use DI\Definition\Source\ReflectionDefinitionSource;
 
+/**
+ * @covers \DI\Definition\Source\ReflectionDefinitionSource
+ */
 class ReflectionDefinitionSourceTest extends \PHPUnit_Framework_TestCase
 {
-    /**
-     * @covers \DI\Definition\Source\ReflectionDefinitionSource::getDefinition
-     */
     public function testUnknownClass()
     {
         $source = new ReflectionDefinitionSource();
         $this->assertNull($source->getDefinition('foo'));
     }
 
-    /**
-     * @covers \DI\Definition\Source\ReflectionDefinitionSource::getDefinition
-     * @covers \DI\Definition\Source\ReflectionDefinitionSource::getMethodInjection
-     */
     public function testConstructor()
     {
         $source = new ReflectionDefinitionSource();
@@ -39,13 +35,10 @@ class ReflectionDefinitionSourceTest extends \PHPUnit_Framework_TestCase
         $parameters = $constructorInjection->getParameters();
         $this->assertCount(1, $parameters);
 
-        $param1 = $parameters['param1'];
+        $param1 = $parameters[0];
         $this->assertEquals(new EntryReference('UnitTests\DI\Definition\Source\Fixtures\ReflectionFixture'), $param1);
     }
 
-    /**
-     * @covers \DI\Definition\Source\ReflectionDefinitionSource::getDefinition
-     */
     public function testConstructorInParentClass()
     {
         $source = new ReflectionDefinitionSource();
@@ -58,18 +51,7 @@ class ReflectionDefinitionSourceTest extends \PHPUnit_Framework_TestCase
         $parameters = $constructorInjection->getParameters();
         $this->assertCount(1, $parameters);
 
-        $param1 = $parameters['param1'];
+        $param1 = $parameters[0];
         $this->assertEquals(new EntryReference('UnitTests\DI\Definition\Source\Fixtures\ReflectionFixture'), $param1);
-    }
-
-    /**
-     * @covers \DI\Definition\Source\ReflectionDefinitionSource::getPropertyInjection
-     */
-    public function testGetPropertyInjection()
-    {
-        $property = $this->getMock('\ReflectionProperty', null, array(), '', false);
-
-        $source = new ReflectionDefinitionSource();
-        $this->assertNull($source->getPropertyInjection('foo', $property));
     }
 }

@@ -57,8 +57,8 @@ class AnnotationDefinitionSourceTest extends \PHPUnit_Framework_TestCase
 
         $parameters = $constructorInjection->getParameters();
         $this->assertCount(2, $parameters);
-        $this->assertEquals(new EntryReference('foo'), $parameters['param1']);
-        $this->assertEquals(new EntryReference('bar'), $parameters['param2']);
+        $this->assertEquals(new EntryReference('foo'), $parameters[0]);
+        $this->assertEquals(new EntryReference('bar'), $parameters[1]);
     }
 
     /**
@@ -92,8 +92,8 @@ class AnnotationDefinitionSourceTest extends \PHPUnit_Framework_TestCase
 
         $parameters = $methodInjection->getParameters();
         $this->assertCount(2, $parameters);
-        $this->assertEquals(new EntryReference('foo'), $parameters['param1']);
-        $this->assertEquals(new EntryReference('bar'), $parameters['param2']);
+        $this->assertEquals(new EntryReference('foo'), $parameters[0]);
+        $this->assertEquals(new EntryReference('bar'), $parameters[1]);
     }
 
     /**
@@ -113,8 +113,8 @@ class AnnotationDefinitionSourceTest extends \PHPUnit_Framework_TestCase
         $this->assertCount(2, $parameters);
 
         $reference = new EntryReference('UnitTests\DI\Definition\Source\Fixtures\AnnotationFixture2');
-        $this->assertEquals($reference, $parameters['param1']);
-        $this->assertEquals($reference, $parameters['param2']);
+        $this->assertEquals($reference, $parameters[0]);
+        $this->assertEquals($reference, $parameters[1]);
     }
 
     /**
@@ -132,8 +132,8 @@ class AnnotationDefinitionSourceTest extends \PHPUnit_Framework_TestCase
 
         $parameters = $methodInjection->getParameters();
         $this->assertCount(2, $parameters);
-        $this->assertEquals(new EntryReference('foo'), $parameters['param1']);
-        $this->assertEquals(new EntryReference('bar'), $parameters['param2']);
+        $this->assertEquals(new EntryReference('foo'), $parameters[0]);
+        $this->assertEquals(new EntryReference('bar'), $parameters[1]);
     }
 
     /**
@@ -152,6 +152,7 @@ class AnnotationDefinitionSourceTest extends \PHPUnit_Framework_TestCase
         $parameters = $methodInjection->getParameters();
         $this->assertCount(1, $parameters);
 
-        $this->assertEquals(new EntryReference('bar'), $parameters['param2']);
+        // Offset is 1, not 0, because parameter 0 wasn't defined
+        $this->assertEquals(new EntryReference('bar'), $parameters[1]);
     }
 }

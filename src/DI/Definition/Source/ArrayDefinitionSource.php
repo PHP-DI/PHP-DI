@@ -9,20 +9,18 @@
 
 namespace DI\Definition\Source;
 
-use DI\Definition\ClassDefinition;
 use DI\Definition\Definition;
 use DI\Definition\Exception\DefinitionException;
+use DI\Definition\MergeableDefinition;
 use DI\Definition\ValueDefinition;
 use DI\DefinitionHelper\DefinitionHelper;
-use ReflectionMethod;
-use ReflectionProperty;
 
 /**
  * Reads DI definitions from a PHP array, or a file returning a PHP array.
  *
  * @author Matthieu Napoli <matthieu@mnapoli.fr>
  */
-class ArrayDefinitionSource implements DefinitionSource, ChainableDefinitionSource, ClassDefinitionSource
+class ArrayDefinitionSource implements ChainableDefinitionSource
 {
     /**
      * @var DefinitionSource
@@ -64,14 +62,14 @@ class ArrayDefinitionSource implements DefinitionSource, ChainableDefinitionSour
     /**
      * {@inheritdoc}
      */
-    public function getDefinition($name)
+    public function getDefinition($name, MergeableDefinition $parentDefinition = null)
     {
         $this->initialize();
 
         if (! array_key_exists($name, $this->definitions)) {
             // Not found, we use the chain or return null
             if ($this->chainedSource) {
-                return $this->chainedSource->getDefinition($name);
+                return $this->chainedSource->getDefinition($name, $parentDefinition);
             }
             return null;
         }
@@ -86,49 +84,41 @@ class ArrayDefinitionSource implements DefinitionSource, ChainableDefinitionSour
             $definition = new ValueDefinition($name, $definition);
         }
 
-        if ($definition instanceof ClassDefinition) {
-            // TODO merge properties and methods with sub-sources
+        // If the definition we have is not mergeable, and we are supposed to merge, we ignore it
+        if ($parentDefinition && (! $definition instanceof MergeableDefinition)) {
+            return $parentDefinition;
+        }
+
+        // Merge with parent
+        if ($parentDefinition) {
+            $parentDefinition->merge($definition);
+            $definition = $parentDefinition;
+        }
+
+        // Enrich definition in sub-source
+        if ($this->chainedSource && $definition instanceof MergeableDefinition) {
+            $this->chainedSource->getDefinition($name, $definition);
         }
 
         return $definition;
     }
 
     /**
-     * {@inheritdoc}
-     */
-    public function getPropertyInjection($entryName, ReflectionProperty $property)
-    {
-        $definition = $this->getDefinition($entryName);
-
-        if ($definition && $definition instanceof ClassDefinition) {
-            return $definition->getPropertyInjection($property->getName());
-        }
-
-        return null;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getMethodInjection($entryName, ReflectionMethod $method)
-    {
-        $definition = $this->getDefinition($entryName);
-
-        if ($definition && $definition instanceof ClassDefinition) {
-            return $definition->getMethodInjection($method->getName());
-        }
-
-        return null;
-    }
-
-    /**
-     * @param array $definitions DI definitions in a PHP array.
+     * @param array $definitions DI definitions in a PHP array indexed by the definition name.
      */
     public function addDefinitions(array $definitions)
     {
         // The newly added data prevails
         // "for keys that exist in both arrays, the elements from the left-hand array will be used"
         $this->definitions = $definitions + $this->definitions;
+    }
+
+    /**
+     * @param Definition $definition
+     */
+    public function addDefinition(Definition $definition)
+    {
+        $this->definitions[$definition->getName()] = $definition;
     }
 
     /**

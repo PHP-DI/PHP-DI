@@ -17,6 +17,7 @@ use DI\Definition\Exception\AnnotationException;
 use DI\Definition\Exception\DefinitionException;
 use DI\Definition\ClassInjection\MethodInjection;
 use DI\Definition\ClassInjection\PropertyInjection;
+use DI\Definition\MergeableDefinition;
 use Doctrine\Common\Annotations\AnnotationRegistry;
 use Doctrine\Common\Annotations\Reader;
 use Doctrine\Common\Annotations\SimpleAnnotationReader;
@@ -36,7 +37,7 @@ use UnexpectedValueException;
  *
  * @author Matthieu Napoli <matthieu@mnapoli.fr>
  */
-class AnnotationDefinitionSource implements DefinitionSource, ClassDefinitionSource
+class AnnotationDefinitionSource implements DefinitionSource
 {
     /**
      * @var Reader
@@ -53,14 +54,21 @@ class AnnotationDefinitionSource implements DefinitionSource, ClassDefinitionSou
      * @throws AnnotationException
      * @throws InvalidArgumentException The class doesn't exist
      */
-    public function getDefinition($name)
+    public function getDefinition($name, MergeableDefinition $parentDefinition = null)
     {
-        if (!class_exists($name) && !interface_exists($name)) {
+        // Only merges with class definition
+        if ($parentDefinition && (! $parentDefinition instanceof ClassDefinition)) {
             return null;
         }
 
-        $class = new ReflectionClass($name);
-        $classDefinition = new ClassDefinition($name);
+        $className = $parentDefinition ? $parentDefinition->getClassName() : $name;
+
+        if (!class_exists($className) && !interface_exists($className)) {
+            return null;
+        }
+
+        $class = new ReflectionClass($className);
+        $definition = new ClassDefinition($name);
 
         // Injectable annotation
         /** @var $injectableAnnotation Injectable|null */
@@ -77,20 +85,26 @@ class AnnotationDefinitionSource implements DefinitionSource, ClassDefinitionSou
 
         if ($injectableAnnotation) {
             if ($injectableAnnotation->getScope()) {
-                $classDefinition->setScope($injectableAnnotation->getScope());
+                $definition->setScope($injectableAnnotation->getScope());
             }
             if ($injectableAnnotation->isLazy() !== null) {
-                $classDefinition->setLazy($injectableAnnotation->isLazy());
+                $definition->setLazy($injectableAnnotation->isLazy());
             }
         }
 
         // Browse the class properties looking for annotated properties
-        $this->readProperties($class, $classDefinition);
+        $this->readProperties($class, $definition);
 
         // Browse the object's methods looking for annotated methods
-        $this->readMethods($class, $classDefinition);
+        $this->readMethods($class, $definition);
 
-        return $classDefinition;
+        // Merge with parent
+        if ($parentDefinition) {
+            $parentDefinition->merge($definition);
+            $definition = $parentDefinition;
+        }
+
+        return $definition;
     }
 
     /**
@@ -108,7 +122,7 @@ class AnnotationDefinitionSource implements DefinitionSource, ClassDefinitionSou
                 continue;
             }
 
-            $propertyInjection = $this->getPropertyInjection($reflectionClass->getName(), $property);
+            $propertyInjection = $this->getPropertyInjection($property);
 
             if ($propertyInjection) {
                 $classDefinition->addPropertyInjection($propertyInjection);
@@ -119,7 +133,7 @@ class AnnotationDefinitionSource implements DefinitionSource, ClassDefinitionSou
     /**
      * {@inheritdoc}
      */
-    public function getPropertyInjection($entryName, ReflectionProperty $property)
+    private function getPropertyInjection(ReflectionProperty $property)
     {
         // Look for @Inject annotation
         /** @var $annotation Inject */
@@ -132,7 +146,11 @@ class AnnotationDefinitionSource implements DefinitionSource, ClassDefinitionSou
         $entryName = $annotation->getName() ?: $this->getPhpDocReader()->getPropertyType($property);
 
         if ($entryName === null) {
-            return null;
+            throw new AnnotationException(sprintf(
+                '@Inject found on property %s::%s but unable to guess what to inject, use a @var annotation',
+                $property->getDeclaringClass()->getName(),
+                $property->getName()
+            ));
         }
 
         return new PropertyInjection($property->getName(), new EntryReference($entryName));
@@ -152,7 +170,7 @@ class AnnotationDefinitionSource implements DefinitionSource, ClassDefinitionSou
                 continue;
             }
 
-            $methodInjection = $this->getMethodInjection($class->getName(), $method);
+            $methodInjection = $this->getMethodInjection($method);
 
             if (! $methodInjection) {
                 continue;
@@ -169,7 +187,7 @@ class AnnotationDefinitionSource implements DefinitionSource, ClassDefinitionSou
     /**
      * {@inheritdoc}
      */
-    public function getMethodInjection($entryName, ReflectionMethod $method)
+    private function getMethodInjection(ReflectionMethod $method)
     {
         // Look for @Inject annotation
         /** @var $annotation Inject|null */
@@ -186,7 +204,7 @@ class AnnotationDefinitionSource implements DefinitionSource, ClassDefinitionSou
             $entryName = $this->getMethodParameter($index, $parameter, $annotationParameters);
 
             if ($entryName !== null) {
-                $parameters[$parameter->getName()] = new EntryReference($entryName);
+                $parameters[$index] = new EntryReference($entryName);
             }
         }
 

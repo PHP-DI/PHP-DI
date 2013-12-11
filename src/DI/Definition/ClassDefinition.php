@@ -19,7 +19,7 @@ use DI\Scope;
  *
  * @author Matthieu Napoli <matthieu@mnapoli.fr>
  */
-class ClassDefinition implements Definition
+class ClassDefinition implements MergeableDefinition
 {
     /**
      * Entry name (most of the time, same as $classname)
@@ -157,7 +157,7 @@ class ClassDefinition implements Definition
 
     /**
      * @param string $methodName
-     * @return MethodInjection
+     * @return MethodInjection|null
      */
     public function getMethodInjection($methodName)
     {
@@ -212,21 +212,23 @@ class ClassDefinition implements Definition
     /**
      * {@inheritdoc}
      */
-    public function merge(Definition $definition)
+    public function merge(MergeableDefinition $definition)
     {
         if (!$definition instanceof ClassDefinition) {
-            throw new DefinitionException("DI definition conflict: there are 2 different definitions for '"
-                . $definition->getName() . "' that are incompatible, they are not of the same type");
+            throw new DefinitionException(
+                "DI definition conflict: there are 2 different definitions for '" . $this->getName()
+                . "' that are incompatible, they are not of the same type"
+            );
         }
 
-        // The latter prevails
-        if ($definition->className !== null) {
+        // The current prevails
+        if ($this->className === null) {
             $this->className = $definition->className;
         }
-        if ($definition->scope !== null) {
+        if ($this->scope === null) {
             $this->scope = $definition->scope;
         }
-        if ($definition->lazy !== null) {
+        if ($this->lazy === null) {
             $this->lazy = $definition->lazy;
         }
 
@@ -243,10 +245,7 @@ class ClassDefinition implements Definition
 
         // Merge property injections
         foreach ($definition->getPropertyInjections() as $propertyName => $propertyInjection) {
-            if (array_key_exists($propertyName, $this->propertyInjections)) {
-                // Merge
-                $this->propertyInjections[$propertyName]->merge($propertyInjection);
-            } else {
+            if (! array_key_exists($propertyName, $this->propertyInjections)) {
                 // Add
                 $this->propertyInjections[$propertyName] = $propertyInjection;
             }
@@ -268,14 +267,6 @@ class ClassDefinition implements Definition
      * {@inheritdoc}
      */
     public function isCacheable()
-    {
-        return true;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public static function isMergeable()
     {
         return true;
     }

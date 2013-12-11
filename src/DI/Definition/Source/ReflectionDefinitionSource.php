@@ -12,63 +12,66 @@ namespace DI\Definition\Source;
 use DI\Definition\ClassDefinition;
 use DI\Definition\EntryReference;
 use DI\Definition\ClassInjection\MethodInjection;
+use DI\Definition\MergeableDefinition;
 use ReflectionClass;
 use ReflectionMethod;
-use ReflectionProperty;
 
 /**
  * Reads DI class definitions using reflection.
  *
  * @author Matthieu Napoli <matthieu@mnapoli.fr>
  */
-class ReflectionDefinitionSource implements DefinitionSource, ClassDefinitionSource
+class ReflectionDefinitionSource implements DefinitionSource
 {
     /**
      * {@inheritdoc}
      */
-    public function getDefinition($name)
+    public function getDefinition($name, MergeableDefinition $parentDefinition = null)
     {
-        if (!class_exists($name) && !interface_exists($name)) {
+        // Only merges with class definition
+        if ($parentDefinition && (! $parentDefinition instanceof ClassDefinition)) {
             return null;
         }
 
-        $class = new ReflectionClass($name);
-        $classDefinition = new ClassDefinition($name);
+        $className = $parentDefinition ? $parentDefinition->getClassName() : $name;
+
+        if (!class_exists($className) && !interface_exists($className)) {
+            return null;
+        }
+
+        $class = new ReflectionClass($className);
+        $definition = new ClassDefinition($name);
 
         // Constructor
         $constructor = $class->getConstructor();
-
         if ($constructor && $constructor->isPublic()) {
-            $classDefinition->setConstructorInjection($this->getMethodInjection($name, $constructor));
+            $definition->setConstructorInjection($this->getConstructorInjection($constructor));
         }
 
-        return $classDefinition;
+        // Merge with parent
+        if ($parentDefinition) {
+            $parentDefinition->merge($definition);
+            $definition = $parentDefinition;
+        }
+
+        return $definition;
     }
 
     /**
      * {@inheritdoc}
      */
-    public function getPropertyInjection($entryName, ReflectionProperty $property)
-    {
-        // Nothing to guess on properties
-        return null;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getMethodInjection($entryName, ReflectionMethod $method)
+    private function getConstructorInjection(ReflectionMethod $constructor)
     {
         $parameters = array();
 
-        foreach ($method->getParameters() as $parameter) {
+        foreach ($constructor->getParameters() as $index => $parameter) {
             $parameterClass = $parameter->getClass();
 
             if ($parameterClass) {
-                $parameters[$parameter->getName()] = new EntryReference($parameterClass->getName());
+                $parameters[$index] = new EntryReference($parameterClass->getName());
             }
         }
 
-        return new MethodInjection($method->getName(), $parameters);
+        return new MethodInjection($constructor->getName(), $parameters);
     }
 }

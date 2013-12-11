@@ -76,23 +76,7 @@ class CallableDefinition implements Definition
     /**
      * {@inheritdoc}
      */
-    public function merge(Definition $definition)
-    {
-        throw new \BadMethodCallException("Impossible to merge a CallableDefinition with another definition");
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public function isCacheable()
-    {
-        return false;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public static function isMergeable()
     {
         return false;
     }

@@ -9,8 +9,8 @@
 
 namespace DI\Definition;
 
+use DI\Definition\Source\ArrayDefinitionSource;
 use DI\Definition\Source\DefinitionSource;
-use DI\Definition\Source\InMemoryDefinitionSource;
 use Doctrine\Common\Cache\Cache;
 
 /**
@@ -33,13 +33,13 @@ class DefinitionManager
     private $cache;
 
     /**
-     * @var InMemoryDefinitionSource
+     * @var ArrayDefinitionSource
      */
     private $source;
 
     public function __construct(DefinitionSource $source = null)
     {
-        $this->source = new InMemoryDefinitionSource();
+        $this->source = new ArrayDefinitionSource();
 
         if ($source) {
             $this->source->chain($source);
