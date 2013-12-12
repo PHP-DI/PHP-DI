@@ -15,7 +15,6 @@ return array(
                 'name' => 'IntegrationTests\DI\Fixtures\LazyDependency',
                 'lazy' => true,
             ),
-            'property6' => 'simpleValueDependency',
         ),
         'constructor' => array(
             'param1' => 'IntegrationTests\DI\Fixtures\Class2',
@@ -24,7 +23,6 @@ return array(
                 'name' => 'IntegrationTests\DI\Fixtures\LazyDependency',
                 'lazy' => true,
             ),
-            'simpleValueDependency' => 'simpleValueDependency',
         ),
         'methods'     => array(
             'method1' => 'IntegrationTests\DI\Fixtures\Class2',
@@ -38,9 +36,6 @@ return array(
                     'name' => 'IntegrationTests\DI\Fixtures\LazyDependency',
                     'lazy' => true,
                 ),
-            ),
-            'method5' => array(
-                'param1' => 'simpleValueDependency',
             ),
         ),
     ),

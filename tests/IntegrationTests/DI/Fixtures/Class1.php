@@ -47,15 +47,9 @@ class Class1
      */
     public $property5;
 
-    /**
-     * @Inject("simpleValueDependency")
-     */
-    public $property6;
-
     public $constructorParam1;
     public $constructorParam2;
     public $constructorParam3;
-    public $constructorParam4;
 
     public $method1Param1;
 
@@ -66,22 +60,19 @@ class Class1
 
     public $method4Param1;
 
-    public $method5Param1;
-
     /**
      * @Inject({"param3" = {"lazy" = true}})
      * @param Class2         $param1
      * @param Interface1     $param2
      * @param LazyDependency $param3
-     * @param $simpleValueDependency
      * @throws \Exception
      */
-    public function __construct(Class2 $param1, Interface1 $param2, LazyDependency $param3, $simpleValueDependency, $optional = true)
+    public function __construct(Class2 $param1, Interface1 $param2, LazyDependency $param3, $optional = true)
     {
         $this->constructorParam1 = $param1;
         $this->constructorParam2 = $param2;
         $this->constructorParam3 = $param3;
-        $this->constructorParam4 = $simpleValueDependency;
+
         if ($optional !== true) {
             throw new \Exception("Expected optional parameter to not be defined");
         }
@@ -127,15 +118,6 @@ class Class1
     public function method4(LazyDependency $param1)
     {
         $this->method4Param1 = $param1;
-    }
-
-    /**
-     * @Inject({"simpleValueDependency"})
-     * @param string $param1
-     */
-    public function method5($param1)
-    {
-        $this->method5Param1 = $param1;
     }
 
 }

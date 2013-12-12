@@ -31,7 +31,6 @@ class InjectionTest extends \PHPUnit_Framework_TestCase
     const DEFINITION_PHP = 4;
     const DEFINITION_ARRAY_FROM_FILE = 5;
     const DEFINITION_YAML = 6;
-    const CUSTOM_VALUE = 'This is a runtime-supplied value';
 
     /**
      * PHPUnit data provider: generates container configurations for running the same tests for each configuration possible
@@ -55,7 +54,6 @@ class InjectionTest extends \PHPUnit_Framework_TestCase
                 ),
             )
         );
-        $containerReflection->set('simpleValueDependency', InjectionTest::CUSTOM_VALUE);
 
         // Test with a container using annotations and reflection
         $builder = new ContainerBuilder();
@@ -73,7 +71,6 @@ class InjectionTest extends \PHPUnit_Framework_TestCase
                 ),
             )
         );
-        $containerAnnotations->set('simpleValueDependency', InjectionTest::CUSTOM_VALUE);
 
         // Test with a container using array configuration
         $builder = new ContainerBuilder();
@@ -82,7 +79,6 @@ class InjectionTest extends \PHPUnit_Framework_TestCase
         $containerArray = $builder->build();
         $array = require __DIR__ . '/Fixtures/definitions.php';
         $containerArray->addDefinitions($array);
-        $containerArray->set('simpleValueDependency', InjectionTest::CUSTOM_VALUE);
 
         // Test with a container using PHP configuration
         $builder = new ContainerBuilder();
@@ -97,7 +93,6 @@ class InjectionTest extends \PHPUnit_Framework_TestCase
             ->withProperty('property3', 'namedDependency')
             ->withProperty('property4', 'foo')
             ->withProperty('property5', 'IntegrationTests\DI\Fixtures\LazyDependency', true)
-            ->withProperty('property6', 'simpleValueDependency')
             ->withConstructor(
                 array(
                     'param1' => 'IntegrationTests\DI\Fixtures\Class2',
@@ -105,8 +100,7 @@ class InjectionTest extends \PHPUnit_Framework_TestCase
                     'param3' => array(
                         'name' => 'IntegrationTests\DI\Fixtures\LazyDependency',
                         'lazy' => true,
-                    ),
-                    'param4' => 'simpleValueDependency'
+                    )
                 )
             )
             ->withMethod('method1', array('IntegrationTests\DI\Fixtures\Class2'))
@@ -115,8 +109,7 @@ class InjectionTest extends \PHPUnit_Framework_TestCase
             ->withMethod('method4', array('param1' => array(
                     'name' => 'IntegrationTests\DI\Fixtures\LazyDependency',
                     'lazy' => true,
-                )))
-            ->withMethod('method5', array('param1' => 'simpleValueDependency'));
+                )));
         $containerPHP->set('IntegrationTests\DI\Fixtures\Class2');
         $containerPHP->set('IntegrationTests\DI\Fixtures\Implementation1');
         $containerPHP->set('IntegrationTests\DI\Fixtures\Interface1')
@@ -125,7 +118,6 @@ class InjectionTest extends \PHPUnit_Framework_TestCase
         $containerPHP->set('namedDependency')
             ->bindTo('IntegrationTests\DI\Fixtures\Class2');
         $containerPHP->set('IntegrationTests\DI\Fixtures\LazyDependency');
-        $containerPHP->set('simpleValueDependency', InjectionTest::CUSTOM_VALUE);
 
         // Test with a container using array configuration loaded from file
         $builder = new ContainerBuilder();
@@ -133,7 +125,6 @@ class InjectionTest extends \PHPUnit_Framework_TestCase
         $builder->useAnnotations(false);
         $builder->addDefinitionsFromFile(new ArrayDefinitionFileLoader(__DIR__ . '/Fixtures/definitions.php'));
         $containerArrayFromFile = $builder->build();
-        $containerArrayFromFile->set('simpleValueDependency', InjectionTest::CUSTOM_VALUE);
 
         // Test with a container using array configuration loaded from file
         $builder = new ContainerBuilder();
@@ -141,7 +132,6 @@ class InjectionTest extends \PHPUnit_Framework_TestCase
         $builder->useAnnotations(false);
         $builder->addDefinitionsFromFile(new YamlDefinitionFileLoader(__DIR__ . '/Fixtures/definitions.yml'));
         $containerYaml = $builder->build();
-        $containerYaml->set('simpleValueDependency', InjectionTest::CUSTOM_VALUE);
 
         return array(
             array(self::DEFINITION_REFLECTION, $containerReflection),
@@ -163,7 +153,6 @@ class InjectionTest extends \PHPUnit_Framework_TestCase
 
         $this->assertInstanceOf('IntegrationTests\DI\Fixtures\Class2', $class1->constructorParam1);
         $this->assertInstanceOf('IntegrationTests\DI\Fixtures\Implementation1', $class1->constructorParam2);
-        $this->assertEquals(InjectionTest::CUSTOM_VALUE, $class1->constructorParam4);
 
         // Test lazy injection (not possible using reflection)
         if ($type != self::DEFINITION_REFLECTION) {
@@ -194,7 +183,6 @@ class InjectionTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf('IntegrationTests\DI\Fixtures\Implementation1', $class1->property2);
         $this->assertInstanceOf('IntegrationTests\DI\Fixtures\Class2', $class1->property3);
         $this->assertEquals('bar', $class1->property4);
-        $this->assertEquals(InjectionTest::CUSTOM_VALUE, $class1->property6);
         // Lazy injection
         /** @var LazyDependency|\ProxyManager\Proxy\LazyLoadingInterface $proxy */
         $proxy = $class1->property5;
@@ -216,14 +204,13 @@ class InjectionTest extends \PHPUnit_Framework_TestCase
             return;
         }
         /** @var $class1 Class1 */
-        $class1 = new Class1(new Class2(), new Implementation1(), new LazyDependency(), null);
+        $class1 = new Class1(new Class2(), new Implementation1(), new LazyDependency());
         $container->injectOn($class1);
 
         $this->assertInstanceOf('IntegrationTests\DI\Fixtures\Class2', $class1->property1);
         $this->assertInstanceOf('IntegrationTests\DI\Fixtures\Implementation1', $class1->property2);
         $this->assertInstanceOf('IntegrationTests\DI\Fixtures\Class2', $class1->property3);
         $this->assertEquals('bar', $class1->property4);
-        $this->assertEquals(InjectionTest::CUSTOM_VALUE, $class1->property6);
         // Lazy injection
         /** @var LazyDependency|\ProxyManager\Proxy\LazyLoadingInterface $proxy */
         $proxy = $class1->property5;
@@ -253,8 +240,6 @@ class InjectionTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('bar', $class1->method3Param2);
         $this->assertInstanceOf('IntegrationTests\DI\Fixtures\LazyDependency', $class1->method4Param1);
         $this->assertInstanceOf('ProxyManager\Proxy\LazyLoadingInterface', $class1->method4Param1);
-        $this->assertEquals(InjectionTest::CUSTOM_VALUE, $class1->method5Param1);
-
         // Lazy injection
         /** @var LazyDependency|\ProxyManager\Proxy\LazyLoadingInterface $proxy */
         $proxy = $class1->method4Param1;
@@ -273,10 +258,8 @@ class InjectionTest extends \PHPUnit_Framework_TestCase
         if ($type == self::DEFINITION_REFLECTION) {
             return;
         }
-        $customValue = 'customValue';
-        $container->set('simpleValueDependency', $customValue);
         /** @var $class1 Class1 */
-        $class1 = new Class1(new Class2(), new Implementation1(), new LazyDependency(), null);
+        $class1 = new Class1(new Class2(), new Implementation1(), new LazyDependency());
         $container->injectOn($class1);
 
         $this->assertInstanceOf('IntegrationTests\DI\Fixtures\Class2', $class1->method1Param1);
