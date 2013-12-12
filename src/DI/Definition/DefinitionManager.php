@@ -9,13 +9,8 @@
 
 namespace DI\Definition;
 
-use DI\Definition\Definition;
-use DI\Definition\Source\AnnotationDefinitionSource;
 use DI\Definition\Source\ArrayDefinitionSource;
-use DI\Definition\Source\CombinedDefinitionSource;
-use DI\Definition\Source\ReflectionDefinitionSource;
-use DI\Definition\Source\SimpleDefinitionSource;
-use DI\Definition\FileLoader\DefinitionFileLoader;
+use DI\Definition\Source\DefinitionSource;
 use Doctrine\Common\Cache\Cache;
 
 /**
@@ -26,7 +21,6 @@ use Doctrine\Common\Cache\Cache;
  */
 class DefinitionManager
 {
-
     /**
      * Prefix for cache key, to avoid conflicts with other systems using the same cache
      * @var string
@@ -39,45 +33,17 @@ class DefinitionManager
     private $cache;
 
     /**
-     * Source merging definitions of sub-sources
-     * @var CombinedDefinitionSource
+     * @var ArrayDefinitionSource
      */
-    private $combinedSource;
+    private $source;
 
-    /**
-     * Keep a reference to the simple source to add definitions to it
-     * @var SimpleDefinitionSource
-     */
-    private $simpleSource;
-
-    /**
-     * Keep a reference to the reflection source to ensure only one is used
-     * @var ReflectionDefinitionSource|null
-     */
-    private $reflectionSource;
-
-    /**
-     * Keep a reference to the annotation source to ensure only one is used
-     * @var AnnotationDefinitionSource|null
-     */
-    private $annotationSource;
-
-    /**
-     * @var ArrayDefinitionSource[]
-     */
-    private $arraySources = array();
-
-    /**
-     * Enables/disable the validation of the definitions
-     * @var bool
-     */
-    private $definitionsValidation = false;
-
-    public function __construct()
+    public function __construct(DefinitionSource $source = null)
     {
-        $this->simpleSource = new SimpleDefinitionSource();
+        $this->source = new ArrayDefinitionSource();
 
-        $this->updateCombinedSource();
+        if ($source) {
+            $this->source->chain($source);
+        }
     }
 
     /**
@@ -87,20 +53,11 @@ class DefinitionManager
      */
     public function getDefinition($name)
     {
-        // Look in cache first
+        // Look in cache
         $definition = $this->fetchFromCache($name);
 
         if ($definition === false) {
-            $definition = $this->combinedSource->getDefinition($name);
-
-            // If alias, merge definition with alias
-            if ($definition instanceof ClassDefinition && $definition->isAlias()) {
-                $implementationDefinition = $this->getDefinition($definition->getClassName());
-
-                if ($implementationDefinition) {
-                    $definition->merge($implementationDefinition);
-                }
-            }
+            $definition = $this->source->getDefinition($name);
 
             // Save to cache
             if ($definition === null || ($definition && $definition->isCacheable())) {
@@ -112,86 +69,13 @@ class DefinitionManager
     }
 
     /**
-     * Enable or disable the use of reflection
+     * Add a single definition
      *
-     * @param boolean $bool
-     */
-    public function useReflection($bool)
-    {
-        // Enable
-        if ($bool && $this->reflectionSource === null) {
-            $this->reflectionSource = new ReflectionDefinitionSource();
-            $this->updateCombinedSource();
-        // Disable
-        } elseif (!$bool && $this->reflectionSource !== null) {
-            $this->reflectionSource = null;
-            $this->updateCombinedSource();
-        }
-    }
-
-    /**
-     * Enable or disable the use of annotations
-     *
-     * @param boolean $bool
-     */
-    public function useAnnotations($bool)
-    {
-        // Enable
-        if ($bool && $this->annotationSource === null) {
-            $this->annotationSource = new AnnotationDefinitionSource();
-            $this->updateCombinedSource();
-        // Disable
-        } elseif (!$bool && $this->annotationSource !== null) {
-            $this->annotationSource = null;
-            $this->updateCombinedSource();
-        }
-    }
-
-    /**
-     * Add definitions from an array
-     *
-     * @param array $definitions
-     */
-    public function addArrayDefinitions(array $definitions)
-    {
-        $arraySource = new ArrayDefinitionSource();
-        $arraySource->addDefinitions($definitions);
-
-        $this->arraySources[] = $arraySource;
-
-        $this->updateCombinedSource();
-    }
-
-    /**
-     * Add definitions from an array
-     *
-     * @param array $definitions
+     * @param Definition $definition
      */
     public function addDefinition(Definition $definition)
     {
-        $this->simpleSource->addDefinition($definition);
-    }
-
-    /**
-     * Add definitions contained in a file
-     *
-     * @param \DI\Definition\FileLoader\DefinitionFileLoader $definitionFileLoader
-     * @throws \InvalidArgumentException
-     */
-    public function addDefinitionsFromFile(DefinitionFileLoader $definitionFileLoader)
-    {
-        $definitions = $definitionFileLoader->load($this->definitionsValidation);
-
-        if (!is_array($definitions)) {
-            throw new \InvalidArgumentException(get_class($definitionFileLoader) . " must return an array.");
-        }
-
-        $arraySource = new ArrayDefinitionSource();
-        $arraySource->addDefinitions($definitions);
-
-        $this->arraySources[] = $arraySource;
-
-        $this->updateCombinedSource();
+        $this->source->addDefinition($definition);
     }
 
     /**
@@ -210,28 +94,6 @@ class DefinitionManager
     public function setCache(Cache $cache = null)
     {
         $this->cache = $cache;
-    }
-
-    /**
-     * Enables/disables the validation of the definitions
-     *
-     * By default, disabled
-     * @param bool $bool
-     */
-    public function setDefinitionsValidation($bool)
-    {
-        $this->definitionsValidation = (bool) $bool;
-    }
-
-    /**
-     * Returns the state of the validation of the definitions
-     *
-     * By default, disabled
-     * @param bool $bool
-     */
-    public function getDefinitionsValidation()
-    {
-        return $this->definitionsValidation;
     }
 
     /**
@@ -268,31 +130,4 @@ class DefinitionManager
         $cacheKey = self::CACHE_PREFIX . $name;
         $this->cache->save($cacheKey, $definition);
     }
-
-    /**
-     * Builds the combined source
-     *
-     * Builds from scratch every time because the order of the sources is important.
-     */
-    private function updateCombinedSource()
-    {
-        // Sources are added from highest priority to least priority
-        $this->combinedSource = new CombinedDefinitionSource();
-
-        $this->combinedSource->addSource($this->simpleSource);
-
-        // Traverses the array reverse
-        foreach (array_reverse($this->arraySources) as $arraySource) {
-            $this->combinedSource->addSource($arraySource);
-        }
-
-        if ($this->annotationSource) {
-            $this->combinedSource->addSource($this->annotationSource);
-        }
-
-        if ($this->reflectionSource) {
-            $this->combinedSource->addSource($this->reflectionSource);
-        }
-    }
-
 }

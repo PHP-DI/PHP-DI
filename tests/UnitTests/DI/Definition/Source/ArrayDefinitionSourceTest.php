@@ -9,16 +9,18 @@
 
 namespace UnitTests\DI\Definition\Source;
 
-use DI\Definition\Source\ArrayDefinitionSource;
+use DI\Definition\CallableDefinition;
 use DI\Definition\ClassDefinition;
-use DI\Scope;
+use DI\Definition\Source\ArrayDefinitionSource;
 
 /**
  * Test class for ArrayDefinitionSource
  */
 class ArrayDefinitionSourceTest extends \PHPUnit_Framework_TestCase
 {
-
+    /**
+     * @covers \DI\Definition\Source\ArrayDefinitionSource
+     */
     public function testValueDefinition()
     {
         $source = new ArrayDefinitionSource();
@@ -28,11 +30,14 @@ class ArrayDefinitionSourceTest extends \PHPUnit_Framework_TestCase
             )
         );
         $definition = $source->getDefinition('foo');
-        $this->assertInstanceOf('\\DI\\Definition\\ValueDefinition', $definition);
+        $this->assertInstanceOf('DI\Definition\ValueDefinition', $definition);
         $this->assertEquals('foo', $definition->getName());
         $this->assertEquals('bar', $definition->getValue());
     }
 
+    /**
+     * @covers \DI\Definition\Source\ArrayDefinitionSource
+     */
     public function testValueTypes()
     {
         $source = new ArrayDefinitionSource();
@@ -40,6 +45,10 @@ class ArrayDefinitionSourceTest extends \PHPUnit_Framework_TestCase
             'integer' => 1,
             'string'  => 'test',
             'float'   => 1.0,
+            'array'   => array('a', 'b', 'c'),
+            'assoc'   => array('a' => 'b'),
+            'closure' => function () {
+            },
         );
         $source->addDefinitions($definitions);
 
@@ -57,284 +66,73 @@ class ArrayDefinitionSourceTest extends \PHPUnit_Framework_TestCase
         $this->assertNotNull($definition);
         $this->assertEquals(1.0, $definition->getValue());
         $this->assertInternalType('float', $definition->getValue());
+
+        $definition = $source->getDefinition('array');
+        $this->assertNotNull($definition);
+        $this->assertEquals(array('a', 'b', 'c'), $definition->getValue());
+        $this->assertInternalType('array', $definition->getValue());
+
+        $definition = $source->getDefinition('assoc');
+        $this->assertNotNull($definition);
+        $this->assertEquals(array('a' => 'b'), $definition->getValue());
+        $this->assertInternalType('array', $definition->getValue());
+
+        $definition = $source->getDefinition('closure');
+        $this->assertNotNull($definition);
+        $this->assertInstanceOf('Closure', $definition->getValue());
     }
 
+    /**
+     * @covers \DI\Definition\Source\ArrayDefinitionSource
+     */
     public function testClassDefinition()
     {
         $source = new ArrayDefinitionSource();
-        $source->addDefinitions(
-            array(
-                'foo' => array(
-                    'lazy'  => true,
-                    'scope' => 'prototype',
-                ),
-            )
-        );
+        $source->addDefinitions(array(
+            'foo' => \DI\object(),
+        ));
         /** @var $definition ClassDefinition */
         $definition = $source->getDefinition('foo');
         $this->assertInstanceOf('DI\Definition\ClassDefinition', $definition);
         $this->assertEquals('foo', $definition->getName());
         $this->assertEquals('foo', $definition->getClassName());
-        $this->assertTrue($definition->isLazy());
-        $this->assertEquals(Scope::PROTOTYPE(), $definition->getScope());
-    }
-
-    public function testScopeDefinition()
-    {
-        $source = new ArrayDefinitionSource();
-        $source->addDefinitions(
-            array(
-                'default' => array(
-                ),
-                'foo' => array(
-                    'scope' => 'prototype',
-                ),
-                'bar' => array(
-                    'scope' => Scope::PROTOTYPE,
-                ),
-                'bam' => array(
-                    'scope' => Scope::PROTOTYPE(),
-                ),
-            )
-        );
-        /** @var $definition ClassDefinition */
-        $definition = $source->getDefinition('default');
-        $this->assertEquals(Scope::SINGLETON(), $definition->getScope());
-        $definition = $source->getDefinition('foo');
-        $this->assertEquals(Scope::PROTOTYPE(), $definition->getScope());
-        $definition = $source->getDefinition('bar');
-        $this->assertEquals(Scope::PROTOTYPE(), $definition->getScope());
-        $definition = $source->getDefinition('bam');
-        $this->assertEquals(Scope::PROTOTYPE(), $definition->getScope());
-    }
-
-    public function testAliasDefinition()
-    {
-        $source = new ArrayDefinitionSource();
-        $source->addDefinitions(
-            array(
-                'foo' => array(
-                    'class' => 'Bar',
-                ),
-            )
-        );
-        /** @var $definition ClassDefinition */
-        $definition = $source->getDefinition('foo');
-        $this->assertInstanceOf('DI\Definition\ClassDefinition', $definition);
-        $this->assertEquals('foo', $definition->getName());
-        $this->assertEquals('Bar', $definition->getClassName());
-    }
-
-    public function testPropertyDefinition()
-    {
-        $source = new ArrayDefinitionSource();
-        $source->addDefinitions(
-            array(
-                'foo' => array(
-                    'properties' => array(
-                        'property1' => 'Property1',
-                        'property2' => array(
-                            'name' => 'Property2',
-                            'lazy' => true,
-                        ),
-                    ),
-                ),
-            )
-        );
-        /** @var $definition ClassDefinition */
-        $definition = $source->getDefinition('foo');
-        $propertyInjections = $definition->getPropertyInjections();
-        $this->assertCount(2, $propertyInjections);
-
-        $property1 = $propertyInjections['property1'];
-        $this->assertEquals('property1', $property1->getPropertyName());
-        $this->assertEquals('Property1', $property1->getEntryName());
-        $this->assertFalse($property1->isLazy());
-
-        $property2 = $propertyInjections['property2'];
-        $this->assertEquals('property2', $property2->getPropertyName());
-        $this->assertEquals('Property2', $property2->getEntryName());
-        $this->assertTrue($property2->isLazy());
-    }
-
-    public function testMethodDefinition1()
-    {
-        $source = new ArrayDefinitionSource();
-        $source->addDefinitions(
-            array(
-                'foo' => array(
-                    'methods' => array(
-                        'set1' => array(
-                            'param1' => 'Foo1',
-                            'param2' => array(
-                                'name' => 'Foo2',
-                                'lazy' => true,
-                            ),
-                        ),
-                    ),
-                ),
-            )
-        );
-        /** @var $definition ClassDefinition */
-        $definition = $source->getDefinition('foo');
-        $methodInjections = $definition->getMethodInjections();
-        $this->assertCount(1, $methodInjections);
-
-        $method1 = $methodInjections['set1'];
-        $this->assertEquals('set1', $method1->getMethodName());
-
-        $parameters = $method1->getParameterInjections();
-
-        $parameter1 = $parameters['param1'];
-        $this->assertEquals('param1', $parameter1->getParameterName());
-        $this->assertEquals('Foo1', $parameter1->getEntryName());
-        $this->assertFalse($parameter1->isLazy());
-
-        $parameter2 = $parameters['param2'];
-        $this->assertEquals('param2', $parameter2->getParameterName());
-        $this->assertEquals('Foo2', $parameter2->getEntryName());
-        $this->assertTrue($parameter2->isLazy());
-    }
-
-    public function testMethodDefinition2()
-    {
-        $source = new ArrayDefinitionSource();
-        $source->addDefinitions(
-            array(
-                 'foo' => array(
-                     'methods' => array(
-                         'set1' => array('Foo1', 'Foo2'),
-                     ),
-                 ),
-            )
-        );
-        /** @var $definition ClassDefinition */
-        $definition = $source->getDefinition('foo');
-        $methodInjections = $definition->getMethodInjections();
-        $this->assertCount(1, $methodInjections);
-
-        $method1 = $methodInjections['set1'];
-        $this->assertEquals('set1', $method1->getMethodName());
-
-        $parameters = $method1->getParameterInjections();
-
-        $parameter1 = $parameters[0];
-        $this->assertEquals(0, $parameter1->getParameterName());
-        $this->assertEquals('Foo1', $parameter1->getEntryName());
-
-        $parameter2 = $parameters[1];
-        $this->assertEquals(1, $parameter2->getParameterName());
-        $this->assertEquals('Foo2', $parameter2->getEntryName());
-    }
-
-    public function testMethodDefinition3()
-    {
-        $source = new ArrayDefinitionSource();
-        $source->addDefinitions(
-            array(
-                 'foo' => array(
-                     'methods' => array(
-                         'set1' => 'Foo1',
-                     ),
-                 ),
-            )
-        );
-        /** @var $definition ClassDefinition */
-        $definition = $source->getDefinition('foo');
-        $methodInjections = $definition->getMethodInjections();
-        $this->assertCount(1, $methodInjections);
-
-        $method1 = $methodInjections['set1'];
-        $this->assertEquals('set1', $method1->getMethodName());
-
-        $parameters = $method1->getParameterInjections();
-
-        $parameter1 = $parameters[0];
-        $this->assertEquals(0, $parameter1->getParameterName());
-        $this->assertEquals('Foo1', $parameter1->getEntryName());
-    }
-
-    public function testConstructorDefinition1()
-    {
-        $source = new ArrayDefinitionSource();
-        $source->addDefinitions(
-            array(
-                'foo' => array(
-                    'constructor' => array(
-                        'param1' => 'Foo1',
-                        'param2' => array(
-                            'name' => 'Foo2',
-                        ),
-                    ),
-                ),
-            )
-        );
-        /** @var $definition ClassDefinition */
-        $definition = $source->getDefinition('foo');
-        $constructorInjection = $definition->getConstructorInjection();
-
-        $this->assertNotNull($constructorInjection);
-        $this->assertEquals('__construct', $constructorInjection->getMethodName());
-
-        $parameters = $constructorInjection->getParameterInjections();
-
-        $parameter1 = $parameters['param1'];
-        $this->assertEquals('param1', $parameter1->getParameterName());
-        $this->assertEquals('Foo1', $parameter1->getEntryName());
-
-        $parameter2 = $parameters['param2'];
-        $this->assertEquals('param2', $parameter2->getParameterName());
-        $this->assertEquals('Foo2', $parameter2->getEntryName());
     }
 
     /**
-     * @expectedException \DI\Definition\Exception\DefinitionException
-     * @expectedExceptionMessage Invalid key 'bar' in definition of entry 'foo'; Valid keys are: class, scope, lazy, constructor, properties, methods
+     * @covers \DI\Definition\Source\ArrayDefinitionSource
      */
-    public function testKeysValidation()
-    {
-        $source = new ArrayDefinitionSource();
-        $source->addDefinitions(
-            array(
-                'foo' => array(
-                    'bar' => true,
-                ),
-            )
-        );
-        $source->getDefinition('foo');
-    }
-
-    public function testIndexedNonEmptyArrayAsValidValue()
-    {
-        $source = new ArrayDefinitionSource();
-        $source->addDefinitions(
-            array(
-                'foo' => array('a', 'b', 'c')
-            )
-        );
-        $definition = $source->getDefinition('foo');
-        $this->assertInstanceOf('\\DI\\Definition\\ValueDefinition', $definition);
-        $this->assertEquals(array('a', 'b', 'c'), $definition->getValue());
-    }
-
     public function testClosureDefinition()
     {
+        $callable = function () {
+            return 'bar';
+        };
         $source = new ArrayDefinitionSource();
-        $source->addDefinitions(
-            array(
-                'foo' => function() {
-                    return 'bar';
-                },
-            )
-        );
+        $source->addDefinitions(array(
+            'foo' => \DI\factory($callable),
+        ));
+        /** @var CallableDefinition $definition */
         $definition = $source->getDefinition('foo');
-        $this->assertInstanceOf('DI\Definition\ClosureDefinition', $definition);
+        $this->assertInstanceOf('DI\Definition\CallableDefinition', $definition);
         $this->assertEquals('foo', $definition->getName());
-
-        $container = $this->getMockBuilder('DI\Container')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->assertEquals('bar', $definition->getValue($container));
+        $this->assertEquals($callable, $definition->getCallable());
     }
 
+    /**
+     * @covers \DI\Definition\Source\ArrayDefinitionSource::getDefinition
+     * @covers \DI\Definition\Source\ArrayDefinitionSource::chain
+     */
+    public function testChainableSource()
+    {
+        $source = new ArrayDefinitionSource(__DIR__ . '/Fixtures/definitions.php');
+
+        $otherSource = $this->getMockForAbstractClass('DI\Definition\Source\DefinitionSource');
+        $otherSource->expects($this->once())
+            ->method('getDefinition')
+            ->with('some unknown entry')
+            ->will($this->returnValue(42));
+
+        $source->chain($otherSource);
+
+        $this->assertEquals(42, $source->getDefinition('some unknown entry'));
+    }
 }

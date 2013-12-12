@@ -18,7 +18,6 @@ use DI\Annotation\Injectable;
  */
 class Class1
 {
-
     /**
      * @Inject
      * @var Class2
@@ -42,7 +41,7 @@ class Class1
     public $property4;
 
     /**
-     * @Inject(lazy=true)
+     * @Inject
      * @var LazyDependency
      */
     public $property5;
@@ -61,7 +60,6 @@ class Class1
     public $method4Param1;
 
     /**
-     * @Inject({"param3" = {"lazy" = true}})
      * @param Class2         $param1
      * @param Interface1     $param2
      * @param LazyDependency $param3
@@ -112,12 +110,11 @@ class Class1
     }
 
     /**
-     * @Inject({"param1" = {"lazy" = true}})
+     * @Inject
      * @param LazyDependency $param1
      */
     public function method4(LazyDependency $param1)
     {
         $this->method4Param1 = $param1;
     }
-
 }

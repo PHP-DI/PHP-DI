@@ -13,15 +13,13 @@ use DI\Annotation\Inject;
 
 class Class1
 {
-
     public $arg1;
 
     /**
-     * @Inject({"arg1" = "service1"})
+     * @Inject({"service1"})
      */
     public function __construct(\stdClass $arg1)
     {
         $this->arg1 = $arg1;
     }
-
 }

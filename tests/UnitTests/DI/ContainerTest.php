@@ -9,18 +9,20 @@
 
 namespace UnitTests\DI;
 
+use DI\ContainerBuilder;
 use stdClass;
-use DI\Container;
 
 /**
  * Test class for Container
  */
 class ContainerTest extends \PHPUnit_Framework_TestCase
 {
-
+    /**
+     * @covers \DI\Container
+     */
     public function testSetGet()
     {
-        $container = new Container();
+        $container = ContainerBuilder::buildDevContainer();
         $dummy = new stdClass();
         $container->set('key', $dummy);
         $this->assertSame($dummy, $container->get('key'));
@@ -28,57 +30,54 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException \DI\NotFoundException
+     * @covers \DI\Container
      */
     public function testGetNotFound()
     {
-        $container = new Container();
+        $container = ContainerBuilder::buildDevContainer();
         $container->get('key');
     }
 
-    public function testGetWithClosure()
+    /**
+     * @coversNothing
+     */
+    public function testClosureIsNotResolved()
     {
-        $container = new Container();
-        $container->set(
-            'key',
-            function () {
-                return 'hello';
-            }
-        );
-        $this->assertEquals('hello', $container->get('key'));
+        $closure = function () {
+            return 'hello';
+        };
+        $container = ContainerBuilder::buildDevContainer();
+        $container->set('key', $closure);
+        $this->assertSame($closure, $container->get('key'));
     }
 
-    public function testGetWithClosureIsCached()
-    {
-        $container = new Container();
-        $container->set(
-            'key',
-            function () {
-                return new stdClass();
-            }
-        );
-        $instance1 = $container->get('key');
-        $instance2 = $container->get('key');
-        $this->assertSame($instance1, $instance2);
-    }
-
+    /**
+     * @covers \DI\Container
+     */
     public function testGetWithClassName()
     {
-        $container = new Container();
+        $container = ContainerBuilder::buildDevContainer();
         $this->assertInstanceOf('stdClass', $container->get('stdClass'));
     }
 
+    /**
+     * @covers \DI\Container
+     */
     public function testGetWithPrototypeScope()
     {
-        $container = new Container();
+        $container = ContainerBuilder::buildDevContainer();
         // With @Injectable(scope="prototype") annotation
         $instance1 = $container->get('UnitTests\DI\Fixtures\Prototype');
         $instance2 = $container->get('UnitTests\DI\Fixtures\Prototype');
         $this->assertNotSame($instance1, $instance2);
     }
 
+    /**
+     * @covers \DI\Container
+     */
     public function testGetWithSingletonScope()
     {
-        $container = new Container();
+        $container = ContainerBuilder::buildDevContainer();
         // Without @Injectable annotation => default is Singleton
         $instance1 = $container->get('stdClass');
         $instance2 = $container->get('stdClass');
@@ -92,69 +91,66 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
     /**
      * @expectedException \DI\Definition\Exception\DefinitionException
      * @expectedExceptionMessage Error while reading @Injectable on UnitTests\DI\Fixtures\InvalidScope: Value 'foobar' is not part of the enum DI\Scope
+     * @coversNothing
      */
     public function testGetWithInvalidScope()
     {
-        $container = new Container();
+        $container = ContainerBuilder::buildDevContainer();
         $container->get('UnitTests\DI\Fixtures\InvalidScope');
-    }
-
-    public function testGetWithProxy()
-    {
-        $container = new Container();
-        $this->assertInstanceOf('stdClass', $container->get('stdClass', true));
-    }
-
-    /**
-     * Issue #58
-     * @see https://github.com/mnapoli/PHP-DI/issues/58
-     */
-    public function testGetWithProxyWithAlias()
-    {
-        $container = new Container();
-        $container->addDefinitions(
-            array(
-                'foo' => array(
-                    'class' => 'stdClass',
-                ),
-            )
-        );
-        $this->assertInstanceOf('stdClass', $container->get('foo', true));
     }
 
     /**
      * Tests if instantiation unlock works. We should be able to create two instances of the same class.
+     * @covers \DI\Container
      */
     public function testCircularDependencies()
     {
-        $container = new Container();
+        $container = ContainerBuilder::buildDevContainer();
         $container->get('UnitTests\DI\Fixtures\Prototype');
         $container->get('UnitTests\DI\Fixtures\Prototype');
     }
 
     /**
      * @expectedException \DI\DependencyException
-     * @expectedExceptionMessage Circular dependency detected while trying to instantiate class 'UnitTests\DI\Fixtures\Class1CircularDependencies'
+     * @expectedExceptionMessage Circular dependency detected while trying to get entry 'UnitTests\DI\Fixtures\Class1CircularDependencies'
+     * @covers \DI\Container
      */
-    public function testCircularDependenciesException()
+    public function testCircularDependencyException()
     {
-        $container = new Container();
+        $container = ContainerBuilder::buildDevContainer();
         $container->get('UnitTests\DI\Fixtures\Class1CircularDependencies');
+    }
+
+    /**
+     * @expectedException \DI\DependencyException
+     * @expectedExceptionMessage Circular dependency detected while trying to get entry 'foo'
+     * @covers \DI\Container
+     */
+    public function testCircularDependencyExceptionWithAlias()
+    {
+        $container = ContainerBuilder::buildDevContainer();
+        // Alias to itself -> infinite recursive loop
+        $container->set('foo', \DI\link('foo'));
+        $container->get('foo');
     }
 
     /**
      * @expectedException \InvalidArgumentException
      * @expectedExceptionMessage The name parameter must be of type string
+     * @covers \DI\Container::get
      */
     public function testGetNonStringParameter()
     {
-        $container = new Container();
+        $container = ContainerBuilder::buildDevContainer();
         $container->get(new stdClass());
     }
 
+    /**
+     * @covers \DI\Container
+     */
     public function testHas()
     {
-        $container = new Container();
+        $container = ContainerBuilder::buildDevContainer();
         $container->set('foo', 'bar');
 
         $this->assertTrue($container->has('foo'));
@@ -164,19 +160,21 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
     /**
      * @expectedException \InvalidArgumentException
      * @expectedExceptionMessage The name parameter must be of type string
+     * @covers \DI\Container::has
      */
     public function testHasNonStringParameter()
     {
-        $container = new Container();
+        $container = ContainerBuilder::buildDevContainer();
         $container->get(new stdClass());
     }
 
     /**
      * Test that injecting an existing object returns the same reference to that object
+     * @covers \DI\Container
      */
     public function testInjectOnMaintainsReferentialEquality()
     {
-        $container = new Container();
+        $container = ContainerBuilder::buildDevContainer();
         $instance = new stdClass();
         $result = $container->injectOn($instance);
 
@@ -185,10 +183,11 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
 
     /**
      * Test that injection on null yields null
+     * @covers \DI\Container
      */
     public function testInjectNull()
     {
-        $container = new Container();
+        $container = ContainerBuilder::buildDevContainer();
         $result = $container->injectOn(null);
 
         $this->assertEquals($result, null);
@@ -197,37 +196,41 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
     /**
      * We should be able to set a null value
      * @see https://github.com/mnapoli/PHP-DI/issues/79
+     * @covers \DI\Container
      */
     public function testSetNullValue()
     {
-        $container = new Container();
-        $return = $container->set('foo', null);
+        $container = ContainerBuilder::buildDevContainer();
+        $container->set('foo', null);
 
-        $this->assertNull($return);
         $this->assertNull($container->get('foo'));
     }
 
     /**
-     * @see https://github.com/mnapoli/PHP-DI/issues/79
-     * @test
-     */
-    public function setWithoutValueShouldReturnClassDefinitionHelper()
-    {
-        $container = new Container();
-        $return = $container->set('foo');
-
-        $this->assertInstanceOf('DI\Definition\Helper\ClassDefinitionHelper', $return);
-    }
-
-    /**
      * The container auto-registers itself
+     * @covers \DI\Container
      */
     public function testContainerIsRegistered()
     {
-        $container = new Container();
+        $container = ContainerBuilder::buildDevContainer();
         $otherContainer = $container->get('DI\Container');
 
         $this->assertSame($container, $otherContainer);
     }
 
+    /**
+     * @see https://github.com/mnapoli/PHP-DI/issues/126
+     * @test
+     * @covers \DI\Container
+     */
+    public function testSetGetSetGet()
+    {
+        $container = ContainerBuilder::buildDevContainer();
+
+        $container->set('foo', 'bar');
+        $container->get('foo');
+        $container->set('foo', 'hello');
+        
+        $this->assertSame('hello', $container->get('foo'));
+    }
 }

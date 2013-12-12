@@ -21,18 +21,11 @@ namespace DI\Annotation;
  */
 final class Inject
 {
-
     /**
      * Entry name
      * @var string
      */
     private $name;
-
-    /**
-     * Use lazy loading
-     * @var boolean
-     */
-    private $lazy;
 
     /**
      * Parameters, indexed by the parameter number (index) or name
@@ -55,17 +48,10 @@ final class Inject
         } elseif (isset($values['value']) && is_string($values['value'])) {
             $this->name = $values['value'];
         }
-        if (isset($values['lazy']) && is_bool($values['lazy'])) {
-            $this->lazy = $values['lazy'];
-        }
 
         // @Inject on a method
         if (isset($values['value']) && is_array($values['value'])) {
             foreach ($values['value'] as $key => $value) {
-                // This is a shortcut to a full parameter definition
-                if (is_string($value)) {
-                    $value = array('name' => $value);
-                }
                 $this->parameters[$key] = $value;
             }
         }
@@ -80,19 +66,10 @@ final class Inject
     }
 
     /**
-     * @return bool
-     */
-    public function isLazy()
-    {
-        return $this->lazy;
-    }
-
-    /**
      * @return array Parameters, indexed by the parameter number (index) or name
      */
     public function getParameters()
     {
         return $this->parameters;
     }
-
 }

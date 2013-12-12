@@ -10,9 +10,8 @@
 namespace UnitTests\DI\Definition;
 
 use DI\Definition\ClassDefinition;
-use DI\Definition\Exception\DefinitionException;
-use DI\Definition\MethodInjection;
-use DI\Definition\PropertyInjection;
+use DI\Definition\ClassInjection\MethodInjection;
+use DI\Definition\ClassInjection\PropertyInjection;
 use DI\Definition\ValueDefinition;
 use DI\Scope;
 
@@ -21,7 +20,6 @@ use DI\Scope;
  */
 class ClassDefinitionTest extends \PHPUnit_Framework_TestCase
 {
-
     public function testProperties()
     {
         $definition = new ClassDefinition('foo', 'bar');
@@ -47,19 +45,16 @@ class ClassDefinitionTest extends \PHPUnit_Framework_TestCase
         $this->assertEmpty($definition->getMethodInjections());
     }
 
-    public function testMergeable()
-    {
-        $this->assertTrue(ClassDefinition::isMergeable());
-    }
-
     /**
      * @expectedException \DI\Definition\Exception\DefinitionException
      * @expectedExceptionMessage DI definition conflict: there are 2 different definitions for 'foo' that are incompatible, they are not of the same type
      */
     public function testMergeIncompatibleTypes()
     {
+        $otherDefinition = $this->getMockForAbstractClass('DI\Definition\MergeableDefinition');
+
         $definition = new ClassDefinition('foo', 'bar');
-        $definition->merge(new ValueDefinition('foo', 1));
+        $definition->merge($otherDefinition);
     }
 
     /**
@@ -103,5 +98,4 @@ class ClassDefinitionTest extends \PHPUnit_Framework_TestCase
             array($definition2, $definition1),
         );
     }
-
 }

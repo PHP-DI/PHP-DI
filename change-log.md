@@ -2,15 +2,38 @@
 
 ## 4.0
 
+Major changes:
+
+* The configuration format has changed
+
 BC-breaks:
 
 * XML and JSON definitions have been removed
+* `ContainerSingleton` has been removed
+* You cannot configure an injection as lazy anymore, you can only configure a container entry as lazy
+* The Container constructor now takes mandatory parameters. Use the ContainerBuilder to create a Container.
+* Removed `ContainerBuilder::setDefinitionsValidation()` (no definition validation anymore)
 
 All changes:
 
 * [#115](https://github.com/mnapoli/PHP-DI/issues/115) Added `Container::has()`
+* [#127](https://github.com/mnapoli/PHP-DI/issues/127) Added support for cases where PHP-DI is wrapped by another container (like Acclimate): PHP-DI can now use the wrapping container to perform injections
+* [#128](https://github.com/mnapoli/PHP-DI/issues/128) Configure entry aliases
 * [#110](https://github.com/mnapoli/PHP-DI/issues/110) XML definitions are not supported anymore
 * [#122](https://github.com/mnapoli/PHP-DI/issues/122) JSON definitions are not supported anymore
+* `ContainerSingleton` has finally been removed
+* Added `ContainerBuilder::buildDevContainer()` to get started with a default container very easily.
+
+## 3.5.1
+
+* FIXED [#126](https://github.com/mnapoli/PHP-DI/issues/126): `Container::set` without effect if a value has already been set and retrieved
+
+## 3.5
+
+Read the [news entry](news/05-php-di-3-5.md).
+
+* Importing `@Inject` and `@Injectable` annotations is now optional! It means that you don't have to write `use DI\Annotation\Inject` anymore
+* FIXED [#124](https://github.com/mnapoli/PHP-DI/issues/124): `@Injects` annotation conflicts with other annotations
 
 ## 3.4
 

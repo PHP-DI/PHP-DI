@@ -98,12 +98,7 @@ $storeService = $container->get('StoreService');
 and configure which GeolocationService PHP-DI should automatically inject in StoreService through configuration:
 
 ```php
-// config/di.php
-return [
-    'GeolocationService' => [
-        'class' => 'GoogleMaps',
-    ],
-];
+$container->set('GeolocationService', Entry::object('GoogleMaps'));
 ```
 
 If you change your mind, there's just one line of configuration to change now.

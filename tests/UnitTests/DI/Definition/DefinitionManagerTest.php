@@ -16,9 +16,9 @@ use DI\Definition\DefinitionManager;
  */
 class DefinitionManagerTest extends \PHPUnit_Framework_TestCase
 {
-
     /**
      * @test
+     * @covers \DI\Definition\DefinitionManager
      */
     public function shouldUseCache()
     {
@@ -33,5 +33,4 @@ class DefinitionManagerTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals('foo', $definitionManager->getDefinition('foo'));
     }
-
 }

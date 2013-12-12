@@ -16,9 +16,8 @@ use DI\Annotation\Inject;
  */
 class LazyInjectionClass
 {
-
     /**
-     * @Inject(lazy=true)
+     * @Inject
      * @var \IntegrationTests\DI\Fixtures\PropertyInjectionTest\Class2
      */
     private $class2;
@@ -42,5 +41,4 @@ class LazyInjectionClass
         }
         return $this->class2->getBoolean();
     }
-
 }

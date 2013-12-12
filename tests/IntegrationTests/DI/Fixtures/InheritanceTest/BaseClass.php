@@ -16,7 +16,6 @@ use DI\Annotation\Inject;
  */
 abstract class BaseClass
 {
-
     /**
      * @Inject
      * @var Dependency
@@ -49,5 +48,4 @@ abstract class BaseClass
     {
         $this->property2 = $property2;
     }
-
 }

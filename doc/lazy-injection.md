@@ -65,8 +65,6 @@ Here is how you can define lazy injections depending on the configuration you us
 
 ```php
 <?php
-use DI\Annotation\Inject;
-
 class Example {
     /**
      * @Inject(lazy=true)

@@ -9,32 +9,32 @@
 
 namespace DI;
 
-use Closure;
 use DI\Definition\ClassDefinition;
-use DI\Definition\ClosureDefinition;
+use DI\Definition\Definition;
 use DI\Definition\DefinitionManager;
-use DI\Definition\Helper\ClassDefinitionHelper;
 use DI\Definition\ValueDefinition;
-use DI\Definition\FileLoader\DefinitionFileLoader;
-use Doctrine\Common\Cache\Cache;
+use DI\DefinitionHelper\DefinitionHelper;
+use DI\DefinitionResolver\AliasDefinitionResolver;
+use DI\DefinitionResolver\CallableDefinitionResolver;
+use DI\DefinitionResolver\ClassDefinitionResolver;
+use DI\DefinitionResolver\DefinitionResolver;
+use DI\DefinitionResolver\ValueDefinitionResolver;
 use Exception;
 use InvalidArgumentException;
 use ProxyManager\Factory\LazyLoadingValueHolderFactory;
-use ProxyManager\GeneratorStrategy\EvaluatingGeneratorStrategy;
 
 /**
- * Dependency Injection Container
+ * Dependency Injection Container.
  *
  * @author Matthieu Napoli <matthieu@mnapoli.fr>
  */
-class Container
+class Container implements ContainerInterface
 {
-
     /**
-     * Map of instances of entry with Singleton scope
+     * Map of entries with Singleton scope
      * @var array
      */
-    private $entries = array();
+    private $resolvedEntries = array();
 
     /**
      * @var DefinitionManager
@@ -42,104 +42,109 @@ class Container
     private $definitionManager;
 
     /**
-     * @var FactoryInterface
+     * Map of definition resolvers, indexed by the classname of the definition it resolves.
+     *
+     * @var DefinitionResolver[]
      */
-    private $factory;
+    private $definitionResolvers;
 
     /**
-     * @var LazyLoadingValueHolderFactory
-     */
-    private $proxyFactory;
-
-    /**
-     * Array of classes being instantiated.
-     * Used to avoid circular dependencies.
+     * Array of entries being resolved. Used to avoid circular dependencies and infinite loops.
      * @var array
      */
-    private $classesBeingInstantiated = array();
+    private $entriesBeingResolved = array();
 
     /**
-     * Parameters are optional, use them to override a dependency.
+     * Use the ContainerBuilder to ease constructing the Container.
      *
-     * @param DefinitionManager|null             $definitionManager
-     * @param FactoryInterface|null              $factory
-     * @param LazyLoadingValueHolderFactory|null $proxyFactory
+     * @see ContainerBuilder
+     *
+     * @param DefinitionManager             $definitionManager
+     * @param LazyLoadingValueHolderFactory $proxyFactory
+     * @param ContainerInterface            $wrapperContainer  If the container is wrapped by another container.
      */
     public function __construct(
-        DefinitionManager $definitionManager = null,
-        FactoryInterface $factory = null,
-        LazyLoadingValueHolderFactory $proxyFactory = null
+        DefinitionManager $definitionManager,
+        LazyLoadingValueHolderFactory $proxyFactory,
+        ContainerInterface $wrapperContainer = null
     ) {
-        $this->definitionManager = $definitionManager ?: $this->createDefaultDefinitionManager();
-        $this->factory = $factory ?: $this->createDefaultFactory();
-        $this->proxyFactory = $proxyFactory ?: $this->createDefaultProxyFactory();
+        $this->definitionManager = $definitionManager;
+
+        // Definition resolvers
+        $wrapperContainer = $wrapperContainer ?: $this;
+        $this->definitionResolvers = array(
+            'DI\Definition\ValueDefinition'    => new ValueDefinitionResolver(),
+            'DI\Definition\CallableDefinition' => new CallableDefinitionResolver($wrapperContainer),
+            'DI\Definition\AliasDefinition'    => new AliasDefinitionResolver($wrapperContainer),
+            'DI\Definition\ClassDefinition'    => new ClassDefinitionResolver($wrapperContainer, $proxyFactory),
+        );
 
         // Auto-register the container
-        $this->entries[get_class($this)] = $this;
+        $this->resolvedEntries[get_class($this)] = $this;
     }
 
     /**
-     * Returns an instance by its name
+     * Returns an entry of the container by its name.
      *
-     * @param string $name Entry name or a class name
-     * @param bool   $useProxy If true, returns a proxy class of the instance
-     *                         if it is not already loaded
-     * @throws InvalidArgumentException
-     * @throws DependencyException
-     * @throws NotFoundException
-     * @return mixed Instance
+     * @param string $name Entry name or a class name.
+     *
+     * @throws InvalidArgumentException The name parameter must be of type string.
+     * @throws DependencyException Error while resolving the entry.
+     * @throws NotFoundException No entry found for the given name.
+     * @return mixed
      */
-    public function get($name, $useProxy = false)
+    public function get($name)
     {
-        if (!is_string($name)) {
-            throw new InvalidArgumentException("The name parameter must be of type string");
+        if (! is_string($name)) {
+            throw new InvalidArgumentException(sprintf(
+                'The name parameter must be of type string, %s given',
+                is_object($name) ? get_class($name) : gettype($name)
+            ));
         }
 
         // Try to find the entry in the map
-        if (array_key_exists($name, $this->entries)) {
-            return $this->entries[$name];
+        if (array_key_exists($name, $this->resolvedEntries)) {
+            return $this->resolvedEntries[$name];
         }
 
         // Entry not loaded, use the definitions
         $definition = $this->definitionManager->getDefinition($name);
 
-        // It's a value
-        if ($definition instanceof ValueDefinition) {
-            $this->entries[$name] = $definition->getValue();
-            return $this->entries[$name];
+        if (! $definition) {
+            throw new NotFoundException("No entry or class found for '$name'");
         }
 
-        // It's a closure
-        if ($definition instanceof ClosureDefinition) {
-            $this->entries[$name] = $definition->getValue($this);
-            return $this->entries[$name];
+        $definitionResolver = $this->getDefinitionResolver($definition);
+
+        // Check if we are already getting this entry -> circular dependency
+        if (isset($this->entriesBeingResolved[$name])) {
+            throw new DependencyException("Circular dependency detected while trying to get entry '$name'");
+        }
+        $this->entriesBeingResolved[$name] = true;
+
+        // Resolve the definition
+        try {
+            $value = $definitionResolver->resolve($definition);
+        } catch (Exception $exception) {
+            unset($this->entriesBeingResolved[$name]);
+            throw $exception;
         }
 
-        // It's a class
-        if ($definition instanceof ClassDefinition) {
-            // Return a proxy class
-            if ($useProxy) {
-                return $this->getProxy($definition->getClassName());
-            }
+        unset($this->entriesBeingResolved[$name]);
 
-            // Create the instance
-            $instance = $this->getNewInstance($definition);
-
-            if ($definition->getScope() == Scope::SINGLETON()) {
-                // If it's a singleton, store the newly created instance
-                $this->entries[$name] = $instance;
-            }
-
-            return $instance;
+        // If the entry is singleton, we store it to always return it without recomputing it.
+        if ($definition->getScope() == Scope::SINGLETON()) {
+            $this->resolvedEntries[$name] = $value;
         }
 
-        throw new NotFoundException("No entry or class found for '$name'");
+        return $value;
     }
 
     /**
      * Test if the container can provide something for the given name
      *
      * @param string $name Entry name or a class name
+     * @throws \InvalidArgumentException
      * @return bool
      */
     public function has($name)
@@ -148,11 +153,7 @@ class Container
             throw new InvalidArgumentException("The name parameter must be of type string");
         }
 
-        if (array_key_exists($name, $this->entries) || $this->definitionManager->getDefinition($name)) {
-            return true;
-        }
-
-        return false;
+        return array_key_exists($name, $this->resolvedEntries) || $this->definitionManager->getDefinition($name);
     }
 
     /**
@@ -160,16 +161,17 @@ class Container
      *
      * @param object $instance Object to perform injection upon
      * @throws InvalidArgumentException
-     * @throws DependencyException
+     * @throws DependencyException Error while injecting dependencies
      * @return object $instance Returns the same instance
      */
     public function injectOn($instance)
     {
         $definition = $this->definitionManager->getDefinition(get_class($instance));
+        $definitionResolver = $this->getDefinitionResolver($definition);
 
         // Check that the definition is a class definition
-        if ($definition instanceof ClassDefinition) {
-            $instance = $this->factory->injectInstance($definition, $instance);
+        if ($definition instanceof ClassDefinition && $definitionResolver instanceof ClassDefinitionResolver) {
+            $definitionResolver->injectOnInstance($definition, $instance);
         }
 
         return $instance;
@@ -178,143 +180,23 @@ class Container
     /**
      * Define an object or a value in the container
      *
-     * @param string             $name Entry name
-     * @param mixed|Closure|null $value Value, Closure or if *not set*, returns a ClassDefinitionHelper
-     * If a null value is explicitly given ($container->set('foo', null)) then the null value is registered
-     * and no ClassDefinitionHelper is returned.
-     * Use $container->set('foo') to get a ClassDefinitionHelper.
-     *
-     * @return null|ClassDefinitionHelper
+     * @param string                 $name  Entry name
+     * @param mixed|DefinitionHelper $value Value, use definition helpers to define objects
      */
-    public function set($name, $value = null)
+    public function set($name, $value)
     {
-        // Class definition
-        if ($value === null) {
-            // If a null value was explicitly given in the method call, then we register a null value
-            if (func_num_args() === 2) {
-                $definition = new ValueDefinition($name, $value);
-                $this->definitionManager->addDefinition($definition);
-                return null;
-            }
-
-            $helper = new ClassDefinitionHelper($name);
-            $this->definitionManager->addDefinition($helper->getDefinition());
-            return $helper;
+        // Clear existing entry if it exists
+        if (array_key_exists($name, $this->resolvedEntries)) {
+            unset($this->resolvedEntries[$name]);
         }
 
-        // Closure definition
-        if ($value instanceof Closure) {
-            $definition = new ClosureDefinition($name, $value);
-            $this->definitionManager->addDefinition($definition);
-            return null;
+        if ($value instanceof DefinitionHelper) {
+            $definition = $value->getDefinition($name);
+        } else {
+            $definition = new ValueDefinition($name, $value);
         }
 
-        // Value definition
-        $definition = new ValueDefinition($name, $value);
         $this->definitionManager->addDefinition($definition);
-        return null;
-    }
-
-    /**
-     * Enable or disable the use of reflection
-     *
-     * @param boolean $bool
-     * @deprecated Use ContainerBuilder::useReflection instead. Will be removed in next major release (v4).
-     * @see ContainerBuilder::useReflection
-     */
-    public function useReflection($bool)
-    {
-        $this->definitionManager->useReflection($bool);
-    }
-
-    /**
-     * Enable or disable the use of annotations
-     *
-     * @param boolean $bool
-     * @deprecated Use ContainerBuilder::useAnnotations instead. Will be removed in next major release (v4).
-     * @see ContainerBuilder::useAnnotations
-     */
-    public function useAnnotations($bool)
-    {
-        $this->definitionManager->useAnnotations($bool);
-    }
-
-    /**
-     * Add definitions from an array
-     *
-     * @param array $definitions
-     */
-    public function addDefinitions(array $definitions)
-    {
-        $this->definitionManager->addArrayDefinitions($definitions);
-    }
-
-    /**
-     * Add definitions contained in a file
-     *
-     * @param \DI\Definition\FileLoader\DefinitionFileLoader $definitionFileLoader
-     * @throws \InvalidArgumentException
-     */
-    public function addDefinitionsFromFile(DefinitionFileLoader $definitionFileLoader)
-    {
-        $this->definitionManager->addDefinitionsFromFile($definitionFileLoader);
-    }
-
-    /**
-     * Enables the use of a cache for the definitions
-     *
-     * @param Cache $cache Cache backend to use
-     * @deprecated Use ContainerBuilder::setDefinitionCache instead. Will be removed in next major release (v4).
-     * @see ContainerBuilder::setDefinitionCache
-     */
-    public function setDefinitionCache(Cache $cache)
-    {
-        $this->definitionManager->setCache($cache);
-    }
-
-    /**
-     * Enables/disables the validation of the definitions
-     *
-     * By default, disabled
-     * @param bool $bool
-     * @deprecated Use ContainerBuilder::setDefinitionsValidation instead. Will be removed in next major release (v4).
-     * @see ContainerBuilder::setDefinitionsValidation
-     */
-    public function setDefinitionsValidation($bool)
-    {
-        $this->definitionManager->setDefinitionsValidation($bool);
-    }
-
-    /**
-     * @param FactoryInterface $factory
-     */
-    public function setFactory(FactoryInterface $factory)
-    {
-        $this->factory = $factory;
-    }
-
-    /**
-     * @return FactoryInterface
-     */
-    public function getFactory()
-    {
-        return $this->factory;
-    }
-
-    /**
-     * @return LazyLoadingValueHolderFactory
-     */
-    public function getProxyFactory()
-    {
-        return $this->proxyFactory;
-    }
-
-    /**
-     * @param LazyLoadingValueHolderFactory $proxyFactory
-     */
-    public function setProxyFactory(LazyLoadingValueHolderFactory $proxyFactory)
-    {
-        $this->proxyFactory = $proxyFactory;
     }
 
     /**
@@ -326,83 +208,20 @@ class Container
     }
 
     /**
-     * @param ClassDefinition $classDefinition
-     * @return object The instance
-     */
-    private function getNewInstance(ClassDefinition $classDefinition)
-    {
-        $classname = $classDefinition->getClassName();
-
-        if (isset($this->classesBeingInstantiated[$classname])) {
-            throw new DependencyException("Circular dependency detected while trying to instantiate class '$classname'");
-        }
-        $this->classesBeingInstantiated[$classname] = true;
-
-        try {
-            $instance = $this->factory->createInstance($classDefinition);
-        } catch (Exception $exception) {
-            unset($this->classesBeingInstantiated[$classname]);
-            throw $exception;
-        }
-
-        unset($this->classesBeingInstantiated[$classname]);
-        return $instance;
-    }
-
-    /**
-     * Returns a proxy instance
+     * Returns a resolver capable of handling the given definition.
      *
-     * @param string $classname
-     * @return object Proxy instance
+     * @param Definition $definition
+     * @throws \RuntimeException No definition resolver was found for this type of definition.
+     * @return DefinitionResolver
      */
-    private function getProxy($classname)
+    private function getDefinitionResolver(Definition $definition)
     {
-        $container = $this;
+        $definitionType = get_class($definition);
 
-        $proxy = $this->proxyFactory->createProxy(
-            $classname,
-            function (& $wrappedObject, $proxy, $method, $parameters, & $initializer) use ($container, $classname) {
-                $wrappedObject = $container->get($classname);
-                $initializer = null; // turning off further lazy initialization
-                return true;
-            }
-        );
+        if (! isset($this->definitionResolvers[$definitionType])) {
+            throw new \RuntimeException("No definition resolver was configured for definition of type $definitionType");
+        }
 
-        return $proxy;
+        return $this->definitionResolvers[$definitionType];
     }
-
-    /**
-     * @return DefinitionManager
-     */
-    private function createDefaultDefinitionManager()
-    {
-        $definitionManager = new DefinitionManager();
-        $definitionManager->useReflection(true);
-        $definitionManager->useAnnotations(true);
-
-        return $definitionManager;
-    }
-
-    /**
-     * @return FactoryInterface
-     */
-    private function createDefaultFactory()
-    {
-        return new Factory($this);
-    }
-
-    /**
-     * @return LazyLoadingValueHolderFactory
-     */
-    private function createDefaultProxyFactory()
-    {
-        // Proxy factory
-        $config = new \ProxyManager\Configuration();
-        // By default, auto-generate proxies and don't write them to file
-        $config->setAutoGenerateProxies(true);
-        $config->setGeneratorStrategy(new EvaluatingGeneratorStrategy());
-
-        return new LazyLoadingValueHolderFactory($config);
-    }
-
 }

@@ -9,17 +9,12 @@
 
 namespace UnitTests\DI\Fixtures;
 
-use Exception;
-use DI\Annotation\Scope;
-use DI\Annotation\Inject;
-
 /**
  * Fixture class for testing circular dependencies
  *
  */
 class Class1CircularDependencies
 {
-
     /**
      * @Inject
      * @var \UnitTests\DI\Fixtures\Class2CircularDependencies

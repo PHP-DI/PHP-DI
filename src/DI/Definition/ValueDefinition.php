@@ -9,14 +9,15 @@
 
 namespace DI\Definition;
 
+use DI\Scope;
+
 /**
- * Definition of a value for dependency injection
+ * Definition of a value for dependency injection.
  *
  * @author Matthieu Napoli <matthieu@mnapoli.fr>
  */
 class ValueDefinition implements Definition
 {
-
     /**
      * Entry name
      * @var string
@@ -47,6 +48,16 @@ class ValueDefinition implements Definition
     }
 
     /**
+     * A value definition is like a constant, there is nothing to compute, the value is the same for everyone.
+     *
+     * {@inheritdoc}
+     */
+    public function getScope()
+    {
+        return Scope::SINGLETON();
+    }
+
+    /**
      * @return mixed
      */
     public function getValue()
@@ -57,25 +68,8 @@ class ValueDefinition implements Definition
     /**
      * {@inheritdoc}
      */
-    public function merge(Definition $definition)
-    {
-        throw new \BadMethodCallException("Impossible to merge a ValueDefinition with another definition");
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public function isCacheable()
     {
         return false;
     }
-
-    /**
-     * {@inheritdoc}
-     */
-    public static function isMergeable()
-    {
-        return false;
-    }
-
 }

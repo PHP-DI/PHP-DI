@@ -3,50 +3,36 @@
 use DI\Scope;
 
 return array(
-    'foo'                                          => 'bar',
-    'IntegrationTests\DI\Fixtures\Class1'          => array(
-        'scope'       => Scope::PROTOTYPE(),
-        'properties'  => array(
-            'property1' => 'IntegrationTests\DI\Fixtures\Class2',
-            'property2' => 'IntegrationTests\DI\Fixtures\Interface1',
-            'property3' => 'namedDependency',
-            'property4' => 'foo',
-            'property5' => array(
-                'name' => 'IntegrationTests\DI\Fixtures\LazyDependency',
-                'lazy' => true,
-            ),
-        ),
-        'constructor' => array(
-            'param1' => 'IntegrationTests\DI\Fixtures\Class2',
-            'param2' => 'IntegrationTests\DI\Fixtures\Interface1',
-            'param3' => array(
-                'name' => 'IntegrationTests\DI\Fixtures\LazyDependency',
-                'lazy' => true,
-            ),
-        ),
-        'methods'     => array(
-            'method1' => 'IntegrationTests\DI\Fixtures\Class2',
-            'method2' => array('IntegrationTests\DI\Fixtures\Interface1'),
-            'method3' => array(
-                'param1' => 'namedDependency',
-                'param2' => 'foo',
-            ),
-            'method4' => array(
-                'param1' => array(
-                    'name' => 'IntegrationTests\DI\Fixtures\LazyDependency',
-                    'lazy' => true,
-                ),
-            ),
-        ),
-    ),
-    'IntegrationTests\DI\Fixtures\Class2'          => array(),
-    'IntegrationTests\DI\Fixtures\Implementation1' => array(),
-    'IntegrationTests\DI\Fixtures\Interface1'      => array(
-        'class' => 'IntegrationTests\DI\Fixtures\Implementation1',
-        'scope' => 'singleton',
-    ),
-    'namedDependency'                              => array(
-        'class' => 'IntegrationTests\DI\Fixtures\Class2',
-    ),
-    'IntegrationTests\DI\Fixtures\LazyDependency' => array(),
+    'foo' => 'bar',
+
+    'IntegrationTests\DI\Fixtures\Class1' => DI\object()
+            ->withScope(Scope::PROTOTYPE())
+            ->withProperty('property1', DI\link('IntegrationTests\DI\Fixtures\Class2'))
+            ->withProperty('property2', DI\link('IntegrationTests\DI\Fixtures\Interface1'))
+            ->withProperty('property3', DI\link('namedDependency'))
+            ->withProperty('property4', DI\link('foo'))
+            ->withProperty('property5', DI\link('IntegrationTests\DI\Fixtures\LazyDependency'))
+            ->withConstructor(
+                DI\link('IntegrationTests\DI\Fixtures\Class2'),
+                DI\link('IntegrationTests\DI\Fixtures\Interface1'),
+                DI\link('IntegrationTests\DI\Fixtures\LazyDependency')
+            )
+            ->withMethod('method1', DI\link('IntegrationTests\DI\Fixtures\Class2'))
+            ->withMethod('method2', DI\link('IntegrationTests\DI\Fixtures\Interface1'))
+            ->withMethod('method3', DI\link('namedDependency'), DI\link('foo'))
+            ->withMethod('method4', DI\link('IntegrationTests\DI\Fixtures\LazyDependency')),
+
+    'IntegrationTests\DI\Fixtures\Class2' => DI\object(),
+
+    'IntegrationTests\DI\Fixtures\Implementation1' => DI\object(),
+
+    'IntegrationTests\DI\Fixtures\Interface1' => DI\object('IntegrationTests\DI\Fixtures\Implementation1')
+            ->withScope(Scope::SINGLETON()),
+
+    'namedDependency' => DI\object('IntegrationTests\DI\Fixtures\Class2'),
+
+    'IntegrationTests\DI\Fixtures\LazyDependency' => DI\object()
+            ->lazy(),
+
+    'alias' => DI\link('namedDependency'),
 );

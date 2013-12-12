@@ -12,17 +12,21 @@ namespace DI;
 use MyCLabs\Enum\Enum;
 
 /**
- * Scope enum
+ * Scope enum.
+ *
+ * The scope defines the lifecycle of an entry.
  *
  * @author Matthieu Napoli <matthieu@mnapoli.fr>
  */
 class Scope extends Enum
 {
-
     const SINGLETON = 'singleton';
     const PROTOTYPE = 'prototype';
 
     /**
+     * A singleton entry will be computed once and shared.
+     * For a class, only a single instance of the class will be created.
+     *
      * @return Scope
      */
     public static function SINGLETON()
@@ -31,11 +35,13 @@ class Scope extends Enum
     }
 
     /**
+     * A prototype entry will be recomputed each time it is asked.
+     * For a class, this will create a new instance each time.
+     *
      * @return Scope
      */
     public static function PROTOTYPE()
     {
         return new static(self::PROTOTYPE);
     }
-
 }

@@ -1,7 +1,7 @@
-PHP-DI is a Container that makes [*Dependency Injection*](http://en.wikipedia.org/wiki/Dependency_injection)
-as practical as possible.
+PHP-DI is a Dependency Injection Container made for humans.
 
-PHP-DI also tries to avoid falling into the trap of the "Service Locator" antipattern and help you do *real* dependency injection.
+Its goal is to help you using [dependency injection](http://en.wikipedia.org/wiki/Dependency_injection)
+in your application, without writing boilerplate code or falling into the trap of the "Service Locator" antipattern.
 
 [![Latest Stable Version](https://poser.pugx.org/mnapoli/php-di/v/stable.png)](https://packagist.org/packages/mnapoli/php-di) [![Total Downloads](https://poser.pugx.org/mnapoli/php-di/downloads.png)](https://packagist.org/packages/mnapoli/php-di)
 
@@ -12,9 +12,8 @@ PHP-DI also tries to avoid falling into the trap of the "Service Locator" antipa
 * Supports different configuration alternatives to suit every taste:
     * **Reflection**: zero configuration, intelligent guessing
     * **Annotations**: modern, practical and simple
-    * **PHP code**: if you like complete control and auto-completion
+    * **PHP code**: for complete control and auto-completion
     * **PHP array**: allows you to store it in a configuration file
-    * **YAML**: elegant and concise
 * **Performances**: supports a large number of Caches
 * Lazy injection: lazy-loading of dependencies
 * Supports constructor injection, setter injection and property injection
@@ -62,7 +61,7 @@ Here is how a code using DI will roughly work:
     * Foo calls Bar
         * Bar does something
 
-This is the pattern of **Inversion of Control**. The control of the dependencies is **inversed** from one being called to the one calling.
+This is the pattern of **Inversion of Control**. The control of the dependencies is **inverted** from one being called to the one calling.
 
 The main advantage: the one at the end of the caller chain is always **you**. So you can control every dependencies: you have a complete control on how your application works. You can replace a dependency by another (one you made for example).
 

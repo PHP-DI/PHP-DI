@@ -9,6 +9,8 @@
 
 namespace DI\Definition;
 
+use DI\Scope;
+
 /**
  * Definition
  *
@@ -16,7 +18,6 @@ namespace DI\Definition;
  */
 interface Definition
 {
-
     /**
      * Returns the name of the entry in the container
      *
@@ -25,13 +26,11 @@ interface Definition
     public function getName();
 
     /**
-     * Merge another definition into the current definition
+     * Returns the scope of the entry
      *
-     * In case of conflicts, the latter prevails (i.e. the other definition)
-     *
-     * @param Definition $definition
+     * @return Scope
      */
-    public function merge(Definition $definition);
+    public function getScope();
 
     /**
      * Returns true if the definition can be cached, false otherwise
@@ -39,12 +38,4 @@ interface Definition
      * @return bool
      */
     public function isCacheable();
-
-    /**
-     * Returns true if the definition is mergeable with other definitions
-     *
-     * @return bool
-     */
-    public static function isMergeable();
-
 }
