@@ -97,6 +97,8 @@ class InjectionTest extends \PHPUnit_Framework_TestCase
                 ->withMethod('method2', \DI\link('IntegrationTests\DI\Fixtures\Interface1'))
                 ->withMethod('method3', \DI\link('namedDependency'), \DI\link('foo'))
                 ->withMethod('method4', \DI\link('IntegrationTests\DI\Fixtures\LazyDependency'))
+                ->withMethodParameter('method5', 'param1', \DI\link('IntegrationTests\DI\Fixtures\Interface1'))
+                ->withMethodParameter('method5', 'param2', \DI\link('foo'))
         );
         $containerPHP->set('IntegrationTests\DI\Fixtures\Class2', \DI\object());
         $containerPHP->set('IntegrationTests\DI\Fixtures\Implementation1', \DI\object());

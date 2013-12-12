@@ -66,6 +66,16 @@ class MethodInjection
     }
 
     /**
+     * Replace the parameters of the definition by a new array of parameters.
+     *
+     * @param array $parameters
+     */
+    public function replaceParameters(array $parameters)
+    {
+        $this->parameters = $parameters;
+    }
+
+    /**
      * Merge another definition into the current definition.
      *
      * In case of conflicts, the current definition prevails.
