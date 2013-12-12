@@ -14,12 +14,11 @@ use DI\Definition\Source\PHPFileDefinitionSource;
 
 /**
  * Test class for PHPFileDefinitionSource
+ *
+ * @covers \DI\Definition\Source\PHPFileDefinitionSource
  */
 class PHPFileDefinitionSourceTest extends \PHPUnit_Framework_TestCase
 {
-    /**
-     * @covers \DI\Definition\Source\PHPFileDefinitionSource
-     */
     public function testLoadFromFile()
     {
         $source = new PHPFileDefinitionSource(__DIR__ . '/Fixtures/definitions.php');

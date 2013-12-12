@@ -12,6 +12,9 @@ namespace UnitTests\DI\DefinitionHelper;
 use DI\Definition\CallableDefinition;
 use DI\DefinitionHelper\CallableDefinitionHelper;
 
+/**
+ * @covers \DI\DefinitionHelper\CallableDefinitionHelper
+ */
 class CallableDefinitionHelperTest extends \PHPUnit_Framework_TestCase
 {
     public function testGetDefinition()

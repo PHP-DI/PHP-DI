@@ -14,6 +14,8 @@ use DI\Scope;
 
 /**
  * Test class for CallableDefinition
+ *
+ * @covers \DI\Definition\CallableDefinition
  */
 class CallableDefinitionTest extends \PHPUnit_Framework_TestCase
 {

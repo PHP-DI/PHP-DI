@@ -14,21 +14,17 @@ use DI\Definition\Source\AnnotationDefinitionSource;
 
 /**
  * Test class for AnnotationDefinitionSource
+ *
+ * @covers \DI\Definition\Source\AnnotationDefinitionSource
  */
 class AnnotationDefinitionSourceTest extends \PHPUnit_Framework_TestCase
 {
-    /**
-     * @covers \DI\Definition\Source\AnnotationDefinitionSource::getDefinition
-     */
     public function testUnknownClass()
     {
         $source = new AnnotationDefinitionSource();
         $this->assertNull($source->getDefinition('foo'));
     }
 
-    /**
-     * @covers \DI\Definition\Source\AnnotationDefinitionSource
-     */
     public function testProperty1()
     {
         $source = new AnnotationDefinitionSource();
@@ -43,9 +39,6 @@ class AnnotationDefinitionSourceTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(new EntryReference('foo'), $property->getValue());
     }
 
-    /**
-     * @covers \DI\Definition\Source\AnnotationDefinitionSource
-     */
     public function testConstructor()
     {
         $source = new AnnotationDefinitionSource();
@@ -61,9 +54,6 @@ class AnnotationDefinitionSourceTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(new EntryReference('bar'), $parameters[1]);
     }
 
-    /**
-     * @covers \DI\Definition\Source\AnnotationDefinitionSource
-     */
     public function testMethod1()
     {
         $source = new AnnotationDefinitionSource();
@@ -77,9 +67,6 @@ class AnnotationDefinitionSourceTest extends \PHPUnit_Framework_TestCase
         $this->assertEmpty($methodInjection->getParameters());
     }
 
-    /**
-     * @covers \DI\Definition\Source\AnnotationDefinitionSource
-     */
     public function testMethod2()
     {
         $source = new AnnotationDefinitionSource();
@@ -96,9 +83,6 @@ class AnnotationDefinitionSourceTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(new EntryReference('bar'), $parameters[1]);
     }
 
-    /**
-     * @covers \DI\Definition\Source\AnnotationDefinitionSource
-     */
     public function testMethod3()
     {
         $source = new AnnotationDefinitionSource();
@@ -117,9 +101,6 @@ class AnnotationDefinitionSourceTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($reference, $parameters[1]);
     }
 
-    /**
-     * @covers \DI\Definition\Source\AnnotationDefinitionSource
-     */
     public function testMethod4()
     {
         $source = new AnnotationDefinitionSource();
@@ -136,9 +117,6 @@ class AnnotationDefinitionSourceTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(new EntryReference('bar'), $parameters[1]);
     }
 
-    /**
-     * @covers \DI\Definition\Source\AnnotationDefinitionSource
-     */
     public function testMethod5()
     {
         $source = new AnnotationDefinitionSource();

@@ -13,6 +13,8 @@ use DI\Definition\DefinitionManager;
 
 /**
  * Test class for DefinitionManager
+ *
+ * @covers \DI\Definition\DefinitionManager
  */
 class DefinitionManagerTest extends \PHPUnit_Framework_TestCase
 {

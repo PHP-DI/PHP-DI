@@ -12,6 +12,9 @@ namespace UnitTests\DI\Definition;
 use DI\Definition\AliasDefinition;
 use DI\Definition\EntryReference;
 
+/**
+ * @covers \DI\Definition\EntryReference
+ */
 class EntryReferenceTest extends \PHPUnit_Framework_TestCase
 {
     public function testGetDefinition()

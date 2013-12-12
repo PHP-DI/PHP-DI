@@ -14,6 +14,8 @@ use DI\Scope;
 
 /**
  * Test class for ValueDefinition
+ *
+ * @covers \DI\Definition\ValueDefinition
  */
 class ValueDefinitionTest extends \PHPUnit_Framework_TestCase
 {

@@ -13,6 +13,9 @@ use DI\Definition\CallableDefinition;
 use DI\Definition\ValueDefinition;
 use DI\DefinitionResolver\CallableDefinitionResolver;
 
+/**
+ * @covers \DI\DefinitionResolver\CallableDefinitionResolver
+ */
 class CallableDefinitionResolverTest extends \PHPUnit_Framework_TestCase
 {
     public function testResolve()

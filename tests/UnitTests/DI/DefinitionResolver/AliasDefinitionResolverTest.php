@@ -13,6 +13,9 @@ use DI\Definition\AliasDefinition;
 use DI\Definition\ValueDefinition;
 use DI\DefinitionResolver\AliasDefinitionResolver;
 
+/**
+ * @covers \DI\DefinitionResolver\AliasDefinitionResolver
+ */
 class AliasDefinitionResolverTest extends \PHPUnit_Framework_TestCase
 {
     public function testResolve()

@@ -12,6 +12,9 @@ namespace UnitTests\DI\DefinitionHelper;
 use DI\DefinitionHelper\ObjectDefinitionHelper;
 use DI\Scope;
 
+/**
+ * @covers \DI\DefinitionHelper\ObjectDefinitionHelper
+ */
 class ObjectDefinitionHelperTest extends \PHPUnit_Framework_TestCase
 {
     public function testDefaultValues()

@@ -17,6 +17,8 @@ use DI\Scope;
 
 /**
  * Test class for ClassDefinition
+ *
+ * @covers \DI\Definition\ClassDefinition
  */
 class ClassDefinitionTest extends \PHPUnit_Framework_TestCase
 {

@@ -14,6 +14,8 @@ use DI\Scope;
 
 /**
  * Test class for AliasDefinition
+ *
+ * @covers \DI\Definition\AliasDefinition
  */
 class AliasDefinitionTest extends \PHPUnit_Framework_TestCase
 {

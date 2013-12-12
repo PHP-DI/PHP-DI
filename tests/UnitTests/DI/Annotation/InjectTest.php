@@ -16,6 +16,8 @@ use ReflectionClass;
 
 /**
  * Inject annotation test class
+ *
+ * @covers \DI\Annotation\Inject
  */
 class InjectTest extends \PHPUnit_Framework_TestCase
 {
