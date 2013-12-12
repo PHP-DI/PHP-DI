@@ -48,23 +48,4 @@ class CallableDefinitionTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals(Scope::PROTOTYPE(), $definition->getScope());
     }
-
-    public function testMergeable()
-    {
-        $this->assertFalse(CallableDefinition::isMergeable());
-    }
-
-    /**
-     * @expectedException \BadMethodCallException
-     */
-    public function testMerge()
-    {
-        $definition1 = new CallableDefinition('foo', function () {
-            return 1;
-        });
-        $definition2 = new CallableDefinition('foo', function () {
-            return 2;
-        });
-        $definition1->merge($definition2);
-    }
 }

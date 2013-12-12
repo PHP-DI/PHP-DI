@@ -15,6 +15,8 @@ use IntegrationTests\DI\Fixtures\InheritanceTest\SubClass;
 
 /**
  * Test class for bean injection
+ *
+ * @coversNothing
  */
 class InheritanceTest extends \PHPUnit_Framework_TestCase
 {
@@ -52,7 +54,8 @@ class InheritanceTest extends \PHPUnit_Framework_TestCase
 
 
     /**
-     * PHPUnit data provider: generates container configurations for running the same tests for each configuration possible
+     * PHPUnit data provider: generates container configurations for running the same tests
+     * for each configuration possible
      * @return array
      */
     public static function containerProvider()
@@ -62,44 +65,38 @@ class InheritanceTest extends \PHPUnit_Framework_TestCase
         $builder->useReflection(true);
         $builder->useAnnotations(true);
         $containerAnnotations = $builder->build();
-        $containerAnnotations->set('IntegrationTests\DI\Fixtures\InheritanceTest\BaseClass', \DI\object('IntegrationTests\DI\Fixtures\InheritanceTest\SubClass'));
+        $containerAnnotations->set(
+            'IntegrationTests\DI\Fixtures\InheritanceTest\BaseClass',
+            \DI\object('IntegrationTests\DI\Fixtures\InheritanceTest\SubClass')
+        );
 
-        // Test with a container using array configuration
+        // Test with a container using PHP configuration -> entries are different,
+        // definitions shouldn't be shared between 2 different entries se we redefine all properties and methods
         $builder = new ContainerBuilder();
         $builder->useReflection(false);
         $builder->useAnnotations(false);
-        $containerFullArrayDefinitions = $builder->build();
-        $containerFullArrayDefinitions->addDefinitions(array(
-            'IntegrationTests\DI\Fixtures\InheritanceTest\BaseClass' => \DI\object('IntegrationTests\DI\Fixtures\InheritanceTest\SubClass')
+        $containerPHPDefinitions = $builder->build();
+        $containerPHPDefinitions->set('IntegrationTests\DI\Fixtures\InheritanceTest\Dependency', \DI\object());
+        $containerPHPDefinitions->set(
+            'IntegrationTests\DI\Fixtures\InheritanceTest\BaseClass',
+            \DI\object('IntegrationTests\DI\Fixtures\InheritanceTest\SubClass')
                 ->withProperty('property1', \DI\link('IntegrationTests\DI\Fixtures\InheritanceTest\Dependency'))
                 ->withProperty('property4', \DI\link('IntegrationTests\DI\Fixtures\InheritanceTest\Dependency'))
                 ->withConstructor(\DI\link('IntegrationTests\DI\Fixtures\InheritanceTest\Dependency'))
-                ->withMethod('setProperty2', \DI\link('IntegrationTests\DI\Fixtures\InheritanceTest\Dependency')),
-            'IntegrationTests\DI\Fixtures\InheritanceTest\SubClass' => \DI\object()
+                ->withMethod('setProperty2', \DI\link('IntegrationTests\DI\Fixtures\InheritanceTest\Dependency'))
+        );
+        $containerPHPDefinitions->set(
+            'IntegrationTests\DI\Fixtures\InheritanceTest\SubClass',
+            \DI\object()
                 ->withProperty('property1', \DI\link('IntegrationTests\DI\Fixtures\InheritanceTest\Dependency'))
                 ->withProperty('property4', \DI\link('IntegrationTests\DI\Fixtures\InheritanceTest\Dependency'))
                 ->withConstructor(\DI\link('IntegrationTests\DI\Fixtures\InheritanceTest\Dependency'))
-                ->withMethod('setProperty2', \DI\link('IntegrationTests\DI\Fixtures\InheritanceTest\Dependency')),
-        ));
-
-        // Test with a container using array configuration
-        $builder = new ContainerBuilder();
-        $builder->useReflection(false);
-        $builder->useAnnotations(false);
-        $containerInheritanceDefinitions = $builder->build();
-        $containerInheritanceDefinitions->addDefinitions(array(
-             'IntegrationTests\DI\Fixtures\InheritanceTest\BaseClass' => \DI\object('IntegrationTests\DI\Fixtures\InheritanceTest\SubClass')
-                ->withProperty('property1', \DI\link('IntegrationTests\DI\Fixtures\InheritanceTest\Dependency'))
-                ->withConstructor(\DI\link('IntegrationTests\DI\Fixtures\InheritanceTest\Dependency'))
-                ->withMethod('setProperty2', \DI\link('IntegrationTests\DI\Fixtures\InheritanceTest\Dependency')),
-             'IntegrationTests\DI\Fixtures\InheritanceTest\SubClass' => \DI\object()
-                ->withProperty('property4', \DI\link('IntegrationTests\DI\Fixtures\InheritanceTest\Dependency')),
-        ));
+                ->withMethod('setProperty2', \DI\link('IntegrationTests\DI\Fixtures\InheritanceTest\Dependency'))
+        );
 
         return array(
-            array($containerAnnotations),
-            array($containerFullArrayDefinitions),
-            array($containerInheritanceDefinitions),
+            'annotation' => array($containerAnnotations),
+            'php'        => array($containerPHPDefinitions),
         );
     }
 }

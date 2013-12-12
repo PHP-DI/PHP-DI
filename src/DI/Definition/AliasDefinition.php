@@ -12,7 +12,7 @@ namespace DI\Definition;
 use DI\Scope;
 
 /**
- * Defines an alias from an entry to another
+ * Defines an alias from an entry to another.
  *
  * @author Matthieu Napoli <matthieu@mnapoli.fr>
  */
@@ -67,24 +67,8 @@ class AliasDefinition implements Definition
     /**
      * {@inheritdoc}
      */
-    public function merge(Definition $definition)
-    {
-        throw new \BadMethodCallException("Impossible to merge an AliasDefinition with another definition");
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public function isCacheable()
     {
         return true;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public static function isMergeable()
-    {
-        return false;
     }
 }

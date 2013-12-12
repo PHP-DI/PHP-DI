@@ -53,14 +53,27 @@ class MethodInjection
     }
 
     /**
+     * @param int $index Position of the parameter (starting at 0)
+     * @return mixed|null Value to inject, or null if no injection defined.
+     */
+    public function getParameter($index)
+    {
+        if (! isset($this->parameters[$index])) {
+            return null;
+        }
+
+        return $this->parameters[$index];
+    }
+
+    /**
      * Merge another definition into the current definition.
      *
-     * In case of conflicts, the latter prevails (i.e. the other definition)
+     * In case of conflicts, the current definition prevails.
      *
      * @param MethodInjection $methodInjection
      */
     public function merge(MethodInjection $methodInjection)
     {
-        $this->parameters = $methodInjection->parameters + $this->parameters;
+        $this->parameters = $this->parameters + $methodInjection->parameters;
     }
 }

@@ -16,5 +16,4 @@ namespace DI\Definition\Exception;
  */
 class DefinitionException extends \Exception
 {
-
 }

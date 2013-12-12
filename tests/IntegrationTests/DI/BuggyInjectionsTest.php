@@ -13,6 +13,8 @@ use DI\ContainerBuilder;
 
 /**
  * Tests buggy cases
+ *
+ * @coversNothing
  */
 class BuggyInjectionsTest extends \PHPUnit_Framework_TestCase
 {

@@ -32,25 +32,10 @@ class ValueDefinitionTest extends \PHPUnit_Framework_TestCase
         $this->assertFalse($definition->isCacheable());
     }
 
-    public function testMergeable()
-    {
-        $this->assertFalse(ValueDefinition::isMergeable());
-    }
-
     public function testScope()
     {
         $definition = new ValueDefinition('foo', 1);
 
         $this->assertEquals(Scope::SINGLETON(), $definition->getScope());
-    }
-
-    /**
-     * @expectedException \BadMethodCallException
-     */
-    public function testMerge()
-    {
-        $definition1 = new ValueDefinition('foo', 1);
-        $definition2 = new ValueDefinition('foo', 2);
-        $definition1->merge($definition2);
     }
 }
