@@ -97,6 +97,8 @@ class InjectionTest extends \PHPUnit_Framework_TestCase
                 ->withMethod('method2', \DI\link('IntegrationTests\DI\Fixtures\Interface1'))
                 ->withMethod('method3', \DI\link('namedDependency'), \DI\link('foo'))
                 ->withMethod('method4', \DI\link('IntegrationTests\DI\Fixtures\LazyDependency'))
+                ->withMethodParameter('method5', 'param1', \DI\link('IntegrationTests\DI\Fixtures\Interface1'))
+                ->withMethodParameter('method5', 'param2', \DI\link('foo'))
         );
         $containerPHP->set('IntegrationTests\DI\Fixtures\Class2', \DI\object());
         $containerPHP->set('IntegrationTests\DI\Fixtures\Implementation1', \DI\object());
@@ -110,10 +112,10 @@ class InjectionTest extends \PHPUnit_Framework_TestCase
         $containerPHP->set('alias', \DI\link('namedDependency'));
 
         return array(
-            'reflection'  => array(self::DEFINITION_REFLECTION, $containerReflection),
-            'annotations' => array(self::DEFINITION_ANNOTATIONS, $containerAnnotations),
-            'array'       => array(self::DEFINITION_ARRAY, $containerArray),
-            'php'         => array(self::DEFINITION_PHP, $containerPHP),
+            'autowiring' => array(self::DEFINITION_REFLECTION, $containerReflection),
+            'annotation' => array(self::DEFINITION_ANNOTATIONS, $containerAnnotations),
+            'array'      => array(self::DEFINITION_ARRAY, $containerArray),
+            'php'        => array(self::DEFINITION_PHP, $containerPHP),
         );
     }
 
@@ -220,10 +222,17 @@ class InjectionTest extends \PHPUnit_Framework_TestCase
         /** @var $class1 Class1 */
         $class1 = $container->get('IntegrationTests\DI\Fixtures\Class1');
 
+        // Method 1 (automatic resolution with type hinting, optional parameter not overridden)
         $this->assertInstanceOf('IntegrationTests\DI\Fixtures\Class2', $class1->method1Param1);
+
+        // Method 2 (automatic resolution with type hinting)
         $this->assertInstanceOf('IntegrationTests\DI\Fixtures\Implementation1', $class1->method2Param1);
+
+        // Method 3 (defining parameters with the annotation)
         $this->assertInstanceOf('IntegrationTests\DI\Fixtures\Class2', $class1->method3Param1);
         $this->assertEquals('bar', $class1->method3Param2);
+
+        // Method 4 (lazy)
         $this->assertInstanceOf('IntegrationTests\DI\Fixtures\LazyDependency', $class1->method4Param1);
         $this->assertInstanceOf('ProxyManager\Proxy\LazyLoadingInterface', $class1->method4Param1);
         // Lazy injection
@@ -233,6 +242,10 @@ class InjectionTest extends \PHPUnit_Framework_TestCase
         // Correct proxy resolution
         $this->assertTrue($proxy->getValue());
         $this->assertTrue($proxy->isProxyInitialized());
+
+        // Method 5 (defining a parameter by its name)
+        $this->assertInstanceOf('IntegrationTests\DI\Fixtures\Implementation1', $class1->method5Param1);
+        $this->assertEquals('bar', $class1->method5Param2);
     }
 
     /**
@@ -248,19 +261,8 @@ class InjectionTest extends \PHPUnit_Framework_TestCase
         $class1 = new Class1(new Class2(), new Implementation1(), new LazyDependency());
         $container->injectOn($class1);
 
-        $this->assertInstanceOf('IntegrationTests\DI\Fixtures\Class2', $class1->method1Param1);
-        $this->assertInstanceOf('IntegrationTests\DI\Fixtures\Implementation1', $class1->method2Param1);
-        $this->assertInstanceOf('IntegrationTests\DI\Fixtures\Class2', $class1->method3Param1);
-        $this->assertEquals('bar', $class1->method3Param2);
-        $this->assertInstanceOf('IntegrationTests\DI\Fixtures\LazyDependency', $class1->method4Param1);
-        $this->assertInstanceOf('ProxyManager\Proxy\LazyLoadingInterface', $class1->method4Param1);
-        // Lazy injection
-        /** @var LazyDependency|\ProxyManager\Proxy\LazyLoadingInterface $proxy */
-        $proxy = $class1->method4Param1;
-        $this->assertFalse($proxy->isProxyInitialized());
-        // Correct proxy resolution
-        $this->assertTrue($proxy->getValue());
-        $this->assertTrue($proxy->isProxyInitialized());
+        // Tests method injection worked
+        $this->testMethodInjection($type, $container);
     }
 
     /**

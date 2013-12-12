@@ -9,6 +9,8 @@
 
 namespace DI\Annotation;
 
+use DI\Definition\Exception\AnnotationException;
+
 /**
  * "Inject" annotation
  *
@@ -42,16 +44,34 @@ final class Inject
     {
         // Process the parameters as a list AND as a parameter array (we don't know on what the annotation is)
 
-        // @Inject on a property
+        // @Inject(name="foo")
         if (isset($values['name']) && is_string($values['name'])) {
             $this->name = $values['name'];
-        } elseif (isset($values['value']) && is_string($values['value'])) {
-            $this->name = $values['value'];
+            return;
         }
 
-        // @Inject on a method
-        if (isset($values['value']) && is_array($values['value'])) {
-            foreach ($values['value'] as $key => $value) {
+        // @Inject
+        if (! isset($values['value'])) {
+            return;
+        }
+
+        $values = $values['value'];
+
+        // @Inject("foo")
+        if (is_string($values)) {
+            $this->name = $values;
+        }
+
+        // @Inject({...}) on a method
+        if (is_array($values)) {
+            foreach ($values as $key => $value) {
+                if (! is_string($value)) {
+                    throw new AnnotationException(sprintf(
+                        '@Inject({"param" = "value"}) expects "value" to be a string, %s given.',
+                        json_encode($value)
+                    ));
+                }
+
                 $this->parameters[$key] = $value;
             }
         }

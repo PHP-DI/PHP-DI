@@ -20,7 +20,9 @@ return array(
             ->withMethod('method1', DI\link('IntegrationTests\DI\Fixtures\Class2'))
             ->withMethod('method2', DI\link('IntegrationTests\DI\Fixtures\Interface1'))
             ->withMethod('method3', DI\link('namedDependency'), DI\link('foo'))
-            ->withMethod('method4', DI\link('IntegrationTests\DI\Fixtures\LazyDependency')),
+            ->withMethod('method4', DI\link('IntegrationTests\DI\Fixtures\LazyDependency'))
+            ->withMethodParameter('method5', 'param1', \DI\link('IntegrationTests\DI\Fixtures\Interface1'))
+            ->withMethodParameter('method5', 'param2', \DI\link('foo')),
 
     'IntegrationTests\DI\Fixtures\Class2' => DI\object(),
 

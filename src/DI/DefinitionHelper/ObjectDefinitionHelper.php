@@ -91,6 +91,15 @@ class ObjectDefinitionHelper implements DefinitionHelper
         return $this;
     }
 
+    public function withMethodParameter($method, $parameter, $value)
+    {
+        if (! isset($this->methods[$method])) {
+            $this->methods[$method] = array();
+        }
+        $this->methods[$method][$parameter] = $value;
+        return $this;
+    }
+
     /**
      * @param string $entryName Container entry name
      * @return ClassDefinition
@@ -105,11 +114,12 @@ class ObjectDefinitionHelper implements DefinitionHelper
         if ($this->scope !== null) {
             $definition->setScope($this->scope);
         }
+
         if (! empty($this->constructor)) {
-            $definition->setConstructorInjection(
-                new MethodInjection('__construct', $this->constructor)
-            );
+            $parameters = $this->fixParameters($definition, '__construct', $this->constructor);
+            $definition->setConstructorInjection(new MethodInjection('__construct', $parameters));
         }
+
         if (! empty($this->properties)) {
             foreach ($this->properties as $property => $value) {
                 $definition->addPropertyInjection(
@@ -117,14 +127,43 @@ class ObjectDefinitionHelper implements DefinitionHelper
                 );
             }
         }
+
         if (! empty($this->methods)) {
-            foreach ($this->methods as $method => $args) {
-                $definition->addMethodInjection(
-                    new MethodInjection($method, $args)
-                );
+            foreach ($this->methods as $method => $parameters) {
+                $parameters = $this->fixParameters($definition, $method, $parameters);
+                $definition->addMethodInjection(new MethodInjection($method, $parameters));
             }
         }
 
         return $definition;
+    }
+
+    /**
+     * Fixes parameters indexed by the parameter name -> reindex by position.
+     *
+     * This is necessary so that merging definitions between sources is possible.
+     *
+     * @param ClassDefinition $definition
+     * @param string          $method
+     * @param array           $parameters
+     * @return array
+     */
+    private function fixParameters(ClassDefinition $definition, $method, $parameters)
+    {
+        $fixedParameters = array();
+
+        foreach ($parameters as $index => $parameter) {
+            // Parameter indexed by the parameter name, we reindex it with its position
+            if (is_string($index)) {
+                $callable = array($definition->getClassName(), $method);
+                $reflectionParameter = new \ReflectionParameter($callable, $index);
+
+                $index = $reflectionParameter->getPosition();
+            }
+
+            $fixedParameters[$index] = $parameter;
+        }
+
+        return $fixedParameters;
     }
 }

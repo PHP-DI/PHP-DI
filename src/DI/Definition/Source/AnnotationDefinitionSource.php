@@ -191,7 +191,16 @@ class AnnotationDefinitionSource implements DefinitionSource
     {
         // Look for @Inject annotation
         /** @var $annotation Inject|null */
-        $annotation = $this->getAnnotationReader()->getMethodAnnotation($method, 'DI\Annotation\Inject');
+        try {
+            $annotation = $this->getAnnotationReader()->getMethodAnnotation($method, 'DI\Annotation\Inject');
+        } catch (AnnotationException $e) {
+            throw new AnnotationException(sprintf(
+                '@Inject annotation on %s::%s is malformed. %s',
+                $method->getDeclaringClass()->getName(),
+                $method->getName(),
+                $e->getMessage()
+            ), 0, $e);
+        }
         $annotationParameters = $annotation ? $annotation->getParameters() : array();
 
         // @Inject on constructor is implicit

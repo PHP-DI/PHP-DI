@@ -42,4 +42,11 @@ class InjectFixture
     public function method2($str1, $str2)
     {
     }
+
+    /**
+     * @Inject({"str1" = "foo"})
+     */
+    public function method3($str1)
+    {
+    }
 }
