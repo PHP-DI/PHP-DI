@@ -70,7 +70,7 @@ class InjectionTest extends \PHPUnit_Framework_TestCase
         $builder = new ContainerBuilder();
         $builder->useReflection(false);
         $builder->useAnnotations(false);
-        $builder->addDefinitions(new ArrayDefinitionSource(__DIR__ . '/Fixtures/definitions.php'));
+        $builder->addDefinitions(__DIR__ . '/Fixtures/definitions.php');
         $containerArray = $builder->build();
 
         // Test with a container using PHP configuration

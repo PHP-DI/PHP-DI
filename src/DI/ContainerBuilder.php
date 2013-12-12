@@ -12,6 +12,7 @@ namespace DI;
 use DI\Definition\DefinitionManager;
 use DI\Definition\Source\AnnotationDefinitionSource;
 use DI\Definition\Source\ChainableDefinitionSource;
+use DI\Definition\Source\PHPFileDefinitionSource;
 use DI\Definition\Source\ReflectionDefinitionSource;
 use Doctrine\Common\Cache\Cache;
 use InvalidArgumentException;
@@ -69,10 +70,10 @@ class ContainerBuilder
     private $wrapperContainer;
 
     /**
-     * Source of definitions for the container.
-     * @var ChainableDefinitionSource[]
+     * Files of definitions for the container.
+     * @var string[]
      */
-    private $definitionSources = array();
+    private $files = array();
 
     /**
      * Build a container configured for the dev environment.
@@ -100,11 +101,13 @@ class ContainerBuilder
     {
         // Definition sources
         $source = null;
-        foreach ($this->definitionSources as $definitionSource) {
-            if ($source instanceof ChainableDefinitionSource) {
-                $definitionSource->chain($source);
+        foreach ($this->files as $file) {
+            $newSource = new PHPFileDefinitionSource($file);
+            // Chain file sources
+            if ($source) {
+                $newSource->chain($source);
             }
-            $source = $definitionSource;
+            $source = $newSource;
         }
         if ($this->useAnnotations) {
             if ($source) {
@@ -213,18 +216,13 @@ class ContainerBuilder
     }
 
     /**
-     * Add definitions to the container by adding a source of definitions.
+     * Add a file containing definitions to the container.
      *
-     * Do not add ReflectionDefinitionSource or AnnotationDefinitionSource manually, they should be
-     * handled with useReflection() and useAnnotations().
-     *
-     * @param ChainableDefinitionSource $definitionSource
-     *
-     * @todo Give file directly
+     * @param string $file
      */
-    public function addDefinitions(ChainableDefinitionSource $definitionSource)
+    public function addDefinitions($file)
     {
-        $this->definitionSources[] = $definitionSource;
+        $this->files[] = $file;
     }
 
     /**

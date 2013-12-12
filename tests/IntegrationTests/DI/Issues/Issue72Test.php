@@ -52,7 +52,7 @@ class Issue72Test extends \PHPUnit_Framework_TestCase
         $builder->useAnnotations(false);
 
         // Override to 'service2' in the definition file
-        $builder->addDefinitions(new ArrayDefinitionSource(__DIR__ . '/Issue72/definitions.php'));
+        $builder->addDefinitions(__DIR__ . '/Issue72/definitions.php');
 
         $container = $builder->build();
 
@@ -72,7 +72,7 @@ class Issue72Test extends \PHPUnit_Framework_TestCase
         $builder->useAnnotations(true);
 
         // Override 'service1' to 'service2' in the definition file
-        $builder->addDefinitions(new ArrayDefinitionSource(__DIR__ . '/Issue72/definitions.php'));
+        $builder->addDefinitions(__DIR__ . '/Issue72/definitions.php');
 
         $container = $builder->build();
 
@@ -90,7 +90,7 @@ class Issue72Test extends \PHPUnit_Framework_TestCase
         $builder = new ContainerBuilder();
         $builder->useReflection(false);
         $builder->useAnnotations(false);
-        $builder->addDefinitions(new ArrayDefinitionSource(__DIR__ . '/Issue72/definitions.php'));
+        $builder->addDefinitions(__DIR__ . '/Issue72/definitions.php');
         $container = $builder->build();
 
         // Override 'service1' to 'service2'

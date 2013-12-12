@@ -118,25 +118,6 @@ class ArrayDefinitionSourceTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \DI\Definition\Source\ArrayDefinitionSource
-     */
-    public function testLoadFromFile()
-    {
-        $source = new ArrayDefinitionSource(__DIR__ . '/Fixtures/definitions.php');
-
-        $definition = $source->getDefinition('foo');
-        $this->assertNotNull($definition);
-        $this->assertEquals('bar', $definition->getValue());
-        $this->assertInternalType('string', $definition->getValue());
-
-        /** @var $definition ClassDefinition */
-        $definition = $source->getDefinition('bim');
-        $this->assertInstanceOf('DI\Definition\ClassDefinition', $definition);
-        $this->assertEquals('bim', $definition->getName());
-        $this->assertEquals('bim', $definition->getClassName());
-    }
-
-    /**
      * @covers \DI\Definition\Source\ArrayDefinitionSource::getDefinition
      * @covers \DI\Definition\Source\ArrayDefinitionSource::chain
      */
