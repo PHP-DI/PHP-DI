@@ -17,6 +17,9 @@ use stdClass;
  */
 class ContainerTest extends \PHPUnit_Framework_TestCase
 {
+    /**
+     * @covers \DI\Container
+     */
     public function testSetGet()
     {
         $container = ContainerBuilder::buildDevContainer();
@@ -27,6 +30,7 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException \DI\NotFoundException
+     * @covers \DI\Container
      */
     public function testGetNotFound()
     {
@@ -34,6 +38,9 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
         $container->get('key');
     }
 
+    /**
+     * @coversNothing
+     */
     public function testClosureIsNotResolved()
     {
         $closure = function () {
@@ -44,12 +51,18 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($closure, $container->get('key'));
     }
 
+    /**
+     * @covers \DI\Container
+     */
     public function testGetWithClassName()
     {
         $container = ContainerBuilder::buildDevContainer();
         $this->assertInstanceOf('stdClass', $container->get('stdClass'));
     }
 
+    /**
+     * @covers \DI\Container
+     */
     public function testGetWithPrototypeScope()
     {
         $container = ContainerBuilder::buildDevContainer();
@@ -59,6 +72,9 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
         $this->assertNotSame($instance1, $instance2);
     }
 
+    /**
+     * @covers \DI\Container
+     */
     public function testGetWithSingletonScope()
     {
         $container = ContainerBuilder::buildDevContainer();
@@ -75,6 +91,7 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
     /**
      * @expectedException \DI\Definition\Exception\DefinitionException
      * @expectedExceptionMessage Error while reading @Injectable on UnitTests\DI\Fixtures\InvalidScope: Value 'foobar' is not part of the enum DI\Scope
+     * @coversNothing
      */
     public function testGetWithInvalidScope()
     {
@@ -82,25 +99,9 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
         $container->get('UnitTests\DI\Fixtures\InvalidScope');
     }
 
-    public function testGetWithProxy()
-    {
-        $container = ContainerBuilder::buildDevContainer();
-        $this->assertInstanceOf('stdClass', $container->get('stdClass', true));
-    }
-
-    /**
-     * Issue #58
-     * @see https://github.com/mnapoli/PHP-DI/issues/58
-     */
-    public function testGetWithProxyWithAlias()
-    {
-        $container = ContainerBuilder::buildDevContainer();
-        $container->set('foo', \DI\object('stdClass'));
-        $this->assertInstanceOf('stdClass', $container->get('foo', true));
-    }
-
     /**
      * Tests if instantiation unlock works. We should be able to create two instances of the same class.
+     * @covers \DI\Container
      */
     public function testCircularDependencies()
     {
@@ -112,6 +113,7 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
     /**
      * @expectedException \DI\DependencyException
      * @expectedExceptionMessage Circular dependency detected while trying to get entry 'UnitTests\DI\Fixtures\Class1CircularDependencies'
+     * @covers \DI\Container
      */
     public function testCircularDependencyException()
     {
@@ -122,6 +124,7 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
     /**
      * @expectedException \DI\DependencyException
      * @expectedExceptionMessage Circular dependency detected while trying to get entry 'foo'
+     * @covers \DI\Container
      */
     public function testCircularDependencyExceptionWithAlias()
     {
@@ -134,6 +137,7 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
     /**
      * @expectedException \InvalidArgumentException
      * @expectedExceptionMessage The name parameter must be of type string
+     * @covers \DI\Container::get
      */
     public function testGetNonStringParameter()
     {
@@ -141,6 +145,9 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
         $container->get(new stdClass());
     }
 
+    /**
+     * @covers \DI\Container
+     */
     public function testHas()
     {
         $container = ContainerBuilder::buildDevContainer();
@@ -153,6 +160,7 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
     /**
      * @expectedException \InvalidArgumentException
      * @expectedExceptionMessage The name parameter must be of type string
+     * @covers \DI\Container::has
      */
     public function testHasNonStringParameter()
     {
@@ -162,6 +170,7 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
 
     /**
      * Test that injecting an existing object returns the same reference to that object
+     * @covers \DI\Container
      */
     public function testInjectOnMaintainsReferentialEquality()
     {
@@ -174,6 +183,7 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
 
     /**
      * Test that injection on null yields null
+     * @covers \DI\Container
      */
     public function testInjectNull()
     {
@@ -186,6 +196,7 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
     /**
      * We should be able to set a null value
      * @see https://github.com/mnapoli/PHP-DI/issues/79
+     * @covers \DI\Container
      */
     public function testSetNullValue()
     {
@@ -197,6 +208,7 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
 
     /**
      * The container auto-registers itself
+     * @covers \DI\Container
      */
     public function testContainerIsRegistered()
     {
@@ -209,6 +221,7 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
     /**
      * @see https://github.com/mnapoli/PHP-DI/issues/126
      * @test
+     * @covers \DI\Container
      */
     public function testSetGetSetGet()
     {

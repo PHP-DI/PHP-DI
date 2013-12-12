@@ -153,9 +153,12 @@ To sum up:
 
 ## What's next
 
-You can head over to [the documentation](README.md).
+You can head over to [the documentation index](README.md).
 
-Here are some topics that might interest you right now:
+You can also read the [Best practices guide](best-practices.md), it's a good way to get a good view on
+when to use each of PHP-DI's features.
+
+Here are some other topics that might interest you right now:
 
 - [Configuring the container](container-configuration.md)
 - [Define injections](definition.md)

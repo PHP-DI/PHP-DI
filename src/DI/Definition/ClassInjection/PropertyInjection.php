@@ -53,18 +53,4 @@ class PropertyInjection
     {
         return $this->value;
     }
-
-    /**
-     * Merge another definition into the current definition
-     *
-     * In case of conflicts, the latter prevails (i.e. the other definition)
-     *
-     * @param PropertyInjection $propertyInjection
-     */
-    public function merge(PropertyInjection $propertyInjection)
-    {
-        if ($propertyInjection->value !== null) {
-            $this->value = $propertyInjection->value;
-        }
-    }
 }

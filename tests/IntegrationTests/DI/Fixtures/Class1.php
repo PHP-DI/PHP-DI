@@ -41,7 +41,7 @@ class Class1
     public $property4;
 
     /**
-     * @Inject(lazy=true)
+     * @Inject
      * @var LazyDependency
      */
     public $property5;
@@ -63,7 +63,6 @@ class Class1
     public $method5Param2;
 
     /**
-     * @Inject
      * @param Class2         $param1
      * @param Interface1     $param2
      * @param LazyDependency $param3

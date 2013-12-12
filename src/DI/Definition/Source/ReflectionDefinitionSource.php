@@ -12,14 +12,12 @@ namespace DI\Definition\Source;
 use DI\Definition\ClassDefinition;
 use DI\Definition\EntryReference;
 use DI\Definition\ClassInjection\MethodInjection;
-use DI\Definition\ClassInjection\UndefinedInjection;
+use DI\Definition\MergeableDefinition;
 use ReflectionClass;
-use ReflectionParameter;
+use ReflectionMethod;
 
 /**
- * Reads DI class definitions using only reflection
- *
- * Will guess injection only on class constructors
+ * Reads DI class definitions using reflection.
  *
  * @author Matthieu Napoli <matthieu@mnapoli.fr>
  */
@@ -28,58 +26,52 @@ class ReflectionDefinitionSource implements DefinitionSource
     /**
      * {@inheritdoc}
      */
-    public function getDefinition($name)
+    public function getDefinition($name, MergeableDefinition $parentDefinition = null)
     {
-        if (!$this->classExists($name)) {
+        // Only merges with class definition
+        if ($parentDefinition && (! $parentDefinition instanceof ClassDefinition)) {
             return null;
         }
 
-        $reflectionClass = new ReflectionClass($name);
+        $className = $parentDefinition ? $parentDefinition->getClassName() : $name;
 
-        $classDefinition = new ClassDefinition($name);
+        if (!class_exists($className) && !interface_exists($className)) {
+            return null;
+        }
+
+        $class = new ReflectionClass($className);
+        $definition = new ClassDefinition($name);
 
         // Constructor
-        $constructor = $reflectionClass->getConstructor();
-
+        $constructor = $class->getConstructor();
         if ($constructor && $constructor->isPublic()) {
-            $parameters = array();
-            foreach ($constructor->getParameters() as $parameter) {
-                $parameterType = $this->getParameterType($parameter);
+            $definition->setConstructorInjection($this->getConstructorInjection($constructor));
+        }
 
-                if ($parameterType) {
-                    $parameters[] = new EntryReference($parameterType);
-                } else {
-                    $parameters[] = new UndefinedInjection();
-                }
+        // Merge with parent
+        if ($parentDefinition) {
+            $parentDefinition->merge($definition);
+            $definition = $parentDefinition;
+        }
+
+        return $definition;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    private function getConstructorInjection(ReflectionMethod $constructor)
+    {
+        $parameters = array();
+
+        foreach ($constructor->getParameters() as $index => $parameter) {
+            $parameterClass = $parameter->getClass();
+
+            if ($parameterClass) {
+                $parameters[$index] = new EntryReference($parameterClass->getName());
             }
-
-            $classDefinition->setConstructorInjection(
-                new MethodInjection($constructor->name, $parameters)
-            );
         }
 
-        return $classDefinition;
-    }
-
-    /**
-     * @param ReflectionParameter $parameter
-     * @return string|null Type of the parameter
-     */
-    private function getParameterType(ReflectionParameter $parameter)
-    {
-        $reflectionClass = $parameter->getClass();
-        if ($reflectionClass === null) {
-            return null;
-        }
-        return $reflectionClass->name;
-    }
-
-    /**
-     * @param string $class
-     * @return bool
-     */
-    private function classExists($class)
-    {
-        return class_exists($class) || interface_exists($class);
+        return new MethodInjection($constructor->getName(), $parameters);
     }
 }

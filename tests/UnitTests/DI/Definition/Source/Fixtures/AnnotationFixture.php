@@ -67,4 +67,12 @@ class AnnotationFixture
     public function method4($param1, $param2)
     {
     }
+
+    /**
+     * Indexed by name, param1 not specified:
+     * @Inject({"param2" = "bar"})
+     */
+    public function method5($param1, $param2)
+    {
+    }
 }

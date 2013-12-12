@@ -10,7 +10,10 @@
 namespace DI;
 
 use DI\Definition\DefinitionManager;
-use DI\Definition\Source\DefinitionSource;
+use DI\Definition\Source\AnnotationDefinitionSource;
+use DI\Definition\Source\ChainableDefinitionSource;
+use DI\Definition\Source\PHPFileDefinitionSource;
+use DI\Definition\Source\ReflectionDefinitionSource;
 use Doctrine\Common\Cache\Cache;
 use InvalidArgumentException;
 use ProxyManager\Configuration;
@@ -67,10 +70,10 @@ class ContainerBuilder
     private $wrapperContainer;
 
     /**
-     * Source of definitions for the container.
-     * @var DefinitionSource[]
+     * Files of definitions for the container.
+     * @var string[]
      */
-    private $definitionSources = array();
+    private $files = array();
 
     /**
      * Build a container configured for the dev environment.
@@ -96,13 +99,34 @@ class ContainerBuilder
      */
     public function build()
     {
+        // Definition sources
+        $source = null;
+        foreach ($this->files as $file) {
+            $newSource = new PHPFileDefinitionSource($file);
+            // Chain file sources
+            if ($source) {
+                $newSource->chain($source);
+            }
+            $source = $newSource;
+        }
+        if ($this->useAnnotations) {
+            if ($source) {
+                $source->chain(new AnnotationDefinitionSource());
+            } else {
+                $source = new AnnotationDefinitionSource();
+            }
+        } elseif ($this->useReflection) {
+            if ($source) {
+                $source->chain(new ReflectionDefinitionSource());
+            } else {
+                $source = new ReflectionDefinitionSource();
+            }
+        }
+
         // Definition manager
-        $definitionManager = new DefinitionManager($this->useReflection, $this->useAnnotations);
+        $definitionManager = new DefinitionManager($source);
         if ($this->cache) {
             $definitionManager->setCache($this->cache);
-        }
-        foreach ($this->definitionSources as $definitionSource) {
-            $definitionManager->addDefinitionSource($definitionSource);
         }
 
         // Proxy factory
@@ -192,16 +216,13 @@ class ContainerBuilder
     }
 
     /**
-     * Add definitions to the container by adding a source of definitions.
+     * Add a file containing definitions to the container.
      *
-     * Do not add ReflectionDefinitionSource or AnnotationDefinitionSource manually, they should be
-     * handled with useReflection() and useAnnotations().
-     *
-     * @param DefinitionSource $definitionSource
+     * @param string $file
      */
-    public function addDefinitions(DefinitionSource $definitionSource)
+    public function addDefinitions($file)
     {
-        $this->definitionSources[] = $definitionSource;
+        $this->files[] = $file;
     }
 
     /**
@@ -210,6 +231,7 @@ class ContainerBuilder
     private function buildProxyFactory()
     {
         $config = new Configuration();
+        // TODO use non-deprecated method
         $config->setAutoGenerateProxies(true);
 
         if ($this->writeProxiesToFile) {

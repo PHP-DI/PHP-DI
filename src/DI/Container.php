@@ -96,7 +96,10 @@ class Container implements ContainerInterface
     public function get($name)
     {
         if (! is_string($name)) {
-            throw new InvalidArgumentException("The name parameter must be of type string");
+            throw new InvalidArgumentException(sprintf(
+                'The name parameter must be of type string, %s given',
+                is_object($name) ? get_class($name) : gettype($name)
+            ));
         }
 
         // Try to find the entry in the map
@@ -194,16 +197,6 @@ class Container implements ContainerInterface
         }
 
         $this->definitionManager->addDefinition($definition);
-    }
-
-    /**
-     * Add definitions from an array
-     *
-     * @param array $definitions
-     */
-    public function addDefinitions(array $definitions)
-    {
-        $this->definitionManager->addArrayDefinitions($definitions);
     }
 
     /**

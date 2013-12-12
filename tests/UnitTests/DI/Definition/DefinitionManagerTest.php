@@ -18,6 +18,7 @@ class DefinitionManagerTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @test
+     * @covers \DI\Definition\DefinitionManager
      */
     public function shouldUseCache()
     {

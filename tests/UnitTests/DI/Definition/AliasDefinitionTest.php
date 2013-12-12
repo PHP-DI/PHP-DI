@@ -37,19 +37,4 @@ class AliasDefinitionTest extends \PHPUnit_Framework_TestCase
         $definition = new AliasDefinition('foo', 'bar');
         $this->assertTrue($definition->isCacheable());
     }
-
-    public function testMergeable()
-    {
-        $this->assertFalse(AliasDefinition::isMergeable());
-    }
-
-    /**
-     * @expectedException \BadMethodCallException
-     */
-    public function testMerge()
-    {
-        $definition1 = new AliasDefinition('foo', 'bar');
-        $definition2 = new AliasDefinition('foo', 'baz');
-        $definition1->merge($definition2);
-    }
 }

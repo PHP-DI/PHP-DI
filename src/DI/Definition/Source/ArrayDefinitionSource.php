@@ -9,29 +9,22 @@
 
 namespace DI\Definition\Source;
 
-use DI\Definition\ClassDefinition;
 use DI\Definition\Definition;
-use DI\Definition\Exception\DefinitionException;
+use DI\Definition\MergeableDefinition;
 use DI\Definition\ValueDefinition;
 use DI\DefinitionHelper\DefinitionHelper;
 
 /**
- * Reads DI definitions from a PHP array, or a file returning a PHP array.
+ * Reads DI definitions from a PHP array.
  *
  * @author Matthieu Napoli <matthieu@mnapoli.fr>
  */
-class ArrayDefinitionSource implements DefinitionSource
+class ArrayDefinitionSource implements ChainableDefinitionSource
 {
     /**
-     * @var bool
+     * @var DefinitionSource
      */
-    private $initialized;
-
-    /**
-     * File containing definitions, or null if the definitions are given as a PHP array.
-     * @var string|null
-     */
-    private $file;
+    private $chainedSource;
 
     /**
      * DI definitions in a PHP array
@@ -40,36 +33,14 @@ class ArrayDefinitionSource implements DefinitionSource
     private $definitions = array();
 
     /**
-     * @param string|null $file File in which the definitions are returned as an array.
-     */
-    public function __construct($file = null)
-    {
-        if (! $file) {
-            $this->initialized = true;
-            return;
-        }
-
-        if (! is_readable($file)) {
-            throw new DefinitionException("File $file doesn't exist or is not readable");
-        }
-
-        // If we are given a file containing an array, we lazy-load it to improve performance
-        $this->initialized = false;
-        $this->file = $file;
-    }
-
-    /**
      * {@inheritdoc}
      */
-    public function getDefinition($name)
+    public function getDefinition($name, MergeableDefinition $parentDefinition = null)
     {
-        $this->initialize();
-
-        if (!array_key_exists($name, $this->definitions)) {
-            if (class_exists($name)) {
-                $definition = new ClassDefinition($name);
-                $this->mergeWithParents($name, $definition);
-                return $definition;
+        if (! array_key_exists($name, $this->definitions)) {
+            // Not found, we use the chain or return null
+            if ($this->chainedSource) {
+                return $this->chainedSource->getDefinition($name, $parentDefinition);
             }
             return null;
         }
@@ -84,16 +55,27 @@ class ArrayDefinitionSource implements DefinitionSource
             $definition = new ValueDefinition($name, $definition);
         }
 
-        // If it's a class, merge definitions from parent classes and interfaces
-        if ($definition instanceof ClassDefinition) {
-            $this->mergeWithParents($name, $definition);
+        // If the definition we have is not mergeable, and we are supposed to merge, we ignore it
+        if ($parentDefinition && (! $definition instanceof MergeableDefinition)) {
+            return $parentDefinition;
+        }
+
+        // Merge with parent
+        if ($parentDefinition) {
+            $parentDefinition->merge($definition);
+            $definition = $parentDefinition;
+        }
+
+        // Enrich definition in sub-source
+        if ($this->chainedSource && $definition instanceof MergeableDefinition) {
+            $this->chainedSource->getDefinition($name, $definition);
         }
 
         return $definition;
     }
 
     /**
-     * @param array $definitions DI definitions in a PHP array.
+     * @param array $definitions DI definitions in a PHP array indexed by the definition name.
      */
     public function addDefinitions(array $definitions)
     {
@@ -103,64 +85,18 @@ class ArrayDefinitionSource implements DefinitionSource
     }
 
     /**
-     * Lazy-loading of the definitions.
-     * @throws DefinitionException
+     * @param Definition $definition
      */
-    private function initialize()
+    public function addDefinition(Definition $definition)
     {
-        if ($this->initialized === true) {
-            return;
-        }
-
-        $definitions = require $this->file;
-
-        if (! is_array($definitions)) {
-            throw new DefinitionException("File {$this->file} should return an array of definitions");
-        }
-
-        $this->addDefinitions($definitions);
-
-        $this->initialized = true;
+        $this->definitions[$definition->getName()] = $definition;
     }
 
     /**
-     * Merge a class definition which the definitions of its parent classes and its interfaces.
-     *
-     * @param string          $name
-     * @param ClassDefinition $definition
+     * {@inheritdoc}
      */
-    private function mergeWithParents($name, ClassDefinition $definition)
+    public function chain(DefinitionSource $source)
     {
-        $className = $definition->getClassName();
-        if (!class_exists($className)) {
-            return;
-        }
-
-        // Parent class
-        $parentClass = get_parent_class($className);
-
-        // Avoids loops (if AbstractClass1 is an alias to Class1, which extends AbstractClass1)
-        if ($parentClass && $parentClass != $name) {
-            $parentDefinition = $this->getDefinition($parentClass);
-            if ($parentDefinition instanceof ClassDefinition) {
-                $definition->merge($this->getDefinition($parentClass));
-            }
-        }
-
-        // Interfaces
-        $interfaces = class_implements($className);
-
-        if (is_array($interfaces)) {
-            foreach ($interfaces as $interfaceName) {
-                // Avoids loops (if Interface1 is an alias to Class1, which implements Interface1)
-                if ($interfaceName == $name) {
-                    continue;
-                }
-                $interfaceDefinition = $this->getDefinition($interfaceName);
-                if ($interfaceDefinition instanceof ClassDefinition) {
-                    $definition->merge($interfaceDefinition);
-                }
-            }
-        }
+        $this->chainedSource = $source;
     }
 }

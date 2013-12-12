@@ -20,6 +20,8 @@ use IntegrationTests\DI\Fixtures\LazyDependency;
 
 /**
  * Test class for injection
+ *
+ * @coversNothing Because integration test
  */
 class InjectionTest extends \PHPUnit_Framework_TestCase
 {
@@ -40,31 +42,35 @@ class InjectionTest extends \PHPUnit_Framework_TestCase
         $builder->useReflection(true);
         $builder->useAnnotations(false);
         $containerReflection = $builder->build();
-        $containerReflection->addDefinitions(array(
-            'foo'                 => 'bar',
-            'IntegrationTests\DI\Fixtures\Interface1' => \DI\object('IntegrationTests\DI\Fixtures\Implementation1'),
-            'namedDependency'     => \DI\object('IntegrationTests\DI\Fixtures\Class2'),
-            'IntegrationTests\DI\Fixtures\LazyDependency' => \DI\object()->lazy(),
-            'alias'               => \DI\link('namedDependency'),
-        ));
+        // We have to define some entries for the test because reflection on itself doesn't make it possible
+        $containerReflection->set('foo', 'bar');
+        $containerReflection->set(
+            'IntegrationTests\DI\Fixtures\Interface1',
+            \DI\object('IntegrationTests\DI\Fixtures\Implementation1')
+        );
+        $containerReflection->set('namedDependency', \DI\object('IntegrationTests\DI\Fixtures\Class2'));
+        $containerReflection->set('IntegrationTests\DI\Fixtures\LazyDependency', \DI\object()->lazy());
+        $containerReflection->set('alias', \DI\link('namedDependency'));
 
         // Test with a container using annotations and reflection
         $builder = new ContainerBuilder();
         $builder->useReflection(true);
         $builder->useAnnotations(true);
         $containerAnnotations = $builder->build();
-        $containerAnnotations->addDefinitions(array(
-            'foo'             => 'bar',
-            'IntegrationTests\DI\Fixtures\Interface1' => \DI\object('IntegrationTests\DI\Fixtures\Implementation1'),
-            'namedDependency' => \DI\object('IntegrationTests\DI\Fixtures\Class2'),
-            'alias'           => \DI\link('namedDependency'),
-        ));
+        // We have to define some entries for the test because annotations on itself doesn't make it possible
+        $containerAnnotations->set('foo', 'bar');
+        $containerAnnotations->set(
+            'IntegrationTests\DI\Fixtures\Interface1',
+            \DI\object('IntegrationTests\DI\Fixtures\Implementation1')
+        );
+        $containerAnnotations->set('namedDependency', \DI\object('IntegrationTests\DI\Fixtures\Class2'));
+        $containerAnnotations->set('alias', \DI\link('namedDependency'));
 
         // Test with a container using array configuration
         $builder = new ContainerBuilder();
         $builder->useReflection(false);
         $builder->useAnnotations(false);
-        $builder->addDefinitions(new ArrayDefinitionSource(__DIR__ . '/Fixtures/definitions.php'));
+        $builder->addDefinitions(__DIR__ . '/Fixtures/definitions.php');
         $containerArray = $builder->build();
 
         // Test with a container using PHP configuration
@@ -106,8 +112,8 @@ class InjectionTest extends \PHPUnit_Framework_TestCase
         return array(
             'autowiring' => array(self::DEFINITION_REFLECTION, $containerReflection),
             'annotation' => array(self::DEFINITION_ANNOTATIONS, $containerAnnotations),
-            'array' => array(self::DEFINITION_ARRAY, $containerArray),
-            'php' => array(self::DEFINITION_PHP, $containerPHP),
+            'array'      => array(self::DEFINITION_ARRAY, $containerArray),
+            'php'        => array(self::DEFINITION_PHP, $containerPHP),
         );
     }
 

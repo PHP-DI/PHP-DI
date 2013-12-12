@@ -16,6 +16,8 @@ use IntegrationTests\DI\Fixtures\PropertyInjectionTest\NamedBean;
 
 /**
  * Test class for bean injection
+ *
+ * @coversNothing
  */
 class PropertyInjectionTest extends \PHPUnit_Framework_TestCase
 {
