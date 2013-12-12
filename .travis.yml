@@ -6,8 +6,7 @@ php:
   - 5.5
 
 before_script:
-  - wget http://getcomposer.org/composer.phar
-  - php composer.phar require satooshi/php-coveralls:dev-master --dev --no-progress --prefer-source
+  - composer require satooshi/php-coveralls:dev-master --dev --no-progress --prefer-source
 
 script:
   - mkdir -p build/logs
