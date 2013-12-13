@@ -67,7 +67,7 @@ class Class1
      * @param LazyDependency $param3
      * @throws \Exception
      */
-    public function __construct(Class2 $param1, Interface1 $param2, LazyDependency $param3, $optional = true)
+    public function __construct(Class2 $param1, Interface1 $param2, LazyDependency $param3, $namedDependency, $optional = true)
     {
         $this->constructorParam1 = $param1;
         $this->constructorParam2 = $param2;

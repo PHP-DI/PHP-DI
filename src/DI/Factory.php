@@ -88,6 +88,7 @@ class Factory implements FactoryInterface
      * @param MethodInjection|null $constructorInjection
      *
      * @throws DefinitionException
+     * @throws
      * @return object
      */
     private function injectConstructor(ReflectionClass $classReflection, MethodInjection $constructorInjection = null)
@@ -128,10 +129,22 @@ class Factory implements FactoryInterface
                     . "' of the constructor of '{$classReflection->name}' has no type defined or guessable");
             }
 
-            if ($parameterInjection->isLazy()) {
-                $args[] = $this->container->get($entryName, true);
-            } else {
-                $args[] = $this->container->get($entryName);
+            try
+            {
+                if ($parameterInjection->isLazy()) {
+                    $args[] = $this->container->get($entryName, true);
+                } else {
+                    $args[] = $this->container->get($entryName);
+                }
+            }
+            catch (NotFoundException $e)
+            {
+                if ($parameters[$parameterInjection->getParameterName()]->isOptional()) {
+                    // As a last resort use the default value for the parameter
+                    $args[] = $this->getParameterDefaultValue($parameters[$parameterInjection->getParameterName()], $constructorReflection);
+                    continue;
+                }
+                throw $e;
             }
         }
 
@@ -199,10 +212,22 @@ class Factory implements FactoryInterface
                     . "' of {$classReflection->name}::$methodName has no type defined or guessable");
             }
 
-            if ($parameterInjection->isLazy()) {
-                $args[] = $this->container->get($entryName, true);
-            } else {
-                $args[] = $this->container->get($entryName);
+            try
+            {
+                if ($parameterInjection->isLazy()) {
+                    $args[] = $this->container->get($entryName, true);
+                } else {
+                    $args[] = $this->container->get($entryName);
+                }
+            }
+            catch (NotFoundException $e)
+            {
+                if ($parameters[$parameterInjection->getParameterName()]->isOptional()) {
+                    // As a last resort use the default value for the parameter
+                    $args[] = $this->getParameterDefaultValue($parameters[$parameterInjection->getParameterName()], $methodReflection);
+                    continue;
+                }
+                throw $e;
             }
         }
 
