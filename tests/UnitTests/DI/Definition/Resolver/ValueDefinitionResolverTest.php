@@ -14,7 +14,7 @@ use DI\Definition\ValueDefinition;
 use DI\Definition\Resolver\ValueDefinitionResolver;
 
 /**
- * @covers \DI\DefinitionResolver\ValueDefinitionResolver
+ * @covers \DI\Definition\Resolver\ValueDefinitionResolver
  */
 class ValueDefinitionResolverTest extends \PHPUnit_Framework_TestCase
 {

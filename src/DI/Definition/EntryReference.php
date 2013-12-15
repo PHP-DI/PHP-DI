@@ -9,7 +9,7 @@
 
 namespace DI\Definition;
 
-use DI\DefinitionHelper\DefinitionHelper;
+use DI\Definition\Helper\DefinitionHelper;
 
 /**
  * Represents a reference to a container entry.

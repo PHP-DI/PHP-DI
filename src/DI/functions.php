@@ -10,8 +10,8 @@
 namespace DI;
 
 use DI\Definition\EntryReference;
-use DI\DefinitionHelper\CallableDefinitionHelper;
-use DI\DefinitionHelper\ClassDefinitionHelper;
+use DI\Definition\Helper\CallableDefinitionHelper;
+use DI\Definition\Helper\ClassDefinitionHelper;
 
 /**
  * Helper for defining an object.

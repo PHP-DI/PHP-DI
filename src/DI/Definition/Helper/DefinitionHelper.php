@@ -7,7 +7,7 @@
  * @license   http://www.opensource.org/licenses/mit-license.php MIT (see the LICENSE file)
  */
 
-namespace DI\DefinitionHelper;
+namespace DI\Definition\Helper;
 
 /**
  * Helps defining container entries.
@@ -20,5 +20,5 @@ interface DefinitionHelper
      * @param string $entryName Container entry name
      * @return \DI\Definition\Definition
      */
-    function getDefinition($entryName);
+    public function getDefinition($entryName);
 }

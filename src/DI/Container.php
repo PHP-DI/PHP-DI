@@ -13,7 +13,7 @@ use DI\Definition\ClassDefinition;
 use DI\Definition\Definition;
 use DI\Definition\DefinitionManager;
 use DI\Definition\ValueDefinition;
-use DI\DefinitionHelper\DefinitionHelper;
+use DI\Definition\Helper\DefinitionHelper;
 use DI\Definition\Resolver\AliasDefinitionResolver;
 use DI\Definition\Resolver\CallableDefinitionResolver;
 use DI\Definition\Resolver\ClassDefinitionResolver;

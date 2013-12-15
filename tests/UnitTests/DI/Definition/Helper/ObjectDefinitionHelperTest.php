@@ -7,13 +7,13 @@
  * @license   http://www.opensource.org/licenses/mit-license.php MIT (see the LICENSE file)
  */
 
-namespace UnitTests\DI\DefinitionHelper;
+namespace UnitTests\DI\Definition\Helper;
 
-use DI\DefinitionHelper\ClassDefinitionHelper;
+use DI\Definition\Helper\ClassDefinitionHelper;
 use DI\Scope;
 
 /**
- * @covers \DI\DefinitionHelper\ObjectDefinitionHelper
+ * @covers \DI\Definition\Helper\ClassDefinitionHelper
  */
 class ObjectDefinitionHelperTest extends \PHPUnit_Framework_TestCase
 {

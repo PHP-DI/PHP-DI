@@ -21,12 +21,12 @@ class FunctionsTest extends \PHPUnit_Framework_TestCase
     {
         $definition = \DI\object();
 
-        $this->assertInstanceOf('DI\DefinitionHelper\ClassDefinitionHelper', $definition);
+        $this->assertInstanceOf('DI\Definition\Helper\ClassDefinitionHelper', $definition);
         $this->assertEquals('entry', $definition->getDefinition('entry')->getClassName());
 
         $definition = \DI\object('foo');
 
-        $this->assertInstanceOf('DI\DefinitionHelper\ClassDefinitionHelper', $definition);
+        $this->assertInstanceOf('DI\Definition\Helper\ClassDefinitionHelper', $definition);
         $this->assertEquals('foo', $definition->getDefinition('entry')->getClassName());
     }
 
@@ -39,7 +39,7 @@ class FunctionsTest extends \PHPUnit_Framework_TestCase
             return 42;
         });
 
-        $this->assertInstanceOf('DI\DefinitionHelper\CallableDefinitionHelper', $definition);
+        $this->assertInstanceOf('DI\Definition\Helper\CallableDefinitionHelper', $definition);
         $callable = $definition->getDefinition('entry')->getCallable();
         $this->assertEquals(42, $callable());
     }

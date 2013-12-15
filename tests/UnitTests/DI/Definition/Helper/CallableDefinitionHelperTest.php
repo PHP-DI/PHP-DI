@@ -7,13 +7,13 @@
  * @license   http://www.opensource.org/licenses/mit-license.php MIT (see the LICENSE file)
  */
 
-namespace UnitTests\DI\DefinitionHelper;
+namespace UnitTests\DI\Definition\Helper;
 
 use DI\Definition\CallableDefinition;
-use DI\DefinitionHelper\CallableDefinitionHelper;
+use DI\Definition\Helper\CallableDefinitionHelper;
 
 /**
- * @covers \DI\DefinitionHelper\CallableDefinitionHelper
+ * @covers \DI\Definition\Helper\ClassDefinitionHelper
  */
 class CallableDefinitionHelperTest extends \PHPUnit_Framework_TestCase
 {
