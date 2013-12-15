@@ -54,35 +54,86 @@ class ClassDefinitionHelper implements DefinitionHelper
      */
     private $methods = array();
 
+    /**
+     * Helper for defining an object.
+     *
+     * @param string|null $className Class name of the object.
+     *                               If null, the name of the entry (in the container) will be used as class name.
+     *
+     * @return ClassDefinitionHelper
+     */
     public function __construct($className = null)
     {
         $this->className = $className;
     }
 
+    /**
+     * Define the entry as lazy.
+     *
+     * A lazy entry is created only when it is used, a proxy is injected instead.
+     *
+     * @return ClassDefinitionHelper
+     */
     public function lazy()
     {
         $this->lazy = true;
         return $this;
     }
 
+    /**
+     * Defines the scope of the entry.
+     *
+     * @param Scope $scope
+     *
+     * @return ClassDefinitionHelper
+     */
     public function withScope(Scope $scope)
     {
         $this->scope = $scope;
         return $this;
     }
 
+    /**
+     * Defines arguments to use to call the constructor.
+     *
+     * This method takes a variable number of arguments, example:
+     *     ->withConstructor($param1, $param2, $param3)
+     *
+     * @param mixed ... Parameters to use for calling the constructor of the class.
+     *
+     * @return ClassDefinitionHelper
+     */
     public function withConstructor()
     {
         $this->constructor = func_get_args();
         return $this;
     }
 
+    /**
+     * Defines a value to inject in a property of the object.
+     *
+     * @param string $property Entry in which to inject the value.
+     * @param mixed  $value    Value to inject in the property.
+     *
+     * @return ClassDefinitionHelper
+     */
     public function withProperty($property, $value)
     {
         $this->properties[$property] = $value;
         return $this;
     }
 
+    /**
+     * Defines a method to call and the arguments to use.
+     *
+     * This method takes a variable number of arguments after the method name, example:
+     *     ->withMethod('myMethod', $param1, $param2)
+     *
+     * @param string $method Name of the method to call.
+     * @param mixed  ...     Parameters to use for calling the method.
+     *
+     * @return ClassDefinitionHelper
+     */
     public function withMethod($method)
     {
         $args = func_get_args();
@@ -91,6 +142,20 @@ class ClassDefinitionHelper implements DefinitionHelper
         return $this;
     }
 
+    /**
+     * Defines a method to call and a value for a specific argument.
+     *
+     * This method is usually used together with annotations or autowiring, when a parameter
+     * is not (or cannot be) type-hinted. Using this method instead of withMethod() allows to
+     * avoid defining all the parameters (letting them being resolved using annotations or autowiring)
+     * and only define one.
+     *
+     * @param string $method    Name of the method to call.
+     * @param string $parameter Parameter in which the value will be given.
+     * @param mixed  $value     Value to give for this parameter.
+     *
+     * @return ClassDefinitionHelper
+     */
     public function withMethodParameter($method, $parameter, $value)
     {
         if (! isset($this->methods[$method])) {
@@ -101,8 +166,7 @@ class ClassDefinitionHelper implements DefinitionHelper
     }
 
     /**
-     * @param string $entryName Container entry name
-     * @return ClassDefinition
+     * {@inheritdoc}
      */
     public function getDefinition($entryName)
     {
