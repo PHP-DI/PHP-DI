@@ -14,7 +14,7 @@ BC-breaks:
 * The Container constructor now takes mandatory parameters. Use the ContainerBuilder to create a Container.
 * Removed `ContainerBuilder::setDefinitionsValidation()` (no definition validation anymore)
 
-All changes:
+Changes:
 
 * [#115](https://github.com/mnapoli/PHP-DI/issues/115) Added `Container::has()`
 * [#127](https://github.com/mnapoli/PHP-DI/issues/127) Added support for cases where PHP-DI is wrapped by another container (like Acclimate): PHP-DI can now use the wrapping container to perform injections
@@ -23,6 +23,10 @@ All changes:
 * [#122](https://github.com/mnapoli/PHP-DI/issues/122) JSON definitions are not supported anymore
 * `ContainerSingleton` has finally been removed
 * Added `ContainerBuilder::buildDevContainer()` to get started with a default container very easily.
+
+Bugfixes:
+
+* [#99](https://github.com/mnapoli/PHP-DI/issues/99) "@param" with PHP internal type throws exception
 
 ## 3.5.1
 
