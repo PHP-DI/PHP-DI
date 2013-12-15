@@ -20,7 +20,7 @@ class InjectFixture
 
     /**
      * @Inject
-     * @var InjectableFixture
+     * @var Dependency
      */
     protected $property2;
 
