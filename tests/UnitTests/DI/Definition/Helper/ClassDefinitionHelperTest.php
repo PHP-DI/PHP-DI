@@ -9,6 +9,7 @@
 
 namespace UnitTests\DI\Definition\Helper;
 
+use DI\Definition\ClassInjection\MethodInjection;
 use DI\Definition\Helper\ClassDefinitionHelper;
 use DI\Scope;
 
@@ -48,6 +49,15 @@ class ClassDefinitionHelperTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(Scope::PROTOTYPE(), $definition->getScope());
     }
 
+    public function testLazy()
+    {
+        $helper = new ClassDefinitionHelper();
+        $helper->lazy();
+        $definition = $helper->getDefinition('foo');
+
+        $this->assertTrue($definition->isLazy());
+    }
+
     public function testConstructor()
     {
         $helper = new ClassDefinitionHelper();
@@ -71,11 +81,25 @@ class ClassDefinitionHelperTest extends \PHPUnit_Framework_TestCase
     public function testMethodInjections()
     {
         $helper = new ClassDefinitionHelper();
-        $helper->withMethod('prop', 1, 2, 3);
+        $helper->withMethod('method', 1, 2, 3);
         $definition = $helper->getDefinition('foo');
 
         $this->assertCount(1, $definition->getMethodInjections());
         $methodInjection = current($definition->getMethodInjections());
         $this->assertEquals(array(1, 2, 3), $methodInjection->getParameters());
+    }
+
+    public function testWithMethodParameter()
+    {
+        $helper = new ClassDefinitionHelper();
+        $helper->withMethodParameter('method', 0, 42);
+        $definition = $helper->getDefinition('foo');
+
+        $this->assertCount(1, $definition->getMethodInjections());
+        /** @var MethodInjection $methodInjection */
+        $methodInjection = current($definition->getMethodInjections());
+
+        $this->assertEquals('method', $methodInjection->getMethodName());
+        $this->assertEquals(42, $methodInjection->getParameter(0));
     }
 }
