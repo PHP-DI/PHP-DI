@@ -106,6 +106,16 @@ class InjectTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @expectedException \DI\Definition\Exception\AnnotationException
+     * @expectedExceptionMessage @Inject({"param" = "value"}) expects "value" to be a string, [] given.
+     */
+    public function testInvalidAnnotation()
+    {
+        $method = $this->reflectionClass->getMethod('method4');
+        $this->annotationReader->getMethodAnnotation($method, 'DI\Annotation\Inject');
+    }
+
+    /**
      * Inject annotation should work even if not imported
      */
     public function testNonImportedAnnotation()
