@@ -7,7 +7,7 @@
  * @license   http://www.opensource.org/licenses/mit-license.php MIT (see the LICENSE file)
  */
 
-namespace DI\DefinitionResolver;
+namespace DI\Definition\Resolver;
 
 use DI\ContainerInterface;
 use DI\Definition\CallableDefinition;

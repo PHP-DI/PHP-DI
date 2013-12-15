@@ -7,11 +7,12 @@
  * @license   http://www.opensource.org/licenses/mit-license.php MIT (see the LICENSE file)
  */
 
-namespace DI\DefinitionResolver;
+namespace DI\Definition\Resolver;
 
 use DI\ContainerInterface;
 use DI\Definition\AliasDefinition;
 use DI\Definition\Definition;
+use DI\Definition\Resolver\DefinitionResolver;
 
 /**
  * Resolves an alias definition to a value.

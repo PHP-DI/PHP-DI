@@ -7,11 +7,11 @@
  * @license   http://www.opensource.org/licenses/mit-license.php MIT (see the LICENSE file)
  */
 
-namespace UnitTests\DI\DefinitionResolver;
+namespace UnitTests\DI\Definition\Resolver;
 
 use DI\Definition\CallableDefinition;
 use DI\Definition\ValueDefinition;
-use DI\DefinitionResolver\ValueDefinitionResolver;
+use DI\Definition\Resolver\ValueDefinitionResolver;
 
 /**
  * @covers \DI\DefinitionResolver\ValueDefinitionResolver

@@ -14,11 +14,11 @@ use DI\Definition\Definition;
 use DI\Definition\DefinitionManager;
 use DI\Definition\ValueDefinition;
 use DI\DefinitionHelper\DefinitionHelper;
-use DI\DefinitionResolver\AliasDefinitionResolver;
-use DI\DefinitionResolver\CallableDefinitionResolver;
-use DI\DefinitionResolver\ClassDefinitionResolver;
-use DI\DefinitionResolver\DefinitionResolver;
-use DI\DefinitionResolver\ValueDefinitionResolver;
+use DI\Definition\Resolver\AliasDefinitionResolver;
+use DI\Definition\Resolver\CallableDefinitionResolver;
+use DI\Definition\Resolver\ClassDefinitionResolver;
+use DI\Definition\Resolver\DefinitionResolver;
+use DI\Definition\Resolver\ValueDefinitionResolver;
 use Exception;
 use InvalidArgumentException;
 use ProxyManager\Factory\LazyLoadingValueHolderFactory;
@@ -212,7 +212,7 @@ class Container implements ContainerInterface
      *
      * @param Definition $definition
      * @throws \RuntimeException No definition resolver was found for this type of definition.
-     * @return DefinitionResolver
+     * @return \DI\Definition\Resolver\DefinitionResolver
      */
     private function getDefinitionResolver(Definition $definition)
     {
