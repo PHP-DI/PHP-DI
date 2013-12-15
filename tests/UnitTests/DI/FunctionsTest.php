@@ -21,12 +21,12 @@ class FunctionsTest extends \PHPUnit_Framework_TestCase
     {
         $definition = \DI\object();
 
-        $this->assertInstanceOf('DI\DefinitionHelper\ObjectDefinitionHelper', $definition);
+        $this->assertInstanceOf('DI\DefinitionHelper\ClassDefinitionHelper', $definition);
         $this->assertEquals('entry', $definition->getDefinition('entry')->getClassName());
 
         $definition = \DI\object('foo');
 
-        $this->assertInstanceOf('DI\DefinitionHelper\ObjectDefinitionHelper', $definition);
+        $this->assertInstanceOf('DI\DefinitionHelper\ClassDefinitionHelper', $definition);
         $this->assertEquals('foo', $definition->getDefinition('entry')->getClassName());
     }
 

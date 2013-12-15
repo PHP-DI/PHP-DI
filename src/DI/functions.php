@@ -11,7 +11,7 @@ namespace DI;
 
 use DI\Definition\EntryReference;
 use DI\DefinitionHelper\CallableDefinitionHelper;
-use DI\DefinitionHelper\ObjectDefinitionHelper;
+use DI\DefinitionHelper\ClassDefinitionHelper;
 
 /**
  * Helper for defining an object.
@@ -19,11 +19,11 @@ use DI\DefinitionHelper\ObjectDefinitionHelper;
  * @param string|null $className Class name of the object.
  *                               If null, the name of the entry (in the container) will be used as class name.
  *
- * @return ObjectDefinitionHelper
+ * @return ClassDefinitionHelper
  */
 function object($className = null)
 {
-    return new ObjectDefinitionHelper($className);
+    return new ClassDefinitionHelper($className);
 }
 
 /**

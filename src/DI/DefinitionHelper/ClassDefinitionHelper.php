@@ -19,7 +19,7 @@ use DI\Scope;
  *
  * @author Matthieu Napoli <matthieu@mnapoli.fr>
  */
-class ObjectDefinitionHelper implements DefinitionHelper
+class ClassDefinitionHelper implements DefinitionHelper
 {
     /**
      * @var string|null

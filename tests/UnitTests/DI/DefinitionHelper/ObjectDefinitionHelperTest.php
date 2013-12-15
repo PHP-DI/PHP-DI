@@ -9,7 +9,7 @@
 
 namespace UnitTests\DI\DefinitionHelper;
 
-use DI\DefinitionHelper\ObjectDefinitionHelper;
+use DI\DefinitionHelper\ClassDefinitionHelper;
 use DI\Scope;
 
 /**
@@ -19,7 +19,7 @@ class ObjectDefinitionHelperTest extends \PHPUnit_Framework_TestCase
 {
     public function testDefaultValues()
     {
-        $helper = new ObjectDefinitionHelper();
+        $helper = new ClassDefinitionHelper();
         $definition = $helper->getDefinition('foo');
 
         $this->assertEquals('foo', $definition->getName());
@@ -32,7 +32,7 @@ class ObjectDefinitionHelperTest extends \PHPUnit_Framework_TestCase
 
     public function testClassName()
     {
-        $helper = new ObjectDefinitionHelper('bar');
+        $helper = new ClassDefinitionHelper('bar');
         $definition = $helper->getDefinition('foo');
 
         $this->assertEquals('foo', $definition->getName());
@@ -41,7 +41,7 @@ class ObjectDefinitionHelperTest extends \PHPUnit_Framework_TestCase
 
     public function testScope()
     {
-        $helper = new ObjectDefinitionHelper();
+        $helper = new ClassDefinitionHelper();
         $helper->withScope(Scope::PROTOTYPE());
         $definition = $helper->getDefinition('foo');
 
@@ -50,7 +50,7 @@ class ObjectDefinitionHelperTest extends \PHPUnit_Framework_TestCase
 
     public function testConstructor()
     {
-        $helper = new ObjectDefinitionHelper();
+        $helper = new ClassDefinitionHelper();
         $helper->withConstructor(1, 2, 3);
         $definition = $helper->getDefinition('foo');
 
@@ -59,7 +59,7 @@ class ObjectDefinitionHelperTest extends \PHPUnit_Framework_TestCase
 
     public function testPropertyInjections()
     {
-        $helper = new ObjectDefinitionHelper();
+        $helper = new ClassDefinitionHelper();
         $helper->withProperty('prop', 1);
         $definition = $helper->getDefinition('foo');
 
@@ -70,7 +70,7 @@ class ObjectDefinitionHelperTest extends \PHPUnit_Framework_TestCase
 
     public function testMethodInjections()
     {
-        $helper = new ObjectDefinitionHelper();
+        $helper = new ClassDefinitionHelper();
         $helper->withMethod('prop', 1, 2, 3);
         $definition = $helper->getDefinition('foo');
 
