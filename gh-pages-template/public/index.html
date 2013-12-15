@@ -307,8 +307,8 @@ return [
                         Are you injecting a service that is expensive to build?
                     </p>
                     <p>
-                        Just mark it as <code>lazy</code> and it will be created
-                        only if it is called.
+                        Just mark it as <code>lazy</code>. A lightweight proxy will be injected instead,
+                        and the service will be created only if it is really used.
                     </p>
                     <p class="text-right">
                         <a href="doc/lazy-injection">Learn more »</a>
@@ -389,7 +389,7 @@ return [
                 </div>
                 <div class='span6'>
                     <h5 class='footer-header'>Contributors</h5>
-                    <ul class='footer-img-list thumbnails'>
+                    <ul class='footer-img-list thumbnails contributors'>
                         <li class='span1'>
                             <a class='thumbnail'>
                                 <img src="images/test-user.png"/>
@@ -421,6 +421,9 @@ return [
                             </a>
                         </li>
                     </ul>
+                    <p class="text-right">
+                        <a href="https://github.com/mnapoli/PHP-DI/graphs/contributors">All contributors »</a>
+                    </p>
                 </div>
             </div>
         </div>
@@ -441,6 +444,23 @@ return [
 <script src="http://yandex.st/highlightjs/7.5/highlight.min.js"></script>
 <script src="js/template.js"></script>
 <script>hljs.initHighlightingOnLoad();</script>
+
+<script>
+    $(function() {
+        var url = "https://api.github.com/repos/mnapoli/php-di/contributors?callback=?";
+
+        $.getJSON(url, function (result) {
+            var elem = $('.contributors');
+            elem.empty();
+            for (var i = 0; i < Math.min(result.data.length, 6); ++i) {
+                var img = result.data[i].avatar_url;
+                var name = result.data[i].login;
+                var url = result.data[i].url;
+                elem.append($("<li class='span1'><a class='thumbnail' title='" + name + "' href='" + url + "'><img src='" + img + "'/></a></li>"));
+            }
+        });
+    });
+</script>
 
 <script type="text/javascript">
     var _gaq = _gaq || [];

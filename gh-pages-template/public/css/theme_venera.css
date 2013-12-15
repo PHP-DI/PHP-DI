@@ -9345,10 +9345,12 @@ table.no-margin {
   color: #fff;
 }
 .pre-footer .footer-list li {
-  margin-bottom: 10px;
+    margin-bottom: 10px;
+}
+.pre-footer {
     font-size: 16px;
 }
-.pre-footer .footer-list li a {
+.pre-footer a {
   color: #c9d3cd;
 }
 /* Deep footer */
@@ -10564,10 +10566,4 @@ table.no-margin {
 
 .text-danger {
     color: #a03743 !important;
-}
-.text-center {
-    text-align: center;
-}
-.text-right {
-    text-align: right;
 }
