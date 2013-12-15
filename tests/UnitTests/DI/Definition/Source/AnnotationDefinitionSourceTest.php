@@ -133,4 +133,25 @@ class AnnotationDefinitionSourceTest extends \PHPUnit_Framework_TestCase
         // Offset is 1, not 0, because parameter 0 wasn't defined
         $this->assertEquals(new EntryReference('bar'), $parameters[1]);
     }
+
+    /**
+     * @see https://github.com/mnapoli/PHP-DI/issues/99
+     */
+    public function testIssue99()
+    {
+        $source = new AnnotationDefinitionSource();
+        $definition = $source->getDefinition('UnitTests\DI\Definition\Source\Fixtures\AnnotationFixture3');
+        $this->assertInstanceOf('DI\Definition\Definition', $definition);
+
+        $methodInjections = $definition->getMethodInjections();
+        $methodInjection = $methodInjections['method1'];
+        $this->assertInstanceOf('DI\Definition\ClassInjection\MethodInjection', $methodInjection);
+
+        $parameters = $methodInjection->getParameters();
+        $this->assertCount(1, $parameters);
+        $this->assertEquals(
+            new EntryReference('UnitTests\DI\Definition\Source\Fixtures\AnnotationFixture2'),
+            $parameters[0]
+        );
+    }
 }

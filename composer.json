@@ -19,7 +19,7 @@
         "php": ">=5.3.3",
         "doctrine/annotations": "1.*",
         "doctrine/cache": "1.*",
-        "mnapoli/phpdocreader": "1.0.*",
+        "mnapoli/phpdocreader": "~1.1",
         "myclabs/php-enum": "1.*",
         "ocramius/proxy-manager": "~0.3",
         "symfony/yaml": "2.*"
