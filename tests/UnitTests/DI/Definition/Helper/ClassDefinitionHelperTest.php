@@ -15,7 +15,7 @@ use DI\Scope;
 /**
  * @covers \DI\Definition\Helper\ClassDefinitionHelper
  */
-class ObjectDefinitionHelperTest extends \PHPUnit_Framework_TestCase
+class ClassDefinitionHelperTest extends \PHPUnit_Framework_TestCase
 {
     public function testDefaultValues()
     {

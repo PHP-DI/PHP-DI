@@ -13,7 +13,7 @@ use DI\Definition\CallableDefinition;
 use DI\Definition\Helper\CallableDefinitionHelper;
 
 /**
- * @covers \DI\Definition\Helper\ClassDefinitionHelper
+ * @covers \DI\Definition\Helper\CallableDefinitionHelper
  */
 class CallableDefinitionHelperTest extends \PHPUnit_Framework_TestCase
 {
