@@ -88,7 +88,7 @@ class Factory implements FactoryInterface
      * @param MethodInjection|null $constructorInjection
      *
      * @throws DefinitionException
-     * @throws
+     * @throws NotFoundException
      * @return object
      */
     private function injectConstructor(ReflectionClass $classReflection, MethodInjection $constructorInjection = null)

@@ -52,14 +52,12 @@ class ReflectionDefinitionSource implements DefinitionSource
                 $parameterType = $this->getParameterType($parameter);
                 if ($parameterType) {
                     $parameterInjection = new ParameterInjection($parameter->name, $parameterType);
+                } elseif ($this->useParameterNames) {
+                    $parameterInjection = new ParameterInjection($parameter->name, $parameter->name);
                 } else {
-                    if ($this->useParameterNames) {
-                        $parameterInjection = new ParameterInjection($parameter->name, $parameter->name);
-                    }
-                    else {
-                        $parameterInjection = new ParameterInjection($parameter->name);
-                    }
+                    $parameterInjection = new ParameterInjection($parameter->name);
                 }
+
                 $constructorInjection->addParameterInjection($parameterInjection);
             }
         }

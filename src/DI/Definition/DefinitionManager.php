@@ -142,7 +142,8 @@ class DefinitionManager
     {
         // Enable
         if ($bool && $this->reflectionSource === null) {
-            $this->reflectionSource = new ReflectionDefinitionSource($this->useParameterNames);
+            $this->reflectionSource = new ReflectionDefinitionSource();
+            $this->reflectionSource->useParameterNames($bool);
             $this->updateCombinedSource();
         // Disable
         } elseif (!$bool && $this->reflectionSource !== null) {
@@ -160,7 +161,8 @@ class DefinitionManager
     {
         // Enable
         if ($bool && $this->annotationSource === null) {
-            $this->annotationSource = new AnnotationDefinitionSource($this->useParameterNames);
+            $this->annotationSource = new AnnotationDefinitionSource();
+            $this->annotationSource->useParameterNames($bool);
             $this->updateCombinedSource();
         // Disable
         } elseif (!$bool && $this->annotationSource !== null) {
