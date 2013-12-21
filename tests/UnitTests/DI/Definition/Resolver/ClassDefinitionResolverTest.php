@@ -52,6 +52,19 @@ class ClassDefinitionResolverTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('value2', $object->methodParam1);
     }
 
+    public function testDefaultParameterValue()
+    {
+        $definition = new ClassDefinition('UnitTests\DI\Definition\Resolver\FixtureClass');
+        $definition->setConstructorInjection(new MethodInjection('__construct', array('')));
+        $definition->addMethodInjection(new MethodInjection('methodDefaultValue'));
+        $resolver = $this->buildResolver();
+
+        $object = $resolver->resolve($definition);
+
+        $this->assertInstanceOf('UnitTests\DI\Definition\Resolver\FixtureClass', $object);
+        $this->assertEquals('defaultValue', $object->methodParam2);
+    }
+
     public function testGetContainer()
     {
         /** @var \DI\Container $container */
@@ -71,6 +84,31 @@ class ClassDefinitionResolverTest extends \PHPUnit_Framework_TestCase
     public function testNotInstantiable()
     {
         $definition = new ClassDefinition('ArrayAccess');
+        $resolver = $this->buildResolver();
+
+        $resolver->resolve($definition);
+    }
+
+    /**
+     * @expectedException \DI\Definition\Exception\DefinitionException
+     * @expectedExceptionMessage The parameter 'param1' of UnitTests\DI\Definition\Resolver\FixtureClass::__construct has no value defined or guessable
+     */
+    public function testUndefinedInjection()
+    {
+        $definition = new ClassDefinition('UnitTests\DI\Definition\Resolver\FixtureClass');
+        $resolver = $this->buildResolver();
+
+        $resolver->resolve($definition);
+    }
+
+    /**
+     * Tests the exception thrown for internal classes: getting the default value of a parameter
+     * @expectedException \DI\Definition\Exception\DefinitionException
+     * @expectedExceptionMessage The parameter 'time' of DateTime::__construct has no type defined or guessable. It has a default value, but the default value can't be read through Reflection because it is a PHP internal class.
+     */
+    public function testInternalClassDefaultParameterValue()
+    {
+        $definition = new ClassDefinition('DateTime');
         $resolver = $this->buildResolver();
 
         $resolver->resolve($definition);
@@ -110,6 +148,7 @@ class FixtureClass
     public $prop;
     public $constructorParam1;
     public $methodParam1;
+    public $methodParam2;
 
     public function __construct($param1)
     {
@@ -119,5 +158,10 @@ class FixtureClass
     public function method($param1)
     {
         $this->methodParam1 = $param1;
+    }
+
+    public function methodDefaultValue($param = 'defaultValue')
+    {
+        $this->methodParam2 = $param;
     }
 }
