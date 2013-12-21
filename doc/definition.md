@@ -155,32 +155,32 @@ $container->set('report.recipients', [
 ]);
 
 // Direct mapping (not needed if you didn't disable autowiring)
-$container->set('SomeClass', Entry::object());
+$container->set('SomeClass', \DI\object());
 
 // This is not recommended: will instantiate the class on every request, even when not used
 $container->set('SomeClass', new SomeOtherClass(1, "hello"));
 
 // Defines an instance of My\Class
-$container->set('My\Class', Entry::object()
-    ->withConstructor('some raw value', Entry::link('My\OtherClass'))
+$container->set('My\Class', \DI\object()
+    ->withConstructor('some raw value', \DI\link('My\OtherClass'))
 );
 
-$container->set('My\OtherClass', Entry::object()
-    ->withScope(Scope::PROTOTYPE())
-    ->withConstructor(Entry::link('db.host'), Entry('db.port'))
-    ->withMethod('setFoo2', Entry::link('My\Foo1'), Entry::link('My\Foo2'))
-    ->withProperty('bar', 'My\Bar')
+$container->set('My\OtherClass', \DI\object()
+    ->scope(Scope::PROTOTYPE())
+    ->constructor(\DI\link('db.host'), \DI\link('db.port'))
+    ->method('setFoo2', \DI\link('My\Foo1'), \DI\link('My\Foo2'))
+    ->property('bar', 'My\Bar')
 );
 
 // Mapping an interface to an implementation
-$container->set('My\Interface', Entry::object('My\Implementation'));
+$container->set('My\Interface', \DI\object('My\Implementation'));
 
 // Defining a named instance
-$container->set('myNamedInstance', Entry::object('My\Class'));
+$container->set('myNamedInstance', \DI\object('My\Class'));
 
 // Using an anonymous function
 // not recommended: will not be cached
-$container->set('My\Stuff', Entry::factory(function(Container $c) {
+$container->set('My\Stuff', \DI\factory(function (Container $c) {
     return new MyClass($c->get('db.host'));
 }));
 ```
@@ -189,15 +189,12 @@ $container->set('My\Stuff', Entry::factory(function(Container $c) {
 ## PHP array
 
 ```php
-$container->addDefinitions($array);
-// or from a file
-use DI\Definition\FileLoader\ArrayDefinitionFileLoader;
-$container->addDefinitionsFromFile(new ArrayDefinitionFileLoader('config/di.php'));
+$containerBuilder->addDefinitions('config.php');
 ```
 
 You can also define injections with a PHP array.
 
-Example of a `config/di.php` file (using [PHP 5.4 short arrays](http://php.net/manual/en/migration54.new-features.php)):
+Example of a `config.php` file (using [PHP 5.4 short arrays](http://php.net/manual/en/migration54.new-features.php)):
 
 ```php
 <?php
@@ -220,13 +217,13 @@ return [
 
     // Defines an instance of My\Class
     'My\Class' => DI\object()
-        ->withConstructor(DI\link('db.host'), DI\link('My\OtherClass')),
+        ->constructor(DI\link('db.host'), DI\link('My\OtherClass')),
 
     'My\OtherClass' => DI\object()
-        ->withScope(Scope::PROTOTYPE())
-        ->withConstructor(DI\link('db.host'), DI\link('db.port'))
-        ->withMethod('setFoo2', DI\link('My\Foo1'), DI\link('My\Foo2'))
-        ->withProperty('bar', 'My\Bar')
+        ->scope(Scope::PROTOTYPE())
+        ->constructor(DI\link('db.host'), DI\link('db.port'))
+        ->method('setFoo2', DI\link('My\Foo1'), DI\link('My\Foo2'))
+        ->property('bar', 'My\Bar')
 
     // Mapping an interface to an implementation
     'My\Interface' => DI\object('My\Implementation'),

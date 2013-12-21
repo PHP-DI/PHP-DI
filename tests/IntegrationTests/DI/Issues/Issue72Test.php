@@ -97,7 +97,7 @@ class Issue72Test extends \PHPUnit_Framework_TestCase
         $container->set(
             'IntegrationTests\DI\Issues\Issue72\Class1',
             \DI\object()
-                ->withConstructor(\DI\link('service2'))
+                ->constructor(\DI\link('service2'))
         );
 
         /** @var Class1 $class1 */

@@ -178,7 +178,7 @@ return [
     }),
 
     Foo::class => object()
-      ->withConstructor(link(Bar::class))
+      ->constructor(link(Bar::class)),
 ];
 </code></pre>
                     </div>
@@ -257,7 +257,7 @@ return [
                     <div class="img-w hover-fader">
 <pre><code class="php small">return [
     Foo::class => object()
-      ->withConstructor(link(Bar::class))
+      ->constructor(link(Bar::class))
 ];
 </code></pre>
                     </div>

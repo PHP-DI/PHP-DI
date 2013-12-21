@@ -43,7 +43,7 @@ class ClassDefinitionHelperTest extends \PHPUnit_Framework_TestCase
     public function testScope()
     {
         $helper = new ClassDefinitionHelper();
-        $helper->withScope(Scope::PROTOTYPE());
+        $helper->scope(Scope::PROTOTYPE());
         $definition = $helper->getDefinition('foo');
 
         $this->assertEquals(Scope::PROTOTYPE(), $definition->getScope());
@@ -61,7 +61,7 @@ class ClassDefinitionHelperTest extends \PHPUnit_Framework_TestCase
     public function testConstructor()
     {
         $helper = new ClassDefinitionHelper();
-        $helper->withConstructor(1, 2, 3);
+        $helper->constructor(1, 2, 3);
         $definition = $helper->getDefinition('foo');
 
         $this->assertEquals(array(1, 2, 3), $definition->getConstructorInjection()->getParameters());
@@ -70,7 +70,7 @@ class ClassDefinitionHelperTest extends \PHPUnit_Framework_TestCase
     public function testPropertyInjections()
     {
         $helper = new ClassDefinitionHelper();
-        $helper->withProperty('prop', 1);
+        $helper->property('prop', 1);
         $definition = $helper->getDefinition('foo');
 
         $this->assertCount(1, $definition->getPropertyInjections());
@@ -81,7 +81,7 @@ class ClassDefinitionHelperTest extends \PHPUnit_Framework_TestCase
     public function testMethodInjections()
     {
         $helper = new ClassDefinitionHelper();
-        $helper->withMethod('method', 1, 2, 3);
+        $helper->method('method', 1, 2, 3);
         $definition = $helper->getDefinition('foo');
 
         $this->assertCount(1, $definition->getMethodInjections());
@@ -92,7 +92,7 @@ class ClassDefinitionHelperTest extends \PHPUnit_Framework_TestCase
     public function testWithMethodParameter()
     {
         $helper = new ClassDefinitionHelper();
-        $helper->withMethodParameter('method', 0, 42);
+        $helper->methodParameter('method', 0, 42);
         $definition = $helper->getDefinition('foo');
 
         $this->assertCount(1, $definition->getMethodInjections());

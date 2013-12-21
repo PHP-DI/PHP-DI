@@ -10,7 +10,7 @@ return [
     'db.port' => 3336,
 
     'DbAdapter' => DI\object()
-        ->withConstructor(DI\link('db.host'), DI\link('db.port')),
+        ->constructor(DI\link('db.host'), DI\link('db.port')),
 ];
 ```
 
@@ -39,7 +39,7 @@ return [
 // config.php
 return [
     'DbAdapter' => DI\object()
-        ->withConstructor(DI\link('db.host'), DI\link('db.port')),
+        ->constructor(DI\link('db.host'), DI\link('db.port')),
 ];
 ```
 
@@ -49,10 +49,10 @@ Then you can configure your container to including the correct files:
 $builder = new ContainerBuilder();
 
 // Main configuration
-$builder->addDefinitions(new ArrayDefinitionSource("config.php"));
+$builder->addDefinitions("config.php");
 
 // Config file for the environment
-$builder->addDefinitions(new ArrayDefinitionSource("config.$environment.php"));
+$builder->addDefinitions("config.$environment.php");
 
 $container = $builder->build();
 ```
