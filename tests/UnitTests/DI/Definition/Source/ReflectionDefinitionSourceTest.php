@@ -30,7 +30,7 @@ class ReflectionDefinitionSourceTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf('DI\Definition\ClassDefinition', $definition);
 
         $constructorInjection = $definition->getConstructorInjection();
-        $this->assertInstanceOf('DI\Definition\ClassInjection\MethodInjection', $constructorInjection);
+        $this->assertInstanceOf('DI\Definition\ClassDefinition\MethodInjection', $constructorInjection);
 
         $parameters = $constructorInjection->getParameters();
         $this->assertCount(1, $parameters);
@@ -46,7 +46,7 @@ class ReflectionDefinitionSourceTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf('DI\Definition\ClassDefinition', $definition);
 
         $constructorInjection = $definition->getConstructorInjection();
-        $this->assertInstanceOf('DI\Definition\ClassInjection\MethodInjection', $constructorInjection);
+        $this->assertInstanceOf('DI\Definition\ClassDefinition\MethodInjection', $constructorInjection);
 
         $parameters = $constructorInjection->getParameters();
         $this->assertCount(1, $parameters);

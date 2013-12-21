@@ -10,8 +10,8 @@
 namespace UnitTests\DI\Definition;
 
 use DI\Definition\ClassDefinition;
-use DI\Definition\ClassInjection\MethodInjection;
-use DI\Definition\ClassInjection\PropertyInjection;
+use DI\Definition\ClassDefinition\MethodInjection;
+use DI\Definition\ClassDefinition\PropertyInjection;
 use DI\Definition\ValueDefinition;
 use DI\Scope;
 

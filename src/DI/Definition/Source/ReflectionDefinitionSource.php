@@ -11,7 +11,7 @@ namespace DI\Definition\Source;
 
 use DI\Definition\ClassDefinition;
 use DI\Definition\EntryReference;
-use DI\Definition\ClassInjection\MethodInjection;
+use DI\Definition\ClassDefinition\MethodInjection;
 use DI\Definition\MergeableDefinition;
 use ReflectionClass;
 use ReflectionMethod;

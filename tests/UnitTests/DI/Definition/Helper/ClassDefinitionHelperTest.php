@@ -9,7 +9,7 @@
 
 namespace UnitTests\DI\Definition\Helper;
 
-use DI\Definition\ClassInjection\MethodInjection;
+use DI\Definition\ClassDefinition\MethodInjection;
 use DI\Definition\Helper\ClassDefinitionHelper;
 use DI\Scope;
 
