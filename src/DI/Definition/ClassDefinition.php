@@ -221,46 +221,50 @@ class ClassDefinition implements MergeableDefinition
             );
         }
 
+        $newDefinition = clone $this;
+
         // The current prevails
-        if ($this->className === null) {
-            $this->className = $definition->className;
+        if ($newDefinition->className === null) {
+            $newDefinition->className = $definition->className;
         }
-        if ($this->scope === null) {
-            $this->scope = $definition->scope;
+        if ($newDefinition->scope === null) {
+            $newDefinition->scope = $definition->scope;
         }
-        if ($this->lazy === null) {
-            $this->lazy = $definition->lazy;
+        if ($newDefinition->lazy === null) {
+            $newDefinition->lazy = $definition->lazy;
         }
 
         // Merge constructor injection
         if ($definition->getConstructorInjection() !== null) {
-            if ($this->constructorInjection !== null) {
+            if ($newDefinition->constructorInjection !== null) {
                 // Merge
-                $this->constructorInjection->merge($definition->getConstructorInjection());
+                $newDefinition->constructorInjection->merge($definition->getConstructorInjection());
             } else {
                 // Set
-                $this->constructorInjection = $definition->getConstructorInjection();
+                $newDefinition->constructorInjection = $definition->getConstructorInjection();
             }
         }
 
         // Merge property injections
         foreach ($definition->getPropertyInjections() as $propertyName => $propertyInjection) {
-            if (! array_key_exists($propertyName, $this->propertyInjections)) {
+            if (! array_key_exists($propertyName, $newDefinition->propertyInjections)) {
                 // Add
-                $this->propertyInjections[$propertyName] = $propertyInjection;
+                $newDefinition->propertyInjections[$propertyName] = $propertyInjection;
             }
         }
 
         // Merge method injections
         foreach ($definition->getMethodInjections() as $methodName => $methodInjection) {
-            if (array_key_exists($methodName, $this->methodInjections)) {
+            if (array_key_exists($methodName, $newDefinition->methodInjections)) {
                 // Merge
-                $this->methodInjections[$methodName]->merge($methodInjection);
+                $newDefinition->methodInjections[$methodName]->merge($methodInjection);
             } else {
                 // Add
-                $this->methodInjections[$methodName] = $methodInjection;
+                $newDefinition->methodInjections[$methodName] = $methodInjection;
             }
         }
+
+        return $newDefinition;
     }
 
     /**

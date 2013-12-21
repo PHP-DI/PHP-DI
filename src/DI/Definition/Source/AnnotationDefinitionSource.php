@@ -100,8 +100,7 @@ class AnnotationDefinitionSource implements DefinitionSource
 
         // Merge with parent
         if ($parentDefinition) {
-            $parentDefinition->merge($definition);
-            $definition = $parentDefinition;
+            $definition = $parentDefinition->merge($definition);
         }
 
         return $definition;

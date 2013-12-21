@@ -11,7 +11,9 @@ namespace UnitTests\DI\Definition\Source;
 
 use DI\Definition\CallableDefinition;
 use DI\Definition\ClassDefinition;
+use DI\Definition\ClassDefinition\PropertyInjection;
 use DI\Definition\Source\ArrayDefinitionSource;
+use DI\Definition\ValueDefinition;
 
 /**
  * Test class for ArrayDefinitionSource
@@ -20,6 +22,12 @@ use DI\Definition\Source\ArrayDefinitionSource;
  */
 class ArrayDefinitionSourceTest extends \PHPUnit_Framework_TestCase
 {
+    public function testEntryNotFound()
+    {
+        $source = new ArrayDefinitionSource();
+        $this->assertNull($source->getDefinition('foo'));
+    }
+
     public function testValueDefinition()
     {
         $source = new ArrayDefinitionSource();
@@ -120,5 +128,75 @@ class ArrayDefinitionSourceTest extends \PHPUnit_Framework_TestCase
         $source->chain($otherSource);
 
         $this->assertEquals(42, $source->getDefinition('some unknown entry'));
+    }
+
+    public function testAddDefinition()
+    {
+        $source = new ArrayDefinitionSource();
+        $definition = new ValueDefinition('foo', 'bar');
+
+        $source->addDefinition($definition);
+        $this->assertSame($definition, $source->getDefinition('foo'));
+    }
+
+    public function testAddDefinitions()
+    {
+        $source = new ArrayDefinitionSource();
+        $definition = new ValueDefinition('foo', 'bar');
+
+        $source->addDefinitions(array('foo' => $definition));
+        $this->assertSame($definition, $source->getDefinition('foo'));
+    }
+
+    public function testAddDefinitionsOverrideExisting()
+    {
+        $source = new ArrayDefinitionSource();
+        $definition1 = new ValueDefinition('foo', 'bar');
+        $definition2 = new ValueDefinition('foo', 'bar');
+
+        $source->addDefinitions(array('foo' => $definition1));
+        $source->addDefinitions(array('foo' => $definition2));
+
+        $this->assertSame($definition2, $source->getDefinition('foo'));
+    }
+
+    public function testUseChainedSource()
+    {
+        $chainedSource = new ArrayDefinitionSource();
+        $definition = new ValueDefinition('foo', 'bar');
+        $chainedSource->addDefinition($definition);
+
+        $source = new ArrayDefinitionSource();
+        $source->chain($chainedSource);
+
+        $this->assertSame($definition, $source->getDefinition('foo'));
+    }
+
+    /**
+     * Tests that if the source is chained to another, then mergeable definitions are merged
+     */
+    public function testChainedSourceMergeableDefinitions()
+    {
+        $source1 = new ArrayDefinitionSource();
+        $definition1 = new ClassDefinition('foo');
+        $definition1->addPropertyInjection(new PropertyInjection('p1', 'val1'));
+        $source1->addDefinition($definition1);
+
+        $source2 = new ArrayDefinitionSource();
+        $definition2 = new ClassDefinition('foo');
+        $definition2->addPropertyInjection(new PropertyInjection('p2', 'val2'));
+        $source2->addDefinition($definition2);
+
+        $source1->chain($source2);
+
+        /** @var ClassDefinition $mergedDefinition */
+        $mergedDefinition = $source1->getDefinition('foo');
+
+        // Check that it's a different, merged, definition
+        $this->assertNotSame($definition1, $mergedDefinition);
+        $this->assertNotSame($definition2, $mergedDefinition);
+        $this->assertInstanceOf('DI\Definition\ClassDefinition', $mergedDefinition);
+        $this->assertEquals(new PropertyInjection('p1', 'val1'), $mergedDefinition->getPropertyInjection('p1'));
+        $this->assertEquals(new PropertyInjection('p2', 'val2'), $mergedDefinition->getPropertyInjection('p2'));
     }
 }

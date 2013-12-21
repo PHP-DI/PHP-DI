@@ -17,11 +17,13 @@ namespace DI\Definition;
 interface MergeableDefinition extends Definition
 {
     /**
-     * Merge another definition into the current definition.
+     * Merge another definition with the current definition and returns the result.
      *
      * In case of conflicts, the current definition prevails.
      *
      * @param MergeableDefinition $definition
+     *
+     * @return MergeableDefinition Merged definition
      */
     public function merge(MergeableDefinition $definition);
 }

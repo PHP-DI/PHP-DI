@@ -64,15 +64,18 @@ class ClassDefinitionTest extends \PHPUnit_Framework_TestCase
      */
     public function testMerge(ClassDefinition $definition1, ClassDefinition $definition2)
     {
-        $definition1->merge($definition2);
+        $merged = $definition1->merge($definition2);
 
-        $this->assertEquals('foo', $definition1->getName());
-        $this->assertEquals('bar', $definition1->getClassName());
-        $this->assertTrue($definition1->isLazy());
-        $this->assertEquals(Scope::PROTOTYPE(), $definition1->getScope());
-        $this->assertNotNull($definition1->getConstructorInjection());
-        $this->assertCount(3, $definition1->getPropertyInjections());
-        $this->assertCount(3, $definition1->getMethodInjections());
+        // Check that the object is cloned
+        $this->assertNotSame($definition1, $merged);
+
+        $this->assertEquals('foo', $merged->getName());
+        $this->assertEquals('bar', $merged->getClassName());
+        $this->assertTrue($merged->isLazy());
+        $this->assertEquals(Scope::PROTOTYPE(), $merged->getScope());
+        $this->assertNotNull($merged->getConstructorInjection());
+        $this->assertCount(3, $merged->getPropertyInjections());
+        $this->assertCount(3, $merged->getMethodInjections());
     }
 
     /**
