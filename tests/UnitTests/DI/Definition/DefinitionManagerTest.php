@@ -63,10 +63,7 @@ class DefinitionManagerTest extends \PHPUnit_Framework_TestCase
      */
     public function testDefinitionSource()
     {
-        $definition = $this->getMockForAbstractClass('DI\Definition\Definition');
-        $definition->expects($this->once())
-            ->method('isCacheable')
-            ->will($this->returnValue(true));
+        $definition = $this->getMockForAbstractClass('DI\Definition\CacheableDefinition');
 
         $source = $this->getMockForAbstractClass('DI\Definition\Source\DefinitionSource');
         $source->expects($this->once())

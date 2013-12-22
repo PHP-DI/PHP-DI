@@ -64,12 +64,4 @@ class ValueDefinition implements Definition
     {
         return $this->value;
     }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function isCacheable()
-    {
-        return false;
-    }
 }

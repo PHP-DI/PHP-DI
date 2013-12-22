@@ -31,11 +31,4 @@ interface Definition
      * @return Scope
      */
     public function getScope();
-
-    /**
-     * Returns true if the definition can be cached, false otherwise
-     *
-     * @return bool
-     */
-    public function isCacheable();
 }

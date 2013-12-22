@@ -103,4 +103,9 @@ class ClassDefinitionTest extends \PHPUnit_Framework_TestCase
             array($definition2, $definition1),
         );
     }
+
+    public function testCacheable()
+    {
+        $this->assertInstanceOf('DI\Definition\CacheableDefinition', new ClassDefinition('foo'));
+    }
 }

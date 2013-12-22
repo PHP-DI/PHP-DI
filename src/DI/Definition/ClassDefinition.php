@@ -19,7 +19,7 @@ use DI\Scope;
  *
  * @author Matthieu Napoli <matthieu@mnapoli.fr>
  */
-class ClassDefinition implements MergeableDefinition
+class ClassDefinition implements MergeableDefinition, CacheableDefinition
 {
     /**
      * Entry name (most of the time, same as $classname)
@@ -265,13 +265,5 @@ class ClassDefinition implements MergeableDefinition
         }
 
         return $newDefinition;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function isCacheable()
-    {
-        return true;
     }
 }

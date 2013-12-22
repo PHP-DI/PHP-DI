@@ -72,12 +72,4 @@ class CallableDefinition implements Definition
     {
         return $this->callable;
     }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function isCacheable()
-    {
-        return false;
-    }
 }

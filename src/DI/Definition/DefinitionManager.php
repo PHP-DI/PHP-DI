@@ -60,7 +60,7 @@ class DefinitionManager
             $definition = $this->source->getDefinition($name);
 
             // Save to cache
-            if ($definition === null || ($definition && $definition->isCacheable())) {
+            if ($definition === null || ($definition instanceof CacheableDefinition)) {
                 $this->saveToCache($name, $definition);
             }
         }
