@@ -11,6 +11,7 @@ namespace UnitTests\DI\Definition\Source;
 
 use DI\Definition\EntryReference;
 use DI\Definition\Source\AnnotationDefinitionSource;
+use DI\Scope;
 
 /**
  * Test class for AnnotationDefinitionSource
@@ -174,6 +175,16 @@ class AnnotationDefinitionSourceTest extends \PHPUnit_Framework_TestCase
         $definition = $source->getDefinition('UnitTests\DI\Definition\Source\Fixtures\AnnotationFixture');
 
         $this->assertNull($definition->getMethodInjection('staticMethod'));
+    }
+
+    public function testInjectable()
+    {
+        $source = new AnnotationDefinitionSource();
+        $definition = $source->getDefinition('UnitTests\DI\Definition\Source\Fixtures\AnnotationInjectableFixture');
+        $this->assertInstanceOf('DI\Definition\Definition', $definition);
+
+        $this->assertEquals(Scope::PROTOTYPE(), $definition->getScope());
+        $this->assertTrue($definition->isLazy());
     }
 
     /**

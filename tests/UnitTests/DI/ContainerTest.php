@@ -9,17 +9,18 @@
 
 namespace UnitTests\DI;
 
+use DI\Container;
 use DI\ContainerBuilder;
+use DI\Definition\DefinitionManager;
 use stdClass;
 
 /**
  * Test class for Container
+ *
+ * @covers \DI\Container
  */
 class ContainerTest extends \PHPUnit_Framework_TestCase
 {
-    /**
-     * @covers \DI\Container
-     */
     public function testSetGet()
     {
         $container = ContainerBuilder::buildDevContainer();
@@ -30,7 +31,6 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException \DI\NotFoundException
-     * @covers \DI\Container
      */
     public function testGetNotFound()
     {
@@ -51,18 +51,12 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($closure, $container->get('key'));
     }
 
-    /**
-     * @covers \DI\Container
-     */
     public function testGetWithClassName()
     {
         $container = ContainerBuilder::buildDevContainer();
         $this->assertInstanceOf('stdClass', $container->get('stdClass'));
     }
 
-    /**
-     * @covers \DI\Container
-     */
     public function testGetWithPrototypeScope()
     {
         $container = ContainerBuilder::buildDevContainer();
@@ -72,9 +66,6 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
         $this->assertNotSame($instance1, $instance2);
     }
 
-    /**
-     * @covers \DI\Container
-     */
     public function testGetWithSingletonScope()
     {
         $container = ContainerBuilder::buildDevContainer();
@@ -101,7 +92,6 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
 
     /**
      * Tests if instantiation unlock works. We should be able to create two instances of the same class.
-     * @covers \DI\Container
      */
     public function testCircularDependencies()
     {
@@ -113,7 +103,6 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
     /**
      * @expectedException \DI\DependencyException
      * @expectedExceptionMessage Circular dependency detected while trying to get entry 'UnitTests\DI\Fixtures\Class1CircularDependencies'
-     * @covers \DI\Container
      */
     public function testCircularDependencyException()
     {
@@ -124,7 +113,6 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
     /**
      * @expectedException \DI\DependencyException
      * @expectedExceptionMessage Circular dependency detected while trying to get entry 'foo'
-     * @covers \DI\Container
      */
     public function testCircularDependencyExceptionWithAlias()
     {
@@ -137,7 +125,6 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
     /**
      * @expectedException \InvalidArgumentException
      * @expectedExceptionMessage The name parameter must be of type string
-     * @covers \DI\Container::get
      */
     public function testGetNonStringParameter()
     {
@@ -145,9 +132,6 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
         $container->get(new stdClass());
     }
 
-    /**
-     * @covers \DI\Container
-     */
     public function testHas()
     {
         $container = ContainerBuilder::buildDevContainer();
@@ -160,17 +144,15 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
     /**
      * @expectedException \InvalidArgumentException
      * @expectedExceptionMessage The name parameter must be of type string
-     * @covers \DI\Container::has
      */
     public function testHasNonStringParameter()
     {
         $container = ContainerBuilder::buildDevContainer();
-        $container->get(new stdClass());
+        $container->has(new stdClass());
     }
 
     /**
      * Test that injecting an existing object returns the same reference to that object
-     * @covers \DI\Container
      */
     public function testInjectOnMaintainsReferentialEquality()
     {
@@ -183,7 +165,6 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
 
     /**
      * Test that injection on null yields null
-     * @covers \DI\Container
      */
     public function testInjectNull()
     {
@@ -196,7 +177,6 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
     /**
      * We should be able to set a null value
      * @see https://github.com/mnapoli/PHP-DI/issues/79
-     * @covers \DI\Container
      */
     public function testSetNullValue()
     {
@@ -208,7 +188,6 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
 
     /**
      * The container auto-registers itself
-     * @covers \DI\Container
      */
     public function testContainerIsRegistered()
     {
@@ -221,7 +200,6 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
     /**
      * @see https://github.com/mnapoli/PHP-DI/issues/126
      * @test
-     * @covers \DI\Container
      */
     public function testSetGetSetGet()
     {
@@ -232,5 +210,14 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
         $container->set('foo', 'hello');
         
         $this->assertSame('hello', $container->get('foo'));
+    }
+
+    public function testGetDefinitionManager()
+    {
+        $definitionManager = new DefinitionManager();
+        $proxyFactory = $this->getMock('ProxyManager\Factory\LazyLoadingValueHolderFactory');
+        $container = new Container($definitionManager, $proxyFactory);
+
+        $this->assertSame($definitionManager, $container->getDefinitionManager());
     }
 }
