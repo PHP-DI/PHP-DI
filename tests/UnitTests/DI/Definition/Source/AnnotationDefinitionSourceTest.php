@@ -39,6 +39,32 @@ class AnnotationDefinitionSourceTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(new EntryReference('foo'), $property->getValue());
     }
 
+    public function testUnannotatedProperty()
+    {
+        $source = new AnnotationDefinitionSource();
+        $definition = $source->getDefinition('UnitTests\DI\Definition\Source\Fixtures\AnnotationFixture');
+
+        $this->assertNull($definition->getPropertyInjection('unannotatedProperty'));
+    }
+
+    public function testStaticProperty()
+    {
+        $source = new AnnotationDefinitionSource();
+        $definition = $source->getDefinition('UnitTests\DI\Definition\Source\Fixtures\AnnotationFixture');
+
+        $this->assertNull($definition->getPropertyInjection('staticProperty'));
+    }
+
+    /**
+     * @expectedException \DI\Definition\Exception\AnnotationException
+     * @expectedExceptionMessage @Inject found on property UnitTests\DI\Definition\Source\Fixtures\AnnotationFixture4::property but unable to guess what to inject, use a @var annotation
+     */
+    public function testUnguessableProperty()
+    {
+        $source = new AnnotationDefinitionSource();
+        $source->getDefinition('UnitTests\DI\Definition\Source\Fixtures\AnnotationFixture4');
+    }
+
     public function testConstructor()
     {
         $source = new AnnotationDefinitionSource();
@@ -134,6 +160,22 @@ class AnnotationDefinitionSourceTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(new EntryReference('bar'), $parameters[1]);
     }
 
+    public function testUnannotatedMethod()
+    {
+        $source = new AnnotationDefinitionSource();
+        $definition = $source->getDefinition('UnitTests\DI\Definition\Source\Fixtures\AnnotationFixture');
+
+        $this->assertNull($definition->getMethodInjection('unannotatedMethod'));
+    }
+
+    public function testStaticMethod()
+    {
+        $source = new AnnotationDefinitionSource();
+        $definition = $source->getDefinition('UnitTests\DI\Definition\Source\Fixtures\AnnotationFixture');
+
+        $this->assertNull($definition->getMethodInjection('staticMethod'));
+    }
+
     /**
      * @see https://github.com/mnapoli/PHP-DI/issues/99
      */
@@ -153,5 +195,15 @@ class AnnotationDefinitionSourceTest extends \PHPUnit_Framework_TestCase
             new EntryReference('UnitTests\DI\Definition\Source\Fixtures\AnnotationFixture2'),
             $parameters[0]
         );
+    }
+
+    public function testSetAnnotationReader()
+    {
+        $reader = $this->getMockForAbstractClass('Doctrine\Common\Annotations\Reader');
+
+        $source = new AnnotationDefinitionSource();
+        $source->setAnnotationReader($reader);
+
+        $this->assertSame($reader, $source->getAnnotationReader());
     }
 }

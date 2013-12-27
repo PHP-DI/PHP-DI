@@ -51,7 +51,7 @@ class CallableDefinitionTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(Scope::PROTOTYPE(), $definition->getScope());
     }
 
-    public function testCacheable()
+    public function testNotCacheable()
     {
         $definition = new CallableDefinition('foo', function () {
         });

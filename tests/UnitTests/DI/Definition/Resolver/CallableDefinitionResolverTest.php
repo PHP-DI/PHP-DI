@@ -18,6 +18,15 @@ use DI\Definition\Resolver\CallableDefinitionResolver;
  */
 class CallableDefinitionResolverTest extends \PHPUnit_Framework_TestCase
 {
+    public function testGetContainer()
+    {
+        $container = $this->getMock('DI\Container', array(), array(), '', false);
+
+        $resolver = new CallableDefinitionResolver($container);
+
+        $this->assertSame($container, $resolver->getContainer());
+    }
+
     public function testResolve()
     {
         /** @var \DI\Container $container */

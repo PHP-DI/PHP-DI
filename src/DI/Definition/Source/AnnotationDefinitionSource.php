@@ -203,7 +203,7 @@ class AnnotationDefinitionSource implements DefinitionSource
         $annotationParameters = $annotation ? $annotation->getParameters() : array();
 
         // @Inject on constructor is implicit
-        if (! ($annotation ||$method->isConstructor())) {
+        if (! ($annotation || $method->isConstructor())) {
             return null;
         }
 

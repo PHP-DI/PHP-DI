@@ -14,12 +14,11 @@ use UnitTests\DI\Fixtures\FakeContainer;
 
 /**
  * Test class for ContainerBuilder
+ *
+ * @covers \DI\ContainerBuilder
  */
 class ContainerBuilderTest extends \PHPUnit_Framework_TestCase
 {
-    /**
-     * @covers \DI\ContainerBuilder
-     */
     public function testDefaultConfiguration()
     {
         // Make the ContainerBuilder use our fake class to catch constructor parameters
@@ -31,9 +30,6 @@ class ContainerBuilderTest extends \PHPUnit_Framework_TestCase
         $this->assertNull($container->definitionManager->getCache());
     }
 
-    /**
-     * @covers \DI\ContainerBuilder
-     */
     public function testSetCache()
     {
         $cache = $this->getMockForAbstractClass('Doctrine\Common\Cache\Cache');
@@ -49,7 +45,6 @@ class ContainerBuilderTest extends \PHPUnit_Framework_TestCase
 
     /**
      * By default, the definition resolvers should not be overridden
-     * @covers \DI\ContainerBuilder
      */
     public function testContainerNotWrapped()
     {
@@ -60,9 +55,6 @@ class ContainerBuilderTest extends \PHPUnit_Framework_TestCase
         $this->assertNull($container->wrapperContainer);
     }
 
-    /**
-     * @covers \DI\ContainerBuilder
-     */
     public function testContainerWrapped()
     {
         $otherContainer = $this->getMockForAbstractClass('DI\ContainerInterface');
@@ -76,9 +68,6 @@ class ContainerBuilderTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($otherContainer, $container->wrapperContainer);
     }
 
-    /**
-     * @covers \DI\ContainerBuilder
-     */
     public function testFluentInterface()
     {
         $builder = new ContainerBuilder();

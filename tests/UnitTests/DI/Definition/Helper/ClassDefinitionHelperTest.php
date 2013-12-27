@@ -89,7 +89,7 @@ class ClassDefinitionHelperTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(array(1, 2, 3), $methodInjection->getParameters());
     }
 
-    public function testWithMethodParameter()
+    public function testMethodParameter()
     {
         $helper = new ClassDefinitionHelper();
         $helper->methodParameter('method', 0, 42);
@@ -101,5 +101,19 @@ class ClassDefinitionHelperTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals('method', $methodInjection->getMethodName());
         $this->assertEquals(42, $methodInjection->getParameter(0));
+    }
+
+    public function testMethodParameterByName()
+    {
+        $helper = new ClassDefinitionHelper();
+        $helper->methodParameter('__construct', 'param2', 'val2');
+        $helper->methodParameter('__construct', 'param1', 'val1');
+        $definition = $helper->getDefinition('UnitTests\DI\Definition\Helper\Fixtures\Class1');
+
+        $this->assertCount(1, $definition->getMethodInjections());
+        $methodInjection = current($definition->getMethodInjections());
+
+        // Check that injections are in the good order (matching the real parameters order)
+        $this->assertEquals(array('val1', 'val2'), $methodInjection->getParameters());
     }
 }

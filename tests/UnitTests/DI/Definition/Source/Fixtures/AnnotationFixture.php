@@ -29,6 +29,15 @@ class AnnotationFixture
      */
     protected $property3;
 
+    protected $unannotatedProperty;
+
+    /**
+     * Static property shouldn't be injected
+     *
+     * @Inject("foo")
+     */
+    protected static $staticProperty;
+
     /**
      * @Inject({"foo", "bar"})
      */
@@ -73,6 +82,17 @@ class AnnotationFixture
      * @Inject({"param2" = "bar"})
      */
     public function method5($param1, $param2)
+    {
+    }
+
+    public function unannotatedMethod()
+    {
+    }
+
+    /**
+     * @Inject
+     */
+    public static function staticMethod()
     {
     }
 }
