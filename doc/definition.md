@@ -179,10 +179,12 @@ $container->set('My\Interface', \DI\object('My\Implementation'));
 $container->set('myNamedInstance', \DI\object('My\Class'));
 
 // Using an anonymous function
-// not recommended: will not be cached
 $container->set('My\Stuff', \DI\factory(function (Container $c) {
     return new MyClass($c->get('db.host'));
 }));
+
+// Defining an alias to another entry
+$container->set('some.entry', \DI\link('some.other.entry'));
 ```
 
 
@@ -235,6 +237,9 @@ return [
     'My\Stuff' => DI\factory(function (Container $c) {
         return new MyClass($c->get('db.host'));
     }),
+
+    // Defining an alias to another entry
+    'some.entry' => DI\link('some.other.entry'),
 
 ];
 ```
