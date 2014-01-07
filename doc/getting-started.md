@@ -148,6 +148,7 @@ To sum up:
 
 #### Frameworks integration
 
+- [Symfony 2](frameworks/symfony2.md)
 - [Zend Framework 1](frameworks/zf1.md)
 
 
