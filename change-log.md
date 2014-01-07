@@ -6,6 +6,8 @@ Major changes:
 
 * The configuration format has changed
 
+Read the migration guide if you are using 3.x: [Migration guide from 3.x to 4.0](doc/migration/4.0.md).
+
 BC-breaks:
 
 * XML and JSON definitions have been removed
