@@ -117,17 +117,16 @@ class ArrayDefinitionSourceTest extends \PHPUnit_Framework_TestCase
 
     public function testChainableSource()
     {
-        $source = new ArrayDefinitionSource(__DIR__ . '/Fixtures/definitions.php');
+        $source = new ArrayDefinitionSource();
 
-        $otherSource = $this->getMockForAbstractClass('DI\Definition\Source\DefinitionSource');
-        $otherSource->expects($this->once())
-            ->method('getDefinition')
-            ->with('some unknown entry')
-            ->will($this->returnValue(42));
+        $source2 = new ArrayDefinitionSource();
+        $source2->addDefinitions(array(
+            'foo' => 'bar',
+        ));
 
-        $source->chain($otherSource);
+        $source->chain($source2);
 
-        $this->assertEquals(42, $source->getDefinition('some unknown entry'));
+        $this->assertEquals(new ValueDefinition('foo', 'bar'), $source->getDefinition('foo'));
     }
 
     public function testAddDefinition()
