@@ -233,7 +233,7 @@ class ContainerBuilder
     private function buildProxyFactory()
     {
         $config = new Configuration();
-        // TODO use non-deprecated method
+        // TODO useless since ProxyManager 0.5, line kept for compatibility with previous versions
         $config->setAutoGenerateProxies(true);
 
         if ($this->writeProxiesToFile) {
