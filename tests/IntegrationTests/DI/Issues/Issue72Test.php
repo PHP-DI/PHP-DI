@@ -10,7 +10,6 @@
 namespace IntegrationTests\DI\Issues;
 
 use DI\ContainerBuilder;
-use DI\Definition\Source\ArrayDefinitionSource;
 use IntegrationTests\DI\Issues\Issue72\Class1;
 
 /**
