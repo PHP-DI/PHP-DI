@@ -158,6 +158,12 @@ class ClassDefinitionHelper implements DefinitionHelper
      */
     public function methodParameter($method, $parameter, $value)
     {
+        // Special case for the constructor
+        if ($method === '__construct') {
+            $this->constructor[$parameter] = $value;
+            return $this;
+        }
+
         if (! isset($this->methods[$method])) {
             $this->methods[$method] = array();
         }

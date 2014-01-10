@@ -103,11 +103,30 @@ class ClassDefinitionHelperTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(42, $methodInjection->getParameter(0));
     }
 
-    public function testMethodParameterByName()
+    /**
+     * If using methodParameter() for "__construct", then the constructor definition should be updated
+     */
+    public function testMethodParameterOnConstructor()
     {
         $helper = new ClassDefinitionHelper();
-        $helper->methodParameter('__construct', 'param2', 'val2');
-        $helper->methodParameter('__construct', 'param1', 'val1');
+        $helper->methodParameter('__construct', 0, 42);
+        $definition = $helper->getDefinition('foo');
+
+        $this->assertCount(0, $definition->getMethodInjections());
+        $this->assertNotNull($definition->getConstructorInjection());
+
+        $this->assertEquals('__construct', $definition->getConstructorInjection()->getMethodName());
+        $this->assertEquals(42, $definition->getConstructorInjection()->getParameter(0));
+    }
+
+    /**
+     * Check using the parameter name, not its index
+     */
+    public function testMethodParameterByParameterName()
+    {
+        $helper = new ClassDefinitionHelper();
+        $helper->methodParameter('method', 'param2', 'val2');
+        $helper->methodParameter('method', 'param1', 'val1');
         $definition = $helper->getDefinition('UnitTests\DI\Definition\Helper\Fixtures\Class1');
 
         $this->assertCount(1, $definition->getMethodInjections());
