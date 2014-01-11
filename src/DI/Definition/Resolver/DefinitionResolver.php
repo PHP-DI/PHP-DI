@@ -12,7 +12,7 @@ namespace DI\Definition\Resolver;
 use DI\Definition\Definition;
 
 /**
- * Represents an object that resolves a DI\Definition to a value.
+ * Resolves a definition to a value.
  *
  * @since 4.0
  * @author Matthieu Napoli <matthieu@mnapoli.fr>

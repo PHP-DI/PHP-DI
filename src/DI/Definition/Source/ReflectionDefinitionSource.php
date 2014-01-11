@@ -26,21 +26,21 @@ class ReflectionDefinitionSource implements DefinitionSource
     /**
      * {@inheritdoc}
      */
-    public function getDefinition($id, MergeableDefinition $parentDefinition = null)
+    public function getDefinition($name, MergeableDefinition $parentDefinition = null)
     {
         // Only merges with class definition
         if ($parentDefinition && (! $parentDefinition instanceof ClassDefinition)) {
             return null;
         }
 
-        $className = $parentDefinition ? $parentDefinition->getClassName() : $id;
+        $className = $parentDefinition ? $parentDefinition->getClassName() : $name;
 
         if (!class_exists($className) && !interface_exists($className)) {
             return null;
         }
 
         $class = new ReflectionClass($className);
-        $definition = new ClassDefinition($id);
+        $definition = new ClassDefinition($name);
 
         // Constructor
         $constructor = $class->getConstructor();

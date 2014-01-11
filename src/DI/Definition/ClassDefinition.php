@@ -15,7 +15,7 @@ use DI\Definition\Exception\DefinitionException;
 use DI\Scope;
 
 /**
- * Definition of a class for dependency injection
+ * Defines how a class can be instantiated.
  *
  * @author Matthieu Napoli <matthieu@mnapoli.fr>
  */
