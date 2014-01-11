@@ -14,23 +14,27 @@
 * [Lazy injection](lazy-injection.md)
 * [Scopes](scopes.md)
 
-## Frameworks integration
+### Frameworks integration
 
 - [Symfony 2](frameworks/symfony2.md)
 - [Zend Framework 1](frameworks/zf1.md)
 - [Zend Framework 2](https://github.com/mnapoli/PHP-DI-ZF2) (beta version)
 
-## Extra topics
+### Extra topics
 
 * [Performances](performances.md)
 * [Inject on an existing instance](inject-on-instance.md)
 * [Injections depending on the environment](environments.md)
+
+### Migration guides
+
+* [Migration from PHP-DI 3.x to 4.0](migration/4.0.md)
 
 ## Internals
 
 * [Contribute](../CONTRIBUTING.md)
 * [How PHP-DI works](how-it-works.md)
 
-### License
-
 PHP-DI is under the MIT license.
+
+This documentation is also embedded in PHP-DI's git repository so you can read it offline (in the `doc/` folder).
