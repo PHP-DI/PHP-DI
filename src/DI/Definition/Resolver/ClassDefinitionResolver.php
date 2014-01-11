@@ -225,9 +225,9 @@ class ClassDefinitionResolver implements DefinitionResolver
      *
      * @param MethodInjection  $methodInjection
      * @param ReflectionMethod $methodReflection
-     * @param array            $parameters       Force so parameters to specific values.
+     * @param array            $parameters       Force some parameters to specific values.
      *
-     * @throws DefinitionException A parameter a no defined or guessable value.
+     * @throws DefinitionException A parameter has no defined or guessable value.
      * @return array Array of parameters to use to call the method.
      */
     private function prepareMethodParameters(
