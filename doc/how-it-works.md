@@ -24,7 +24,7 @@ A container instance has the following sub-components:
 A definition defines what is an entry:
 
 - **a simple value** (string, number, object instance…): `ValueDefinition`
-- **a callable returning the value**: `CallableDefinition`
+- **a factory/callable returning the value**: `FactoryDefinition`
 - **a definition of an entry alias**: `AliasDefinition`
 - **a definition of a class**: `ClassDefinition`
 
