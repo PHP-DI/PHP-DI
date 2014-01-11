@@ -37,4 +37,5 @@
 
 PHP-DI is under the MIT license.
 
-This documentation is also embedded in PHP-DI's git repository so you can read it offline (in the `doc/` folder).
+This documentation is also embedded in [PHP-DI's git repository](https://github.com/mnapoli/PHP-DI/tree/4.0/doc)
+so you can read it offline (in the `doc/` folder).
