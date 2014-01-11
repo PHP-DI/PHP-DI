@@ -13,6 +13,7 @@ use DI\Definition\CallableDefinition;
 use DI\Definition\ClassDefinition;
 use DI\Definition\ClassDefinition\MethodInjection;
 use DI\Definition\ClassDefinition\PropertyInjection;
+use DI\Definition\EntryReference;
 use DI\Definition\Resolver\ClassDefinitionResolver;
 use ProxyManager\Factory\LazyLoadingValueHolderFactory;
 
@@ -44,6 +45,71 @@ class ClassDefinitionResolverTest extends \PHPUnit_Framework_TestCase
 
         $object = $resolver->resolve($definition);
         $this->assertInstanceOf('UnitTests\DI\Definition\Resolver\NoConstructor', $object);
+    }
+
+    public function testResolveWithParameters()
+    {
+        $definition = new ClassDefinition('UnitTests\DI\Definition\Resolver\FixtureClass');
+        $resolver = $this->buildResolver();
+
+        $object = $resolver->resolve($definition, array('param1' => 'value'));
+
+        $this->assertInstanceOf('UnitTests\DI\Definition\Resolver\FixtureClass', $object);
+        $this->assertEquals('value', $object->constructorParam1);
+    }
+
+    /**
+     * Check that given parameters override the definition
+     */
+    public function testResolveWithParametersAndDefinition()
+    {
+        $definition = new ClassDefinition('UnitTests\DI\Definition\Resolver\FixtureClass');
+        $definition->setConstructorInjection(new MethodInjection('__construct', array('foo')));
+        $resolver = $this->buildResolver();
+
+        $object = $resolver->resolve($definition, array('param1' => 'bar'));
+
+        $this->assertInstanceOf('UnitTests\DI\Definition\Resolver\FixtureClass', $object);
+        $this->assertEquals('bar', $object->constructorParam1);
+    }
+
+    /**
+     * Check that useless parameters are ignored (no error)
+     */
+    public function testResolveWithUselessParameters()
+    {
+        $definition = new ClassDefinition('UnitTests\DI\Definition\Resolver\FixtureClass');
+        $resolver = $this->buildResolver();
+
+        $object = $resolver->resolve($definition, array('param1' => 'value', 'unknown' => 'foo'));
+
+        $this->assertInstanceOf('UnitTests\DI\Definition\Resolver\FixtureClass', $object);
+        $this->assertEquals('value', $object->constructorParam1);
+    }
+
+    /**
+     * Check that entry references (in the definition) are resolved using the container
+     */
+    public function testResolveWithEntryReference()
+    {
+        $definition = new ClassDefinition('UnitTests\DI\Definition\Resolver\FixtureClass');
+        // The constructor definition uses an EntryReference
+        $definition->setConstructorInjection(new MethodInjection('__construct', array(new EntryReference('foo'))));
+
+        $container = $this->getMock('DI\Container', array(), array(), '', false);
+        $container->expects($this->once())
+            ->method('get')
+            ->with('foo')
+            ->will($this->returnValue('bar'));
+        /** @var LazyLoadingValueHolderFactory $factory */
+        $factory = $this->getMock('ProxyManager\Factory\LazyLoadingValueHolderFactory', array(), array(), '', false);
+
+        $resolver = new ClassDefinitionResolver($container, $factory);
+
+        $object = $resolver->resolve($definition);
+
+        $this->assertInstanceOf('UnitTests\DI\Definition\Resolver\FixtureClass', $object);
+        $this->assertEquals('bar', $object->constructorParam1);
     }
 
     public function testInjectOnInstance()

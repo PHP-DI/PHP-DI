@@ -44,7 +44,7 @@ class CallableDefinitionResolver implements DefinitionResolver
      *
      * {@inheritdoc}
      */
-    public function resolve(Definition $definition)
+    public function resolve(Definition $definition, array $parameters = array())
     {
         if (! $definition instanceof CallableDefinition) {
             throw new \InvalidArgumentException(

@@ -64,7 +64,7 @@ class ClassDefinitionResolver implements DefinitionResolver
      *
      * {@inheritdoc}
      */
-    public function resolve(Definition $definition)
+    public function resolve(Definition $definition, array $parameters = array())
     {
         if (! $definition instanceof ClassDefinition) {
             throw new \InvalidArgumentException(sprintf(
@@ -75,10 +75,10 @@ class ClassDefinitionResolver implements DefinitionResolver
 
         // Lazy?
         if ($definition->isLazy()) {
-            return $this->createProxy($definition);
+            return $this->createProxy($definition, $parameters);
         }
 
-        return $this->createInstance($definition);
+        return $this->createInstance($definition, $parameters);
     }
 
     /**
@@ -109,18 +109,19 @@ class ClassDefinitionResolver implements DefinitionResolver
      * Returns a proxy instance
      *
      * @param ClassDefinition $definition
+     * @param array           $parameters
      *
      * @return object Proxy instance
      */
-    private function createProxy(ClassDefinition $definition)
+    private function createProxy(ClassDefinition $definition, array $parameters)
     {
         $resolver = $this;
 
         /** @noinspection PhpUnusedParameterInspection */
         $proxy = $this->proxyFactory->createProxy(
             $definition->getClassName(),
-            function (& $wrappedObject, $proxy, $method, $parameters, & $initializer) use ($resolver, $definition) {
-                $wrappedObject = $resolver->createInstance($definition);
+            function (& $wrappedObject, $proxy, $method, $parameters, & $initializer) use ($resolver, $definition, $parameters) {
+                $wrappedObject = $resolver->createInstance($definition, $parameters);
                 $initializer = null; // turning off further lazy initialization
                 return true;
             }
@@ -133,13 +134,14 @@ class ClassDefinitionResolver implements DefinitionResolver
      * Creates an instance of the class and injects dependencies..
      *
      * @param ClassDefinition $classDefinition
+     * @param array           $parameters      Optional parameters to use to create the instance.
      *
      * @throws DependencyException
      * @return object
      *
-     * @todo Make private once PHP-DI supports PHP 5.4+
+     * @todo Make private once PHP-DI supports PHP > 5.4 only
      */
-    public function createInstance(ClassDefinition $classDefinition)
+    public function createInstance(ClassDefinition $classDefinition, array $parameters)
     {
         $classReflection = new ReflectionClass($classDefinition->getClassName());
 
@@ -147,8 +149,10 @@ class ClassDefinitionResolver implements DefinitionResolver
             throw new DependencyException("$classReflection->name is not instantiable");
         }
 
+        $constructorInjection = $classDefinition->getConstructorInjection();
+
         try {
-            $instance = $this->injectConstructor($classReflection, $classDefinition->getConstructorInjection());
+            $instance = $this->injectConstructor($classReflection, $constructorInjection, $parameters);
             $this->injectMethodsAndProperties($instance, $classDefinition);
         } catch (NotFoundException $e) {
             $message = sprintf(
@@ -167,13 +171,17 @@ class ClassDefinitionResolver implements DefinitionResolver
      *
      * @param ReflectionClass      $classReflection
      * @param MethodInjection|null $constructorInjection
+     * @param array                $parameters           Force so parameters to specific values.
      *
      * @throws DefinitionException
      * @return object
      */
-    private function injectConstructor(ReflectionClass $classReflection, MethodInjection $constructorInjection = null)
-    {
-        $args = $this->prepareMethodParameters($constructorInjection, $classReflection->getConstructor());
+    private function injectConstructor(
+        ReflectionClass $classReflection,
+        MethodInjection $constructorInjection = null,
+        array $parameters = array()
+    ) {
+        $args = $this->prepareMethodParameters($constructorInjection, $classReflection->getConstructor(), $parameters);
 
         return $classReflection->newInstanceArgs($args);
     }
@@ -212,9 +220,20 @@ class ClassDefinitionResolver implements DefinitionResolver
         $methodReflection->invokeArgs($object, $args);
     }
 
+    /**
+     * Create the parameter array to call a method.
+     *
+     * @param MethodInjection  $methodInjection
+     * @param ReflectionMethod $methodReflection
+     * @param array            $parameters       Force so parameters to specific values.
+     *
+     * @throws DefinitionException A parameter a no defined or guessable value.
+     * @return array Array of parameters to use to call the method.
+     */
     private function prepareMethodParameters(
         MethodInjection $methodInjection = null,
-        ReflectionMethod $methodReflection = null
+        ReflectionMethod $methodReflection = null,
+        array $parameters = array()
     ) {
         if (! $methodReflection) {
             return array();
@@ -223,7 +242,13 @@ class ClassDefinitionResolver implements DefinitionResolver
         $args = array();
 
         foreach ($methodReflection->getParameters() as $index => $parameter) {
-            $value = $methodInjection ? $methodInjection->getParameter($index) : null;
+            if (array_key_exists($parameter->getName(), $parameters)) {
+                // Look in the $parameters array
+                $value = $parameters[$parameter->getName()];
+            } else {
+                // Look in the definition
+                $value = $methodInjection ? $methodInjection->getParameter($index) : null;
+            }
 
             // Unknown injection
             if ($value === null) {

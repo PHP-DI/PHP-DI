@@ -18,7 +18,9 @@ BC-breaks:
 
 Changes:
 
+* Added `ContainerInterface` and `FactoryInterface`, both implemented by the container.
 * [#115](https://github.com/mnapoli/PHP-DI/issues/115) Added `Container::has()`
+* [#142](https://github.com/mnapoli/PHP-DI/issues/142) Added `Container::make()` to resolve an entry
 * [#127](https://github.com/mnapoli/PHP-DI/issues/127) Added support for cases where PHP-DI is wrapped by another container (like Acclimate): PHP-DI can now use the wrapping container to perform injections
 * [#128](https://github.com/mnapoli/PHP-DI/issues/128) Configure entry aliases
 * [#110](https://github.com/mnapoli/PHP-DI/issues/110) XML definitions are not supported anymore
