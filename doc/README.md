@@ -2,7 +2,7 @@
 
 ## Introduction
 
-* [Introduction to dependency injection with an example](example.md)
+* [Understanding dependency injection](understanding-di.md)
 * [Getting started](getting-started.md)
 * [Best practices guide](best-practices.md)
 
