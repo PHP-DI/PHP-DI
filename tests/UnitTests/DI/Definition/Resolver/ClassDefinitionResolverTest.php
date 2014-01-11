@@ -37,6 +37,15 @@ class ClassDefinitionResolverTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('value3', $object->methodParam1);
     }
 
+    public function testResolveNoConstructorClass()
+    {
+        $definition = new ClassDefinition('UnitTests\DI\Definition\Resolver\NoConstructor');
+        $resolver = $this->buildResolver();
+
+        $object = $resolver->resolve($definition);
+        $this->assertInstanceOf('UnitTests\DI\Definition\Resolver\NoConstructor', $object);
+    }
+
     public function testInjectOnInstance()
     {
         $definition = new ClassDefinition('UnitTests\DI\Definition\Resolver\FixtureClass');
@@ -164,4 +173,8 @@ class FixtureClass
     {
         $this->methodParam2 = $param;
     }
+}
+
+class NoConstructor
+{
 }
