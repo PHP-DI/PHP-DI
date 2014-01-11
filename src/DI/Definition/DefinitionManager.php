@@ -48,7 +48,9 @@ class DefinitionManager
 
     /**
      * Returns DI definition for the entry name
+     *
      * @param string $name
+     *
      * @return Definition|null
      */
     public function getDefinition($name)

@@ -9,21 +9,21 @@
 
 namespace UnitTests\DI\Definition;
 
-use DI\Definition\CallableDefinition;
+use DI\Definition\FactoryDefinition;
 use DI\Scope;
 
 /**
- * Test class for CallableDefinition
+ * Test class for FactoryDefinition
  *
- * @covers \DI\Definition\CallableDefinition
+ * @covers \DI\Definition\FactoryDefinition
  */
-class CallableDefinitionTest extends \PHPUnit_Framework_TestCase
+class FactoryDefinitionTest extends \PHPUnit_Framework_TestCase
 {
     public function testGetters()
     {
         $callable = function () {
         };
-        $definition = new CallableDefinition('foo', $callable);
+        $definition = new FactoryDefinition('foo', $callable);
 
         $this->assertEquals('foo', $definition->getName());
         $this->assertEquals($callable, $definition->getCallable());
@@ -37,7 +37,7 @@ class CallableDefinitionTest extends \PHPUnit_Framework_TestCase
     public function testAcceptArrayCallable()
     {
         $callable = array($this, 'foo');
-        $definition = new CallableDefinition('foo', $callable);
+        $definition = new FactoryDefinition('foo', $callable);
 
         $this->assertEquals('foo', $definition->getName());
         $this->assertEquals($callable, $definition->getCallable());
@@ -45,7 +45,7 @@ class CallableDefinitionTest extends \PHPUnit_Framework_TestCase
 
     public function testScope()
     {
-        $definition = new CallableDefinition('foo', function () {
+        $definition = new FactoryDefinition('foo', function () {
         }, Scope::PROTOTYPE());
 
         $this->assertEquals(Scope::PROTOTYPE(), $definition->getScope());
@@ -53,7 +53,7 @@ class CallableDefinitionTest extends \PHPUnit_Framework_TestCase
 
     public function testNotCacheable()
     {
-        $definition = new CallableDefinition('foo', function () {
+        $definition = new FactoryDefinition('foo', function () {
         });
 
         $this->assertNotInstanceOf('DI\Definition\CacheableDefinition', $definition);

@@ -12,11 +12,11 @@ namespace DI\Definition;
 use DI\Scope;
 
 /**
- * Definition of a value or class using a callable.
+ * Definition of a value or class with a factory.
  *
  * @author Matthieu Napoli <matthieu@mnapoli.fr>
  */
-class CallableDefinition implements Definition
+class FactoryDefinition implements Definition
 {
     /**
      * Entry name.
@@ -33,17 +33,17 @@ class CallableDefinition implements Definition
      * Callable that returns the value.
      * @var callable
      */
-    private $callable;
+    private $factory;
 
     /**
-     * @param string     $name     Entry name
-     * @param callable   $callable Callable that returns the value associated to the entry name.
+     * @param string     $name    Entry name
+     * @param callable   $factory Callable that returns the value associated to the entry name.
      * @param Scope|null $scope
      */
-    public function __construct($name, $callable, Scope $scope = null)
+    public function __construct($name, $factory, Scope $scope = null)
     {
         $this->name = $name;
-        $this->callable = $callable;
+        $this->factory = $factory;
         $this->scope = $scope;
     }
 
@@ -66,10 +66,10 @@ class CallableDefinition implements Definition
     }
 
     /**
-     * @return callable
+     * @return callable Callable that returns the value associated to the entry name.
      */
     public function getCallable()
     {
-        return $this->callable;
+        return $this->factory;
     }
 }

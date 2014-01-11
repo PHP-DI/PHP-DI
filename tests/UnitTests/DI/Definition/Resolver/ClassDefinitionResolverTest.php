@@ -9,7 +9,7 @@
 
 namespace UnitTests\DI\Definition\Resolver;
 
-use DI\Definition\CallableDefinition;
+use DI\Definition\FactoryDefinition;
 use DI\Definition\ClassDefinition;
 use DI\Definition\ClassDefinition\MethodInjection;
 use DI\Definition\ClassDefinition\PropertyInjection;
@@ -191,7 +191,7 @@ class ClassDefinitionResolverTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage This definition resolver is only compatible with ClassDefinition objects, DI\Definition\CallableDefinition given
+     * @expectedExceptionMessage This definition resolver is only compatible with ClassDefinition objects, DI\Definition\FactoryDefinition given
      */
     public function testInvalidDefinitionType()
     {
@@ -200,7 +200,7 @@ class ClassDefinitionResolverTest extends \PHPUnit_Framework_TestCase
         /** @var LazyLoadingValueHolderFactory $factory */
         $factory = $this->getMock('ProxyManager\Factory\LazyLoadingValueHolderFactory', array(), array(), '', false);
 
-        $definition = new CallableDefinition('foo', function () {
+        $definition = new FactoryDefinition('foo', function () {
         });
         $resolver = new ClassDefinitionResolver($container, $factory);
 

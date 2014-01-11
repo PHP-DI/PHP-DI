@@ -9,7 +9,7 @@
 
 namespace UnitTests\DI\Definition\Source;
 
-use DI\Definition\CallableDefinition;
+use DI\Definition\FactoryDefinition;
 use DI\Definition\ClassDefinition;
 use DI\Definition\ClassDefinition\PropertyInjection;
 use DI\Definition\Source\ArrayDefinitionSource;
@@ -108,9 +108,9 @@ class ArrayDefinitionSourceTest extends \PHPUnit_Framework_TestCase
         $source->addDefinitions(array(
             'foo' => \DI\factory($callable),
         ));
-        /** @var CallableDefinition $definition */
+        /** @var FactoryDefinition $definition */
         $definition = $source->getDefinition('foo');
-        $this->assertInstanceOf('DI\Definition\CallableDefinition', $definition);
+        $this->assertInstanceOf('DI\Definition\FactoryDefinition', $definition);
         $this->assertEquals('foo', $definition->getName());
         $this->assertEquals($callable, $definition->getCallable());
     }

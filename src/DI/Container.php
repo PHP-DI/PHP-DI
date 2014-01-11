@@ -15,7 +15,7 @@ use DI\Definition\DefinitionManager;
 use DI\Definition\ValueDefinition;
 use DI\Definition\Helper\DefinitionHelper;
 use DI\Definition\Resolver\AliasDefinitionResolver;
-use DI\Definition\Resolver\CallableDefinitionResolver;
+use DI\Definition\Resolver\FactoryDefinitionResolver;
 use DI\Definition\Resolver\ClassDefinitionResolver;
 use DI\Definition\Resolver\DefinitionResolver;
 use DI\Definition\Resolver\ValueDefinitionResolver;
@@ -73,10 +73,10 @@ class Container implements ContainerInterface, FactoryInterface
         // Definition resolvers
         $wrapperContainer = $wrapperContainer ?: $this;
         $this->definitionResolvers = array(
-            'DI\Definition\ValueDefinition'    => new ValueDefinitionResolver(),
-            'DI\Definition\CallableDefinition' => new CallableDefinitionResolver($wrapperContainer),
-            'DI\Definition\AliasDefinition'    => new AliasDefinitionResolver($wrapperContainer),
-            'DI\Definition\ClassDefinition'    => new ClassDefinitionResolver($wrapperContainer, $proxyFactory),
+            'DI\Definition\ValueDefinition'   => new ValueDefinitionResolver(),
+            'DI\Definition\FactoryDefinition' => new FactoryDefinitionResolver($wrapperContainer),
+            'DI\Definition\AliasDefinition'   => new AliasDefinitionResolver($wrapperContainer),
+            'DI\Definition\ClassDefinition'   => new ClassDefinitionResolver($wrapperContainer, $proxyFactory),
         );
 
         // Auto-register the container
@@ -163,7 +163,7 @@ class Container implements ContainerInterface, FactoryInterface
      *
      * @param string $name Entry name or a class name.
      *
-     * @throws \InvalidArgumentException
+     * @throws InvalidArgumentException The name parameter must be of type string.
      * @return bool
      */
     public function has($name)

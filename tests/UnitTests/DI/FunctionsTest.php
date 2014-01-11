@@ -39,7 +39,7 @@ class FunctionsTest extends \PHPUnit_Framework_TestCase
             return 42;
         });
 
-        $this->assertInstanceOf('DI\Definition\Helper\CallableDefinitionHelper', $definition);
+        $this->assertInstanceOf('DI\Definition\Helper\FactoryDefinitionHelper', $definition);
         $callable = $definition->getDefinition('entry')->getCallable();
         $this->assertEquals(42, $callable());
     }

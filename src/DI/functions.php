@@ -10,7 +10,7 @@
 namespace DI;
 
 use DI\Definition\EntryReference;
-use DI\Definition\Helper\CallableDefinitionHelper;
+use DI\Definition\Helper\FactoryDefinitionHelper;
 use DI\Definition\Helper\ClassDefinitionHelper;
 
 /**
@@ -27,16 +27,16 @@ function object($className = null)
 }
 
 /**
- * Helper for defining a container entry using a callable.
+ * Helper for defining a container entry using a factory function/callable.
  *
- * @param callable $callable The callable takes the container as parameter
- *                           and returns the value to register in the container.
+ * @param callable $factory The factory is a callable that takes the container as parameter
+ *                          and returns the value to register in the container.
  *
- * @return CallableDefinitionHelper
+ * @return FactoryDefinitionHelper
  */
-function factory($callable)
+function factory($factory)
 {
-    return new CallableDefinitionHelper($callable);
+    return new FactoryDefinitionHelper($factory);
 }
 
 /**

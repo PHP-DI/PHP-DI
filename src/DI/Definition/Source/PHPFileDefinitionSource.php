@@ -42,11 +42,11 @@ class PHPFileDefinitionSource extends ArrayDefinitionSource
     /**
      * {@inheritdoc}
      */
-    public function getDefinition($name, MergeableDefinition $parentDefinition = null)
+    public function getDefinition($id, MergeableDefinition $parentDefinition = null)
     {
         $this->initialize();
 
-        return parent::getDefinition($name, $parentDefinition);
+        return parent::getDefinition($id, $parentDefinition);
     }
 
     /**

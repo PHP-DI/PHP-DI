@@ -35,24 +35,24 @@ class ArrayDefinitionSource implements ChainableDefinitionSource
     /**
      * {@inheritdoc}
      */
-    public function getDefinition($name, MergeableDefinition $parentDefinition = null)
+    public function getDefinition($id, MergeableDefinition $parentDefinition = null)
     {
-        if (! array_key_exists($name, $this->definitions)) {
+        if (! array_key_exists($id, $this->definitions)) {
             // Not found, we use the chain or return null
             if ($this->chainedSource) {
-                return $this->chainedSource->getDefinition($name, $parentDefinition);
+                return $this->chainedSource->getDefinition($id, $parentDefinition);
             }
             return null;
         }
 
-        $definition = $this->definitions[$name];
+        $definition = $this->definitions[$id];
 
         if ($definition instanceof DefinitionHelper) {
-            $definition = $definition->getDefinition($name);
+            $definition = $definition->getDefinition($id);
         }
 
         if (! $definition instanceof Definition) {
-            $definition = new ValueDefinition($name, $definition);
+            $definition = new ValueDefinition($id, $definition);
         }
 
         // If the definition we have is not mergeable, and we are supposed to merge, we ignore it
@@ -67,7 +67,7 @@ class ArrayDefinitionSource implements ChainableDefinitionSource
 
         // Enrich definition in sub-source
         if ($this->chainedSource && $definition instanceof MergeableDefinition) {
-            $definition = $this->chainedSource->getDefinition($name, $definition);
+            $definition = $this->chainedSource->getDefinition($id, $definition);
         }
 
         return $definition;
