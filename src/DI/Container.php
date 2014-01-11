@@ -31,10 +31,10 @@ use ProxyManager\Factory\LazyLoadingValueHolderFactory;
 class Container implements ContainerInterface
 {
     /**
-     * Map of entries with Singleton scope
+     * Map of entries with Singleton scope that are already resolved.
      * @var array
      */
-    private $resolvedEntries = array();
+    private $singletonEntries = array();
 
     /**
      * @var DefinitionManager
@@ -80,7 +80,7 @@ class Container implements ContainerInterface
         );
 
         // Auto-register the container
-        $this->resolvedEntries[get_class($this)] = $this;
+        $this->singletonEntries[get_class($this)] = $this;
     }
 
     /**
@@ -102,9 +102,9 @@ class Container implements ContainerInterface
             ));
         }
 
-        // Try to find the entry in the map
-        if (array_key_exists($name, $this->resolvedEntries)) {
-            return $this->resolvedEntries[$name];
+        // Try to find the entry in the singleton map
+        if (array_key_exists($name, $this->singletonEntries)) {
+            return $this->singletonEntries[$name];
         }
 
         // Entry not loaded, use the definitions
@@ -132,9 +132,9 @@ class Container implements ContainerInterface
 
         unset($this->entriesBeingResolved[$name]);
 
-        // If the entry is singleton, we store it to always return it without recomputing it.
+        // If the entry is singleton, we store it to always return it without recomputing it
         if ($definition->getScope() == Scope::SINGLETON()) {
-            $this->resolvedEntries[$name] = $value;
+            $this->singletonEntries[$name] = $value;
         }
 
         return $value;
@@ -153,7 +153,7 @@ class Container implements ContainerInterface
             throw new InvalidArgumentException("The name parameter must be of type string");
         }
 
-        return array_key_exists($name, $this->resolvedEntries) || $this->definitionManager->getDefinition($name);
+        return array_key_exists($name, $this->singletonEntries) || $this->definitionManager->getDefinition($name);
     }
 
     /**
@@ -186,8 +186,8 @@ class Container implements ContainerInterface
     public function set($name, $value)
     {
         // Clear existing entry if it exists
-        if (array_key_exists($name, $this->resolvedEntries)) {
-            unset($this->resolvedEntries[$name]);
+        if (array_key_exists($name, $this->singletonEntries)) {
+            unset($this->singletonEntries[$name]);
         }
 
         if ($value instanceof DefinitionHelper) {
