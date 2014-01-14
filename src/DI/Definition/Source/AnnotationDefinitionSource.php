@@ -64,7 +64,7 @@ class AnnotationDefinitionSource implements DefinitionSource
         $className = $parentDefinition ? $parentDefinition->getClassName() : $name;
 
         if (!class_exists($className) && !interface_exists($className)) {
-            return null;
+            return $parentDefinition;
         }
 
         $class = new ReflectionClass($className);

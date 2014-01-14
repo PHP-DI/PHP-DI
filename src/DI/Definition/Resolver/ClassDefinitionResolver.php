@@ -136,6 +136,7 @@ class ClassDefinitionResolver implements DefinitionResolver
      * @param ClassDefinition $classDefinition
      * @param array           $parameters      Optional parameters to use to create the instance.
      *
+     * @throws DefinitionException
      * @throws DependencyException
      * @return object
      *
@@ -143,10 +144,18 @@ class ClassDefinitionResolver implements DefinitionResolver
      */
     public function createInstance(ClassDefinition $classDefinition, array $parameters)
     {
+        if (! class_exists($classDefinition->getClassName()) && ! interface_exists($classDefinition->getClassName())) {
+            throw new DefinitionException(sprintf(
+                'Entry %s cannot be resolved: the class %s doesn\'t exist',
+                $classDefinition->getName(),
+                $classDefinition->getClassName()
+            ));
+        }
+
         $classReflection = new ReflectionClass($classDefinition->getClassName());
 
         if (!$classReflection->isInstantiable()) {
-            throw new DependencyException("$classReflection->name is not instantiable");
+            throw new DefinitionException("$classReflection->name is not instantiable");
         }
 
         $constructorInjection = $classDefinition->getConstructorInjection();

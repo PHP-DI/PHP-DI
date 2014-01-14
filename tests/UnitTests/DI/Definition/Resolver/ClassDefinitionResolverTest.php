@@ -153,7 +153,19 @@ class ClassDefinitionResolverTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \DI\DependencyException
+     * @expectedException \DI\Definition\Exception\DefinitionException
+     * @expectedExceptionMessage Entry foo cannot be resolved: the class bar doesn't exist
+     */
+    public function testUnknownClass()
+    {
+        $definition = new ClassDefinition('foo', 'bar');
+        $resolver = $this->buildResolver();
+
+        $resolver->resolve($definition);
+    }
+
+    /**
+     * @expectedException \DI\Definition\Exception\DefinitionException
      * @expectedExceptionMessage ArrayAccess is not instantiable
      */
     public function testNotInstantiable()
