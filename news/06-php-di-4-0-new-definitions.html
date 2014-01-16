@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>PHP-DI - Dependency Injection Container for PHP</title>
+    <meta name="description" content="PHP-DI is a Dependency Injection Container for PHP that intends to be practical and powerful">
+
+    <link rel="stylesheet" href="http://php-di.org/css/bootstrap.min.css">
+    <link rel="stylesheet" href="http://php-di.org/css/bootstrap-responsive.min.css">
+    <link rel="stylesheet" href="http://php-di.org/css/font-awesome.min.css">
+    <link rel="stylesheet" href="http://php-di.org/css/prettify-github.css">
+
+    <link rel="stylesheet" href="http://php-di.org/css/style.css">
+
+    <!-- HTML5 Support for IE -->
+    <!--[if lt IE 9]>
+    <script src="http://html5shim.googlecode.com/svn/trunk/html5.js" type="text/javascript"></script>
+    <![endif]-->
+</head>
+
+<body>
+
+    <div class="navbar navbar-inverse navbar-fixed-top">
+        <div class="navbar-inner">
+            <div class="container">
+                <button type="button" class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="brand" href="http://php-di.org/">PHP-DI</a>
+
+                <div class="nav-collapse collapse">
+                    <ul class="nav pull-right">
+                        <li><a href="http://php-di.org/">Home</a></li>
+                        <li><a href="http://php-di.org/news/">News</a></li>
+                        <li><a href="http://php-di.org/doc/getting-started">Getting started</a></li>
+                        <li><a href="http://php-di.org/doc/">Documentation</a></li>
+                        <li><a href="http://php-di.org/change-log">Change log</a></li>
+                        <li><a href="https://github.com/mnapoli/PHP-DI"><i class="icon-github"></i>Github</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <header>
+
+        <div class="title">
+
+            <h1>
+                PHP-DI
+                <small>Dependency Injection Container for PHP</small>
+            </h1>
+
+        </div>
+
+    </header>
+
+
+    <!-- Main Content starts -->
+
+    <div class="main">
+        <div class="container-fluid">
+<h1>What will change in PHP-DI 4: the new definition format</h1>
+
+<p><em>Posted by <a href="http://mnapoli.fr">Matthieu Napoli</a> on January 16th 2014</em></p>
+
+<p>In PHP-DI 4, the definition format will change. Autowiring and Annotations are still there, but the YAML
+and PHP array definitions have disappeared. Let&#39;s see why.</p>
+
+<h2>Why was YAML a bad choice</h2>
+
+<p>The recommended definition format for PHP-DI 3.x was YAML. Everybody loves YAML. This is a clean, short and readable format.</p>
+
+<p>I started to question this choice though. There have always been limitations to using YAML, the main one would be that
+it&#39;s not PHP code:</p>
+
+<ul>
+<li>you cannot use constants, or class constants</li>
+<li>you cannot write simple PHP code like concatenating strings, or adding numbers…</li>
+<li>you cannot use anonymous functions to define entries/services</li>
+<li>no autocompletion support (on class names for example) or Ctrl+click to go to the class</li>
+<li>no refactoring support (renaming a class for example)</li>
+<li>you cannot have helpers (classes, functions, …) to help you write the configuration</li>
+</ul>
+
+<p>And it all became very obvious when Symfony introduced their new component: <a href="http://symfony.com/doc/current/components/expression_language/introduction.html">ExpressionLanguage</a>.</p>
+
+<p>ExpressionLanguage is a language that looks like PHP, except you use <code>.</code> instead of <code>-></code> and variables don&#39;t have the <code>$</code> prefix.
+And with that component, you are now able to write code in Symfony&#39;s container configuration. Isn&#39;t it great?</p>
+
+<p>Well, even though the component itself is very good, it really shows how stupid the situation is (not Symfony!).</p>
+
+<p><strong>If we need to configure our PHP app, and if for this we need to use code, then let&#39;s use PHP!</strong></p>
+
+<h3>PHP 5.4, 5.5 and 5.6 to the rescue</h3>
+
+<p>Moreover, since PHP 5.3, there has been very nice features added to PHP that make the code much more concise, even more than YAML sometimes.</p>
+
+<p>Here is a YAML configuration:</p>
+
+<pre><code class="yaml">Acme\BlogModule\Model\ArticleRepository:
+    scope: prototype
+    constructor: [Doctrine\ORM\EntityManager, some.param]
+</code></pre>
+
+<p>Here would be the PHP 5.3 version:</p>
+
+<pre><code class="php">return array(
+    &#39;Acme\BlogModule\Model\ArticleRepository&#39; =&gt; array(
+        &#39;scope&#39; =&gt; Scope::PROTOTYPE(),
+        &#39;constructor&#39; =&gt; array(&#39;Doctrine\ORM\EntityManager&#39;, &#39;some.param&#39;),
+    ),
+);
+</code></pre>
+
+<p>Pretty verbose! But here is the PHP 5.4 version:</p>
+
+<pre><code class="php">return [
+    &#39;Acme\BlogModule\Model\ArticleRepository&#39; =&gt; [
+        &#39;scope&#39; =&gt; Scope::PROTOTYPE(),
+        &#39;constructor&#39; =&gt; [&#39;Doctrine\ORM\EntityManager&#39;, &#39;some.param&#39;],
+    ],
+];
+</code></pre>
+
+<p>Short arrays make it much better. Let&#39;s not stop here, and use PHP 5.5:</p>
+
+<pre><code class="php">use ...;
+return [
+    ArticleRepository::class =&gt; [
+        &#39;scope&#39; =&gt; Scope::PROTOTYPE(),
+        &#39;constructor&#39; =&gt; [EntityManager::class, &#39;some.param&#39;],
+    ],
+];
+</code></pre>
+
+<p>It&#39;s getting very nice. Even nicer than YAML, because here the IDE can recognize the class and give us Ctrl+Click and
+refactoring support.</p>
+
+<p>And when we think about PHP 5.6, what new syntactic sugar will we get? <a href="https://wiki.php.net/rfc/use_function">Use function</a>.
+Keep that in mind, it&#39;s going to come up again later.</p>
+
+<h2>Why is the current PHP format not a good choice still</h2>
+
+<p>OK, we&#39;ve decided that YAML may not be appropriate. Why not just use the PHP equivalent?</p>
+
+<p>The current format (YAML or PHP) is actually a data structure, an array. Here, it is obvious:</p>
+
+<pre><code class="php">return [
+    ArticleRepository::class =&gt; [
+        &#39;scope&#39; =&gt; Scope::PROTOTYPE(),
+        &#39;constructor&#39; =&gt; [EntityManager::class, &#39;some.param&#39;],
+    ],
+];
+</code></pre>
+
+<p>What if you mistype <code>constructor</code>? Your IDE will not tell you you&#39;ve made a mistake, and are you sure PHP-DI will warn you?
+And what if you don&#39;t remember whether it&#39;s <code>constructor</code>, <code>__construct</code> or <code>arguments</code> (like in Symfony)?
+And mostly, what is the difference between defining a service (using an array, as shown above) and a value that <strong>is</strong> an array?</p>
+
+<p>There are a lot of loopholes with this format, and many of them were already known (reported in GitHub tickets).</p>
+
+<p><strong>This is not practical!</strong> As a user:</p>
+
+<ul>
+<li>I don&#39;t want to learn a format/syntax for each DI container</li>
+<li>I don&#39;t want ambiguity</li>
+<li>I don&#39;t want to make mistakes</li>
+</ul>
+
+<p>Arbitrary array structures are ambiguous and confusing, you&#39;ve probably met this problem before in other contexts.
+And what do you do in that case? You use <strong>OOP</strong> and you get <strong>explicit naming</strong>, <strong>autocompletion</strong> and <strong>strict validation</strong>.</p>
+
+<pre><code class="php">// This is an example, not the real format
+$definition = new ObjectDefinition();    // this is explicit on what it is, this is not a value, this is an object
+$definition->hasScope(Scope::Prototype); // you can&#39;t put an invalid scope in there
+$definition->withConstructorArguments(
+    new InjectOtherContainerEntry(EntityManager::class), // explicit as hell
+    new InjectSomeValue(&#39;some.param&#39;),
+);
+$definition->// autocompletion power! no need to learn or read the documentation!
+return [
+    ArticleRepository::class =&gt; $definition,
+];
+</code></pre>
+
+<p>Well, that seems nice! It&#39;s a bit verbose though!</p>
+
+<p>Here was the first version I came up with (the definition is inlined in the array):</p>
+
+<pre><code class="php">return [
+    ArticleRepository::class =&gt; Entry::object()
+        ->withScope(Scope::PROTOTYPE())
+        ->withConstructor(Entry::link(EntityManager::class), &#39;some.param&#39;),
+];
+</code></pre>
+
+<p>Nice. Though, do you remember what I said about PHP 5.6 and <code>use function</code>, so let&#39;s take advantage of that.
+Here is what the actual PHP-DI 4.0 format looks like:</p>
+
+<pre><code class="php">return [
+    ArticleRepository::class =&gt; object()
+        ->scope(Scope::PROTOTYPE())
+        ->constructor(link(EntityManager::class), &#39;some.param&#39;),
+];
+</code></pre>
+
+<p><code>object()</code> and <code>link()</code> are actually functions (that return an object helper) in the <code>DI</code> namespace.
+So in this example, the <code>use</code> at the beginning of the file are skipped, but here is what it would look like:</p>
+
+<pre><code class="php">use Acme\BlogModule\Model\ArticleRepository;
+use Doctrine\ORM\EntityManager;
+use function DI\object;
+use function DI\link;
+</code></pre>
+
+<h2>Not bulletproof, not perfect</h2>
+
+<p>What about a complex example:</p>
+
+<pre><code class="php">return [
+    ArticleRepositoryInterface::class =&gt; object(ArticleRepository::class)
+        ->constructor(link(EntityManager::class), link(PrivateSubDependency::class), &#39;some.param&#39;)
+        ->method(&#39;setFoo&#39;, link(Foo::class))
+        ->method(&#39;setBar&#39;, link(Bar::class))
+        ->method(&#39;configureStuff&#39;, &#39;localhost&#39;, 8080)
+        ->property(&#39;logger&#39;, link(LoggerInterface::class)),
+    PrivateSubDependency::class =&gt; object()
+        ->constructor(PrivateSubDependency::MY_CONSTANT),
+];
+</code></pre>
+
+<p>That&#39;s doesn&#39;t look really nice…</p>
+
+<p>Some containers come with bridges/adapters/bundles that abstract a bit the code for certain packages
+(think of <a href="http://symfony.com/en/doc/current/reference/configuration/doctrine.html">Symfony&#39;s configuration for Doctrine</a>).
+That may seem like a good idea at first, but when you find out that all Doctrine&#39;s documentation is useless (because abstracted),
+you begin to wonder: what&#39;s the point of reading Doctrine&#39;s documentation! And what if my specific config isn&#39;t supported
+by the bridge/adapter/bundle? Or isn&#39;t documented?</p>
+
+<p>It turns out there are so many people lost because of this (examples:
+<a href="http://stackoverflow.com/questions/12702657/how-to-configure-naming-strategy-in-doctrine-2">1</a>,
+<a href="http://stackoverflow.com/questions/16600028/how-to-connect-to-mysql-using-ssl-on-symfony-doctrine">2</a>,
+<a href="http://stackoverflow.com/questions/9468793/how-to-configure-doctrine-in-symfony2">3</a>,
+<a href="http://stackoverflow.com/questions/18503093/how-do-i-change-symfony-2-doctrine-mapper-to-use-my-custom-directory-instead-of">4</a>,
+<a href="http://stackoverflow.com/questions/16854148/how-to-make-symfony2-dic-to-call-doctrine-orm-configurationsethydrationcacheimp">5</a>,
+<a href="http://stackoverflow.com/questions/12935829/configuring-the-translatable-doctrine2-extension-with-symfony2-using-yaml">6</a>…).</p>
+
+<p>Let&#39;s stop pretending and <strong>write some damn PHP</strong>:</p>
+
+<pre><code class="php">return [
+    ArticleRepositoryInterface::class =&gt; factory(function (Container $c) {
+        $dependency = new PrivateSubDependency(PrivateSubDependency::MY_CONSTANT);
+
+        $repository = new ArticleRepository($c->get(EntityManager::class), $dependency, &#39;some.param&#39;);
+        $repository->setFoo($c->get(Foo::class));
+        $repository->setBar($c->get(Bar::class));
+        $repository->configureStuff(&#39;localhost&#39;, 8080);
+        $repository->logger = $c->get(LoggerInterface::class);
+
+        return $repository;
+    }),
+];
+</code></pre>
+
+<p>THAT is readable. You can&#39;t have it more readable and maintainable for PHP developers.</p>
+
+<h2>Conclusion</h2>
+
+<p>In PHP-DI 4, you can have:</p>
+
+<ul>
+<li>a nice, explicit API for defining entries easily</li>
+<li>complex definitions as PHP code (using closures)</li>
+</ul>
+
+<p>The first one works great in combination with autowiring and annotations for example, to bind interfaces to classes,
+or set a value for non-object parameters (which cannot be done using autowiring alone).</p>
+
+<p>The second one is for when the definition is a bit more complex.</p>
+
+<p><strong>PHP-DI 4 is not released yet</strong>. You can however try the <a href="https://github.com/mnapoli/PHP-DI/releases/tag/4.0.0-beta2">4.0.0-beta2 version</a>
+or follow the <a href="https://github.com/mnapoli/PHP-DI/pull/119">4.0 pull request</a>.</p>
+            <div class="github">
+                PHP-DI is an open source project, you can contribute or seek help on
+                <a class="btn btn-mini" href="https://github.com/mnapoli/PHP-DI/" target="_blank">
+                    <i class="icon-github-alt"></i>
+                    Github</a>
+                or
+                <a class="btn btn-mini" href="https://twitter.com/PHPDI" target="_blank">
+                    <i class="icon-twitter"></i>
+                    Twitter</a>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Main content ends -->
+
+    <footer>
+        <div class="container-fluid">
+            <p class="copy">
+                Copyright &copy; 2013 | <a href="http://mnapoli.fr/">Matthieu Napoli</a>
+            </p>
+            <p>
+                Website generated by
+                <a href="http://mnapoli.github.com/gh-pages-compiler/" target="_blank">gh-pages-compiler</a>.
+            </p>
+        </div>
+    </footer>
+
+    <!-- JS -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/2.2.1/bootstrap.min.js"></script>
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/prettify/188.0.0/prettify.js"></script>
+    <script src="http://php-di.org/js/template.js"></script>
+
+    <script type="text/javascript">
+        var _gaq = _gaq || [];
+        _gaq.push(['_setAccount', 'UA-15584647-13']);
+        _gaq.push(['_trackPageview']);
+        (function() {
+            var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+            ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+            var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+        })();
+    </script>
+
+</body>
+</html>
