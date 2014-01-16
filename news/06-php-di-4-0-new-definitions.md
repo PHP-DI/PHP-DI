@@ -110,7 +110,7 @@ There are a lot of loopholes with this format, and many of them were already kno
 Arbitrary array structures are ambiguous and confusing, you've probably met this problem before in other contexts.
 And what do you do in that case? You use **OOP** and you get **explicit naming**, **autocompletion** and **strict validation**.
 
-```
+```php
 // This is an example, not the real format
 $definition = new ObjectDefinition();    // this is explicit on what it is, this is not a value, this is an object
 $definition->hasScope(Scope::Prototype); // you can't put an invalid scope in there
@@ -128,7 +128,7 @@ Well, that seems nice! It's a bit verbose though!
 
 Here was the first version I came up with (the definition is inlined in the array):
 
-```
+```php
 return [
     ArticleRepository::class => Entry::object()
         ->withScope(Scope::PROTOTYPE())
@@ -139,7 +139,7 @@ return [
 Nice. Though, do you remember what I said about PHP 5.6 and `use function`, so let's take advantage of that.
 Here is what the actual PHP-DI 4.0 format looks like:
 
-```
+```php
 return [
     ArticleRepository::class => object()
         ->scope(Scope::PROTOTYPE())
@@ -161,7 +161,7 @@ use function DI\link;
 
 What about a complex example:
 
-```
+```php
 return [
     ArticleRepositoryInterface::class => object(ArticleRepository::class)
         ->constructor(link(EntityManager::class), link(PrivateSubDependency::class), 'some.param')
@@ -177,21 +177,22 @@ return [
 That's doesn't look really nice…
 
 Some containers come with bridges/adapters/bundles that abstract a bit the code for certain packages
-(think of [Symfony's configuration for Doctrine](http://symfony.com/fr/doc/current/reference/configuration/doctrine.html)).
+(think of [Symfony's configuration for Doctrine](http://symfony.com/en/doc/current/reference/configuration/doctrine.html)).
 That may seem like a good idea at first, but when you find out that all Doctrine's documentation is useless (because abstracted),
 you begin to wonder: what's the point of reading Doctrine's documentation! And what if my specific config isn't supported
 by the bridge/adapter/bundle? Or isn't documented?
 
-It turns out there are [so](http://stackoverflow.com/questions/12702657/how-to-configure-naming-strategy-in-doctrine-2)
-[many](http://stackoverflow.com/questions/16600028/how-to-connect-to-mysql-using-ssl-on-symfony-doctrine)
-[people](http://stackoverflow.com/questions/9468793/how-to-configure-doctrine-in-symfony2)
-[lost](http://stackoverflow.com/questions/18503093/how-do-i-change-symfony-2-doctrine-mapper-to-use-my-custom-directory-instead-of)
-[because](http://stackoverflow.com/questions/16854148/how-to-make-symfony2-dic-to-call-doctrine-orm-configurationsethydrationcacheimp)
-[of this](http://stackoverflow.com/questions/12935829/configuring-the-translatable-doctrine2-extension-with-symfony2-using-yaml).
+It turns out there are so many people lost because of this (examples:
+[1](http://stackoverflow.com/questions/12702657/how-to-configure-naming-strategy-in-doctrine-2),
+[2](http://stackoverflow.com/questions/16600028/how-to-connect-to-mysql-using-ssl-on-symfony-doctrine),
+[3](http://stackoverflow.com/questions/9468793/how-to-configure-doctrine-in-symfony2),
+[4](http://stackoverflow.com/questions/18503093/how-do-i-change-symfony-2-doctrine-mapper-to-use-my-custom-directory-instead-of),
+[5](http://stackoverflow.com/questions/16854148/how-to-make-symfony2-dic-to-call-doctrine-orm-configurationsethydrationcacheimp),
+[6](http://stackoverflow.com/questions/12935829/configuring-the-translatable-doctrine2-extension-with-symfony2-using-yaml)…).
 
 Let's stop pretending and **write some damn PHP**:
 
-```
+```php
 return [
     ArticleRepositoryInterface::class => factory(function (Container $c) {
         $dependency = new PrivateSubDependency(PrivateSubDependency::MY_CONSTANT);
