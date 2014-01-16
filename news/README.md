@@ -1,5 +1,7 @@
 # News
 
+- January 17th 2014. [PHP-DI 4.0 released](07-php-di-4-0-released.md)
+
 - October 11th 2013. [PHP-DI 3.5 released](05-php-di-3-5.md): Import of annotations is now optional, …
 
 - September 24th 2013. [PHP-DI 3.4 released](04-php-di-3-4.md): Fluent ContainerBuilder, support for optional parameters and more…
