@@ -11,7 +11,7 @@ $container = new \DI\Container();
 
 By default, PHP-DI will use `Reflection` and `Annotation` [definition sources](definition.md).
 
-To improve performances, you may want to use a simple Array cache. This kind of cache is cleared on every request, so you will not need to empty it manually when you change the code. It is also recommended to enable definition validation to detect errors as soon as possible.
+To improve performance, you may want to use a simple Array cache. This kind of cache is cleared on every request, so you will not need to empty it manually when you change the code. It is also recommended to enable definition validation to detect errors as soon as possible.
 
 ```php
 $builder = new \DI\ContainerBuilder();
