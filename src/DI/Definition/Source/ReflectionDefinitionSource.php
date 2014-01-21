@@ -24,6 +24,8 @@ use ReflectionParameter;
  */
 class ReflectionDefinitionSource implements DefinitionSource
 {
+    /** @var bool */
+    private $useParameterNames;
 
     /**
      * {@inheritdoc}
@@ -50,9 +52,12 @@ class ReflectionDefinitionSource implements DefinitionSource
                 $parameterType = $this->getParameterType($parameter);
                 if ($parameterType) {
                     $parameterInjection = new ParameterInjection($parameter->name, $parameterType);
+                } elseif ($this->useParameterNames) {
+                    $parameterInjection = new ParameterInjection($parameter->name, $parameter->name);
                 } else {
                     $parameterInjection = new ParameterInjection($parameter->name);
                 }
+
                 $constructorInjection->addParameterInjection($parameterInjection);
             }
         }
@@ -82,4 +87,12 @@ class ReflectionDefinitionSource implements DefinitionSource
         return class_exists($class) || interface_exists($class);
     }
 
+    /**
+     * Enable or disable the use of parameter names when type is not available
+     * @param boolean $bool
+     */
+    public function useParameterNames($bool)
+    {
+        $this->useParameterNames = $bool;
+    }
 }

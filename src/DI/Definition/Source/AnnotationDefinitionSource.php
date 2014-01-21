@@ -46,6 +46,10 @@ class AnnotationDefinitionSource implements DefinitionSource
      */
     private $phpDocParser;
 
+    /**
+     * @var bool
+     */
+    private $useParameterNames;
 
     /**
      * Constructor
@@ -226,6 +230,11 @@ class AnnotationDefinitionSource implements DefinitionSource
                 $entryName = $this->phpDocParser->getParameterType($reflectionClass, $method, $parameter);
             }
 
+            // If no entryName has been found and useParameterNames is enabled, use the parameter name as the entryName
+            if ($entryName === null && $this->useParameterNames) {
+                $entryName = $parameter->name;
+            }
+
             $parameterInjection = new ParameterInjection($parameter->name, $entryName);
 
             if (isset($annotationParameter['lazy'])) {
@@ -268,4 +277,12 @@ class AnnotationDefinitionSource implements DefinitionSource
         return class_exists($class) || interface_exists($class);
     }
 
+    /**
+     * Enable or disable the use of parameter names when type is not available
+     * @param boolean $bool
+     */
+    public function useParameterNames($bool)
+    {
+        $this->useParameterNames = $bool;
+    }
 }

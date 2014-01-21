@@ -73,6 +73,12 @@ class DefinitionManager
      */
     private $definitionsValidation = false;
 
+    /**
+     * Enable or disable the use of parameter names when type is not available
+     * @var bool
+     */
+    private $useParameterNames = false;
+
     public function __construct()
     {
         $this->simpleSource = new SimpleDefinitionSource();
@@ -112,6 +118,22 @@ class DefinitionManager
     }
 
     /**
+     * Enable or disable the use of parameter names when type is not available
+     *
+     * @param boolean $bool
+     */
+    public function useParameterNames($bool)
+    {
+        $this->useParameterNames = $bool;
+        if ($this->reflectionSource !== null) {
+            $this->reflectionSource->useParameterNames($bool);
+        }
+        if ($this->annotationSource !== null) {
+            $this->annotationSource->useParameterNames($bool);
+        }
+    }
+
+    /**
      * Enable or disable the use of reflection
      *
      * @param boolean $bool
@@ -121,6 +143,7 @@ class DefinitionManager
         // Enable
         if ($bool && $this->reflectionSource === null) {
             $this->reflectionSource = new ReflectionDefinitionSource();
+            $this->reflectionSource->useParameterNames($bool);
             $this->updateCombinedSource();
         // Disable
         } elseif (!$bool && $this->reflectionSource !== null) {
@@ -139,6 +162,7 @@ class DefinitionManager
         // Enable
         if ($bool && $this->annotationSource === null) {
             $this->annotationSource = new AnnotationDefinitionSource();
+            $this->annotationSource->useParameterNames($bool);
             $this->updateCombinedSource();
         // Disable
         } elseif (!$bool && $this->annotationSource !== null) {

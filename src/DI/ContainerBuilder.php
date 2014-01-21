@@ -34,6 +34,11 @@ class ContainerBuilder
     /**
      * @var boolean
      */
+    private $useParameterNames = false;
+
+    /**
+     * @var boolean
+     */
     private $useAnnotations = true;
 
     /**
@@ -72,6 +77,8 @@ class ContainerBuilder
         $definitionManager = new DefinitionManager();
         $definitionManager->useReflection($this->useReflection);
         $definitionManager->useAnnotations($this->useAnnotations);
+        $definitionManager->useParameterNames($this->useParameterNames);
+
         if ($this->definitionsValidation) {
             $definitionManager->setDefinitionsValidation($this->definitionsValidation);
         }
@@ -108,6 +115,15 @@ class ContainerBuilder
     {
         $this->useReflection = $bool;
         return $this;
+    }
+
+    /**
+     * Enable or disable the use of parameter names when type is not available
+     * @param boolean $bool
+     */
+    public function useParameterNames($bool)
+    {
+        $this->useParameterNames = $bool;
     }
 
     /**

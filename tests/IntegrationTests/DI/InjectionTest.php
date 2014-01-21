@@ -42,6 +42,7 @@ class InjectionTest extends \PHPUnit_Framework_TestCase
         $builder = new ContainerBuilder();
         $builder->useReflection(true);
         $builder->useAnnotations(false);
+        $builder->useParameterNames(true);
         $containerReflection = $builder->build();
         $containerReflection->addDefinitions(
             array(
@@ -55,10 +56,29 @@ class InjectionTest extends \PHPUnit_Framework_TestCase
             )
         );
 
-        // Test with a container using annotations and reflection
+        // Test with a container using annotations
+        $builder = new ContainerBuilder();
+        $builder->useReflection(false);
+        $builder->useAnnotations(true);
+        $builder->useParameterNames(true);
+        $containerAnnotations = $builder->build();
+        $containerAnnotations->addDefinitions(
+            array(
+                'foo'                                     => 'bar',
+                'IntegrationTests\DI\Fixtures\Interface1' => array(
+                    'class' => 'IntegrationTests\DI\Fixtures\Implementation1',
+                ),
+                'namedDependency'                         => array(
+                    'class' => 'IntegrationTests\DI\Fixtures\Class2',
+                ),
+            )
+        );
+
+        // Test with a container using reflection and annotations
         $builder = new ContainerBuilder();
         $builder->useReflection(true);
         $builder->useAnnotations(true);
+        $builder->useParameterNames(true);
         $containerAnnotations = $builder->build();
         $containerAnnotations->addDefinitions(
             array(
@@ -100,7 +120,8 @@ class InjectionTest extends \PHPUnit_Framework_TestCase
                     'param3' => array(
                         'name' => 'IntegrationTests\DI\Fixtures\LazyDependency',
                         'lazy' => true,
-                    )
+                    ),
+                    'namedDependency' => 'IntegrationTests\DI\Fixtures\Class2'
                 )
             )
             ->withMethod('method1', array('IntegrationTests\DI\Fixtures\Class2'))
@@ -204,7 +225,7 @@ class InjectionTest extends \PHPUnit_Framework_TestCase
             return;
         }
         /** @var $class1 Class1 */
-        $class1 = new Class1(new Class2(), new Implementation1(), new LazyDependency());
+        $class1 = new Class1(new Class2(), new Implementation1(), new LazyDependency(), new Class2());
         $container->injectOn($class1);
 
         $this->assertInstanceOf('IntegrationTests\DI\Fixtures\Class2', $class1->property1);
@@ -259,7 +280,7 @@ class InjectionTest extends \PHPUnit_Framework_TestCase
             return;
         }
         /** @var $class1 Class1 */
-        $class1 = new Class1(new Class2(), new Implementation1(), new LazyDependency());
+        $class1 = new Class1(new Class2(), new Implementation1(), new LazyDependency(), new Class2());
         $container->injectOn($class1);
 
         $this->assertInstanceOf('IntegrationTests\DI\Fixtures\Class2', $class1->method1Param1);

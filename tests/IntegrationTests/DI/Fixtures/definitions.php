@@ -23,6 +23,7 @@ return array(
                 'name' => 'IntegrationTests\DI\Fixtures\LazyDependency',
                 'lazy' => true,
             ),
+            'namedDependency' => 'IntegrationTests\DI\Fixtures\Class2',
         ),
         'methods'     => array(
             'method1' => 'IntegrationTests\DI\Fixtures\Class2',
