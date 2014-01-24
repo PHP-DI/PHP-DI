@@ -9,16 +9,16 @@
 
 namespace UnitTests\DI\Compiler\DefinitionCompiler;
 
-use DI\Compiler\DefinitionCompiler\CallableDefinitionCompiler;
+use DI\Compiler\DefinitionCompiler\FactoryDefinitionCompiler;
 use DI\Container;
 use DI\Definition\FactoryDefinition;
 use DI\Definition\ValueDefinition;
 
-class CallableDefinitionCompilerTest extends \PHPUnit_Framework_TestCase
+class FactoryDefinitionCompilerTest extends \PHPUnit_Framework_TestCase
 {
     public function testArrayCallable()
     {
-        $resolver = new CallableDefinitionCompiler();
+        $resolver = new FactoryDefinitionCompiler();
 
         $value = $resolver->compile(new FactoryDefinition('entry', array('foo', 'bar')));
 
@@ -32,7 +32,7 @@ PHP;
 
     public function testSimpleClosure()
     {
-        $resolver = new CallableDefinitionCompiler();
+        $resolver = new FactoryDefinitionCompiler();
 
         $value = $resolver->compile(new FactoryDefinition('entry', function () {
             return 'bar';
@@ -50,7 +50,7 @@ PHP;
 
     public function testClosureWithParameters()
     {
-        $resolver = new CallableDefinitionCompiler();
+        $resolver = new FactoryDefinitionCompiler();
 
         $value = $resolver->compile(new FactoryDefinition('entry', function (Container $c) {
                 return $c->get('bar');
@@ -72,7 +72,7 @@ PHP;
      */
     public function testClosureWithUse()
     {
-        $resolver = new CallableDefinitionCompiler();
+        $resolver = new FactoryDefinitionCompiler();
 
         $resolver->compile(new FactoryDefinition('entry', function (Container $c) use ($resolver) {
             return $c->get('bar');
@@ -85,7 +85,7 @@ PHP;
      */
     public function testArrayWithObject()
     {
-        $resolver = new CallableDefinitionCompiler();
+        $resolver = new FactoryDefinitionCompiler();
 
         $resolver->compile(new FactoryDefinition('foo', array($this, 'foo')));
     }
@@ -96,7 +96,7 @@ PHP;
      */
     public function testString()
     {
-        $resolver = new CallableDefinitionCompiler();
+        $resolver = new FactoryDefinitionCompiler();
 
         $resolver->compile(new FactoryDefinition('foo', 'bar'));
     }
@@ -107,7 +107,7 @@ PHP;
      */
     public function testObject()
     {
-        $resolver = new CallableDefinitionCompiler();
+        $resolver = new FactoryDefinitionCompiler();
 
         $resolver->compile(new FactoryDefinition('foo', new \stdClass()));
     }
@@ -118,7 +118,7 @@ PHP;
      */
     public function testInvalidDefinitionType()
     {
-        $resolver = new CallableDefinitionCompiler();
+        $resolver = new FactoryDefinitionCompiler();
 
         $resolver->compile(new ValueDefinition('foo', 'bar'));
     }

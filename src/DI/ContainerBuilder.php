@@ -13,7 +13,7 @@ use DI\Compiler\Backend\FileBackend;
 use DI\Compiler\CompiledContainer;
 use DI\Compiler\Compiler;
 use DI\Compiler\DefinitionCompiler\AliasDefinitionCompiler;
-use DI\Compiler\DefinitionCompiler\CallableDefinitionCompiler;
+use DI\Compiler\DefinitionCompiler\FactoryDefinitionCompiler;
 use DI\Compiler\DefinitionCompiler\ClassDefinitionCompiler;
 use DI\Compiler\DefinitionCompiler\ValueDefinitionCompiler;
 use DI\Definition\DefinitionManager;
@@ -152,7 +152,7 @@ class ContainerBuilder
             $backend = new FileBackend($this->compilationPath, $proxyFactory);
             $definitionCompilers = array(
                 'DI\Definition\ValueDefinition'    => new ValueDefinitionCompiler(),
-                'DI\Definition\FactoryDefinition' => new CallableDefinitionCompiler(),
+                'DI\Definition\FactoryDefinition' => new FactoryDefinitionCompiler(),
                 'DI\Definition\AliasDefinition'    => new AliasDefinitionCompiler(),
                 'DI\Definition\ClassDefinition'    => new ClassDefinitionCompiler(),
             );

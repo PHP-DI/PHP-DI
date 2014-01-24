@@ -15,12 +15,12 @@ use DI\Definition\FactoryDefinition;
 use Jeremeamia\SuperClosure\ClosureParser;
 
 /**
- * Compiles a CallableDefinition to PHP code.
+ * Compiles a FactoryDefinition to PHP code.
  *
  * @since 4.0
  * @author Matthieu Napoli <matthieu@mnapoli.fr>
  */
-class CallableDefinitionCompiler implements DefinitionCompiler
+class FactoryDefinitionCompiler implements DefinitionCompiler
 {
     /**
      * {@inheritdoc}
