@@ -254,13 +254,10 @@ class ClassDefinitionResolver implements DefinitionResolver
             if (array_key_exists($parameter->getName(), $parameters)) {
                 // Look in the $parameters array
                 $value = $parameters[$parameter->getName()];
-            } else {
+            } elseif ($methodInjection && $methodInjection->hasParameter($index)) {
                 // Look in the definition
-                $value = $methodInjection ? $methodInjection->getParameter($index) : null;
-            }
-
-            // Unknown injection
-            if ($value === null) {
+                $value = $methodInjection->getParameter($index);
+            } else {
                 // If the parameter is optional and wasn't specified, we take its default value
                 if ($parameter->isOptional()) {
                     $args[] = $this->getParameterDefaultValue($parameter, $methodReflection);
