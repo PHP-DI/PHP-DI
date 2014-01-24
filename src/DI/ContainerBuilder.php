@@ -12,10 +12,10 @@ namespace DI;
 use DI\Compiler\Backend\FileBackend;
 use DI\Compiler\CompiledContainer;
 use DI\Compiler\Compiler;
-use DI\Compiler\DefinitionCompiler\AliasDefinitionCompiler;
-use DI\Compiler\DefinitionCompiler\FactoryDefinitionCompiler;
-use DI\Compiler\DefinitionCompiler\ClassDefinitionCompiler;
-use DI\Compiler\DefinitionCompiler\ValueDefinitionCompiler;
+use DI\Definition\Compiler\AliasDefinitionCompiler;
+use DI\Definition\Compiler\FactoryDefinitionCompiler;
+use DI\Definition\Compiler\ClassDefinitionCompiler;
+use DI\Definition\Compiler\ValueDefinitionCompiler;
 use DI\Definition\DefinitionManager;
 use DI\Definition\Source\AnnotationDefinitionSource;
 use DI\Definition\Source\PHPFileDefinitionSource;
@@ -151,10 +151,10 @@ class ContainerBuilder
         if ($this->compilationPath) {
             $backend = new FileBackend($this->compilationPath, $proxyFactory);
             $definitionCompilers = array(
-                'DI\Definition\ValueDefinition'    => new ValueDefinitionCompiler(),
+                'DI\Definition\ValueDefinition'   => new ValueDefinitionCompiler(),
                 'DI\Definition\FactoryDefinition' => new FactoryDefinitionCompiler(),
-                'DI\Definition\AliasDefinition'    => new AliasDefinitionCompiler(),
-                'DI\Definition\ClassDefinition'    => new ClassDefinitionCompiler(),
+                'DI\Definition\AliasDefinition'   => new AliasDefinitionCompiler(),
+                'DI\Definition\ClassDefinition'   => new ClassDefinitionCompiler(),
             );
             $compiler = new Compiler($backend, $definitionCompilers);
 

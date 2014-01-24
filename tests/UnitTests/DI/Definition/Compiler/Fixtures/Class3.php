@@ -7,11 +7,10 @@
  * @license   http://www.opensource.org/licenses/mit-license.php MIT (see the LICENSE file)
  */
 
-namespace UnitTests\DI\Compiler\DefinitionCompiler\Fixtures;
+namespace UnitTests\DI\Definition\Compiler\Fixtures;
 
-class Class1
+class Class3
 {
-    public function __construct($param1, $param2)
-    {
-    }
+    public $publicProperty;
+    private $privateProperty;
 }

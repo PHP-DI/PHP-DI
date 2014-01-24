@@ -7,9 +7,9 @@
  * @license   http://www.opensource.org/licenses/mit-license.php MIT (see the LICENSE file)
  */
 
-namespace UnitTests\DI\Compiler\DefinitionCompiler;
+namespace UnitTests\DI\Definition\Compiler;
 
-use DI\Compiler\DefinitionCompiler\ClassDefinitionCompiler;
+use DI\Definition\Compiler\ClassDefinitionCompiler;
 use DI\Scope;
 
 /**
@@ -19,7 +19,7 @@ class ClassDefinitionCompilerConstructorTest extends \PHPUnit_Framework_TestCase
 {
     public function testEmptyConstructor()
     {
-        $entry = \DI\object('UnitTests\DI\Compiler\DefinitionCompiler\Fixtures\Class2')
+        $entry = \DI\object('UnitTests\DI\Definition\Compiler\Fixtures\Class2')
             ->scope(Scope::PROTOTYPE());
 
         $resolver = new ClassDefinitionCompiler();
@@ -27,7 +27,7 @@ class ClassDefinitionCompilerConstructorTest extends \PHPUnit_Framework_TestCase
         $value = $resolver->compile($entry->getDefinition('class2'));
 
         $code = <<<PHP
-\$object = new \UnitTests\DI\Compiler\DefinitionCompiler\Fixtures\Class2();
+\$object = new \UnitTests\DI\Definition\Compiler\Fixtures\Class2();
 return \$object;
 PHP;
         $this->assertEquals($code, $value);
@@ -35,17 +35,17 @@ PHP;
 
     public function testWithParameters()
     {
-        $entry = \DI\object('UnitTests\DI\Compiler\DefinitionCompiler\Fixtures\Class1')
+        $entry = \DI\object('UnitTests\DI\Definition\Compiler\Fixtures\Class1')
             ->scope(Scope::PROTOTYPE())
-            ->constructor(\DI\link('UnitTests\DI\Compiler\DefinitionCompiler\Fixtures\Class2'), 'foo');
+            ->constructor(\DI\link('UnitTests\DI\Definition\Compiler\Fixtures\Class2'), 'foo');
 
         $resolver = new ClassDefinitionCompiler();
 
         $value = $resolver->compile($entry->getDefinition('class1'));
 
         $code = <<<PHP
-\$object = new \UnitTests\DI\Compiler\DefinitionCompiler\Fixtures\Class1(
-    \$this->get('UnitTests\\\DI\\\Compiler\\\DefinitionCompiler\\\Fixtures\\\Class2'),
+\$object = new \UnitTests\DI\Definition\Compiler\Fixtures\Class1(
+    \$this->get('UnitTests\\\DI\\\Definition\\\Compiler\\\Fixtures\\\Class2'),
     'foo'
 );
 return \$object;
@@ -55,11 +55,11 @@ PHP;
 
     /**
      * @expectedException \DI\Definition\Exception\DefinitionException
-     * @expectedExceptionMessage The parameter 'param1' of UnitTests\DI\Compiler\DefinitionCompiler\Fixtures\Class1::__construct has no value defined or guessable
+     * @expectedExceptionMessage The parameter 'param1' of UnitTests\DI\Definition\Compiler\Fixtures\Class1::__construct has no value defined or guessable
      */
     public function testWrongNumberOfParameters()
     {
-        $entry = \DI\object('UnitTests\DI\Compiler\DefinitionCompiler\Fixtures\Class1')
+        $entry = \DI\object('UnitTests\DI\Definition\Compiler\Fixtures\Class1')
             ->scope(Scope::PROTOTYPE());
 
         $resolver = new ClassDefinitionCompiler();

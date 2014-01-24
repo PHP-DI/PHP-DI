@@ -10,7 +10,7 @@
 namespace DI\Compiler;
 
 use DI\Compiler\Backend\Backend;
-use DI\Compiler\DefinitionCompiler\DefinitionCompiler;
+use DI\Definition\Compiler\DefinitionCompiler;
 use DI\Definition\Definition;
 
 class Compiler

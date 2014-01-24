@@ -7,7 +7,7 @@
  * @license   http://www.opensource.org/licenses/mit-license.php MIT (see the LICENSE file)
  */
 
-namespace DI\Compiler\DefinitionCompiler;
+namespace DI\Definition\Compiler;
 
 use DI\Compiler\CompilationException;
 use DI\Definition\Definition;

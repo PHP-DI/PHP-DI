@@ -7,9 +7,9 @@
  * @license   http://www.opensource.org/licenses/mit-license.php MIT (see the LICENSE file)
  */
 
-namespace UnitTests\DI\Compiler\DefinitionCompiler;
+namespace UnitTests\DI\Definition\Compiler;
 
-use DI\Compiler\DefinitionCompiler\ValueDefinitionCompiler;
+use DI\Definition\Compiler\ValueDefinitionCompiler;
 use DI\Definition\FactoryDefinition;
 use DI\Definition\ValueDefinition;
 
@@ -17,7 +17,7 @@ class ValueDefinitionCompilerTest extends \PHPUnit_Framework_TestCase
 {
     public function testCompileString()
     {
-        $resolver = new ValueDefinitionCompiler();
+        $resolver = new \DI\Definition\Compiler\ValueDefinitionCompiler();
 
         $value = $resolver->compile(new ValueDefinition('foo', 'bar'));
 
@@ -26,7 +26,7 @@ class ValueDefinitionCompilerTest extends \PHPUnit_Framework_TestCase
 
     public function testCompileInt()
     {
-        $resolver = new ValueDefinitionCompiler();
+        $resolver = new \DI\Definition\Compiler\ValueDefinitionCompiler();
 
         $value = $resolver->compile(new ValueDefinition('foo', 15));
 
@@ -35,7 +35,7 @@ class ValueDefinitionCompilerTest extends \PHPUnit_Framework_TestCase
 
     public function testCompileFloat()
     {
-        $resolver = new ValueDefinitionCompiler();
+        $resolver = new \DI\Definition\Compiler\ValueDefinitionCompiler();
 
         $value = $resolver->compile(new ValueDefinition('foo', 15.43));
 
@@ -57,7 +57,7 @@ class ValueDefinitionCompilerTest extends \PHPUnit_Framework_TestCase
 
     public function testCompileArray()
     {
-        $resolver = new ValueDefinitionCompiler();
+        $resolver = new \DI\Definition\Compiler\ValueDefinitionCompiler();
 
         $value = $resolver->compile(new ValueDefinition('foo', array(1, 2, 3)));
 
@@ -75,7 +75,7 @@ class ValueDefinitionCompilerTest extends \PHPUnit_Framework_TestCase
      */
     public function testCompileObject()
     {
-        $resolver = new ValueDefinitionCompiler();
+        $resolver = new \DI\Definition\Compiler\ValueDefinitionCompiler();
 
         $resolver->compile(new ValueDefinition('foo', new \stdClass()));
     }
@@ -88,7 +88,7 @@ class ValueDefinitionCompilerTest extends \PHPUnit_Framework_TestCase
     {
         $definition = new FactoryDefinition('foo', function () {
         });
-        $resolver = new ValueDefinitionCompiler();
+        $resolver = new \DI\Definition\Compiler\ValueDefinitionCompiler();
 
         $resolver->compile($definition);
     }

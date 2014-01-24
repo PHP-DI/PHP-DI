@@ -7,9 +7,9 @@
  * @license   http://www.opensource.org/licenses/mit-license.php MIT (see the LICENSE file)
  */
 
-namespace UnitTests\DI\Compiler\DefinitionCompiler;
+namespace UnitTests\DI\Definition\Compiler;
 
-use DI\Compiler\DefinitionCompiler\ClassDefinitionCompiler;
+use DI\Definition\Compiler\ClassDefinitionCompiler;
 use DI\Definition\FactoryDefinition;
 use DI\Scope;
 
@@ -17,15 +17,15 @@ class ClassDefinitionCompilerTest extends \PHPUnit_Framework_TestCase
 {
     public function testPrototype()
     {
-        $entry = \DI\object('UnitTests\DI\Compiler\DefinitionCompiler\Fixtures\Class2')
+        $entry = \DI\object('UnitTests\DI\Definition\Compiler\Fixtures\Class2')
             ->scope(Scope::PROTOTYPE());
 
-        $resolver = new ClassDefinitionCompiler();
+        $resolver = new \DI\Definition\Compiler\ClassDefinitionCompiler();
 
         $value = $resolver->compile($entry->getDefinition('class2'));
 
         $code = <<<PHP
-\$object = new \UnitTests\DI\Compiler\DefinitionCompiler\Fixtures\Class2();
+\$object = new \UnitTests\DI\Definition\Compiler\Fixtures\Class2();
 return \$object;
 PHP;
         $this->assertEquals($code, $value);
@@ -33,7 +33,7 @@ PHP;
 
     public function testSingleton()
     {
-        $entry = \DI\object('UnitTests\DI\Compiler\DefinitionCompiler\Fixtures\Class2')
+        $entry = \DI\object('UnitTests\DI\Definition\Compiler\Fixtures\Class2')
             ->scope(Scope::SINGLETON());
 
         $resolver = new ClassDefinitionCompiler();
@@ -41,7 +41,7 @@ PHP;
         $value = $resolver->compile($entry->getDefinition('class2'));
 
         $code = <<<PHP
-\$object = new \UnitTests\DI\Compiler\DefinitionCompiler\Fixtures\Class2();
+\$object = new \UnitTests\DI\Definition\Compiler\Fixtures\Class2();
 return new \DI\Compiler\SharedEntry(\$object);
 PHP;
         $this->assertEquals($code, $value);
@@ -55,7 +55,7 @@ PHP;
     {
         $definition = new FactoryDefinition('foo', function () {
         });
-        $resolver = new ClassDefinitionCompiler();
+        $resolver = new \DI\Definition\Compiler\ClassDefinitionCompiler();
 
         $resolver->compile($definition);
     }

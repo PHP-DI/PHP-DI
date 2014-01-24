@@ -7,9 +7,9 @@
  * @license   http://www.opensource.org/licenses/mit-license.php MIT (see the LICENSE file)
  */
 
-namespace UnitTests\DI\Compiler\DefinitionCompiler;
+namespace UnitTests\DI\Definition\Compiler;
 
-use DI\Compiler\DefinitionCompiler\FactoryDefinitionCompiler;
+use DI\Definition\Compiler\FactoryDefinitionCompiler;
 use DI\Container;
 use DI\Definition\FactoryDefinition;
 use DI\Definition\ValueDefinition;
@@ -18,7 +18,7 @@ class FactoryDefinitionCompilerTest extends \PHPUnit_Framework_TestCase
 {
     public function testArrayCallable()
     {
-        $resolver = new FactoryDefinitionCompiler();
+        $resolver = new \DI\Definition\Compiler\FactoryDefinitionCompiler();
 
         $value = $resolver->compile(new FactoryDefinition('entry', array('foo', 'bar')));
 
@@ -50,7 +50,7 @@ PHP;
 
     public function testClosureWithParameters()
     {
-        $resolver = new FactoryDefinitionCompiler();
+        $resolver = new \DI\Definition\Compiler\FactoryDefinitionCompiler();
 
         $value = $resolver->compile(new FactoryDefinition('entry', function (Container $c) {
                 return $c->get('bar');
@@ -118,7 +118,7 @@ PHP;
      */
     public function testInvalidDefinitionType()
     {
-        $resolver = new FactoryDefinitionCompiler();
+        $resolver = new \DI\Definition\Compiler\FactoryDefinitionCompiler();
 
         $resolver->compile(new ValueDefinition('foo', 'bar'));
     }

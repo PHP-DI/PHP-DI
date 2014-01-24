@@ -7,9 +7,9 @@
  * @license   http://www.opensource.org/licenses/mit-license.php MIT (see the LICENSE file)
  */
 
-namespace UnitTests\DI\Compiler\DefinitionCompiler;
+namespace UnitTests\DI\Definition\Compiler;
 
-use DI\Compiler\DefinitionCompiler\AliasDefinitionCompiler;
+use DI\Definition\Compiler\AliasDefinitionCompiler;
 use DI\Definition\AliasDefinition;
 use DI\Definition\FactoryDefinition;
 
