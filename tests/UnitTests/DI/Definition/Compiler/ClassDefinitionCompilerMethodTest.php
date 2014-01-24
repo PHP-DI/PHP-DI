@@ -60,6 +60,30 @@ PHP;
         $this->assertEquals($code, $value);
     }
 
+    /**
+     * Check that injecting "null" is supported
+     */
+    public function testWithNullParameters()
+    {
+        $entry = \DI\object('UnitTests\DI\Definition\Compiler\Fixtures\Class2')
+            ->scope(Scope::PROTOTYPE())
+            ->method('setWithParams', null, null);
+
+        $resolver = new ClassDefinitionCompiler();
+
+        $value = $resolver->compile($entry->getDefinition('class2'));
+
+        $code = <<<PHP
+\$object = new \UnitTests\DI\Definition\Compiler\Fixtures\Class2();
+\$object->setWithParams(
+    NULL,
+    NULL
+);
+return \$object;
+PHP;
+        $this->assertEquals($code, $value);
+    }
+
     public function testDefaultValues()
     {
         $entry = \DI\object('UnitTests\DI\Definition\Compiler\Fixtures\Class2')

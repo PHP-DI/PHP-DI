@@ -136,10 +136,9 @@ PHP;
 
         foreach ($methodReflection->getParameters() as $index => $parameter) {
             // Look in the definition
-            $value = $methodInjection ? $methodInjection->getParameter($index) : null;
-
-            // Unknown injection
-            if ($value === null) {
+            if ($methodInjection && $methodInjection->hasParameter($index)) {
+                $value = $methodInjection->getParameter($index);
+            } else {
                 // If the parameter is optional and wasn't specified, we take its default value
                 if ($parameter->isOptional()) {
                     $args[] = var_export($this->getParameterDefaultValue($parameter, $methodReflection), true);
