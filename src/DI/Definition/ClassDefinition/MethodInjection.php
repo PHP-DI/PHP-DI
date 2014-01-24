@@ -56,10 +56,20 @@ class MethodInjection
      * @param int $index Position of the parameter (starting at 0)
      * @return mixed|null Value to inject, or null if no injection defined.
      */
+    public function hasParameter($index)
+    {
+        return array_key_exists($index, $this->parameters);
+    }
+
+    /**
+     * @param int $index Position of the parameter (starting at 0)
+     * @throws \InvalidArgumentException
+     * @return mixed Value to inject
+     */
     public function getParameter($index)
     {
-        if (! isset($this->parameters[$index])) {
-            return null;
+        if (! array_key_exists($index, $this->parameters)) {
+            throw new \InvalidArgumentException('There is no parameter value for index ' . $index);
         }
 
         return $this->parameters[$index];

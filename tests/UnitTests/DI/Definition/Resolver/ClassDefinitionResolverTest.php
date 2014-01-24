@@ -112,6 +112,23 @@ class ClassDefinitionResolverTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('bar', $object->constructorParam1);
     }
 
+    /**
+     * Check that we can inject "null" into parameters and properties
+     */
+    public function testResolveNullInjections()
+    {
+        $definition = new ClassDefinition('UnitTests\DI\Definition\Resolver\FixtureClass');
+        $definition->setConstructorInjection(new MethodInjection('__construct', array(null)));
+        $definition->addPropertyInjection(new PropertyInjection('prop', null));
+        $resolver = $this->buildResolver();
+
+        $object = $resolver->resolve($definition);
+
+        $this->assertInstanceOf('UnitTests\DI\Definition\Resolver\FixtureClass', $object);
+        $this->assertNull($object->constructorParam1);
+        $this->assertNull($object->prop);
+    }
+
     public function testInjectOnInstance()
     {
         $definition = new ClassDefinition('UnitTests\DI\Definition\Resolver\FixtureClass');

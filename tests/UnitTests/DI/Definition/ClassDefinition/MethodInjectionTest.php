@@ -24,7 +24,6 @@ class MethodInjectionTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals('foo', $definition->getMethodName());
         $this->assertEmpty($definition->getParameters());
-        $this->assertNull($definition->getParameter(0));
     }
 
     public function testGetParameter()
@@ -32,6 +31,16 @@ class MethodInjectionTest extends \PHPUnit_Framework_TestCase
         $definition = new MethodInjection('foo', array('bar'));
 
         $this->assertEquals('bar', $definition->getParameter(0));
+    }
+
+    /**
+     * @expectedException \InvalidArgumentException
+     * @expectedExceptionMessage There is no parameter value for index 0
+     */
+    public function testGetUndefinedParameter()
+    {
+        $definition = new MethodInjection('foo', array());
+        $definition->getParameter(0);
     }
 
     public function testReplaceParameters()
@@ -56,5 +65,22 @@ class MethodInjectionTest extends \PHPUnit_Framework_TestCase
         $definition1->merge($definition2);
 
         $this->assertEquals(array('a', 'b', 'd'), $definition1->getParameters());
+    }
+
+    /**
+     * Check that a merge will preserve "null" injections
+     */
+    public function testMergeParametersPreservesNull()
+    {
+        $definition1 = new MethodInjection('foo', array(
+            0 => null,
+        ));
+        $definition2 = new MethodInjection('foo', array(
+            0 => 'bar',
+        ));
+
+        $definition1->merge($definition2);
+
+        $this->assertEquals(array(null), $definition1->getParameters());
     }
 }
