@@ -11,7 +11,7 @@ namespace UnitTests\DI\Compiler\DefinitionCompiler;
 
 use DI\Compiler\DefinitionCompiler\CallableDefinitionCompiler;
 use DI\Container;
-use DI\Definition\CallableDefinition;
+use DI\Definition\FactoryDefinition;
 use DI\Definition\ValueDefinition;
 
 class CallableDefinitionCompilerTest extends \PHPUnit_Framework_TestCase
@@ -20,7 +20,7 @@ class CallableDefinitionCompilerTest extends \PHPUnit_Framework_TestCase
     {
         $resolver = new CallableDefinitionCompiler();
 
-        $value = $resolver->compile(new CallableDefinition('entry', array('foo', 'bar')));
+        $value = $resolver->compile(new FactoryDefinition('entry', array('foo', 'bar')));
 
         $code = <<<PHP
 \$factory = array('foo', 'bar');
@@ -34,7 +34,7 @@ PHP;
     {
         $resolver = new CallableDefinitionCompiler();
 
-        $value = $resolver->compile(new CallableDefinition('entry', function () {
+        $value = $resolver->compile(new FactoryDefinition('entry', function () {
             return 'bar';
         }));
 
@@ -52,7 +52,7 @@ PHP;
     {
         $resolver = new CallableDefinitionCompiler();
 
-        $value = $resolver->compile(new CallableDefinition('entry', function (Container $c) {
+        $value = $resolver->compile(new FactoryDefinition('entry', function (Container $c) {
                 return $c->get('bar');
             }));
 
@@ -74,20 +74,20 @@ PHP;
     {
         $resolver = new CallableDefinitionCompiler();
 
-        $resolver->compile(new CallableDefinition('entry', function (Container $c) use ($resolver) {
+        $resolver->compile(new FactoryDefinition('entry', function (Container $c) use ($resolver) {
             return $c->get('bar');
         }));
     }
 
     /**
      * @expectedException \DI\Compiler\CompilationException
-     * @expectedExceptionMessage The callable definition for entry 'foo' must be a closure or an array of strings (no object in the array)
+     * @expectedExceptionMessage The factory definition for entry 'foo' must be a closure or an array of strings (no object in the array)
      */
     public function testArrayWithObject()
     {
         $resolver = new CallableDefinitionCompiler();
 
-        $resolver->compile(new CallableDefinition('foo', array($this, 'foo')));
+        $resolver->compile(new FactoryDefinition('foo', array($this, 'foo')));
     }
 
     /**
@@ -98,7 +98,7 @@ PHP;
     {
         $resolver = new CallableDefinitionCompiler();
 
-        $resolver->compile(new CallableDefinition('foo', 'bar'));
+        $resolver->compile(new FactoryDefinition('foo', 'bar'));
     }
 
     /**
@@ -109,12 +109,12 @@ PHP;
     {
         $resolver = new CallableDefinitionCompiler();
 
-        $resolver->compile(new CallableDefinition('foo', new \stdClass()));
+        $resolver->compile(new FactoryDefinition('foo', new \stdClass()));
     }
 
     /**
      * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage This definition compiler is only compatible with CallableDefinition objects, DI\Definition\ValueDefinition given
+     * @expectedExceptionMessage This definition compiler is only compatible with FactoryDefinition objects, DI\Definition\ValueDefinition given
      */
     public function testInvalidDefinitionType()
     {

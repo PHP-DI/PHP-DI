@@ -11,7 +11,7 @@ namespace UnitTests\DI\Compiler\DefinitionCompiler;
 
 use DI\Compiler\DefinitionCompiler\AliasDefinitionCompiler;
 use DI\Definition\AliasDefinition;
-use DI\Definition\CallableDefinition;
+use DI\Definition\FactoryDefinition;
 
 class AliasDefinitionCompilerTest extends \PHPUnit_Framework_TestCase
 {
@@ -26,11 +26,11 @@ class AliasDefinitionCompilerTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage This definition compiler is only compatible with AliasDefinition objects, DI\Definition\CallableDefinition given
+     * @expectedExceptionMessage This definition compiler is only compatible with AliasDefinition objects, DI\Definition\FactoryDefinition given
      */
     public function testInvalidDefinitionType()
     {
-        $definition = new CallableDefinition('foo', function () {
+        $definition = new FactoryDefinition('foo', function () {
         });
         $resolver = new AliasDefinitionCompiler();
 

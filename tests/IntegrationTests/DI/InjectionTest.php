@@ -185,30 +185,30 @@ class InjectionTest extends \PHPUnit_Framework_TestCase
         $compiledContainerPHP->set(
             'IntegrationTests\DI\Fixtures\Class1',
             \DI\object()
-                ->withScope(Scope::PROTOTYPE())
-                ->withProperty('property1', \DI\link('IntegrationTests\DI\Fixtures\Class2'))
-                ->withProperty('property2', \DI\link('IntegrationTests\DI\Fixtures\Interface1'))
-                ->withProperty('property3', \DI\link('namedDependency'))
-                ->withProperty('property4', \DI\link('foo'))
-                ->withProperty('property5', \DI\link('IntegrationTests\DI\Fixtures\LazyDependency'))
-                ->withConstructor(
+                ->scope(Scope::PROTOTYPE())
+                ->property('property1', \DI\link('IntegrationTests\DI\Fixtures\Class2'))
+                ->property('property2', \DI\link('IntegrationTests\DI\Fixtures\Interface1'))
+                ->property('property3', \DI\link('namedDependency'))
+                ->property('property4', \DI\link('foo'))
+                ->property('property5', \DI\link('IntegrationTests\DI\Fixtures\LazyDependency'))
+                ->constructor(
                     \DI\link('IntegrationTests\DI\Fixtures\Class2'),
                     \DI\link('IntegrationTests\DI\Fixtures\Interface1'),
                     \DI\link('IntegrationTests\DI\Fixtures\LazyDependency')
                 )
-                ->withMethod('method1', \DI\link('IntegrationTests\DI\Fixtures\Class2'))
-                ->withMethod('method2', \DI\link('IntegrationTests\DI\Fixtures\Interface1'))
-                ->withMethod('method3', \DI\link('namedDependency'), \DI\link('foo'))
-                ->withMethod('method4', \DI\link('IntegrationTests\DI\Fixtures\LazyDependency'))
-                ->withMethodParameter('method5', 'param1', \DI\link('IntegrationTests\DI\Fixtures\Interface1'))
-                ->withMethodParameter('method5', 'param2', \DI\link('foo'))
+                ->method('method1', \DI\link('IntegrationTests\DI\Fixtures\Class2'))
+                ->method('method2', \DI\link('IntegrationTests\DI\Fixtures\Interface1'))
+                ->method('method3', \DI\link('namedDependency'), \DI\link('foo'))
+                ->method('method4', \DI\link('IntegrationTests\DI\Fixtures\LazyDependency'))
+                ->methodParameter('method5', 'param1', \DI\link('IntegrationTests\DI\Fixtures\Interface1'))
+                ->methodParameter('method5', 'param2', \DI\link('foo'))
         );
         $compiledContainerPHP->set('IntegrationTests\DI\Fixtures\Class2', \DI\object());
         $compiledContainerPHP->set('IntegrationTests\DI\Fixtures\Implementation1', \DI\object());
         $compiledContainerPHP->set(
             'IntegrationTests\DI\Fixtures\Interface1',
             \DI\object('IntegrationTests\DI\Fixtures\Implementation1')
-                ->withScope(Scope::SINGLETON())
+                ->scope(Scope::SINGLETON())
         );
         $compiledContainerPHP->set('namedDependency', \DI\object('IntegrationTests\DI\Fixtures\Class2'));
         $compiledContainerPHP->set('IntegrationTests\DI\Fixtures\LazyDependency', \DI\object()->lazy());
@@ -254,7 +254,7 @@ class InjectionTest extends \PHPUnit_Framework_TestCase
         $proxies[] = $this->validateConstructorInjection($obj, $type);
 
         // Only constructor injection with reflection
-        if ($type != self::DEFINITION_REFLECTION) {
+        if ($type != self::DEFINITION_REFLECTION && $type != self::DEFINITION_COMPILED_REFLECTION) {
             $proxies[] = $this->validatePropertyInjection($obj);
             $proxies[] = $this->validateMethodInjection($obj);
         }
@@ -275,7 +275,7 @@ class InjectionTest extends \PHPUnit_Framework_TestCase
         $proxies[] = $this->validateConstructorInjection($obj, $type);
 
         // Only constructor injection with reflection
-        if ($type != self::DEFINITION_REFLECTION) {
+        if ($type != self::DEFINITION_REFLECTION && $type != self::DEFINITION_COMPILED_REFLECTION) {
             $proxies[] = $this->validatePropertyInjection($obj);
             $proxies[] = $this->validateMethodInjection($obj);
         }
@@ -295,7 +295,7 @@ class InjectionTest extends \PHPUnit_Framework_TestCase
         $proxies = array();
 
         // Only constructor injection with autowiring
-        if ($type != self::DEFINITION_REFLECTION) {
+        if ($type != self::DEFINITION_REFLECTION && $type != self::DEFINITION_COMPILED_REFLECTION) {
             $proxies[] = $this->validatePropertyInjection($obj);
             $proxies[] = $this->validateMethodInjection($obj);
         }
@@ -310,7 +310,7 @@ class InjectionTest extends \PHPUnit_Framework_TestCase
     public function testScope($type, Container $container)
     {
         // No scope definition possible with autowiring only
-        if ($type == self::DEFINITION_REFLECTION) {
+        if ($type == self::DEFINITION_REFLECTION || $type == self::DEFINITION_COMPILED_REFLECTION) {
             return;
         }
         $class1_1 = $container->get('IntegrationTests\DI\Fixtures\Class1');
@@ -346,7 +346,7 @@ class InjectionTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf('IntegrationTests\DI\Fixtures\Implementation1', $class1->constructorParam2);
 
         // Test lazy injection (not possible using autowiring only)
-        if ($type != self::DEFINITION_REFLECTION) {
+        if ($type != self::DEFINITION_REFLECTION && $type != self::DEFINITION_COMPILED_REFLECTION) {
             $this->assertInstanceOf('IntegrationTests\DI\Fixtures\LazyDependency', $class1->constructorParam3);
             $this->assertInstanceOf('ProxyManager\Proxy\LazyLoadingInterface', $class1->constructorParam3);
             /** @var LazyDependency|\ProxyManager\Proxy\LazyLoadingInterface $proxy */

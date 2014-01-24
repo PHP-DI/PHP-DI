@@ -10,7 +10,7 @@
 namespace UnitTests\DI\Compiler\DefinitionCompiler;
 
 use DI\Compiler\DefinitionCompiler\ValueDefinitionCompiler;
-use DI\Definition\CallableDefinition;
+use DI\Definition\FactoryDefinition;
 use DI\Definition\ValueDefinition;
 
 class ValueDefinitionCompilerTest extends \PHPUnit_Framework_TestCase
@@ -82,11 +82,11 @@ class ValueDefinitionCompilerTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage This definition compiler is only compatible with ValueDefinition objects, DI\Definition\CallableDefinition given
+     * @expectedExceptionMessage This definition compiler is only compatible with ValueDefinition objects, DI\Definition\FactoryDefinition given
      */
     public function testInvalidDefinitionType()
     {
-        $definition = new CallableDefinition('foo', function () {
+        $definition = new FactoryDefinition('foo', function () {
         });
         $resolver = new ValueDefinitionCompiler();
 

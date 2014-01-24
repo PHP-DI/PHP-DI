@@ -20,8 +20,8 @@ class ClassDefinitionCompilerMethodTest extends \PHPUnit_Framework_TestCase
     public function testEmptyConstructor()
     {
         $entry = \DI\object('UnitTests\DI\Compiler\DefinitionCompiler\Fixtures\Class2')
-            ->withScope(Scope::PROTOTYPE())
-            ->withMethod('setThing');
+            ->scope(Scope::PROTOTYPE())
+            ->method('setThing');
 
         $resolver = new ClassDefinitionCompiler();
 
@@ -38,8 +38,8 @@ PHP;
     public function testWithParameters()
     {
         $entry = \DI\object('UnitTests\DI\Compiler\DefinitionCompiler\Fixtures\Class2')
-            ->withScope(Scope::PROTOTYPE())
-            ->withMethod(
+            ->scope(Scope::PROTOTYPE())
+            ->method(
                 'setWithParams',
                 \DI\link('UnitTests\DI\Compiler\DefinitionCompiler\Fixtures\Class2'),
                 'foo'
@@ -63,8 +63,8 @@ PHP;
     public function testDefaultValues()
     {
         $entry = \DI\object('UnitTests\DI\Compiler\DefinitionCompiler\Fixtures\Class2')
-            ->withScope(Scope::PROTOTYPE())
-            ->withMethod('setWithDefaultValues');
+            ->scope(Scope::PROTOTYPE())
+            ->method('setWithDefaultValues');
 
         $resolver = new ClassDefinitionCompiler();
 
@@ -72,7 +72,10 @@ PHP;
 
         $code = <<<PHP
 \$object = new \UnitTests\DI\Compiler\DefinitionCompiler\Fixtures\Class2();
-\$object->setWithDefaultValues();
+\$object->setWithDefaultValues(
+    'foo',
+    'bar'
+);
 return \$object;
 PHP;
         $this->assertEquals($code, $value);
@@ -80,9 +83,9 @@ PHP;
 
     /**
      * @expectedException \DI\Definition\Exception\DefinitionException
-     * @expectedExceptionMessage UnitTests\DI\Compiler\DefinitionCompiler\Fixtures\Class1::__construct takes 2 parameters, 0 defined or guessed
+     * @expectedExceptionMessage The parameter 'param1' of UnitTests\DI\Compiler\DefinitionCompiler\Fixtures\Class1::__construct has no value defined or guessable
      */
-    public function testWrongNumberOfParameters()
+    public function testUndefinedParameter()
     {
         $entry = \DI\object('UnitTests\DI\Compiler\DefinitionCompiler\Fixtures\Class1');
 

@@ -10,9 +10,8 @@
 namespace DI\Compiler\DefinitionCompiler;
 
 use DI\Definition\ClassDefinition;
-use DI\Definition\ClassInjection\MethodInjection;
-use DI\Definition\ClassInjection\PropertyInjection;
-use DI\Definition\ClassInjection\UndefinedInjection;
+use DI\Definition\ClassDefinition\MethodInjection;
+use DI\Definition\ClassDefinition\PropertyInjection;
 use DI\Definition\Definition;
 use DI\Definition\EntryReference;
 use DI\Definition\Exception\DefinitionException;
@@ -93,14 +92,6 @@ class ClassDefinitionCompiler implements DefinitionCompiler
 
         $value = $propertyInjection->getValue();
 
-        if ($value instanceof UndefinedInjection) {
-            throw new DefinitionException(sprintf(
-                "The property %s::%s has no value defined or guessable",
-                $classReflection->getName(),
-                $propertyInjection->getPropertyName()
-            ));
-        }
-
         if ($value instanceof EntryReference) {
             $valueToSet = sprintf('$this->get(%s)', var_export($value->getName(), true));
         } else {
@@ -141,40 +132,26 @@ PHP;
             return '';
         }
 
-        // Check the number of parameters match
-        $nbRequiredParameters = $methodReflection->getNumberOfRequiredParameters();
-        $parameterInjections = $methodInjection ? $methodInjection->getParameters() : array();
-        if (count($parameterInjections) < $nbRequiredParameters) {
-            throw new DefinitionException(sprintf(
-                "%s::%s takes %d parameters, %d defined or guessed",
-                $methodReflection->getDeclaringClass()->getName(),
-                $methodReflection->getName(),
-                $nbRequiredParameters,
-                count($parameterInjections)
-            ));
-        }
-
-        // No parameters
-        if (empty($parameterInjections)) {
-            return '';
-        }
-
-        $reflectionParameters = $methodReflection->getParameters();
-
         $args = array();
-        foreach ($parameterInjections as $index => $value) {
-            // If the parameter is optional and wasn't specified, we take its default value
-            if ($value instanceof UndefinedInjection) {
-                if ($reflectionParameters[$index]->isOptional()) {
-                    $value = $this->getParameterDefaultValue($reflectionParameters[$index], $methodReflection);
-                } else {
-                    throw new DefinitionException(sprintf(
-                        "The parameter '%s' of %s::%s has no value defined or guessable",
-                        $reflectionParameters[$index]->getName(),
-                        $methodReflection->getDeclaringClass()->getName(),
-                        $methodReflection->getName()
-                    ));
+
+        foreach ($methodReflection->getParameters() as $index => $parameter) {
+            // Look in the definition
+            $value = $methodInjection ? $methodInjection->getParameter($index) : null;
+
+            // Unknown injection
+            if ($value === null) {
+                // If the parameter is optional and wasn't specified, we take its default value
+                if ($parameter->isOptional()) {
+                    $args[] = var_export($this->getParameterDefaultValue($parameter, $methodReflection), true);
+                    continue;
                 }
+
+                throw new DefinitionException(sprintf(
+                    "The parameter '%s' of %s::%s has no value defined or guessable",
+                    $parameter->getName(),
+                    $methodReflection->getDeclaringClass()->getName(),
+                    $methodReflection->getName()
+                ));
             }
 
             if ($value instanceof EntryReference) {

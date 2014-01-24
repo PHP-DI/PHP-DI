@@ -20,7 +20,7 @@ class ClassDefinitionCompilerConstructorTest extends \PHPUnit_Framework_TestCase
     public function testEmptyConstructor()
     {
         $entry = \DI\object('UnitTests\DI\Compiler\DefinitionCompiler\Fixtures\Class2')
-            ->withScope(Scope::PROTOTYPE());
+            ->scope(Scope::PROTOTYPE());
 
         $resolver = new ClassDefinitionCompiler();
 
@@ -36,8 +36,8 @@ PHP;
     public function testWithParameters()
     {
         $entry = \DI\object('UnitTests\DI\Compiler\DefinitionCompiler\Fixtures\Class1')
-            ->withScope(Scope::PROTOTYPE())
-            ->withConstructor(\DI\link('UnitTests\DI\Compiler\DefinitionCompiler\Fixtures\Class2'), 'foo');
+            ->scope(Scope::PROTOTYPE())
+            ->constructor(\DI\link('UnitTests\DI\Compiler\DefinitionCompiler\Fixtures\Class2'), 'foo');
 
         $resolver = new ClassDefinitionCompiler();
 
@@ -55,12 +55,12 @@ PHP;
 
     /**
      * @expectedException \DI\Definition\Exception\DefinitionException
-     * @expectedExceptionMessage UnitTests\DI\Compiler\DefinitionCompiler\Fixtures\Class1::__construct takes 2 parameters, 0 defined or guessed
+     * @expectedExceptionMessage The parameter 'param1' of UnitTests\DI\Compiler\DefinitionCompiler\Fixtures\Class1::__construct has no value defined or guessable
      */
     public function testWrongNumberOfParameters()
     {
         $entry = \DI\object('UnitTests\DI\Compiler\DefinitionCompiler\Fixtures\Class1')
-            ->withScope(Scope::PROTOTYPE());
+            ->scope(Scope::PROTOTYPE());
 
         $resolver = new ClassDefinitionCompiler();
         $resolver->compile($entry->getDefinition('class1'));

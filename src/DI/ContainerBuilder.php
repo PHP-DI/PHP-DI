@@ -152,7 +152,7 @@ class ContainerBuilder
             $backend = new FileBackend($this->compilationPath, $proxyFactory);
             $definitionCompilers = array(
                 'DI\Definition\ValueDefinition'    => new ValueDefinitionCompiler(),
-                'DI\Definition\CallableDefinition' => new CallableDefinitionCompiler(),
+                'DI\Definition\FactoryDefinition' => new CallableDefinitionCompiler(),
                 'DI\Definition\AliasDefinition'    => new AliasDefinitionCompiler(),
                 'DI\Definition\ClassDefinition'    => new ClassDefinitionCompiler(),
             );

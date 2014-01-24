@@ -10,7 +10,7 @@
 namespace UnitTests\DI\Compiler\DefinitionCompiler;
 
 use DI\Compiler\DefinitionCompiler\ClassDefinitionCompiler;
-use DI\Definition\CallableDefinition;
+use DI\Definition\FactoryDefinition;
 use DI\Scope;
 
 class ClassDefinitionCompilerTest extends \PHPUnit_Framework_TestCase
@@ -18,7 +18,7 @@ class ClassDefinitionCompilerTest extends \PHPUnit_Framework_TestCase
     public function testPrototype()
     {
         $entry = \DI\object('UnitTests\DI\Compiler\DefinitionCompiler\Fixtures\Class2')
-            ->withScope(Scope::PROTOTYPE());
+            ->scope(Scope::PROTOTYPE());
 
         $resolver = new ClassDefinitionCompiler();
 
@@ -34,7 +34,7 @@ PHP;
     public function testSingleton()
     {
         $entry = \DI\object('UnitTests\DI\Compiler\DefinitionCompiler\Fixtures\Class2')
-            ->withScope(Scope::SINGLETON());
+            ->scope(Scope::SINGLETON());
 
         $resolver = new ClassDefinitionCompiler();
 
@@ -49,11 +49,11 @@ PHP;
 
     /**
      * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage This definition compiler is only compatible with ClassDefinition objects, DI\Definition\CallableDefinition given
+     * @expectedExceptionMessage This definition compiler is only compatible with ClassDefinition objects, DI\Definition\FactoryDefinition given
      */
     public function testInvalidDefinitionType()
     {
-        $definition = new CallableDefinition('foo', function () {
+        $definition = new FactoryDefinition('foo', function () {
         });
         $resolver = new ClassDefinitionCompiler();
 

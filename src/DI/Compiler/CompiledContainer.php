@@ -58,10 +58,10 @@ class CompiledContainer extends Container
         Backend $backend,
         ContainerInterface $wrapperContainer = null
     ) {
+        parent::__construct($definitionManager, $proxyFactory, $wrapperContainer);
+
         $this->compiler = $compiler;
         $this->backend = $backend;
-        $this->definitionManager = $definitionManager;
-        $this->wrapperContainer = $wrapperContainer;
     }
 
     /**
@@ -75,8 +75,8 @@ class CompiledContainer extends Container
         }
 
         // Try to find the entry in the map
-        if (array_key_exists($name, $this->resolvedEntries)) {
-            return $this->resolvedEntries[$name];
+        if (array_key_exists($name, $this->singletonEntries)) {
+            return $this->singletonEntries[$name];
         }
 
         // Entry not loaded, use the definitions
@@ -108,7 +108,7 @@ class CompiledContainer extends Container
         // If the entry is singleton, we store it to always return it without recomputing it.
         if ($value instanceof SharedEntry) {
             $value = $value->getValue();
-            $this->resolvedEntries[$name] = $value;
+            $this->singletonEntries[$name] = $value;
         }
 
         return $value;

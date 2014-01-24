@@ -10,8 +10,8 @@
 namespace DI\Compiler\DefinitionCompiler;
 
 use DI\Compiler\CompilationException;
-use DI\Definition\CallableDefinition;
 use DI\Definition\Definition;
+use DI\Definition\FactoryDefinition;
 use Jeremeamia\SuperClosure\ClosureParser;
 
 /**
@@ -27,9 +27,9 @@ class CallableDefinitionCompiler implements DefinitionCompiler
      */
     public function compile(Definition $definition)
     {
-        if (! $definition instanceof CallableDefinition) {
+        if (! $definition instanceof FactoryDefinition) {
             throw new \InvalidArgumentException(sprintf(
-                'This definition compiler is only compatible with CallableDefinition objects, %s given',
+                'This definition compiler is only compatible with FactoryDefinition objects, %s given',
                 get_class($definition)
             ));
         }
@@ -53,13 +53,13 @@ class CallableDefinitionCompiler implements DefinitionCompiler
         return $code;
     }
 
-    private function compileArrayCallable($callable, CallableDefinition $definition)
+    private function compileArrayCallable($callable, FactoryDefinition $definition)
     {
         list($class, $method) = $callable;
 
         if (! is_string($class)) {
             throw new CompilationException(sprintf(
-                "The callable definition for entry '%s' must be a closure or an array of strings "
+                "The factory definition for entry '%s' must be a closure or an array of strings "
                 . "(no object in the array)",
                 $definition->getName()
             ));
@@ -68,7 +68,7 @@ class CallableDefinitionCompiler implements DefinitionCompiler
         return sprintf('$factory = array(%s, %s);', var_export($class, true), var_export($method, true));
     }
 
-    private function compileClosure($closure, CallableDefinition $definition)
+    private function compileClosure($closure, FactoryDefinition $definition)
     {
         // Uses jeremeamia/super_closure
         $closureParser = ClosureParser::fromClosure($closure);

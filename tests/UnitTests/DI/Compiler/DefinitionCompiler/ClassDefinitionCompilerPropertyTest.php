@@ -20,8 +20,8 @@ class ClassDefinitionCompilerPropertyTest extends \PHPUnit_Framework_TestCase
     public function testPublicProperty()
     {
         $entry = \DI\object('UnitTests\DI\Compiler\DefinitionCompiler\Fixtures\Class3')
-            ->withScope(Scope::PROTOTYPE())
-            ->withProperty('publicProperty', 'foo');
+            ->scope(Scope::PROTOTYPE())
+            ->property('publicProperty', 'foo');
 
         $resolver = new ClassDefinitionCompiler();
 
@@ -38,8 +38,8 @@ PHP;
     public function testPrivateProperty()
     {
         $entry = \DI\object('UnitTests\DI\Compiler\DefinitionCompiler\Fixtures\Class3')
-            ->withScope(Scope::PROTOTYPE())
-            ->withProperty('privateProperty', 'foo');
+            ->scope(Scope::PROTOTYPE())
+            ->property('privateProperty', 'foo');
 
         $resolver = new ClassDefinitionCompiler();
 
