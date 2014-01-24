@@ -123,6 +123,8 @@ class CompiledContainer extends Container
             throw new InvalidArgumentException("The name parameter must be of type string");
         }
 
-        return $this->backend->hasCompiledEntry($name) || $this->definitionManager->getDefinition($name);
+        return array_key_exists($name, $this->singletonEntries)
+            || $this->backend->hasCompiledEntry($name)
+            || $this->definitionManager->getDefinition($name);
     }
 }
