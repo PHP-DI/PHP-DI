@@ -9,24 +9,33 @@
 
 namespace UnitTests\DI\Definition\Resolver;
 
-use DI\Definition\CallableDefinition;
+use DI\Definition\FactoryDefinition;
 use DI\Definition\ValueDefinition;
-use DI\Definition\Resolver\CallableDefinitionResolver;
+use DI\Definition\Resolver\FactoryDefinitionResolver;
 
 /**
- * @covers \DI\Definition\Resolver\CallableDefinitionResolver
+ * @covers \DI\Definition\Resolver\FactoryDefinitionResolver
  */
-class CallableDefinitionResolverTest extends \PHPUnit_Framework_TestCase
+class FactoryDefinitionResolverTest extends \PHPUnit_Framework_TestCase
 {
+    public function testGetContainer()
+    {
+        $container = $this->getMock('DI\Container', array(), array(), '', false);
+
+        $resolver = new FactoryDefinitionResolver($container);
+
+        $this->assertSame($container, $resolver->getContainer());
+    }
+
     public function testResolve()
     {
         /** @var \DI\Container $container */
         $container = $this->getMock('DI\Container', array(), array(), '', false);
 
-        $definition = new CallableDefinition('foo', function () {
+        $definition = new FactoryDefinition('foo', function () {
             return 'bar';
         });
-        $resolver = new CallableDefinitionResolver($container);
+        $resolver = new FactoryDefinitionResolver($container);
 
         $value = $resolver->resolve($definition);
 
@@ -35,7 +44,7 @@ class CallableDefinitionResolverTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage This definition resolver is only compatible with CallableDefinition objects, DI\Definition\ValueDefinition given
+     * @expectedExceptionMessage This definition resolver is only compatible with FactoryDefinition objects, DI\Definition\ValueDefinition given
      */
     public function testInvalidDefinitionType()
     {
@@ -43,7 +52,7 @@ class CallableDefinitionResolverTest extends \PHPUnit_Framework_TestCase
         $container = $this->getMock('DI\Container', array(), array(), '', false);
 
         $definition = new ValueDefinition('foo', 'bar');
-        $resolver = new CallableDefinitionResolver($container);
+        $resolver = new FactoryDefinitionResolver($container);
 
         $resolver->resolve($definition);
     }

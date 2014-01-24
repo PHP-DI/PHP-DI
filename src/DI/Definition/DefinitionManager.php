@@ -48,7 +48,9 @@ class DefinitionManager
 
     /**
      * Returns DI definition for the entry name
+     *
      * @param string $name
+     *
      * @return Definition|null
      */
     public function getDefinition($name)
@@ -60,7 +62,7 @@ class DefinitionManager
             $definition = $this->source->getDefinition($name);
 
             // Save to cache
-            if ($definition === null || ($definition && $definition->isCacheable())) {
+            if ($definition === null || ($definition instanceof CacheableDefinition)) {
                 $this->saveToCache($name, $definition);
             }
         }

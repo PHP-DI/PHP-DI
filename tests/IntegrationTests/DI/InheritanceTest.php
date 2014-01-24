@@ -80,18 +80,18 @@ class InheritanceTest extends \PHPUnit_Framework_TestCase
         $containerPHPDefinitions->set(
             'IntegrationTests\DI\Fixtures\InheritanceTest\BaseClass',
             \DI\object('IntegrationTests\DI\Fixtures\InheritanceTest\SubClass')
-                ->withProperty('property1', \DI\link('IntegrationTests\DI\Fixtures\InheritanceTest\Dependency'))
-                ->withProperty('property4', \DI\link('IntegrationTests\DI\Fixtures\InheritanceTest\Dependency'))
-                ->withConstructor(\DI\link('IntegrationTests\DI\Fixtures\InheritanceTest\Dependency'))
-                ->withMethod('setProperty2', \DI\link('IntegrationTests\DI\Fixtures\InheritanceTest\Dependency'))
+                ->property('property1', \DI\link('IntegrationTests\DI\Fixtures\InheritanceTest\Dependency'))
+                ->property('property4', \DI\link('IntegrationTests\DI\Fixtures\InheritanceTest\Dependency'))
+                ->constructor(\DI\link('IntegrationTests\DI\Fixtures\InheritanceTest\Dependency'))
+                ->method('setProperty2', \DI\link('IntegrationTests\DI\Fixtures\InheritanceTest\Dependency'))
         );
         $containerPHPDefinitions->set(
             'IntegrationTests\DI\Fixtures\InheritanceTest\SubClass',
             \DI\object()
-                ->withProperty('property1', \DI\link('IntegrationTests\DI\Fixtures\InheritanceTest\Dependency'))
-                ->withProperty('property4', \DI\link('IntegrationTests\DI\Fixtures\InheritanceTest\Dependency'))
-                ->withConstructor(\DI\link('IntegrationTests\DI\Fixtures\InheritanceTest\Dependency'))
-                ->withMethod('setProperty2', \DI\link('IntegrationTests\DI\Fixtures\InheritanceTest\Dependency'))
+                ->property('property1', \DI\link('IntegrationTests\DI\Fixtures\InheritanceTest\Dependency'))
+                ->property('property4', \DI\link('IntegrationTests\DI\Fixtures\InheritanceTest\Dependency'))
+                ->constructor(\DI\link('IntegrationTests\DI\Fixtures\InheritanceTest\Dependency'))
+                ->method('setProperty2', \DI\link('IntegrationTests\DI\Fixtures\InheritanceTest\Dependency'))
         );
 
         return array(

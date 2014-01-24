@@ -27,7 +27,7 @@ class ValueDefinitionResolver implements DefinitionResolver
      *
      * {@inheritdoc}
      */
-    public function resolve(Definition $definition)
+    public function resolve(Definition $definition, array $parameters = array())
     {
         if (! $definition instanceof ValueDefinition) {
             throw new \InvalidArgumentException(sprintf(

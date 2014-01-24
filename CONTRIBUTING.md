@@ -22,6 +22,7 @@ $ php composer.phar install
 
 If you are running Windows or are having trouble, read [the official documentation](http://getcomposer.org/doc/00-intro.md#installation).
 
+
 ## Run the tests
 
 The tests are run with [PHPUnit](http://www.phpunit.de/manual/current/en/installation.html):
@@ -31,11 +32,16 @@ $ phpunit
 ```
 
 
-## To do
+## Learning the internals
+
+Read the [How it works](doc/how-it-works.md) documentation.
+
+
+## What to do?
 
 - Add tests: pick up uncovered situations in the [code coverage report](https://coveralls.io/r/mnapoli/PHP-DI)
 - Resolve issues: [issue list](https://github.com/mnapoli/PHP-DI/issues)
-- Improve documentation
+- Improve the documentation
 - …
 
 

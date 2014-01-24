@@ -178,7 +178,7 @@ return [
     }),
 
     Foo::class => object()
-      ->withConstructor(link(Bar::class))
+      ->constructor(link(Bar::class)),
 ];
 </code></pre>
                     </div>
@@ -257,7 +257,7 @@ return [
                     <div class="img-w hover-fader">
 <pre><code class="php small">return [
     Foo::class => object()
-      ->withConstructor(link(Bar::class))
+      ->constructor(link(Bar::class))
 ];
 </code></pre>
                     </div>
@@ -362,7 +362,7 @@ return [
                                 PSR-0, PSR-1 and PSR-2 compliant
                             </li>
                             <li>
-                                Compliant with <a href="https://github.com/di-interop/di-interop">DI-Interop</a>
+                                Compliant with <a href="https://github.com/container-interop/container-interop">Container Interop</a>
                             </li>
                             <li>
                                 Follows <a href="http://semver.org/">Semantic Versioning</a>
@@ -431,7 +431,7 @@ return [
     <div class='deep-footer'>
         <div class='container'>
             <div class='copyright'>
-                Copyright &copy; 2013 <a href="http://mnapoli.fr/">Matthieu Napoli</a>
+                Copyright &copy; 2014 <a href="http://mnapoli.fr/">Matthieu Napoli</a>
                 Website generated with
                 <a href="http://mnapoli.github.com/gh-pages-compiler/" target="_blank">gh-pages-compiler</a>.
             </div>

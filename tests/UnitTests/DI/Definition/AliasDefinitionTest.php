@@ -36,7 +36,6 @@ class AliasDefinitionTest extends \PHPUnit_Framework_TestCase
 
     public function testCacheable()
     {
-        $definition = new AliasDefinition('foo', 'bar');
-        $this->assertTrue($definition->isCacheable());
+        $this->assertInstanceOf('DI\Definition\CacheableDefinition', new AliasDefinition('foo', 'bar'));
     }
 }

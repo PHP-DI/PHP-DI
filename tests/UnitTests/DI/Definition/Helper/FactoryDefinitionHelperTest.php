@@ -9,22 +9,22 @@
 
 namespace UnitTests\DI\Definition\Helper;
 
-use DI\Definition\CallableDefinition;
-use DI\Definition\Helper\CallableDefinitionHelper;
+use DI\Definition\FactoryDefinition;
+use DI\Definition\Helper\FactoryDefinitionHelper;
 
 /**
- * @covers \DI\Definition\Helper\CallableDefinitionHelper
+ * @covers \DI\Definition\Helper\FactoryDefinitionHelper
  */
-class CallableDefinitionHelperTest extends \PHPUnit_Framework_TestCase
+class FactoryDefinitionHelperTest extends \PHPUnit_Framework_TestCase
 {
     public function testGetDefinition()
     {
         $callable = function () {
         };
-        $helper = new CallableDefinitionHelper($callable);
+        $helper = new FactoryDefinitionHelper($callable);
         $definition = $helper->getDefinition('foo');
 
-        $this->assertTrue($definition instanceof CallableDefinition);
+        $this->assertTrue($definition instanceof FactoryDefinition);
         $this->assertSame('foo', $definition->getName());
         $this->assertSame($callable, $definition->getCallable());
     }

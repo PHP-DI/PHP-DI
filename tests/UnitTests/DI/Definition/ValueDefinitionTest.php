@@ -27,17 +27,15 @@ class ValueDefinitionTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(1, $definition->getValue());
     }
 
-    public function testCacheable()
-    {
-        $definition = new ValueDefinition('foo', 1);
-
-        $this->assertFalse($definition->isCacheable());
-    }
-
     public function testScope()
     {
         $definition = new ValueDefinition('foo', 1);
 
         $this->assertEquals(Scope::SINGLETON(), $definition->getScope());
+    }
+
+    public function testCacheable()
+    {
+        $this->assertNotInstanceOf('DI\Definition\CacheableDefinition', new ValueDefinition('foo', 'bar'));
     }
 }

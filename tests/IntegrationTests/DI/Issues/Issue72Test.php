@@ -10,7 +10,6 @@
 namespace IntegrationTests\DI\Issues;
 
 use DI\ContainerBuilder;
-use DI\Definition\Source\ArrayDefinitionSource;
 use IntegrationTests\DI\Issues\Issue72\Class1;
 
 /**
@@ -85,6 +84,28 @@ class Issue72Test extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
+    public function arrayDefinitionShouldOverrideAnotherArrayDefinition()
+    {
+        $builder = new ContainerBuilder();
+        $builder->useReflection(false);
+        $builder->useAnnotations(false);
+
+        // Override 'service1' to 'service2' in the definition file
+        $builder->addDefinitions(__DIR__ . '/Issue72/definitions.php');
+        // Override 'service2' to 'service3' in the definition file
+        $builder->addDefinitions(__DIR__ . '/Issue72/definitions2.php');
+
+        $container = $builder->build();
+
+        /** @var Class1 $class1 */
+        $class1 = $container->get('IntegrationTests\DI\Issues\Issue72\Class1');
+
+        $this->assertEquals('baz', $class1->arg1->foo);
+    }
+
+    /**
+     * @test
+     */
     public function phpDefinitionShouldOverrideArrayDefinition()
     {
         $builder = new ContainerBuilder();
@@ -97,7 +118,7 @@ class Issue72Test extends \PHPUnit_Framework_TestCase
         $container->set(
             'IntegrationTests\DI\Issues\Issue72\Class1',
             \DI\object()
-                ->withConstructor(\DI\link('service2'))
+                ->constructor(\DI\link('service2'))
         );
 
         /** @var Class1 $class1 */

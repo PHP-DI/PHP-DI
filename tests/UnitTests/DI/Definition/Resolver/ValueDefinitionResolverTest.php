@@ -9,7 +9,7 @@
 
 namespace UnitTests\DI\Definition\Resolver;
 
-use DI\Definition\CallableDefinition;
+use DI\Definition\FactoryDefinition;
 use DI\Definition\ValueDefinition;
 use DI\Definition\Resolver\ValueDefinitionResolver;
 
@@ -30,11 +30,11 @@ class ValueDefinitionResolverTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage This definition resolver is only compatible with ValueDefinition objects, DI\Definition\CallableDefinition given
+     * @expectedExceptionMessage This definition resolver is only compatible with ValueDefinition objects, DI\Definition\FactoryDefinition given
      */
     public function testInvalidDefinitionType()
     {
-        $definition = new CallableDefinition('foo', function () {
+        $definition = new FactoryDefinition('foo', function () {
         });
         $resolver = new ValueDefinitionResolver();
 

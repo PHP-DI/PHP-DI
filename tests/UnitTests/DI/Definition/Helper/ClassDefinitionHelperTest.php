@@ -9,7 +9,7 @@
 
 namespace UnitTests\DI\Definition\Helper;
 
-use DI\Definition\ClassInjection\MethodInjection;
+use DI\Definition\ClassDefinition\MethodInjection;
 use DI\Definition\Helper\ClassDefinitionHelper;
 use DI\Scope;
 
@@ -43,7 +43,7 @@ class ClassDefinitionHelperTest extends \PHPUnit_Framework_TestCase
     public function testScope()
     {
         $helper = new ClassDefinitionHelper();
-        $helper->withScope(Scope::PROTOTYPE());
+        $helper->scope(Scope::PROTOTYPE());
         $definition = $helper->getDefinition('foo');
 
         $this->assertEquals(Scope::PROTOTYPE(), $definition->getScope());
@@ -61,7 +61,7 @@ class ClassDefinitionHelperTest extends \PHPUnit_Framework_TestCase
     public function testConstructor()
     {
         $helper = new ClassDefinitionHelper();
-        $helper->withConstructor(1, 2, 3);
+        $helper->constructor(1, 2, 3);
         $definition = $helper->getDefinition('foo');
 
         $this->assertEquals(array(1, 2, 3), $definition->getConstructorInjection()->getParameters());
@@ -70,7 +70,7 @@ class ClassDefinitionHelperTest extends \PHPUnit_Framework_TestCase
     public function testPropertyInjections()
     {
         $helper = new ClassDefinitionHelper();
-        $helper->withProperty('prop', 1);
+        $helper->property('prop', 1);
         $definition = $helper->getDefinition('foo');
 
         $this->assertCount(1, $definition->getPropertyInjections());
@@ -81,7 +81,7 @@ class ClassDefinitionHelperTest extends \PHPUnit_Framework_TestCase
     public function testMethodInjections()
     {
         $helper = new ClassDefinitionHelper();
-        $helper->withMethod('method', 1, 2, 3);
+        $helper->method('method', 1, 2, 3);
         $definition = $helper->getDefinition('foo');
 
         $this->assertCount(1, $definition->getMethodInjections());
@@ -89,10 +89,10 @@ class ClassDefinitionHelperTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(array(1, 2, 3), $methodInjection->getParameters());
     }
 
-    public function testWithMethodParameter()
+    public function testMethodParameter()
     {
         $helper = new ClassDefinitionHelper();
-        $helper->withMethodParameter('method', 0, 42);
+        $helper->methodParameter('method', 0, 42);
         $definition = $helper->getDefinition('foo');
 
         $this->assertCount(1, $definition->getMethodInjections());
@@ -101,5 +101,38 @@ class ClassDefinitionHelperTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals('method', $methodInjection->getMethodName());
         $this->assertEquals(42, $methodInjection->getParameter(0));
+    }
+
+    /**
+     * If using methodParameter() for "__construct", then the constructor definition should be updated
+     */
+    public function testMethodParameterOnConstructor()
+    {
+        $helper = new ClassDefinitionHelper();
+        $helper->methodParameter('__construct', 0, 42);
+        $definition = $helper->getDefinition('foo');
+
+        $this->assertCount(0, $definition->getMethodInjections());
+        $this->assertNotNull($definition->getConstructorInjection());
+
+        $this->assertEquals('__construct', $definition->getConstructorInjection()->getMethodName());
+        $this->assertEquals(42, $definition->getConstructorInjection()->getParameter(0));
+    }
+
+    /**
+     * Check using the parameter name, not its index
+     */
+    public function testMethodParameterByParameterName()
+    {
+        $helper = new ClassDefinitionHelper();
+        $helper->methodParameter('method', 'param2', 'val2');
+        $helper->methodParameter('method', 'param1', 'val1');
+        $definition = $helper->getDefinition('UnitTests\DI\Definition\Helper\Fixtures\Class1');
+
+        $this->assertCount(1, $definition->getMethodInjections());
+        $methodInjection = current($definition->getMethodInjections());
+
+        // Check that injections are in the good order (matching the real parameters order)
+        $this->assertEquals(array('val1', 'val2'), $methodInjection->getParameters());
     }
 }

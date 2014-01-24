@@ -148,7 +148,9 @@ To sum up:
 
 #### Frameworks integration
 
+- [Symfony 2](frameworks/symfony2.md)
 - [Zend Framework 1](frameworks/zf1.md)
+- [Zend Framework 2](https://github.com/mnapoli/PHP-DI-ZF2) (beta version)
 
 
 ## What's next

@@ -15,7 +15,7 @@ use DI\Definition\DefinitionManager;
 use DI\Definition\ValueDefinition;
 use DI\Definition\Helper\DefinitionHelper;
 use DI\Definition\Resolver\AliasDefinitionResolver;
-use DI\Definition\Resolver\CallableDefinitionResolver;
+use DI\Definition\Resolver\FactoryDefinitionResolver;
 use DI\Definition\Resolver\ClassDefinitionResolver;
 use DI\Definition\Resolver\DefinitionResolver;
 use DI\Definition\Resolver\ValueDefinitionResolver;
@@ -28,13 +28,13 @@ use ProxyManager\Factory\LazyLoadingValueHolderFactory;
  *
  * @author Matthieu Napoli <matthieu@mnapoli.fr>
  */
-class Container implements ContainerInterface
+class Container implements ContainerInterface, FactoryInterface
 {
     /**
-     * Map of entries with Singleton scope
+     * Map of entries with Singleton scope that are already resolved.
      * @var array
      */
-    protected $resolvedEntries = array();
+    protected $singletonEntries = array();
 
     /**
      * @var DefinitionManager
@@ -73,14 +73,14 @@ class Container implements ContainerInterface
         // Definition resolvers
         $wrapperContainer = $wrapperContainer ?: $this;
         $this->definitionResolvers = array(
-            'DI\Definition\ValueDefinition'    => new ValueDefinitionResolver(),
-            'DI\Definition\CallableDefinition' => new CallableDefinitionResolver($wrapperContainer),
-            'DI\Definition\AliasDefinition'    => new AliasDefinitionResolver($wrapperContainer),
-            'DI\Definition\ClassDefinition'    => new ClassDefinitionResolver($wrapperContainer, $proxyFactory),
+            'DI\Definition\ValueDefinition'   => new ValueDefinitionResolver(),
+            'DI\Definition\FactoryDefinition' => new FactoryDefinitionResolver($wrapperContainer),
+            'DI\Definition\AliasDefinition'   => new AliasDefinitionResolver($wrapperContainer),
+            'DI\Definition\ClassDefinition'   => new ClassDefinitionResolver($wrapperContainer, $proxyFactory),
         );
 
         // Auto-register the container
-        $this->resolvedEntries[get_class($this)] = $this;
+        $this->singletonEntries[get_class($this)] = $this;
     }
 
     /**
@@ -102,58 +102,80 @@ class Container implements ContainerInterface
             ));
         }
 
-        // Try to find the entry in the map
-        if (array_key_exists($name, $this->resolvedEntries)) {
-            return $this->resolvedEntries[$name];
+        // Try to find the entry in the singleton map
+        if (array_key_exists($name, $this->singletonEntries)) {
+            return $this->singletonEntries[$name];
         }
 
-        // Entry not loaded, use the definitions
         $definition = $this->definitionManager->getDefinition($name);
-
         if (! $definition) {
             throw new NotFoundException("No entry or class found for '$name'");
         }
 
-        $definitionResolver = $this->getDefinitionResolver($definition);
+        $value = $this->resolveDefinition($definition);
 
-        // Check if we are already getting this entry -> circular dependency
-        if (isset($this->entriesBeingResolved[$name])) {
-            throw new DependencyException("Circular dependency detected while trying to get entry '$name'");
-        }
-        $this->entriesBeingResolved[$name] = true;
-
-        // Resolve the definition
-        try {
-            $value = $definitionResolver->resolve($definition);
-        } catch (Exception $exception) {
-            unset($this->entriesBeingResolved[$name]);
-            throw $exception;
-        }
-
-        unset($this->entriesBeingResolved[$name]);
-
-        // If the entry is singleton, we store it to always return it without recomputing it.
+        // If the entry is singleton, we store it to always return it without recomputing it
         if ($definition->getScope() == Scope::SINGLETON()) {
-            $this->resolvedEntries[$name] = $value;
+            $this->singletonEntries[$name] = $value;
         }
 
         return $value;
     }
 
     /**
-     * Test if the container can provide something for the given name
+     * Build an entry of the container by its name.
      *
-     * @param string $name Entry name or a class name
-     * @throws \InvalidArgumentException
+     * This method behave like get() except it forces the scope to "prototype",
+     * which means the definition of the entry will be re-evaluated each time.
+     * For example, if the entry is a class, then a new instance will be created each time.
+     *
+     * This method makes the container behave like a factory.
+     *
+     * @param string $name       Entry name or a class name.
+     * @param array  $parameters Optional parameters to use to build the entry. Use this to force specific parameters
+     *                           to specific values. Parameters not defined in this array will be resolved using
+     *                           the container.
+     *
+     * @throws InvalidArgumentException The name parameter must be of type string.
+     * @throws DependencyException Error while resolving the entry.
+     * @throws NotFoundException No entry found for the given name.
+     * @return mixed
+     */
+    public function make($name, array $parameters = array())
+    {
+        if (! is_string($name)) {
+            throw new InvalidArgumentException(sprintf(
+                'The name parameter must be of type string, %s given',
+                is_object($name) ? get_class($name) : gettype($name)
+            ));
+        }
+
+        $definition = $this->definitionManager->getDefinition($name);
+        if (! $definition) {
+            throw new NotFoundException("No entry or class found for '$name'");
+        }
+
+        return $this->resolveDefinition($definition, $parameters);
+    }
+
+    /**
+     * Test if the container can provide something for the given name.
+     *
+     * @param string $name Entry name or a class name.
+     *
+     * @throws InvalidArgumentException The name parameter must be of type string.
      * @return bool
      */
     public function has($name)
     {
         if (! is_string($name)) {
-            throw new InvalidArgumentException("The name parameter must be of type string");
+            throw new InvalidArgumentException(sprintf(
+                'The name parameter must be of type string, %s given',
+                is_object($name) ? get_class($name) : gettype($name)
+            ));
         }
 
-        return array_key_exists($name, $this->resolvedEntries) || $this->definitionManager->getDefinition($name);
+        return array_key_exists($name, $this->singletonEntries) || $this->definitionManager->getDefinition($name);
     }
 
     /**
@@ -186,8 +208,8 @@ class Container implements ContainerInterface
     public function set($name, $value)
     {
         // Clear existing entry if it exists
-        if (array_key_exists($name, $this->resolvedEntries)) {
-            unset($this->resolvedEntries[$name]);
+        if (array_key_exists($name, $this->singletonEntries)) {
+            unset($this->singletonEntries[$name]);
         }
 
         if ($value instanceof DefinitionHelper) {
@@ -205,6 +227,42 @@ class Container implements ContainerInterface
     public function getDefinitionManager()
     {
         return $this->definitionManager;
+    }
+
+    /**
+     * Resolves a definition.
+     *
+     * Checks for circular dependencies while resolving the definition.
+     *
+     * @param Definition $definition
+     * @param array      $parameters
+     *
+     * @throws DependencyException Error while resolving the entry.
+     * @return mixed
+     */
+    private function resolveDefinition(Definition $definition, array $parameters = array())
+    {
+        $entryName = $definition->getName();
+
+        $definitionResolver = $this->getDefinitionResolver($definition);
+
+        // Check if we are already getting this entry -> circular dependency
+        if (isset($this->entriesBeingResolved[$entryName])) {
+            throw new DependencyException("Circular dependency detected while trying to resolve entry '$entryName'");
+        }
+        $this->entriesBeingResolved[$entryName] = true;
+
+        // Resolve the definition
+        try {
+            $value = $definitionResolver->resolve($definition, $parameters);
+        } catch (Exception $exception) {
+            unset($this->entriesBeingResolved[$entryName]);
+            throw $exception;
+        }
+
+        unset($this->entriesBeingResolved[$entryName]);
+
+        return $value;
     }
 
     /**

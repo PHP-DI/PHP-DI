@@ -6,7 +6,7 @@ PHP-DI's container is preconfigured for "plug'n'play", i.e. development environm
 
 
 ```php
-$container = new \DI\Container();
+$container = ContainerBuilder::buildDevContainer();
 ```
 
 By default, PHP-DI will use `Autowiring` and `Annotation` [definition sources](definition.md).
@@ -19,8 +19,6 @@ $builder->setDefinitionCache(new Doctrine\Common\Cache\ArrayCache());
 
 $container = $builder->build();
 ```
-
-Read more about [definitions](definition.md).
 
 ## Production environment
 
@@ -38,7 +36,7 @@ To choose a cache, read [the performances documentation](performances.md).
 
 ## Lightweight container
 
-If you want to use PHP-DI's container as a simple container, you will want to disable all extra features.
+If you want to use PHP-DI's container as a simple container (no autowiring or annotation support), you will want to disable all extra features.
 
 ```php
 $builder = new \DI\ContainerBuilder();

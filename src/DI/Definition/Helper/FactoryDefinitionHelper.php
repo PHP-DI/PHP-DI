@@ -9,34 +9,34 @@
 
 namespace DI\Definition\Helper;
 
-use DI\Definition\CallableDefinition;
+use DI\Definition\FactoryDefinition;
 
 /**
- * Helps defining how to create an instance of a class using a callable.
+ * Helps defining how to create an instance of a class using a factory (callable).
  *
  * @author Matthieu Napoli <matthieu@mnapoli.fr>
  */
-class CallableDefinitionHelper implements DefinitionHelper
+class FactoryDefinitionHelper implements DefinitionHelper
 {
     /**
      * @var callable
      */
-    private $callable;
+    private $factory;
 
     /**
-     * @param callable $callable
+     * @param callable $factory
      */
-    public function __construct($callable)
+    public function __construct($factory)
     {
-        $this->callable = $callable;
+        $this->factory = $factory;
     }
 
     /**
      * @param string $entryName Container entry name
-     * @return CallableDefinition
+     * @return FactoryDefinition
      */
     public function getDefinition($entryName)
     {
-        return new CallableDefinition($entryName, $this->callable);
+        return new FactoryDefinition($entryName, $this->factory);
     }
 }

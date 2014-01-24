@@ -16,7 +16,7 @@ use DI\Scope;
  *
  * @author Matthieu Napoli <matthieu@mnapoli.fr>
  */
-class AliasDefinition implements Definition
+class AliasDefinition implements CacheableDefinition
 {
     /**
      * Entry name
@@ -62,13 +62,5 @@ class AliasDefinition implements Definition
     public function getTargetEntryName()
     {
         return $this->targetEntryName;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function isCacheable()
-    {
-        return true;
     }
 }

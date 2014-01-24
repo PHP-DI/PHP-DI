@@ -18,7 +18,6 @@ use DI\Compiler\DefinitionCompiler\ClassDefinitionCompiler;
 use DI\Compiler\DefinitionCompiler\ValueDefinitionCompiler;
 use DI\Definition\DefinitionManager;
 use DI\Definition\Source\AnnotationDefinitionSource;
-use DI\Definition\Source\ChainableDefinitionSource;
 use DI\Definition\Source\PHPFileDefinitionSource;
 use DI\Definition\Source\ReflectionDefinitionSource;
 use Doctrine\Common\Cache\Cache;
@@ -113,31 +112,34 @@ class ContainerBuilder
     public function build()
     {
         // Definition sources
-        $source = null;
-        foreach ($this->files as $file) {
-            $newSource = new PHPFileDefinitionSource($file);
+        $firstSource = null;
+        $lastSource = null;
+        foreach (array_reverse($this->files) as $file) {
+            $source = new PHPFileDefinitionSource($file);
             // Chain file sources
-            if ($source) {
-                $newSource->chain($source);
+            if ($lastSource instanceof PHPFileDefinitionSource) {
+                $lastSource->chain($source);
+            } else {
+                $firstSource = $source;
             }
-            $source = $newSource;
+            $lastSource = $source;
         }
         if ($this->useAnnotations) {
-            if ($source) {
-                $source->chain(new AnnotationDefinitionSource());
+            if ($lastSource) {
+                $lastSource->chain(new AnnotationDefinitionSource());
             } else {
-                $source = new AnnotationDefinitionSource();
+                $firstSource = new AnnotationDefinitionSource();
             }
         } elseif ($this->useReflection) {
-            if ($source) {
-                $source->chain(new ReflectionDefinitionSource());
+            if ($lastSource) {
+                $lastSource->chain(new ReflectionDefinitionSource());
             } else {
-                $source = new ReflectionDefinitionSource();
+                $firstSource = new ReflectionDefinitionSource();
             }
         }
 
         // Definition manager
-        $definitionManager = new DefinitionManager($source);
+        $definitionManager = new DefinitionManager($firstSource);
         if ($this->cache) {
             $definitionManager->setCache($this->cache);
         }
@@ -274,7 +276,7 @@ class ContainerBuilder
     private function buildProxyFactory()
     {
         $config = new Configuration();
-        // TODO use non-deprecated method
+        // TODO useless since ProxyManager 0.5, line kept for compatibility with previous versions
         $config->setAutoGenerateProxies(true);
 
         if ($this->writeProxiesToFile) {

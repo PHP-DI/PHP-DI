@@ -10,8 +10,8 @@
 namespace DI\Definition\Helper;
 
 use DI\Definition\ClassDefinition;
-use DI\Definition\ClassInjection\MethodInjection;
-use DI\Definition\ClassInjection\PropertyInjection;
+use DI\Definition\ClassDefinition\MethodInjection;
+use DI\Definition\ClassDefinition\PropertyInjection;
 use DI\Scope;
 
 /**
@@ -87,14 +87,14 @@ class ClassDefinitionHelper implements DefinitionHelper
      *
      * @return ClassDefinitionHelper
      */
-    public function withScope(Scope $scope)
+    public function scope(Scope $scope)
     {
         $this->scope = $scope;
         return $this;
     }
 
     /**
-     * Defines arguments to use to call the constructor.
+     * Defines the arguments to use to call the constructor.
      *
      * This method takes a variable number of arguments, example:
      *     ->withConstructor($param1, $param2, $param3)
@@ -103,7 +103,7 @@ class ClassDefinitionHelper implements DefinitionHelper
      *
      * @return ClassDefinitionHelper
      */
-    public function withConstructor()
+    public function constructor()
     {
         $this->constructor = func_get_args();
         return $this;
@@ -117,7 +117,7 @@ class ClassDefinitionHelper implements DefinitionHelper
      *
      * @return ClassDefinitionHelper
      */
-    public function withProperty($property, $value)
+    public function property($property, $value)
     {
         $this->properties[$property] = $value;
         return $this;
@@ -134,7 +134,7 @@ class ClassDefinitionHelper implements DefinitionHelper
      *
      * @return ClassDefinitionHelper
      */
-    public function withMethod($method)
+    public function method($method)
     {
         $args = func_get_args();
         array_shift($args);
@@ -156,8 +156,14 @@ class ClassDefinitionHelper implements DefinitionHelper
      *
      * @return ClassDefinitionHelper
      */
-    public function withMethodParameter($method, $parameter, $value)
+    public function methodParameter($method, $parameter, $value)
     {
+        // Special case for the constructor
+        if ($method === '__construct') {
+            $this->constructor[$parameter] = $value;
+            return $this;
+        }
+
         if (! isset($this->methods[$method])) {
             $this->methods[$method] = array();
         }

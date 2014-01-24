@@ -62,13 +62,12 @@ class ArrayDefinitionSource implements ChainableDefinitionSource
 
         // Merge with parent
         if ($parentDefinition) {
-            $parentDefinition->merge($definition);
-            $definition = $parentDefinition;
+            $definition = $parentDefinition->merge($definition);
         }
 
         // Enrich definition in sub-source
         if ($this->chainedSource && $definition instanceof MergeableDefinition) {
-            $this->chainedSource->getDefinition($name, $definition);
+            $definition = $this->chainedSource->getDefinition($name, $definition);
         }
 
         return $definition;

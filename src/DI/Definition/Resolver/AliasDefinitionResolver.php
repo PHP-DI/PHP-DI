@@ -12,7 +12,6 @@ namespace DI\Definition\Resolver;
 use DI\ContainerInterface;
 use DI\Definition\AliasDefinition;
 use DI\Definition\Definition;
-use DI\Definition\Resolver\DefinitionResolver;
 
 /**
  * Resolves an alias definition to a value.
@@ -45,7 +44,7 @@ class AliasDefinitionResolver implements DefinitionResolver
      *
      * {@inheritdoc}
      */
-    public function resolve(Definition $definition)
+    public function resolve(Definition $definition, array $parameters = array())
     {
         if (! $definition instanceof AliasDefinition) {
             throw new \InvalidArgumentException(sprintf(

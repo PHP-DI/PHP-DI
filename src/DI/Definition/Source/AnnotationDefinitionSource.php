@@ -15,8 +15,8 @@ use DI\Definition\ClassDefinition;
 use DI\Definition\EntryReference;
 use DI\Definition\Exception\AnnotationException;
 use DI\Definition\Exception\DefinitionException;
-use DI\Definition\ClassInjection\MethodInjection;
-use DI\Definition\ClassInjection\PropertyInjection;
+use DI\Definition\ClassDefinition\MethodInjection;
+use DI\Definition\ClassDefinition\PropertyInjection;
 use DI\Definition\MergeableDefinition;
 use Doctrine\Common\Annotations\AnnotationRegistry;
 use Doctrine\Common\Annotations\Reader;
@@ -64,7 +64,7 @@ class AnnotationDefinitionSource implements DefinitionSource
         $className = $parentDefinition ? $parentDefinition->getClassName() : $name;
 
         if (!class_exists($className) && !interface_exists($className)) {
-            return null;
+            return $parentDefinition;
         }
 
         $class = new ReflectionClass($className);
@@ -100,8 +100,7 @@ class AnnotationDefinitionSource implements DefinitionSource
 
         // Merge with parent
         if ($parentDefinition) {
-            $parentDefinition->merge($definition);
-            $definition = $parentDefinition;
+            $definition = $parentDefinition->merge($definition);
         }
 
         return $definition;
@@ -204,7 +203,7 @@ class AnnotationDefinitionSource implements DefinitionSource
         $annotationParameters = $annotation ? $annotation->getParameters() : array();
 
         // @Inject on constructor is implicit
-        if (! ($annotation ||$method->isConstructor())) {
+        if (! ($annotation || $method->isConstructor())) {
             return null;
         }
 

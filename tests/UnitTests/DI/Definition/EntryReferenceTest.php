@@ -17,6 +17,13 @@ use DI\Definition\EntryReference;
  */
 class EntryReferenceTest extends \PHPUnit_Framework_TestCase
 {
+    public function testGetName()
+    {
+        $helper = new EntryReference('foo');
+
+        $this->assertSame('foo', $helper->getName());
+    }
+
     public function testGetDefinition()
     {
         $helper = new EntryReference('bar');

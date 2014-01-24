@@ -12,7 +12,7 @@ namespace DI\Definition\Resolver;
 use DI\Definition\Definition;
 
 /**
- * Represents an object that resolves a DI\Definition to a value.
+ * Resolves a definition to a value.
  *
  * @since 4.0
  * @author Matthieu Napoli <matthieu@mnapoli.fr>
@@ -23,7 +23,9 @@ interface DefinitionResolver
      * Resolve a definition to a value.
      *
      * @param Definition $definition Object that defines how the value should be obtained.
+     * @param array      $parameters Optional parameters to use to build the entry.
+     *
      * @return mixed Value obtained from the definition.
      */
-    public function resolve(Definition $definition);
+    public function resolve(Definition $definition, array $parameters = array());
 }
