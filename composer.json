@@ -7,9 +7,9 @@
     "license": "MIT",
     "autoload": {
         "psr-0": {
-            "DI": "src/",
-            "IntegrationTests": "tests/",
-            "UnitTests": "tests/"
+            "DI\\": "src/",
+            "IntegrationTests\\": "tests/",
+            "UnitTests\\": "tests/"
         },
         "files": [
             "src/DI/functions.php"
