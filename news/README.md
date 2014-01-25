@@ -1,3 +1,7 @@
+---
+template: news
+---
+
 # News
 
 - January 17th 2014. [PHP-DI 4.0 released](07-php-di-4-0-released.md)
