@@ -9,16 +9,19 @@ class Foo
     private $a;
     private $b;
 
-    public function __construct(Foo $a, Bar $b) {
+    public function __construct(Foo $a, Bar $b)
+    {
         $this->a = $a;
         $this->b = $b;
     }
 
-    public function doSomething() {
+    public function doSomething()
+    {
         $this->a->doStuff();
     }
 
-    public function doSomethingElse() {
+    public function doSomethingElse()
+    {
         $this->b->doStuff();
     }
 }
@@ -32,7 +35,7 @@ That's where lazy injection can help.
 
 ## How it works
 
-If you define a dependency as "lazy", PHP-DI will inject:
+If you define an object as "lazy", PHP-DI will inject:
 
 - the object, if it has already been created
 - or else a **proxy** to the object, if it is not yet created
@@ -46,37 +49,38 @@ Creating a proxy is complex. For this, PHP-DI relies on [ProxyManager](https://g
 For the simplicity of the example, we will not inject a lazy object, but we will ask the container to return one:
 
 ```php
+class Foo
+{
+    public function doSomething()
+    {
+    }
+}
+
+$container->set('Foo', \DI\object()->lazy);
+
 // $proxy is a Proxy object, it is not initialized
 // It is very lightweight in memory
-$proxy = $container->get('My\Class', true);
+$proxy = $container->get('Foo');
 
-var_dump($proxy instanceof \My\Class); // true
+var_dump($proxy instanceof Foo); // true
 
 // Calling a method on the proxy will initialize it
-$proxy->doSomething(); // works if doSomething() is a method of My\Class
-// Now the proxy is initialized, the real instance of My\Class has been created and called
+$proxy->doSomething();
+// Now the proxy is initialized, the real instance of Foo has been created and called
 ```
 
 ## How to use
 
-Here is how you can define lazy injections depending on the configuration you use.
+You can define an object as "lazy". If it is injected as a dependency, then a proxy will be injected instead.
 
 ### Annotations
 
 ```php
-<?php
-class Example {
-    /**
-     * @Inject(lazy=true)
-     * @var My\Class
-     */
-    protected $property;
-
-    /**
-     * @Inject({ "param1" = {"lazy"=true} })
-     */
-    public function method(My\Class $param1) {
-    }
+/**
+ * @Injectable(lazy=true)
+ */
+class MyClass
+{
 }
 ```
 
@@ -84,49 +88,16 @@ class Example {
 
 ```php
 <?php
-$containerPHP->set('Example')
-    ->withProperty('property', 'My\Class', true)
-    ->withMethod('method', array('param1' => array(
-            'name' => 'My\Class',
-            'lazy' => true,
-        )));
+$containerPHP->set('foo', \DI\object('MyClass')->lazy());
 ```
 
-### PHP array
+### PHP configuration file
 
 ```php
 <?php
-return array(
-    'Example' => array(
-        'properties'  => array(
-            'property' => array(
-                'name' => 'My\Class',
-                'lazy' => true,
-            ),
-        ),
-        'methods'     => array(
-            'method' => array(
-                'param1' => array(
-                    'name' => 'My\Class',
-                    'lazy' => true,
-                ),
-            ),
-        ),
-    ),
-);
-```
 
-### YAML
-
-```yaml
-Example:
-  properties:
-    property:
-      name: My\Class
-      lazy: true
-  methods:
-    method:
-      param1:
-        name: My\Class
-        lazy: true
+return [
+    'foo' => DI\object('MyClass')
+        ->lazy(),
+];
 ```
