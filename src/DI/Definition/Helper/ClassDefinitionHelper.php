@@ -10,119 +10,230 @@
 namespace DI\Definition\Helper;
 
 use DI\Definition\ClassDefinition;
-use DI\Definition\MethodInjection;
-use DI\Definition\ParameterInjection;
-use DI\Definition\PropertyInjection;
+use DI\Definition\ClassDefinition\MethodInjection;
+use DI\Definition\ClassDefinition\PropertyInjection;
 use DI\Scope;
 
 /**
- * Help to create a ClassDefinition
+ * Helps defining how to create an instance of a class.
  *
  * @author Matthieu Napoli <matthieu@mnapoli.fr>
  */
-class ClassDefinitionHelper
+class ClassDefinitionHelper implements DefinitionHelper
 {
+    /**
+     * @var string|null
+     */
+    private $className;
 
     /**
-     * @var ClassDefinition
+     * @var boolean|null
      */
-    private $classDefinition;
+    private $lazy;
 
     /**
-     * @param string $entryName
+     * @var Scope|null
      */
-    public function __construct($entryName)
+    private $scope;
+
+    /**
+     * Array of constructor parameters.
+     * @var array
+     */
+    private $constructor = array();
+
+    /**
+     * Array of properties and their value.
+     * @var array
+     */
+    private $properties = array();
+
+    /**
+     * Array of methods and their parameters.
+     * @var array
+     */
+    private $methods = array();
+
+    /**
+     * Helper for defining an object.
+     *
+     * @param string|null $className Class name of the object.
+     *                               If null, the name of the entry (in the container) will be used as class name.
+     *
+     * @return ClassDefinitionHelper
+     */
+    public function __construct($className = null)
     {
-        $this->classDefinition = new ClassDefinition($entryName);
+        $this->className = $className;
     }
 
     /**
-     * Bind the entry to a class
-     * @param string $className
-     * @return $this
+     * Define the entry as lazy.
+     *
+     * A lazy entry is created only when it is used, a proxy is injected instead.
+     *
+     * @return ClassDefinitionHelper
      */
-    public function bindTo($className)
+    public function lazy()
     {
-        $this->classDefinition->setClassName($className);
+        $this->lazy = true;
         return $this;
     }
 
     /**
-     * Set the scope for the class
+     * Defines the scope of the entry.
+     *
      * @param Scope $scope
-     * @return $this
+     *
+     * @return ClassDefinitionHelper
      */
-    public function withScope(Scope $scope)
+    public function scope(Scope $scope)
     {
-        $this->classDefinition->setScope($scope);
+        $this->scope = $scope;
         return $this;
     }
 
     /**
-     * Define a property injection
-     * @param string $propertyName Property name
-     * @param string $entryToInject Name of the entry that should be injected in the property
-     * @param bool   $lazy If the injected object should be a proxy for lazy-loading
-     * @return $this
+     * Defines the arguments to use to call the constructor.
+     *
+     * This method takes a variable number of arguments, example:
+     *     ->withConstructor($param1, $param2, $param3)
+     *
+     * @param mixed ... Parameters to use for calling the constructor of the class.
+     *
+     * @return ClassDefinitionHelper
      */
-    public function withProperty($propertyName, $entryToInject, $lazy = false)
+    public function constructor()
     {
-        $this->classDefinition->addPropertyInjection(new PropertyInjection($propertyName, $entryToInject, $lazy));
+        $this->constructor = func_get_args();
         return $this;
     }
 
     /**
-     * Injections using the constructor
-     * @param string[] $params Parameters for the constructor: array of container entries names
-     * @return $this
+     * Defines a value to inject in a property of the object.
+     *
+     * @param string $property Entry in which to inject the value.
+     * @param mixed  $value    Value to inject in the property.
+     *
+     * @return ClassDefinitionHelper
      */
-    public function withConstructor(array $params)
+    public function property($property, $value)
     {
-        $this->classDefinition->setConstructorInjection($this->createMethodInjection('__construct', $params));
+        $this->properties[$property] = $value;
         return $this;
     }
 
     /**
-     * Injections by calling a method of the class
-     * @param string[] $params Parameters for the method: array of container entries names
-     * @return $this
+     * Defines a method to call and the arguments to use.
+     *
+     * This method takes a variable number of arguments after the method name, example:
+     *     ->withMethod('myMethod', $param1, $param2)
+     *
+     * @param string $method Name of the method to call.
+     * @param mixed  ...     Parameters to use for calling the method.
+     *
+     * @return ClassDefinitionHelper
      */
-    public function withMethod($methodName, array $params)
+    public function method($method)
     {
-        $this->classDefinition->addMethodInjection($this->createMethodInjection($methodName, $params));
+        $args = func_get_args();
+        array_shift($args);
+        $this->methods[$method] = $args;
         return $this;
     }
 
     /**
-     * @return ClassDefinition
+     * Defines a method to call and a value for a specific argument.
+     *
+     * This method is usually used together with annotations or autowiring, when a parameter
+     * is not (or cannot be) type-hinted. Using this method instead of withMethod() allows to
+     * avoid defining all the parameters (letting them being resolved using annotations or autowiring)
+     * and only define one.
+     *
+     * @param string $method    Name of the method to call.
+     * @param string $parameter Parameter in which the value will be given.
+     * @param mixed  $value     Value to give for this parameter.
+     *
+     * @return ClassDefinitionHelper
      */
-    public function getDefinition()
+    public function methodParameter($method, $parameter, $value)
     {
-        return $this->classDefinition;
-    }
-
-    /**
-     * @param string[] $params Parameters for the method: array of container entries names
-     * @return MethodInjection
-     */
-    private function createMethodInjection($methodName, array $params)
-    {
-        $paramInjections = array();
-
-        foreach ($params as $key => $param) {
-            if (is_array($param)) {
-                $parameterInjection = new ParameterInjection($key, $param['name']);
-                // Lazy
-                if (array_key_exists('lazy', $param)) {
-                    $parameterInjection->setLazy($param['lazy']);
-                }
-            } else {
-                $parameterInjection = new ParameterInjection($key, $param);
-            }
-            $paramInjections[] = $parameterInjection;
+        // Special case for the constructor
+        if ($method === '__construct') {
+            $this->constructor[$parameter] = $value;
+            return $this;
         }
 
-        return new MethodInjection($methodName, $paramInjections);
+        if (! isset($this->methods[$method])) {
+            $this->methods[$method] = array();
+        }
+        $this->methods[$method][$parameter] = $value;
+        return $this;
     }
 
+    /**
+     * {@inheritdoc}
+     */
+    public function getDefinition($entryName)
+    {
+        $definition = new ClassDefinition($entryName, $this->className);
+
+        if ($this->lazy !== null) {
+            $definition->setLazy($this->lazy);
+        }
+        if ($this->scope !== null) {
+            $definition->setScope($this->scope);
+        }
+
+        if (! empty($this->constructor)) {
+            $parameters = $this->fixParameters($definition, '__construct', $this->constructor);
+            $definition->setConstructorInjection(new MethodInjection('__construct', $parameters));
+        }
+
+        if (! empty($this->properties)) {
+            foreach ($this->properties as $property => $value) {
+                $definition->addPropertyInjection(
+                    new PropertyInjection($property, $value)
+                );
+            }
+        }
+
+        if (! empty($this->methods)) {
+            foreach ($this->methods as $method => $parameters) {
+                $parameters = $this->fixParameters($definition, $method, $parameters);
+                $definition->addMethodInjection(new MethodInjection($method, $parameters));
+            }
+        }
+
+        return $definition;
+    }
+
+    /**
+     * Fixes parameters indexed by the parameter name -> reindex by position.
+     *
+     * This is necessary so that merging definitions between sources is possible.
+     *
+     * @param ClassDefinition $definition
+     * @param string          $method
+     * @param array           $parameters
+     * @return array
+     */
+    private function fixParameters(ClassDefinition $definition, $method, $parameters)
+    {
+        $fixedParameters = array();
+
+        foreach ($parameters as $index => $parameter) {
+            // Parameter indexed by the parameter name, we reindex it with its position
+            if (is_string($index)) {
+                $callable = array($definition->getClassName(), $method);
+                $reflectionParameter = new \ReflectionParameter($callable, $index);
+
+                $index = $reflectionParameter->getPosition();
+            }
+
+            $fixedParameters[$index] = $parameter;
+        }
+
+        return $fixedParameters;
+    }
 }

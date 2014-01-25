@@ -9,21 +9,22 @@
 
 namespace IntegrationTests\DI;
 
-use DI\Container;
+use DI\ContainerBuilder;
 
 /**
  * Tests buggy cases
+ *
+ * @coversNothing
  */
 class BuggyInjectionsTest extends \PHPUnit_Framework_TestCase
 {
-
     /**
      * @expectedException \DI\Definition\Exception\DefinitionException
-     * @expectedExceptionMessage The parameter 'dependency' of the constructor of 'IntegrationTests\DI\Fixtures\ConstructorInjectionTest\Buggy1' has no type defined or guessable
+     * @expectedExceptionMessage The parameter 'dependency' of IntegrationTests\DI\Fixtures\ConstructorInjectionTest\Buggy1::__construct has no value defined or guessable
      */
     public function testConstructorNonTypeHintedMethod()
     {
-        $container = new Container();
+        $container = ContainerBuilder::buildDevContainer();
         $container->get('IntegrationTests\DI\Fixtures\ConstructorInjectionTest\Buggy1');
     }
 
@@ -33,7 +34,7 @@ class BuggyInjectionsTest extends \PHPUnit_Framework_TestCase
      */
     public function testConstructorNonExistentEntry()
     {
-        $container = new Container();
+        $container = ContainerBuilder::buildDevContainer();
         $container->get('IntegrationTests\DI\Fixtures\ConstructorInjectionTest\Buggy2');
     }
 
@@ -43,18 +44,18 @@ class BuggyInjectionsTest extends \PHPUnit_Framework_TestCase
      */
     public function testSetterNamedInjectionNotFound()
     {
-        $container = new Container();
+        $container = ContainerBuilder::buildDevContainer();
         // Exception (bean not defined)
         $container->get('IntegrationTests\DI\Fixtures\SetterInjectionTest\NamedInjectionClass');
     }
 
     /**
      * @expectedException \DI\Definition\Exception\DefinitionException
-     * @expectedExceptionMessage The parameter 'dependency' of IntegrationTests\DI\Fixtures\SetterInjectionTest\Buggy1::setDependency has no type defined or guessable
+     * @expectedExceptionMessage The parameter 'dependency' of IntegrationTests\DI\Fixtures\SetterInjectionTest\Buggy1::setDependency has no value defined or guessable
      */
     public function testSetterNonTypeHintedMethod()
     {
-        $container = new Container();
+        $container = ContainerBuilder::buildDevContainer();
         $container->get('IntegrationTests\DI\Fixtures\SetterInjectionTest\Buggy1');
     }
 
@@ -64,7 +65,7 @@ class BuggyInjectionsTest extends \PHPUnit_Framework_TestCase
      */
     public function testSetterNamedUnknownBean()
     {
-        $container = new Container();
+        $container = ContainerBuilder::buildDevContainer();
         $container->get('IntegrationTests\DI\Fixtures\SetterInjectionTest\Buggy3');
     }
 
@@ -74,8 +75,7 @@ class BuggyInjectionsTest extends \PHPUnit_Framework_TestCase
      */
     public function testValueException()
     {
-        $container = new Container();
+        $container = ContainerBuilder::buildDevContainer();
         $container->get('IntegrationTests\DI\Fixtures\ValueInjectionTest\ValueInjectionClass');
     }
-
 }

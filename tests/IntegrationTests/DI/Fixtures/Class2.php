@@ -14,7 +14,6 @@ namespace IntegrationTests\DI\Fixtures;
  */
 class Class2
 {
-
     /**
      * @return boolean
      */
@@ -22,5 +21,4 @@ class Class2
     {
         return true;
     }
-
 }

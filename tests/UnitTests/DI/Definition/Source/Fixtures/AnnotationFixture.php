@@ -13,7 +13,6 @@ use DI\Annotation\Inject;
 
 class AnnotationFixture
 {
-
     /**
      * @Inject("foo")
      */
@@ -26,9 +25,18 @@ class AnnotationFixture
     protected $property2;
 
     /**
-     * @Inject(name="foo", lazy=true)
+     * @Inject(name="foo")
      */
     protected $property3;
+
+    protected $unannotatedProperty;
+
+    /**
+     * Static property shouldn't be injected
+     *
+     * @Inject("foo")
+     */
+    protected static $staticProperty;
 
     /**
      * @Inject({"foo", "bar"})
@@ -52,28 +60,11 @@ class AnnotationFixture
     }
 
     /**
-     * @Inject({
-     *  {"name" = "foo"},
-     *  "bar"
-     * })
-     */
-    public function method3($param1, $param2)
-    {
-    }
-
-    /**
-     * @Inject({"param2" = "bar"})
-     */
-    public function method4($param1, $param2)
-    {
-    }
-
-    /**
      * @Inject
      * @param $param1
      * @param AnnotationFixture2 $param2
      */
-    public function method5(AnnotationFixture2 $param1, $param2)
+    public function method3(AnnotationFixture2 $param1, $param2)
     {
     }
 
@@ -82,18 +73,26 @@ class AnnotationFixture
      * @param AnnotationFixture2 $param1
      * @param AnnotationFixture2 $param2
      */
-    public function method6($param1, $param2)
+    public function method4($param1, $param2)
     {
     }
 
     /**
-     * @Inject({
-     *   "param1" = {"name" = "foo", "lazy" = true},
-     *   "param2" = {"name" = "bar"}
-     * })
+     * Indexed by name, param1 not specified:
+     * @Inject({"param2" = "bar"})
      */
-    public function method7($param1, $param2)
+    public function method5($param1, $param2)
     {
     }
 
+    public function unannotatedMethod()
+    {
+    }
+
+    /**
+     * @Inject
+     */
+    public static function staticMethod()
+    {
+    }
 }

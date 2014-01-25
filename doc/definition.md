@@ -4,31 +4,29 @@ PHP-DI injects stuff into objects.
 
 To **define** where and how to inject stuff, you have several options:
 
-- let PHP-DI guess using [Reflection](http://www.php.net/manual/en/book.reflection.php)
+- use autowiring: let PHP-DI guess using [Reflection](http://www.php.net/manual/en/book.reflection.php)
 - use annotations
-- use PHP code (using `Container::set()`)
-- use a PHP array
-- use YAML files
+- use PHP configuration
 
 You can also use several or all these options at the same time if you want to.
 
 If you combine several sources, there are priorities that apply. From the highest priority to the least:
 
-- Code definition (i.e. defined with `$container->set()`)
-- File and array definitions (if A is added after B, then A prevails)
+- Explicit definition on the container (i.e. defined with `$container->set()`)
+- PHP file definitions (if A is added after B, then A prevails)
 - Annotations
-- Reflection
+- Autowiring
 
 Read more in the [Definition overriding documentation](definition-overriding.md)
 
 
-## Reflection
+## Autowiring
 
 ```php
 $container->useReflection(true);
 ```
 
-**Note: Reflection is enabled by default**
+**Note: autowiring is enabled by default**
 
 This solution is the simplest, but also restricted.
 
@@ -58,7 +56,7 @@ class Foo {
 
 It will not know what parameters to give to the constructor, and `setStuff()` will not be called.
 
-So use Reflection either:
+So use autowiring either:
 
 - if you also use other definition options (annotations, file configuration…)
 - if you only need constructor injection, and if you always use type-hinting
@@ -95,10 +93,6 @@ class Example {
      * @Inject("db.host")
      */
     protected $property2;
-    /**
-     * @Inject(name="dbAdapter", lazy=true)
-     */
-    protected $property3;
 
     /**
      * @Inject
@@ -119,14 +113,6 @@ class Example {
      */
     public function method2($param1, $param2) {
     }
-
-    /**
-     * @Inject({"param2" = "bar"})
-     * @param Foo    $param1
-     * @param string $param2
-     */
-    public function method3(Foo $param1, $param2) {
-    }
 }
 ```
 
@@ -136,7 +122,7 @@ The `@Injectable` annotation let's you set options on injectable classes:
 
 ```php
 /**
- * @Injectable(scope="prototype")
+ * @Injectable(scope="prototype", lazy=true)
  */
 class Example {
 }
@@ -150,7 +136,7 @@ There are still things that can't be defined with annotations:
 - mapping interfaces to implementations
 - defining entries with an anonymous function
 
-For that, you can combine annotations with definitions in YAML files or PHP arrays (see below).
+For that, you can combine annotations with definitions in PHP (see below).
 
 
 ## PHP code
@@ -163,186 +149,97 @@ $container = new Container();
 // Values (not classes)
 $container->set('db.host', 'localhost');
 $container->set('db.port', 5000);
+$container->set('report.recipients', [
+    'bob@acme.example.com',
+    'alice@acme.example.com'
+]);
 
-// Indexed non-empty array as value
-$container->set('report.recipients', array(
-	'bob@acme.example.com',
-	'alice@acme.example.com'
-));
+// Direct mapping (not needed if you didn't disable autowiring)
+$container->set('SomeClass', \DI\object());
 
-// Direct mapping (not needed if you didn't disable Reflection)
-$container->set('SomeClass');
-
-// This is not recommended: will instantiate the class even when not used, prevents caching
+// This is not recommended: will instantiate the class on every request, even when not used
 $container->set('SomeClass', new SomeOtherClass(1, "hello"));
 
 // Defines an instance of My\Class
-$container->set('My\Class')
-	->withConstructor(array('db.host', 'My\OtherClass'));
+$container->set('My\Class', \DI\object()
+    ->withConstructor('some raw value', \DI\link('My\OtherClass'))
+);
 
-$container->set('My\OtherClass')
-	->withScope(Scope::PROTOTYPE())
-	->withConstructor(
-		array(
-			'host' => 'db.host',
-			'port' => 'db.port',
-		)
-	)
-	->withMethod('setFoo1', array('My\Foo1'))
-	->withMethod('setFoo2', array('My\Foo1', 'My\Foo2'))
-	->withMethod('setFoo3', array(
-			'param1' => 'My\Foo1',
-			'param2' => 'My\Foo2'
-		))
-	->withProperty('bar', 'My\Bar')
-	->withProperty('baz', 'My\Baz', true);
+$container->set('My\OtherClass', \DI\object()
+    ->scope(Scope::PROTOTYPE())
+    ->constructor(\DI\link('db.host'), \DI\link('db.port'))
+    ->method('setFoo2', \DI\link('My\Foo1'), \DI\link('My\Foo2'))
+    ->property('bar', 'My\Bar')
+);
 
 // Mapping an interface to an implementation
-$container->set('My\Interface')
-	->bindTo('My\Implementation');
+$container->set('My\Interface', \DI\object('My\Implementation'));
 
 // Defining a named instance
-$container->set('myNamedInstance')
-	->bindTo('My\Class');
+$container->set('myNamedInstance', \DI\object('My\Class'));
 
 // Using an anonymous function
-// not recommended: will not be cached
-$container->set('My\Stuff', function(Container $c) {
-								return new MyClass($c['db.host']);
-							});
+$container->set('My\Stuff', \DI\factory(function (Container $c) {
+    return new MyClass($c->get('db.host'));
+}));
+
+// Defining an alias to another entry
+$container->set('some.entry', \DI\link('some.other.entry'));
 ```
 
 
 ## PHP array
 
 ```php
-$container->addDefinitions($array);
-// or from a file
-use DI\Definition\FileLoader\ArrayDefinitionFileLoader;
-$container->addDefinitionsFromFile(new ArrayDefinitionFileLoader('config/di.php'));
+$containerBuilder->addDefinitions('config.php');
 ```
 
 You can also define injections with a PHP array.
 
-Example of a `config/di.php` file (using [PHP 5.4 short arrays](http://php.net/manual/en/migration54.new-features.php)):
+Example of a `config.php` file (using [PHP 5.4 short arrays](http://php.net/manual/en/migration54.new-features.php)):
 
 ```php
 <?php
+
 return [
 
     // Values (not classes)
-    'db.host' => 'localhost',
-    'db.port' => 5000,
-
-    // Indexed non-empty array as value
+    'db.host'           => 'localhost',
+    'db.port'           => 5000,
     'report.recipients' => [
         'bob@acme.example.com',
         'alice@acme.example.com'
     ],
 
-    // Direct mapping (not needed if you didn't disable Reflection)
-    'SomeClass' => [],
+    // Direct mapping (not needed if you didn't disable autowiring)
+    'SomeClass' => DI\object(),
 
-    // This is not recommended: will instantiate the class even when not used, prevents caching
+    // This is not recommended: will instantiate the class on every request, even when not used
     'SomeOtherClass' => new SomeOtherClass(1, "hello"),
 
     // Defines an instance of My\Class
-    'My\Class' => [
-        'constructor' => ['db.host', 'My\OtherClass'],
-    ],
+    'My\Class' => DI\object()
+        ->constructor(DI\link('db.host'), DI\link('My\OtherClass')),
 
-    'My\OtherClass' => [
-        'scope' => Scope::PROTOTYPE(),
-        'constructor' => [
-            'host' => 'db.host',
-            'port' => 'db.port',
-        ],
-        'methods' => [
-            'setFoo1' => 'My\Foo1',
-            'setFoo2' => ['My\Foo1', 'My\Foo2'],
-            'setFoo3' => [
-                'param1' => 'My\Foo1',
-                'param2' => 'My\Foo2',
-            ],
-        ],
-        'properties' => [
-            'bar' => 'My\Bar',
-            'baz' => [
-                'name' => 'My\Baz',
-                'lazy' => true,
-            ],
-        ],
-    ],
+    'My\OtherClass' => DI\object()
+        ->scope(Scope::PROTOTYPE())
+        ->constructor(DI\link('db.host'), DI\link('db.port'))
+        ->method('setFoo2', DI\link('My\Foo1'), DI\link('My\Foo2'))
+        ->property('bar', 'My\Bar')
 
     // Mapping an interface to an implementation
-    'My\Interface' => [
-        'class' => 'My\Implementation',
-    ],
+    'My\Interface' => DI\object('My\Implementation'),
 
     // Defining a named instance
-    'myNamedInstance' => [
-        'class' => 'My\Class',
-    ],
+    'myNamedInstance' => DI\object('My\Class'),
 
     // Using an anonymous function
-    // not recommended: will prevent caching
-    'My\Stuff' => function(Container $c) {
-        return new MyClass($c['db.host']);
-    ],
+    'My\Stuff' => DI\factory(function (Container $c) {
+        return new MyClass($c->get('db.host'));
+    }),
+
+    // Defining an alias to another entry
+    'some.entry' => DI\link('some.other.entry'),
 
 ];
 ```
-
-
-## YAML file
-
-```php
-use DI\Definition\FileLoader\YamlDefinitionFileLoader;
-$container->addDefinitionsFromFile(new YamlDefinitionFileLoader('config/di.yml'));
-```
-
-Example of a `config/di.yml` file:
-
-```yml
-# Values (not classes)
-db.host: localhost
-db.port: 5000
-
-# Indexed non-empty array as value
-report.recipients:
-    - bob@acme.example.com
-    - alice@acme.example.com
-
-# Direct mapping (not needed if you didn't disable Reflection)
-SomeClass:
-
-# Defines an instance of My\Class
-My\Class:
-  constructor: [db.host, My\OtherClass]
-
-My\OtherClass:
-  scope: prototype
-  constructor:
-    host: db.host
-    port: db.port
-  methods:
-    setFoo1: My\Foo1
-    setFoo2: [My\Foo1, My\Foo2]
-    setFoo3:
-      param1: My\Foo1
-      param2: My\Foo2
-    properties:
-      bar: My\Bar
-      baz:
-        name: My\Baz
-        lazy: true
-
-# Mapping an interface to an implementation
-My\Interface:
-  class: My\Implementation
-
-# Defining a named instance
-myNamedInstance:
-    class: My\Class
-```
-

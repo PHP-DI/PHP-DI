@@ -10,7 +10,9 @@
 namespace DI;
 
 use DI\Definition\DefinitionManager;
-use DI\Definition\FileLoader\DefinitionFileLoader;
+use DI\Definition\Source\AnnotationDefinitionSource;
+use DI\Definition\Source\PHPFileDefinitionSource;
+use DI\Definition\Source\ReflectionDefinitionSource;
 use Doctrine\Common\Cache\Cache;
 use InvalidArgumentException;
 use ProxyManager\Configuration;
@@ -18,13 +20,20 @@ use ProxyManager\Factory\LazyLoadingValueHolderFactory;
 use ProxyManager\GeneratorStrategy\EvaluatingGeneratorStrategy;
 
 /**
- * Fluent helper to create a Container
+ * Helper to create and configure a Container.
  *
- * @since 3.2
+ * With the default options, the container created is appropriate for the development environment.
+ *
+ * @since  3.2
  * @author Matthieu Napoli <matthieu@mnapoli.fr>
  */
 class ContainerBuilder
 {
+    /**
+     * Name of the container class, used to create the container.
+     * @var string
+     */
+    private $containerClass;
 
     /**
      * @var boolean
@@ -37,19 +46,9 @@ class ContainerBuilder
     private $useAnnotations = true;
 
     /**
-     * @var boolean
-     */
-    private $definitionsValidation;
-
-    /**
      * @var Cache
      */
     private $cache;
-
-    /**
-     * @var DefinitionFileLoader[]
-     */
-    private $fileLoaders = array();
 
     /**
      * If true, write the proxies to disk to improve performances.
@@ -58,43 +57,86 @@ class ContainerBuilder
     private $writeProxiesToFile = false;
 
     /**
-     * Directory where to write the proxies (if $writeProxiesToFile is enabled)
+     * Directory where to write the proxies (if $writeProxiesToFile is enabled).
      * @var string
      */
     private $proxyDirectory;
+
+    /**
+     * If PHP-DI is wrapped in another container, this references the wrapper.
+     * @var ContainerInterface
+     */
+    private $wrapperContainer;
+
+    /**
+     * Files of definitions for the container.
+     * @var string[]
+     */
+    private $files = array();
+
+    /**
+     * Build a container configured for the dev environment.
+     *
+     * @return Container
+     */
+    public static function buildDevContainer()
+    {
+        $builder = new self();
+        return $builder->build();
+    }
+
+    /**
+     * @param string $containerClass Name of the container class, used to create the container.
+     */
+    public function __construct($containerClass = 'DI\Container')
+    {
+        $this->containerClass = $containerClass;
+    }
 
     /**
      * @return Container
      */
     public function build()
     {
-        // Definition manager
-        $definitionManager = new DefinitionManager();
-        $definitionManager->useReflection($this->useReflection);
-        $definitionManager->useAnnotations($this->useAnnotations);
-        if ($this->definitionsValidation) {
-            $definitionManager->setDefinitionsValidation($this->definitionsValidation);
+        // Definition sources
+        $firstSource = null;
+        $lastSource = null;
+        foreach (array_reverse($this->files) as $file) {
+            $source = new PHPFileDefinitionSource($file);
+            // Chain file sources
+            if ($lastSource instanceof PHPFileDefinitionSource) {
+                $lastSource->chain($source);
+            } else {
+                $firstSource = $source;
+            }
+            $lastSource = $source;
         }
+        if ($this->useAnnotations) {
+            if ($lastSource) {
+                $lastSource->chain(new AnnotationDefinitionSource());
+            } else {
+                $firstSource = new AnnotationDefinitionSource();
+            }
+        } elseif ($this->useReflection) {
+            if ($lastSource) {
+                $lastSource->chain(new ReflectionDefinitionSource());
+            } else {
+                $firstSource = new ReflectionDefinitionSource();
+            }
+        }
+
+        // Definition manager
+        $definitionManager = new DefinitionManager($firstSource);
         if ($this->cache) {
             $definitionManager->setCache($this->cache);
         }
-        foreach ($this->fileLoaders as $fileLoader) {
-            $definitionManager->addDefinitionsFromFile($fileLoader);
-        }
 
         // Proxy factory
-        $config = new Configuration();
-        $config->setAutoGenerateProxies(true);
-        if ($this->writeProxiesToFile) {
-            $config->setProxiesTargetDir($this->proxyDirectory);
-            spl_autoload_register($config->getProxyAutoloader());
-        } else {
-            $config->setGeneratorStrategy(new EvaluatingGeneratorStrategy());
-        }
+        $proxyFactory = $this->buildProxyFactory();
 
-        $container = new Container($definitionManager, null, new LazyLoadingValueHolderFactory($config));
+        $containerClass = $this->containerClass;
 
-        return $container;
+        return new $containerClass($definitionManager, $proxyFactory, $this->wrapperContainer);
     }
 
     /**
@@ -124,19 +166,6 @@ class ContainerBuilder
     }
 
     /**
-     * Enables/disables the validation of the definitions
-     *
-     * By default, disabled
-     * @param bool $bool
-     * @return ContainerBuilder
-     */
-    public function setDefinitionsValidation($bool)
-    {
-        $this->definitionsValidation = $bool;
-        return $this;
-    }
-
-    /**
      * Enables the use of a cache for the definitions
      *
      * @param Cache $cache Cache backend to use
@@ -149,24 +178,12 @@ class ContainerBuilder
     }
 
     /**
-     * Add definitions contained in a file
-     *
-     * @param DefinitionFileLoader $definitionFileLoader
-     * @return ContainerBuilder
-     */
-    public function addDefinitionsFromFile(DefinitionFileLoader $definitionFileLoader)
-    {
-        $this->fileLoaders[] = $definitionFileLoader;
-        return $this;
-    }
-
-    /**
      * Configure the proxy generation
      *
      * For dev environment, use writeProxiesToFile(false) (default configuration)
      * For production environment, use writeProxiesToFile(true, 'tmp/proxies')
      *
-     * @param boolean     $writeToFile If true, write the proxies to disk to improve performances
+     * @param boolean     $writeToFile    If true, write the proxies to disk to improve performances
      * @param string|null $proxyDirectory Directory where to write the proxies
      * @return ContainerBuilder
      *
@@ -177,11 +194,55 @@ class ContainerBuilder
         $this->writeProxiesToFile = $writeToFile;
 
         if ($writeToFile && $proxyDirectory === null) {
-            throw new InvalidArgumentException("The proxy directory must be specified if you want to write proxies on disk");
+            throw new InvalidArgumentException(
+                "The proxy directory must be specified if you want to write proxies on disk"
+            );
         }
         $this->proxyDirectory = $proxyDirectory;
 
         return $this;
     }
 
+    /**
+     * If PHP-DI's container is wrapped by another container, we can
+     * set this so that PHP-DI will use the wrapper rather than itself for building objects.
+     *
+     * @param ContainerInterface $otherContainer
+     * @return $this
+     */
+    public function wrapContainer(ContainerInterface $otherContainer)
+    {
+        $this->wrapperContainer = $otherContainer;
+
+        return $this;
+    }
+
+    /**
+     * Add a file containing definitions to the container.
+     *
+     * @param string $file
+     */
+    public function addDefinitions($file)
+    {
+        $this->files[] = $file;
+    }
+
+    /**
+     * @return LazyLoadingValueHolderFactory
+     */
+    private function buildProxyFactory()
+    {
+        $config = new Configuration();
+        // TODO useless since ProxyManager 0.5, line kept for compatibility with previous versions
+        $config->setAutoGenerateProxies(true);
+
+        if ($this->writeProxiesToFile) {
+            $config->setProxiesTargetDir($this->proxyDirectory);
+            spl_autoload_register($config->getProxyAutoloader());
+        } else {
+            $config->setGeneratorStrategy(new EvaluatingGeneratorStrategy());
+        }
+
+        return new LazyLoadingValueHolderFactory($config);
+    }
 }

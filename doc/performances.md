@@ -24,15 +24,15 @@ Of course, do not use this one in production.
 
 The cache implementation is provided by Doctrine (because it works very well) and contains:
 
-- ApcCache (requires ext/apc)
 - ArrayCache (in memory, lifetime of the request)
+- ApcCache (requires the APC or APCu extension)
 - FilesystemCache (not optimal for high concurrency)
-- MemcacheCache (requires ext/memcache)
-- MemcachedCache (requires ext/memcached)
+- MemcacheCache (requires the memcache extension)
+- MemcachedCache (requires the memcached extension)
 - PhpFileCache (not optimal for high concurrency)
-- RedisCache.php (requires ext/phpredis)
-- WinCacheCache.php (requires ext/wincache)
-- XcacheCache.php (requires ext/xcache)
+- RedisCache.php (requires the phpredis extension)
+- WinCacheCache.php (requires the wincache extension)
+- XcacheCache.php (requires the xcache extension)
 - ZendDataCache.php (requires Zend Server Platform)
 
 Read the [Doctrine documentation](http://docs.doctrine-project.org/projects/doctrine-common/en/latest/reference/caching.html)

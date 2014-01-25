@@ -13,7 +13,6 @@ use DI\Annotation\Inject;
 
 class InjectFixture
 {
-
     /**
      * @Inject("foo")
      */
@@ -21,12 +20,12 @@ class InjectFixture
 
     /**
      * @Inject
-     * @var InjectableFixture
+     * @var Dependency
      */
     protected $property2;
 
     /**
-     * @Inject(name="foo", lazy=true)
+     * @Inject(name="foo")
      */
     protected $property3;
 
@@ -45,29 +44,16 @@ class InjectFixture
     }
 
     /**
-     * @Inject({
-     *  {"name" = "foo", "lazy" = true},
-     *  "bar"
-     * })
+     * @Inject({"str1" = "foo"})
      */
-    public function method3($str1, $str2)
+    public function method3($str1)
     {
     }
 
     /**
-     * @Inject({"str2" = "foo"})
+     * @Inject({"str1" = {}})
      */
-    public function method4($str1, $str2)
+    public function method4($str1)
     {
     }
-
-    /**
-     * @Inject({
-     *  "str2" = {"lazy" = true}
-     * })
-     */
-    public function method5($str1, $str2)
-    {
-    }
-
 }

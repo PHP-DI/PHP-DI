@@ -5,14 +5,14 @@ Scopes allow you to reuse instances and gives you the flexibility to choose the 
 
 The scopes supported out of the box are listed below:
 
-Scope | Description
-------|------------
+Scope               | Description
+--------------------|------------
 singleton (default) | The object instance is unique during the container's lifecycle - each injection by the container or explicit call of `get()` returns the same instance.
-prototype | The object instance is not unique - each injection or call of the container's `get()` method returns a fresh instance.
+prototype           | The object instance is not unique - each injection or call of the container's `get()` method returns a fresh instance.
 
 ## Applying Scopes
 
-Scopes are part of the [definitions](definition.md) of injections, so you can define them using annotations or PHP arrays.
+Scopes are part of the [definitions](definition.md) of injections, so you can define them using annotations or PHP.
 
 ### Annotation
 
@@ -23,22 +23,21 @@ Remember singleton is the scope used if it is not configured.
 /**
  * @Injectable(scope="prototype")
  */
-class MyService {
+class MyService
+{
     // ...
 }
 ```
 
-### Array configuration
+### PHP configuration
 
-You can specify the scope by using the `scope` key in the array describing the class:
+You can specify the scope by using the `scope` method on the helper:
 
 ```php
 <?php
+
 return [
-    'MyService' => [
-        'scope' => Scope::PROTOTYPE(),
-        // or
-        'scope' => 'prototype',
-    ],
+    'MyService' => DI\object()
+        ->scope(Scope::PROTOTYPE()),
 ];
 ```

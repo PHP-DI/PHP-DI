@@ -9,17 +9,18 @@
 
 namespace DI\Definition;
 
+use DI\Definition\ClassDefinition\MethodInjection;
+use DI\Definition\ClassDefinition\PropertyInjection;
 use DI\Definition\Exception\DefinitionException;
 use DI\Scope;
 
 /**
- * Definition of a class for dependency injection
+ * Defines how a class can be instantiated.
  *
  * @author Matthieu Napoli <matthieu@mnapoli.fr>
  */
-class ClassDefinition implements Definition
+class ClassDefinition implements MergeableDefinition, CacheableDefinition
 {
-
     /**
      * Entry name (most of the time, same as $classname)
      * @var string
@@ -130,6 +131,15 @@ class ClassDefinition implements Definition
     }
 
     /**
+     * @param string $propertyName
+     * @return PropertyInjection
+     */
+    public function getPropertyInjection($propertyName)
+    {
+        return isset($this->propertyInjections[$propertyName]) ? $this->propertyInjections[$propertyName] : null;
+    }
+
+    /**
      * @param PropertyInjection $propertyInjection
      */
     public function addPropertyInjection(PropertyInjection $propertyInjection)
@@ -143,6 +153,15 @@ class ClassDefinition implements Definition
     public function getMethodInjections()
     {
         return $this->methodInjections;
+    }
+
+    /**
+     * @param string $methodName
+     * @return MethodInjection|null
+     */
+    public function getMethodInjection($methodName)
+    {
+        return isset($this->methodInjections[$methodName]) ? $this->methodInjections[$methodName] : null;
     }
 
     /**
@@ -166,12 +185,7 @@ class ClassDefinition implements Definition
      */
     public function getScope()
     {
-        if ($this->scope !== null) {
-            return $this->scope;
-        } else {
-            // Default scope
-            return Scope::SINGLETON();
-        }
+        return $this->scope ?: Scope::SINGLETON();
     }
 
     /**
@@ -198,72 +212,58 @@ class ClassDefinition implements Definition
     /**
      * {@inheritdoc}
      */
-    public function merge(Definition $definition)
+    public function merge(MergeableDefinition $definition)
     {
         if (!$definition instanceof ClassDefinition) {
-            throw new DefinitionException("DI definition conflict: there are 2 different definitions for '"
-            . $definition->getName() . "' that are incompatible, they are not of the same type");
+            throw new DefinitionException(
+                "DI definition conflict: there are 2 different definitions for '" . $this->getName()
+                . "' that are incompatible, they are not of the same type"
+            );
         }
 
-        // The latter prevails
-        if ($definition->className !== null) {
-            $this->className = $definition->className;
+        $newDefinition = clone $this;
+
+        // The current prevails
+        if ($newDefinition->className === null) {
+            $newDefinition->className = $definition->className;
         }
-        if ($definition->scope !== null) {
-            $this->scope = $definition->scope;
+        if ($newDefinition->scope === null) {
+            $newDefinition->scope = $definition->scope;
         }
-        if ($definition->lazy !== null) {
-            $this->lazy = $definition->lazy;
+        if ($newDefinition->lazy === null) {
+            $newDefinition->lazy = $definition->lazy;
         }
 
         // Merge constructor injection
         if ($definition->getConstructorInjection() !== null) {
-            if ($this->constructorInjection !== null) {
+            if ($newDefinition->constructorInjection !== null) {
                 // Merge
-                $this->constructorInjection->merge($definition->getConstructorInjection());
+                $newDefinition->constructorInjection->merge($definition->getConstructorInjection());
             } else {
                 // Set
-                $this->constructorInjection = $definition->getConstructorInjection();
+                $newDefinition->constructorInjection = $definition->getConstructorInjection();
             }
         }
 
         // Merge property injections
         foreach ($definition->getPropertyInjections() as $propertyName => $propertyInjection) {
-            if (array_key_exists($propertyName, $this->propertyInjections)) {
-                // Merge
-                $this->propertyInjections[$propertyName]->merge($propertyInjection);
-            } else {
+            if (! array_key_exists($propertyName, $newDefinition->propertyInjections)) {
                 // Add
-                $this->propertyInjections[$propertyName] = $propertyInjection;
+                $newDefinition->propertyInjections[$propertyName] = $propertyInjection;
             }
         }
 
         // Merge method injections
         foreach ($definition->getMethodInjections() as $methodName => $methodInjection) {
-            if (array_key_exists($methodName, $this->methodInjections)) {
+            if (array_key_exists($methodName, $newDefinition->methodInjections)) {
                 // Merge
-                $this->methodInjections[$methodName]->merge($methodInjection);
+                $newDefinition->methodInjections[$methodName]->merge($methodInjection);
             } else {
                 // Add
-                $this->methodInjections[$methodName] = $methodInjection;
+                $newDefinition->methodInjections[$methodName] = $methodInjection;
             }
         }
-    }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function isCacheable()
-    {
-        return true;
+        return $newDefinition;
     }
-
-    /**
-     * {@inheritdoc}
-     */
-    public static function isMergeable()
-    {
-        return true;
-    }
-
 }

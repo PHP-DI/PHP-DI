@@ -10,42 +10,62 @@
 namespace UnitTests\DI;
 
 use DI\ContainerBuilder;
+use UnitTests\DI\Fixtures\FakeContainer;
 
 /**
  * Test class for ContainerBuilder
+ *
+ * @covers \DI\ContainerBuilder
  */
 class ContainerBuilderTest extends \PHPUnit_Framework_TestCase
 {
-
     public function testDefaultConfiguration()
     {
-        $builder = new ContainerBuilder();
+        // Make the ContainerBuilder use our fake class to catch constructor parameters
+        $builder = new ContainerBuilder('UnitTests\DI\Fixtures\FakeContainer');
+        /** @var FakeContainer $container */
         $container = $builder->build();
 
-        $this->assertNull($container->getDefinitionManager()->getCache());
-        $this->assertFalse($container->getDefinitionManager()->getDefinitionsValidation());
+        // No cache
+        $this->assertNull($container->definitionManager->getCache());
     }
 
     public function testSetCache()
     {
         $cache = $this->getMockForAbstractClass('Doctrine\Common\Cache\Cache');
 
-        $builder = new ContainerBuilder();
+        $builder = new ContainerBuilder('UnitTests\DI\Fixtures\FakeContainer');
         $builder->setDefinitionCache($cache);
 
+        /** @var FakeContainer $container */
         $container = $builder->build();
 
-        $this->assertSame($cache, $container->getDefinitionManager()->getCache());
+        $this->assertSame($cache, $container->definitionManager->getCache());
     }
 
-    public function testSetDefinitionsValidation()
+    /**
+     * By default, the definition resolvers should not be overridden
+     */
+    public function testContainerNotWrapped()
     {
-        $builder = new ContainerBuilder();
-        $builder->setDefinitionsValidation(true);
-
+        $builder = new ContainerBuilder('UnitTests\DI\Fixtures\FakeContainer');
+        /** @var FakeContainer $container */
         $container = $builder->build();
 
-        $this->assertTrue($container->getDefinitionManager()->getDefinitionsValidation());
+        $this->assertNull($container->wrapperContainer);
+    }
+
+    public function testContainerWrapped()
+    {
+        $otherContainer = $this->getMockForAbstractClass('DI\ContainerInterface');
+
+        $builder = new ContainerBuilder('UnitTests\DI\Fixtures\FakeContainer');
+        $builder->wrapContainer($otherContainer);
+
+        /** @var FakeContainer $container */
+        $container = $builder->build();
+
+        $this->assertSame($otherContainer, $container->wrapperContainer);
     }
 
     public function testFluentInterface()
@@ -70,19 +90,11 @@ class ContainerBuilderTest extends \PHPUnit_Framework_TestCase
         $result = $builder->writeProxiesToFile(false);
         $this->assertSame($builder, $result);
 
-        $result = $builder->setDefinitionsValidation(true);
-        $this->assertSame($builder, $result);
-
-        $result = $builder->setDefinitionsValidation(false);
-        $this->assertSame($builder, $result);
-
         $mockCache = $this->getMockForAbstractClass('Doctrine\Common\Cache\Cache');
         $result = $builder->setDefinitionCache($mockCache);
         $this->assertSame($builder, $result);
 
-        $mockLoader = $this->getMock('DI\Definition\FileLoader\DefinitionFileLoader', array(), array(), '', false);
-        $result = $builder->addDefinitionsFromFile($mockLoader);
+        $result = $builder->wrapContainer($this->getMockForAbstractClass('DI\ContainerInterface'));
         $this->assertSame($builder, $result);
     }
-
 }

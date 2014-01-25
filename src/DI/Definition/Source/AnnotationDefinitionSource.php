@@ -12,230 +12,238 @@ namespace DI\Definition\Source;
 use DI\Annotation\Inject;
 use DI\Annotation\Injectable;
 use DI\Definition\ClassDefinition;
+use DI\Definition\EntryReference;
 use DI\Definition\Exception\AnnotationException;
 use DI\Definition\Exception\DefinitionException;
-use DI\Definition\MethodInjection;
-use DI\Definition\ParameterInjection;
-use DI\Definition\PropertyInjection;
-use DI\Definition\Source\Annotation\PhpDocParser;
+use DI\Definition\ClassDefinition\MethodInjection;
+use DI\Definition\ClassDefinition\PropertyInjection;
+use DI\Definition\MergeableDefinition;
 use Doctrine\Common\Annotations\AnnotationRegistry;
 use Doctrine\Common\Annotations\Reader;
 use Doctrine\Common\Annotations\SimpleAnnotationReader;
 use InvalidArgumentException;
+use PhpDocReader\PhpDocReader;
 use ReflectionClass;
 use ReflectionMethod;
+use ReflectionParameter;
+use ReflectionProperty;
 use UnexpectedValueException;
 
 /**
- * Source of DI class definitions in annotations such as @ Inject and @ var annotations
+ * Source of DI class definitions in annotations such as @ Inject and @ var annotations.
  *
- * Uses Reflection, Doctrine's Annotations and regex docblock parsing
+ * Uses ReflectionDefinitionSource, Doctrine's Annotations and regex docblock parsing.
+ * This source automatically includes the reflection source.
  *
  * @author Matthieu Napoli <matthieu@mnapoli.fr>
  */
 class AnnotationDefinitionSource implements DefinitionSource
 {
-
     /**
      * @var Reader
      */
     private $annotationReader;
 
     /**
-     * @var PhpDocParser
+     * @var PhpDocReader
      */
-    private $phpDocParser;
-
-
-    /**
-     * Constructor
-     */
-    public function __construct()
-    {
-        $this->phpDocParser = new PhpDocParser();
-    }
+    private $phpDocReader;
 
     /**
      * {@inheritdoc}
      * @throws AnnotationException
      * @throws InvalidArgumentException The class doesn't exist
      */
-    public function getDefinition($name)
+    public function getDefinition($name, MergeableDefinition $parentDefinition = null)
     {
-        if (!$this->classExists($name)) {
+        // Only merges with class definition
+        if ($parentDefinition && (! $parentDefinition instanceof ClassDefinition)) {
             return null;
         }
-        $reflectionClass = new ReflectionClass($name);
 
-        $classDefinition = new ClassDefinition($name);
+        $className = $parentDefinition ? $parentDefinition->getClassName() : $name;
 
-        // Injectable annotation
-        /** @var $injectableAnnotation Injectable */
-        try {
-            $injectableAnnotation = $this->getAnnotationReader()->getClassAnnotation($reflectionClass, 'DI\Annotation\Injectable');
-        } catch (UnexpectedValueException $e) {
-            throw new DefinitionException("Error while reading @Injectable on $reflectionClass->name: "
-                . $e->getMessage());
+        if (!class_exists($className) && !interface_exists($className)) {
+            return $parentDefinition;
         }
 
-        if ($injectableAnnotation !== null && $injectableAnnotation->getScope()) {
-            $classDefinition->setScope($injectableAnnotation->getScope());
+        $class = new ReflectionClass($className);
+        $definition = new ClassDefinition($name);
+
+        // Injectable annotation
+        /** @var $injectableAnnotation Injectable|null */
+        try {
+            $injectableAnnotation = $this->getAnnotationReader()
+                ->getClassAnnotation($class, 'DI\Annotation\Injectable');
+        } catch (UnexpectedValueException $e) {
+            throw new DefinitionException(sprintf(
+                'Error while reading @Injectable on %s: %s',
+                $class->getName(),
+                $e->getMessage()
+            ), 0, $e);
+        }
+
+        if ($injectableAnnotation) {
+            if ($injectableAnnotation->getScope()) {
+                $definition->setScope($injectableAnnotation->getScope());
+            }
+            if ($injectableAnnotation->isLazy() !== null) {
+                $definition->setLazy($injectableAnnotation->isLazy());
+            }
         }
 
         // Browse the class properties looking for annotated properties
-        $this->readProperties($reflectionClass, $classDefinition);
-
-        // Look for annotated constructor
-        $constructor = $reflectionClass->getConstructor();
-        if ($constructor) {
-            $this->readConstructor($reflectionClass, $constructor, $classDefinition);
-        }
+        $this->readProperties($class, $definition);
 
         // Browse the object's methods looking for annotated methods
-        $this->readMethods($reflectionClass, $classDefinition);
+        $this->readMethods($class, $definition);
 
-        return $classDefinition;
+        // Merge with parent
+        if ($parentDefinition) {
+            $definition = $parentDefinition->merge($definition);
+        }
+
+        return $definition;
     }
 
     /**
-     * Browse the class properties looking for annotated properties
+     * Browse the class properties looking for annotated properties.
+     *
      * @param ReflectionClass $reflectionClass
      * @param ClassDefinition $classDefinition
      */
     private function readProperties(ReflectionClass $reflectionClass, ClassDefinition $classDefinition)
     {
+        // This will look in all the properties, including those of the parent classes
         foreach ($reflectionClass->getProperties() as $property) {
-
             // Ignore static properties
             if ($property->isStatic()) {
                 continue;
             }
 
-            // Look for @Inject annotation
-            $annotation = $this->getAnnotationReader()->getPropertyAnnotation($property, 'DI\Annotation\Inject');
+            $propertyInjection = $this->getPropertyInjection($property);
 
-            if ($annotation !== null) {
-                /** @var $annotation Inject */
-
-                $entryName = $annotation->getName();
-                if ($entryName == null) {
-                    // Look for @var content
-                    $entryName = $this->phpDocParser->getPropertyType($reflectionClass, $property);
-                }
-                $propertyInjection = new PropertyInjection($property->name, $entryName, $annotation->isLazy());
+            if ($propertyInjection) {
                 $classDefinition->addPropertyInjection($propertyInjection);
             }
-
         }
     }
 
     /**
-     * Browse the object's methods looking for annotated methods
-     * @param ReflectionClass $reflectionClass
-     * @param ClassDefinition $classDefinition
+     * {@inheritdoc}
      */
-    private function readConstructor(ReflectionClass $reflectionClass, ReflectionMethod $reflectionMethod, ClassDefinition $classDefinition)
+    private function getPropertyInjection(ReflectionProperty $property)
     {
         // Look for @Inject annotation
-        /** @var $annotation Inject|null */
-        $annotation = $this->getAnnotationReader()->getMethodAnnotation($reflectionMethod, 'DI\Annotation\Inject');
-
-        if ($annotation) {
-            // @Inject found, create MethodInjection
-            $methodInjection = new MethodInjection($reflectionMethod->name);
-            $classDefinition->setConstructorInjection($methodInjection);
-
-            // Read method parameters annotations
-            $this->readMethodParameters($reflectionClass, $reflectionMethod, $annotation, $methodInjection);
+        /** @var $annotation Inject */
+        $annotation = $this->getAnnotationReader()->getPropertyAnnotation($property, 'DI\Annotation\Inject');
+        if ($annotation === null) {
+            return null;
         }
+
+        // @Inject("name") or look for @var content
+        $entryName = $annotation->getName() ?: $this->getPhpDocReader()->getPropertyType($property);
+
+        if ($entryName === null) {
+            throw new AnnotationException(sprintf(
+                '@Inject found on property %s::%s but unable to guess what to inject, use a @var annotation',
+                $property->getDeclaringClass()->getName(),
+                $property->getName()
+            ));
+        }
+
+        return new PropertyInjection($property->getName(), new EntryReference($entryName));
     }
 
     /**
-     * Browse the object's methods looking for annotated methods
-     * @param ReflectionClass $reflectionClass
+     * Browse the object's methods looking for annotated methods.
+     *
+     * @param ReflectionClass $class
      * @param ClassDefinition $classDefinition
      */
-    private function readMethods(ReflectionClass $reflectionClass, ClassDefinition $classDefinition)
+    private function readMethods(ReflectionClass $class, ClassDefinition $classDefinition)
     {
-        foreach ($reflectionClass->getMethods(\ReflectionMethod::IS_PUBLIC) as $method) {
-            // Ignore constructor and static methods
-            if ($method->isStatic() || $method->isConstructor()) {
+        // This will look in all the methods, including those of the parent classes
+        foreach ($class->getMethods(ReflectionMethod::IS_PUBLIC) as $method) {
+            if ($method->isStatic()) {
                 continue;
             }
 
-            $this->readMethod($reflectionClass, $method, $classDefinition);
+            $methodInjection = $this->getMethodInjection($method);
+
+            if (! $methodInjection) {
+                continue;
+            }
+
+            if ($method->isConstructor()) {
+                $classDefinition->setConstructorInjection($methodInjection);
+            } else {
+                $classDefinition->addMethodInjection($methodInjection);
+            }
         }
     }
 
     /**
-     * Browse the object's methods looking for annotated methods
-     * @param ReflectionClass $reflectionClass
-     * @param ClassDefinition $classDefinition
+     * {@inheritdoc}
      */
-    private function readMethod(ReflectionClass $reflectionClass, ReflectionMethod $reflectionMethod, ClassDefinition $classDefinition)
+    private function getMethodInjection(ReflectionMethod $method)
     {
         // Look for @Inject annotation
         /** @var $annotation Inject|null */
-        $annotation = $this->getAnnotationReader()->getMethodAnnotation($reflectionMethod, 'DI\Annotation\Inject');
-
-        if ($annotation) {
-            // @Inject found, create MethodInjection
-            $methodInjection = new MethodInjection($reflectionMethod->name);
-            $classDefinition->addMethodInjection($methodInjection);
-
-            // Read method parameters annotations
-            $this->readMethodParameters($reflectionClass, $reflectionMethod, $annotation, $methodInjection);
+        try {
+            $annotation = $this->getAnnotationReader()->getMethodAnnotation($method, 'DI\Annotation\Inject');
+        } catch (AnnotationException $e) {
+            throw new AnnotationException(sprintf(
+                '@Inject annotation on %s::%s is malformed. %s',
+                $method->getDeclaringClass()->getName(),
+                $method->getName(),
+                $e->getMessage()
+            ), 0, $e);
         }
+        $annotationParameters = $annotation ? $annotation->getParameters() : array();
+
+        // @Inject on constructor is implicit
+        if (! ($annotation || $method->isConstructor())) {
+            return null;
+        }
+
+        $parameters = array();
+        foreach ($method->getParameters() as $index => $parameter) {
+            $entryName = $this->getMethodParameter($index, $parameter, $annotationParameters);
+
+            if ($entryName !== null) {
+                $parameters[$index] = new EntryReference($entryName);
+            }
+        }
+
+        return new MethodInjection($method->getName(), $parameters);
     }
 
     /**
-     * @param ReflectionClass  $reflectionClass
-     * @param ReflectionMethod $method
-     * @param Inject           $annotation
-     * @param MethodInjection  $methodInjection
+     * @param int                 $parameterIndex
+     * @param ReflectionParameter $parameter
+     * @param array               $annotationParameters
+     *
+     * @return string|null Entry name or null if not found.
      */
-    private function readMethodParameters(
-        ReflectionClass $reflectionClass,
-        ReflectionMethod $method,
-        Inject $annotation,
-        MethodInjection $methodInjection
-    ) {
-        $annotationParameters = $annotation->getParameters();
-
-        // For each param
-        $index = 0;
-        foreach ($method->getParameters() as $parameter) {
-
-            $entryName = null;
-
-            $annotationParameter = null;
-            // @Inject has definition for this parameter (not named)
-            if (isset($annotationParameters[$index])) {
-                $annotationParameter = $annotationParameters[$index];
-            }
-            // @Inject has definition for this parameter (named)
-            if (isset($annotationParameters[$parameter->name])) {
-                $annotationParameter = $annotationParameters[$parameter->name];
-            }
-            if (isset($annotationParameter['name'])) {
-                $entryName = $annotationParameter['name'];
-            }
-
-            // Look for @param tag or PHP type-hinting (only case where we use reflection)
-            if ($entryName === null) {
-                $entryName = $this->phpDocParser->getParameterType($reflectionClass, $method, $parameter);
-            }
-
-            $parameterInjection = new ParameterInjection($parameter->name, $entryName);
-
-            if (isset($annotationParameter['lazy'])) {
-                $parameterInjection->setLazy($annotationParameter['lazy']);
-            }
-
-            $methodInjection->addParameterInjection($parameterInjection);
-
-            $index++;
+    private function getMethodParameter($parameterIndex, ReflectionParameter $parameter, array $annotationParameters)
+    {
+        // @Inject has definition for this parameter (by index, or by name)
+        if (isset($annotationParameters[$parameterIndex])) {
+            return $annotationParameters[$parameterIndex];
         }
+        if (isset($annotationParameters[$parameter->getName()])) {
+            return $annotationParameters[$parameter->getName()];
+        }
+
+        // Try to use the type-hinting
+        $parameterClass = $parameter->getClass();
+        if ($parameterClass) {
+            return $parameterClass->getName();
+        }
+
+        // Last resort, look for @param tag
+        return $this->getPhpDocReader()->getParameterType($parameter);
     }
 
     /**
@@ -248,6 +256,7 @@ class AnnotationDefinitionSource implements DefinitionSource
             $this->annotationReader = new SimpleAnnotationReader();
             $this->annotationReader->addNamespace('DI\Annotation');
         }
+
         return $this->annotationReader;
     }
 
@@ -260,12 +269,14 @@ class AnnotationDefinitionSource implements DefinitionSource
     }
 
     /**
-     * @param string $class
-     * @return bool
+     * @return PhpDocReader
      */
-    private function classExists($class)
+    private function getPhpDocReader()
     {
-        return class_exists($class) || interface_exists($class);
-    }
+        if ($this->phpDocReader === null) {
+            $this->phpDocReader = new PhpDocReader();
+        }
 
+        return $this->phpDocReader;
+    }
 }

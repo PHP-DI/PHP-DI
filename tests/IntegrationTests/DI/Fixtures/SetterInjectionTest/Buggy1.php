@@ -16,7 +16,6 @@ use DI\Annotation\Inject;
  */
 class Buggy1
 {
-
     /**
      * @Inject
      * @param $dependency
@@ -25,5 +24,4 @@ class Buggy1
     {
         $this->dependency = $dependency;
     }
-
 }

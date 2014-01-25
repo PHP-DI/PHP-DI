@@ -7,17 +7,21 @@
     "license": "MIT",
     "autoload": {
         "psr-0": {
-            "DI": "src/",
-            "IntegrationTests": "tests/",
-            "UnitTests": "tests/"
-        }
+            "DI\\": "src/",
+            "IntegrationTests\\": "tests/",
+            "UnitTests\\": "tests/"
+        },
+        "files": [
+            "src/DI/functions.php"
+        ]
     },
     "require": {
-        "php": ">=5.3.0",
+        "php": ">=5.3.3",
         "doctrine/annotations": "1.*",
         "doctrine/cache": "1.*",
+        "mnapoli/phpdocreader": "~1.1",
         "myclabs/php-enum": "1.*",
-        "symfony/yaml": "2.*",
-        "ocramius/proxy-manager": "~0.3"
+        "ocramius/proxy-manager": "~0.3",
+        "symfony/yaml": "2.*"
     }
 }

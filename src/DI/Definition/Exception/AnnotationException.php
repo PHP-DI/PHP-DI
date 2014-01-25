@@ -9,8 +9,6 @@
 
 namespace DI\Definition\Exception;
 
-use DI\Definition\Exception\DefinitionException;
-
 /**
  * Exception in the definitions using annotations
  *
@@ -18,5 +16,4 @@ use DI\Definition\Exception\DefinitionException;
  */
 class AnnotationException extends DefinitionException
 {
-
 }

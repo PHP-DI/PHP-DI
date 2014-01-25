@@ -9,26 +9,27 @@
 
 namespace IntegrationTests\DI\Issues;
 
-use DI\Container;
-use DI\Definition\DefinitionManager;
+use DI\ContainerBuilder;
 use IntegrationTests\DI\Issues\Issue72\Class1;
 
 /**
  * Test that the manager prioritize correctly the different sources
  *
  * @see https://github.com/mnapoli/PHP-DI/issues/72
+ *
+ * @coversNothing
  */
 class Issue72Test extends \PHPUnit_Framework_TestCase
 {
-
     /**
      * @test
      */
     public function annotationDefinitionShouldOverrideReflectionDefinition()
     {
-        $container = new Container();
-        $container->useReflection(true);
-        $container->useAnnotations(true);
+        $builder = new ContainerBuilder();
+        $builder->useReflection(true);
+        $builder->useAnnotations(true);
+        $container = $builder->build();
 
         $value = new \stdClass();
         $value->foo = 'bar';
@@ -43,23 +44,16 @@ class Issue72Test extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function arrayDefinitionShouldOverrideAnnotationDefinition()
+    public function arrayDefinitionShouldOverrideReflectionDefinition()
     {
-        $container = new Container();
-        $container->useReflection(false);
+        $builder = new ContainerBuilder();
+        $builder->useReflection(true);
+        $builder->useAnnotations(false);
 
-        $container->useAnnotations(true);
-        // Override 'service1' to 'service2'
-        $container->addDefinitions(array(
-                'service2' => function() {
-                    $value = new \stdClass();
-                    $value->foo = 'bar';
-                    return $value;
-                },
-                'IntegrationTests\DI\Issues\Issue72\Class1' => array(
-                    'constructor' => array('arg1' => 'service2'),
-                ),
-            ));
+        // Override to 'service2' in the definition file
+        $builder->addDefinitions(__DIR__ . '/Issue72/definitions.php');
+
+        $container = $builder->build();
 
         /** @var Class1 $class1 */
         $class1 = $container->get('IntegrationTests\DI\Issues\Issue72\Class1');
@@ -70,25 +64,16 @@ class Issue72Test extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function simpleDefinitionShouldOverrideArrayDefinition()
+    public function arrayDefinitionShouldOverrideAnnotationDefinition()
     {
-        $container = new Container();
-        $container->useReflection(false);
-        $container->useAnnotations(false);
+        $builder = new ContainerBuilder();
+        $builder->useReflection(false);
+        $builder->useAnnotations(true);
 
-        $container->addDefinitions(array(
-                'service2' => function() {
-                    $value = new \stdClass();
-                    $value->foo = 'bar';
-                    return $value;
-                },
-                'IntegrationTests\DI\Issues\Issue72\Class1' => array(
-                    'constructor' => array('arg1' => 'service1'),
-                ),
-            ));
-        // Override 'service1' to 'service2'
-        $container->set('IntegrationTests\DI\Issues\Issue72\Class1')
-            ->withConstructor(array('arg1' => 'service2'));
+        // Override 'service1' to 'service2' in the definition file
+        $builder->addDefinitions(__DIR__ . '/Issue72/definitions.php');
+
+        $container = $builder->build();
 
         /** @var Class1 $class1 */
         $class1 = $container->get('IntegrationTests\DI\Issues\Issue72\Class1');
@@ -96,4 +81,49 @@ class Issue72Test extends \PHPUnit_Framework_TestCase
         $this->assertEquals('bar', $class1->arg1->foo);
     }
 
+    /**
+     * @test
+     */
+    public function arrayDefinitionShouldOverrideAnotherArrayDefinition()
+    {
+        $builder = new ContainerBuilder();
+        $builder->useReflection(false);
+        $builder->useAnnotations(false);
+
+        // Override 'service1' to 'service2' in the definition file
+        $builder->addDefinitions(__DIR__ . '/Issue72/definitions.php');
+        // Override 'service2' to 'service3' in the definition file
+        $builder->addDefinitions(__DIR__ . '/Issue72/definitions2.php');
+
+        $container = $builder->build();
+
+        /** @var Class1 $class1 */
+        $class1 = $container->get('IntegrationTests\DI\Issues\Issue72\Class1');
+
+        $this->assertEquals('baz', $class1->arg1->foo);
+    }
+
+    /**
+     * @test
+     */
+    public function phpDefinitionShouldOverrideArrayDefinition()
+    {
+        $builder = new ContainerBuilder();
+        $builder->useReflection(false);
+        $builder->useAnnotations(false);
+        $builder->addDefinitions(__DIR__ . '/Issue72/definitions.php');
+        $container = $builder->build();
+
+        // Override 'service1' to 'service2'
+        $container->set(
+            'IntegrationTests\DI\Issues\Issue72\Class1',
+            \DI\object()
+                ->constructor(\DI\link('service2'))
+        );
+
+        /** @var Class1 $class1 */
+        $class1 = $container->get('IntegrationTests\DI\Issues\Issue72\Class1');
+
+        $this->assertEquals('bar', $class1->arg1->foo);
+    }
 }

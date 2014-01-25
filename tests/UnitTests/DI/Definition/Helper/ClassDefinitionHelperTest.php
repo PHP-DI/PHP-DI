@@ -9,75 +9,130 @@
 
 namespace UnitTests\DI\Definition\Helper;
 
+use DI\Definition\ClassDefinition\MethodInjection;
 use DI\Definition\Helper\ClassDefinitionHelper;
-use DI\Definition\ParameterInjection;
 use DI\Scope;
 
 /**
- * Test class for ClassDefinitionHelper
+ * @covers \DI\Definition\Helper\ClassDefinitionHelper
  */
 class ClassDefinitionHelperTest extends \PHPUnit_Framework_TestCase
 {
-
-    public function testHelper()
+    public function testDefaultValues()
     {
-        $helper = new ClassDefinitionHelper('foo');
-        $helper->bindTo('stdClass')
-            ->withScope(Scope::SINGLETON())
-            ->withProperty('prop', 'bar')
-            ->withConstructor(array('param1', 'param2'))
-            ->withMethod('test', array('p1' => 'param1'))
-            ->withMethod('test2', array('p1' => array('name' => 'param1', 'lazy' => true)));
+        $helper = new ClassDefinitionHelper();
+        $definition = $helper->getDefinition('foo');
 
-        $definition = $helper->getDefinition();
-
-        $this->assertInstanceOf('DI\Definition\ClassDefinition', $definition);
         $this->assertEquals('foo', $definition->getName());
-        $this->assertEquals('stdClass', $definition->getClassName());
+        $this->assertEquals('foo', $definition->getClassName());
         $this->assertEquals(Scope::SINGLETON(), $definition->getScope());
-
-        // Property injection
-        $propertyInjections = $definition->getPropertyInjections();
-        $this->assertCount(1, $propertyInjections);
-        $propertyInjection = array_shift($propertyInjections);
-        $this->assertEquals('prop', $propertyInjection->getPropertyName());
-        $this->assertEquals('bar', $propertyInjection->getEntryName());
-
-        // Constructor injection
-        $constructorInjection = $definition->getConstructorInjection();
-        $parameters = $constructorInjection->getParameterInjections();
-        $this->assertCount(2, $parameters);
-        /** @var $parameter ParameterInjection */
-        $parameter = array_shift($parameters);
-        $this->assertEquals(0, $parameter->getParameterName());
-        $this->assertEquals('param1', $parameter->getEntryName());
-        /** @var $parameter ParameterInjection */
-        $parameter = array_shift($parameters);
-        $this->assertEquals(1, $parameter->getParameterName());
-        $this->assertEquals('param2', $parameter->getEntryName());
-
-        // Method injection
-        $methodInjections = $definition->getMethodInjections();
-        $this->assertCount(2, $methodInjections);
-        $methodInjection = array_shift($methodInjections);
-        $this->assertEquals('test', $methodInjection->getMethodName());
-        $parameters = $methodInjection->getParameterInjections();
-        $this->assertCount(1, $parameters);
-        /** @var $parameter ParameterInjection */
-        $parameter = array_shift($parameters);
-        $this->assertEquals('p1', $parameter->getParameterName());
-        $this->assertEquals('param1', $parameter->getEntryName());
-
-        // Method injection 2
-        $methodInjection = array_shift($methodInjections);
-        $this->assertEquals('test2', $methodInjection->getMethodName());
-        $parameters = $methodInjection->getParameterInjections();
-        $this->assertCount(1, $parameters);
-        /** @var $parameter ParameterInjection */
-        $parameter = array_shift($parameters);
-        $this->assertEquals('p1', $parameter->getParameterName());
-        $this->assertEquals('param1', $parameter->getEntryName());
-        $this->assertTrue($parameter->isLazy());
+        $this->assertNull($definition->getConstructorInjection());
+        $this->assertEmpty($definition->getPropertyInjections());
+        $this->assertEmpty($definition->getMethodInjections());
     }
 
+    public function testClassName()
+    {
+        $helper = new ClassDefinitionHelper('bar');
+        $definition = $helper->getDefinition('foo');
+
+        $this->assertEquals('foo', $definition->getName());
+        $this->assertEquals('bar', $definition->getClassName());
+    }
+
+    public function testScope()
+    {
+        $helper = new ClassDefinitionHelper();
+        $helper->scope(Scope::PROTOTYPE());
+        $definition = $helper->getDefinition('foo');
+
+        $this->assertEquals(Scope::PROTOTYPE(), $definition->getScope());
+    }
+
+    public function testLazy()
+    {
+        $helper = new ClassDefinitionHelper();
+        $helper->lazy();
+        $definition = $helper->getDefinition('foo');
+
+        $this->assertTrue($definition->isLazy());
+    }
+
+    public function testConstructor()
+    {
+        $helper = new ClassDefinitionHelper();
+        $helper->constructor(1, 2, 3);
+        $definition = $helper->getDefinition('foo');
+
+        $this->assertEquals(array(1, 2, 3), $definition->getConstructorInjection()->getParameters());
+    }
+
+    public function testPropertyInjections()
+    {
+        $helper = new ClassDefinitionHelper();
+        $helper->property('prop', 1);
+        $definition = $helper->getDefinition('foo');
+
+        $this->assertCount(1, $definition->getPropertyInjections());
+        $propertyInjection = current($definition->getPropertyInjections());
+        $this->assertEquals(1, $propertyInjection->getValue());
+    }
+
+    public function testMethodInjections()
+    {
+        $helper = new ClassDefinitionHelper();
+        $helper->method('method', 1, 2, 3);
+        $definition = $helper->getDefinition('foo');
+
+        $this->assertCount(1, $definition->getMethodInjections());
+        $methodInjection = current($definition->getMethodInjections());
+        $this->assertEquals(array(1, 2, 3), $methodInjection->getParameters());
+    }
+
+    public function testMethodParameter()
+    {
+        $helper = new ClassDefinitionHelper();
+        $helper->methodParameter('method', 0, 42);
+        $definition = $helper->getDefinition('foo');
+
+        $this->assertCount(1, $definition->getMethodInjections());
+        /** @var MethodInjection $methodInjection */
+        $methodInjection = current($definition->getMethodInjections());
+
+        $this->assertEquals('method', $methodInjection->getMethodName());
+        $this->assertEquals(42, $methodInjection->getParameter(0));
+    }
+
+    /**
+     * If using methodParameter() for "__construct", then the constructor definition should be updated
+     */
+    public function testMethodParameterOnConstructor()
+    {
+        $helper = new ClassDefinitionHelper();
+        $helper->methodParameter('__construct', 0, 42);
+        $definition = $helper->getDefinition('foo');
+
+        $this->assertCount(0, $definition->getMethodInjections());
+        $this->assertNotNull($definition->getConstructorInjection());
+
+        $this->assertEquals('__construct', $definition->getConstructorInjection()->getMethodName());
+        $this->assertEquals(42, $definition->getConstructorInjection()->getParameter(0));
+    }
+
+    /**
+     * Check using the parameter name, not its index
+     */
+    public function testMethodParameterByParameterName()
+    {
+        $helper = new ClassDefinitionHelper();
+        $helper->methodParameter('method', 'param2', 'val2');
+        $helper->methodParameter('method', 'param1', 'val1');
+        $definition = $helper->getDefinition('UnitTests\DI\Definition\Helper\Fixtures\Class1');
+
+        $this->assertCount(1, $definition->getMethodInjections());
+        $methodInjection = current($definition->getMethodInjections());
+
+        // Check that injections are in the good order (matching the real parameters order)
+        $this->assertEquals(array('val1', 'val2'), $methodInjection->getParameters());
+    }
 }

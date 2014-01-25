@@ -2,38 +2,33 @@
 /**
  * PHP-DI
  *
- * @link      http://mnapoli.github.io/PHP-DI/
+ * @link      http://php-di.org/
  * @copyright Matthieu Napoli (http://mnapoli.fr/)
  * @license   http://www.opensource.org/licenses/mit-license.php MIT (see the LICENSE file)
  */
 
 namespace DI;
 
-use DI\Definition\ClassDefinition;
-
 /**
- * Factory class, responsible of instantiating classes
+ * Describes the basic interface of a factory.
  *
+ * @since 4.0
  * @author Matthieu Napoli <matthieu@mnapoli.fr>
  */
 interface FactoryInterface
 {
-
     /**
-     * Create a new instance of the class
+     * Resolves an entry by its name. If given a class name, it will return a new instance of that class.
      *
-     * @param ClassDefinition $classDefinition
+     * @param string $name       Entry name or a class name.
+     * @param array  $parameters Optional parameters to use to build the entry. Use this to force specific
+     *                           parameters to specific values. Parameters not defined in this array will
+     *                           be automatically resolved.
      *
-     * @return object The instance
+     * @throws \InvalidArgumentException The name parameter must be of type string.
+     * @throws DependencyException       Error while resolving the entry.
+     * @throws NotFoundException         No entry or class found for the given name.
+     * @return mixed
      */
-    function createInstance(ClassDefinition $classDefinition);
-
-    /**
-     * @param ClassDefinition $classDefinition
-     * @param object          $instance
-     *
-     * @return object The instance
-     */
-    function injectInstance(ClassDefinition $classDefinition, $instance);
-
+    public function make($name, array $parameters = array());
 }

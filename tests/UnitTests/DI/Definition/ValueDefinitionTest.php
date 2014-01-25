@@ -9,15 +9,16 @@
 
 namespace UnitTests\DI\Definition;
 
-use DI\Definition\ClassDefinition;
 use DI\Definition\ValueDefinition;
+use DI\Scope;
 
 /**
  * Test class for ValueDefinition
+ *
+ * @covers \DI\Definition\ValueDefinition
  */
 class ValueDefinitionTest extends \PHPUnit_Framework_TestCase
 {
-
     public function testGetters()
     {
         $definition = new ValueDefinition('foo', 1);
@@ -26,25 +27,15 @@ class ValueDefinitionTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(1, $definition->getValue());
     }
 
-    public function testCacheable()
+    public function testScope()
     {
         $definition = new ValueDefinition('foo', 1);
-        $this->assertFalse($definition->isCacheable());
+
+        $this->assertEquals(Scope::SINGLETON(), $definition->getScope());
     }
 
-    public function testMergeable()
+    public function testCacheable()
     {
-        $this->assertFalse(ValueDefinition::isMergeable());
+        $this->assertNotInstanceOf('DI\Definition\CacheableDefinition', new ValueDefinition('foo', 'bar'));
     }
-
-    /**
-     * @expectedException \BadMethodCallException
-     */
-    public function testMerge()
-    {
-        $definition1 = new ValueDefinition('foo', 1);
-        $definition2 = new ValueDefinition('foo', 2);
-        $definition1->merge($definition2);
-    }
-
 }

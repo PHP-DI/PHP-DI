@@ -1,4 +1,10 @@
+---
+template: news
+---
+
 # News
+
+- January 17th 2014. [PHP-DI 4.0 released](07-php-di-4-0-released.md)
 
 - January 16th 2014. [What will change in PHP-DI 4: the new definition format](06-php-di-4-0-new-definitions.md).
 
