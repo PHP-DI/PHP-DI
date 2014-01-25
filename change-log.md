@@ -4,7 +4,7 @@
 
 Major changes:
 
-* The configuration format has changed
+* The configuration format has changed ([read more here to understand why](news/06-php-di-4-0-new-definitions.md))
 
 Read the migration guide if you are using 3.x: [Migration guide from 3.x to 4.0](doc/migration/4.0.md).
 
