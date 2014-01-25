@@ -10,3 +10,7 @@ h2 {
 p {
     margin: 5px 0 15px;
 }
+
+strong {
+    color: black;
+}
