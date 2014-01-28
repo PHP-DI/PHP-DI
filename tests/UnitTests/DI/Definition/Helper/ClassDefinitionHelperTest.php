@@ -67,6 +67,17 @@ class ClassDefinitionHelperTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(array(1, 2, 3), $definition->getConstructorInjection()->getParameters());
     }
 
+    public function testConstructorParameter()
+    {
+        $helper = new ClassDefinitionHelper();
+        $helper->constructorParameter(0, 42);
+        $definition = $helper->getDefinition('foo');
+
+        $constructorInjection = $definition->getConstructorInjection();
+
+        $this->assertEquals(42, $constructorInjection->getParameter(0));
+    }
+
     public function testPropertyInjections()
     {
         $helper = new ClassDefinitionHelper();

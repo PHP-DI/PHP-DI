@@ -97,7 +97,7 @@ class ClassDefinitionHelper implements DefinitionHelper
      * Defines the arguments to use to call the constructor.
      *
      * This method takes a variable number of arguments, example:
-     *     ->withConstructor($param1, $param2, $param3)
+     *     ->constructor($param1, $param2, $param3)
      *
      * @param mixed ... Parameters to use for calling the constructor of the class.
      *
@@ -106,6 +106,25 @@ class ClassDefinitionHelper implements DefinitionHelper
     public function constructor()
     {
         $this->constructor = func_get_args();
+        return $this;
+    }
+
+    /**
+     * Defines a value for a specific argument of the constructor.
+     *
+     * This method is usually used together with annotations or autowiring, when a parameter
+     * is not (or cannot be) type-hinted. Using this method instead of constructor() allows to
+     * avoid defining all the parameters (letting them being resolved using annotations or autowiring)
+     * and only define one.
+     *
+     * @param string $parameter Parameter for which the value will be given.
+     * @param mixed  $value     Value to give to this parameter.
+     *
+     * @return ClassDefinitionHelper
+     */
+    public function constructorParameter($parameter, $value)
+    {
+        $this->constructor[$parameter] = $value;
         return $this;
     }
 
@@ -127,7 +146,7 @@ class ClassDefinitionHelper implements DefinitionHelper
      * Defines a method to call and the arguments to use.
      *
      * This method takes a variable number of arguments after the method name, example:
-     *     ->withMethod('myMethod', $param1, $param2)
+     *     ->method('myMethod', $param1, $param2)
      *
      * @param string $method Name of the method to call.
      * @param mixed  ...     Parameters to use for calling the method.
@@ -146,13 +165,13 @@ class ClassDefinitionHelper implements DefinitionHelper
      * Defines a method to call and a value for a specific argument.
      *
      * This method is usually used together with annotations or autowiring, when a parameter
-     * is not (or cannot be) type-hinted. Using this method instead of withMethod() allows to
+     * is not (or cannot be) type-hinted. Using this method instead of method() allows to
      * avoid defining all the parameters (letting them being resolved using annotations or autowiring)
      * and only define one.
      *
      * @param string $method    Name of the method to call.
-     * @param string $parameter Parameter in which the value will be given.
-     * @param mixed  $value     Value to give for this parameter.
+     * @param string $parameter Parameter for which the value will be given.
+     * @param mixed  $value     Value to give to this parameter.
      *
      * @return ClassDefinitionHelper
      */
