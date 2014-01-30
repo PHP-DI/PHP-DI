@@ -8,3 +8,5 @@ PHP-DI is a Dependency Injection Container made for humans.
 
 It is very practical, extremely powerful, and framework-agnostic.
 Read more on its official website: [php-di.org](http://php-di.org)
+
+Join us in the Gitter chat room: [![Gitter chat](https://badges.gitter.im/mnapoli/PHP-DI.png)](https://gitter.im/mnapoli/PHP-DI)
