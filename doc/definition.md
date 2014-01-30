@@ -172,6 +172,11 @@ $container->set('My\OtherClass', \DI\object()
     ->property('bar', 'My\Bar')
 );
 
+$container->set('My\AnotherClass', \DI\object()
+    ->constructorParameter('someParam', 'value to inject')
+    ->methodParameter('setFoo2', 'someParam', DI\link('My\Foo'))
+);
+
 // Mapping an interface to an implementation
 $container->set('My\Interface', \DI\object('My\Implementation'));
 
@@ -225,7 +230,12 @@ return [
         ->scope(Scope::PROTOTYPE())
         ->constructor(DI\link('db.host'), DI\link('db.port'))
         ->method('setFoo2', DI\link('My\Foo1'), DI\link('My\Foo2'))
-        ->property('bar', 'My\Bar')
+        ->property('bar', 'My\Bar'),
+
+    // Define only specific parameters
+    'My\AnotherClass' => DI\object()
+        ->constructorParameter('someParam', 'value to inject')
+        ->methodParameter('setFoo2', 'someParam', DI\link('My\Foo')),
 
     // Mapping an interface to an implementation
     'My\Interface' => DI\object('My\Implementation'),
