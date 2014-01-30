@@ -27,7 +27,7 @@ class Issue72Test extends \PHPUnit_Framework_TestCase
     public function annotationDefinitionShouldOverrideReflectionDefinition()
     {
         $builder = new ContainerBuilder();
-        $builder->useReflection(true);
+        $builder->useAutowiring(true);
         $builder->useAnnotations(true);
         $container = $builder->build();
 
@@ -47,7 +47,7 @@ class Issue72Test extends \PHPUnit_Framework_TestCase
     public function arrayDefinitionShouldOverrideReflectionDefinition()
     {
         $builder = new ContainerBuilder();
-        $builder->useReflection(true);
+        $builder->useAutowiring(true);
         $builder->useAnnotations(false);
 
         // Override to 'service2' in the definition file
@@ -67,7 +67,7 @@ class Issue72Test extends \PHPUnit_Framework_TestCase
     public function arrayDefinitionShouldOverrideAnnotationDefinition()
     {
         $builder = new ContainerBuilder();
-        $builder->useReflection(false);
+        $builder->useAutowiring(false);
         $builder->useAnnotations(true);
 
         // Override 'service1' to 'service2' in the definition file
@@ -87,7 +87,7 @@ class Issue72Test extends \PHPUnit_Framework_TestCase
     public function arrayDefinitionShouldOverrideAnotherArrayDefinition()
     {
         $builder = new ContainerBuilder();
-        $builder->useReflection(false);
+        $builder->useAutowiring(false);
         $builder->useAnnotations(false);
 
         // Override 'service1' to 'service2' in the definition file
@@ -109,7 +109,7 @@ class Issue72Test extends \PHPUnit_Framework_TestCase
     public function phpDefinitionShouldOverrideArrayDefinition()
     {
         $builder = new ContainerBuilder();
-        $builder->useReflection(false);
+        $builder->useAutowiring(false);
         $builder->useAnnotations(false);
         $builder->addDefinitions(__DIR__ . '/Issue72/definitions.php');
         $container = $builder->build();

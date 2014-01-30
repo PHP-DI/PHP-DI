@@ -62,7 +62,7 @@ class InheritanceTest extends \PHPUnit_Framework_TestCase
     {
         // Test with a container using annotations
         $builder = new ContainerBuilder();
-        $builder->useReflection(true);
+        $builder->useAutowiring(true);
         $builder->useAnnotations(true);
         $containerAnnotations = $builder->build();
         $containerAnnotations->set(
@@ -73,7 +73,7 @@ class InheritanceTest extends \PHPUnit_Framework_TestCase
         // Test with a container using PHP configuration -> entries are different,
         // definitions shouldn't be shared between 2 different entries se we redefine all properties and methods
         $builder = new ContainerBuilder();
-        $builder->useReflection(false);
+        $builder->useAutowiring(false);
         $builder->useAnnotations(false);
         $containerPHPDefinitions = $builder->build();
         $containerPHPDefinitions->set('IntegrationTests\DI\Fixtures\InheritanceTest\Dependency', \DI\object());

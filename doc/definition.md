@@ -23,7 +23,7 @@ Read more in the [Definition overriding documentation](definition-overriding.md)
 ## Autowiring
 
 ```php
-$container->useReflection(true);
+$container->useAutowiring(true);
 ```
 
 **Note: autowiring is enabled by default**

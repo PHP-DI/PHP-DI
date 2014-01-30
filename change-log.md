@@ -15,8 +15,10 @@ BC-breaks:
 * You cannot configure an injection as lazy anymore, you can only configure a container entry as lazy
 * The Container constructor now takes mandatory parameters. Use the ContainerBuilder to create a Container.
 * Removed `ContainerBuilder::setDefinitionsValidation()` (no definition validation anymore)
+* `ContainerBuilder::useReflection()` is now named: `ContainerBuilder::useAutowiring()`
+* `ContainerBuilder::addDefinitionsFromFile()` is now named: `ContainerBuilder::addDefinitions()`
 
-Changes:
+Other changes:
 
 * Added `ContainerInterface` and `FactoryInterface`, both implemented by the container.
 * [#115](https://github.com/mnapoli/PHP-DI/issues/115) Added `Container::has()`
@@ -27,10 +29,7 @@ Changes:
 * [#122](https://github.com/mnapoli/PHP-DI/issues/122) JSON definitions are not supported anymore
 * `ContainerSingleton` has finally been removed
 * Added `ContainerBuilder::buildDevContainer()` to get started with a default container very easily.
-
-Bugfixes:
-
-* [#99](https://github.com/mnapoli/PHP-DI/issues/99) "@param" with PHP internal type throws exception
+* [#99](https://github.com/mnapoli/PHP-DI/issues/99) Fixed "`@param` with PHP internal type throws exception"
 
 ## 3.5.1
 
