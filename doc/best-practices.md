@@ -108,7 +108,40 @@ By using autowiring (enabled by default), you save yourself binding every parame
 of the constructor in the configuration. PHP-DI will guess which object it needs to inject by checking
 the types of your parameters.
 
-Side note: as explained in rule n°3, we recommend **type-hinting against interfaces**. In that case,
+In some cases, autowiring will not be enough because some parameter will be a scalar (string, int, …).
+At that point, you will need to define explicitly what to inject in that scalar parameter, and for this you can either:
+
+- define the whole injection of the method/class (i.e. every parameters).
+
+Example:
+
+```php
+<?php
+// config.php
+return [
+    // ...
+    OrderService::class => DI\object()
+        ->constructor(DI\link(SomeOtherService::class), 'a value'),
+];
+```
+
+- or define *just the scalar parameter* and let PHP-DI use autowiring for the rest.
+
+Example:
+
+```php
+<?php
+// config.php
+return [
+    // ...
+    OrderService::class => DI\object()
+        ->constructorParameter('paramName', 'a value'),
+];
+```
+
+This solution is generally preferred give it avoids redefining everything.
+
+*Side note:* as explained in rule n°3, we recommend **type-hinting against interfaces**. In that case,
 you will need to map interfaces to the implementation the container should use in the configuration:
 
 ```php

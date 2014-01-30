@@ -24,6 +24,11 @@ use ProxyManager\GeneratorStrategy\EvaluatingGeneratorStrategy;
  *
  * With the default options, the container created is appropriate for the development environment.
  *
+ * Example:
+ *
+ *     $builder = new ContainerBuilder();
+ *     $container = $builder->build();
+ *
  * @since  3.2
  * @author Matthieu Napoli <matthieu@mnapoli.fr>
  */
@@ -38,7 +43,7 @@ class ContainerBuilder
     /**
      * @var boolean
      */
-    private $useReflection = true;
+    private $useAutowiring = true;
 
     /**
      * @var boolean
@@ -94,6 +99,8 @@ class ContainerBuilder
     }
 
     /**
+     * Build and return a container.
+     *
      * @return Container
      */
     public function build()
@@ -117,7 +124,7 @@ class ContainerBuilder
             } else {
                 $firstSource = new AnnotationDefinitionSource();
             }
-        } elseif ($this->useReflection) {
+        } elseif ($this->useAutowiring) {
             if ($lastSource) {
                 $lastSource->chain(new ReflectionDefinitionSource());
             } else {
@@ -140,22 +147,24 @@ class ContainerBuilder
     }
 
     /**
-     * Enable or disable the use of reflection
+     * Enable or disable the use of autowiring to guess injections.
      *
-     * By default, enabled
+     * By default, enabled.
+     *
      * @param boolean $bool
      * @return ContainerBuilder
      */
-    public function useReflection($bool)
+    public function useAutowiring($bool)
     {
-        $this->useReflection = $bool;
+        $this->useAutowiring = $bool;
         return $this;
     }
 
     /**
-     * Enable or disable the use of annotations
+     * Enable or disable the use of annotations to guess injections.
      *
-     * By default, enabled
+     * By default, enabled.
+     *
      * @param $bool
      * @return ContainerBuilder
      */
@@ -166,7 +175,7 @@ class ContainerBuilder
     }
 
     /**
-     * Enables the use of a cache for the definitions
+     * Enables the use of a cache for the definitions.
      *
      * @param Cache $cache Cache backend to use
      * @return ContainerBuilder

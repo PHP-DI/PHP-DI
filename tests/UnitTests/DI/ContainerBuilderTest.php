@@ -78,10 +78,10 @@ class ContainerBuilderTest extends \PHPUnit_Framework_TestCase
         $result = $builder->useAnnotations(true);
         $this->assertSame($builder, $result);
 
-        $result = $builder->useReflection(false);
+        $result = $builder->useAutowiring(false);
         $this->assertSame($builder, $result);
 
-        $result = $builder->useReflection(true);
+        $result = $builder->useAutowiring(true);
         $this->assertSame($builder, $result);
 
         $result = $builder->writeProxiesToFile(true, 'somedir');

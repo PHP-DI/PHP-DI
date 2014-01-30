@@ -38,7 +38,7 @@ class InjectionTest extends \PHPUnit_Framework_TestCase
     {
         // Test with a container using reflection
         $builder = new ContainerBuilder();
-        $builder->useReflection(true);
+        $builder->useAutowiring(true);
         $builder->useAnnotations(false);
         $containerReflection = $builder->build();
         // We have to define some entries for the test because reflection on itself doesn't make it possible
@@ -53,7 +53,7 @@ class InjectionTest extends \PHPUnit_Framework_TestCase
 
         // Test with a container using annotations and reflection
         $builder = new ContainerBuilder();
-        $builder->useReflection(true);
+        $builder->useAutowiring(true);
         $builder->useAnnotations(true);
         $containerAnnotations = $builder->build();
         // We have to define some entries for the test because annotations on itself doesn't make it possible
@@ -67,14 +67,14 @@ class InjectionTest extends \PHPUnit_Framework_TestCase
 
         // Test with a container using array configuration
         $builder = new ContainerBuilder();
-        $builder->useReflection(false);
+        $builder->useAutowiring(false);
         $builder->useAnnotations(false);
         $builder->addDefinitions(__DIR__ . '/Fixtures/definitions.php');
         $containerArray = $builder->build();
 
         // Test with a container using PHP configuration
         $builder = new ContainerBuilder();
-        $builder->useReflection(false);
+        $builder->useAutowiring(false);
         $builder->useAnnotations(false);
         $containerPHP = $builder->build();
         $containerPHP->set('foo', 'bar');

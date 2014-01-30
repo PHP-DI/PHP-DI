@@ -40,11 +40,14 @@ If you want to use PHP-DI's container as a simple container (no autowiring or an
 
 ```php
 $builder = new \DI\ContainerBuilder();
-$builder->useReflection(false);
+$builder->useAutowiring(false);
 $builder->useAnnotations(false);
 
 $container = $builder->build();
 ```
+
+Note that this doesn't necessarily means that the container will be faster, since everything can be cached anyway.
+Read more about this in [the performances documentation](performances.md).
 
 ## Using PHP-DI with other containers
 
