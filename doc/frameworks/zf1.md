@@ -22,7 +22,8 @@ To use PHP-DI in your ZF1 application, you need to change the Dispatcher used by
 
 ```php
     protected function _initDependencyInjection() {
-        $container = new \DI\Container();
+        $builder = new \DI\ContainerBuilder();
+        $container = $builder->build();
 
         $dispatcher = new \DI\ZendFramework1\Dispatcher();
         $dispatcher->setContainer($container);

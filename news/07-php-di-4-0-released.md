@@ -73,6 +73,14 @@ This group aims to provide interfaces that will help making different containers
 While Container Interop has not released a stable version yet, PHP-DI is ready and will probably use it in v4.1.
 
 
+### Better documentation
+
+Documentation is extremely important and a great care has been taken to:
+
+- update the documentation following the new major release
+- improve the existing documentation and make it more readable
+
+
 ### Code quality
 
 This new major version also comes with even more code quality.

@@ -18,7 +18,7 @@ You can also use several or all these options at the same time if you want to.
 If you combine several sources, there are priorities that apply. From the highest priority to the least:
 
 - Explicit definition on the container (i.e. defined with `$container->set()`)
-- PHP file definitions (if A is added after B, then A prevails)
+- PHP file definitions (if you add several configuration files, then the last one can override entries from the previous ones)
 - Annotations
 - Autowiring
 
@@ -144,7 +144,7 @@ There are still things that can't be defined with annotations:
 For that, you can combine annotations with definitions in PHP (see below).
 
 
-## PHP array
+## PHP configuration
 
 You can define injections with a PHP array:
 
@@ -153,6 +153,18 @@ $containerBuilder->addDefinitions('config.php');
 ```
 
 This definition format is the most powerful of all, but also more verbose.
+There are several kind of **entries** you can define:
+
+- **value**: string, int, array, class instance, …
+- **object**: you describe to the container *how* it will create an instance of a class
+- **factory**: a `callable` (function) that will return the entry
+- **alias**: alias an entry name to another entry name
+
+PHP-DI provides function helpers for this (to define *values*, you don't need a function):
+
+- `DI\object($classname = null)`: define an object entry
+- `DI\factory($factory)`: define a factory that returns an entry
+- `DI\link($entryName)`: used to define alias entries, and also to reference other entries in object definitions (see below)
 
 Example of a `config.php` file (using [PHP 5.4 short arrays](http://php.net/manual/en/migration54.new-features.php)):
 
@@ -169,10 +181,11 @@ return [
         'alice@acme.example.com'
     ],
 
-    // Direct mapping (not needed if you didn't disable autowiring)
+    // Explicit definition of an object (unnecessary if you use autowiring)
     'SomeClass' => DI\object(),
 
-    // This is not recommended: will instantiate the class on every request, even when not used
+    // Value definition of a class instance
+    // Not recommended: will instantiate the class on every request, even when not used
     'SomeOtherClass' => new SomeOtherClass(1, "hello"),
 
     // Defines an instance of My\Class
@@ -208,9 +221,8 @@ return [
 ```
 
 
-## PHP code
-
-In addition to defining entries in an array, you can set them directly in the container:
+In addition to defining entries in an array, you can set them directly in the container as shown below.
+**Using an array is however recommended since it allows to cache the definitions.**
 
 ```php
 // Value
