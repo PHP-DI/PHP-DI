@@ -1,0 +1,154 @@
+{% extends "page.twig" %}
+
+{% block content %}
+
+    <section class='section-wrapper post-w'>
+        <div class='container'>
+            <div class='row'>
+
+                <div class='span8'>
+
+                    {% block blogcontent %}
+
+                        <div class='white-card recent-post clearfix extra-padding'>
+                            <h5 class='recent-post-header'>
+                                PHP-DI 4.0 released
+                            </h5>
+
+                            <p class='post-content'>
+                                I am extremely happy to announce that, after 4 months of work and more than 150 commits,
+                                PHP-DI version 4.0 has been released!
+                                This is a new major release, and it delivers. As indicated by "major release",
+                                it comes with BC breaks, but this is for the better.
+                            </p>
+                            <a href="{{ baseUrl }}/news/07-php-di-4-0-released.html" class="btn btn-extra pull-right">
+                                Read More &gt;</a>
+                        </div>
+
+                        <div class='white-card recent-post clearfix extra-padding'>
+                            <h5 class='recent-post-header'>
+                                What will change in PHP-DI 4: the new definition format
+                            </h5>
+
+                            <p class='post-content'>
+                                In PHP-DI 4, the definition format will change.
+                                Autowiring and Annotations are still there, but the YAML
+                                and PHP array definitions have disappeared. Let's see why.
+                            </p>
+                            <a href="{{ baseUrl }}/news/06-php-di-4-0-new-definitions.html" class="btn btn-extra pull-right">
+                                Read More &gt;</a>
+                        </div>
+
+                        <div class='white-card recent-post clearfix extra-padding'>
+                            <h5 class='recent-post-header'>
+                                PHP-DI 3.5 released
+                            </h5>
+
+                            <p class='post-content'>
+                                I am happy to announce that PHP-DI version 3.5 has just been released.
+                                It features a minor but amazing improvement:
+                                you don't have to import annotations anymore!
+                            </p>
+                            <a href="{{ baseUrl }}/news/05-php-di-3-5.html" class="btn btn-extra pull-right">
+                                Read More &gt;</a>
+                        </div>
+
+                        <div class='white-card recent-post clearfix extra-padding'>
+                            <h5 class='recent-post-header'>
+                                PHP-DI 3.4 released
+                            </h5>
+
+                            <p class='post-content'>
+                                I am happy to announce that PHP-DI version 3.4 has just been released.
+                                This time, several small improvements: …
+                            </p>
+                            <a href="{{ baseUrl }}/news/04-php-di-3-4.html" class="btn btn-extra pull-right">
+                                Read More &gt;</a>
+                        </div>
+
+                        <div class='white-card recent-post clearfix extra-padding'>
+                            <h5 class='recent-post-header'>
+                                PHP-DI 3.3 released
+                            </h5>
+
+                            <p class='post-content'>
+                                I am happy to announce that PHP-DI version 3.3 has just been released.
+                                The major new feature is the possibility to inject all dependencies of an existing instance.
+                            </p>
+                            <a href="{{ baseUrl }}/news/03-php-di-3-3.html" class="btn btn-extra pull-right">
+                                Read More &gt;</a>
+                        </div>
+
+                        <div class='white-card recent-post clearfix extra-padding'>
+                            <h5 class='recent-post-header'>
+                                PHP-DI 3.2 released
+                            </h5>
+
+                            <p class='post-content'>
+                                I am happy to announce that I have just released PHP-DI version 3.2.
+                                The major new feature is the full support of Lazy Injection.
+                                But first, let's talk about the `ContainerBuilder`.
+                            </p>
+                            <a href="{{ baseUrl }}/news/02-php-di-3-2.html" class="btn btn-extra pull-right">
+                                Read More &gt;</a>
+                        </div>
+
+                        <div class='white-card recent-post clearfix extra-padding'>
+                            <h5 class='recent-post-header'>
+                                PHP-DI 3.1 released
+                            </h5>
+
+                            <p class='post-content'>
+                                I am happy to announce that I have just released PHP-DI version 3.1.
+                                The major new feature is the Zend Framework 1 integration.
+                                You can now use PHP-DI very easily with ZF1, and the integration will provide
+                                you dependency injection into your controllers.
+                            </p>
+                            <a href="{{ baseUrl }}/news/01-php-di-3-1.html" class="btn btn-extra pull-right">
+                                Read More &gt;</a>
+                        </div>
+
+                    {% endblock %}
+
+                </div>
+
+                <div class='span4'>
+                    <div class='blog-side-bar'>
+
+                        <div class='blog-categories widget-tp'>
+                            <h3>
+                                <i class='icon-th-list'></i>
+                                Latest posts
+                            </h3>
+                            <ul>
+                                <li>
+                                    <a href="{{ baseUrl }}/news/07-php-di-4-0-released.html">PHP-DI 4.0 released</a>
+                                </li>
+                                <li>
+                                    <a href="{{ baseUrl }}/news/06-php-di-4-0-new-definitions.html">What will change in PHP-DI 4: the new definition format</a>
+                                </li>
+                                <li>
+                                    <a href="{{ baseUrl }}/news/05-php-di-3-5.html">PHP-DI 3.5 released</a>
+                                </li>
+                                <li>
+                                    <a href="{{ baseUrl }}/news/04-php-di-3-4.html">PHP-DI 3.4 released</a>
+                                </li>
+                                <li>
+                                    <a href="{{ baseUrl }}/news/03-php-di-3-3.html">PHP-DI 3.3 released</a>
+                                </li>
+                                <li>
+                                    <a href="{{ baseUrl }}/news/02-php-di-3-2.html">PHP-DI 3.2 released</a>
+                                </li>
+                                <li>
+                                    <a href="{{ baseUrl }}/news/01-php-di-3-1.html">PHP-DI 3.1 released</a>
+                                </li>
+                            </ul>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+{% endblock %}

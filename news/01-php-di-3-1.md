@@ -1,6 +1,9 @@
-# PHP-DI 3.1 released
-
-*Posted by [Matthieu Napoli](http://mnapoli.fr) on June 23rd 2013*
+---
+template: blogpost
+title: PHP-DI 3.1 released
+author: Matthieu Napoli
+date: June 23rd 2013
+---
 
 I am happy to announce that I have just released PHP-DI version 3.1.
 

@@ -1,6 +1,9 @@
-# PHP-DI 4.0 released
-
-*Posted by [Matthieu Napoli](http://mnapoli.fr) on February 1st 2014*
+---
+template: blogpost
+title: PHP-DI 4.0 released
+author: Matthieu Napoli
+date: February 1st 2014
+---
 
 I am extremely happy to announce that, after 4 months of work and more than 150 commits, PHP-DI version 4.0 has been released!
 

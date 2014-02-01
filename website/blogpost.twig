@@ -1,0 +1,45 @@
+{% extends "blog.twig" %}
+
+{% block blogcontent %}
+
+    <div class='single-post-w'>
+        <h1 class='post-title'>{{ title }}</h1>
+
+        <p class='post-info'>
+            <span class='info-item'>
+              Posted by {{ author }}
+            </span>
+            <span class='info-item'>{{ date }}</span>
+        </p>
+        <div class='post-content'>
+            {{ content|raw }}
+        </div>
+    </div>
+
+    <div class='post-comments-w'>
+        <h3 class='section-header'>
+            Comments
+        </h3>
+        <div id="disqus_thread"></div>
+        <noscript>
+            Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+    </div>
+
+{% endblock %}
+
+
+{% block javascripts %}
+    {{ parent() }}
+
+    <script>
+        // Disqus comments
+        var disqus_shortname = 'phpdi';
+
+        (function() {
+            var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+            dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+        })();
+    </script>
+{% endblock %}

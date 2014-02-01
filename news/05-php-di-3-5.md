@@ -1,6 +1,9 @@
-# PHP-DI 3.5 released
-
-*Posted by [Matthieu Napoli](http://mnapoli.fr) on October 11th 2013*
+---
+template: blogpost
+title: PHP-DI 3.5 released
+author: Matthieu Napoli
+date: October 11th 2013
+---
 
 I am happy to announce that PHP-DI version 3.5 has just been released.
 

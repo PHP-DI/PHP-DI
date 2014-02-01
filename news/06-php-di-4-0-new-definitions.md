@@ -1,6 +1,9 @@
-# What will change in PHP-DI 4: the new definition format
-
-*Posted by [Matthieu Napoli](http://mnapoli.fr) on January 16th 2014*
+---
+template: blogpost
+title: What will change in PHP-DI 4: the new definition format
+author: Matthieu Napoli
+date: January 16th 2014
+---
 
 In PHP-DI 4, the definition format will change. Autowiring and Annotations are still there, but the YAML
 and PHP array definitions have disappeared. Let's see why.

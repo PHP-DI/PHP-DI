@@ -1,6 +1,9 @@
-# PHP-DI 3.4 released
-
-*Posted by [Matthieu Napoli](http://mnapoli.fr) on September 24th 2013*
+---
+template: blogpost
+title: PHP-DI 3.4 released
+author: Matthieu Napoli
+date: September 24th 2013
+---
 
 I am happy to announce that PHP-DI version 3.4 has just been released.
 
