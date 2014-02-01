@@ -70,6 +70,7 @@ For example, in the Symfony 2 integration, PHP-DI works perfectly along Symfony'
 
 PHP-DI also participates in the [Container Interop](https://github.com/container-interop/container-interop) initiative.
 This group aims to provide interfaces that will help making different containers and frameworks work together.
+While Container Interop has not released a stable version yet, PHP-DI is ready and will probably use it in v4.1.
 
 
 ### Code quality
