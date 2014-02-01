@@ -87,10 +87,10 @@
 <p>By default, PHP-DI returns the same instance each time it supplies a value. This behaviour is configurable via scopes.
 Scopes allow you to reuse instances and gives you the flexibility to choose the scope of the objects you create through configuration instead of having to 'bake in' the scope of an object at the PHP class level.</p>
 <p>The scopes supported out of the box are listed below:</p>
-<p>Scope               | Description
---------------------|------------
-singleton (default) | The object instance is unique during the container's lifecycle - each injection by the container or explicit call of <code>get()</code> returns the same instance.
-prototype           | The object instance is not unique - each injection or call of the container's <code>get()</code> method returns a fresh instance.</p>
+<ul>
+<li><strong>singleton</strong> (default): The object instance is unique during the container's lifecycle - each injection by the container or explicit call of <code>get()</code> returns the same instance.</li>
+<li><strong>prototype</strong>: The object instance is not unique - each injection or call of the container's <code>get()</code> method returns a fresh instance.</li>
+</ul>
 <h2>Applying Scopes</h2>
 <p>Scopes are part of the <a href="definition.html">definitions</a> of injections, so you can define them using annotations or PHP.</p>
 <h3>Annotation</h3>
