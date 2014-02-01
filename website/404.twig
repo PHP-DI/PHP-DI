@@ -1,0 +1,38 @@
+{% extends "page.twig" %}
+
+{% block content %}
+
+    <section class='section-wrapper not-found-w'>
+        <div class='container'>
+            <div class='row'>
+                <div class='span4'>
+                    <img alt="Not-found-error" src="{{ baseUrl }}/images/not-found-error.png"/>
+                </div>
+                <div class='span8'>
+                    <h1>Page not found</h1>
+                    <h4>Sorry the page you requested may have been moved or deleted.</h4>
+
+                    <div class='white-card extra-padding'>
+                        <p>Let's try one of the following remedies to get you back on track...</p>
+
+                        <div class='not-found-solutions btn-group'>
+                            <a href="{{ baseUrl }}/" class="btn">
+                                <i class='icon-home'></i>
+                                Go to the homepage
+                            </a>
+                            <a href="{{ baseUrl }}/news" class="btn">
+                                <i class='icon-comment-alt'></i>
+                                Check out the latest news
+                            </a>
+                            <a href="{{ baseUrl }}/doc" class="btn">
+                                <i class='icon-th-list'></i>
+                                Go to the documentation index
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+{% endblock %}
