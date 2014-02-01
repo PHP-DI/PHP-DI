@@ -112,7 +112,7 @@ return [
 
     // Class
     MyDbAdapter::class => DI\object()
-        ->withConstructor(DI\link('db.host'), DI\link('db.port')),
+        ->constructor(DI\link('db.host'), DI\link('db.port')),
 
 ];
 ```
