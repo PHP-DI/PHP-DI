@@ -83,80 +83,46 @@
     </div>
 
     <div class="container docs-w">
-        <h1>Lazy injection</h1>
-<p>Consider the following example:</p>
+        <h1>Injections depending on the environment</h1>
+<p>You may want to inject different parameters according to the environment, for example:</p>
 <pre><code class="language-php">&lt;?php
-class Foo
-{
-    private $a;
-    private $b;
-
-    public function __construct(Foo $a, Bar $b)
-    {
-        $this-&gt;a = $a;
-        $this-&gt;b = $b;
-    }
-
-    public function doSomething()
-    {
-        $this-&gt;a-&gt;doStuff();
-    }
-
-    public function doSomethingElse()
-    {
-        $this-&gt;b-&gt;doStuff();
-    }
-}</code></pre>
-<p><code>a</code> is used only when <code>doSomething()</code> is called, and <code>b</code> only when <code>doSomethingElse()</code> is called.</p>
-<p>You may wonder then: why injecting <code>a</code> <strong>and</strong> <code>b</code> if they may not be used? Especially if creating those objects is heavy in time or memory.</p>
-<p>That's where lazy injection can help.</p>
-<h2>How it works</h2>
-<p>If you define an object as "lazy", PHP-DI will inject:</p>
-<ul>
-<li>the object, if it has already been created</li>
-<li>or else a <strong>proxy</strong> to the object, if it is not yet created</li>
-</ul>
-<p>The proxy is a special kind of object that <strong>looks and behave exactly like the original object</strong>, so you can't tell the difference. The proxy will instantiate the original object only when needed.</p>
-<p>Creating a proxy is complex. For this, PHP-DI relies on <a href="https://github.com/Ocramius/ProxyManager">ProxyManager</a>, the (amazing) library used by Doctrine, Symfony and Zend.</p>
-<h3>Example</h3>
-<p>For the simplicity of the example, we will not inject a lazy object, but we will ask the container to return one:</p>
-<pre><code class="language-php">class Foo
-{
-    public function doSomething()
-    {
-    }
-}
-
-$container-&gt;set('Foo', \DI\object()-&gt;lazy);
-
-// $proxy is a Proxy object, it is not initialized
-// It is very lightweight in memory
-$proxy = $container-&gt;get('Foo');
-
-var_dump($proxy instanceof Foo); // true
-
-// Calling a method on the proxy will initialize it
-$proxy-&gt;doSomething();
-// Now the proxy is initialized, the real instance of Foo has been created and called</code></pre>
-<h2>How to use</h2>
-<p>You can define an object as "lazy". If it is injected as a dependency, then a proxy will be injected instead.</p>
-<h3>Annotations</h3>
-<pre><code class="language-php">/**
- * @Injectable(lazy=true)
- */
-class MyClass
-{
-}</code></pre>
-<h3>PHP code</h3>
-<pre><code class="language-php">&lt;?php
-$containerPHP-&gt;set('foo', \DI\object('MyClass')-&gt;lazy());</code></pre>
-<h3>PHP configuration file</h3>
-<pre><code class="language-php">&lt;?php
-
 return [
-    'foo' =&gt; DI\object('MyClass')
-        -&gt;lazy(),
+    // These values change according to the environment
+    'db.host' =&gt; 'localhost',
+    'db.port' =&gt; 3336,
+
+    'DbAdapter' =&gt; DI\object()
+        -&gt;constructor(DI\link('db.host'), DI\link('db.port')),
 ];</code></pre>
+<p>To achieve this, you can create a main <code>config.php</code> file and have small configuration files for each environment:</p>
+<pre><code class="language-php">&lt;?php
+// config.prod.php
+return [
+    'db.host' =&gt; '178.231.21.29',
+    'db.port' =&gt; 5000,
+];</code></pre>
+<pre><code class="language-php">&lt;?php
+// config.dev.php
+return [
+    'db.host' =&gt; 'localhost',
+    'db.port' =&gt; 3336,
+];</code></pre>
+<pre><code class="language-php">&lt;?php
+// config.php
+return [
+    'DbAdapter' =&gt; DI\object()
+        -&gt;constructor(DI\link('db.host'), DI\link('db.port')),
+];</code></pre>
+<p>Then you can configure your container to including the correct files:</p>
+<pre><code class="language-php">$builder = new ContainerBuilder();
+
+// Main configuration
+$builder-&gt;addDefinitions("config.php");
+
+// Config file for the environment
+$builder-&gt;addDefinitions("config.$environment.php");
+
+$container = $builder-&gt;build();</code></pre>
     </div>
 
 

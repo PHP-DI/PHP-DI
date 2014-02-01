@@ -1,179 +1,150 @@
 <!DOCTYPE html>
-<html lang="en">
+<!--[if lt IE 7]>
+<html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>
+<html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>
+<html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!-->
+<html class="no-js"> <!--<![endif]-->
 <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width">
 
-    <title>PHP-DI - Dependency Injection Container for PHP</title>
+    <title>PHP-DI - The Dependency Injection Container for humans</title>
     <meta name="description" content="PHP-DI is a Dependency Injection Container for PHP that intends to be practical and powerful">
 
-    <link rel="stylesheet" href="http://php-di.org/css/bootstrap.min.css">
-    <link rel="stylesheet" href="http://php-di.org/css/bootstrap-responsive.min.css">
-    <link rel="stylesheet" href="http://php-di.org/css/font-awesome.min.css">
-    <link rel="stylesheet" href="http://php-di.org/css/prettify-github.css">
-
-    <link rel="stylesheet" href="http://php-di.org/css/style.css">
-
-    <!-- HTML5 Support for IE -->
-    <!--[if lt IE 9]>
-    <script src="http://html5shim.googlecode.com/svn/trunk/html5.js" type="text/javascript"></script>
-    <![endif]-->
-</head>
-
+            <link href="http://php-di.org/css/bootstrap-theme_venera.min.css" media="all" rel="stylesheet" type="text/css">
+        <link href="http://fonts.googleapis.com/css?family=Abel:400|Oswald:300,400,700" media="all" rel="stylesheet" type="text/css">
+        <link href="http://php-di.org/css/highlight.github.css" rel="stylesheet">
+        <link href="http://php-di.org/css/custom.css" rel="stylesheet">
+    </head>
 <body>
 
-    <div class="navbar navbar-inverse navbar-fixed-top">
-        <div class="navbar-inner">
-            <div class="container">
-                <button type="button" class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-                <a class="brand" href="http://php-di.org/">PHP-DI</a>
+    <header id='header'>
+        <div class='navbar navbar-fixed-top'>
+            <div class='navbar-inner'>
+                <div class='container'>
+                    <a class='btn btn-navbar' data-target='.nav-collapse' data-toggle='collapse'>
+                        <span class='icon-bar'></span>
+                        <span class='icon-bar'></span>
+                        <span class='icon-bar'></span>
+                    </a>
+                    <a href="http://php-di.org/index.html" class="brand">PHP-DI</a>
 
-                <div class="nav-collapse collapse">
-                    <ul class="nav pull-right">
-                        <li><a href="http://php-di.org/">Home</a></li>
-                        <li><a href="http://php-di.org/news/">News</a></li>
-                        <li><a href="http://php-di.org/doc/getting-started">Getting started</a></li>
-                        <li><a href="http://php-di.org/doc/">Documentation</a></li>
-                        <li><a href="http://php-di.org/change-log">Change log</a></li>
-                        <li><a href="https://github.com/mnapoli/PHP-DI"><i class="icon-github"></i>Github</a></li>
-                    </ul>
+                    <div class='nav-collapse subnav-collapse collapse pull-right' id='top-navigation'>
+                        <ul class='nav'>
+                            <li><a href="http://php-di.org/">Home</a></li>
+                            <li><a href="http://php-di.org/news/">News</a></li>
+                            <li><a href="http://php-di.org/doc/getting-started.html">Getting started</a></li>
+                            <li><a href="http://php-di.org/doc/">Documentation</a></li>
+                            <li><a href="http://php-di.org/change-log.html">Change log</a></li>
+                            <li><a href="https://github.com/mnapoli/PHP-DI"><i class="icon-github"></i> Github</a></li>
+                        </ul>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
-
-    <header>
-
-        <div class="title">
-
-            <h1>
-                PHP-DI
-                <small>Dependency Injection Container for PHP</small>
-            </h1>
-
-        </div>
-
     </header>
 
-
-    <!-- Main Content starts -->
-
-    <div class="main">
-        <div class="container-fluid">
-<h1>How PHP-DI works</h1>
-
-<p>Do you want to help out improving PHP-DI? Or are you simply curious? Here is a short presentation of how PHP-DI works.</p>
-
-<h2>Global architecture</h2>
-
-<p>The main component is the <code>Container</code> class.</p>
-
-<p>It is the entry point from the user&#39;s point of view, it is also the component that coordinates all other sub-components.</p>
-
-<p>Its main role is to return <strong>entries</strong> by their <strong>entry name</strong>:</p>
-
-<pre><code class="php">$entry = $container->get(&#39;entryName&#39;);
-</code></pre>
-
-<p>A container instance has the following sub-components:</p>
-
-<ul>
-<li>a <code>DefinitionManager</code> that returns a <code>Definition</code> for an entry name</li>
-<li>a <code>Factory</code> to create instances from the definitions</li>
-</ul>
-
-<h3>Definitions</h3>
-
-<p>A definition defines what is an entry:</p>
-
-<ul>
-<li><strong>a simple value</strong> (string, number, object instance…): <code>ValueDefinition</code></li>
-<li><strong>a closure returning the value</strong>: <code>ClosureDefinition</code></li>
-<li><strong>a definition of a class</strong>: <code>ClassDefinition</code></li>
-</ul>
-
-<p>The last type (class definition) describes how the container should create a class instance (what parameters the constructor takes, …).</p>
-
-<h3>Definition sources</h3>
-
-<p>All definition sources implement the <code>DefinitionSource</code> interface.</p>
-
-<p>Their role is to return a <code>Definition</code> for an entry name.</p>
-
-<p>Implementations are:</p>
-
-<ul>
-<li><code>SimpleDefinitionSource</code>, contains definitions in an array in memory (for definitions created on the fly)</li>
-<li><code>ArrayDefinitionSource</code> parses definitions from a PHP array</li>
-<li><code>ReflectionDefinitionSource</code> uses <a href="http://fr.php.net/manual/en/book.reflection.php">PHP reflection</a> to guess constructors parameters</li>
-<li><code>AnnotationDefinitionSource</code> parses code annotations using <a href="http://docs.doctrine-project.org/projects/doctrine-common/en/latest/reference/annotations.html">Doctrine annotations library</a></li>
-<li><code>CombinedDefinitionSource</code> wraps a list of other definition sources and merges definitions from them</li>
-</ul>
-
-<h3>File loaders</h3>
-
-<p>File loaders extend the <code>DefinitionFileLoader</code> abstract class.</p>
-
-<p>Their goal is to read a file containing definitions (PHP, YAML, XML, …) and return a PHP array that will be read by the <code>ArrayDefinitionSource</code>.</p>
-
-<h3>Definition manager</h3>
-
-<p>The <code>DefinitionManager</code> sits on top of the definition sources to manage them.</p>
-
-<p>The container uses a definition manager to add sources and to get a <code>Definition</code> for an entry name.</p>
-
-<p>It answers the following needs:</p>
-
-<ul>
-<li>prioritize correctly the sources (e.g. annotations should override reflection): read more about <a href="definition-overriding">definition overriding</a></li>
-<li>cache the definitions (if configured)</li>
-</ul>
-
-<p><em>This could be improved by splitting this into 2 separate classes to follow the <a href="http://en.wikipedia.org/wiki/Single_responsibility_principle">Single Responsibility Principle</a>.</em></p>
-
-<h3>Factory</h3>
-
-<p>The role of the <code>Factory</code> is to return an object instance from a <code>ClassDefinition</code>.</p>
-            <div class="github">
-                PHP-DI is an open source project, you can contribute or seek help on
-                <a class="btn btn-mini" href="https://github.com/mnapoli/PHP-DI/" target="_blank">
-                    <i class="icon-github-alt"></i>
-                    Github</a>
-                or
-                <a class="btn btn-mini" href="https://twitter.com/PHPDI" target="_blank">
-                    <i class="icon-twitter"></i>
-                    Twitter</a>
+    
+    <header class="jumbotron subhead" id="overview">
+        <div class="container">
+            <div class="docs-header-icon">
+                <h1>Documentation</h1>
+                <p class="lead">
+                    This is the documentation for PHP-DI 4. The documentation for v3 is
+                    <a href="https://github.com/mnapoli/PHP-DI/tree/3.x/doc">still available here</a>.
+                </p>
             </div>
-
+        </div>
+    </header>
+    <div class='sub-jumbotron'>
+        <div class='container'>
+            <ul>
+                <li>
+                    <a href="/doc/" class="">Full documentation</a>
+                </li>
+                <li>
+                    <a href="/doc/getting-started.html" class="">Getting started</a>
+                </li>
+                <li>
+                    <a href="/doc/best-practices.html" class="">Best practices</a>
+                </li>
+                <li>
+                    <a href="/doc/container-configuration.html" class="">Configuring the container</a>
+                </li>
+                <li>
+                    <a href="/doc/definition.html" class="">Defining injections</a>
+                </li>
+            </ul>
         </div>
     </div>
 
-    <!-- Main content ends -->
+    <div class="container docs-w">
+        <h1>How PHP-DI works</h1>
+<p>Do you want to help out improving PHP-DI? Or are you simply curious? Here is a short presentation of how PHP-DI works.</p>
+<h2>Global architecture</h2>
+<p>The main component is the <code>Container</code> class. It is created by a <code>ContainerBuilder</code>, which is just a helper class.</p>
+<p>It is the entry point from the user's point of view, it is also the component that coordinates all other sub-components.</p>
+<p>Its main role is to return <strong>entries</strong> by their <strong>entry name</strong>:</p>
+<pre><code class="language-php">$entry = $container-&gt;get('entryName');</code></pre>
+<p>A container instance has the following sub-components:</p>
+<ul>
+<li>a <code>DefinitionManager</code> that returns a <code>Definition</code> for an entry name (by looking in severeal <code>DefinitionSource</code>)</li>
+<li>a list of <code>DefinitionResolver</code> that take a <code>Definition</code> and resolve it to a value (f.e. if it's an object, it will create it)</li>
+</ul>
+<h3>Definitions</h3>
+<p>A definition defines what is an entry:</p>
+<ul>
+<li><strong>a simple value</strong> (string, number, object instance…): <code>ValueDefinition</code></li>
+<li><strong>a factory/callable returning the value</strong>: <code>FactoryDefinition</code></li>
+<li><strong>a definition of an entry alias</strong>: <code>AliasDefinition</code></li>
+<li><strong>a definition of a class</strong>: <code>ClassDefinition</code></li>
+</ul>
+<p>The last type (class definition) describes how the container should create a class instance (what parameters the constructor takes, …).</p>
+    </div>
 
-    <footer>
-        <div class="container-fluid">
-            <p class="copy">
-                Copyright &copy; 2013 | <a href="http://mnapoli.fr/">Matthieu Napoli</a>
-            </p>
-            <p>
-                Website generated by
-                <a href="http://mnapoli.github.com/gh-pages-compiler/" target="_blank">gh-pages-compiler</a>.
-            </p>
-        </div>
-    </footer>
 
-    <!-- JS -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
-    <script src="http://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/2.2.1/bootstrap.min.js"></script>
-    <script src="http://cdnjs.cloudflare.com/ajax/libs/prettify/188.0.0/prettify.js"></script>
-    <script src="http://php-di.org/js/template.js"></script>
+            <footer>
+            <div class='pre-footer'>
+                <div class='container'>
+                    <p>
+                        <strong>Unsatisfied with the documentation?</strong>
+                        Please let us know, <a href="https://github.com/mnapoli/PHP-DI/issues/new">create an issue</a>,
+                        we will greatly appreciate it.
+                        You can chat with us on
+                        <a href="https://twitter.com/phpdi">Twitter</a> or
+                        <a href="https://gitter.im/mnapoli/PHP-DI">Gitter chat</a> too.
+                    </p>
+                </div>
+            </div>
+            <div class='deep-footer'>
+                <div class='container'>
+                    <div class='copyright'>
+                        Copyright &copy; 2014 <a href="http://mnapoli.fr/">Matthieu Napoli</a>
+                        Website generated with
+                        <a href="http://mnapoli.fr/Couscous/" target="_blank">Couscous</a>.
+                    </div>
+                </div>
+            </div>
+        </footer>
+    
+            <script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
+        <script src="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/js/bootstrap.min.js" type="text/javascript"></script>
+        <script src="http://yandex.st/highlightjs/7.5/highlight.min.js"></script>
+        <script src="http://php-di.org/js/template.js"></script>
 
-    <script type="text/javascript">
+        <script>
+            $(function() {
+                $("section>h1").wrap('<div class="page-header" />');
+                $("section>p:first-child").addClass('lead');
+                hljs.initHighlightingOnLoad();
+            });
+        </script>
+    
+    <script>
         var _gaq = _gaq || [];
         _gaq.push(['_setAccount', 'UA-15584647-13']);
         _gaq.push(['_trackPageview']);
@@ -183,6 +154,5 @@
             var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
         })();
     </script>
-
 </body>
 </html>

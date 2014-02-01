@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>
+<html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>
+<html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>
+<html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!-->
+<html class="no-js"> <!--<![endif]-->
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width">
+
+    <title>PHP-DI - The Dependency Injection Container for humans</title>
+    <meta name="description" content="PHP-DI is a Dependency Injection Container for PHP that intends to be practical and powerful">
+
+            <link href="http://php-di.org/css/bootstrap-theme_venera.min.css" media="all" rel="stylesheet" type="text/css">
+        <link href="http://fonts.googleapis.com/css?family=Abel:400|Oswald:300,400,700" media="all" rel="stylesheet" type="text/css">
+        <link href="http://php-di.org/css/highlight.github.css" rel="stylesheet">
+        <link href="http://php-di.org/css/custom.css" rel="stylesheet">
+    </head>
+<body>
+
+    <header id='header'>
+        <div class='navbar navbar-fixed-top'>
+            <div class='navbar-inner'>
+                <div class='container'>
+                    <a class='btn btn-navbar' data-target='.nav-collapse' data-toggle='collapse'>
+                        <span class='icon-bar'></span>
+                        <span class='icon-bar'></span>
+                        <span class='icon-bar'></span>
+                    </a>
+                    <a href="http://php-di.org/index.html" class="brand">PHP-DI</a>
+
+                    <div class='nav-collapse subnav-collapse collapse pull-right' id='top-navigation'>
+                        <ul class='nav'>
+                            <li><a href="http://php-di.org/">Home</a></li>
+                            <li><a href="http://php-di.org/news/">News</a></li>
+                            <li><a href="http://php-di.org/doc/getting-started.html">Getting started</a></li>
+                            <li><a href="http://php-di.org/doc/">Documentation</a></li>
+                            <li><a href="http://php-di.org/change-log.html">Change log</a></li>
+                            <li><a href="https://github.com/mnapoli/PHP-DI"><i class="icon-github"></i> Github</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    
+    <header class="jumbotron subhead" id="overview">
+        <div class="container">
+            <div class="docs-header-icon">
+                <h1>Documentation</h1>
+                <p class="lead">
+                    This is the documentation for PHP-DI 4. The documentation for v3 is
+                    <a href="https://github.com/mnapoli/PHP-DI/tree/3.x/doc">still available here</a>.
+                </p>
+            </div>
+        </div>
+    </header>
+    <div class='sub-jumbotron'>
+        <div class='container'>
+            <ul>
+                <li>
+                    <a href="/doc/" class="">Full documentation</a>
+                </li>
+                <li>
+                    <a href="/doc/getting-started.html" class="">Getting started</a>
+                </li>
+                <li>
+                    <a href="/doc/best-practices.html" class="active">Best practices</a>
+                </li>
+                <li>
+                    <a href="/doc/container-configuration.html" class="">Configuring the container</a>
+                </li>
+                <li>
+                    <a href="/doc/definition.html" class="">Defining injections</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="container docs-w">
+        <h1>Best practices</h1>
+<p>This is an opinionated guide on how to use PHP-DI and dependency injection for the best.</p>
+<p>While it may not cover every case, and satisfy everybody, it can serve as a canvas to help you
+getting started with dependency injection.</p>
+<p>If you disagree with anything explained in that guide, that's OK. It's opinionated, and you
+should make your own opinion on all these subjects ;). It shouldn't prevent you to use PHP-DI
+the way you want.</p>
+<h2>Rules for using a container and dependency injection</h2>
+<p>Here are some basic rules to follow:</p>
+<ol>
+<li>never get an entry from the container directly (always use dependency injection)</li>
+<li>more generally, write code decoupled from the container</li>
+<li>type-hint against interfaces, configure which implementation to use in the container's configuration</li>
+</ol>
+<h2>Writing controllers</h2>
+<p>Using dependency injection in controllers is usually where it is the most painful.</p>
+<p>If we take Symfony 2 as an example (but this generally applies to every framework), here are your options:</p>
+<ul>
+<li>inject the container in the controllers, and call <code>$container-&gt;get(...)</code></li>
+</ul>
+<p>This is bad, see the rule n°1.</p>
+<ul>
+<li>inject dependencies in the constructor (<a href="http://symfony.com/doc/current/cookbook/controller/service.html">controller as a service in Symfony</a>)</li>
+</ul>
+<p>This is painful when you have more than 5 dependencies, and your constructor is
+<a href="http://www.whitewashing.de/2013/06/27/extending_symfony2__controller_utilities.html">15 lines of boilerplate code</a></p>
+<ul>
+<li><strong>inject dependencies in properties</strong></li>
+</ul>
+<p>This is the solution we recommend.</p>
+<p>Example:</p>
+<pre><code class="language-php">class UserController
+{
+    /**
+     * @Inject
+     * @var FormFactoryInterface
+     */
+    private $formFactory;
+
+    public function createForm($type, $data, $options)
+    {
+        // $this-&gt;formFactory-&gt;...
+    }
+}</code></pre>
+<p>As you can see, this solution requires very few code, is simple to understand and benefits from IDE support
+(autocompletion, refactoring, …).</p>
+<p>Property injection is generally frowned upon, and for good reasons:</p>
+<ul>
+<li>injecting in a private property breaks encapsulation</li>
+<li>it is not an explicit dependency: there is no contract saying your class need the property to be set to work</li>
+<li>if you use PHP-DI's annotations to mark the dependency to be injected, your class is dependent on the container (see the 2nd rule above)</li>
+</ul>
+<p>BUT</p>
+<p>if you follow general best practices on how to write your application, your controllers
+will not contain business logic (only routing calls to the models and binding returned values to view).</p>
+<p>So:</p>
+<ul>
+<li>you will not unit-test it (that doesn’t mean you won’t write functional tests on the interface though)</li>
+<li>you will not need to reuse it elsewhere</li>
+<li>if you change the framework, you may have to rewrite it (or parts of it) anyway
+(because most dependencies like Request, Response, templating system, etc. will have changed)</li>
+</ul>
+<p>This solution offers many benefits for no major drawback, so
+<strong>we recommend using annotations in controllers</strong>.</p>
+<h2>Writing services</h2>
+<p>Given a service is intended to be reused, tested and independent of your framework, <strong>we do not recommend
+using annotations for injecting dependencies</strong>.</p>
+<p>Instead, we recommend using <strong>constructor injection and autowiring</strong>:</p>
+<pre><code class="language-php">class OrderService implements OrderServiceInterface
+{
+    private $paymentService;
+
+    public function __construct(PaymentServiceInterface $paymentService)
+    {
+        $this-&gt;paymentService = $paymentService;
+    }
+
+    public function processOrder($order)
+    {
+        $this-&gt;paymentService-&gt;...
+    }
+}</code></pre>
+<p>By using autowiring (enabled by default), you save yourself binding every parameter
+of the constructor in the configuration. PHP-DI will guess which object it needs to inject by checking
+the types of your parameters.</p>
+<p>In some cases, autowiring will not be enough because some parameter will be a scalar (string, int, …).
+At that point, you will need to define explicitly what to inject in that scalar parameter, and for this you can either:</p>
+<ul>
+<li>define the whole injection of the method/class (i.e. every parameters).</li>
+</ul>
+<p>Example:</p>
+<pre><code class="language-php">&lt;?php
+// config.php
+return [
+    // ...
+    OrderService::class =&gt; DI\object()
+        -&gt;constructor(DI\link(SomeOtherService::class), 'a value'),
+];</code></pre>
+<ul>
+<li>or define <em>just the scalar parameter</em> and let PHP-DI use autowiring for the rest.</li>
+</ul>
+<p>Example:</p>
+<pre><code class="language-php">&lt;?php
+// config.php
+return [
+    // ...
+    OrderService::class =&gt; DI\object()
+        -&gt;constructorParameter('paramName', 'a value'),
+];</code></pre>
+<p>This solution is generally preferred give it avoids redefining everything.</p>
+<p><em>Side note:</em> as explained in rule n°3, we recommend <strong>type-hinting against interfaces</strong>. In that case,
+you will need to map interfaces to the implementation the container should use in the configuration:</p>
+<pre><code class="language-php">&lt;?php
+// config.php
+return [
+    // ...
+    OrderServiceInterface::class =&gt; DI\object(OrderService::class),
+];</code></pre>
+<h2>Using libraries</h2>
+<p>When using libraries, like loggers, ORMs, … you sometimes need to configure them.</p>
+<p>In that case, we advise you to define these dependencies in your configuration file.
+We also recommend using an anonymous function when the configuration gets a bit complex.</p>
+<p><strong>The anonymous function allows you to write real PHP code</strong>, which is great, because you
+can use the library's documentation, you get IDE support, and you are a PHP developer so
+you already know the language ;).</p>
+<p>Here is an example with <a href="https://github.com/Seldaek/monolog">Monolog</a>, a PHP logger:</p>
+<pre><code class="language-php">&lt;?php
+// config.php
+
+use Monolog\Logger;
+use Monolog\Handler\StreamHandler;
+
+return [
+    // ...
+
+    Psr\Log\LoggerInterface::class =&gt; DI\factory(function () {
+        $logger = new Logger('mylog');
+
+        $fileHandler = new StreamHandler('path/to/your.log', Logger::DEBUG);
+        $fileHandler-&gt;setFormatter(new LineFormatter());
+        $logger-&gt;pushHandler($fileHandler);
+
+        return $logger;
+    }),
+];</code></pre>
+<p>Of course, as you can see, we used the PSR-3 interface for injections. That way we can replace Monolog
+with any PSR-3 logger anytime we want, just by changing this configuration.</p>
+    </div>
+
+
+            <footer>
+            <div class='pre-footer'>
+                <div class='container'>
+                    <p>
+                        <strong>Unsatisfied with the documentation?</strong>
+                        Please let us know, <a href="https://github.com/mnapoli/PHP-DI/issues/new">create an issue</a>,
+                        we will greatly appreciate it.
+                        You can chat with us on
+                        <a href="https://twitter.com/phpdi">Twitter</a> or
+                        <a href="https://gitter.im/mnapoli/PHP-DI">Gitter chat</a> too.
+                    </p>
+                </div>
+            </div>
+            <div class='deep-footer'>
+                <div class='container'>
+                    <div class='copyright'>
+                        Copyright &copy; 2014 <a href="http://mnapoli.fr/">Matthieu Napoli</a>
+                        Website generated with
+                        <a href="http://mnapoli.fr/Couscous/" target="_blank">Couscous</a>.
+                    </div>
+                </div>
+            </div>
+        </footer>
+    
+            <script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
+        <script src="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/js/bootstrap.min.js" type="text/javascript"></script>
+        <script src="http://yandex.st/highlightjs/7.5/highlight.min.js"></script>
+        <script src="http://php-di.org/js/template.js"></script>
+
+        <script>
+            $(function() {
+                $("section>h1").wrap('<div class="page-header" />');
+                $("section>p:first-child").addClass('lead');
+                hljs.initHighlightingOnLoad();
+            });
+        </script>
+    
+    <script>
+        var _gaq = _gaq || [];
+        _gaq.push(['_setAccount', 'UA-15584647-13']);
+        _gaq.push(['_trackPageview']);
+        (function() {
+            var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+            ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+            var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+        })();
+    </script>
+</body>
+</html>

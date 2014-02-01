@@ -83,80 +83,31 @@
     </div>
 
     <div class="container docs-w">
-        <h1>Lazy injection</h1>
-<p>Consider the following example:</p>
-<pre><code class="language-php">&lt;?php
-class Foo
-{
-    private $a;
-    private $b;
-
-    public function __construct(Foo $a, Bar $b)
-    {
-        $this-&gt;a = $a;
-        $this-&gt;b = $b;
-    }
-
-    public function doSomething()
-    {
-        $this-&gt;a-&gt;doStuff();
-    }
-
-    public function doSomethingElse()
-    {
-        $this-&gt;b-&gt;doStuff();
+        <h1>PHP-DI in Zend Framework 1</h1>
+<p>If you are using ZF1, PHP-DI provides easy and clean integration so that you don't have
+to call the container (thus avoiding the Service Locator pattern).</p>
+<p>First, install the bridge to ZF1:</p>
+<pre><code class="language-json">{
+    "require": {
+        "mnapoli/php-di": "The version you want here",
+        "mnapoli/php-di-zf1": "*"
     }
 }</code></pre>
-<p><code>a</code> is used only when <code>doSomething()</code> is called, and <code>b</code> only when <code>doSomethingElse()</code> is called.</p>
-<p>You may wonder then: why injecting <code>a</code> <strong>and</strong> <code>b</code> if they may not be used? Especially if creating those objects is heavy in time or memory.</p>
-<p>That's where lazy injection can help.</p>
-<h2>How it works</h2>
-<p>If you define an object as "lazy", PHP-DI will inject:</p>
-<ul>
-<li>the object, if it has already been created</li>
-<li>or else a <strong>proxy</strong> to the object, if it is not yet created</li>
-</ul>
-<p>The proxy is a special kind of object that <strong>looks and behave exactly like the original object</strong>, so you can't tell the difference. The proxy will instantiate the original object only when needed.</p>
-<p>Creating a proxy is complex. For this, PHP-DI relies on <a href="https://github.com/Ocramius/ProxyManager">ProxyManager</a>, the (amazing) library used by Doctrine, Symfony and Zend.</p>
-<h3>Example</h3>
-<p>For the simplicity of the example, we will not inject a lazy object, but we will ask the container to return one:</p>
-<pre><code class="language-php">class Foo
-{
-    public function doSomething()
-    {
-    }
-}
+<p>To use PHP-DI in your ZF1 application, you need to change the Dispatcher used by the Front Controller in the Bootstrap.</p>
+<pre><code class="language-php">    protected function _initDependencyInjection() {
+        $builder = new \DI\ContainerBuilder();
+        $container = $builder-&gt;build();
 
-$container-&gt;set('Foo', \DI\object()-&gt;lazy);
+        $dispatcher = new \DI\ZendFramework1\Dispatcher();
+        $dispatcher-&gt;setContainer($container);
 
-// $proxy is a Proxy object, it is not initialized
-// It is very lightweight in memory
-$proxy = $container-&gt;get('Foo');
-
-var_dump($proxy instanceof Foo); // true
-
-// Calling a method on the proxy will initialize it
-$proxy-&gt;doSomething();
-// Now the proxy is initialized, the real instance of Foo has been created and called</code></pre>
-<h2>How to use</h2>
-<p>You can define an object as "lazy". If it is injected as a dependency, then a proxy will be injected instead.</p>
-<h3>Annotations</h3>
-<pre><code class="language-php">/**
- * @Injectable(lazy=true)
- */
-class MyClass
-{
-}</code></pre>
-<h3>PHP code</h3>
-<pre><code class="language-php">&lt;?php
-$containerPHP-&gt;set('foo', \DI\object('MyClass')-&gt;lazy());</code></pre>
-<h3>PHP configuration file</h3>
-<pre><code class="language-php">&lt;?php
-
-return [
-    'foo' =&gt; DI\object('MyClass')
-        -&gt;lazy(),
-];</code></pre>
+        Zend_Controller_Front::getInstance()-&gt;setDispatcher($dispatcher);
+    }</code></pre>
+<p><strong>That's it!</strong></p>
+<p>Now you have dependency injection <strong>in your controllers</strong>.</p>
+<p><strong>Warning</strong>: if you use Zend's autoloader (and not Composer), you will need to configure it:</p>
+<pre><code class="language-php">$autoloader-&gt;suppressNotFoundWarnings(true);</code></pre>
+<p>Read more on the <a href="https://github.com/mnapoli/PHP-DI-ZF1">PHP-DI-ZF1 project on Github</a>.</p>
     </div>
 
 

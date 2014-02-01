@@ -57,69 +57,100 @@
 
                     
     <div class='single-post-w'>
-        <h1 class='post-title'>PHP-DI 3.2 released</h1>
+        <h1 class='post-title'>PHP-DI 4.0 released</h1>
 
         <p class='post-info'>
             <span class='info-item'>
               Posted by Matthieu Napoli
             </span>
-            <span class='info-item'>July 23rd 2013</span>
+            <span class='info-item'>February 1st 2014</span>
         </p>
         <div class='post-content'>
-            <p>I am happy to announce that I have just released PHP-DI version 3.2.</p>
-<p>The major new feature is the full support of <strong>Lazy Injection</strong>. But first, let's talk about the <code>ContainerBuilder</code>.</p>
-<h2>ContainerBuilder</h2>
-<p>The <code>ContainerBuilder</code> is an object helping you to configure and create your container.</p>
-<pre><code class="language-php">&lt;?php
-$builder = new \DI\ContainerBuilder();
-$builder-&gt;setDefinitionCache(new Doctrine\Common\Cache\ArrayCache());
-$builder-&gt;setDefinitionsValidation(true);
-
-$container = $builder-&gt;build();</code></pre>
-<p>The documentation now presents 3 different configuration templates:</p>
+            <p>I am extremely happy to announce that, after 4 months of work and more than 150 commits, PHP-DI version 4.0 has been released!</p>
+<p>This is a new major release, and it delivers. As indicated by "major release", it comes with BC breaks, but this is for the better.</p>
+<p><em>PHP-DI 3.x users: BC-breaks are detailed in the <a href="../change-log.html">change log</a>, read the <a href="../doc/migration/4.0.html">migration guide from 3.x to 4.0</a>.</em></p>
+<h2>What's new?</h2>
+<h3>Completely new definition format</h3>
+<p>PHP-DI 3.x offered several definition formats, such as:</p>
 <ul>
-<li>development configuration</li>
-<li>production configuration</li>
-<li>lightweight configuration</li>
+<li>autowiring (use of reflection)</li>
+<li>annotations</li>
+<li>YAML</li>
+<li>PHP array</li>
+<li>various undocumented, unstable formats (XML, JSON)…</li>
 </ul>
-<p>Read the documentation: <a href="../doc/container-configuration.html">Configuring the container</a>.</p>
-<h2>Lazy injection</h2>
-<p>Until v3.1, PHP-DI offered limited support for injecting dependencies lazily: it was restricted to property injection. Up from v3.2, there are no restrictions anymore: you can now inject lazily in constructors, setters or properties.</p>
-<p>To achieve lazy dependencies, PHP-DI injects <strong>proxies</strong>. These proxies behave and look just like the real object, except they delay loading this object until it is really used.</p>
-<p>This can be really helpful to improve performances if you tend to inject unused dependencies.</p>
-<p><strong>Credits</strong>: lazy injection relies on creating proxy classes. PHP-DI uses <a href="https://github.com/Ocramius/ProxyManager">ProxyManager</a> by Marco Pivetta, the library now used by Symfony, Zend Framework, …. A big thanks to him.</p>
-<h3>Example</h3>
-<p>You can mark dependencies to be lazily injected, here is an example using annotations:</p>
-<pre><code class="language-php">&lt;?php
-use DI\Annotation\Inject;
-
-class Example {
-    /**
-     * @Inject(lazy=true)
-     * @var My\Class
-     */
-    protected $property;
-
-    /**
-     * @Inject({ "param1" = {"lazy"=true} })
-     */
-    public function method(My\Class $param1) {
+<p>PHP-DI 4.0 now offers:</p>
+<ul>
+<li>autowiring (unchanged)</li>
+<li>annotations (very few changes)</li>
+<li>PHP definitions</li>
+</ul>
+<p>The last one is completely new, and is the result of several months of brainstorming and trials.
+It is meant to be much more powerful and simpler to write and understand.</p>
+<p>You can read more about <a href="06-php-di-4-0-new-definitions.html">why the definition format has changed</a>.</p>
+<h3>Container methods</h3>
+<p>The container now offers new methods in addition to <code>get($id)</code>:</p>
+<ul>
+<li><code>has($id)</code> will return <code>true</code> or <code>false</code> depending on if the container can provide the entry.</li>
+</ul>
+<p>This method is also useful to make PHP-DI comply with future standards, and to improve container interoperability
+(most containers have this method).</p>
+<ul>
+<li><code>make($id, $params = [])</code> will <strong>create</strong> a new instance of the service using the given parameters.</li>
+</ul>
+<p>Missing parameters are provided by the container. This is essentially the same as <code>get()</code>, except it ignores
+the singleton scope.</p>
+<p>This method makes the container work like a factory, so a new <code>FactoryInterface</code> has been introduced so that
+you can type-hint against the interface and not couple yourself to the container.</p>
+<h3>Framework integration</h3>
+<p>PHP-DI now works with Symfony 2 and Zend Framework 1 &amp; 2!</p>
+<p>It is actually pretty easy making PHP-DI work with any other framework, feel free to start a discussion
+about your favorite framework on GitHub.</p>
+<h3>Container interoperability</h3>
+<p>PHP-DI 4 has been thought so that it could work hand in hand with <strong>other</strong> containers.
+For example, in the Symfony 2 integration, PHP-DI works perfectly along Symfony's native container.</p>
+<p>PHP-DI also participates in the <a href="https://github.com/container-interop/container-interop">Container Interop</a> initiative.
+This group aims to provide interfaces that will help making different containers and frameworks work together.
+While Container Interop has not released a stable version yet, PHP-DI is ready and will probably use it in v4.1.</p>
+<h3>Better documentation</h3>
+<p>Documentation is extremely important and a great care has been taken to:</p>
+<ul>
+<li>update the documentation following the new major release</li>
+<li>improve the existing documentation and make it more readable</li>
+</ul>
+<h3>Code quality</h3>
+<p>This new major version also comes with even more code quality.</p>
+<ul>
+<li>Better architecture</li>
+</ul>
+<p>A large part of the internals of PHP-DI has been rewritten for this new version. The core is now much more maintainable,
+testable and extensible. Adding new features should be easier, and many edge cases that couldn't supported in 3.* are now fixed.</p>
+<ul>
+<li>Code coverage</li>
+</ul>
+<p>Functional tests have been removed from the code coverage reports, so that only unit tests are taken into account.
+Furthermore, every unit test uses the <a href="http://phpunit.de/manual/3.7/en/appendixes.annotations.html#appendixes.annotations.covers"><code>@covers</code> annotation</a> from PHPUnit.</p>
+<p>This allows to have a much more realistic and useful code coverage report. To give you an idea, the code coverage
+<strong>dropped from 91% to 60%</strong>! A lot of work has been put into testing, and now the code coverage is back up to more than 85%.</p>
+<ul>
+<li>Scrutinizer-CI</li>
+</ul>
+<p>The overall Scrutinizer-CI index went from <strong>7.9</strong> to <strong>9.0</strong>! Most issues have been fixed:</p>
+<p><img alt="Scrutinizer report" src="scrutinizer-issues.png" /></p>
+<h3>Many small improvements</h3>
+<p>PHP-DI 4 comes with many small improvements too, and rather than list them all, you can see them in the <a href="../change-log.html">change log</a>.</p>
+<h2>Installing PHP-DI 4.0</h2>
+<p>Just require <code>"mnapoli/php-di"</code> and <a href="../doc/getting-started.html">get started</a>.</p>
+<p>Already using PHP-DI 3? Then edit your composer configuration:</p>
+<pre><code class="language-json">{
+    "require": {
+        "mnapoli/php-di": "~4.0"
     }
 }</code></pre>
-<p>Here is an example using YAML:</p>
-<pre><code class="language-yaml">Example:
-  properties:
-    property:
-      name: My\Class
-      lazy: true
-  methods:
-    method:
-      param1:
-        name: My\Class
-        lazy: true</code></pre>
-<p>Read the full documentation: <a href="../doc/lazy-injection.html">Lazy injection</a>.</p>
+<p>and run <code>composer update</code>.</p>
+<p>You can also read the <a href="../doc/migration/4.0.html">migration guide from 3.x to 4.0</a>.</p>
 <h2>Change log</h2>
-<p>Read all the changes in the <a href="../change-log.html">change log</a>.</p>
+<p>You can also read the complete <a href="../change-log.html">change log</a>.</p>
         </div>
     </div>
 

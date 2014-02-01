@@ -83,80 +83,71 @@
     </div>
 
     <div class="container docs-w">
-        <h1>Lazy injection</h1>
-<p>Consider the following example:</p>
-<pre><code class="language-php">&lt;?php
-class Foo
-{
-    private $a;
-    private $b;
-
-    public function __construct(Foo $a, Bar $b)
-    {
-        $this-&gt;a = $a;
-        $this-&gt;b = $b;
-    }
-
-    public function doSomething()
-    {
-        $this-&gt;a-&gt;doStuff();
-    }
-
-    public function doSomethingElse()
-    {
-        $this-&gt;b-&gt;doStuff();
-    }
+        <h1>Migrating from PHP-DI 3.x to 4.0</h1>
+<p>PHP-DI 4.0 is a new major version that comes with backward compatibility breaks.</p>
+<p>This guide will (hopefully) help you migrate from a 3.x version to 4.0.</p>
+<h2>Annotations</h2>
+<p>The <code>lazy</code> option has disappeared:</p>
+<pre><code class="language-php">class Example {
+    /**
+     * @Inject(lazy=true)
+     * @var Foo
+     */
+    private $property;
 }</code></pre>
-<p><code>a</code> is used only when <code>doSomething()</code> is called, and <code>b</code> only when <code>doSomethingElse()</code> is called.</p>
-<p>You may wonder then: why injecting <code>a</code> <strong>and</strong> <code>b</code> if they may not be used? Especially if creating those objects is heavy in time or memory.</p>
-<p>That's where lazy injection can help.</p>
-<h2>How it works</h2>
-<p>If you define an object as "lazy", PHP-DI will inject:</p>
-<ul>
-<li>the object, if it has already been created</li>
-<li>or else a <strong>proxy</strong> to the object, if it is not yet created</li>
-</ul>
-<p>The proxy is a special kind of object that <strong>looks and behave exactly like the original object</strong>, so you can't tell the difference. The proxy will instantiate the original object only when needed.</p>
-<p>Creating a proxy is complex. For this, PHP-DI relies on <a href="https://github.com/Ocramius/ProxyManager">ProxyManager</a>, the (amazing) library used by Doctrine, Symfony and Zend.</p>
-<h3>Example</h3>
-<p>For the simplicity of the example, we will not inject a lazy object, but we will ask the container to return one:</p>
-<pre><code class="language-php">class Foo
-{
-    public function doSomething()
-    {
-    }
-}
-
-$container-&gt;set('Foo', \DI\object()-&gt;lazy);
-
-// $proxy is a Proxy object, it is not initialized
-// It is very lightweight in memory
-$proxy = $container-&gt;get('Foo');
-
-var_dump($proxy instanceof Foo); // true
-
-// Calling a method on the proxy will initialize it
-$proxy-&gt;doSomething();
-// Now the proxy is initialized, the real instance of Foo has been created and called</code></pre>
-<h2>How to use</h2>
-<p>You can define an object as "lazy". If it is injected as a dependency, then a proxy will be injected instead.</p>
-<h3>Annotations</h3>
+<p>Now, you can only define a whole service as lazy, for example with annotations:</p>
 <pre><code class="language-php">/**
  * @Injectable(lazy=true)
  */
-class MyClass
-{
+class Foo {
 }</code></pre>
-<h3>PHP code</h3>
-<pre><code class="language-php">&lt;?php
-$containerPHP-&gt;set('foo', \DI\object('MyClass')-&gt;lazy());</code></pre>
-<h3>PHP configuration file</h3>
-<pre><code class="language-php">&lt;?php
-
+<h2>Definitions</h2>
+<p>The biggest BC break is between the definitions format. The new definition format is very different from the old one,
+because it is based on function helpers, not an array or YAML structure.</p>
+<p>To be clear: YAML configuration is not supported anymore.</p>
+<p>Here is a comparison:</p>
+<pre><code class="language-php">// Before
 return [
-    'foo' =&gt; DI\object('MyClass')
-        -&gt;lazy(),
+    'My\Class' =&gt; [
+        'constructor' =&gt; [
+            'host' =&gt; 'db.host',
+            'port' =&gt; 'db.port',
+        ],
+        'methods' =&gt; [
+            'setFoo' =&gt; [ 'My\Foo' ],
+        ],
+    ],
+];
+
+// After
+return [
+    'My\Class' =&gt; DI\object()
+        -&gt;constructor(DI\link('db.host'), DI\link('db.port'))
+        -&gt;method('setFoo', DI\link('My\Foo'))
 ];</code></pre>
+<p>You may or may not like this choice, but this is the conclusion of a lot of thinking and trials.
+If you are interested, you can read more here: <a href="https://gist.github.com/mnapoli/6890585">Thoughts about PHP-DI 4.0</a>,
+the main reason is that offering a YAML DSL is very restrictive over what we can do with PHP code,
+mainly <strong>closures</strong>.</p>
+<p>We actually recommend that any complex definition should be written in PHP code using an anonymous function:</p>
+<pre><code class="language-php">return [
+    MyClass::class =&gt; DI\factory(function (ContainerInterface $c) {
+        $o = new MyClass($c-&gt;get('db.host'), $c-&gt;get('db.port'));
+        $o-&gt;setFoo($c-&gt;get(Foo::class));
+        return $o;
+    })
+];</code></pre>
+<p>Using real PHP code is of course better, because it's easier to maintain, it is less tied to PHP-DI and it's
+not limited by an API.</p>
+<p>On the other hand, the helper functions are helpful if you are writing a simple definition.</p>
+<h2>Creating the container</h2>
+<p>You are encouraged to use the <code>ContainerBuilder</code> to create the <code>Container</code> if you weren't already doing this.</p>
+<p>The API of the <code>ContainerBuilder</code> has changed a bit:</p>
+<ul>
+<li><code>setDefinitionsValidation</code> has been removed (since it's PHP code it's validated by PHP)</li>
+<li><code>addDefinitionsFromFile</code> is now <code>addDefinitions</code> and now takes a file name (simpler)</li>
+<li><code>useReflection</code> is now <code>useAutowiring</code></li>
+</ul>
     </div>
 
 

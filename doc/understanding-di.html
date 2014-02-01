@@ -83,80 +83,141 @@
     </div>
 
     <div class="container docs-w">
-        <h1>Lazy injection</h1>
-<p>Consider the following example:</p>
-<pre><code class="language-php">&lt;?php
-class Foo
-{
-    private $a;
-    private $b;
-
-    public function __construct(Foo $a, Bar $b)
-    {
-        $this-&gt;a = $a;
-        $this-&gt;b = $b;
-    }
-
-    public function doSomething()
-    {
-        $this-&gt;a-&gt;doStuff();
-    }
-
-    public function doSomethingElse()
-    {
-        $this-&gt;b-&gt;doStuff();
-    }
-}</code></pre>
-<p><code>a</code> is used only when <code>doSomething()</code> is called, and <code>b</code> only when <code>doSomethingElse()</code> is called.</p>
-<p>You may wonder then: why injecting <code>a</code> <strong>and</strong> <code>b</code> if they may not be used? Especially if creating those objects is heavy in time or memory.</p>
-<p>That's where lazy injection can help.</p>
-<h2>How it works</h2>
-<p>If you define an object as "lazy", PHP-DI will inject:</p>
+        <h1>Understanding Dependency Injection</h1>
+<p>You can first read the <a href="doc/example.html">introduction to dependency injection with an example</a>.</p>
+<p>Dependency injection and DI containers are separate notions:</p>
 <ul>
-<li>the object, if it has already been created</li>
-<li>or else a <strong>proxy</strong> to the object, if it is not yet created</li>
+<li><strong>dependency injection is a method</strong> for writing better code</li>
+<li><strong>a container is a tool</strong> to help injecting dependencies</li>
 </ul>
-<p>The proxy is a special kind of object that <strong>looks and behave exactly like the original object</strong>, so you can't tell the difference. The proxy will instantiate the original object only when needed.</p>
-<p>Creating a proxy is complex. For this, PHP-DI relies on <a href="https://github.com/Ocramius/ProxyManager">ProxyManager</a>, the (amazing) library used by Doctrine, Symfony and Zend.</p>
-<h3>Example</h3>
-<p>For the simplicity of the example, we will not inject a lazy object, but we will ask the container to return one:</p>
-<pre><code class="language-php">class Foo
+<p>You do not <strong>need</strong> a container to do dependency injection. However, a container can help you.</p>
+<p>PHP-DI is about this: making dependency injection more practical.</p>
+<h2>The theory</h2>
+<h3>How classic PHP code works</h3>
+<p>Here is how a code <strong>not</strong> using DI will roughly work:</p>
+<ul>
+<li>Application needs Foo (e.g. a controller), so:</li>
+<li>Application creates Foo</li>
+<li>Application calls Foo
+<ul>
+<li>Foo needs Bar (e.g. a service), so:</li>
+<li>Foo creates Bar</li>
+<li>Foo calls Bar
+<ul>
+<li>Bar needs Bim (a service, a repository, …), so:</li>
+<li>Bar creates Bim</li>
+<li>Bar does something</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3>How Dependency Injection works</h3>
+<p>Here is how a code using DI will roughly work:</p>
+<ul>
+<li>Application needs Foo, which needs Bar, which needs Bim, so:</li>
+<li>Application creates Bim</li>
+<li>Application creates Bar and gives it Bim</li>
+<li>Application creates Foo and gives it Bar</li>
+<li>Application calls Foo
+<ul>
+<li>Foo calls Bar
+<ul>
+<li>Bar does something</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p>This is the pattern of <strong>Inversion of Control</strong>. The control of the dependencies is <strong>inverted</strong> from one being called to the one calling.</p>
+<p>The main advantage: the one at the end of the caller chain is always <strong>you</strong>. So you can control every dependencies: you have a complete control on how your application works. You can replace a dependency by another (one you made for example).</p>
+<p>For example that wouldn't be so easy if Library X uses Logger Y and you have to change the code of Library X to make it use your logger Z.</p>
+<h3>How code using a container works</h3>
+<p>Now how does a code using PHP-DI works:</p>
+<ul>
+<li>Application needs Foo so:</li>
+<li>Application gets Foo from the Container, so:
+<ul>
+<li>Container creates Bim</li>
+<li>Container creates Bar and gives it Bim</li>
+<li>Container creates Foo and gives it Bar</li>
+</ul>
+</li>
+<li>Application calls Foo
+<ul>
+<li>Foo calls Bar
+<ul>
+<li>Bar does something</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p>In short, the container takes away all the work of creating and injecting dependencies.</p>
+<h2>Understanding with an example</h2>
+<p>This is a real life example comparing a classic implementation (using <code>new</code> or singletons) VS using dependency injection.</p>
+<h3>Without dependency injection</h3>
+<p>Say you have:</p>
+<pre><code class="language-php">class GoogleMaps
 {
-    public function doSomething()
-    {
+    public function getCoordinatesFromAddress($address) {
+        // calls Google Maps webservice
     }
 }
-
-$container-&gt;set('Foo', \DI\object()-&gt;lazy);
-
-// $proxy is a Proxy object, it is not initialized
-// It is very lightweight in memory
-$proxy = $container-&gt;get('Foo');
-
-var_dump($proxy instanceof Foo); // true
-
-// Calling a method on the proxy will initialize it
-$proxy-&gt;doSomething();
-// Now the proxy is initialized, the real instance of Foo has been created and called</code></pre>
-<h2>How to use</h2>
-<p>You can define an object as "lazy". If it is injected as a dependency, then a proxy will be injected instead.</p>
-<h3>Annotations</h3>
-<pre><code class="language-php">/**
- * @Injectable(lazy=true)
- */
-class MyClass
+class OpenStreetMap
 {
+    public function getCoordinatesFromAddress($address) {
+        // calls OpenStreetMap webservice
+    }
 }</code></pre>
-<h3>PHP code</h3>
-<pre><code class="language-php">&lt;?php
-$containerPHP-&gt;set('foo', \DI\object('MyClass')-&gt;lazy());</code></pre>
-<h3>PHP configuration file</h3>
-<pre><code class="language-php">&lt;?php
+<p>The classic way of doing things is:</p>
+<pre><code class="language-php">class StoreService
+{
+    public function getStoreCoordinates($store) {
+        $geolocationService = new GoogleMaps();
+        // or $geolocationService = GoogleMaps::getInstance() if you use singletons
 
-return [
-    'foo' =&gt; DI\object('MyClass')
-        -&gt;lazy(),
-];</code></pre>
+        return $geolocationService-&gt;getCoordinatesFromAddress($store-&gt;getAddress());
+    }
+}</code></pre>
+<p>Now we want to use the <code>OpenStreetMap</code> instead of <code>GoogleMaps</code>, how do we do?
+We have to change the code of <code>StoreService</code>, and all the other classes that use <code>GoogleMaps</code>.</p>
+<p><strong>Without dependency injection, your classes are tightly coupled with their dependencies.</strong></p>
+<h3>With dependency injection</h3>
+<p>The <code>StoreService</code> now uses dependency injection:</p>
+<pre><code class="language-php">class StoreService {
+    private $geolocationService;
+
+    public function __construct(GeolocationService $geolocationService) {
+        $this-&gt;geolocationService = $geolocationService;
+    }
+
+    public function getStoreCoordinates($store) {
+        return $this-&gt;geolocationService-&gt;getCoordinatesFromAddress($store-&gt;getAddress());
+    }
+}</code></pre>
+<p>And the services are defined using an interface:</p>
+<pre><code class="language-php">interface GeolocationService {
+    public function getCoordinatesFromAddress($address);
+}
+
+class GoogleMaps implements GeolocationService { ...
+
+class OpenStreetMap implements GeolocationService { ...</code></pre>
+<p>Now, it is for the user of the StoreService to decide which implementation to use. And it can be changed anytime, without
+having to rewrite the <code>StoreService</code>.</p>
+<p><strong>The <code>StoreService</code> is no longer tightly coupled with its dependency.</strong></p>
+<h2>With PHP-DI</h2>
+<p>You may see that dependency injection will leave with one drawback: you now have to handle injecting dependencies.</p>
+<p>That's where a container, and specifically PHP-DI, can help you.</p>
+<p>Instead of writing:</p>
+<pre><code class="language-php">$geolocationService = new GoogleMaps();
+$storeService = new StoreService($geolocationService);</code></pre>
+<p>You can write:</p>
+<pre><code class="language-php">$storeService = $container-&gt;get('StoreService');</code></pre>
+<p>and configure which GeolocationService PHP-DI should automatically inject in StoreService through configuration:</p>
+<pre><code class="language-php">$container-&gt;set('GeolocationService', \DI\object('GoogleMaps'));</code></pre>
+<p>If you change your mind, there's just one line of configuration to change now.</p>
     </div>
 
 
