@@ -1,5 +1,7 @@
 # Documentation
 
+*This is the documentation for PHP-DI 4. The documentation for v3 is [still available here](https://github.com/mnapoli/PHP-DI/tree/3.x/doc).*
+
 ## Introduction
 
 * [Understanding dependency injection](understanding-di.md)
