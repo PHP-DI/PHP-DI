@@ -9,10 +9,8 @@ Scopes allow you to reuse instances and gives you the flexibility to choose the 
 
 The scopes supported out of the box are listed below:
 
-Scope               | Description
---------------------|------------
-singleton (default) | The object instance is unique during the container's lifecycle - each injection by the container or explicit call of `get()` returns the same instance.
-prototype           | The object instance is not unique - each injection or call of the container's `get()` method returns a fresh instance.
+- **singleton** (default): The object instance is unique during the container's lifecycle - each injection by the container or explicit call of `get()` returns the same instance.
+- **prototype**: The object instance is not unique - each injection or call of the container's `get()` method returns a fresh instance.
 
 ## Applying Scopes
 
