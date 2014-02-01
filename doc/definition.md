@@ -144,67 +144,15 @@ There are still things that can't be defined with annotations:
 For that, you can combine annotations with definitions in PHP (see below).
 
 
-## PHP code
-
-The container offers methods to quickly and easily define injections:
-
-```php
-$container = new Container();
-
-// Values (not classes)
-$container->set('db.host', 'localhost');
-$container->set('db.port', 5000);
-$container->set('report.recipients', [
-    'bob@acme.example.com',
-    'alice@acme.example.com'
-]);
-
-// Direct mapping (not needed if you didn't disable autowiring)
-$container->set('SomeClass', \DI\object());
-
-// This is not recommended: will instantiate the class on every request, even when not used
-$container->set('SomeClass', new SomeOtherClass(1, "hello"));
-
-// Defines an instance of My\Class
-$container->set('My\Class', \DI\object()
-    ->withConstructor('some raw value', \DI\link('My\OtherClass'))
-);
-
-$container->set('My\OtherClass', \DI\object()
-    ->scope(Scope::PROTOTYPE())
-    ->constructor(\DI\link('db.host'), \DI\link('db.port'))
-    ->method('setFoo2', \DI\link('My\Foo1'), \DI\link('My\Foo2'))
-    ->property('bar', 'My\Bar')
-);
-
-$container->set('My\AnotherClass', \DI\object()
-    ->constructorParameter('someParam', 'value to inject')
-    ->methodParameter('setFoo2', 'someParam', DI\link('My\Foo'))
-);
-
-// Mapping an interface to an implementation
-$container->set('My\Interface', \DI\object('My\Implementation'));
-
-// Defining a named instance
-$container->set('myNamedInstance', \DI\object('My\Class'));
-
-// Using an anonymous function
-$container->set('My\Stuff', \DI\factory(function (Container $c) {
-    return new MyClass($c->get('db.host'));
-}));
-
-// Defining an alias to another entry
-$container->set('some.entry', \DI\link('some.other.entry'));
-```
-
-
 ## PHP array
+
+You can define injections with a PHP array:
 
 ```php
 $containerBuilder->addDefinitions('config.php');
 ```
 
-You can also define injections with a PHP array.
+This definition format is the most powerful of all, but also more verbose.
 
 Example of a `config.php` file (using [PHP 5.4 short arrays](http://php.net/manual/en/migration54.new-features.php)):
 
@@ -258,3 +206,22 @@ return [
 
 ];
 ```
+
+
+## PHP code
+
+In addition to defining entries in an array, you can set them directly in the container:
+
+```php
+// Value
+$container->set('db.host', 'localhost');
+
+// Object
+$container->set('My\Class', \DI\object()
+    ->constructor('some raw value'))
+);
+
+// ...
+```
+
+The API is the same as shown above for the PHP array containing definitions.
