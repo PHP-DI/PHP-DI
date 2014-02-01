@@ -1,3 +1,7 @@
+---
+template: documentation
+---
+
 # Scopes
 
 By default, PHP-DI returns the same instance each time it supplies a value. This behaviour is configurable via scopes.

@@ -1,0 +1,42 @@
+{% extends "page.twig" %}
+
+{% block content %}
+
+    <header class="jumbotron subhead" id="overview">
+        <div class="container">
+            <div class="docs-header-icon">
+                <h1>Documentation</h1>
+                <p class="lead">
+                    This is the documentation for PHP-DI 4. The documentation for v3 is
+                    <a href="https://github.com/mnapoli/PHP-DI/tree/3.x/doc">still available here</a>.
+                </p>
+            </div>
+        </div>
+    </header>
+    <div class='sub-jumbotron'>
+        <div class='container'>
+            <ul>
+                <li>
+                    <a href="{{ baseurl }}/doc/" class="{{ tab == 'index' ? 'active' }}">Full documentation</a>
+                </li>
+                <li>
+                    <a href="{{ baseurl }}/doc/getting-started.html" class="{{ tab == 'get-started' ? 'active' }}">Getting started</a>
+                </li>
+                <li>
+                    <a href="{{ baseurl }}/doc/best-practices.html" class="{{ tab == 'best-practices' ? 'active' }}">Best practices</a>
+                </li>
+                <li>
+                    <a href="{{ baseurl }}/doc/container-configuration.html" class="{{ tab == 'container-config' ? 'active' }}">Configuring the container</a>
+                </li>
+                <li>
+                    <a href="{{ baseurl }}/doc/definition.html" class="{{ tab == 'definition' ? 'active' }}">Defining injections</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="container docs-w">
+        {{ content|raw }}
+    </div>
+
+{% endblock %}

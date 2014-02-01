@@ -1,3 +1,7 @@
+---
+template: documentation
+---
+
 # Performances
 
 ## Cache

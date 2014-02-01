@@ -1,6 +1,9 @@
-# Documentation
-
-*This is the documentation for PHP-DI 4. The documentation for v3 is [still available here](https://github.com/mnapoli/PHP-DI/tree/3.x/doc).*
+---
+template: documentation
+title: Documentation index
+subtitle: Learn how to use PHP-DI.
+tab: index
+---
 
 ## Introduction
 

@@ -1,3 +1,7 @@
+---
+template: documentation
+---
+
 # Inject on an existing instance
 
 *Feature introduced in PHP-DI 3.3*

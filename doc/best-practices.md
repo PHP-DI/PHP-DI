@@ -1,3 +1,8 @@
+---
+template: documentation
+tab: best-practices
+---
+
 # Best practices
 
 This is an opinionated guide on how to use PHP-DI and dependency injection for the best.

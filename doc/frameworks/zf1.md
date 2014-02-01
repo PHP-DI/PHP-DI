@@ -1,3 +1,7 @@
+---
+template: documentation
+---
+
 # PHP-DI in Zend Framework 1
 
 If you are using ZF1, PHP-DI provides easy and clean integration so that you don't have

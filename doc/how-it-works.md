@@ -1,3 +1,7 @@
+---
+template: documentation
+---
+
 # How PHP-DI works
 
 Do you want to help out improving PHP-DI? Or are you simply curious? Here is a short presentation of how PHP-DI works.

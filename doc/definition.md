@@ -1,3 +1,8 @@
+---
+template: documentation
+tab: definition
+---
+
 # Definitions
 
 PHP-DI injects stuff into objects.

@@ -1,3 +1,7 @@
+---
+template: documentation
+---
+
 # Lazy injection
 
 Consider the following example:

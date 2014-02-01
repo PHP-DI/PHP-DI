@@ -1,3 +1,7 @@
+---
+template: documentation
+---
+
 # Injections depending on the environment
 
 You may want to inject different parameters according to the environment, for example:

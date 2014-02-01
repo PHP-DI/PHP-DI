@@ -1,3 +1,8 @@
+---
+template: documentation
+tab: container-config
+---
+
 # Configuring the container
 
 ## Development environment

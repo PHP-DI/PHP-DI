@@ -1,3 +1,7 @@
+---
+template: documentation
+---
+
 # Definition overriding
 
 PHP-DI provides different definition sources. As explained on the [Definition documentation](documentation.md),

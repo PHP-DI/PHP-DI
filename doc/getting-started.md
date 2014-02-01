@@ -1,5 +1,9 @@
-# Getting started
+---
+template: documentation
+tab: get-started
+---
 
+# Getting started
 
 ## Installation
 

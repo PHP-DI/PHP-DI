@@ -1,3 +1,7 @@
+---
+template: documentation
+---
+
 # PHP-DI in Symfony 2
 
 If you are using Symfony 2, PHP-DI provides easy and clean integration, without replacing the original container
