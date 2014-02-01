@@ -10,7 +10,7 @@ Read the migration guide if you are using 3.x: [Migration guide from 3.x to 4.0]
 
 BC-breaks:
 
-* XML and JSON definitions have been removed
+* YAML, XML and JSON definitions have been removed, and the PHP definition format has changed (see above)
 * `ContainerSingleton` has been removed
 * You cannot configure an injection as lazy anymore, you can only configure a container entry as lazy
 * The Container constructor now takes mandatory parameters. Use the ContainerBuilder to create a Container.
