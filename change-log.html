@@ -67,6 +67,7 @@
 <li>Removed <code>ContainerBuilder::setDefinitionsValidation()</code> (no definition validation anymore)</li>
 <li><code>ContainerBuilder::useReflection()</code> is now named: <code>ContainerBuilder::useAutowiring()</code></li>
 <li><code>ContainerBuilder::addDefinitionsFromFile()</code> is now named: <code>ContainerBuilder::addDefinitions()</code></li>
+<li>The <code>$proxy</code> parameter in <code>Container::get($name, $proxy = true)</code> hase been removed. To get a proxy, you now need to define an entry as "lazy".</li>
 </ul>
 <p>Other changes:</p>
 <ul>
