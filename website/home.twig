@@ -166,6 +166,57 @@ return [
     <div class='container'>
         <div class='row'>
             <div class='span12'>
+                <h3 class='section-header'>Powerful</h3>
+
+                <p>
+                    Behind the simplicity, PHP-DI is meant to be extremely powerful.
+                </p>
+            </div>
+            <div class='span4'>
+                <div class='white-card'>
+                    <h5>Basic features</h5>
+                    <ul>
+                        <li>Constructor, method and property injection</li>
+                        <li>Injection of objects <em>and</em> scalar values</li>
+                        <li>Map interfaces to implementations</li>
+                        <li>Recursive dependency injection</li>
+                    </ul>
+                </div>
+            </div>
+            <div class='span4'>
+                <div class='white-card'>
+                    <h5>The power behind definitions</h5>
+                    <ul>
+                        <li>Definitions using the fluent API</li>
+                        <li>Definitions using closures</li>
+                        <li>Lazy injection</li>
+                        <li>Clear definition overriding</li>
+                    </ul>
+                </div>
+            </div>
+            <div class='span4'>
+                <div class='white-card'>
+                    <h5>Not just a container</h5>
+                    <ul>
+                        <li>Injection on an existing instance</li>
+                        <li>Can behave like a factory</li>
+                        <li>Integrates with other containers</li>
+                        <li>Offers extension points</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <p>
+            Go and have a look in <a href="{{ baseUrl }}/doc/">the complete documentation</a>.
+        </p>
+    </div>
+</section>
+
+
+<section class='section-wrapper'>
+    <div class='container'>
+        <div class='row'>
+            <div class='span12'>
                 <h3 class='section-header'>Modern</h3>
 
                 <p>
@@ -415,7 +466,7 @@ return [
                 for (var i = 0; i < Math.min(result.data.length, 6); ++i) {
                     var img = result.data[i].avatar_url;
                     var name = result.data[i].login;
-                    var url = result.data[i].url;
+                    var url = result.data[i].html_url;
                     elem.append($("<li class='span1'><a class='thumbnail' title='" + name + "' href='" + url + "'><img src='" + img + "'/></a></li>"));
                 }
             });
