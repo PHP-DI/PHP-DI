@@ -17,6 +17,7 @@ BC-breaks:
 * Removed `ContainerBuilder::setDefinitionsValidation()` (no definition validation anymore)
 * `ContainerBuilder::useReflection()` is now named: `ContainerBuilder::useAutowiring()`
 * `ContainerBuilder::addDefinitionsFromFile()` is now named: `ContainerBuilder::addDefinitions()`
+* The `$proxy` parameter in `Container::get($name, $proxy = true)` hase been removed. To get a proxy, you now need to define an entry as "lazy".
 
 Other changes:
 
