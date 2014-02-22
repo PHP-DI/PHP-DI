@@ -18,7 +18,7 @@ use DI\Definition\Definition;
  * @since 4.1
  * @author Matthieu Napoli <matthieu@mnapoli.fr>
  */
-class AliasDefinitionDumper
+class AliasDefinitionDumper implements DefinitionDumper
 {
     /**
      * {@inheritdoc}

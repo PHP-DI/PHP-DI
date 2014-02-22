@@ -22,7 +22,7 @@ use ReflectionMethod;
  * @since 4.1
  * @author Matthieu Napoli <matthieu@mnapoli.fr>
  */
-class ClassDefinitionDumper
+class ClassDefinitionDumper implements DefinitionDumper
 {
     /**
      * {@inheritdoc}

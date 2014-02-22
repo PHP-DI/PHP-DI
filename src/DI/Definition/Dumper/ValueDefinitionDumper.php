@@ -18,7 +18,7 @@ use DI\Definition\ValueDefinition;
  * @since 4.1
  * @author Matthieu Napoli <matthieu@mnapoli.fr>
  */
-class ValueDefinitionDumper
+class ValueDefinitionDumper implements DefinitionDumper
 {
     /**
      * {@inheritdoc}

@@ -18,7 +18,7 @@ use DI\Definition\FactoryDefinition;
  * @since 4.1
  * @author Matthieu Napoli <matthieu@mnapoli.fr>
  */
-class FactoryDefinitionDumper
+class FactoryDefinitionDumper implements DefinitionDumper
 {
     /**
      * {@inheritdoc}
