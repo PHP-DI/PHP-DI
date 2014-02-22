@@ -9,6 +9,9 @@
 
 namespace DI\Definition\Exception;
 
+use DI\Debug;
+use DI\Definition\Definition;
+
 /**
  * Invalid DI definitions
  *
@@ -16,4 +19,14 @@ namespace DI\Definition\Exception;
  */
 class DefinitionException extends \Exception
 {
+    public static function create(Definition $definition, $message)
+    {
+        return new self(sprintf(
+            "Entry %s cannot be resolved: %s\nDefinition of %s:\n%s",
+            $definition->getName(),
+            $message,
+            $definition->getName(),
+            Debug::dump($definition)
+        ));
+    }
 }
