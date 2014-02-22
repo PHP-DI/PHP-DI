@@ -94,7 +94,7 @@ class ClassDefinitionResolver implements DefinitionResolver
     public function injectOnInstance(ClassDefinition $classDefinition, $instance)
     {
         try {
-            $this->injectMethodsAndProperties($instance, $classDefinition);
+            $this->injectMethodsAndProperties($classDefinition, $instance, $classDefinition);
         } catch (NotFoundException $e) {
             $message = sprintf(
                 "Error while injecting dependencies into %s: %s",
@@ -115,6 +115,7 @@ class ClassDefinitionResolver implements DefinitionResolver
      */
     private function createProxy(ClassDefinition $definition, array $parameters)
     {
+        // waiting for PHP 5.4+ support
         $resolver = $this;
 
         /** @noinspection PhpUnusedParameterInspection */
@@ -145,9 +146,8 @@ class ClassDefinitionResolver implements DefinitionResolver
     public function createInstance(ClassDefinition $classDefinition, array $parameters)
     {
         if (! class_exists($classDefinition->getClassName()) && ! interface_exists($classDefinition->getClassName())) {
-            throw new DefinitionException(sprintf(
-                'Entry %s cannot be resolved: the class %s doesn\'t exist',
-                $classDefinition->getName(),
+            throw DefinitionException::create($classDefinition, sprintf(
+                "the class %s doesn't exist",
                 $classDefinition->getClassName()
             ));
         }
@@ -155,21 +155,28 @@ class ClassDefinitionResolver implements DefinitionResolver
         $classReflection = new ReflectionClass($classDefinition->getClassName());
 
         if (!$classReflection->isInstantiable()) {
-            throw new DefinitionException("$classReflection->name is not instantiable");
+            throw DefinitionException::create($classDefinition, sprintf(
+                "%s is not instantiable",
+                $classDefinition->getClassName()
+            ));
         }
 
         $constructorInjection = $classDefinition->getConstructorInjection();
 
         try {
-            $instance = $this->injectConstructor($classReflection, $constructorInjection, $parameters);
-            $this->injectMethodsAndProperties($instance, $classDefinition);
+            $instance = $this->injectConstructor(
+                $classDefinition,
+                $classReflection,
+                $constructorInjection,
+                $parameters
+            );
+            $this->injectMethodsAndProperties($classDefinition, $instance, $classDefinition);
         } catch (NotFoundException $e) {
-            $message = sprintf(
+            throw new DependencyException(sprintf(
                 "Error while injecting dependencies into %s: %s",
                 $classReflection->getName(),
                 $e->getMessage()
-            );
-            throw new DependencyException($message, 0, $e);
+            ), 0, $e);
         }
 
         return $instance;
@@ -178,6 +185,7 @@ class ClassDefinitionResolver implements DefinitionResolver
     /**
      * Creates an instance and injects dependencies through the constructor.
      *
+     * @param ClassDefinition      $definition
      * @param ReflectionClass      $classReflection
      * @param MethodInjection|null $constructorInjection
      * @param array                $parameters           Force so parameters to specific values.
@@ -186,45 +194,56 @@ class ClassDefinitionResolver implements DefinitionResolver
      * @return object
      */
     private function injectConstructor(
+        ClassDefinition $definition,
         ReflectionClass $classReflection,
         MethodInjection $constructorInjection = null,
         array $parameters = array()
     ) {
-        $args = $this->prepareMethodParameters($constructorInjection, $classReflection->getConstructor(), $parameters);
+        $args = $this->prepareMethodParameters(
+            $definition,
+            $constructorInjection,
+            $classReflection->getConstructor(),
+            $parameters
+        );
 
         return $classReflection->newInstanceArgs($args);
     }
 
     /**
+     * @param ClassDefinition $definition
      * @param object          $instance
      * @param ClassDefinition $classDefinition
      */
-    private function injectMethodsAndProperties($instance, ClassDefinition $classDefinition)
-    {
+    private function injectMethodsAndProperties(
+        ClassDefinition $definition,
+        $instance,
+        ClassDefinition $classDefinition
+    ) {
         // Property injections
         foreach ($classDefinition->getPropertyInjections() as $propertyInjection) {
             $this->injectProperty($instance, $propertyInjection);
         }
         // Method injections
         foreach ($classDefinition->getMethodInjections() as $methodInjection) {
-            $this->injectMethod($instance, $methodInjection);
+            $this->injectMethod($definition, $instance, $methodInjection);
         }
     }
 
     /**
      * Inject dependencies through methods.
      *
+     * @param ClassDefinition $definition
      * @param object          $object Object to inject dependencies into
      * @param MethodInjection $methodInjection
      *
      * @throws DependencyException
      * @throws DefinitionException
      */
-    private function injectMethod($object, MethodInjection $methodInjection)
+    private function injectMethod(ClassDefinition $definition, $object, MethodInjection $methodInjection)
     {
         $methodReflection = new ReflectionMethod($object, $methodInjection->getMethodName());
 
-        $args = $this->prepareMethodParameters($methodInjection, $methodReflection);
+        $args = $this->prepareMethodParameters($definition, $methodInjection, $methodReflection);
 
         $methodReflection->invokeArgs($object, $args);
     }
@@ -232,6 +251,7 @@ class ClassDefinitionResolver implements DefinitionResolver
     /**
      * Create the parameter array to call a method.
      *
+     * @param ClassDefinition  $definition
      * @param MethodInjection  $methodInjection
      * @param ReflectionMethod $methodReflection
      * @param array            $parameters       Force some parameters to specific values.
@@ -240,6 +260,7 @@ class ClassDefinitionResolver implements DefinitionResolver
      * @return array Array of parameters to use to call the method.
      */
     private function prepareMethodParameters(
+        ClassDefinition $definition,
         MethodInjection $methodInjection = null,
         ReflectionMethod $methodReflection = null,
         array $parameters = array()
@@ -264,7 +285,7 @@ class ClassDefinitionResolver implements DefinitionResolver
                     continue;
                 }
 
-                throw new DefinitionException(sprintf(
+                throw DefinitionException::create($definition, sprintf(
                     "The parameter '%s' of %s::%s has no value defined or guessable",
                     $parameter->getName(),
                     $methodReflection->getDeclaringClass()->getName(),
