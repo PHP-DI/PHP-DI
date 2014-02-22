@@ -158,6 +158,15 @@ return [
         -&gt;lazy(),
 ];</code></pre>
 <p>Read more in the <a href="../lazy-injection.html">lazy injection documentation</a>.</p>
+<h2>Caches</h2>
+<p>That may be obvious, but remember to <strong>clear the cache</strong> when migrating an application from 3.x to 4.0.
+PHP-DI may have cached definitions in the 3.x format, and v4 cannot read them.</p>
+<p>You will have to clear the cache just once, when you install you application with the new PHP-DI version.</p>
+<h2>Autoloading</h2>
+<p>If you use Composer, you have nothing to worry about. However if you use your own autoloader, you will
+need to include this file manually: <code>php-di/src/DI/functions.php</code>.</p>
+<p>This file contains the helper functions that you can use to define entries. And since there is no function
+autoloading in PHP (yet), this file must be included manually.</p>
     </div>
 
 
