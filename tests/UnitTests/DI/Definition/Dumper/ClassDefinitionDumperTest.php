@@ -27,7 +27,7 @@ class ClassDefinitionDumperTest extends \PHPUnit_Framework_TestCase
             ->method('setFoo', \DI\link('SomeDependency'))
             ->property('prop', 'Some value')
             ->getDefinition('foo');
-        $resolver = new ClassDefinitionDumper();
+        $dumper = new ClassDefinitionDumper();
 
         $str = 'Object (
     class = UnitTests\DI\Definition\Dumper\FixtureClass
@@ -43,14 +43,14 @@ class ClassDefinitionDumperTest extends \PHPUnit_Framework_TestCase
     )
 )';
 
-        $this->assertEquals($str, $resolver->dump($definition));
+        $this->assertEquals($str, $dumper->dump($definition));
     }
 
     public function testClass()
     {
         $definition = \DI\object('UnitTests\DI\Definition\Dumper\FixtureClass')
             ->getDefinition('foo');
-        $resolver = new ClassDefinitionDumper();
+        $dumper = new ClassDefinitionDumper();
 
         $str = 'Object (
     class = UnitTests\DI\Definition\Dumper\FixtureClass
@@ -58,7 +58,7 @@ class ClassDefinitionDumperTest extends \PHPUnit_Framework_TestCase
     lazy = false
 )';
 
-        $this->assertEquals($str, $resolver->dump($definition));
+        $this->assertEquals($str, $dumper->dump($definition));
     }
 
     public function testNonExistentClass()

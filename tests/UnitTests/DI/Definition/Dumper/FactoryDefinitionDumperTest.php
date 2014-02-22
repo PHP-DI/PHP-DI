@@ -21,9 +21,9 @@ class FactoryDefinitionDumperTest extends \PHPUnit_Framework_TestCase
     public function testDump()
     {
         $definition = new FactoryDefinition('foo', 'bar');
-        $resolver = new FactoryDefinitionDumper();
+        $dumper = new FactoryDefinitionDumper();
 
-        $this->assertEquals('Factory', $resolver->dump($definition));
+        $this->assertEquals('Factory', $dumper->dump($definition));
     }
 
     /**
@@ -33,8 +33,8 @@ class FactoryDefinitionDumperTest extends \PHPUnit_Framework_TestCase
     public function testInvalidDefinitionType()
     {
         $definition = new ValueDefinition('foo', 'bar');
-        $resolver = new FactoryDefinitionDumper();
+        $dumper = new FactoryDefinitionDumper();
 
-        $resolver->dump($definition);
+        $dumper->dump($definition);
     }
 }

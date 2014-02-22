@@ -21,25 +21,25 @@ class ValueDefinitionDumperTest extends \PHPUnit_Framework_TestCase
     public function testStringValue()
     {
         $definition = new ValueDefinition('foo', 'bar');
-        $resolver = new ValueDefinitionDumper();
+        $dumper = new ValueDefinitionDumper();
 
         $str = 'Value (
     string(3) "bar"
 )';
 
-        $this->assertEquals($str, $resolver->dump($definition));
+        $this->assertEquals($str, $dumper->dump($definition));
     }
 
     public function testIntValue()
     {
         $definition = new ValueDefinition('foo', 3306);
-        $resolver = new ValueDefinitionDumper();
+        $dumper = new ValueDefinitionDumper();
 
         $str = 'Value (
     int(3306)
 )';
 
-        $this->assertEquals($str, $resolver->dump($definition));
+        $this->assertEquals($str, $dumper->dump($definition));
     }
 
     /**
@@ -50,8 +50,8 @@ class ValueDefinitionDumperTest extends \PHPUnit_Framework_TestCase
     {
         $definition = new FactoryDefinition('foo', function () {
         });
-        $resolver = new ValueDefinitionDumper();
+        $dumper = new ValueDefinitionDumper();
 
-        $resolver->dump($definition);
+        $dumper->dump($definition);
     }
 }

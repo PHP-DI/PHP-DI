@@ -21,13 +21,13 @@ class AliasDefinitionDumperTest extends \PHPUnit_Framework_TestCase
     public function testDump()
     {
         $definition = new AliasDefinition('foo', 'bar');
-        $resolver = new AliasDefinitionDumper();
+        $dumper = new AliasDefinitionDumper();
 
         $str = 'Alias (
     foo => bar
 )';
 
-        $this->assertEquals($str, $resolver->dump($definition));
+        $this->assertEquals($str, $dumper->dump($definition));
     }
 
     /**
@@ -37,8 +37,8 @@ class AliasDefinitionDumperTest extends \PHPUnit_Framework_TestCase
     public function testInvalidDefinitionType()
     {
         $definition = new ValueDefinition('foo', 'bar');
-        $resolver = new AliasDefinitionDumper();
+        $dumper = new AliasDefinitionDumper();
 
-        $resolver->dump($definition);
+        $dumper->dump($definition);
     }
 }
