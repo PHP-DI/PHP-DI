@@ -9,7 +9,6 @@
 
 namespace DI\Definition\Resolver;
 
-use DI\ContainerInterface;
 use DI\Definition\ClassDefinition;
 use DI\Definition\Definition;
 use DI\Definition\EntryReference;
@@ -19,6 +18,7 @@ use DI\Definition\ClassDefinition\PropertyInjection;
 use DI\DependencyException;
 use DI\NotFoundException;
 use Exception;
+use Interop\Container\ContainerInterface;
 use ProxyManager\Factory\LazyLoadingValueHolderFactory;
 use ReflectionClass;
 use ReflectionException;

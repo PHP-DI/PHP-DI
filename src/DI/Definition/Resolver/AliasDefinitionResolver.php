@@ -9,9 +9,9 @@
 
 namespace DI\Definition\Resolver;
 
-use DI\ContainerInterface;
 use DI\Definition\AliasDefinition;
 use DI\Definition\Definition;
+use Interop\Container\ContainerInterface;
 
 /**
  * Resolves an alias definition to a value.

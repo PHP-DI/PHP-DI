@@ -14,6 +14,7 @@ use DI\Definition\Source\AnnotationDefinitionSource;
 use DI\Definition\Source\PHPFileDefinitionSource;
 use DI\Definition\Source\ReflectionDefinitionSource;
 use Doctrine\Common\Cache\Cache;
+use Interop\Container\ContainerInterface;
 use InvalidArgumentException;
 use ProxyManager\Configuration;
 use ProxyManager\Factory\LazyLoadingValueHolderFactory;

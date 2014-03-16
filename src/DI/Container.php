@@ -20,6 +20,7 @@ use DI\Definition\Resolver\ClassDefinitionResolver;
 use DI\Definition\Resolver\DefinitionResolver;
 use DI\Definition\Resolver\ValueDefinitionResolver;
 use Exception;
+use Interop\Container\ContainerInterface as ContainerInteropInterface;
 use InvalidArgumentException;
 use ProxyManager\Factory\LazyLoadingValueHolderFactory;
 
@@ -28,7 +29,7 @@ use ProxyManager\Factory\LazyLoadingValueHolderFactory;
  *
  * @author Matthieu Napoli <matthieu@mnapoli.fr>
  */
-class Container implements ContainerInterface, FactoryInterface
+class Container implements ContainerInteropInterface, ContainerInterface, FactoryInterface
 {
     /**
      * Map of entries with Singleton scope that are already resolved.
@@ -61,12 +62,12 @@ class Container implements ContainerInterface, FactoryInterface
      *
      * @param DefinitionManager             $definitionManager
      * @param LazyLoadingValueHolderFactory $proxyFactory
-     * @param ContainerInterface            $wrapperContainer  If the container is wrapped by another container.
+     * @param ContainerInteropInterface     $wrapperContainer If the container is wrapped by another container.
      */
     public function __construct(
         DefinitionManager $definitionManager,
         LazyLoadingValueHolderFactory $proxyFactory,
-        ContainerInterface $wrapperContainer = null
+        ContainerInteropInterface $wrapperContainer = null
     ) {
         $this->definitionManager = $definitionManager;
 

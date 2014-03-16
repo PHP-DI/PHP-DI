@@ -9,9 +9,9 @@
 
 namespace DI\Definition\Resolver;
 
-use DI\ContainerInterface;
 use DI\Definition\FactoryDefinition;
 use DI\Definition\Definition;
+use Interop\Container\ContainerInterface;
 
 /**
  * Resolves a factory definition to a value.
