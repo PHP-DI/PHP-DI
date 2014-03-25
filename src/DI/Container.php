@@ -81,7 +81,8 @@ class Container implements ContainerInteropInterface, ContainerInterface, Factor
         );
 
         // Auto-register the container
-        $this->singletonEntries[get_class($this)] = $this;
+        $this->singletonEntries['DI\Container'] = $this;
+        $this->singletonEntries['DI\ContainerInterface'] = $this;
     }
 
     /**
