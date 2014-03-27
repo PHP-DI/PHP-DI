@@ -179,6 +179,19 @@ class Container implements ContainerInterface, FactoryInterface
     }
 
     /**
+     * Test if the container already has something for the given name. This will not change the state of the container.
+     *
+     * @param string $name Entry name or a class name.
+     *
+     * @throws InvalidArgumentException The name parameter must be of type string.
+     * @return bool
+     */
+    public function hasSingleton($name)
+    {
+        return array_key_exists($name, $this->singletonEntries);
+    }
+
+    /**
      * Inject all dependencies on an existing instance
      *
      * @param object $instance Object to perform injection upon
@@ -207,18 +220,13 @@ class Container implements ContainerInterface, FactoryInterface
      */
     public function set($name, $value)
     {
-        // Clear existing entry if it exists
-        if (array_key_exists($name, $this->singletonEntries)) {
-            unset($this->singletonEntries[$name]);
-        }
-
         if ($value instanceof DefinitionHelper) {
+            unset($this->singletonEntries[$name]);
             $definition = $value->getDefinition($name);
+            $this->definitionManager->addDefinition($definition);
         } else {
-            $definition = new ValueDefinition($name, $value);
+            $this->singletonEntries[$name] = $value;
         }
-
-        $this->definitionManager->addDefinition($definition);
     }
 
     /**

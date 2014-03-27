@@ -19,14 +19,6 @@ use stdClass;
  */
 class ContainerMakeTest extends \PHPUnit_Framework_TestCase
 {
-    public function testSetMake()
-    {
-        $container = ContainerBuilder::buildDevContainer();
-        $dummy = new stdClass();
-        $container->set('key', $dummy);
-        $this->assertSame($dummy, $container->make('key'));
-    }
-
     /**
      * @expectedException \DI\NotFoundException
      */
@@ -34,19 +26,6 @@ class ContainerMakeTest extends \PHPUnit_Framework_TestCase
     {
         $container = ContainerBuilder::buildDevContainer();
         $container->make('key');
-    }
-
-    /**
-     * @coversNothing
-     */
-    public function testClosureIsNotResolved()
-    {
-        $closure = function () {
-            return 'hello';
-        };
-        $container = ContainerBuilder::buildDevContainer();
-        $container->set('key', $closure);
-        $this->assertSame($closure, $container->make('key'));
     }
 
     public function testMakeWithClassName()
