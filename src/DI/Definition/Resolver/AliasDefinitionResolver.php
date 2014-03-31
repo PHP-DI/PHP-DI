@@ -2,7 +2,7 @@
 /**
  * PHP-DI
  *
- * @link      http://mnapoli.github.com/PHP-DI/
+ * @link      http://php-di.org/
  * @copyright Matthieu Napoli (http://mnapoli.fr/)
  * @license   http://www.opensource.org/licenses/mit-license.php MIT (see the LICENSE file)
  */
@@ -47,12 +47,10 @@ class AliasDefinitionResolver implements DefinitionResolver
     public function resolve(Definition $definition, array $parameters = array())
     {
         if (! $definition instanceof AliasDefinition) {
-            throw new \InvalidArgumentException(
-                sprintf(
-                    'This definition resolver is only compatible with AliasDefinition objects, %s given',
-                    get_class($definition)
-                )
-            );
+            throw new \InvalidArgumentException(sprintf(
+                'This definition resolver is only compatible with AliasDefinition objects, %s given',
+                get_class($definition)
+            ));
         }
 
         return $this->container->get($definition->getTargetEntryName());

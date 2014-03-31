@@ -2,7 +2,7 @@
 /**
  * PHP-DI
  *
- * @link      http://mnapoli.github.io/PHP-DI/
+ * @link      http://php-di.org/
  * @copyright Matthieu Napoli (http://mnapoli.fr/)
  * @license   http://www.opensource.org/licenses/mit-license.php MIT (see the LICENSE file)
  */
@@ -34,25 +34,25 @@ class Container implements ContainerInterface, FactoryInterface
      * Map of entries with Singleton scope that are already resolved.
      * @var array
      */
-    private $singletonEntries = array();
+    protected $singletonEntries = array();
 
     /**
      * @var DefinitionManager
      */
-    private $definitionManager;
+    protected $definitionManager;
 
     /**
      * Map of definition resolvers, indexed by the classname of the definition it resolves.
      *
      * @var DefinitionResolver[]
      */
-    private $definitionResolvers;
+    protected $definitionResolvers;
 
     /**
      * Array of entries being resolved. Used to avoid circular dependencies and infinite loops.
      * @var array
      */
-    private $entriesBeingResolved = array();
+    protected $entriesBeingResolved = array();
 
     /**
      * Use the ContainerBuilder to ease constructing the Container.
