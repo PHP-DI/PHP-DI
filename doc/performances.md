@@ -52,5 +52,5 @@ to avoid collisions.
 ```php
 $cache = new Doctrine\Common\Cache\ApcCache();
 $cache->setNamespace('MyApplication');
-$container->setDefinitionCache($cache);
+$containerBuilder->setDefinitionCache($cache);
 ```
