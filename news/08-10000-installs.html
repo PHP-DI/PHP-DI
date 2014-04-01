@@ -57,52 +57,20 @@
 
                     
     <div class='single-post-w'>
-        <h1 class='post-title'>PHP-DI 3.5 released</h1>
+        <h1 class='post-title'>10.000 installs!</h1>
 
         <p class='post-info'>
             <span class='info-item'>
               Posted by Matthieu Napoli
             </span>
-            <span class='info-item'>October 11th 2013</span>
+            <span class='info-item'>April 2nd 2014</span>
         </p>
         <div class='post-content'>
-            <p>I am happy to announce that PHP-DI version 3.5 has just been released.</p>
-<p>It features a minor but amazing improvement: <strong>you don't have to import annotations anymore</strong>!</p>
-<p><strong>Before</strong>:</p>
-<pre><code class="language-php">&lt;?php
-
-use DI\Annotation\Inject;
-
-class ProductController
-{
-    /**
-     * @Inject
-     * @var ProductService
-     */
-    private $productService;
-
-    // ...
-}</code></pre>
-<p><strong>After</strong>:</p>
-<pre><code class="language-php">&lt;?php
-
-class ProductController
-{
-    /**
-     * @Inject
-     * @var ProductService
-     */
-    private $productService;
-
-    // ...
-}</code></pre>
-<p>Of course, you don't have to change you code, everything will still work if you import annotations.</p>
-<p>This is made possible thanks to the amazing <a href="https://github.com/doctrine/annotations">Doctrine Annotation</a> library.</p>
-<p>Related to the same change, <a href="https://github.com/mnapoli/PHP-DI/issues/124">#124</a> is now fixed, that means <strong>there is
-no conflict with other annotations anymore</strong>.</p>
-<p>For example, you can now use <code>@Inject</code> in PHPUnit, the <code>@test</code> and <code>@expectedException</code> annotations are not a problem.</p>
-<h2>Change log</h2>
-<p>You can also read the complete <a href="../change-log.html">change log</a>.</p>
+            <p>PHP-DI just reached 200 stars on GitHub and 10 000 installs through <a href="https://packagist.org/packages/mnapoli/php-di">Packagist</a>!</p>
+<p>That's time for a nice graph, so here are the number of installs per month since Feb. 2013:</p>
+<p><img alt="installs" src="installs.png" /></p>
+<p>And that useless post is also the occasion to tell you that v4.1 is going to be released soon.
+The <a href="https://github.com/mnapoli/PHP-DI/releases/tag/4.1.0-beta1">first beta</a> has by the way just been tagged.</p>
         </div>
     </div>
 
