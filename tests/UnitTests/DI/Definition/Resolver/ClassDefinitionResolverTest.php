@@ -227,19 +227,6 @@ MESSAGE;
     }
 
     /**
-     * Tests the exception thrown for internal classes: getting the default value of a parameter
-     * @expectedException \DI\Definition\Exception\DefinitionException
-     * @expectedExceptionMessage The parameter 'time' of DateTime::__construct has no type defined or guessable. It has a default value, but the default value can't be read through Reflection because it is a PHP internal class.
-     */
-    public function testInternalClassDefaultParameterValue()
-    {
-        $definition = new ClassDefinition('DateTime');
-        $resolver = $this->buildResolver();
-
-        $resolver->resolve($definition);
-    }
-
-    /**
      * @expectedException \InvalidArgumentException
      * @expectedExceptionMessage This definition resolver is only compatible with ClassDefinition objects, DI\Definition\FactoryDefinition given
      */
