@@ -149,6 +149,15 @@ Keep in mind that it's always better to type-hint against interfaces instead of 
 So write your aliases with interfaces as much as possible.
 
 
+## FOSRestBundle
+
+There was a bug in FOSRestBundle that would prevent using "Controller as services" in some cases.
+
+This bug has been fixed and will be released in >=1.3.2 (not released yet at the time of writing).
+
+Full details are here: [FOSRestBundle#743](https://github.com/FriendsOfSymfony/FOSRestBundle/pull/743]
+
+
 ## More
 
 Read more on the [PHP-DI-Symfony2 project on Github](https://github.com/mnapoli/PHP-DI-Symfony2).
