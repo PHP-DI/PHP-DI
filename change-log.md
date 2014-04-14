@@ -1,5 +1,9 @@
 # Change log
 
+## 4.1
+
+* Improved the documentation for Symfony 2 integration
+
 ## 4.0
 
 Major changes:
