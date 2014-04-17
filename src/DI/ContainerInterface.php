@@ -9,7 +9,7 @@
 
 namespace DI;
 
-use Interop\Container\ContainerInterface as BaseContainerInterface;
+use Interop\Container\ContainerInterface as ContainerInteropInterface;
 
 /**
  * Describes the basic interface of a container.
@@ -21,6 +21,6 @@ use Interop\Container\ContainerInterface as BaseContainerInterface;
  *
  * @author Matthieu Napoli <matthieu@mnapoli.fr>
  */
-interface ContainerInterface extends BaseContainerInterface
+interface ContainerInterface extends ContainerInteropInterface
 {
 }
