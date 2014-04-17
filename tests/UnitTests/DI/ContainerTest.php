@@ -81,9 +81,18 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
     public function testContainerIsRegistered()
     {
         $container = ContainerBuilder::buildDevContainer();
-        $otherContainer = $container->get('DI\Container');
 
-        $this->assertSame($container, $otherContainer);
+        $this->assertSame($container, $container->get('DI\Container'));
+    }
+
+    /**
+     * The container auto-registers itself (with the interface)
+     */
+    public function testContainerInterfaceIsRegistered()
+    {
+        $container = ContainerBuilder::buildDevContainer();
+
+        $this->assertSame($container, $container->get('DI\ContainerInterface'));
     }
 
     /**

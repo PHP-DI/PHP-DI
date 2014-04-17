@@ -4,6 +4,8 @@ template: blog
 
 # News
 
+- April 16th 2014. [PHP-DI 4.1 released](09-php-di-4-1-released.md)
+
 - April 2nd 2014. [10.000 installs!](08-10000-installs.md)
 
 - February 1st 2014. [PHP-DI 4.0 released](07-php-di-4-0-released.md)

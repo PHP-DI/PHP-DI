@@ -9,8 +9,8 @@
 
 namespace UnitTests\DI\Fixtures;
 
-use DI\ContainerInterface;
 use DI\Definition\DefinitionManager;
+use Interop\Container\ContainerInterface;
 use ProxyManager\Factory\LazyLoadingValueHolderFactory;
 
 /**

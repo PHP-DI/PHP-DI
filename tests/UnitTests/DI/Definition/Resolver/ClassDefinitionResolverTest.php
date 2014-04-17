@@ -169,50 +169,58 @@ class ClassDefinitionResolverTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($container, $resolver->getContainer());
     }
 
-    /**
-     * @expectedException \DI\Definition\Exception\DefinitionException
-     * @expectedExceptionMessage Entry foo cannot be resolved: the class bar doesn't exist
-     */
     public function testUnknownClass()
     {
+        $message = <<<MESSAGE
+Entry foo cannot be resolved: the class bar doesn't exist
+Definition of foo:
+Object (
+    class = #UNKNOWN# bar
+    scope = singleton
+    lazy = false
+)
+MESSAGE;
+        $this->setExpectedException('DI\Definition\Exception\DefinitionException', $message);
+
         $definition = new ClassDefinition('foo', 'bar');
         $resolver = $this->buildResolver();
 
         $resolver->resolve($definition);
     }
 
-    /**
-     * @expectedException \DI\Definition\Exception\DefinitionException
-     * @expectedExceptionMessage ArrayAccess is not instantiable
-     */
     public function testNotInstantiable()
     {
+        $message = <<<MESSAGE
+Entry ArrayAccess cannot be resolved: ArrayAccess is not instantiable
+Definition of ArrayAccess:
+Object (
+    class = #NOT INSTANTIABLE# ArrayAccess
+    scope = singleton
+    lazy = false
+)
+MESSAGE;
+        $this->setExpectedException('DI\Definition\Exception\DefinitionException', $message);
+
         $definition = new ClassDefinition('ArrayAccess');
         $resolver = $this->buildResolver();
 
         $resolver->resolve($definition);
     }
 
-    /**
-     * @expectedException \DI\Definition\Exception\DefinitionException
-     * @expectedExceptionMessage The parameter 'param1' of UnitTests\DI\Definition\Resolver\FixtureClass::__construct has no value defined or guessable
-     */
     public function testUndefinedInjection()
     {
+        $message = <<<MESSAGE
+Entry UnitTests\DI\Definition\Resolver\FixtureClass cannot be resolved: The parameter 'param1' of UnitTests\DI\Definition\Resolver\FixtureClass::__construct has no value defined or guessable
+Definition of UnitTests\DI\Definition\Resolver\FixtureClass:
+Object (
+    class = UnitTests\DI\Definition\Resolver\FixtureClass
+    scope = singleton
+    lazy = false
+)
+MESSAGE;
+        $this->setExpectedException('DI\Definition\Exception\DefinitionException', $message);
+
         $definition = new ClassDefinition('UnitTests\DI\Definition\Resolver\FixtureClass');
-        $resolver = $this->buildResolver();
-
-        $resolver->resolve($definition);
-    }
-
-    /**
-     * Tests the exception thrown for internal classes: getting the default value of a parameter
-     * @expectedException \DI\Definition\Exception\DefinitionException
-     * @expectedExceptionMessage The parameter 'time' of DateTime::__construct has no type defined or guessable. It has a default value, but the default value can't be read through Reflection because it is a PHP internal class.
-     */
-    public function testInternalClassDefaultParameterValue()
-    {
-        $definition = new ClassDefinition('DateTime');
         $resolver = $this->buildResolver();
 
         $resolver->resolve($definition);

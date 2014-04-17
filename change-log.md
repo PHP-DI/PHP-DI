@@ -1,5 +1,16 @@
 # Change log
 
+## 4.1
+
+Read the [news entry](news/09-php-di-4-1-released.md).
+
+BC-breaks: None.
+
+* [#138](https://github.com/mnapoli/PHP-DI/issues/138) [Container-interop](https://github.com/container-interop/container-interop) compliance
+* [#143](https://github.com/mnapoli/PHP-DI/issues/143) Much more explicit exception messages
+* [#157](https://github.com/mnapoli/PHP-DI/issues/157) HHVM support
+* [#158](https://github.com/mnapoli/PHP-DI/issues/158) Improved the documentation for [Symfony 2 integration](http://php-di.org/doc/frameworks/symfony2.html)
+
 ## 4.0
 
 Major changes:
