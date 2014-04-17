@@ -86,6 +86,8 @@
         <h1>PHP-DI in Symfony 2</h1>
 <p>If you are using Symfony 2, PHP-DI provides easy and clean integration, without replacing the original container
 (so all bundles and existing code still work).</p>
+<p>Just to be clear: PHP-DI will work alongside Symfony's container. So you can use both at the same time.</p>
+<h2>Installation</h2>
 <p>First, install the bridge:</p>
 <pre><code class="language-json">{
     "require": {
@@ -121,13 +123,15 @@
         $this-&gt;getContainer()-&gt;setFallbackContainer($builder-&gt;build());
     }
 }</code></pre>
-<p><strong>That's it!</strong></p>
+<h2>Usage</h2>
 <p>You can now define <a href="http://symfony.com/doc/current/cookbook/controller/service.html">controllers as services</a>,
-without any configuration, using PHP-DI's magic!</p>
+without any configuration, using PHP-DI's power!</p>
 <p>Example for the routing configuration:</p>
 <pre><code class="language-yaml">my_route:
     pattern:  /product-stock/clear
     defaults: { _controller: MyBundle\Controller\ProductController:clearAction }</code></pre>
+<p><strong>Careful! Note that you need to use <code>:</code> as a separator, not <code>::</code> (else it will not go through the container).</strong>
+The <code>:</code> notation means <code>service_id:method</code>, whereas the <code>::</code> notation means <code>class::method</code>.</p>
 <p>Example with constructor injection:</p>
 <pre><code class="language-php">class ProductController
 {
@@ -157,6 +161,36 @@ without any configuration, using PHP-DI's magic!</p>
         $this-&gt;productService-&gt;clearStock();
     }
 }</code></pre>
+<h2>Using Symfony's services in PHP-DI</h2>
+<p>Let's say you want to inject the <code>EntityManager</code> in your controller: the entity manager is defined
+in Symfony's container, and the controller is resolved by PHP-DI.</p>
+<p><strong>You can reference services that are in Symfony's container in PHP-DI's configuration</strong>.
+That's because PHP-DI is designed to play nice with others:</p>
+<pre><code class="language-php">return [
+    'Acme\MyBundle\Controller\ProductController' =&gt; DI\object()
+        -&gt;constructor(DI\link('doctrine.orm.entity_manager')),
+];</code></pre>
+<p>However Symfony was not designed to play with his friends, so it has no idea that there is
+another container in the application. <strong>You can't inject PHP-DI's services in a Symfony service</strong>.
+That's however rarely a problem.</p>
+<h3>Service name aliases</h3>
+<p>PHP-DI can also work with autowiring or annotations. These rely on the fact that the service name
+is the class name (or interface name), e.g. you reference the entity manager by its class name
+instead of <code>doctrine.orm.entity_manager</code>.</p>
+<p>If you want to enjoy autowiring or annotations, you can simplify your life and write simple aliases
+like these:</p>
+<pre><code class="language-php">return [
+    'Psr\Log\LoggerInterface' =&gt; DI\link('logger'),
+    // PHP 5.5 notation:
+    ObjectManager::class =&gt; DI\link('doctrine.orm.entity_manager'),
+];</code></pre>
+<p>Keep in mind that it's always better to type-hint against interfaces instead of class names!
+So write your aliases with interfaces as much as possible.</p>
+<h2>FOSRestBundle</h2>
+<p>There was a bug in FOSRestBundle that would prevent using "Controller as services" in some cases.</p>
+<p>This bug has been fixed and will be released in >=1.3.2 (not released yet at the time of writing).</p>
+<p>Full details are here: [FOSRestBundle#743](<a href="https://github.com/FriendsOfSymfony/FOSRestBundle/pull/743">https://github.com/FriendsOfSymfony/FOSRestBundle/pull/743</a>]</p>
+<h2>More</h2>
 <p>Read more on the <a href="https://github.com/mnapoli/PHP-DI-Symfony2">PHP-DI-Symfony2 project on Github</a>.</p>
     </div>
 

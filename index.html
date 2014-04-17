@@ -117,7 +117,7 @@
 
         <div class="white-card">
             <strong>New blog post:</strong>
-            <a href="http://php-di.org/news/08-10000-installs.html">10.000 installs!</a>
+            <a href="http://php-di.org/news/09-php-di-4-1-released.html">PHP-DI 4.1 released</a>
         </div>
 
         <div class='row'>
@@ -402,6 +402,76 @@ return [
                     <p class="text-right">
                         <a href="http://php-di.org/doc/performances.html">Learn more »</a>
                     </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+<section class='section-wrapper'>
+    <div class='container'>
+        <div class='row'>
+            <div class='span12'>
+                <h3 class='section-header'>Friendly to framework developers</h3>
+
+                <p>
+                    PHP-DI not only provides the classic API of a container, but also advanced
+                    features that makes it really practical when building or extending a framework.
+                </p>
+            </div>
+            <div class='span4'>
+                <div class='white-card'>
+                    <h5>Get & Has</h5>
+                    <p>
+                        PHP-DI implements
+                        <a href="https://github.com/container-interop/container-interop/blob/master/src/Interop/Container/ContainerInterface.php">
+                            <code>ContainerInterface</code></a> from
+                        <a href="https://github.com/container-interop/container-interop">Container-Interop 1.0</a>.
+                        That means that you can use it in any Container-Interop compatible library
+                        or framework.
+                    </p>
+                    <p>
+                        That universal interface standardizes the <code>get</code> and <code>has</code> methods:
+                    </p>
+                    <pre><code class="php small">$container->get($name);
+$container->has($name);</code></pre>
+                </div>
+            </div>
+            <div class='span4'>
+                <div class='white-card'>
+                    <h5>Make</h5>
+                    <p>
+                        Sometimes, you want to create an object with specific parameters <em>and</em>
+                        parameters coming from the container.
+                    </p>
+                    <p>
+                        To do just this, PHP-DI offers the <code>make</code> method:
+                    </p>
+                    <pre><code class="php small">$container->make($name, $parameters);</code></pre>
+                    <p>
+                        Any constructor parameter that is not in the <code>$parameters</code> array will be
+                        resolved from the container.
+                    </p>
+                    <p>
+                        For this, the container implements a separate <code>DI\FactoryInterface</code> that
+                        makes it easy to inject and use without tying your code to the container itself.
+                    </p>
+                </div>
+            </div>
+            <div class='span4'>
+                <div class='white-card'>
+                    <h5>Inject on a instance</h5>
+                    <p>
+                        This is a very special feature but sometimes you have no choice: you have an
+                        object that is already created and you want to have all its dependencies injected.
+                        Of course, this excludes constructor injection, but the object might be a
+                        candidate for injection through setters or properties.
+                    </p>
+                    <p>
+                        PHP-DI's container provide a <code>injectOn</code> method to do that:
+                    </p>
+                    <pre><code class="php small">$container->injectOn($instance);</code></pre>
                 </div>
             </div>
         </div>
