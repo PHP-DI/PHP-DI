@@ -155,7 +155,7 @@ There was a bug in FOSRestBundle that would prevent using "Controller as service
 
 This bug has been fixed and will be released in >=1.3.2 (not released yet at the time of writing).
 
-Full details are here: [FOSRestBundle#743](https://github.com/FriendsOfSymfony/FOSRestBundle/pull/743]
+Full details are here: [FOSRestBundle#743](https://github.com/FriendsOfSymfony/FOSRestBundle/pull/743)
 
 
 ## More
