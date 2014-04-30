@@ -84,6 +84,7 @@
 
     <div class="container docs-w">
         <h1>PHP-DI in Zend Framework 1</h1>
+<h2>Set up</h2>
 <p>If you are using ZF1, PHP-DI provides easy and clean integration so that you don't have
 to call the container (thus avoiding the Service Locator pattern).</p>
 <p>First, install the bridge to ZF1:</p>
@@ -94,7 +95,7 @@ to call the container (thus avoiding the Service Locator pattern).</p>
     }
 }</code></pre>
 <p>To use PHP-DI in your ZF1 application, you need to change the Dispatcher used by the Front Controller in the Bootstrap.</p>
-<pre><code class="language-php">    protected function _initDependencyInjection() {
+<pre><code class="language-php">    protected function _initContainer() {
         $builder = new \DI\ContainerBuilder();
         $container = $builder-&gt;build();
 
@@ -103,10 +104,107 @@ to call the container (thus avoiding the Service Locator pattern).</p>
 
         Zend_Controller_Front::getInstance()-&gt;setDispatcher($dispatcher);
     }</code></pre>
-<p><strong>That's it!</strong></p>
-<p>Now you have dependency injection <strong>in your controllers</strong>.</p>
+<p>That's it!</p>
 <p><strong>Warning</strong>: if you use Zend's autoloader (and not Composer), you will need to configure it:</p>
 <pre><code class="language-php">$autoloader-&gt;suppressNotFoundWarnings(true);</code></pre>
+<h2>Usage</h2>
+<p>Now you can inject dependencies in your controllers!</p>
+<p>For example, here is the GuestbookController of the quickstart:</p>
+<pre><code class="language-php">class GuestbookController extends Zend_Controller_Action
+{
+    /**
+     * This dependency will be injected by PHP-DI
+     * @Inject
+     * @var Application_Service_GuestbookService
+     */
+    private $guestbookService;
+
+    public function indexAction()
+    {
+        $this-&gt;view-&gt;entries = $this-&gt;guestbookService-&gt;getAllEntries();
+    }
+}</code></pre>
+<h2>Recommended layout</h2>
+<p>Here is a recommended layout for your configuration:</p>
+<pre><code>application/
+    configs/
+        application.ini          # ZF config
+        config.php               # DI config
+        config.development.php   # DI config for development
+        config.production.php    # DI config for production
+        parameters.php           # Local parameters (DB password, …) -&gt; Don't commit this file
+        parameters.php.default   # Template for parameters.php -&gt; Commit this file
+    Bootstrap.php</code></pre>
+<p>Here is an example of the full Bootstrap method:</p>
+<pre><code class="language-php">    protected function _initContainer()
+    {
+        $configuration = new Zend_Config($this-&gt;getOptions());
+
+        $builder = new ContainerBuilder();
+        $builder-&gt;addDefinitions(APPLICATION_PATH . '/configs/config.php');
+        $builder-&gt;addDefinitions(APPLICATION_PATH . '/configs/config.' . APPLICATION_ENV . '.php');
+        $builder-&gt;addDefinitions(APPLICATION_PATH . '/configs/parameters.php');
+
+        if (APPLICATION_ENV === 'production') {
+            $cache = new MemcachedCache();
+            $memcached = new Memcached();
+            $memcached-&gt;addServer('localhost', 11211);
+            $cache-&gt;setMemcached($memcached);
+        } else {
+            $cache = new ArrayCache();
+        }
+        $cache-&gt;setNamespace('MyApp');
+        $builder-&gt;setDefinitionCache($cache);
+
+        $this-&gt;container = $builder-&gt;build();
+
+        $dispatcher = new \DI\Bridge\ZendFramework1\Dispatcher();
+        $dispatcher-&gt;setContainer($this-&gt;container);
+        Zend_Controller_Front::getInstance()-&gt;setDispatcher($dispatcher);
+    }</code></pre>
+<p>You are not required to follow it of course.</p>
+<h2>Tests</h2>
+<p>Zend Framework 1 provides <a href="http://framework.zend.com/manual/1.12/en/zend.test.phpunit.html">a base class to test controllers</a>.
+If you are using this base class, and you want to have full control on the dependencies that will be injected
+inside the controller you are testing (for example to inject <strong>mocks</strong>), here is a recommended approach:</p>
+<pre><code class="language-php">class UserControllerTest extends Zend_Test_PHPUnit_ControllerTestCase
+{
+    private $container;
+
+    public function setUp()
+    {
+        $this-&gt;bootstrap = array($this, 'appBootstrap');
+        parent::setUp();
+    }
+
+    public function appBootstrap()
+    {
+        $builder = new ContainerBuilder();
+        // Configure your container here
+        $builder-&gt;addDefinitions(__DIR__ . '/../../application/config/config.php');
+        $this-&gt;container = $builder-&gt;build();
+
+        $dispatcher = new \DI\Bridge\ZendFramework1\Dispatcher();
+        $dispatcher-&gt;setContainer($this-&gt;container);
+
+        $this-&gt;frontController-&gt;setDispatcher($dispatcher);
+    }
+
+    public function testCallWithoutActionShouldPullFromIndexAction()
+    {
+        // Here I can override the dependencies that will be injected
+        $fakeEntityManager = $this-&gt;getMock(...);
+        $this-&gt;container-&gt;set('Doctrine\ORM\EntityManager', $fakeEntityManager);
+
+        $this-&gt;dispatch('/user');
+        $this-&gt;assertController('user');
+        $this-&gt;assertAction('index');
+    }
+}</code></pre>
+<p>How it works: a new container is created for each test, which ensures that whatever you do
+with the container in one test will not affect the others.</p>
+<p>Obviously, the <code>setUp()</code> and <code>appBootstrap()</code> methods could go in a base abstract class.</p>
+<h2>More</h2>
 <p>Read more on the <a href="https://github.com/mnapoli/PHP-DI-ZF1">PHP-DI-ZF1 project on Github</a>.</p>
     </div>
 
