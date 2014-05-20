@@ -216,7 +216,7 @@ class AnnotationDefinitionSource implements DefinitionSource
             }
         }
 
-        return new MethodInjection($method->getName(), $parameters);
+        return new MethodInjection($method->getDeclaringClass()->getName(), $method->getName(), $parameters);
     }
 
     /**

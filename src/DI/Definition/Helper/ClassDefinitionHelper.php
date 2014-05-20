@@ -206,7 +206,8 @@ class ClassDefinitionHelper implements DefinitionHelper
 
         if (! empty($this->constructor)) {
             $parameters = $this->fixParameters($definition, '__construct', $this->constructor);
-            $definition->setConstructorInjection(new MethodInjection('__construct', $parameters));
+            $constructorInjection = new MethodInjection($this->className, '__construct', $parameters);
+            $definition->setConstructorInjection($constructorInjection);
         }
 
         if (! empty($this->properties)) {
@@ -220,7 +221,8 @@ class ClassDefinitionHelper implements DefinitionHelper
         if (! empty($this->methods)) {
             foreach ($this->methods as $method => $parameters) {
                 $parameters = $this->fixParameters($definition, $method, $parameters);
-                $definition->addMethodInjection(new MethodInjection($method, $parameters));
+                $methodInjection = new MethodInjection($this->className, $method, $parameters);
+                $definition->addMethodInjection($methodInjection);
             }
         }
 

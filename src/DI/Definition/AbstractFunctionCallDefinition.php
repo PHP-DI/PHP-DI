@@ -9,12 +9,14 @@
 
 namespace DI\Definition;
 
+use DI\Scope;
+
 /**
  * Describe a function call.
  *
  * @author Matthieu Napoli <matthieu@mnapoli.fr>
  */
-abstract class AbstractFunctionCallDefinition
+abstract class AbstractFunctionCallDefinition implements Definition
 {
     /**
      * @var array
@@ -65,5 +67,21 @@ abstract class AbstractFunctionCallDefinition
     public function replaceParameters(array $parameters)
     {
         $this->parameters = $parameters;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getName()
+    {
+        return null;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getScope()
+    {
+        return Scope::PROTOTYPE();
     }
 }

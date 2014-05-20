@@ -26,8 +26,12 @@ class ClassDefinitionResolverTest extends \PHPUnit_Framework_TestCase
     {
         $definition = new ClassDefinition('UnitTests\DI\Definition\Resolver\FixtureClass');
         $definition->addPropertyInjection(new PropertyInjection('prop', 'value1'));
-        $definition->setConstructorInjection(new MethodInjection('__construct', array('value2')));
-        $definition->addMethodInjection(new MethodInjection('method', array('value3')));
+        $definition->setConstructorInjection(
+            new MethodInjection('UnitTests\DI\Definition\Resolver\FixtureClass', '__construct', array('value2'))
+        );
+        $definition->addMethodInjection(
+            new MethodInjection('UnitTests\DI\Definition\Resolver\FixtureClass', 'method', array('value3'))
+        );
         $resolver = $this->buildResolver();
 
         $object = $resolver->resolve($definition);
@@ -64,7 +68,9 @@ class ClassDefinitionResolverTest extends \PHPUnit_Framework_TestCase
     public function testResolveWithParametersAndDefinition()
     {
         $definition = new ClassDefinition('UnitTests\DI\Definition\Resolver\FixtureClass');
-        $definition->setConstructorInjection(new MethodInjection('__construct', array('foo')));
+        $definition->setConstructorInjection(
+            new MethodInjection('UnitTests\DI\Definition\Resolver\FixtureClass', '__construct', array('foo'))
+        );
         $resolver = $this->buildResolver();
 
         $object = $resolver->resolve($definition, array('param1' => 'bar'));
@@ -94,7 +100,9 @@ class ClassDefinitionResolverTest extends \PHPUnit_Framework_TestCase
     {
         $definition = new ClassDefinition('UnitTests\DI\Definition\Resolver\FixtureClass');
         // The constructor definition uses an EntryReference
-        $definition->setConstructorInjection(new MethodInjection('__construct', array(new EntryReference('foo'))));
+        $definition->setConstructorInjection(
+            new MethodInjection('UnitTests\DI\Definition\Resolver\FixtureClass', '__construct', array(new EntryReference('foo')))
+        );
 
         $container = $this->getMock('DI\Container', array(), array(), '', false);
         $container->expects($this->once())
@@ -118,7 +126,9 @@ class ClassDefinitionResolverTest extends \PHPUnit_Framework_TestCase
     public function testResolveNullInjections()
     {
         $definition = new ClassDefinition('UnitTests\DI\Definition\Resolver\FixtureClass');
-        $definition->setConstructorInjection(new MethodInjection('__construct', array(null)));
+        $definition->setConstructorInjection(
+            new MethodInjection('UnitTests\DI\Definition\Resolver\FixtureClass', '__construct', array(null))
+        );
         $definition->addPropertyInjection(new PropertyInjection('prop', null));
         $resolver = $this->buildResolver();
 
@@ -133,7 +143,9 @@ class ClassDefinitionResolverTest extends \PHPUnit_Framework_TestCase
     {
         $definition = new ClassDefinition('UnitTests\DI\Definition\Resolver\FixtureClass');
         $definition->addPropertyInjection(new PropertyInjection('prop', 'value1'));
-        $definition->addMethodInjection(new MethodInjection('method', array('value2')));
+        $definition->addMethodInjection(
+            new MethodInjection('UnitTests\DI\Definition\Resolver\FixtureClass', 'method', array('value2'))
+        );
         $resolver = $this->buildResolver();
 
         $object = new FixtureClass('');
@@ -147,8 +159,12 @@ class ClassDefinitionResolverTest extends \PHPUnit_Framework_TestCase
     public function testDefaultParameterValue()
     {
         $definition = new ClassDefinition('UnitTests\DI\Definition\Resolver\FixtureClass');
-        $definition->setConstructorInjection(new MethodInjection('__construct', array('')));
-        $definition->addMethodInjection(new MethodInjection('methodDefaultValue'));
+        $definition->setConstructorInjection(
+            new MethodInjection('UnitTests\DI\Definition\Resolver\FixtureClass', '__construct', array(''))
+        );
+        $definition->addMethodInjection(
+            new MethodInjection('UnitTests\DI\Definition\Resolver\FixtureClass', 'methodDefaultValue')
+        );
         $resolver = $this->buildResolver();
 
         $object = $resolver->resolve($definition);

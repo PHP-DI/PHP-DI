@@ -10,7 +10,9 @@
 namespace DI\Definition;
 
 use DI\Definition\Source\ArrayDefinitionSource;
+use DI\Definition\Source\CallableDefinitionSource;
 use DI\Definition\Source\DefinitionSource;
+use DI\Definition\Source\ReflectionDefinitionSource;
 use Doctrine\Common\Cache\Cache;
 
 /**
@@ -37,9 +39,15 @@ class DefinitionManager
      */
     private $source;
 
+    /**
+     * @var CallableDefinitionSource
+     */
+    private $callableSource;
+
     public function __construct(DefinitionSource $source = null)
     {
         $this->source = new ArrayDefinitionSource();
+        $this->callableSource = new ReflectionDefinitionSource();
 
         if ($source) {
             $this->source->chain($source);
@@ -68,6 +76,18 @@ class DefinitionManager
         }
 
         return $definition;
+    }
+
+    /**
+     * Returns DI definition for the callable.
+     *
+     * @param string $callable
+     *
+     * @return FunctionCallDefinition
+     */
+    public function getCallableDefinition($callable)
+    {
+        return $this->callableSource->getCallableDefinition($callable);
     }
 
     /**

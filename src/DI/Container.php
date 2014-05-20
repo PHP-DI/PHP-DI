@@ -12,6 +12,7 @@ namespace DI;
 use DI\Definition\ClassDefinition;
 use DI\Definition\Definition;
 use DI\Definition\DefinitionManager;
+use DI\Definition\Resolver\FunctionCallDefinitionResolver;
 use DI\Definition\ValueDefinition;
 use DI\Definition\Helper\DefinitionHelper;
 use DI\Definition\Resolver\AliasDefinitionResolver;
@@ -29,7 +30,7 @@ use ProxyManager\Factory\LazyLoadingValueHolderFactory;
  *
  * @author Matthieu Napoli <matthieu@mnapoli.fr>
  */
-class Container implements ContainerInteropInterface, ContainerInterface, FactoryInterface
+class Container implements ContainerInteropInterface, ContainerInterface, FactoryInterface, InvokerInterface
 {
     /**
      * Map of entries with Singleton scope that are already resolved.
@@ -74,10 +75,11 @@ class Container implements ContainerInteropInterface, ContainerInterface, Factor
         // Definition resolvers
         $wrapperContainer = $wrapperContainer ?: $this;
         $this->definitionResolvers = array(
-            'DI\Definition\ValueDefinition'   => new ValueDefinitionResolver(),
-            'DI\Definition\FactoryDefinition' => new FactoryDefinitionResolver($wrapperContainer),
-            'DI\Definition\AliasDefinition'   => new AliasDefinitionResolver($wrapperContainer),
-            'DI\Definition\ClassDefinition'   => new ClassDefinitionResolver($wrapperContainer, $proxyFactory),
+            'DI\Definition\ValueDefinition'        => new ValueDefinitionResolver(),
+            'DI\Definition\FactoryDefinition'      => new FactoryDefinitionResolver($wrapperContainer),
+            'DI\Definition\AliasDefinition'        => new AliasDefinitionResolver($wrapperContainer),
+            'DI\Definition\ClassDefinition'        => new ClassDefinitionResolver($wrapperContainer, $proxyFactory),
+            'DI\Definition\FunctionCallDefinition' => new FunctionCallDefinitionResolver($wrapperContainer),
         );
 
         // Auto-register the container
@@ -202,6 +204,24 @@ class Container implements ContainerInteropInterface, ContainerInterface, Factor
     }
 
     /**
+     * Call the given function using the given parameters.
+     *
+     * Missing parameters will be resolved from the container.
+     *
+     * @param callable $callable   Function to call.
+     * @param array    $parameters Parameters to use.
+     *
+     * @return mixed Result of the function.
+     */
+    public function call($callable, array $parameters = array())
+    {
+        $definition = $this->definitionManager->getCallableDefinition($callable);
+        $resolver = $this->getDefinitionResolver($definition);
+
+        return $resolver->resolve($definition);
+    }
+
+    /**
      * Define an object or a value in the container
      *
      * @param string                 $name  Entry name
@@ -271,8 +291,9 @@ class Container implements ContainerInteropInterface, ContainerInterface, Factor
      * Returns a resolver capable of handling the given definition.
      *
      * @param Definition $definition
+     *
      * @throws \RuntimeException No definition resolver was found for this type of definition.
-     * @return \DI\Definition\Resolver\DefinitionResolver
+     * @return DefinitionResolver
      */
     private function getDefinitionResolver(Definition $definition)
     {

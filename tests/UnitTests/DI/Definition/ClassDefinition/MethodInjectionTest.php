@@ -20,7 +20,7 @@ class MethodInjectionTest extends \PHPUnit_Framework_TestCase
 {
     public function testGetters()
     {
-        $definition = new MethodInjection('foo', array());
+        $definition = new MethodInjection('class', 'foo', array());
 
         $this->assertEquals('foo', $definition->getMethodName());
         $this->assertEmpty($definition->getParameters());
@@ -28,7 +28,7 @@ class MethodInjectionTest extends \PHPUnit_Framework_TestCase
 
     public function testGetParameter()
     {
-        $definition = new MethodInjection('foo', array('bar'));
+        $definition = new MethodInjection('class', 'foo', array('bar'));
 
         $this->assertEquals('bar', $definition->getParameter(0));
     }
@@ -39,13 +39,13 @@ class MethodInjectionTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetUndefinedParameter()
     {
-        $definition = new MethodInjection('foo', array());
+        $definition = new MethodInjection('class', 'foo', array());
         $definition->getParameter(0);
     }
 
     public function testReplaceParameters()
     {
-        $definition = new MethodInjection('foo', array('bar'));
+        $definition = new MethodInjection('class', 'foo', array('bar'));
         $definition->replaceParameters(array('bim'));
 
         $this->assertEquals(array('bim'), $definition->getParameters());
@@ -53,11 +53,11 @@ class MethodInjectionTest extends \PHPUnit_Framework_TestCase
 
     public function testMergeParameters()
     {
-        $definition1 = new MethodInjection('foo', array(
+        $definition1 = new MethodInjection('class', 'foo', array(
             0 => 'a',
             1 => 'b',
         ));
-        $definition2 = new MethodInjection('foo', array(
+        $definition2 = new MethodInjection('class', 'foo', array(
             1 => 'c',
             2 => 'd',
         ));
@@ -72,10 +72,10 @@ class MethodInjectionTest extends \PHPUnit_Framework_TestCase
      */
     public function testMergeParametersPreservesNull()
     {
-        $definition1 = new MethodInjection('foo', array(
+        $definition1 = new MethodInjection('class', 'foo', array(
             0 => null,
         ));
-        $definition2 = new MethodInjection('foo', array(
+        $definition2 = new MethodInjection('class', 'foo', array(
             0 => 'bar',
         ));
 

@@ -12,16 +12,17 @@ namespace DI\Definition\Source;
 use DI\Definition\ClassDefinition;
 use DI\Definition\EntryReference;
 use DI\Definition\ClassDefinition\MethodInjection;
+use DI\Definition\FunctionCallDefinition;
 use DI\Definition\MergeableDefinition;
 use ReflectionClass;
-use ReflectionMethod;
+use Zend\Code\Reflection\FunctionReflection;
 
 /**
  * Reads DI class definitions using reflection.
  *
  * @author Matthieu Napoli <matthieu@mnapoli.fr>
  */
-class ReflectionDefinitionSource implements DefinitionSource
+class ReflectionDefinitionSource implements DefinitionSource, CallableDefinitionSource
 {
     /**
      * {@inheritdoc}
@@ -45,7 +46,12 @@ class ReflectionDefinitionSource implements DefinitionSource
         // Constructor
         $constructor = $class->getConstructor();
         if ($constructor && $constructor->isPublic()) {
-            $definition->setConstructorInjection($this->getConstructorInjection($constructor));
+            $constructorInjection = new MethodInjection(
+                $constructor->getDeclaringClass()->getName(),
+                $constructor->getName(),
+                $this->getParametersDefinition($constructor)
+            );
+            $definition->setConstructorInjection($constructorInjection);
         }
 
         // Merge with parent
@@ -59,7 +65,17 @@ class ReflectionDefinitionSource implements DefinitionSource
     /**
      * {@inheritdoc}
      */
-    private function getConstructorInjection(ReflectionMethod $constructor)
+    public function getCallableDefinition($callable)
+    {
+        $reflection = new FunctionReflection($callable);
+
+        return new FunctionCallDefinition($callable, $this->getParametersDefinition($reflection));
+    }
+
+    /**
+     * Read the type-hinting from the parameters of the function.
+     */
+    private function getParametersDefinition(\ReflectionFunctionAbstract $constructor)
     {
         $parameters = array();
 
@@ -71,6 +87,6 @@ class ReflectionDefinitionSource implements DefinitionSource
             }
         }
 
-        return new MethodInjection($constructor->getName(), $parameters);
+        return $parameters;
     }
 }

@@ -14,7 +14,6 @@ use DI\Definition\ClassDefinition;
 use DI\Definition\Definition;
 use DI\Definition\EntryReference;
 use DI\Definition\Exception\DefinitionException;
-use DI\Definition\FunctionCallDefinition;
 use Interop\Container\ContainerInterface;
 use ReflectionException;
 use ReflectionFunction;
