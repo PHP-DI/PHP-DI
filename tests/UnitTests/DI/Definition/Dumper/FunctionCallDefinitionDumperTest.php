@@ -19,12 +19,18 @@ class FunctionCallDefinitionDumperTest extends \PHPUnit_Framework_TestCase
 {
     public function testDump()
     {
-        $definition = new FunctionCallDefinition(function ($logger, $default = 'foo') {
+        $definition = new FunctionCallDefinition(function ($undefined, $foo, $link, $default = 'foo') {
         });
+        $definition->replaceParameters(array(
+            1  => 'bar',
+            2 => \DI\link('foo'),
+        ));
         $dumper = new FunctionCallDefinitionDumper();
 
         $str = 'closure defined in ' . __FILE__ . ' at line 22(
-    $logger = #UNDEFINED#
+    $undefined = #UNDEFINED#
+    $foo = \'bar\'
+    $link = link(foo)
     $default = (default value) \'foo\'
 )';
 

@@ -10,6 +10,7 @@
 namespace UnitTests\DI\Definition;
 
 use DI\Definition\AbstractFunctionCallDefinition;
+use DI\Definition\ClassDefinition;
 use DI\Scope;
 
 /**
@@ -50,6 +51,16 @@ class AbstractFunctionCallDefinitionTest extends \PHPUnit_Framework_TestCase
         $definition->replaceParameters(array('bar'));
 
         $this->assertEquals('bar', $definition->getParameter(0));
+    }
+
+    public function testHasParameter()
+    {
+        /** @var AbstractFunctionCallDefinition $definition */
+        $definition = $this->getMockForAbstractClass('DI\Definition\AbstractFunctionCallDefinition');
+        $definition->replaceParameters(array('bar'));
+
+        $this->assertTrue($definition->hasParameter(0));
+        $this->assertFalse($definition->hasParameter(1));
     }
 
     /**
@@ -112,5 +123,18 @@ class AbstractFunctionCallDefinitionTest extends \PHPUnit_Framework_TestCase
         $definition1->merge($definition2);
 
         $this->assertEquals(array(null), $definition1->getParameters());
+    }
+
+    /**
+     * @expectedException \DI\Definition\Exception\DefinitionException
+     * @expectedExceptionMessage DI definition conflict: trying to merge incompatible definitions
+     */
+    public function testMergeIncompatibleObject()
+    {
+        /** @var AbstractFunctionCallDefinition $definition1 */
+        $definition1 = $this->getMockForAbstractClass('DI\Definition\AbstractFunctionCallDefinition');
+        $definition2 = new ClassDefinition('foo');
+
+        $definition1->merge($definition2);
     }
 }
