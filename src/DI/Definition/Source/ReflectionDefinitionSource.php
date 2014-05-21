@@ -14,8 +14,6 @@ use DI\Definition\EntryReference;
 use DI\Definition\ClassDefinition\MethodInjection;
 use DI\Definition\FunctionCallDefinition;
 use DI\Definition\MergeableDefinition;
-use ReflectionClass;
-use Zend\Code\Reflection\FunctionReflection;
 
 /**
  * Reads DI class definitions using reflection.
@@ -40,7 +38,7 @@ class ReflectionDefinitionSource implements DefinitionSource, CallableDefinition
             return null;
         }
 
-        $class = new ReflectionClass($className);
+        $class = new \ReflectionClass($className);
         $definition = new ClassDefinition($name);
 
         // Constructor
@@ -64,7 +62,7 @@ class ReflectionDefinitionSource implements DefinitionSource, CallableDefinition
      */
     public function getCallableDefinition($callable)
     {
-        $reflection = new FunctionReflection($callable);
+        $reflection = new \ReflectionFunction($callable);
 
         return new FunctionCallDefinition($callable, $this->getParametersDefinition($reflection));
     }

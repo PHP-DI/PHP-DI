@@ -218,7 +218,7 @@ class Container implements ContainerInteropInterface, ContainerInterface, Factor
         $definition = $this->definitionManager->getCallableDefinition($callable);
         $resolver = $this->getDefinitionResolver($definition);
 
-        return $resolver->resolve($definition);
+        return $resolver->resolve($definition, $parameters);
     }
 
     /**
