@@ -28,15 +28,4 @@ class FunctionCallDefinitionTest extends \PHPUnit_Framework_TestCase
         $definition = new FunctionCallDefinition($closure);
         $this->assertSame($closure, $definition->getCallable());
     }
-
-    public function testGetReflection()
-    {
-        $closure = function () {
-            return 42;
-        };
-        $definition = new FunctionCallDefinition($closure);
-
-        $reflectionClosure = $definition->getReflection()->getClosure();
-        $this->assertEquals($closure(), $reflectionClosure());
-    }
 }

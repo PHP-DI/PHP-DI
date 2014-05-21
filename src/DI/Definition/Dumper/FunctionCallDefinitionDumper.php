@@ -9,9 +9,9 @@
 
 namespace DI\Definition\Dumper;
 
-use DI\Definition\AbstractFunctionCallDefinition;
 use DI\Definition\Definition;
 use DI\Definition\EntryReference;
+use DI\Definition\FunctionCallDefinition;
 
 /**
  * Dumps function call definitions.
@@ -26,14 +26,16 @@ class FunctionCallDefinitionDumper implements DefinitionDumper
      */
     public function dump(Definition $definition)
     {
-        if (! $definition instanceof AbstractFunctionCallDefinition) {
+        if (! $definition instanceof FunctionCallDefinition) {
             throw new \InvalidArgumentException(sprintf(
-                'This definition dumper is only compatible with AbstractFunctionCallDefinition objects, %s given',
+                'This definition dumper is only compatible with FunctionCallDefinition objects, %s given',
                 get_class($definition)
             ));
         }
 
-        $functionReflection = $definition->getReflection();
+        $callable = $definition->getCallable();
+
+        $functionReflection = new \ReflectionFunction($callable);
 
         $functionName = $this->getFunctionName($functionReflection);
         $parameters = $this->dumpMethodParameters($definition, $functionReflection);
@@ -42,7 +44,7 @@ class FunctionCallDefinitionDumper implements DefinitionDumper
     }
 
     private function dumpMethodParameters(
-        AbstractFunctionCallDefinition $definition,
+        FunctionCallDefinition $definition,
         \ReflectionFunctionAbstract $functionReflection
     ) {
         $args = array();
@@ -83,13 +85,7 @@ class FunctionCallDefinitionDumper implements DefinitionDumper
 
     private function getFunctionName(\ReflectionFunctionAbstract $reflectionFunction)
     {
-        if ($reflectionFunction instanceof \ReflectionMethod) {
-            return sprintf(
-                '%s::%s',
-                $reflectionFunction->getDeclaringClass()->getName(),
-                $reflectionFunction->getName()
-            );
-        } elseif ($reflectionFunction->isClosure()) {
+        if ($reflectionFunction->isClosure()) {
             return sprintf(
                 'closure defined in %s at line %d',
                 $reflectionFunction->getFileName(),

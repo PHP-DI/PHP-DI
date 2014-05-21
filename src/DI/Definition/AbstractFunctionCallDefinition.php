@@ -25,16 +25,6 @@ abstract class AbstractFunctionCallDefinition implements Definition, MergeableDe
     protected $parameters = array();
 
     /**
-     * @return \ReflectionFunctionAbstract
-     */
-    abstract public function getReflection();
-
-    /**
-     * @return callable
-     */
-    abstract public function getCallable();
-
-    /**
      * @return array
      */
     public function getParameters()

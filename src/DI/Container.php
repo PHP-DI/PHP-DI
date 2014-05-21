@@ -74,13 +74,12 @@ class Container implements ContainerInteropInterface, ContainerInterface, Factor
 
         // Definition resolvers
         $wrapperContainer = $wrapperContainer ?: $this;
-        $functionCallResolver = new FunctionCallDefinitionResolver($wrapperContainer);
         $this->definitionResolvers = array(
             'DI\Definition\ValueDefinition'        => new ValueDefinitionResolver(),
             'DI\Definition\FactoryDefinition'      => new FactoryDefinitionResolver($wrapperContainer),
             'DI\Definition\AliasDefinition'        => new AliasDefinitionResolver($wrapperContainer),
-            'DI\Definition\ClassDefinition'        => new ClassDefinitionResolver($wrapperContainer, $proxyFactory, $functionCallResolver),
-            'DI\Definition\FunctionCallDefinition' => $functionCallResolver,
+            'DI\Definition\ClassDefinition'        => new ClassDefinitionResolver($wrapperContainer, $proxyFactory),
+            'DI\Definition\FunctionCallDefinition' => new FunctionCallDefinitionResolver($wrapperContainer),
         );
 
         // Auto-register the container

@@ -12,7 +12,6 @@ namespace DI\Definition\Source;
 use DI\Annotation\Inject;
 use DI\Annotation\Injectable;
 use DI\Definition\ClassDefinition;
-use DI\Definition\ClassDefinition\ConstructorInjection;
 use DI\Definition\EntryReference;
 use DI\Definition\Exception\AnnotationException;
 use DI\Definition\Exception\DefinitionException;
@@ -218,9 +217,9 @@ class AnnotationDefinitionSource implements DefinitionSource
         }
 
         if ($method->isConstructor()) {
-            return new ConstructorInjection($method->getDeclaringClass()->getName(), $parameters);
+            return MethodInjection::constructor($parameters);
         } else {
-            return new MethodInjection($method->getDeclaringClass()->getName(), $method->getName(), $parameters);
+            return new MethodInjection($method->getName(), $parameters);
         }
     }
 

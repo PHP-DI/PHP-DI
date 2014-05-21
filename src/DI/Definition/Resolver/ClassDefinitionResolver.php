@@ -49,14 +49,12 @@ class ClassDefinitionResolver implements DefinitionResolver
      * The resolver needs a container.
      * This container will be used to get the entry to which the alias points to.
      *
-     * @param ContainerInterface             $container
-     * @param ProxyFactory                   $proxyFactory Used to create proxies for lazy injections.
-     * @param FunctionCallDefinitionResolver $functionCallResolver
+     * @param ContainerInterface $container
+     * @param ProxyFactory       $proxyFactory Used to create proxies for lazy injections.
      */
     public function __construct(
         ContainerInterface $container,
-        ProxyFactory $proxyFactory,
-        FunctionCallDefinitionResolver $functionCallResolver = null
+        ProxyFactory $proxyFactory
     ) {
         $this->container = $container;
         $this->proxyFactory = $proxyFactory;
@@ -153,7 +151,8 @@ class ClassDefinitionResolver implements DefinitionResolver
     {
         if (! class_exists($classDefinition->getClassName()) && ! interface_exists($classDefinition->getClassName())) {
             throw DefinitionException::create($classDefinition, sprintf(
-                "the class %s doesn't exist",
+                "Entry %s cannot be resolved: class %s doesn't exist",
+                $classDefinition->getName(),
                 $classDefinition->getClassName()
             ));
         }
@@ -162,7 +161,8 @@ class ClassDefinitionResolver implements DefinitionResolver
 
         if (!$classReflection->isInstantiable()) {
             throw DefinitionException::create($classDefinition, sprintf(
-                "%s is not instantiable",
+                "Entry %s cannot be resolved: class %s is not instantiable",
+                $classDefinition->getName(),
                 $classDefinition->getClassName()
             ));
         }
@@ -170,7 +170,13 @@ class ClassDefinitionResolver implements DefinitionResolver
         $constructorInjection = $classDefinition->getConstructorInjection();
 
         try {
-            $object = $this->functionCallResolver->resolve($constructorInjection, $parameters);
+            $args = $this->parameterResolver->resolveParameters(
+                $constructorInjection,
+                $classReflection->getConstructor(),
+                $parameters
+            );
+
+            $object = $classReflection->newInstanceArgs($args);
 
             $this->injectMethodsAndProperties($object, $classDefinition);
         } catch (NotFoundException $e) {
@@ -179,22 +185,30 @@ class ClassDefinitionResolver implements DefinitionResolver
                 $classReflection->getName(),
                 $e->getMessage()
             ), 0, $e);
+        } catch (DefinitionException $e) {
+            throw DefinitionException::create($classDefinition, sprintf(
+                "Entry %s cannot be resolved: %s",
+                $classDefinition->getName(),
+                $e->getMessage()
+            ));
         }
 
         return $object;
     }
 
-    private function injectMethodsAndProperties($instance, ClassDefinition $classDefinition)
+    private function injectMethodsAndProperties($object, ClassDefinition $classDefinition)
     {
         // Property injections
         foreach ($classDefinition->getPropertyInjections() as $propertyInjection) {
-            $this->injectProperty($instance, $propertyInjection);
+            $this->injectProperty($object, $propertyInjection);
         }
 
         // Method injections
         foreach ($classDefinition->getMethodInjections() as $methodInjection) {
-            $methodInjection->setObject($instance);
-            $this->functionCallResolver->resolve($methodInjection);
+            $methodReflection = new \ReflectionMethod($object, $methodInjection->getMethodName());
+            $args = $this->parameterResolver->resolveParameters($methodInjection, $methodReflection);
+
+            $methodReflection->invokeArgs($object, $args);
         }
     }
 

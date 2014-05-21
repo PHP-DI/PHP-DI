@@ -9,7 +9,6 @@
 
 namespace DI\Definition;
 
-use DI\Definition\ClassDefinition\ConstructorInjection;
 use DI\Definition\ClassDefinition\MethodInjection;
 use DI\Definition\ClassDefinition\PropertyInjection;
 use DI\Definition\Exception\DefinitionException;
@@ -36,7 +35,7 @@ class ClassDefinition implements MergeableDefinition, CacheableDefinition
 
     /**
      * Constructor injection
-     * @var ConstructorInjection
+     * @var MethodInjection|null
      */
     private $constructorInjection;
 
@@ -70,7 +69,6 @@ class ClassDefinition implements MergeableDefinition, CacheableDefinition
     {
         $this->name = (string) $name;
         $this->className = $className;
-        $this->constructorInjection = new ConstructorInjection($this->getClassName());
     }
 
     /**
@@ -87,7 +85,6 @@ class ClassDefinition implements MergeableDefinition, CacheableDefinition
     public function setClassName($className)
     {
         $this->className = $className;
-        $this->constructorInjection->setClassName($className);
     }
 
     /**
@@ -102,7 +99,7 @@ class ClassDefinition implements MergeableDefinition, CacheableDefinition
     }
 
     /**
-     * @return ConstructorInjection
+     * @return MethodInjection|null
      */
     public function getConstructorInjection()
     {
@@ -110,9 +107,9 @@ class ClassDefinition implements MergeableDefinition, CacheableDefinition
     }
 
     /**
-     * @param ConstructorInjection $constructorInjection
+     * @param MethodInjection $constructorInjection
      */
-    public function setConstructorInjection(ConstructorInjection $constructorInjection)
+    public function setConstructorInjection(MethodInjection $constructorInjection)
     {
         $this->constructorInjection = $constructorInjection;
     }

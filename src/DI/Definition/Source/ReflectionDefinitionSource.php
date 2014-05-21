@@ -10,7 +10,6 @@
 namespace DI\Definition\Source;
 
 use DI\Definition\ClassDefinition;
-use DI\Definition\ClassDefinition\ConstructorInjection;
 use DI\Definition\EntryReference;
 use DI\Definition\ClassDefinition\MethodInjection;
 use DI\Definition\FunctionCallDefinition;
@@ -47,11 +46,9 @@ class ReflectionDefinitionSource implements DefinitionSource, CallableDefinition
         // Constructor
         $constructor = $class->getConstructor();
         if ($constructor && $constructor->isPublic()) {
-            $constructorInjection = new ConstructorInjection(
-                $constructor->getDeclaringClass()->getName(),
-                $this->getParametersDefinition($constructor)
+            $definition->setConstructorInjection(
+                MethodInjection::constructor($this->getParametersDefinition($constructor))
             );
-            $definition->setConstructorInjection($constructorInjection);
         }
 
         // Merge with parent

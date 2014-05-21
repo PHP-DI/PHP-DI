@@ -11,14 +11,9 @@ namespace DI\Definition\Resolver;
 
 use DI\Definition\AbstractFunctionCallDefinition;
 use DI\Definition\ClassDefinition;
-use DI\Definition\ClassDefinition\ConstructorInjection;
-use DI\Definition\ClassDefinition\MethodInjection;
-use DI\Definition\Definition;
 use DI\Definition\EntryReference;
 use DI\Definition\Exception\DefinitionException;
-use DI\DependencyException;
 use Interop\Container\ContainerInterface;
-use Interop\Container\Exception\NotFoundException;
 
 /**
  * Resolves parameters for a function call.
@@ -41,9 +36,20 @@ class ParameterResolver
         $this->container = $container;
     }
 
-    public function resolveParameters(AbstractFunctionCallDefinition $definition, array $parameters = array())
+    /**
+     * @param AbstractFunctionCallDefinition $definition
+     * @param \ReflectionFunctionAbstract    $functionReflection
+     * @param array                          $parameters
+     *
+     * @throws DefinitionException A parameter has no value defined or guessable.
+     * @return array Parameters to use to call the function.
+     */
+    public function resolveParameters(
+        AbstractFunctionCallDefinition $definition = null,
+        \ReflectionFunctionAbstract $functionReflection = null,
+        array $parameters = array()
+    )
     {
-        $functionReflection = $definition->getReflection();
         $args = array();
 
         if (! $functionReflection) {
@@ -64,7 +70,7 @@ class ParameterResolver
                     continue;
                 }
 
-                throw DefinitionException::create($definition, sprintf(
+                throw new DefinitionException(sprintf(
                     "The parameter '%s' of %s has no value defined or guessable",
                     $parameter->getName(),
                     $this->getFunctionName($functionReflection)
@@ -72,15 +78,7 @@ class ParameterResolver
             }
 
             if ($value instanceof EntryReference) {
-                try {
-                    $args[] = $this->container->get($value->getName());
-                } catch (NotFoundException $e) {
-                    throw new DependencyException(sprintf(
-                        "Error while calling %s: %s",
-                        $this->getFunctionName($functionReflection),
-                        $e->getMessage()
-                    ), 0, $e);
-                }
+                $args[] = $this->container->get($value->getName());
             } else {
                 $args[] = $value;
             }

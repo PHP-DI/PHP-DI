@@ -10,7 +10,6 @@
 namespace UnitTests\DI\Definition;
 
 use DI\Definition\ClassDefinition;
-use DI\Definition\ClassDefinition\ConstructorInjection;
 use DI\Definition\ClassDefinition\MethodInjection;
 use DI\Definition\ClassDefinition\PropertyInjection;
 use DI\Scope;
@@ -86,17 +85,17 @@ class ClassDefinitionTest extends \PHPUnit_Framework_TestCase
         $definition1 = new ClassDefinition('foo', 'bar');
         $definition1->setLazy(true);
         $definition1->setScope(Scope::PROTOTYPE());
-        $definition1->setConstructorInjection(new ConstructorInjection('foo'));
+        $definition1->setConstructorInjection(MethodInjection::constructor());
         $definition1->addPropertyInjection(new PropertyInjection('property1', 'Property1'));
         $definition1->addPropertyInjection(new PropertyInjection('property2', 'Property2'));
-        $definition1->addMethodInjection(new MethodInjection('foo', 'method1'));
-        $definition1->addMethodInjection(new MethodInjection('foo', 'method2'));
+        $definition1->addMethodInjection(new MethodInjection('method1'));
+        $definition1->addMethodInjection(new MethodInjection('method2'));
 
         $definition2 = new ClassDefinition('foo');
         $definition2->addPropertyInjection(new PropertyInjection('property1', 'Property1'));
         $definition2->addPropertyInjection(new PropertyInjection('property3', 'Property3'));
-        $definition2->addMethodInjection(new MethodInjection('foo', 'method1'));
-        $definition2->addMethodInjection(new MethodInjection('foo', 'method3'));
+        $definition2->addMethodInjection(new MethodInjection('method1'));
+        $definition2->addMethodInjection(new MethodInjection('method3'));
 
         return array(
             array($definition1, $definition2),

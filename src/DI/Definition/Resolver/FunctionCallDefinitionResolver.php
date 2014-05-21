@@ -9,9 +9,10 @@
 
 namespace DI\Definition\Resolver;
 
-use DI\Definition\AbstractFunctionCallDefinition;
 use DI\Definition\ClassDefinition;
 use DI\Definition\Definition;
+use DI\Definition\Exception\DefinitionException;
+use DI\Definition\FunctionCallDefinition;
 use Interop\Container\ContainerInterface;
 
 /**
@@ -46,19 +47,25 @@ class FunctionCallDefinitionResolver implements DefinitionResolver
      */
     public function resolve(Definition $definition, array $parameters = array())
     {
-        if (! $definition instanceof AbstractFunctionCallDefinition) {
+        if (! $definition instanceof FunctionCallDefinition) {
             throw new \InvalidArgumentException(
                 sprintf(
-                    'This definition resolver is only compatible with AbstractFunctionCallDefinition objects, %s given',
+                    'This definition resolver is only compatible with FunctionCallDefinition objects, %s given',
                     get_class($definition)
                 )
             );
         }
 
-        $args = $this->parameterResolver->resolveParameters($definition, $parameters);
-
         $callable = $definition->getCallable();
 
-        return call_user_func_array($callable, $args);
+        $functionReflection = new \ReflectionFunction($callable);
+
+        try {
+            $args = $this->parameterResolver->resolveParameters($definition, $functionReflection, $parameters);
+        } catch (DefinitionException $e) {
+            throw DefinitionException::create($definition, $e->getMessage());
+        }
+
+        return $functionReflection->invokeArgs($args);
     }
 }

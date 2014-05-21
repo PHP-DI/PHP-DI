@@ -21,28 +21,21 @@ class MethodInjection extends AbstractFunctionCallDefinition
     /**
      * @var string
      */
-    private $className;
-
-    /**
-     * @var string
-     */
     private $methodName;
 
     /**
-     * @var object
-     */
-    private $object;
-
-    /**
-     * @param string $className
      * @param string $methodName
      * @param array  $parameters
      */
-    public function __construct($className, $methodName, array $parameters = array())
+    public function __construct($methodName, array $parameters = array())
     {
-        $this->className = (string) $className;
         $this->methodName = (string) $methodName;
         $this->parameters = $parameters;
+    }
+
+    public static function constructor(array $parameters = array())
+    {
+        return new self('__construct', $parameters);
     }
 
     /**
@@ -51,33 +44,5 @@ class MethodInjection extends AbstractFunctionCallDefinition
     public function getMethodName()
     {
         return $this->methodName;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getReflection()
-    {
-        return new \ReflectionMethod($this->object, $this->methodName);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getCallable()
-    {
-        if (! $this->object) {
-            throw new \RuntimeException('No object was set in MethodInjection');
-        }
-
-        return array($this->object, $this->methodName);
-    }
-
-    /**
-     * @param object $object
-     */
-    public function setObject($object)
-    {
-        $this->object = $object;
     }
 }
