@@ -62,7 +62,12 @@ class ReflectionDefinitionSource implements DefinitionSource, CallableDefinition
      */
     public function getCallableDefinition($callable)
     {
-        $reflection = new \ReflectionFunction($callable);
+        if (is_array($callable)) {
+            list($class, $method) = $callable;
+            $reflection = new \ReflectionMethod($class, $method);
+        } else {
+            $reflection = new \ReflectionFunction($callable);
+        }
 
         return new FunctionCallDefinition($callable, $this->getParametersDefinition($reflection));
     }

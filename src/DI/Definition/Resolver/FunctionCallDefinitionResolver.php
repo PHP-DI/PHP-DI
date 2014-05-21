@@ -58,7 +58,12 @@ class FunctionCallDefinitionResolver implements DefinitionResolver
 
         $callable = $definition->getCallable();
 
-        $functionReflection = new \ReflectionFunction($callable);
+        if (is_array($callable)) {
+            list($object, $method) = $callable;
+            $functionReflection = new \ReflectionMethod($object, $method);
+        } else {
+            $functionReflection = new \ReflectionFunction($callable);
+        }
 
         try {
             $args = $this->parameterResolver->resolveParameters($definition, $functionReflection, $parameters);
@@ -66,6 +71,10 @@ class FunctionCallDefinitionResolver implements DefinitionResolver
             throw DefinitionException::create($definition, $e->getMessage());
         }
 
-        return $functionReflection->invokeArgs($args);
+        if (is_array($callable)) {
+            return $functionReflection->invokeArgs($callable[0], $args);
+        } else {
+            return $functionReflection->invokeArgs($args);
+        }
     }
 }

@@ -63,4 +63,20 @@ class CallFunctionTest extends \PHPUnit_Framework_TestCase
         });
         $this->assertEquals($value, $result);
     }
+
+    public function testCallObjectMethod()
+    {
+        $container = ContainerBuilder::buildDevContainer();
+        $object = new TestClass();
+        $result = $container->call(array($object, 'foo'));
+        $this->assertEquals(42, $result);
+    }
+}
+
+class TestClass
+{
+    public function foo()
+    {
+        return 42;
+    }
 }
