@@ -29,6 +29,11 @@ class MethodInjection extends AbstractFunctionCallDefinition
     private $methodName;
 
     /**
+     * @var object
+     */
+    private $object;
+
+    /**
      * @param string $className
      * @param string $methodName
      * @param array  $parameters
@@ -49,22 +54,30 @@ class MethodInjection extends AbstractFunctionCallDefinition
     }
 
     /**
-     * Merge another definition into the current definition.
-     *
-     * In case of conflicts, the current definition prevails.
-     *
-     * @param MethodInjection $methodInjection
+     * {@inheritdoc}
      */
-    public function merge(MethodInjection $methodInjection)
+    public function getReflection()
     {
-        $this->parameters = $this->parameters + $methodInjection->parameters;
+        return new \ReflectionMethod($this->object, $this->methodName);
     }
 
     /**
      * {@inheritdoc}
      */
-    public function getReflection()
+    public function getCallable()
     {
-        return new \ReflectionMethod($this->className, $this->methodName);
+        if (! $this->object) {
+            throw new \RuntimeException('No object was set in MethodInjection');
+        }
+
+        return array($this->object, $this->methodName);
+    }
+
+    /**
+     * @param object $object
+     */
+    public function setObject($object)
+    {
+        $this->object = $object;
     }
 }

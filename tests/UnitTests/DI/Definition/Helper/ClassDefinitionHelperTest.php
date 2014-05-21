@@ -126,7 +126,6 @@ class ClassDefinitionHelperTest extends \PHPUnit_Framework_TestCase
         $this->assertCount(0, $definition->getMethodInjections());
         $this->assertNotNull($definition->getConstructorInjection());
 
-        $this->assertEquals('__construct', $definition->getConstructorInjection()->getMethodName());
         $this->assertEquals(42, $definition->getConstructorInjection()->getParameter(0));
     }
 

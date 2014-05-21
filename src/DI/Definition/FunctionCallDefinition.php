@@ -38,4 +38,12 @@ class FunctionCallDefinition extends AbstractFunctionCallDefinition
     {
         return new \ReflectionFunction($this->callable);
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getCallable()
+    {
+        return $this->callable;
+    }
 }

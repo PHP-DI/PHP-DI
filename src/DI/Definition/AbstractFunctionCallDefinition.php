@@ -9,6 +9,7 @@
 
 namespace DI\Definition;
 
+use DI\Definition\Exception\DefinitionException;
 use DI\Scope;
 
 /**
@@ -16,7 +17,7 @@ use DI\Scope;
  *
  * @author Matthieu Napoli <matthieu@mnapoli.fr>
  */
-abstract class AbstractFunctionCallDefinition implements Definition
+abstract class AbstractFunctionCallDefinition implements Definition, MergeableDefinition
 {
     /**
      * @var array
@@ -27,6 +28,11 @@ abstract class AbstractFunctionCallDefinition implements Definition
      * @return \ReflectionFunctionAbstract
      */
     abstract public function getReflection();
+
+    /**
+     * @return callable
+     */
+    abstract public function getCallable();
 
     /**
      * @return array
@@ -67,6 +73,20 @@ abstract class AbstractFunctionCallDefinition implements Definition
     public function replaceParameters(array $parameters)
     {
         $this->parameters = $parameters;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function merge(MergeableDefinition $definition)
+    {
+        if (!$definition instanceof AbstractFunctionCallDefinition) {
+            throw new DefinitionException(
+                "DI definition conflict: trying to merge incompatible definitions"
+            );
+        }
+
+        $this->parameters = $this->parameters + $definition->parameters;
     }
 
     /**

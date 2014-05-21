@@ -9,6 +9,7 @@
 
 namespace DI\Definition;
 
+use DI\Definition\ClassDefinition\ConstructorInjection;
 use DI\Definition\ClassDefinition\MethodInjection;
 use DI\Definition\ClassDefinition\PropertyInjection;
 use DI\Definition\Exception\DefinitionException;
@@ -35,7 +36,7 @@ class ClassDefinition implements MergeableDefinition, CacheableDefinition
 
     /**
      * Constructor injection
-     * @var MethodInjection|null
+     * @var ConstructorInjection
      */
     private $constructorInjection;
 
@@ -69,6 +70,7 @@ class ClassDefinition implements MergeableDefinition, CacheableDefinition
     {
         $this->name = (string) $name;
         $this->className = $className;
+        $this->constructorInjection = new ConstructorInjection($this->getClassName());
     }
 
     /**
@@ -85,6 +87,7 @@ class ClassDefinition implements MergeableDefinition, CacheableDefinition
     public function setClassName($className)
     {
         $this->className = $className;
+        $this->constructorInjection->setClassName($className);
     }
 
     /**
@@ -99,15 +102,7 @@ class ClassDefinition implements MergeableDefinition, CacheableDefinition
     }
 
     /**
-     * @return bool True if the definition is an alias to another class
-     */
-    public function isAlias()
-    {
-        return $this->className !== null && $this->className !== $this->name;
-    }
-
-    /**
-     * @return MethodInjection|null
+     * @return ConstructorInjection
      */
     public function getConstructorInjection()
     {
@@ -115,9 +110,9 @@ class ClassDefinition implements MergeableDefinition, CacheableDefinition
     }
 
     /**
-     * @param MethodInjection|null $constructorInjection
+     * @param ConstructorInjection $constructorInjection
      */
-    public function setConstructorInjection(MethodInjection $constructorInjection = null)
+    public function setConstructorInjection(ConstructorInjection $constructorInjection)
     {
         $this->constructorInjection = $constructorInjection;
     }
@@ -225,7 +220,7 @@ class ClassDefinition implements MergeableDefinition, CacheableDefinition
 
         // The current prevails
         if ($newDefinition->className === null) {
-            $newDefinition->className = $definition->className;
+            $newDefinition->setClassName($definition->className);
         }
         if ($newDefinition->scope === null) {
             $newDefinition->scope = $definition->scope;

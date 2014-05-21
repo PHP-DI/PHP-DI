@@ -13,17 +13,13 @@ use DI\Definition\ClassDefinition;
 use DI\Definition\Definition;
 use DI\Definition\EntryReference;
 use DI\Definition\Exception\DefinitionException;
-use DI\Definition\ClassDefinition\MethodInjection;
 use DI\Definition\ClassDefinition\PropertyInjection;
 use DI\DependencyException;
-use DI\NotFoundException;
 use Exception;
 use Interop\Container\ContainerInterface;
-use ProxyManager\Factory\LazyLoadingValueHolderFactory;
+use Interop\Container\Exception\NotFoundException;
+use ProxyManager\Factory\LazyLoadingValueHolderFactory as ProxyFactory;
 use ReflectionClass;
-use ReflectionException;
-use ReflectionMethod;
-use ReflectionParameter;
 use ReflectionProperty;
 
 /**
@@ -40,21 +36,31 @@ class ClassDefinitionResolver implements DefinitionResolver
     private $container;
 
     /**
-     * @var LazyLoadingValueHolderFactory
+     * @var ProxyFactory
      */
     private $proxyFactory;
+
+    /**
+     * @var ParameterResolver
+     */
+    private $parameterResolver;
 
     /**
      * The resolver needs a container.
      * This container will be used to get the entry to which the alias points to.
      *
-     * @param ContainerInterface            $container
-     * @param LazyLoadingValueHolderFactory $proxyFactory Used to create proxies for lazy injections.
+     * @param ContainerInterface             $container
+     * @param ProxyFactory                   $proxyFactory Used to create proxies for lazy injections.
+     * @param FunctionCallDefinitionResolver $functionCallResolver
      */
-    public function __construct(ContainerInterface $container, LazyLoadingValueHolderFactory $proxyFactory)
-    {
+    public function __construct(
+        ContainerInterface $container,
+        ProxyFactory $proxyFactory,
+        FunctionCallDefinitionResolver $functionCallResolver = null
+    ) {
         $this->container = $container;
         $this->proxyFactory = $proxyFactory;
+        $this->parameterResolver = new ParameterResolver($container);
     }
 
     /**
@@ -94,7 +100,7 @@ class ClassDefinitionResolver implements DefinitionResolver
     public function injectOnInstance(ClassDefinition $classDefinition, $instance)
     {
         try {
-            $this->injectMethodsAndProperties($classDefinition, $instance, $classDefinition);
+            $this->injectMethodsAndProperties($instance, $classDefinition);
         } catch (NotFoundException $e) {
             $message = sprintf(
                 "Error while injecting dependencies into %s: %s",
@@ -164,13 +170,9 @@ class ClassDefinitionResolver implements DefinitionResolver
         $constructorInjection = $classDefinition->getConstructorInjection();
 
         try {
-            $instance = $this->injectConstructor(
-                $classDefinition,
-                $classReflection,
-                $constructorInjection,
-                $parameters
-            );
-            $this->injectMethodsAndProperties($classDefinition, $instance, $classDefinition);
+            $object = $this->functionCallResolver->resolve($constructorInjection, $parameters);
+
+            $this->injectMethodsAndProperties($object, $classDefinition);
         } catch (NotFoundException $e) {
             throw new DependencyException(sprintf(
                 "Error while injecting dependencies into %s: %s",
@@ -179,128 +181,21 @@ class ClassDefinitionResolver implements DefinitionResolver
             ), 0, $e);
         }
 
-        return $instance;
+        return $object;
     }
 
-    /**
-     * Creates an instance and injects dependencies through the constructor.
-     *
-     * @param ClassDefinition      $definition
-     * @param ReflectionClass      $classReflection
-     * @param MethodInjection|null $constructorInjection
-     * @param array                $parameters           Force so parameters to specific values.
-     *
-     * @throws DefinitionException
-     * @return object
-     */
-    private function injectConstructor(
-        ClassDefinition $definition,
-        ReflectionClass $classReflection,
-        MethodInjection $constructorInjection = null,
-        array $parameters = array()
-    ) {
-        $args = $this->prepareMethodParameters(
-            $definition,
-            $constructorInjection,
-            $classReflection->getConstructor(),
-            $parameters
-        );
-
-        return $classReflection->newInstanceArgs($args);
-    }
-
-    /**
-     * @param ClassDefinition $definition
-     * @param object          $instance
-     * @param ClassDefinition $classDefinition
-     */
-    private function injectMethodsAndProperties(
-        ClassDefinition $definition,
-        $instance,
-        ClassDefinition $classDefinition
-    ) {
+    private function injectMethodsAndProperties($instance, ClassDefinition $classDefinition)
+    {
         // Property injections
         foreach ($classDefinition->getPropertyInjections() as $propertyInjection) {
             $this->injectProperty($instance, $propertyInjection);
         }
+
         // Method injections
         foreach ($classDefinition->getMethodInjections() as $methodInjection) {
-            $this->injectMethod($definition, $instance, $methodInjection);
+            $methodInjection->setObject($instance);
+            $this->functionCallResolver->resolve($methodInjection);
         }
-    }
-
-    /**
-     * Inject dependencies through methods.
-     *
-     * @param ClassDefinition $definition
-     * @param object          $object Object to inject dependencies into
-     * @param MethodInjection $methodInjection
-     *
-     * @throws DependencyException
-     * @throws DefinitionException
-     */
-    private function injectMethod(ClassDefinition $definition, $object, MethodInjection $methodInjection)
-    {
-        $methodReflection = new ReflectionMethod($object, $methodInjection->getMethodName());
-
-        $args = $this->prepareMethodParameters($definition, $methodInjection, $methodReflection);
-
-        $methodReflection->invokeArgs($object, $args);
-    }
-
-    /**
-     * Create the parameter array to call a method.
-     *
-     * @param ClassDefinition  $definition
-     * @param MethodInjection  $methodInjection
-     * @param ReflectionMethod $methodReflection
-     * @param array            $parameters       Force some parameters to specific values.
-     *
-     * @throws DefinitionException A parameter has no defined or guessable value.
-     * @return array Array of parameters to use to call the method.
-     */
-    private function prepareMethodParameters(
-        ClassDefinition $definition,
-        MethodInjection $methodInjection = null,
-        ReflectionMethod $methodReflection = null,
-        array $parameters = array()
-    ) {
-        if (! $methodReflection) {
-            return array();
-        }
-
-        $args = array();
-
-        foreach ($methodReflection->getParameters() as $index => $parameter) {
-            if (array_key_exists($parameter->getName(), $parameters)) {
-                // Look in the $parameters array
-                $value = $parameters[$parameter->getName()];
-            } elseif ($methodInjection && $methodInjection->hasParameter($index)) {
-                // Look in the definition
-                $value = $methodInjection->getParameter($index);
-            } else {
-                // If the parameter is optional and wasn't specified, we take its default value
-                if ($parameter->isOptional()) {
-                    $args[] = $this->getParameterDefaultValue($parameter, $methodReflection);
-                    continue;
-                }
-
-                throw DefinitionException::create($definition, sprintf(
-                    "The parameter '%s' of %s::%s has no value defined or guessable",
-                    $parameter->getName(),
-                    $methodReflection->getDeclaringClass()->getName(),
-                    $methodReflection->getName()
-                ));
-            }
-
-            if ($value instanceof EntryReference) {
-                $args[] = $this->container->get($value->getName());
-            } else {
-                $args[] = $value;
-            }
-        }
-
-        return $args;
     }
 
     /**
@@ -339,32 +234,6 @@ class ClassDefinitionResolver implements DefinitionResolver
             $property->setAccessible(true);
         }
         $property->setValue($object, $value);
-    }
-
-    /**
-     * Returns the default value of a function parameter.
-     *
-     * @param ReflectionParameter $reflectionParameter
-     * @param ReflectionMethod    $reflectionMethod
-     *
-     * @throws DefinitionException Can't get default values from PHP internal classes and methods
-     * @return mixed
-     */
-    private function getParameterDefaultValue(
-        ReflectionParameter $reflectionParameter,
-        ReflectionMethod $reflectionMethod
-    ) {
-        try {
-            return $reflectionParameter->getDefaultValue();
-        } catch (ReflectionException $e) {
-            throw new DefinitionException(sprintf(
-                "The parameter '%s' of %s::%s has no type defined or guessable. It has a default value, "
-                . "but the default value can't be read through Reflection because it is a PHP internal class.",
-                $reflectionParameter->getName(),
-                $reflectionMethod->getDeclaringClass()->getName(),
-                $reflectionMethod->getName()
-            ));
-        }
     }
 
     /**

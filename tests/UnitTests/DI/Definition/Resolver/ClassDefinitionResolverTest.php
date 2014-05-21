@@ -9,6 +9,7 @@
 
 namespace UnitTests\DI\Definition\Resolver;
 
+use DI\Definition\ClassDefinition\ConstructorInjection;
 use DI\Definition\FactoryDefinition;
 use DI\Definition\ClassDefinition;
 use DI\Definition\ClassDefinition\MethodInjection;
@@ -27,7 +28,7 @@ class ClassDefinitionResolverTest extends \PHPUnit_Framework_TestCase
         $definition = new ClassDefinition('UnitTests\DI\Definition\Resolver\FixtureClass');
         $definition->addPropertyInjection(new PropertyInjection('prop', 'value1'));
         $definition->setConstructorInjection(
-            new MethodInjection('UnitTests\DI\Definition\Resolver\FixtureClass', '__construct', array('value2'))
+            new ConstructorInjection('UnitTests\DI\Definition\Resolver\FixtureClass', array('value2'))
         );
         $definition->addMethodInjection(
             new MethodInjection('UnitTests\DI\Definition\Resolver\FixtureClass', 'method', array('value3'))
@@ -69,7 +70,7 @@ class ClassDefinitionResolverTest extends \PHPUnit_Framework_TestCase
     {
         $definition = new ClassDefinition('UnitTests\DI\Definition\Resolver\FixtureClass');
         $definition->setConstructorInjection(
-            new MethodInjection('UnitTests\DI\Definition\Resolver\FixtureClass', '__construct', array('foo'))
+            new ConstructorInjection('UnitTests\DI\Definition\Resolver\FixtureClass', array('foo'))
         );
         $resolver = $this->buildResolver();
 
@@ -101,7 +102,7 @@ class ClassDefinitionResolverTest extends \PHPUnit_Framework_TestCase
         $definition = new ClassDefinition('UnitTests\DI\Definition\Resolver\FixtureClass');
         // The constructor definition uses an EntryReference
         $definition->setConstructorInjection(
-            new MethodInjection('UnitTests\DI\Definition\Resolver\FixtureClass', '__construct', array(new EntryReference('foo')))
+            new ConstructorInjection('UnitTests\DI\Definition\Resolver\FixtureClass', array(new EntryReference('foo')))
         );
 
         $container = $this->getMock('DI\Container', array(), array(), '', false);
@@ -127,7 +128,7 @@ class ClassDefinitionResolverTest extends \PHPUnit_Framework_TestCase
     {
         $definition = new ClassDefinition('UnitTests\DI\Definition\Resolver\FixtureClass');
         $definition->setConstructorInjection(
-            new MethodInjection('UnitTests\DI\Definition\Resolver\FixtureClass', '__construct', array(null))
+            new ConstructorInjection('UnitTests\DI\Definition\Resolver\FixtureClass', array(null))
         );
         $definition->addPropertyInjection(new PropertyInjection('prop', null));
         $resolver = $this->buildResolver();
@@ -160,7 +161,7 @@ class ClassDefinitionResolverTest extends \PHPUnit_Framework_TestCase
     {
         $definition = new ClassDefinition('UnitTests\DI\Definition\Resolver\FixtureClass');
         $definition->setConstructorInjection(
-            new MethodInjection('UnitTests\DI\Definition\Resolver\FixtureClass', '__construct', array(''))
+            new ConstructorInjection('UnitTests\DI\Definition\Resolver\FixtureClass', array(''))
         );
         $definition->addMethodInjection(
             new MethodInjection('UnitTests\DI\Definition\Resolver\FixtureClass', 'methodDefaultValue')

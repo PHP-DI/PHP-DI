@@ -10,6 +10,7 @@
 namespace DI\Definition\Helper;
 
 use DI\Definition\ClassDefinition;
+use DI\Definition\ClassDefinition\ConstructorInjection;
 use DI\Definition\ClassDefinition\MethodInjection;
 use DI\Definition\ClassDefinition\PropertyInjection;
 use DI\Scope;
@@ -206,7 +207,7 @@ class ClassDefinitionHelper implements DefinitionHelper
 
         if (! empty($this->constructor)) {
             $parameters = $this->fixParameters($definition, '__construct', $this->constructor);
-            $constructorInjection = new MethodInjection($this->className, '__construct', $parameters);
+            $constructorInjection = new ConstructorInjection($this->className, $parameters);
             $definition->setConstructorInjection($constructorInjection);
         }
 
