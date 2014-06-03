@@ -206,6 +206,9 @@ return [
     // Mapping an interface to an implementation
     'My\Interface' => DI\object('My\Implementation'),
 
+    // Mapping an interface to an implementation using wildcards
+    'My\*Interface' => DI\object('My\*Implementation'),
+
     // Defining a named instance
     'myNamedInstance' => DI\object('My\Class'),
 
