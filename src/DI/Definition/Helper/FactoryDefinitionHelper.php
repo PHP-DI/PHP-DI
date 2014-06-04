@@ -10,6 +10,7 @@
 namespace DI\Definition\Helper;
 
 use DI\Definition\FactoryDefinition;
+use DI\Scope;
 
 /**
  * Helps defining how to create an instance of a class using a factory (callable).
@@ -24,6 +25,11 @@ class FactoryDefinitionHelper implements DefinitionHelper
     private $factory;
 
     /**
+     * @var Scope|null
+     */
+    private $scope;
+
+    /**
      * @param callable $factory
      */
     public function __construct($factory)
@@ -32,11 +38,24 @@ class FactoryDefinitionHelper implements DefinitionHelper
     }
 
     /**
+     * Defines the scope of the entry.
+     *
+     * @param Scope $scope
+     *
+     * @return ClassDefinitionHelper
+     */
+    public function scope(Scope $scope)
+    {
+        $this->scope = $scope;
+        return $this;
+    }
+
+    /**
      * @param string $entryName Container entry name
      * @return FactoryDefinition
      */
     public function getDefinition($entryName)
     {
-        return new FactoryDefinition($entryName, $this->factory);
+        return new FactoryDefinition($entryName, $this->factory, $this->scope);
     }
 }
