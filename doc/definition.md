@@ -217,6 +217,12 @@ return [
         return new MyClass($c->get('db.host'));
     }),
 
+    // We can set the scope on the factory too
+    // This will return a new object each time we request SomeOtherClass
+    'SomeOtherClass' => DI\factory(function () {
+        return new SomeOtherClass();
+    })->scope(Scope::PROTOTYPE()),
+
     // Defining an alias to another entry
     'some.entry' => DI\link('some.other.entry'),
 

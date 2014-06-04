@@ -31,4 +31,14 @@ class FactoryDefinitionHelperTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(Scope::PROTOTYPE(), $definition->getScope());
         $this->assertSame($callable, $definition->getCallable());
     }
+
+    public function testDefaultScope()
+    {
+        $callable = function () {
+        };
+        $helper = new FactoryDefinitionHelper($callable);
+        $definition = $helper->getDefinition('foo');
+
+        $this->assertEquals(Scope::SINGLETON(), $definition->getScope());
+    }
 }

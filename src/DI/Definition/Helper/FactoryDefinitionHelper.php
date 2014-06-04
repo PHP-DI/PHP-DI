@@ -42,7 +42,7 @@ class FactoryDefinitionHelper implements DefinitionHelper
      *
      * @param Scope $scope
      *
-     * @return ClassDefinitionHelper
+     * @return FactoryDefinitionHelper
      */
     public function scope(Scope $scope)
     {
