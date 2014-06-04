@@ -40,6 +40,31 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
         $container->has(new stdClass());
     }
 
+    public function testHasSingletonDoesNotChangeContainer() {
+        $container = ContainerBuilder::buildDevContainer();
+        $class_name = 'UnitTests\DI\Fixtures\Singleton';
+
+        $this->assertFalse($container->hasSingleton($class_name));
+        $this->assertFalse($container->hasSingleton($class_name));
+    }
+
+    public function testHasSingletonDoesSeeSetSingletons() {
+        $container = ContainerBuilder::buildDevContainer();
+        $this->assertFalse($container->hasSingleton('stdClass'));
+        $container->set('stdClass', new StdClass());
+        $this->assertTrue($container->hasSingleton('stdClass'));
+    }
+
+    public function testHasSingletonDoeSeeFetchedSingletons() {
+        $container = ContainerBuilder::buildDevContainer();
+
+        $class_name = 'UnitTests\DI\Fixtures\Singleton';
+
+        $this->assertFalse($container->hasSingleton($class_name));
+        $container->get($class_name);
+        $this->assertTrue($container->hasSingleton($class_name));
+    }
+
     /**
      * Test that injecting an existing object returns the same reference to that object
      */
