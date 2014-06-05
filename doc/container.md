@@ -5,7 +5,7 @@ tab: container
 
 # Using the container
 
-This documentation describes the API of the container.
+This documentation describes the API of the container object itself.
 
 ## get() & has()
 
