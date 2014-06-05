@@ -52,36 +52,6 @@ $container->set('foo', 'bar');
 However it is recommended to use definition files.
 See the [definition documentation](definition.md).
 
-## injectOn()
-
-Sometimes you want to inject dependencies on an object that is already created.
-
-For example, some old frameworks don't allow you to control how controllers are created.
-With `injectOn`, you can ask the container to fulfill the dependencies after the object is created.
-
-Example:
-
-```php
-class UserController extends BaseController
-{
-    /**
-     * @var SomeService
-     */
-    private $someService;
-
-    public function __construct()
-    {
-        // The framework doesn't let us control how the controller is created, so
-        // we can't use the container to create the controller
-        // So we ask the container to inject dependencies
-        $container->injectOn($this);
-
-        // Now the dependencies are injected
-        $this->someService->doSomething();
-    }
-}
-```
-
 ## make()
 
 The container also offers a `make` method. This method is defined in the `DI\FactoryInterface`:
@@ -190,3 +160,41 @@ interface InvokerInterface
     public function call($callable, array $parameters = []);
 }
 ```
+
+## injectOn()
+
+Sometimes you want to inject dependencies on an object that is already created.
+
+For example, some old frameworks don't allow you to control how controllers are created.
+With `injectOn`, you can ask the container to fulfill the dependencies after the object is created.
+
+Keep in mind it's usually always better to use `get()` or `make()` instead of `injectOn()`,
+use it only where you really have to.
+
+Example:
+
+```php
+class UserController extends BaseController
+{
+    /**
+     * @Inject
+     * @var SomeService
+     */
+    private $someService;
+
+    public function __construct()
+    {
+        // The framework doesn't let us control how the controller is created, so
+        // we can't use the container to create the controller
+        // So we ask the container to inject dependencies
+        $container->injectOn($this);
+
+        // Now the dependencies are injected
+        $this->someService->doSomething();
+    }
+}
+```
+
+As you might have guessed, you can't use constructor injection with this method.
+But other kind of injections (property or setter) will work, whether you use annotations
+or whether you configured your object in a definition file.
