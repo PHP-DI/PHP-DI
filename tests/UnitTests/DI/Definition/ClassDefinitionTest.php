@@ -12,7 +12,6 @@ namespace UnitTests\DI\Definition;
 use DI\Definition\ClassDefinition;
 use DI\Definition\ClassDefinition\MethodInjection;
 use DI\Definition\ClassDefinition\PropertyInjection;
-use DI\Definition\ValueDefinition;
 use DI\Scope;
 
 /**
@@ -86,7 +85,7 @@ class ClassDefinitionTest extends \PHPUnit_Framework_TestCase
         $definition1 = new ClassDefinition('foo', 'bar');
         $definition1->setLazy(true);
         $definition1->setScope(Scope::PROTOTYPE());
-        $definition1->setConstructorInjection(new MethodInjection('__construct'));
+        $definition1->setConstructorInjection(MethodInjection::constructor());
         $definition1->addPropertyInjection(new PropertyInjection('property1', 'Property1'));
         $definition1->addPropertyInjection(new PropertyInjection('property2', 'Property2'));
         $definition1->addMethodInjection(new MethodInjection('method1'));

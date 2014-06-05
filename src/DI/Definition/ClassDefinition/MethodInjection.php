@@ -9,22 +9,19 @@
 
 namespace DI\Definition\ClassDefinition;
 
+use DI\Definition\AbstractFunctionCallDefinition;
+
 /**
  * Describe an injection in a class method.
  *
  * @author Matthieu Napoli <matthieu@mnapoli.fr>
  */
-class MethodInjection
+class MethodInjection extends AbstractFunctionCallDefinition
 {
     /**
      * @var string
      */
     private $methodName;
-
-    /**
-     * @var array
-     */
-    private $parameters = array();
 
     /**
      * @param string $methodName
@@ -36,64 +33,16 @@ class MethodInjection
         $this->parameters = $parameters;
     }
 
+    public static function constructor(array $parameters = array())
+    {
+        return new self('__construct', $parameters);
+    }
+
     /**
      * @return string Method name
      */
     public function getMethodName()
     {
         return $this->methodName;
-    }
-
-    /**
-     * @return array
-     */
-    public function getParameters()
-    {
-        return $this->parameters;
-    }
-
-    /**
-     * @param int $index Position of the parameter (starting at 0)
-     * @return mixed|null Value to inject, or null if no injection defined.
-     */
-    public function hasParameter($index)
-    {
-        return array_key_exists($index, $this->parameters);
-    }
-
-    /**
-     * @param int $index Position of the parameter (starting at 0)
-     * @throws \InvalidArgumentException
-     * @return mixed Value to inject
-     */
-    public function getParameter($index)
-    {
-        if (! array_key_exists($index, $this->parameters)) {
-            throw new \InvalidArgumentException('There is no parameter value for index ' . $index);
-        }
-
-        return $this->parameters[$index];
-    }
-
-    /**
-     * Replace the parameters of the definition by a new array of parameters.
-     *
-     * @param array $parameters
-     */
-    public function replaceParameters(array $parameters)
-    {
-        $this->parameters = $parameters;
-    }
-
-    /**
-     * Merge another definition into the current definition.
-     *
-     * In case of conflicts, the current definition prevails.
-     *
-     * @param MethodInjection $methodInjection
-     */
-    public function merge(MethodInjection $methodInjection)
-    {
-        $this->parameters = $this->parameters + $methodInjection->parameters;
     }
 }

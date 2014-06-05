@@ -12,16 +12,15 @@ namespace DI\Definition\Source;
 use DI\Definition\ClassDefinition;
 use DI\Definition\EntryReference;
 use DI\Definition\ClassDefinition\MethodInjection;
+use DI\Definition\FunctionCallDefinition;
 use DI\Definition\MergeableDefinition;
-use ReflectionClass;
-use ReflectionMethod;
 
 /**
  * Reads DI class definitions using reflection.
  *
  * @author Matthieu Napoli <matthieu@mnapoli.fr>
  */
-class ReflectionDefinitionSource implements DefinitionSource
+class ReflectionDefinitionSource implements DefinitionSource, CallableDefinitionSource
 {
     /**
      * {@inheritdoc}
@@ -39,13 +38,15 @@ class ReflectionDefinitionSource implements DefinitionSource
             return null;
         }
 
-        $class = new ReflectionClass($className);
+        $class = new \ReflectionClass($className);
         $definition = new ClassDefinition($name);
 
         // Constructor
         $constructor = $class->getConstructor();
         if ($constructor && $constructor->isPublic()) {
-            $definition->setConstructorInjection($this->getConstructorInjection($constructor));
+            $definition->setConstructorInjection(
+                MethodInjection::constructor($this->getParametersDefinition($constructor))
+            );
         }
 
         // Merge with parent
@@ -59,7 +60,22 @@ class ReflectionDefinitionSource implements DefinitionSource
     /**
      * {@inheritdoc}
      */
-    private function getConstructorInjection(ReflectionMethod $constructor)
+    public function getCallableDefinition($callable)
+    {
+        if (is_array($callable)) {
+            list($class, $method) = $callable;
+            $reflection = new \ReflectionMethod($class, $method);
+        } else {
+            $reflection = new \ReflectionFunction($callable);
+        }
+
+        return new FunctionCallDefinition($callable, $this->getParametersDefinition($reflection));
+    }
+
+    /**
+     * Read the type-hinting from the parameters of the function.
+     */
+    private function getParametersDefinition(\ReflectionFunctionAbstract $constructor)
     {
         $parameters = array();
 
@@ -71,6 +87,6 @@ class ReflectionDefinitionSource implements DefinitionSource
             }
         }
 
-        return new MethodInjection($constructor->getName(), $parameters);
+        return $parameters;
     }
 }

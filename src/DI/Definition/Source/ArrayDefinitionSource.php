@@ -9,6 +9,7 @@
 
 namespace DI\Definition\Source;
 
+use DI\Definition\ClassDefinition;
 use DI\Definition\Definition;
 use DI\Definition\MergeableDefinition;
 use DI\Definition\ValueDefinition;
@@ -21,6 +22,8 @@ use DI\Definition\Helper\DefinitionHelper;
  */
 class ArrayDefinitionSource implements ChainableDefinitionSource
 {
+    const WILDCARD = '*';
+
     /**
      * @var DefinitionSource
      */
@@ -37,22 +40,14 @@ class ArrayDefinitionSource implements ChainableDefinitionSource
      */
     public function getDefinition($name, MergeableDefinition $parentDefinition = null)
     {
-        if (! array_key_exists($name, $this->definitions)) {
+        $definition = $this->findDefinition($name);
+
+        if ($definition === null) {
             // Not found, we use the chain or return null
             if ($this->chainedSource) {
                 return $this->chainedSource->getDefinition($name, $parentDefinition);
             }
             return null;
-        }
-
-        $definition = $this->definitions[$name];
-
-        if ($definition instanceof DefinitionHelper) {
-            $definition = $definition->getDefinition($name);
-        }
-
-        if (! $definition instanceof Definition) {
-            $definition = new ValueDefinition($name, $definition);
         }
 
         // If the definition we have is not mergeable, and we are supposed to merge, we ignore it
@@ -97,5 +92,79 @@ class ArrayDefinitionSource implements ChainableDefinitionSource
     public function chain(DefinitionSource $source)
     {
         $this->chainedSource = $source;
+    }
+
+    /**
+     * @param string $name
+     * @return Definition|null
+     */
+    private function findDefinition($name)
+    {
+        // Look for the definition by name
+        if (array_key_exists($name, $this->definitions)) {
+            return $this->castDefinition($this->definitions[$name], $name);
+        }
+
+        // Look if there are wildcards definitions
+        foreach ($this->definitions as $key => $definition) {
+            if (strpos($key, self::WILDCARD) === false) {
+                continue;
+            }
+
+            // Turn the pattern into a regex
+            $key = addslashes($key);
+            $key = '#' . str_replace(self::WILDCARD, '(.*)', $key) . '#';
+            if (preg_match($key, $name, $matches) === 1) {
+                $definition = $this->castDefinition($definition, $name);
+
+                // For a class definition, we replace * in the class name with the matches
+                // *Interface -> *Impl => FooInterface -> FooImpl
+                if ($definition instanceof ClassDefinition) {
+                    array_shift($matches);
+                    $definition->setClassName(
+                        $this->replaceWildcards($definition->getClassName(), $matches)
+                    );
+                }
+
+                return $definition;
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * @param mixed  $definition
+     * @param string $name
+     * @return Definition
+     */
+    private function castDefinition($definition, $name)
+    {
+        if ($definition instanceof DefinitionHelper) {
+            $definition = $definition->getDefinition($name);
+        }
+        if (! $definition instanceof Definition) {
+            $definition = new ValueDefinition($name, $definition);
+        }
+
+        return $definition;
+    }
+
+    /**
+     * Replaces all the wildcards in the string with the given replacements.
+     * @param string   $string
+     * @param string[] $replacements
+     * @return string
+     */
+    private function replaceWildcards($string, array $replacements)
+    {
+        foreach ($replacements as $replacement) {
+            $pos = strpos($string, self::WILDCARD);
+            if ($pos !== false) {
+                $string = substr_replace($string, $replacement, $pos, 1);
+            }
+        }
+
+        return $string;
     }
 }

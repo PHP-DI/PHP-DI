@@ -99,14 +99,6 @@ class ClassDefinition implements MergeableDefinition, CacheableDefinition
     }
 
     /**
-     * @return bool True if the definition is an alias to another class
-     */
-    public function isAlias()
-    {
-        return $this->className !== null && $this->className !== $this->name;
-    }
-
-    /**
      * @return MethodInjection|null
      */
     public function getConstructorInjection()
@@ -115,9 +107,9 @@ class ClassDefinition implements MergeableDefinition, CacheableDefinition
     }
 
     /**
-     * @param MethodInjection|null $constructorInjection
+     * @param MethodInjection $constructorInjection
      */
-    public function setConstructorInjection(MethodInjection $constructorInjection = null)
+    public function setConstructorInjection(MethodInjection $constructorInjection)
     {
         $this->constructorInjection = $constructorInjection;
     }
@@ -225,7 +217,7 @@ class ClassDefinition implements MergeableDefinition, CacheableDefinition
 
         // The current prevails
         if ($newDefinition->className === null) {
-            $newDefinition->className = $definition->className;
+            $newDefinition->setClassName($definition->className);
         }
         if ($newDefinition->scope === null) {
             $newDefinition->scope = $definition->scope;

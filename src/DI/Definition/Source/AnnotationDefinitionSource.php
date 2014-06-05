@@ -216,7 +216,11 @@ class AnnotationDefinitionSource implements DefinitionSource
             }
         }
 
-        return new MethodInjection($method->getName(), $parameters);
+        if ($method->isConstructor()) {
+            return MethodInjection::constructor($parameters);
+        } else {
+            return new MethodInjection($method->getName(), $parameters);
+        }
     }
 
     /**
