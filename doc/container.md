@@ -115,3 +115,78 @@ For example controllers, models, …
 
 If you need to use the `make()` method inside a service, or a controller, or whatever, it is
 recommended you type-hint against `FactoryInterface`. That avoids coupling your code to the container.
+
+## call()
+
+Since version 4.2, the container exposes a `call()` method:
+
+```php
+$container->call(function (Logger $logger, EntityManager $em) {
+    // ...
+});
+```
+
+The parameters are resolved as container entries using autowiring.
+
+If some parameters shouldn't be resolved by the container, or if some can't be resolved
+using autowiring (for example if a parameter is not type-hinted), then you must define those
+parameters in an array:
+
+```php
+$parameters = [
+    'data' => /* some variable */
+];
+
+$container->call(function (Logger $logger, $data) {
+    // ...
+}, $parameters);
+```
+
+As you can see, you can mix explicitly defined parameters (i.e. `$data` above)
+and auto-resolved parameters (i.e. the `$logger`).
+
+Note that you can also define injections on the fly if you don't use type-hints:
+
+```php
+$parameters = [
+    'logger' => \DI\link('Logger')
+];
+
+$container->call(function ($logger) {
+    // ...
+}, $parameters);
+```
+
+The `call()` method is useful to invoke controllers defined as closures, for example:
+
+```php
+$requestParameters = $_GET;
+
+$controller = function ($id, EntityManager $em) {
+    // ...
+}
+
+$container->call($controller, $requestParameters);
+```
+
+This leaves the liberty to the developer writing controllers to get request parameters
+*and* services using dependency injection.
+
+As with `make()`, `call()` is defined in `DI\InvokerInterface` so that you can type-hint
+against that interface without coupling yourself to the container.
+
+```php
+namespace DI;
+
+interface InvokerInterface
+{
+    /**
+     * Call the given function using the given parameters.
+     *
+     * @param callable $callable   Function to call.
+     * @param array    $parameters Parameters to use.
+     * @return mixed Result of the function.
+     */
+    public function call($callable, array $parameters = []);
+}
+```
