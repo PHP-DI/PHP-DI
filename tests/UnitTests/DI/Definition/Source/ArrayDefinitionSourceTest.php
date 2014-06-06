@@ -203,17 +203,10 @@ class ArrayDefinitionSourceTest extends \PHPUnit_Framework_TestCase
 
         $source->addDefinitions(array(
             'foo*' => 'bar',
-            'foo'  => 'bim', // an exact match should match over wildcards entries
             'Namespaced\*Interface' => \DI\object('Namespaced\*'),
             'Namespaced2\*Interface' => \DI\object('Namespaced2\Foo'),
             'Multiple\*\*\Matches' => \DI\object('Multiple\*\*\Implementation')
         ));
-
-        // an exact match should match over wildcards entries
-        $definition = $source->getDefinition('foo');
-        $this->assertInstanceOf('DI\Definition\ValueDefinition', $definition);
-        $this->assertEquals('foo', $definition->getName());
-        $this->assertEquals('bim', $definition->getValue());
 
         $definition = $source->getDefinition('foo1');
         $this->assertInstanceOf('DI\Definition\ValueDefinition', $definition);
@@ -234,5 +227,45 @@ class ArrayDefinitionSourceTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf('DI\Definition\ClassDefinition', $definition);
         $this->assertEquals('Multiple\Foo\Bar\Matches', $definition->getName());
         $this->assertEquals('Multiple\Foo\Bar\Implementation', $definition->getClassName());
+    }
+
+    /**
+     * An exact match (in the definitions array) should prevail over matching with wildcards.
+     */
+    public function testExactMatchShouldPrevailOverWildcard()
+    {
+        $source = new ArrayDefinitionSource();
+        $source->addDefinitions(array(
+            'fo*' => 'bar',
+            'foo' => 'bim',
+        ));
+        $definition = $source->getDefinition('foo');
+        $this->assertInstanceOf('DI\Definition\ValueDefinition', $definition);
+        $this->assertEquals('foo', $definition->getName());
+        $this->assertEquals('bim', $definition->getValue());
+    }
+
+    /**
+     * The wildcard should not match empty strings
+     */
+    public function testWildcardShouldNotMatchEmptyString()
+    {
+        $source = new ArrayDefinitionSource();
+        $source->addDefinitions(array(
+            'foo*' => 'bar',
+        ));
+        $this->assertNull($source->getDefinition('foo'));
+    }
+
+    /**
+     * The wildcard should not match across namespaces.
+     */
+    public function testWildcardShouldNotMatchAcrossNamespaces()
+    {
+        $source = new ArrayDefinitionSource();
+        $source->addDefinitions(array(
+            'My\*Interface' => \DI\object('My\*'),
+        ));
+        $this->assertNull($source->getDefinition('My\Foo\BarInterface'));
     }
 }

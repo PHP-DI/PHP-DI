@@ -25,7 +25,6 @@ class WildcardDefinitionsTest extends \PHPUnit_Framework_TestCase
         $builder->addDefinitions(__DIR__ . '/Fixtures/wildcards.php');
         $container = $builder->build();
 
-        $this->assertEquals('bar', $container->get('foo'));
         $this->assertEquals('bar', $container->get('foo1'));
 
         $object = $container->get('IntegrationTests\DI\Fixtures\Interface1');

@@ -23,6 +23,10 @@ use DI\Definition\Helper\DefinitionHelper;
 class ArrayDefinitionSource implements ChainableDefinitionSource
 {
     const WILDCARD = '*';
+    /**
+     * Matches anything except "\"
+     */
+    const WILDCARD_PATTERN = '([^\\\\]+)';
 
     /**
      * @var DefinitionSource
@@ -113,7 +117,7 @@ class ArrayDefinitionSource implements ChainableDefinitionSource
 
             // Turn the pattern into a regex
             $key = addslashes($key);
-            $key = '#' . str_replace(self::WILDCARD, '(.*)', $key) . '#';
+            $key = '#' . str_replace(self::WILDCARD, self::WILDCARD_PATTERN, $key) . '#';
             if (preg_match($key, $name, $matches) === 1) {
                 $definition = $this->castDefinition($definition, $name);
 

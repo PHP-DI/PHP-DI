@@ -3,5 +3,5 @@
 return array(
     'foo*' => 'bar',
 
-    '*\Interface*' => DI\object('*\Implementation*'),
+    'IntegrationTests\DI\*\Interface*' => DI\object('IntegrationTests\DI\*\Implementation*'),
 );
