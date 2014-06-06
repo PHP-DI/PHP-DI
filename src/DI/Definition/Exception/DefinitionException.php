@@ -24,7 +24,7 @@ class DefinitionException extends \Exception
         return new self(sprintf(
             "%s\nFull definition:\n%s",
             $message,
-            Debug::dump($definition)
+            Debug::dumpDefinition($definition)
         ));
     }
 }

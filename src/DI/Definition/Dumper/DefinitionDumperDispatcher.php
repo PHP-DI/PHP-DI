@@ -26,6 +26,13 @@ class DefinitionDumperDispatcher implements DefinitionDumper
      */
     private $dumpers = array();
 
+    public function __construct($registerDefaultDumpers = true)
+    {
+        if ($registerDefaultDumpers) {
+            $this->registerDefaultDumpers();
+        }
+    }
+
     /**
      * {@inheritdoc}
      */
@@ -52,14 +59,12 @@ class DefinitionDumperDispatcher implements DefinitionDumper
 
     public function registerDefaultDumpers()
     {
-        $functionCallDumper = new FunctionCallDefinitionDumper();
-
         $this->dumpers = array(
             'DI\Definition\ValueDefinition'        => new ValueDefinitionDumper(),
             'DI\Definition\FactoryDefinition'      => new FactoryDefinitionDumper(),
             'DI\Definition\AliasDefinition'        => new AliasDefinitionDumper(),
             'DI\Definition\ClassDefinition'        => new ClassDefinitionDumper(),
-            'DI\Definition\FunctionCallDefinition' => $functionCallDumper,
+            'DI\Definition\FunctionCallDefinition' => new FunctionCallDefinitionDumper(),
         );
     }
 }
