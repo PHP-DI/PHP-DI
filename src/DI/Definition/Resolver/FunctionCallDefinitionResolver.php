@@ -77,4 +77,19 @@ class FunctionCallDefinitionResolver implements DefinitionResolver
             return $functionReflection->invokeArgs($args);
         }
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function isResolvable(Definition $definition, array $parameters = array())
+    {
+        if (! $definition instanceof FunctionCallDefinition) {
+            throw new \InvalidArgumentException(sprintf(
+                'This definition resolver is only compatible with FunctionCallDefinition objects, %s given',
+                get_class($definition)
+            ));
+        }
+
+        return true;
+    }
 }

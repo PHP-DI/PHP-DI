@@ -21,10 +21,11 @@ use DI\ContainerBuilder;
  */
 class Issue168Test extends \PHPUnit_Framework_TestCase
 {
-    public function testIssue()
+    public function testInterfaceOptionalParameter()
     {
         $container = ContainerBuilder::buildDevContainer();
-        $container->get('IntegrationTests\DI\Issues\TestClass');
+        $object = $container->get('IntegrationTests\DI\Issues\TestClass');
+        $this->assertInstanceOf('IntegrationTests\DI\Issues\TestClass', $object);
     }
 }
 

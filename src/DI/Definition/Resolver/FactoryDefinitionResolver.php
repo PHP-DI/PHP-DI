@@ -61,6 +61,21 @@ class FactoryDefinitionResolver implements DefinitionResolver
     }
 
     /**
+     * {@inheritdoc}
+     */
+    public function isResolvable(Definition $definition, array $parameters = array())
+    {
+        if (! $definition instanceof FactoryDefinition) {
+            throw new \InvalidArgumentException(sprintf(
+                'This definition resolver is only compatible with FactoryDefinition objects, %s given',
+                get_class($definition)
+            ));
+        }
+
+        return true;
+    }
+
+    /**
      * @return ContainerInterface
      */
     public function getContainer()
