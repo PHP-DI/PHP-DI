@@ -48,8 +48,7 @@ class ParameterResolver
         AbstractFunctionCallDefinition $definition = null,
         \ReflectionFunctionAbstract $functionReflection = null,
         array $parameters = array()
-    )
-    {
+    ) {
         $args = array();
 
         if (! $functionReflection) {
@@ -78,10 +77,15 @@ class ParameterResolver
             }
 
             if ($value instanceof EntryReference) {
-                $args[] = $this->container->get($value->getName());
-            } else {
-                $args[] = $value;
+                // If the container cannot produce the entry, we can use the default parameter value
+                if (!$this->container->has($value->getName()) && $parameter->isOptional()) {
+                    $value = $this->getParameterDefaultValue($parameter, $functionReflection);
+                } else {
+                    $value = $this->container->get($value->getName());
+                }
             }
+
+            $args[] = $value;
         }
 
         return $args;

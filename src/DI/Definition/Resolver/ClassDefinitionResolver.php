@@ -86,6 +86,30 @@ class ClassDefinitionResolver implements DefinitionResolver
     }
 
     /**
+     * The definition is not resolvable if the class is not instantiable (interface or abstract)
+     * or if the class doesn't exist.
+     *
+     * {@inheritdoc}
+     */
+    public function isResolvable(Definition $definition, array $parameters = array())
+    {
+        if (! $definition instanceof ClassDefinition) {
+            throw new \InvalidArgumentException(sprintf(
+                'This definition resolver is only compatible with ClassDefinition objects, %s given',
+                get_class($definition)
+            ));
+        }
+
+        if (! class_exists($definition->getClassName())) {
+            return false;
+        }
+
+        $classReflection = new ReflectionClass($definition->getClassName());
+
+        return $classReflection->isInstantiable();
+    }
+
+    /**
      * Injects dependencies on an existing instance.
      *
      * @param ClassDefinition $classDefinition

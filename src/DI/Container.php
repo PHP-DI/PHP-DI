@@ -179,7 +179,18 @@ class Container implements ContainerInteropInterface, ContainerInterface, Factor
             ));
         }
 
-        return array_key_exists($name, $this->singletonEntries) || $this->definitionManager->getDefinition($name);
+        if (array_key_exists($name, $this->singletonEntries)) {
+            return true;
+        }
+
+        $definition = $this->definitionManager->getDefinition($name);
+        if ($definition === null) {
+            return false;
+        }
+
+        $definitionResolver = $this->getDefinitionResolver($definition);
+
+        return $definitionResolver->isResolvable($definition);
     }
 
     /**

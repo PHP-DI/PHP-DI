@@ -59,6 +59,21 @@ class AliasDefinitionResolver implements DefinitionResolver
     }
 
     /**
+     * {@inheritdoc}
+     */
+    public function isResolvable(Definition $definition, array $parameters = array())
+    {
+        if (! $definition instanceof AliasDefinition) {
+            throw new \InvalidArgumentException(sprintf(
+                'This definition resolver is only compatible with AliasDefinition objects, %s given',
+                get_class($definition)
+            ));
+        }
+
+        return true;
+    }
+
+    /**
      * @return ContainerInterface
      */
     public function getContainer()

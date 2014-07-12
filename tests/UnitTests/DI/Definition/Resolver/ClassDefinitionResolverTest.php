@@ -244,6 +244,20 @@ MESSAGE;
         $resolver->resolve($definition);
     }
 
+    public function testIsResolvable()
+    {
+        $resolver = $this->buildResolver();
+
+        $classDefinition = new ClassDefinition('UnitTests\DI\Definition\Resolver\FixtureClass');
+        $this->assertTrue($resolver->isResolvable($classDefinition));
+
+        $interfaceDefinition = new ClassDefinition('UnitTests\DI\Definition\Resolver\FixtureInterface');
+        $this->assertFalse($resolver->isResolvable($interfaceDefinition));
+
+        $abstractClassDefinition = new ClassDefinition('UnitTests\DI\Definition\Resolver\FixtureAbstractClass');
+        $this->assertFalse($resolver->isResolvable($abstractClassDefinition));
+    }
+
     private function buildResolver()
     {
         /** @var \DI\Container $container */
@@ -279,5 +293,13 @@ class FixtureClass
 }
 
 class NoConstructor
+{
+}
+
+interface FixtureInterface
+{
+}
+
+abstract class FixtureAbstractClass
 {
 }
