@@ -123,7 +123,7 @@ You need to configure the container to import this file:
 
 ```php
 $builder = new ContainerBuilder();
-$builder->addDefinitions(new ArrayDefinitionSource('config.php'));
+$builder->addDefinitions('config.php');
 
 $container = $builder->build();
 ```
