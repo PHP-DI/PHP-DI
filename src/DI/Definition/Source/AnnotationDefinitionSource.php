@@ -247,7 +247,7 @@ class AnnotationDefinitionSource implements DefinitionSource
         }
 
         // Last resort, look for @param tag
-        return $this->getPhpDocReader()->getParameterType($parameter);
+        return $this->getPhpDocReader()->getParameterClass($parameter);
     }
 
     /**
