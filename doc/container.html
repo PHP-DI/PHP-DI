@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>
+<html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>
+<html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>
+<html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!-->
+<html class="no-js"> <!--<![endif]-->
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width">
+
+    <title>PHP-DI - The Dependency Injection Container for humans</title>
+    <meta name="description" content="PHP-DI is a Dependency Injection Container for PHP that intends to be practical and powerful">
+
+            <link href="http://php-di.org/css/bootstrap-theme_venera.min.css" media="all" rel="stylesheet" type="text/css">
+        <link href="http://fonts.googleapis.com/css?family=Abel:400|Oswald:300,400,700" media="all" rel="stylesheet" type="text/css">
+        <link href="http://php-di.org/css/highlight.github.css" rel="stylesheet">
+        <link href="http://php-di.org/css/custom.css" rel="stylesheet">
+    </head>
+<body>
+
+    <header id='header'>
+        <div class='navbar navbar-fixed-top'>
+            <div class='navbar-inner'>
+                <div class='container'>
+                    <a class='btn btn-navbar' data-target='.nav-collapse' data-toggle='collapse'>
+                        <span class='icon-bar'></span>
+                        <span class='icon-bar'></span>
+                        <span class='icon-bar'></span>
+                    </a>
+                    <a href="http://php-di.org/index.html" class="brand">PHP-DI</a>
+
+                    <div class='nav-collapse subnav-collapse collapse pull-right' id='top-navigation'>
+                        <ul class='nav'>
+                            <li><a href="http://php-di.org/">Home</a></li>
+                            <li><a href="http://php-di.org/news/">News</a></li>
+                            <li><a href="http://php-di.org/doc/getting-started.html">Getting started</a></li>
+                            <li><a href="http://php-di.org/doc/">Documentation</a></li>
+                            <li><a href="http://php-di.org/change-log.html">Change log</a></li>
+                            <li><a href="https://github.com/mnapoli/PHP-DI"><i class="icon-github"></i> Github</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    
+    <header class="jumbotron subhead" id="overview">
+        <div class="container">
+            <div class="docs-header-icon">
+                <h1>Documentation</h1>
+                <p class="lead">
+                    This is the documentation for PHP-DI 4. The documentation for v3 is
+                    <a href="https://github.com/mnapoli/PHP-DI/tree/3.x/doc">still available here</a>.
+                </p>
+            </div>
+        </div>
+    </header>
+    <div class='sub-jumbotron'>
+        <div class='container'>
+            <ul>
+                <li>
+                    <a href="/doc/" class="">Full documentation</a>
+                </li>
+                <li>
+                    <a href="/doc/getting-started.html" class="">Getting started</a>
+                </li>
+                <li>
+                    <a href="/doc/best-practices.html" class="">Best practices</a>
+                </li>
+                <li>
+                    <a href="/doc/container-configuration.html" class="">Configuring the container</a>
+                </li>
+                <li>
+                    <a href="/doc/container.html" class="active">Using the container</a>
+                </li>
+                <li>
+                    <a href="/doc/definition.html" class="">Defining injections</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="container docs-w">
+        <h1>Using the container</h1>
+<p>This documentation describes the API of the container object itself.</p>
+<h2>get() &amp; has()</h2>
+<p>The container implements the standard <a href="https://github.com/container-interop/container-interop">ContainerInterop</a>.
+That means it implements <code>Interop\Container\ContainerInterface</code>:</p>
+<pre><code class="language-php">namespace Interop\Container;
+
+interface ContainerInterface
+{
+    /**
+     * Finds an entry of the container by its identifier and returns it.
+     *
+     * @param string $id Identifier of the entry to look for.
+     * @throws NotFoundException  No entry was found for this identifier.
+     * @throws ContainerException Error while retrieving the entry.
+     * @return mixed Entry.
+     */
+    public function get($id);
+
+    /**
+     * Returns true if the container can return an entry for the given identifier.
+     *
+     * @param string $id Identifier of the entry to look for.
+     * @return boolean
+     */
+    public function has($id);
+}</code></pre>
+<p>If you type-hint against this interface instead of the implementation (<code>DI\Container</code>),
+that means you will be able to use another container (compatible with ContainerInterop)
+later.</p>
+<h2>set()</h2>
+<p>Of course you can set entries on the container:</p>
+<pre><code class="language-php">$container-&gt;set('foo', 'bar');</code></pre>
+<p>However it is recommended to use definition files.
+See the <a href="definition.html">definition documentation</a>.</p>
+<h2>make()</h2>
+<p>The container also offers a <code>make</code> method. This method is defined in the <code>DI\FactoryInterface</code>:</p>
+<pre><code class="language-php">interface FactoryInterface
+{
+    /**
+     * Resolves an entry by its name. If given a class name, it will return a new instance of that class.
+     *
+     * @param string $name       Entry name or a class name.
+     * @param array  $parameters Optional parameters to use to build the entry. Use this to force specific
+     *                           parameters to specific values. Parameters not defined in this array will
+     *                           be automatically resolved.
+     *
+     * @throws DependencyException Error while resolving the entry.
+     * @throws NotFoundException   No entry or class found for the given name.
+     * @return mixed
+     */
+    public function make($name, array $parameters = array());
+}</code></pre>
+<p>The <code>make()</code> method works the same as <code>get()</code>, except it will create a new instance each time.
+It will use the parameters provided for the constructor, and the missing parameters will be
+resolved from the container.</p>
+<p>It is very useful to create objects that do not belong <em>inside</em> the container (i.e. that are not services),
+but that may have dependencies. It is also useful if you want to override some parameters in the constructor.
+For example controllers, models, …</p>
+<p>If you need to use the <code>make()</code> method inside a service, or a controller, or whatever, it is
+recommended you type-hint against <code>FactoryInterface</code>. That avoids coupling your code to the container.</p>
+<h2>call()</h2>
+<p>Since version 4.2, the container exposes a <code>call()</code> method:</p>
+<pre><code class="language-php">$container-&gt;call(function (Logger $logger, EntityManager $em) {
+    // ...
+});</code></pre>
+<p>The parameters are resolved as container entries using autowiring.</p>
+<p>If some parameters shouldn't be resolved by the container, or if some can't be resolved
+using autowiring (for example if a parameter is not type-hinted), then you must define those
+parameters in an array:</p>
+<pre><code class="language-php">$parameters = [
+    'data' =&gt; /* some variable */
+];
+
+$container-&gt;call(function (Logger $logger, $data) {
+    // ...
+}, $parameters);</code></pre>
+<p>As you can see, you can mix explicitly defined parameters (i.e. <code>$data</code> above)
+and auto-resolved parameters (i.e. the <code>$logger</code>).</p>
+<p>Note that you can also define injections on the fly if you don't use type-hints:</p>
+<pre><code class="language-php">$parameters = [
+    'logger' =&gt; \DI\link('Logger')
+];
+
+$container-&gt;call(function ($logger) {
+    // ...
+}, $parameters);</code></pre>
+<p>The <code>call()</code> method is useful to invoke controllers defined as closures, for example:</p>
+<pre><code class="language-php">$requestParameters = $_GET;
+
+$controller = function ($id, EntityManager $em) {
+    // ...
+}
+
+$container-&gt;call($controller, $requestParameters);</code></pre>
+<p>This leaves the liberty to the developer writing controllers to get request parameters
+<em>and</em> services using dependency injection.</p>
+<p>As with <code>make()</code>, <code>call()</code> is defined in <code>DI\InvokerInterface</code> so that you can type-hint
+against that interface without coupling yourself to the container.</p>
+<pre><code class="language-php">namespace DI;
+
+interface InvokerInterface
+{
+    /**
+     * Call the given function using the given parameters.
+     *
+     * @param callable $callable   Function to call.
+     * @param array    $parameters Parameters to use.
+     * @return mixed Result of the function.
+     */
+    public function call($callable, array $parameters = []);
+}</code></pre>
+<h2>injectOn()</h2>
+<p>Sometimes you want to inject dependencies on an object that is already created.</p>
+<p>For example, some old frameworks don't allow you to control how controllers are created.
+With <code>injectOn</code>, you can ask the container to fulfill the dependencies after the object is created.</p>
+<p>Keep in mind it's usually always better to use <code>get()</code> or <code>make()</code> instead of <code>injectOn()</code>,
+use it only where you really have to.</p>
+<p>Example:</p>
+<pre><code class="language-php">class UserController extends BaseController
+{
+    /**
+     * @Inject
+     * @var SomeService
+     */
+    private $someService;
+
+    public function __construct()
+    {
+        // The framework doesn't let us control how the controller is created, so
+        // we can't use the container to create the controller
+        // So we ask the container to inject dependencies
+        $container-&gt;injectOn($this);
+
+        // Now the dependencies are injected
+        $this-&gt;someService-&gt;doSomething();
+    }
+}</code></pre>
+<p>As you might have guessed, you can't use constructor injection with this method.
+But other kind of injections (property or setter) will work, whether you use annotations
+or whether you configured your object in a definition file.</p>
+    </div>
+
+
+            <footer>
+            <div class='pre-footer'>
+                <div class='container'>
+                    <p>
+                        <strong>Unsatisfied with the documentation?</strong>
+                        Please let us know, <a href="https://github.com/mnapoli/PHP-DI/issues/new">create an issue</a>,
+                        we will greatly appreciate it.
+                        You can chat with us on
+                        <a href="https://twitter.com/phpdi">Twitter</a> or
+                        <a href="https://gitter.im/mnapoli/PHP-DI">Gitter chat</a> too.
+                    </p>
+                </div>
+            </div>
+            <div class='deep-footer'>
+                <div class='container'>
+                    <div class='copyright'>
+                        Copyright &copy; 2014 <a href="http://mnapoli.fr/">Matthieu Napoli</a>
+                        Website generated with
+                        <a href="http://mnapoli.fr/Couscous/" target="_blank">Couscous</a>.
+                    </div>
+                </div>
+            </div>
+        </footer>
+    
+            <script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
+        <script src="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/js/bootstrap.min.js" type="text/javascript"></script>
+        <script src="http://yandex.st/highlightjs/7.5/highlight.min.js"></script>
+        <script src="http://php-di.org/js/template.js"></script>
+
+        <script>
+            $(function() {
+                $("section>h1").wrap('<div class="page-header" />');
+                $("section>p:first-child").addClass('lead');
+                hljs.initHighlightingOnLoad();
+            });
+        </script>
+    
+    <script>
+        var _gaq = _gaq || [];
+        _gaq.push(['_setAccount', 'UA-15584647-13']);
+        _gaq.push(['_trackPageview']);
+        (function() {
+            var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+            ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+            var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+        })();
+    </script>
+</body>
+</html>

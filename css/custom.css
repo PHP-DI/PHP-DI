@@ -14,3 +14,8 @@ p {
 strong {
     color: black;
 }
+
+.single-post-w .post-content {
+    font-size: 18px;
+    line-height: 28px;
+}

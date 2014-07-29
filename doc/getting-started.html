@@ -76,6 +76,9 @@
                     <a href="/doc/container-configuration.html" class="">Configuring the container</a>
                 </li>
                 <li>
+                    <a href="/doc/container.html" class="">Using the container</a>
+                </li>
+                <li>
                     <a href="/doc/definition.html" class="">Defining injections</a>
                 </li>
             </ul>
@@ -161,7 +164,7 @@ return [
 <p>See also the <a href="definition.html">complete documentation about array configuration</a>.</p>
 <p>You need to configure the container to import this file:</p>
 <pre><code class="language-php">$builder = new ContainerBuilder();
-$builder-&gt;addDefinitions(new ArrayDefinitionSource('config.php'));
+$builder-&gt;addDefinitions('config.php');
 
 $container = $builder-&gt;build();</code></pre>
 <h2>Get objects from the container</h2>

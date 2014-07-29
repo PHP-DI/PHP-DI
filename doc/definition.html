@@ -76,6 +76,9 @@
                     <a href="/doc/container-configuration.html" class="">Configuring the container</a>
                 </li>
                 <li>
+                    <a href="/doc/container.html" class="">Using the container</a>
+                </li>
+                <li>
                     <a href="/doc/definition.html" class="active">Defining injections</a>
                 </li>
             </ul>
@@ -245,6 +248,12 @@ return [
         return new MyClass($c-&gt;get('db.host'));
     }),
 
+    // We can set the scope on the factory too
+    // This will return a new object each time we request SomeOtherClass
+    'SomeOtherClass' =&gt; DI\factory(function () {
+        return new SomeOtherClass();
+    })-&gt;scope(Scope::PROTOTYPE()),
+
     // Defining an alias to another entry
     'some.entry' =&gt; DI\link('some.other.entry'),
 
@@ -261,6 +270,20 @@ $container-&gt;set('My\Class', \DI\object()
 
 // ...</code></pre>
 <p>The API is the same as shown above for the PHP array containing definitions.</p>
+<h3>Wildcards</h3>
+<p>You can use wildcards to define a batch of entries. It can be very useful to bind interfaces to implementations:</p>
+<pre><code class="language-php">return [
+    'Blog\Domain\*RepositoryInterface' =&gt; DI\object('Blog\Architecture\*DoctrineRepository'),
+];</code></pre>
+<p>In our example, the wildcard will match <code>Blog\Domain\UserRepositoryInterface</code>, and it will map it to
+<code>Blog\Architecture\UserDoctrineRepository</code>.</p>
+<p>Good to know:</p>
+<ul>
+<li>the wildcard does not match across namespaces</li>
+<li>an exact match (i.e. without <code>*</code>) will always be chosen over a match with a wildcard
+(first PHP-DI looks for an exact match, then it searches in the wildcards)</li>
+<li>in case of "conflicts" (i.e. 2 different matches with wildcards), the first match will prevail</li>
+</ul>
     </div>
 
 
