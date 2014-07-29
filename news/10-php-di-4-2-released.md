@@ -7,7 +7,7 @@ date: July 29th 2014
 
 I am happy to announce that PHP-DI version 4.2 has been released.
 
-It comes with very interesting new features, but before to get into this you need to know that it also comes with
+It comes with very interesting new features, but first you need to know that it also comes with
 a small BC break! This BC break was a necessary evil to fix an buggy and inconsistent behavior:
 
 ```php
@@ -17,13 +17,14 @@ a small BC break! This BC break was a necessary evil to fix an buggy and inconsi
     }
 ```
 
-In 4.1, by default PHP-DI would inject a `Bar` instance in the *optional* parameter. This is not what one would expect:
-optional parameters are now ignored (i.e. their default value is injected unless configured otherwise).
+In 4.1, by default PHP-DI would inject a `Bar` instance in the *optional* parameter.
+This is not what one would expect, and this was causing unexpected bugs because it turned optional dependencies into required dependencies.
 
+Optional parameters are now ignored (i.e. their default value is injected unless configured otherwise).
 You can of course configure explicitly an injection in optional parameters (through PHP config or annotation).
 
 
-## `Container::call()`
+## Container::call()
 
 The container [already provided `get()`, `has()` and `make()`](../doc/container.md).
 Now it can also `call` functions using dependency injection.
@@ -37,7 +38,7 @@ $container->call(function (LoggerInterface $logger) {
 ```
 
 `Container::call()` will call the given function and resolve the parameters automatically.
-Those familiar with, for example, AngularJS will notice that this is very similar.
+Those familiar with AngularJS (for example) will not be lost.
 
 But what's even more interesting is that you can also explicitly set parameters if some are not supposed to be given
 by the container:
