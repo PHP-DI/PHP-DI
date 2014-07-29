@@ -22,11 +22,9 @@ class DefinitionException extends \Exception
     public static function create(Definition $definition, $message)
     {
         return new self(sprintf(
-            "Entry %s cannot be resolved: %s\nDefinition of %s:\n%s",
-            $definition->getName(),
+            "%s\nFull definition:\n%s",
             $message,
-            $definition->getName(),
-            Debug::dump($definition)
+            Debug::dumpDefinition($definition)
         ));
     }
 }

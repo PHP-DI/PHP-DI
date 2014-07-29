@@ -14,6 +14,7 @@ tab: index
 ## PHP-DI's documentation
 
 * [Configure the container](container-configuration.md)
+* [Use the container](container.md)
 * [Define injections](definition.md)
 * [Definition overriding](definition-overriding.md)
 * [Lazy injection](lazy-injection.md)

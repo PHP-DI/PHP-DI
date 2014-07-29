@@ -214,6 +214,12 @@ return [
         return new MyClass($c->get('db.host'));
     }),
 
+    // We can set the scope on the factory too
+    // This will return a new object each time we request SomeOtherClass
+    'SomeOtherClass' => DI\factory(function () {
+        return new SomeOtherClass();
+    })->scope(Scope::PROTOTYPE()),
+
     // Defining an alias to another entry
     'some.entry' => DI\link('some.other.entry'),
 
@@ -237,3 +243,23 @@ $container->set('My\Class', \DI\object()
 ```
 
 The API is the same as shown above for the PHP array containing definitions.
+
+### Wildcards
+
+You can use wildcards to define a batch of entries. It can be very useful to bind interfaces to implementations:
+
+```php
+return [
+    'Blog\Domain\*RepositoryInterface' => DI\object('Blog\Architecture\*DoctrineRepository'),
+];
+```
+
+In our example, the wildcard will match `Blog\Domain\UserRepositoryInterface`, and it will map it to
+`Blog\Architecture\UserDoctrineRepository`.
+
+Good to know:
+
+- the wildcard does not match across namespaces
+- an exact match (i.e. without `*`) will always be chosen over a match with a wildcard
+(first PHP-DI looks for an exact match, then it searches in the wildcards)
+- in case of "conflicts" (i.e. 2 different matches with wildcards), the first match will prevail

@@ -1,5 +1,31 @@
 # Change log
 
+## 4.2
+
+Read the [news entry](news/10-php-di-4-2-released.md).
+
+**Minor BC-break**: Optional parameters (that were not configured) were injected, they are now ignored, which is what naturally makes sense since they are optional.
+Example:
+
+```php
+    public function __construct(Bar $bar = null)
+    {
+        $this->bar = $bar ?: $this->createDefaultBar();
+    }
+```
+
+Before 4.2, PHP-DI would try to inject a `Bar` instance. From 4.2 and onwards, it will inject `null`.
+
+Of course, you can still explicitly define an injection for the optional parameters and that will work.
+
+All changes:
+
+* [#162](https://github.com/mnapoli/PHP-DI/pull/162) Added `Container::call()` to call functions with dependency injection
+* [#156](https://github.com/mnapoli/PHP-DI/issues/156) Wildcards (`*`) in definitions
+* [#164](https://github.com/mnapoli/PHP-DI/issues/164) Prototype scope is now available for `factory()` definitions too
+* FIXED [#168](https://github.com/mnapoli/PHP-DI/pull/168) `Container::has()` now returns false for interfaces and abstract classes that are not mapped in the definitions
+* FIXED [#171](https://github.com/mnapoli/PHP-DI/issues/171) Optional parameters are now ignored (not injected) if not set in the definitions (see the BC-break warning above)
+
 ## 4.1
 
 Read the [news entry](news/09-php-di-4-1-released.md).

@@ -10,7 +10,6 @@
 namespace DI;
 
 use DI\Definition\Definition;
-use DI\Definition\Dumper\DefinitionDumper;
 use DI\Definition\Dumper\DefinitionDumperDispatcher;
 
 /**
@@ -21,24 +20,20 @@ use DI\Definition\Dumper\DefinitionDumperDispatcher;
 class Debug
 {
     /**
-     * @var DefinitionDumper
-     */
-    private static $dumper;
-
-    /**
      * Dump the definition to a string.
      *
      * @param Definition $definition
      *
      * @return string
      */
-    public static function dump(Definition $definition)
+    public static function dumpDefinition(Definition $definition)
     {
-        if (! self::$dumper) {
-            self::$dumper = new DefinitionDumperDispatcher();
-            self::$dumper->registerDefaultDumpers();
+        static $dumper;
+
+        if (! $dumper) {
+            $dumper = new DefinitionDumperDispatcher();
         }
 
-        return self::$dumper->dump($definition);
+        return $dumper->dump($definition);
     }
 }

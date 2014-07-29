@@ -31,11 +31,9 @@ class ArrayDefinitionSourceTest extends \PHPUnit_Framework_TestCase
     public function testValueDefinition()
     {
         $source = new ArrayDefinitionSource();
-        $source->addDefinitions(
-            array(
-                'foo' => 'bar',
-            )
-        );
+        $source->addDefinitions(array(
+            'foo' => 'bar',
+        ));
         $definition = $source->getDefinition('foo');
         $this->assertInstanceOf('DI\Definition\ValueDefinition', $definition);
         $this->assertEquals('foo', $definition->getName());
@@ -197,5 +195,77 @@ class ArrayDefinitionSourceTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf('DI\Definition\ClassDefinition', $mergedDefinition);
         $this->assertEquals(new PropertyInjection('p1', 'val1'), $mergedDefinition->getPropertyInjection('p1'));
         $this->assertEquals(new PropertyInjection('p2', 'val2'), $mergedDefinition->getPropertyInjection('p2'));
+    }
+
+    public function testWildcards()
+    {
+        $source = new ArrayDefinitionSource();
+
+        $source->addDefinitions(array(
+            'foo*' => 'bar',
+            'Namespaced\*Interface' => \DI\object('Namespaced\*'),
+            'Namespaced2\*Interface' => \DI\object('Namespaced2\Foo'),
+            'Multiple\*\*\Matches' => \DI\object('Multiple\*\*\Implementation')
+        ));
+
+        $definition = $source->getDefinition('foo1');
+        $this->assertInstanceOf('DI\Definition\ValueDefinition', $definition);
+        $this->assertEquals('foo1', $definition->getName());
+        $this->assertEquals('bar', $definition->getValue());
+
+        $definition = $source->getDefinition('Namespaced\FooInterface');
+        $this->assertInstanceOf('DI\Definition\ClassDefinition', $definition);
+        $this->assertEquals('Namespaced\FooInterface', $definition->getName());
+        $this->assertEquals('Namespaced\Foo', $definition->getClassName());
+
+        $definition = $source->getDefinition('Namespaced2\FooInterface');
+        $this->assertInstanceOf('DI\Definition\ClassDefinition', $definition);
+        $this->assertEquals('Namespaced2\FooInterface', $definition->getName());
+        $this->assertEquals('Namespaced2\Foo', $definition->getClassName());
+
+        $definition = $source->getDefinition('Multiple\Foo\Bar\Matches');
+        $this->assertInstanceOf('DI\Definition\ClassDefinition', $definition);
+        $this->assertEquals('Multiple\Foo\Bar\Matches', $definition->getName());
+        $this->assertEquals('Multiple\Foo\Bar\Implementation', $definition->getClassName());
+    }
+
+    /**
+     * An exact match (in the definitions array) should prevail over matching with wildcards.
+     */
+    public function testExactMatchShouldPrevailOverWildcard()
+    {
+        $source = new ArrayDefinitionSource();
+        $source->addDefinitions(array(
+            'fo*' => 'bar',
+            'foo' => 'bim',
+        ));
+        $definition = $source->getDefinition('foo');
+        $this->assertInstanceOf('DI\Definition\ValueDefinition', $definition);
+        $this->assertEquals('foo', $definition->getName());
+        $this->assertEquals('bim', $definition->getValue());
+    }
+
+    /**
+     * The wildcard should not match empty strings
+     */
+    public function testWildcardShouldNotMatchEmptyString()
+    {
+        $source = new ArrayDefinitionSource();
+        $source->addDefinitions(array(
+            'foo*' => 'bar',
+        ));
+        $this->assertNull($source->getDefinition('foo'));
+    }
+
+    /**
+     * The wildcard should not match across namespaces.
+     */
+    public function testWildcardShouldNotMatchAcrossNamespaces()
+    {
+        $source = new ArrayDefinitionSource();
+        $source->addDefinitions(array(
+            'My\*Interface' => \DI\object('My\*'),
+        ));
+        $this->assertNull($source->getDefinition('My\Foo\BarInterface'));
     }
 }

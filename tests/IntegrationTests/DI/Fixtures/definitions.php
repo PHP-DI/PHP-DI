@@ -30,6 +30,7 @@ return array(
 
     'IntegrationTests\DI\Fixtures\Interface1' => DI\object('IntegrationTests\DI\Fixtures\Implementation1')
             ->scope(Scope::SINGLETON()),
+    'IntegrationTests\DI\Fixtures\Interface2' => DI\object('IntegrationTests\DI\Fixtures\Class3'),
 
     'namedDependency' => DI\object('IntegrationTests\DI\Fixtures\Class2'),
 

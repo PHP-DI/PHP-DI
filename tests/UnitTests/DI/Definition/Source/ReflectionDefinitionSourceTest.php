@@ -10,6 +10,7 @@
 namespace UnitTests\DI\Definition\Source;
 
 use DI\Definition\EntryReference;
+use DI\Definition\FunctionCallDefinition;
 use DI\Definition\Source\ReflectionDefinitionSource;
 
 /**
@@ -53,5 +54,54 @@ class ReflectionDefinitionSourceTest extends \PHPUnit_Framework_TestCase
 
         $param1 = $parameters[0];
         $this->assertEquals(new EntryReference('UnitTests\DI\Definition\Source\Fixtures\ReflectionFixture'), $param1);
+    }
+
+    public function testClosureDefinition()
+    {
+        $source = new ReflectionDefinitionSource();
+
+        $definition = $source->getCallableDefinition(function (\stdClass $foo, $bar) {
+        });
+
+        $this->assertTrue($definition instanceof FunctionCallDefinition);
+        $this->assertCount(1, $definition->getParameters());
+        $this->assertEquals(new EntryReference('stdClass'), $definition->getParameter(0));
+    }
+
+    public function testMethodCallDefinition()
+    {
+        $source = new ReflectionDefinitionSource();
+
+        $object = new TestClass();
+        $definition = $source->getCallableDefinition(array($object, 'foo'));
+
+        $this->assertTrue($definition instanceof FunctionCallDefinition);
+        $this->assertCount(1, $definition->getParameters());
+        $this->assertEquals(new EntryReference('stdClass'), $definition->getParameter(0));
+    }
+
+    /**
+     * @test
+     */
+    public function optionalParameterShouldBeIgnored()
+    {
+        $source = new ReflectionDefinitionSource();
+
+        $object = new TestClass();
+        $definition = $source->getCallableDefinition(array($object, 'optional'));
+
+        $this->assertTrue($definition instanceof FunctionCallDefinition);
+        $this->assertCount(0, $definition->getParameters());
+    }
+}
+
+class TestClass
+{
+    public function foo(\stdClass $foo, $bar)
+    {
+    }
+
+    public function optional(\stdClass $foo = null)
+    {
     }
 }

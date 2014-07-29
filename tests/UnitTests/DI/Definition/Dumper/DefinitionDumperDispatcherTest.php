@@ -91,7 +91,7 @@ class DefinitionDumperDispatcherTest extends \PHPUnit_Framework_TestCase
      */
     public function testInvalidDefinitionType()
     {
-        $dumper = new DefinitionDumperDispatcher();
+        $dumper = new DefinitionDumperDispatcher(false);
         $dumper->dump(new ValueDefinition('foo', 'bar'));
     }
 }

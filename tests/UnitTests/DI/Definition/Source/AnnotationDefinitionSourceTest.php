@@ -169,6 +169,23 @@ class AnnotationDefinitionSourceTest extends \PHPUnit_Framework_TestCase
         $this->assertNull($definition->getMethodInjection('unannotatedMethod'));
     }
 
+    /**
+     * @test
+     */
+    public function optionalParametersShouldBeIgnored()
+    {
+        $source = new AnnotationDefinitionSource();
+        $definition = $source->getDefinition('UnitTests\DI\Definition\Source\Fixtures\AnnotationFixture');
+
+        $methodInjection = $definition->getMethodInjection('optionalParameter');
+
+        $parameters = $methodInjection->getParameters();
+        $this->assertCount(1, $parameters);
+
+        $this->assertEquals(new EntryReference('foo'), $parameters[0]);
+        $this->assertArrayNotHasKey(1, $parameters);
+    }
+
     public function testStaticMethod()
     {
         $source = new AnnotationDefinitionSource();

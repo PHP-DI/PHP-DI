@@ -21,8 +21,8 @@ class ErrorMessagesTest extends \PHPUnit_Framework_TestCase
     public function testNonInstantiableClass()
     {
         $message = <<<'MESSAGE'
-Entry IntegrationTests\DI\ErrorMessagesFixture2 cannot be resolved: IntegrationTests\DI\ErrorMessagesFixture2 is not instantiable
-Definition of IntegrationTests\DI\ErrorMessagesFixture2:
+Entry IntegrationTests\DI\ErrorMessagesFixture2 cannot be resolved: class IntegrationTests\DI\ErrorMessagesFixture2 is not instantiable
+Full definition:
 Object (
     class = #NOT INSTANTIABLE# IntegrationTests\DI\ErrorMessagesFixture2
     scope = singleton
@@ -39,7 +39,7 @@ MESSAGE;
     {
         $message = <<<'MESSAGE'
 Entry IntegrationTests\DI\ErrorMessagesFixture1 cannot be resolved: The parameter 'bar' of IntegrationTests\DI\ErrorMessagesFixture1::__construct has no value defined or guessable
-Definition of IntegrationTests\DI\ErrorMessagesFixture1:
+Full definition:
 Object (
     class = IntegrationTests\DI\ErrorMessagesFixture1
     scope = singleton

@@ -216,7 +216,11 @@ class AnnotationDefinitionSource implements DefinitionSource
             }
         }
 
-        return new MethodInjection($method->getName(), $parameters);
+        if ($method->isConstructor()) {
+            return MethodInjection::constructor($parameters);
+        } else {
+            return new MethodInjection($method->getName(), $parameters);
+        }
     }
 
     /**
@@ -236,6 +240,11 @@ class AnnotationDefinitionSource implements DefinitionSource
             return $annotationParameters[$parameter->getName()];
         }
 
+        // Skip optional parameters if not explicitly defined
+        if ($parameter->isOptional()) {
+            return null;
+        }
+
         // Try to use the type-hinting
         $parameterClass = $parameter->getClass();
         if ($parameterClass) {
@@ -243,7 +252,7 @@ class AnnotationDefinitionSource implements DefinitionSource
         }
 
         // Last resort, look for @param tag
-        return $this->getPhpDocReader()->getParameterType($parameter);
+        return $this->getPhpDocReader()->getParameterClass($parameter);
     }
 
     /**
