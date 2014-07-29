@@ -90,6 +90,13 @@ class AnnotationFixture
     }
 
     /**
+     * @Inject({"foo"})
+     */
+    public function optionalParameter(\stdClass $optional1 = null, \stdClass $optional2 = null)
+    {
+    }
+
+    /**
      * @Inject
      */
     public static function staticMethod()

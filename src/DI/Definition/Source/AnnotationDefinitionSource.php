@@ -240,6 +240,11 @@ class AnnotationDefinitionSource implements DefinitionSource
             return $annotationParameters[$parameter->getName()];
         }
 
+        // Skip optional parameters if not explicitly defined
+        if ($parameter->isOptional()) {
+            return null;
+        }
+
         // Try to use the type-hinting
         $parameterClass = $parameter->getClass();
         if ($parameterClass) {

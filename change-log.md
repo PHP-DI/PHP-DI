@@ -1,5 +1,21 @@
 # Change log
 
+## 4.2
+
+Read the [news entry](news/10-php-di-4-2-released.md).
+
+**Minor BC-break**: Optional parameters were injected, they are now ignored, which is what naturally makes sense.
+Example:
+
+```php
+    public function __construct(Bar $bar = null)
+    {
+        $this->bar = $bar ?: $this->createDefaultBar();
+    }
+```
+
+Before 4.2, PHP-DI would try to inject a `Bar` instance. From 4.2 and onwards, it will inject `null`.
+
 ## 4.1
 
 Read the [news entry](news/09-php-di-4-1-released.md).

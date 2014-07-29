@@ -79,11 +79,29 @@ class ReflectionDefinitionSourceTest extends \PHPUnit_Framework_TestCase
         $this->assertCount(1, $definition->getParameters());
         $this->assertEquals(new EntryReference('stdClass'), $definition->getParameter(0));
     }
+
+    /**
+     * @test
+     */
+    public function optionalParameterShouldBeIgnored()
+    {
+        $source = new ReflectionDefinitionSource();
+
+        $object = new TestClass();
+        $definition = $source->getCallableDefinition(array($object, 'optional'));
+
+        $this->assertTrue($definition instanceof FunctionCallDefinition);
+        $this->assertCount(0, $definition->getParameters());
+    }
 }
 
 class TestClass
 {
     public function foo(\stdClass $foo, $bar)
+    {
+    }
+
+    public function optional(\stdClass $foo = null)
     {
     }
 }

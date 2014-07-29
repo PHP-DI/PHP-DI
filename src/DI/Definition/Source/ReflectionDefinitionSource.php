@@ -80,6 +80,11 @@ class ReflectionDefinitionSource implements DefinitionSource, CallableDefinition
         $parameters = array();
 
         foreach ($constructor->getParameters() as $index => $parameter) {
+            // Skip optional parameters
+            if ($parameter->isOptional()) {
+                continue;
+            }
+
             $parameterClass = $parameter->getClass();
 
             if ($parameterClass) {
