@@ -7,6 +7,21 @@ date: July 29th 2014
 
 I am happy to announce that PHP-DI version 4.2 has been released.
 
+It comes with very interesting new features, but before to get into this you need to know that it also comes with
+a small BC break! This BC break was a necessary evil to fix an buggy and inconsistent behavior:
+
+```php
+    public function __construct(Bar $bar = null)
+    {
+        $this->bar = $bar ?: $this->createDefaultBar();
+    }
+```
+
+In 4.1, by default PHP-DI would inject a `Bar` instance in the *optional* parameter. This is not what one would expect:
+optional parameters are now ignored (i.e. their default value is injected unless configured otherwise).
+
+You can of course configure explicitly an injection in optional parameters (through PHP config or annotation).
+
 
 ## `Container::call()`
 
@@ -105,10 +120,50 @@ What's great using `make()` and `call()`:
 - you can inject services in your actions
 - you can also inject request parameters in your actions (here `$_GET` is used for the dirty example)
 
+You can see a more complete (and working) example here: [mnapoli/minimal-app](https://github.com/mnapoli/minimal-app).
+
 Of course, this is just an example, you are not supposed to re-write an MVC framework.
 But hopefully it helps to see the potential behind `call()`.
 
 [Read more in the documentation of the container's API](../doc/container.md)
+
+
+## Wildcards in definitions
+
+You can use wildcards to define a batch of entries. It can be very useful to bind interfaces to implementations:
+
+```php
+return [
+    'Blog\Domain\*RepositoryInterface' => DI\object('Blog\Architecture\*DoctrineRepository'),
+];
+```
+
+In our example, the wildcard will match `Blog\Domain\UserRepositoryInterface`, and it will map it to
+`Blog\Architecture\UserDoctrineRepository`.
+
+Good to know:
+
+- the wildcard does not match across namespaces
+- an exact match (i.e. without `*`) will always be chosen over a match with a wildcard
+(first PHP-DI looks for an exact match, then it searches in the wildcards)
+- in case of "conflicts" (i.e. 2 different matches with wildcards), the first match will prevail
+
+
+## Prototype scope for factories
+
+Up till 4.1, factories where only in the Singleton scope: they were only called once.
+
+Now you can use the Prototype scope:
+
+```php
+return [
+    'foo' => DI\factory(function () {
+        return new Foo();
+    })->scope(Scope::PROTOTYPE()),
+];
+```
+
+With this scope, the factory will be called each time `foo` is retrieved.
 
 
 ## 4.1
@@ -124,4 +179,6 @@ integration in other frameworks
 
 ## Change log
 
-You can also read the complete [change log](../change-log.md).
+Some other minor bugfixes where included in the release.
+
+You can read the complete [change log](../change-log.md).
