@@ -54,40 +54,40 @@ class FunctionCallDefinitionResolverTest extends \PHPUnit_Framework_TestCase
 
 		$object = new TestClass();
 		$definition = new FunctionCallDefinition(array($object, 'foo'));
-		$resolver = new FunctionCallDefinitionResolver($container);
+        $resolver = new FunctionCallDefinitionResolver($container);
 
-		$this->assertEquals(42, $resolver->resolve($definition));
-	}
+        $this->assertEquals(42, $resolver->resolve($definition));
+    }
 
-	public function testResolveStringMethodNonStaticCall() 
-	{
-		$class = __NAMESPACE__ . '\TestClass';
-		
-		$container = $this->getMock('DI\Container', array(), array(), '', false);
-		$container->expects($this->once())
+    public function testResolveStringMethodNonStaticCall() 
+    {
+        $class = __NAMESPACE__ . '\TestClass';
+        
+        $container = $this->getMock('DI\Container', array(), array(), '', false);
+        $container->expects($this->once())
             ->method('get')
             ->with($class)
             ->will($this->returnValue(new $class()));
-		
-		$definition = new FunctionCallDefinition(array($class, 'foo'));
-		$resolver = new FunctionCallDefinitionResolver($container);
+        
+        $definition = new FunctionCallDefinition(array($class, 'foo'));
+        $resolver = new FunctionCallDefinitionResolver($container);
 
-		$this->assertEquals(42, $resolver->resolve($definition));
-	}
-	
-	public function testResolveStringMethodStaticCall() 
-	{
-		$class = __NAMESPACE__ . '\TestClass';
-		
-		$container = $this->getMock('DI\Container', array(), array(), '', false);
-		
-		$definition = new FunctionCallDefinition(array($class, 'bar'));
-		$resolver = new FunctionCallDefinitionResolver($container);
+        $this->assertEquals(42, $resolver->resolve($definition));
+    }
+    
+    public function testResolveStringMethodStaticCall() 
+    {
+        $class = __NAMESPACE__ . '\TestClass';
+        
+        $container = $this->getMock('DI\Container', array(), array(), '', false);
+        
+        $definition = new FunctionCallDefinition(array($class, 'bar'));
+        $resolver = new FunctionCallDefinitionResolver($container);
 
-		$this->assertEquals(24, $resolver->resolve($definition));
-	}
+        $this->assertEquals(24, $resolver->resolve($definition));
+    }
 
-	/**
+    /**
      * @expectedException \InvalidArgumentException
      * @expectedExceptionMessage This definition resolver is only compatible with FunctionCallDefinition objects, DI\Definition\ValueDefinition given
      */
@@ -109,9 +109,9 @@ class TestClass
     {
         return 42;
     }
-	
-	public static function bar()
-	{
-		return 24;
-	}
+    
+    public static function bar()
+    {
+        return 24;
+    }
 }

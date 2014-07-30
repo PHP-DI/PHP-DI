@@ -65,7 +65,7 @@ class FunctionCallDefinitionResolver implements DefinitionResolver
 
         if (is_array($callable)) {
             list($object, $method) = $callable;
-			$functionReflection = new \ReflectionMethod($object, $method);
+            $functionReflection = new \ReflectionMethod($object, $method);
         } else {
             $functionReflection = new \ReflectionFunction($callable);
         }
@@ -77,14 +77,12 @@ class FunctionCallDefinitionResolver implements DefinitionResolver
         }
 
         if (is_array($callable)) {
-			$object = $callable[0];
-			
-			if ($functionReflection->isStatic()) {
-				$object = null;
-			} else if (is_string($object)) {
-				$object = $this->container->get($object);
-			}
-			
+            if ($functionReflection->isStatic()) {
+                $object = null;
+            } else if (is_string($object)) {
+                $object = $this->container->get($object);
+            }
+
             return $functionReflection->invokeArgs($object, $args);
         } else {
             return $functionReflection->invokeArgs($args);
