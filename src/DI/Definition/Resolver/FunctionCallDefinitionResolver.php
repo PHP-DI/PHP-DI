@@ -79,8 +79,10 @@ class FunctionCallDefinitionResolver implements DefinitionResolver
         if (is_array($callable)) {
             if ($functionReflection->isStatic()) {
                 $object = null;
-            } elseif (is_string($object)) {
-                $object = $this->container->get($object);
+            } elseif (is_string($callable[0])) {
+                $object = $this->container->get($callable[0]);
+            } else {
+                $object = $callable[0];
             }
 
             return $functionReflection->invokeArgs($object, $args);
