@@ -4,8 +4,6 @@ template: documentation
 
 # Understanding Dependency Injection
 
-You can first read the [introduction to dependency injection with an example](doc/example.md).
-
 Dependency injection and DI containers are separate notions:
 
 - **dependency injection is a method** for writing better code
