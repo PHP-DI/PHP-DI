@@ -87,7 +87,6 @@ class CallFunctionTest extends \PHPUnit_Framework_TestCase
         $result = $container->call(array($class, 'bar'));
         $this->assertEquals(24, $result);
     }
-
 }
 
 class TestClass

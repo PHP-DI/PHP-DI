@@ -22,11 +22,11 @@ use Interop\Container\ContainerInterface;
  */
 class FunctionCallDefinitionResolver implements DefinitionResolver
 {
-	/**
-	 * @var ContainerInterface
-	 */
-	private $container;
-	
+    /**
+     * @var ContainerInterface
+     */
+    private $container;
+
     /**
      * @var ParameterResolver
      */
@@ -39,7 +39,7 @@ class FunctionCallDefinitionResolver implements DefinitionResolver
      */
     public function __construct(ContainerInterface $container)
     {
-		$this->container = $container;
+        $this->container = $container;
         $this->parameterResolver = new ParameterResolver($container);
     }
 
@@ -79,7 +79,7 @@ class FunctionCallDefinitionResolver implements DefinitionResolver
         if (is_array($callable)) {
             if ($functionReflection->isStatic()) {
                 $object = null;
-            } else if (is_string($object)) {
+            } elseif (is_string($object)) {
                 $object = $this->container->get($object);
             }
 

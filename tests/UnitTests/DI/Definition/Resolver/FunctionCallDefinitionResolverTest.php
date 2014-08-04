@@ -48,39 +48,39 @@ class FunctionCallDefinitionResolverTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(array('foo', 42), $value);
     }
 
-    public function testResolveMethodCall() 
-	{
-		$container = $this->getMock('DI\Container', array(), array(), '', false);
+    public function testResolveMethodCall()
+    {
+        $container = $this->getMock('DI\Container', array(), array(), '', false);
 
-		$object = new TestClass();
-		$definition = new FunctionCallDefinition(array($object, 'foo'));
+        $object = new TestClass();
+        $definition = new FunctionCallDefinition(array($object, 'foo'));
         $resolver = new FunctionCallDefinitionResolver($container);
 
         $this->assertEquals(42, $resolver->resolve($definition));
     }
 
-    public function testResolveStringMethodNonStaticCall() 
+    public function testResolveStringMethodNonStaticCall()
     {
         $class = __NAMESPACE__ . '\TestClass';
-        
+
         $container = $this->getMock('DI\Container', array(), array(), '', false);
         $container->expects($this->once())
             ->method('get')
             ->with($class)
             ->will($this->returnValue(new $class()));
-        
+
         $definition = new FunctionCallDefinition(array($class, 'foo'));
         $resolver = new FunctionCallDefinitionResolver($container);
 
         $this->assertEquals(42, $resolver->resolve($definition));
     }
-    
-    public function testResolveStringMethodStaticCall() 
+
+    public function testResolveStringMethodStaticCall()
     {
         $class = __NAMESPACE__ . '\TestClass';
-        
+
         $container = $this->getMock('DI\Container', array(), array(), '', false);
-        
+
         $definition = new FunctionCallDefinition(array($class, 'bar'));
         $resolver = new FunctionCallDefinitionResolver($container);
 
@@ -109,7 +109,7 @@ class TestClass
     {
         return 42;
     }
-    
+
     public static function bar()
     {
         return 24;
