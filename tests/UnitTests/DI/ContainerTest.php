@@ -94,6 +94,16 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
 
         $this->assertSame($container, $container->get('DI\ContainerInterface'));
     }
+	
+	/**
+     * The container auto-registers itself (with the interop interface)
+     */
+    public function testContainerInteropInterfaceIsRegistered()
+    {
+        $container = ContainerBuilder::buildDevContainer();
+
+        $this->assertSame($container, $container->get('Interop\Container\ContainerInterface'));
+    }
 
     /**
      * @see https://github.com/mnapoli/PHP-DI/issues/126

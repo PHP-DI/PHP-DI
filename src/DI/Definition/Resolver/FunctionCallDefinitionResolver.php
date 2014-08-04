@@ -9,7 +9,6 @@
 
 namespace DI\Definition\Resolver;
 
-use DI\Definition\ClassDefinition;
 use DI\Definition\Definition;
 use DI\Definition\Exception\DefinitionException;
 use DI\Definition\FunctionCallDefinition;
@@ -23,6 +22,11 @@ use Interop\Container\ContainerInterface;
  */
 class FunctionCallDefinitionResolver implements DefinitionResolver
 {
+	/**
+	 * @var ContainerInterface
+	 */
+	private $container;
+	
     /**
      * @var ParameterResolver
      */
@@ -35,6 +39,7 @@ class FunctionCallDefinitionResolver implements DefinitionResolver
      */
     public function __construct(ContainerInterface $container)
     {
+		$this->container = $container;
         $this->parameterResolver = new ParameterResolver($container);
     }
 
@@ -72,7 +77,13 @@ class FunctionCallDefinitionResolver implements DefinitionResolver
         }
 
         if (is_array($callable)) {
-            return $functionReflection->invokeArgs($callable[0], $args);
+            if ($functionReflection->isStatic()) {
+                $object = null;
+            } else if (is_string($object)) {
+                $object = $this->container->get($object);
+            }
+
+            return $functionReflection->invokeArgs($object, $args);
         } else {
             return $functionReflection->invokeArgs($args);
         }
