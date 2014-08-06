@@ -4,7 +4,7 @@ template: documentation
 
 # Definition overriding
 
-PHP-DI provides different definition sources. As explained on the [Definition documentation](documentation.md),
+PHP-DI provides different definition sources. As explained on the [Definition documentation](definition.md),
 you can combine them by taking advantage of priorities that apply.
 
 From the highest priority to the least:
@@ -44,24 +44,20 @@ than the autowiring definition (`Bar` for `$param1`).
 
 You can go even further by overriding this definition using file-based definitions:
 
-```yaml
-# config/di.yml
-Foo:
-  constructor:
-    param1: another.specific.service
-
-another.specific.service:
-  class: Bar
-  # ... (definition of my specific instance)
-```
-
 ```php
-$container->addDefinitionsFromFile(new YamlDefinitionFileLoader('config/di.yml'));
+# config/di.php
+
+return [
+    'Foo' => DI\object()
+        ->constructor(DI\link('another.specific.service')),
+
+    'another.specific.service' => DI\object('Bar'),
+];
 ```
 
 Finally, you can also override the file-based definition by directly calling the container:
 
 ```php
 $container->set('Foo')
-    ->withConstructor(array('param1' => 'yet.another.specific.service'));
+    ->constructor(DI\link('yet.another.specific.service'));
 ```
