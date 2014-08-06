@@ -200,7 +200,11 @@ class ClassDefinitionResolver implements DefinitionResolver
                 $parameters
             );
 
-            $object = $classReflection->newInstanceArgs($args);
+            if (count($args) > 0) {
+                $object = $classReflection->newInstanceArgs($args);
+            } else {
+                $object = $classReflection->newInstance();
+            }
 
             $this->injectMethodsAndProperties($object, $classDefinition);
         } catch (NotFoundException $e) {
