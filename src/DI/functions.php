@@ -12,6 +12,7 @@ namespace DI;
 use DI\Definition\EntryReference;
 use DI\Definition\Helper\FactoryDefinitionHelper;
 use DI\Definition\Helper\ClassDefinitionHelper;
+use DI\Definition\Helper\EnvironmentVariableDefinitionHelper;
 
 /**
  * Helper for defining an object.
@@ -49,4 +50,20 @@ function factory($factory)
 function link($entryName)
 {
     return new EntryReference($entryName);
+}
+
+/**
+ * Helper for referencing environment variables.
+ *
+ * @param string $variableName The name of the environment variable.
+ * @param mixed $defaultValue The default value to be used if the environment variable is not defined.
+ *
+ * @return EnvironmentVariableDefinitionHelper
+ */
+function env($variableName, $defaultValue = null)
+{
+    // Only mark as optional if the default value was *explicitly* provided.
+    $isOptional = 2 === func_num_args();
+
+    return new EnvironmentVariableDefinitionHelper($variableName, $isOptional, $defaultValue);
 }
