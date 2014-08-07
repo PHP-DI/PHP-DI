@@ -35,7 +35,12 @@ class FunctionCallDefinitionDumper implements DefinitionDumper
 
         $callable = $definition->getCallable();
 
-        $functionReflection = new \ReflectionFunction($callable);
+        if (is_array($callable)) {
+            list($object, $method) = $callable;
+            $functionReflection = new \ReflectionMethod($object, $method);
+        } else {
+            $functionReflection = new \ReflectionFunction($callable);
+        }
 
         $functionName = $this->getFunctionName($functionReflection);
         $parameters = $this->dumpMethodParameters($definition, $functionReflection);
@@ -90,6 +95,12 @@ class FunctionCallDefinitionDumper implements DefinitionDumper
                 'closure defined in %s at line %d',
                 $reflectionFunction->getFileName(),
                 $reflectionFunction->getStartLine()
+            );
+        } elseif ($reflectionFunction instanceof \ReflectionMethod) {
+            return sprintf(
+                '%s::%s',
+                $reflectionFunction->getDeclaringClass()->getName(),
+                $reflectionFunction->getName()
             );
         }
 
