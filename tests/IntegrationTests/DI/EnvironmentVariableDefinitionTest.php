@@ -55,6 +55,11 @@ class EnvironmentVariableDefinitionTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('<default>', $this->container->get('optional-env'));
     }
 
+    public function testOptionalEnvironmentVariableWithNullDefault()
+    {
+        $this->assertNull($this->container->get('optional-env-null'));
+    }
+
     public function testOptionalEnvironmentVariableWithLinkedDefaultValue()
     {
         $this->assertEquals('bar', $this->container->get('optional-env-linked'));
