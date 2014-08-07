@@ -19,6 +19,9 @@ use DI\Definition\FactoryDefinition;
  */
 class EnvironmentVariableDefinitionDumperTest extends \PHPUnit_Framework_TestCase
 {
+    /**
+     * @var EnvironmentVariableDefinitionDumper
+     */
     private $dumper;
 
     public function setUp()
@@ -28,7 +31,7 @@ class EnvironmentVariableDefinitionDumperTest extends \PHPUnit_Framework_TestCas
 
     public function testDump()
     {
-        $str = 'EnvironmentVariable (
+        $str = 'Environment variable (
     variable = bar
     optional = no
 )';
@@ -43,7 +46,7 @@ class EnvironmentVariableDefinitionDumperTest extends \PHPUnit_Framework_TestCas
 
     public function testDumpOptional()
     {
-        $str = 'EnvironmentVariable (
+        $str = 'Environment variable (
     variable = bar
     optional = yes
     default = \'<default>\'
@@ -59,7 +62,7 @@ class EnvironmentVariableDefinitionDumperTest extends \PHPUnit_Framework_TestCas
 
     public function testDumpOptionalWithLinkedDefault()
     {
-        $str = 'EnvironmentVariable (
+        $str = 'Environment variable (
     variable = bar
     optional = yes
     default = link(foo)

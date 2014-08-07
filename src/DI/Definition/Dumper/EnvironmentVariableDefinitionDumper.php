@@ -48,7 +48,7 @@ class EnvironmentVariableDefinitionDumper implements DefinitionDumper
         }
 
         return sprintf(
-            "EnvironmentVariable (\n%s\n)",
+            "Environment variable (\n%s\n)",
             $str
         );
     }
