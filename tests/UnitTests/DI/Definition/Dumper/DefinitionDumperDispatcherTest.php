@@ -16,8 +16,10 @@ use DI\Definition\Dumper\ClassDefinitionDumper;
 use DI\Definition\Dumper\DefinitionDumperDispatcher;
 use DI\Definition\Dumper\FactoryDefinitionDumper;
 use DI\Definition\Dumper\ValueDefinitionDumper;
+use DI\Definition\Dumper\EnvironmentVariableDefinitionDumper;
 use DI\Definition\FactoryDefinition;
 use DI\Definition\ValueDefinition;
+use DI\Definition\EnvironmentVariableDefinition;
 
 /**
  * @covers \DI\Definition\Dumper\DefinitionDumperDispatcher
@@ -82,6 +84,17 @@ class DefinitionDumperDispatcherTest extends \PHPUnit_Framework_TestCase
         $definition = new ClassDefinition('foo', 'MyClass');
 
         $classDumper = new ClassDefinitionDumper();
+        $this->assertEquals($classDumper->dump($definition), $dumper->dump($definition));
+    }
+
+    public function testDumpEnvironmentVariableDefinition()
+    {
+        $dumper = new DefinitionDumperDispatcher();
+        $dumper->registerDefaultDumpers();
+
+        $definition = new EnvironmentVariableDefinition('foo', 'bar');
+
+        $classDumper = new EnvironmentVariableDefinitionDumper();
         $this->assertEquals($classDumper->dump($definition), $dumper->dump($definition));
     }
 
