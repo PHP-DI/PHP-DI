@@ -40,7 +40,7 @@ class FunctionCallDefinitionDumperTest extends \PHPUnit_Framework_TestCase
     public function testDumpWithMethod()
     {
         $object = new \SplDoublyLinkedList;
-        $definition = new FunctionCallDefinition([$object, 'push']);
+        $definition = new FunctionCallDefinition(array($object, 'push'));
         $dumper = new FunctionCallDefinitionDumper();
 
         $str = 'SplDoublyLinkedList::push(
