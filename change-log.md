@@ -1,5 +1,15 @@
 # Change log
 
+## 4.2.2
+
+- Fixed [#180](https://github.com/mnapoli/PHP-DI/pull/180): `Container::call()` with object methods (`[$object, 'method']`) is now supported
+
+## 4.2.1
+
+- Support for PHP 5.3.3, which was previously incomplete because of a bug in the reflection (there is now a workaround for this bug)
+
+But if you can, seriously avoid this (really old) PHP version and upgrade.
+
 ## 4.2
 
 Read the [news entry](news/10-php-di-4-2-released.md).
