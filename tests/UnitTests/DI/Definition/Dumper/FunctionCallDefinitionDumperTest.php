@@ -36,4 +36,17 @@ class FunctionCallDefinitionDumperTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals($str, $dumper->dump($definition));
     }
+
+    public function testDumpWithMethod()
+    {
+        $object = new \SplDoublyLinkedList;
+        $definition = new FunctionCallDefinition([$object, 'push']);
+        $dumper = new FunctionCallDefinitionDumper();
+
+        $str = 'SplDoublyLinkedList::push(
+    $value = #UNDEFINED#
+)';
+
+        $this->assertEquals($str, $dumper->dump($definition));
+    }
 }
