@@ -96,6 +96,26 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * The container auto-registers itself (with the factory interface)
+     */
+    public function testFactoryInterfaceIsRegistered()
+    {
+        $container = ContainerBuilder::buildDevContainer();
+
+        $this->assertSame($container, $container->get('DI\FactoryInterface'));
+    }
+
+    /**
+     * The container auto-registers itself (with the invoker interface)
+     */
+    public function testInvokerInterfaceIsRegistered()
+    {
+        $container = ContainerBuilder::buildDevContainer();
+
+        $this->assertSame($container, $container->get('DI\InvokerInterface'));
+    }
+
+    /**
      * @see https://github.com/mnapoli/PHP-DI/issues/126
      * @test
      */
