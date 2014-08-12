@@ -48,7 +48,21 @@ class AnnotationDefinitionSource implements DefinitionSource
      * @var PhpDocReader
      */
     private $phpDocReader;
+    
+	/**
+	 *
+	 * @var bool
+	 */
+	private $useAutoWiring;
 
+	/**
+	 * @param bool useAutowiring 
+	 */
+	public function __construct($useAutowiring = true)
+	{
+		$this->useAutoWiring = $useAutowiring;
+	}
+	
     /**
      * {@inheritdoc}
      * @throws AnnotationException
@@ -202,8 +216,8 @@ class AnnotationDefinitionSource implements DefinitionSource
         }
         $annotationParameters = $annotation ? $annotation->getParameters() : array();
 
-        // @Inject on constructor is implicit
-        if (! ($annotation || $method->isConstructor())) {
+        // If @Inject is not present, we're using autowiring and this method is a constructor
+        if (! ($annotation || ($method->isConstructor() && $this->useAutoWiring))) {
             return null;
         }
 
