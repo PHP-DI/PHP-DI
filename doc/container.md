@@ -85,6 +85,7 @@ For example controllers, models, …
 
 If you need to use the `make()` method inside a service, or a controller, or whatever, it is
 recommended you type-hint against `FactoryInterface`. That avoids coupling your code to the container.
+`DI\FactoryInterface` is automatically bound to `DI\Container` so you can inject it without any configuration.
 
 ## call()
 
@@ -144,6 +145,7 @@ This leaves the liberty to the developer writing controllers to get request para
 
 As with `make()`, `call()` is defined in `DI\InvokerInterface` so that you can type-hint
 against that interface without coupling yourself to the container.
+`DI\InvokerInterface` is automatically bound to `DI\Container` so you can inject it without any configuration.
 
 ```php
 namespace DI;
