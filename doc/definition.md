@@ -223,6 +223,13 @@ return [
     // Defining an alias to another entry
     'some.entry' => DI\link('some.other.entry'),
 
+    // Defining a value based on an environment variable
+    'db1.url' => DI\env('DATABASE_URL'),
+    // With a default value
+    'db2.url' => DI\env('DATABASE_URL', 'postgresql://user:pass@localhost/db'),
+    // With a default value that is another entry
+    'db2.host' => DI\env('DATABASE_HOST', DI\link('db.host')),
+
 ];
 ```
 
