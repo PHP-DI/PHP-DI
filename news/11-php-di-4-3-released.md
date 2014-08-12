@@ -66,7 +66,7 @@ return [
 This change will allow you to call an array callable using a class name, like so:
 
 ```php
-$container->call(['MyClass', 'method]);
+$container->call(['MyClass', 'method']);
 ```
 
 If the method is not static, `MyClass` will be resolved using the container.
