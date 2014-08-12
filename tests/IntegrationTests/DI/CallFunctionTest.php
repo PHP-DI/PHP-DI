@@ -71,6 +71,22 @@ class CallFunctionTest extends \PHPUnit_Framework_TestCase
         $result = $container->call(array($object, 'foo'));
         $this->assertEquals(42, $result);
     }
+
+    public function testCallStringMethodNonStatic() 
+    {
+        $container = ContainerBuilder::buildDevContainer();
+        $class = __NAMESPACE__ . '\TestClass';
+        $result = $container->call(array($class, 'foo'));
+        $this->assertEquals(42, $result);
+    }
+
+    public function testCallStringMethodStatic() 
+    {
+        $container = ContainerBuilder::buildDevContainer();
+        $class = __NAMESPACE__ . '\TestClass';
+        $result = $container->call(array($class, 'bar'));
+        $this->assertEquals(24, $result);
+    }
 }
 
 class TestClass
@@ -78,5 +94,10 @@ class TestClass
     public function foo()
     {
         return 42;
+    }
+    
+    public static function bar()
+    {
+        return 24;
     }
 }

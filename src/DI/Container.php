@@ -20,6 +20,7 @@ use DI\Definition\Resolver\FactoryDefinitionResolver;
 use DI\Definition\Resolver\ClassDefinitionResolver;
 use DI\Definition\Resolver\DefinitionResolver;
 use DI\Definition\Resolver\ValueDefinitionResolver;
+use DI\Definition\Resolver\EnvironmentVariableDefinitionResolver;
 use Exception;
 use Interop\Container\ContainerInterface as ContainerInteropInterface;
 use InvalidArgumentException;
@@ -75,16 +76,19 @@ class Container implements ContainerInteropInterface, ContainerInterface, Factor
         // Definition resolvers
         $wrapperContainer = $wrapperContainer ?: $this;
         $this->definitionResolvers = array(
-            'DI\Definition\ValueDefinition'        => new ValueDefinitionResolver(),
-            'DI\Definition\FactoryDefinition'      => new FactoryDefinitionResolver($wrapperContainer),
-            'DI\Definition\AliasDefinition'        => new AliasDefinitionResolver($wrapperContainer),
-            'DI\Definition\ClassDefinition'        => new ClassDefinitionResolver($wrapperContainer, $proxyFactory),
-            'DI\Definition\FunctionCallDefinition' => new FunctionCallDefinitionResolver($wrapperContainer),
+            'DI\Definition\ValueDefinition'               => new ValueDefinitionResolver(),
+            'DI\Definition\FactoryDefinition'             => new FactoryDefinitionResolver($wrapperContainer),
+            'DI\Definition\AliasDefinition'               => new AliasDefinitionResolver($wrapperContainer),
+            'DI\Definition\ClassDefinition'               => new ClassDefinitionResolver($wrapperContainer, $proxyFactory),
+            'DI\Definition\FunctionCallDefinition'        => new FunctionCallDefinitionResolver($wrapperContainer),
+            'DI\Definition\EnvironmentVariableDefinition' => new EnvironmentVariableDefinitionResolver($wrapperContainer),
         );
 
         // Auto-register the container
         $this->singletonEntries['DI\Container'] = $this;
         $this->singletonEntries['DI\ContainerInterface'] = $this;
+        $this->singletonEntries['DI\FactoryInterface'] = $this;
+        $this->singletonEntries['DI\InvokerInterface'] = $this;
     }
 
     /**

@@ -223,8 +223,18 @@ return [
     // Defining an alias to another entry
     'some.entry' => DI\link('some.other.entry'),
 
+    // Defining a value based on an environment variable
+    'db1.url' => DI\env('DATABASE_URL'),
+    // With a default value
+    'db2.url' => DI\env('DATABASE_URL', 'postgresql://user:pass@localhost/db'),
+    // With a default value that is another entry
+    'db2.host' => DI\env('DATABASE_HOST', DI\link('db.host')),
+
 ];
 ```
+
+*Watch out:* remember the helper functions (`DI\object()` for example) are just namespaced functions, not classes.
+Do not use `new` (e.g. `new DI\object()`) else you will get a fatal error "Class 'DI\object' not found".
 
 
 In addition to defining entries in an array, you can set them directly in the container as shown below.

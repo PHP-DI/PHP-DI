@@ -60,11 +60,12 @@ class DefinitionDumperDispatcher implements DefinitionDumper
     public function registerDefaultDumpers()
     {
         $this->dumpers = array(
-            'DI\Definition\ValueDefinition'        => new ValueDefinitionDumper(),
-            'DI\Definition\FactoryDefinition'      => new FactoryDefinitionDumper(),
-            'DI\Definition\AliasDefinition'        => new AliasDefinitionDumper(),
-            'DI\Definition\ClassDefinition'        => new ClassDefinitionDumper(),
-            'DI\Definition\FunctionCallDefinition' => new FunctionCallDefinitionDumper(),
+            'DI\Definition\ValueDefinition'               => new ValueDefinitionDumper(),
+            'DI\Definition\FactoryDefinition'             => new FactoryDefinitionDumper(),
+            'DI\Definition\AliasDefinition'               => new AliasDefinitionDumper(),
+            'DI\Definition\ClassDefinition'               => new ClassDefinitionDumper(),
+            'DI\Definition\FunctionCallDefinition'        => new FunctionCallDefinitionDumper(),
+            'DI\Definition\EnvironmentVariableDefinition' => new EnvironmentVariableDefinitionDumper(),
         );
     }
 }

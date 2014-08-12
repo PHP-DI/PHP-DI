@@ -1,5 +1,13 @@
 # Change log
 
+## 4.3
+
+Read the [news entry](news/11-php-di-4-3-released.md).
+
+- [#176](https://github.com/mnapoli/PHP-DI/pull/176) New definition type for reading environment variables: `DI\env()`
+- [#181](https://github.com/mnapoli/PHP-DI/pull/181) `DI\FactoryInterface` and `DI\InvokerInterface` are now auto-registered inside the container so that you can inject them without any configuration needed
+- [#173](https://github.com/mnapoli/PHP-DI/pull/173) `$container->call(['MyClass', 'method]);` will get `MyClass` from the container if `method()` is not a static method
+
 ## 4.2.2
 
 - Fixed [#180](https://github.com/mnapoli/PHP-DI/pull/180): `Container::call()` with object methods (`[$object, 'method']`) is now supported
