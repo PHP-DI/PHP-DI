@@ -6,7 +6,7 @@ date: August 12th 2014
 ---
 
 I am happy to announce that PHP-DI version 4.3 has been released. This version contains features that have all been
-implemented by contributors other than me, this is very encouraging :) This is also the fastest version to be released,
+implemented by contributors other than me, this is very encouraging :) This is also the quickest release,
 since 4.2 was released only 14 days ago.
 
 It comes without any BC break, and with a new main feature: `DI\env()` to import **environment variables**.
@@ -23,7 +23,7 @@ return [
 
     'db.url' => DI\factory(
         function (DI\Container $container) {
-            $url = isset($_SERVER['DATABASE_URL'])
+            return isset($_SERVER['DATABASE_URL'])
                 ? $_SERVER['DATABASE_URL']
                 : 'postgresql://user:pass@localhost/db';
         }
@@ -32,7 +32,7 @@ return [
 ];
 ```
 
-This might be a common situation for other developers, especially those deploying their applications to
+This might be a common situation for some developers, especially those deploying their applications to
 systems like Heroku, or otherwise following the principles of [12-factor applications](http://12factor.net/config).
 
 Since 4.3, this can be written like this:
@@ -44,7 +44,7 @@ return [
 ```
 
 The first parameter to `DI\env()` is the name of the environment variable to read,
-the second parameter is the default value to use in the event that the environment variable is not defined.
+the second parameter is the default value to use if the environment variable is not defined.
 
 If the environment variable is not defined and no default is provided, a `DefinitionException`
 is thrown when attempting to resolve the value.
@@ -54,7 +54,7 @@ Finally, default values can reference other definitions using `DI\link()`:
 ```php
 return [
     'default-dsn' => 'postgresql://user:pass@localhost/db',
-    'dsn' => DI\env('DATABASE_URL', DI\link('my-app.default-dsn')),
+    'dsn' => DI\env('DATABASE_URL', DI\link('default-dsn')),
 ];
 ```
 
@@ -71,16 +71,18 @@ $container->call(['MyClass', 'method]);
 
 If the method is not static, `MyClass` will be resolved using the container.
 
+Don't know what `Container::call()` is? [Check out the "Container API" documentation](http://php-di.org/doc/container.html).
 
-## `DI\FactoryInterface` and `DI\InvokerInterface` are auto-registered
+
+## FactoryInterface and InvokerInterface are auto-registered
 
 *contributed by [@drealecs](https://github.com/drealecs)*
 
-Before 4.3, if you wanted to use `DI\FactoryInterface` or `DI\InvokerInterface`, you needed to define
-them in the configuration.
+Before 4.3, if you wanted to inject `DI\FactoryInterface` or `DI\InvokerInterface`, you needed to bind
+them in the configuration to `DI\Container`.
 
 They are now auto-registered (just like `DI\ContainerInterface`) as links to `DI\Container` so that
-you can inject them without any configuration needed.
+you can inject them without any configuration.
 
 If you had previously defined them, there is no problem: your definitions always override the internal ones.
 
