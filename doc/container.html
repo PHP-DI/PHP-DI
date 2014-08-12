@@ -154,7 +154,8 @@ resolved from the container.</p>
 but that may have dependencies. It is also useful if you want to override some parameters in the constructor.
 For example controllers, models, …</p>
 <p>If you need to use the <code>make()</code> method inside a service, or a controller, or whatever, it is
-recommended you type-hint against <code>FactoryInterface</code>. That avoids coupling your code to the container.</p>
+recommended you type-hint against <code>FactoryInterface</code>. That avoids coupling your code to the container.
+<code>DI\FactoryInterface</code> is automatically bound to <code>DI\Container</code> so you can inject it without any configuration.</p>
 <h2>call()</h2>
 <p>Since version 4.2, the container exposes a <code>call()</code> method:</p>
 <pre><code class="language-php">$container-&gt;call(function (Logger $logger, EntityManager $em) {
@@ -192,7 +193,8 @@ $container-&gt;call($controller, $requestParameters);</code></pre>
 <p>This leaves the liberty to the developer writing controllers to get request parameters
 <em>and</em> services using dependency injection.</p>
 <p>As with <code>make()</code>, <code>call()</code> is defined in <code>DI\InvokerInterface</code> so that you can type-hint
-against that interface without coupling yourself to the container.</p>
+against that interface without coupling yourself to the container.
+<code>DI\InvokerInterface</code> is automatically bound to <code>DI\Container</code> so you can inject it without any configuration.</p>
 <pre><code class="language-php">namespace DI;
 
 interface InvokerInterface

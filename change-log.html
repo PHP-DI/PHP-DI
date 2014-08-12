@@ -60,6 +60,22 @@
             <div class="container">
                 <section>
                     <h1>Change log</h1>
+<h2>4.3</h2>
+<p>Read the <a href="news/11-php-di-4-3-released.html">news entry</a>.</p>
+<ul>
+<li><a href="https://github.com/mnapoli/PHP-DI/pull/176">#176</a> New definition type for reading environment variables: <code>DI\env()</code></li>
+<li><a href="https://github.com/mnapoli/PHP-DI/pull/181">#181</a> <code>DI\FactoryInterface</code> and <code>DI\InvokerInterface</code> are now auto-registered inside the container so that you can inject them without any configuration needed</li>
+<li><a href="https://github.com/mnapoli/PHP-DI/pull/173">#173</a> <code>$container-&gt;call(['MyClass', 'method]);</code> will get <code>MyClass</code> from the container if <code>method()</code> is not a static method</li>
+</ul>
+<h2>4.2.2</h2>
+<ul>
+<li>Fixed <a href="https://github.com/mnapoli/PHP-DI/pull/180">#180</a>: <code>Container::call()</code> with object methods (<code>[$object, 'method']</code>) is now supported</li>
+</ul>
+<h2>4.2.1</h2>
+<ul>
+<li>Support for PHP 5.3.3, which was previously incomplete because of a bug in the reflection (there is now a workaround for this bug)</li>
+</ul>
+<p>But if you can, seriously avoid this (really old) PHP version and upgrade.</p>
 <h2>4.2</h2>
 <p>Read the <a href="news/10-php-di-4-2-released.html">news entry</a>.</p>
 <p><strong>Minor BC-break</strong>: Optional parameters (that were not configured) were injected, they are now ignored, which is what naturally makes sense since they are optional.

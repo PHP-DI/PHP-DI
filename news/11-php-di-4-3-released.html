@@ -65,128 +65,63 @@
 
                     
     <div class='single-post-w'>
-        <h1 class='post-title'>PHP-DI 4.2 released</h1>
+        <h1 class='post-title'>PHP-DI 4.3 released</h1>
 
         <p class='post-info'>
             <span class='info-item'>
               Posted by Matthieu Napoli
             </span>
-            <span class='info-item'>July 29th 2014</span>
+            <span class='info-item'>August 12th 2014</span>
         </p>
         <div class='post-content'>
-            <p>I am happy to announce that PHP-DI version 4.2 has been released.</p>
-<p>It comes with very interesting new features, but first you need to know that it also comes with
-a small BC break! This BC break was a necessary evil to fix an buggy and inconsistent behavior:</p>
-<pre><code class="language-php">    public function __construct(Bar $bar = null)
-    {
-        $this-&gt;bar = $bar ?: $this-&gt;createDefaultBar();
-    }</code></pre>
-<p>In 4.1, by default PHP-DI would inject a <code>Bar</code> instance in the <em>optional</em> parameter.
-This is not what one would expect, and this was causing unexpected bugs because it turned optional dependencies into required dependencies.</p>
-<p>Optional parameters are now ignored (i.e. their default value is injected unless configured otherwise).
-You can of course configure explicitly an injection in optional parameters (through PHP config or annotation).</p>
-<h2>Container::call()</h2>
-<p>The container <a href="../doc/container.html">already provided <code>get()</code>, <code>has()</code> and <code>make()</code></a>.
-Now it can also <code>call</code> functions using dependency injection.</p>
-<p>Example:</p>
-<pre><code class="language-php">$container-&gt;call(function (LoggerInterface $logger) {
-    $logger-&gt;info('Hello world!');
-});</code></pre>
-<p><code>Container::call()</code> will call the given function and resolve the parameters automatically.
-Those familiar with AngularJS (for example) will not be lost.</p>
-<p>But what's even more interesting is that you can also explicitly set parameters if some are not supposed to be given
-by the container:</p>
-<pre><code class="language-php">$parameters = [
-    'data' =&gt; /* some variable */
-];
-
-$container-&gt;call(function (LoggerInterface $logger, $data) {
-    // ...
-}, $parameters);</code></pre>
-<p><strong>Any real life example please?</strong></p>
-<p>There are many ways <code>call()</code> can become useful, a simple example would be a controller.
-In its raw definition, a controller is a simple callable.</p>
-<p>For example if you use Silex, a controller is just a closure:</p>
-<pre><code class="language-php">$app-&gt;get('/', function(Request $request) use ($app) {
-    $twig = $app['twig'];
-
-    return $twig-&gt;render('home.twig');
-});</code></pre>
-<p>What the framework does to call the controller is simple:</p>
-<pre><code class="language-php">$request = new Request(/* ... */);
-$controller = /* get from the router */;
-
-// Call the controller
-$controller($request);</code></pre>
-<p>What if the MVC framework used <code>Container::call()</code>?</p>
-<pre><code class="language-php">$request = new Request(/* ... */);
-$controller = /* get from the router */;
-
-// Call the controller
-$container-&gt;call($controller, [
-    'request' =&gt; $request
-]);</code></pre>
-<p>That allows to use dependency injection instead of the Service Locator antipattern:</p>
-<pre><code class="language-php">$app-&gt;get('/', function(Twig_Environment $twig, Request $request) use ($app) {
-    return $twig-&gt;render('home.twig');
-});</code></pre>
-<p>And that becomes even more interesting if you controller are classes!
-You can have PHP-DI instantiate your controller (using DI) <strong>and</strong> call the method:</p>
-<pre><code class="language-php">class HomeController {
-    public function helloAction($name) {
-        echo 'Hello ' . $name;
-    }
-}
-
-$controller = $container-&gt;make('HomeController');
-$container-&gt;call(
-    array($controller, 'helloAction'), // this is the callable
-    $_GET                              // parameters that can be injected
-);</code></pre>
-<p>What's great using <code>make()</code> and <code>call()</code>:</p>
-<ul>
-<li>you have dependency injection in your controller class (constructor, property, etc.)</li>
-<li>you can inject services in your actions</li>
-<li>you can also inject request parameters in your actions (here <code>$_GET</code> is used for the dirty example)</li>
-</ul>
-<p>You can see a more complete (and working) example here: <a href="https://github.com/mnapoli/minimal-app">mnapoli/minimal-app</a>.</p>
-<p>Of course, this is just an example, you are not supposed to re-write an MVC framework.
-But hopefully it helps to see the potential behind <code>call()</code>.</p>
-<p><a href="../doc/container.html">Read more in the documentation of the container's API</a></p>
-<h2>Wildcards in definitions</h2>
-<p>You can use wildcards to define a batch of entries. It can be very useful to bind interfaces to implementations:</p>
+            <p>I am happy to announce that PHP-DI version 4.3 has been released. This version contains features that have all been
+implemented by contributors other than me, this is very encouraging :) This is also the quickest release,
+since 4.2 was released only 14 days ago.</p>
+<p>It comes without any BC break, and with a new main feature: <code>DI\env()</code> to import <strong>environment variables</strong>.</p>
+<h2>DI\env()</h2>
+<p><em>contributed by <a href="https://github.com/jmalloc">@jmalloc</a></em></p>
+<p>If you use environment variables, you might end up creating several container definitions looking like this:</p>
 <pre><code class="language-php">return [
-    'Blog\Domain\*RepositoryInterface' =&gt; DI\object('Blog\Architecture\*DoctrineRepository'),
+
+    'db.url' =&gt; DI\factory(
+        function (DI\Container $container) {
+            return isset($_SERVER['DATABASE_URL'])
+                ? $_SERVER['DATABASE_URL']
+                : 'postgresql://user:pass@localhost/db';
+        }
+    )
+
 ];</code></pre>
-<p>In our example, the wildcard will match <code>Blog\Domain\UserRepositoryInterface</code>, and it will map it to
-<code>Blog\Architecture\UserDoctrineRepository</code>.</p>
-<p>Good to know:</p>
-<ul>
-<li>the wildcard does not match across namespaces</li>
-<li>an exact match (i.e. without <code>*</code>) will always be chosen over a match with a wildcard
-(first PHP-DI looks for an exact match, then it searches in the wildcards)</li>
-<li>in case of "conflicts" (i.e. 2 different matches with wildcards), the first match will prevail</li>
-</ul>
-<h2>Prototype scope for factories</h2>
-<p>Up till 4.1, factories where only in the Singleton scope: they were only called once.</p>
-<p>Now you can use the Prototype scope:</p>
+<p>This might be a common situation for some developers, especially those deploying their applications to
+systems like Heroku, or otherwise following the principles of <a href="http://12factor.net/config">12-factor applications</a>.</p>
+<p>Since 4.3, this can be written like this:</p>
 <pre><code class="language-php">return [
-    'foo' =&gt; DI\factory(function () {
-        return new Foo();
-    })-&gt;scope(Scope::PROTOTYPE()),
+    'db.url' =&gt; DI\env('DATABASE_URL', 'postgresql://user:pass@localhost/db'),
 ];</code></pre>
-<p>With this scope, the factory will be called each time <code>foo</code> is retrieved.</p>
-<h2>4.1</h2>
-<p>Are you still on v4.0? Here is a reminder of the cool things included in 4.1:</p>
-<ul>
-<li>HHVM support</li>
-<li>better exception messages</li>
-<li><a href="https://github.com/container-interop/container-interop">container-interop</a> compatibility, which means better
-integration in other frameworks</li>
-<li>better Symfony 2 documentation</li>
-</ul>
+<p>The first parameter to <code>DI\env()</code> is the name of the environment variable to read,
+the second parameter is the default value to use if the environment variable is not defined.</p>
+<p>If the environment variable is not defined and no default is provided, a <code>DefinitionException</code>
+is thrown when attempting to resolve the value.</p>
+<p>Finally, default values can reference other definitions using <code>DI\link()</code>:</p>
+<pre><code class="language-php">return [
+    'default-dsn' =&gt; 'postgresql://user:pass@localhost/db',
+    'dsn' =&gt; DI\env('DATABASE_URL', DI\link('default-dsn')),
+];</code></pre>
+<h2>Container::call() resolves array callable using class name</h2>
+<p><em>contributed by <a href="https://github.com/thispagecannotbefound">@thispagecannotbefound</a></em></p>
+<p>This change will allow you to call an array callable using a class name, like so:</p>
+<pre><code class="language-php">$container-&gt;call(['MyClass', 'method]);</code></pre>
+<p>If the method is not static, <code>MyClass</code> will be resolved using the container.</p>
+<p>Don't know what <code>Container::call()</code> is? <a href="http://php-di.org/doc/container.html">Check out the "Container API" documentation</a>.</p>
+<h2>FactoryInterface and InvokerInterface are auto-registered</h2>
+<p><em>contributed by <a href="https://github.com/drealecs">@drealecs</a></em></p>
+<p>Before 4.3, if you wanted to inject <code>DI\FactoryInterface</code> or <code>DI\InvokerInterface</code>, you needed to bind
+them in the configuration to <code>DI\Container</code>.</p>
+<p>They are now auto-registered (just like <code>DI\ContainerInterface</code>) as links to <code>DI\Container</code> so that
+you can inject them without any configuration.</p>
+<p>If you had previously defined them, there is no problem: your definitions always override the internal ones.</p>
+<p>Don't know what these interfaces are for? <a href="http://php-di.org/doc/container.html">Check out the "Container API" documentation</a>.</p>
 <h2>Change log</h2>
-<p>Some other minor bugfixes where included in the release.</p>
 <p>You can read the complete <a href="../change-log.html">change log</a>.</p>
         </div>
     </div>
