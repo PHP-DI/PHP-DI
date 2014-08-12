@@ -226,6 +226,9 @@ return [
 ];
 ```
 
+*Watch out:* remember the helper functions (`DI\object()` for example) are just namespaced functions, not classes.
+Do not use `new` (e.g. `new DI\object()`) else you will get a fatal error "Class 'DI\object' not found".
+
 
 In addition to defining entries in an array, you can set them directly in the container as shown below.
 **Using an array is however recommended since it allows to cache the definitions.**
