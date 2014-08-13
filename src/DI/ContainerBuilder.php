@@ -120,10 +120,10 @@ class ContainerBuilder
             $lastSource = $source;
         }
         if ($this->useAnnotations) {
-            if ($lastSource) {
-                $lastSource->chain(new AnnotationDefinitionSource());
+            if ($lastSource) {				
+                $lastSource->chain(new AnnotationDefinitionSource($this->useAutowiring));
             } else {
-                $firstSource = new AnnotationDefinitionSource();
+                $firstSource = new AnnotationDefinitionSource($this->useAutowiring);
             }
         } elseif ($this->useAutowiring) {
             if ($lastSource) {
