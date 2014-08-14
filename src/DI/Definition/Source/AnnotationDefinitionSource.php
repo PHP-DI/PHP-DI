@@ -205,7 +205,7 @@ class AnnotationDefinitionSource implements DefinitionSource
         // Look for @Inject annotation
         /** @var $annotation Inject|null */
         try {
-            $annotation = $this->getAnnotationReader()->getMethodAnnotation($method, 'DI\Annotation\Inject');
+            $inject_annotation = $this->getAnnotationReader()->getMethodAnnotation($method, 'DI\Annotation\Inject');
         } catch (AnnotationException $e) {
             throw new AnnotationException(sprintf(
                 '@Inject annotation on %s::%s is malformed. %s',
@@ -214,10 +214,13 @@ class AnnotationDefinitionSource implements DefinitionSource
                 $e->getMessage()
             ), 0, $e);
         }
-        $annotationParameters = $annotation ? $annotation->getParameters() : array();
+        $annotationParameters = $inject_annotation ? $inject_annotation->getParameters() : array();
 
-        // If @Inject is not present, we're using autowiring and this method is a constructor
-        if (! ($annotation || ($method->isConstructor() && $this->useAutoWiring))) {
+		$isConstructorWithAutowiring = $this->useAutoWiring && $method->isConstructor();
+		
+        // if @Inject annotation is not present in the method docblock then return null, 
+		// except if this is the constructor and autowiring is turned on.
+        if ( ! $inject_annotation && ! $isConstructorWithAutowiring) {
             return null;
         }
 
