@@ -38,6 +38,10 @@ class FunctionCallDefinitionDumper implements DefinitionDumper
         if (is_array($callable)) {
             list($object, $method) = $callable;
             $functionReflection = new \ReflectionMethod($object, $method);
+        } elseif ($callable instanceof \Closure) {
+            $functionReflection = new \ReflectionFunction($callable);
+        } elseif (is_object($callable) && method_exists($callable, '__invoke')) {
+            $functionReflection = new \ReflectionMethod($callable, '__invoke');
         } else {
             $functionReflection = new \ReflectionFunction($callable);
         }

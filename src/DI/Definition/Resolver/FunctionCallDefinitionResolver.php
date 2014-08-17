@@ -66,6 +66,10 @@ class FunctionCallDefinitionResolver implements DefinitionResolver
         if (is_array($callable)) {
             list($object, $method) = $callable;
             $functionReflection = new \ReflectionMethod($object, $method);
+        } elseif ($callable instanceof \Closure) {
+            $functionReflection = new \ReflectionFunction($callable);
+        } elseif (is_object($callable) && method_exists($callable, '__invoke')) {
+            $functionReflection = new \ReflectionMethod($callable, '__invoke');
         } else {
             $functionReflection = new \ReflectionFunction($callable);
         }
@@ -86,6 +90,10 @@ class FunctionCallDefinitionResolver implements DefinitionResolver
             }
 
             return $functionReflection->invokeArgs($object, $args);
+        } elseif ($callable instanceof \Closure) {
+            return $functionReflection->invokeArgs($args);
+        } elseif (is_object($callable) && method_exists($callable, '__invoke')) {
+            return $functionReflection->invokeArgs($callable, $args);
         } else {
             return $functionReflection->invokeArgs($args);
         }

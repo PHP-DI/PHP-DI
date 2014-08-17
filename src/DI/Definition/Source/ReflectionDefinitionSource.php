@@ -12,6 +12,7 @@ namespace DI\Definition\Source;
 use DI\Definition\ClassDefinition;
 use DI\Definition\EntryReference;
 use DI\Definition\ClassDefinition\MethodInjection;
+use DI\Definition\Exception\DefinitionException;
 use DI\Definition\FunctionCallDefinition;
 use DI\Definition\MergeableDefinition;
 
@@ -59,12 +60,17 @@ class ReflectionDefinitionSource implements DefinitionSource, CallableDefinition
 
     /**
      * {@inheritdoc}
+     * TODO use a `callable` type-hint once support is for PHP 5.4 and up
      */
     public function getCallableDefinition($callable)
     {
         if (is_array($callable)) {
             list($class, $method) = $callable;
             $reflection = new \ReflectionMethod($class, $method);
+        } elseif ($callable instanceof \Closure) {
+            $reflection = new \ReflectionFunction($callable);
+        } elseif (is_object($callable) && method_exists($callable, '__invoke')) {
+            $reflection = new \ReflectionMethod($callable, '__invoke');
         } else {
             $reflection = new \ReflectionFunction($callable);
         }

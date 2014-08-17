@@ -87,6 +87,14 @@ class CallFunctionTest extends \PHPUnit_Framework_TestCase
         $result = $container->call(array($class, 'bar'));
         $this->assertEquals(24, $result);
     }
+
+    public function testCallCallableObject()
+    {
+        $container = ContainerBuilder::buildDevContainer();
+        $class = __NAMESPACE__ . '\CallableTestClass';
+        $result = $container->call(new $class);
+        $this->assertEquals(42, $result);
+    }
 }
 
 class TestClass
@@ -95,9 +103,17 @@ class TestClass
     {
         return 42;
     }
-    
+
     public static function bar()
     {
         return 24;
+    }
+}
+
+class CallableTestClass
+{
+    public function __invoke()
+    {
+        return 42;
     }
 }

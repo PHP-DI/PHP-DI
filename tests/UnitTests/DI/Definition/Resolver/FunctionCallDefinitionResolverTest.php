@@ -101,6 +101,16 @@ class FunctionCallDefinitionResolverTest extends \PHPUnit_Framework_TestCase
 
         $resolver->resolve($definition);
     }
+
+    public function testResolveCallableObject()
+    {
+        $container = $this->getMock('DI\Container', array(), array(), '', false);
+
+        $definition = new FunctionCallDefinition(new CallableTestClass());
+        $resolver = new FunctionCallDefinitionResolver($container);
+
+        $this->assertEquals(42, $resolver->resolve($definition));
+    }
 }
 
 class TestClass
@@ -113,5 +123,13 @@ class TestClass
     public static function bar()
     {
         return 24;
+    }
+}
+
+class CallableTestClass
+{
+    public function __invoke()
+    {
+        return 42;
     }
 }

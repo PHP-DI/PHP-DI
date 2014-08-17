@@ -93,6 +93,20 @@ class ReflectionDefinitionSourceTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($definition instanceof FunctionCallDefinition);
         $this->assertCount(0, $definition->getParameters());
     }
+
+    /**
+     * @test
+     */
+    public function callableObjectShouldWork()
+    {
+        $source = new ReflectionDefinitionSource();
+
+        $definition = $source->getCallableDefinition(new CallableTestClass());
+
+        $this->assertTrue($definition instanceof FunctionCallDefinition);
+        $this->assertCount(1, $definition->getParameters());
+        $this->assertEquals(new EntryReference('stdClass'), $definition->getParameter(0));
+    }
 }
 
 class TestClass
@@ -102,6 +116,13 @@ class TestClass
     }
 
     public function optional(\stdClass $foo = null)
+    {
+    }
+}
+
+class CallableTestClass
+{
+    public function __invoke(\stdClass $foo)
     {
     }
 }

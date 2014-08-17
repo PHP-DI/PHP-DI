@@ -49,4 +49,24 @@ class FunctionCallDefinitionDumperTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals($str, $dumper->dump($definition));
     }
+
+    public function testDumpWithCallableObject()
+    {
+        $definition = new FunctionCallDefinition(new CallableTestClass());
+        $dumper = new FunctionCallDefinitionDumper();
+
+        $str = 'UnitTests\DI\Definition\Dumper\CallableTestClass::__invoke(
+    $value = #UNDEFINED#
+)';
+
+        $this->assertEquals($str, $dumper->dump($definition));
+    }
+}
+
+class CallableTestClass
+{
+    public function __invoke($value)
+    {
+        return 42;
+    }
 }
