@@ -12,6 +12,7 @@ namespace DI\Definition\Resolver;
 use DI\Definition\Definition;
 use DI\Definition\Exception\DefinitionException;
 use DI\Definition\FunctionCallDefinition;
+use DI\Reflection\CallableReflectionFactory;
 use Interop\Container\ContainerInterface;
 
 /**
@@ -63,16 +64,7 @@ class FunctionCallDefinitionResolver implements DefinitionResolver
 
         $callable = $definition->getCallable();
 
-        if (is_array($callable)) {
-            list($object, $method) = $callable;
-            $functionReflection = new \ReflectionMethod($object, $method);
-        } elseif ($callable instanceof \Closure) {
-            $functionReflection = new \ReflectionFunction($callable);
-        } elseif (is_object($callable) && method_exists($callable, '__invoke')) {
-            $functionReflection = new \ReflectionMethod($callable, '__invoke');
-        } else {
-            $functionReflection = new \ReflectionFunction($callable);
-        }
+        $functionReflection = CallableReflectionFactory::fromCallable($callable);
 
         try {
             $args = $this->parameterResolver->resolveParameters($definition, $functionReflection, $parameters);
@@ -80,23 +72,22 @@ class FunctionCallDefinitionResolver implements DefinitionResolver
             throw DefinitionException::create($definition, $e->getMessage());
         }
 
-        if (is_array($callable)) {
-            if ($functionReflection->isStatic()) {
-                $object = null;
-            } elseif (is_string($callable[0])) {
-                $object = $this->container->get($callable[0]);
-            } else {
-                $object = $callable[0];
-            }
-
-            return $functionReflection->invokeArgs($object, $args);
-        } elseif ($callable instanceof \Closure) {
-            return $functionReflection->invokeArgs($args);
-        } elseif (is_object($callable) && method_exists($callable, '__invoke')) {
-            return $functionReflection->invokeArgs($callable, $args);
-        } else {
+        if ($functionReflection instanceof \ReflectionFunction) {
             return $functionReflection->invokeArgs($args);
         }
+
+        /** @var \ReflectionMethod $functionReflection */
+        if ($functionReflection->isStatic()) {
+            $object = null;
+        } elseif (is_object($callable)) {
+            $object = $callable;
+        } elseif (is_string($callable[0])) {
+            $object = $this->container->get($callable[0]);
+        } else {
+            $object = $callable[0];
+        }
+
+        return $functionReflection->invokeArgs($object, $args);
     }
 
     /**

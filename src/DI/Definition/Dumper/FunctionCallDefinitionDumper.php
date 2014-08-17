@@ -12,6 +12,7 @@ namespace DI\Definition\Dumper;
 use DI\Definition\Definition;
 use DI\Definition\EntryReference;
 use DI\Definition\FunctionCallDefinition;
+use DI\Reflection\CallableReflectionFactory;
 
 /**
  * Dumps function call definitions.
@@ -35,16 +36,7 @@ class FunctionCallDefinitionDumper implements DefinitionDumper
 
         $callable = $definition->getCallable();
 
-        if (is_array($callable)) {
-            list($object, $method) = $callable;
-            $functionReflection = new \ReflectionMethod($object, $method);
-        } elseif ($callable instanceof \Closure) {
-            $functionReflection = new \ReflectionFunction($callable);
-        } elseif (is_object($callable) && method_exists($callable, '__invoke')) {
-            $functionReflection = new \ReflectionMethod($callable, '__invoke');
-        } else {
-            $functionReflection = new \ReflectionFunction($callable);
-        }
+        $functionReflection = CallableReflectionFactory::fromCallable($callable);
 
         $functionName = $this->getFunctionName($functionReflection);
         $parameters = $this->dumpMethodParameters($definition, $functionReflection);

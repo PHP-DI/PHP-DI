@@ -12,9 +12,9 @@ namespace DI\Definition\Source;
 use DI\Definition\ClassDefinition;
 use DI\Definition\EntryReference;
 use DI\Definition\ClassDefinition\MethodInjection;
-use DI\Definition\Exception\DefinitionException;
 use DI\Definition\FunctionCallDefinition;
 use DI\Definition\MergeableDefinition;
+use DI\Reflection\CallableReflectionFactory;
 
 /**
  * Reads DI class definitions using reflection.
@@ -64,16 +64,7 @@ class ReflectionDefinitionSource implements DefinitionSource, CallableDefinition
      */
     public function getCallableDefinition($callable)
     {
-        if (is_array($callable)) {
-            list($class, $method) = $callable;
-            $reflection = new \ReflectionMethod($class, $method);
-        } elseif ($callable instanceof \Closure) {
-            $reflection = new \ReflectionFunction($callable);
-        } elseif (is_object($callable) && method_exists($callable, '__invoke')) {
-            $reflection = new \ReflectionMethod($callable, '__invoke');
-        } else {
-            $reflection = new \ReflectionFunction($callable);
-        }
+        $reflection = CallableReflectionFactory::fromCallable($callable);
 
         return new FunctionCallDefinition($callable, $this->getParametersDefinition($reflection));
     }
