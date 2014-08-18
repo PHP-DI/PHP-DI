@@ -15,6 +15,7 @@ use DI\Definition\ValueDefinition;
 
 /**
  * @covers \DI\Definition\Resolver\FunctionCallDefinitionResolver
+ * @covers \DI\Definition\Resolver\ParameterResolver
  */
 class FunctionCallDefinitionResolverTest extends \PHPUnit_Framework_TestCase
 {
