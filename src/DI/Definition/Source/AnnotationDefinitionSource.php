@@ -50,17 +50,16 @@ class AnnotationDefinitionSource implements DefinitionSource
     private $phpDocReader;
     
 	/**
-	 *
 	 * @var bool
 	 */
-	private $useAutoWiring;
+	private $ignorePhpDocErrors;
 
 	/**
-	 * @param bool useAutowiring 
+	 * @param bool $ignorePhpDocErrors
 	 */
-	public function __construct($useAutowiring = true)
+	public function __construct($ignorePhpDocErrors = false)
 	{
-		$this->useAutoWiring = $useAutowiring;
+		$this->ignorePhpDocErrors = $ignorePhpDocErrors;
 	}
 	
     /**
@@ -205,7 +204,7 @@ class AnnotationDefinitionSource implements DefinitionSource
         // Look for @Inject annotation
         /** @var $annotation Inject|null */
         try {
-            $injectAnnotation = $this->getAnnotationReader()->getMethodAnnotation($method, 'DI\Annotation\Inject');
+            $annotation = $this->getAnnotationReader()->getMethodAnnotation($method, 'DI\Annotation\Inject');
         } catch (AnnotationException $e) {
             throw new AnnotationException(sprintf(
                 '@Inject annotation on %s::%s is malformed. %s',
@@ -214,13 +213,10 @@ class AnnotationDefinitionSource implements DefinitionSource
                 $e->getMessage()
             ), 0, $e);
         }
-        $annotationParameters = $injectAnnotation ? $injectAnnotation->getParameters() : array();
+        $annotationParameters = $annotation ? $annotation->getParameters() : array();
 
-		$isConstructorWithAutowiring = $this->useAutoWiring && $method->isConstructor();
-		
-        // if @Inject annotation is not present in the method docblock then return null, 
-		// except if this is the constructor and autowiring is turned on.
-        if ( ! $injectAnnotation && ! $isConstructorWithAutowiring) {
+        // if this is not a constructor; and annotations are turned off, then we don't want to continue.
+        if (! ($annotation || $method->isConstructor())) {
             return null;
         }
 
@@ -300,7 +296,7 @@ class AnnotationDefinitionSource implements DefinitionSource
     private function getPhpDocReader()
     {
         if ($this->phpDocReader === null) {
-            $this->phpDocReader = new PhpDocReader();
+            $this->phpDocReader = new PhpDocReader($this->ignorePhpDocErrors);
         }
 
         return $this->phpDocReader;

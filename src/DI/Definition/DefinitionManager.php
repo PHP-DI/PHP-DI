@@ -44,6 +44,10 @@ class DefinitionManager
      */
     private $callableSource;
 
+	/**
+	 * 
+	 * @param \DI\Definition\Source\DefinitionSource $source
+	 */
     public function __construct(DefinitionSource $source = null)
     {
         $this->source = new ArrayDefinitionSource();
