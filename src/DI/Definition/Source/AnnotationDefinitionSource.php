@@ -50,18 +50,18 @@ class AnnotationDefinitionSource implements DefinitionSource
     private $phpDocReader;
     
 	/**
-	 * @var bool
-	 */
-	private $ignorePhpDocErrors;
+     * @var bool
+     */
+    private $ignorePhpDocErrors;
 
-	/**
-	 * @param bool $ignorePhpDocErrors
-	 */
-	public function __construct($ignorePhpDocErrors = false)
-	{
-		$this->ignorePhpDocErrors = $ignorePhpDocErrors;
-	}
-	
+    /**
+     * @param bool $ignorePhpDocErrors
+     */
+    public function __construct($ignorePhpDocErrors = false)
+    {
+        $this->ignorePhpDocErrors = $ignorePhpDocErrors;
+    }
+
     /**
      * {@inheritdoc}
      * @throws AnnotationException
@@ -215,7 +215,7 @@ class AnnotationDefinitionSource implements DefinitionSource
         }
         $annotationParameters = $annotation ? $annotation->getParameters() : array();
 
-        // if this is not a constructor; and annotations are turned off, then we don't want to continue.
+        // @Inject on constructor is implicit
         if (! ($annotation || $method->isConstructor())) {
             return null;
         }

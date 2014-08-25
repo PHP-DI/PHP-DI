@@ -181,15 +181,15 @@ class ContainerBuilder
     }
 
     /**
-	 * Enable or disable throwing errors when PhpDoc Errors occur (when parsing annotations)
-	 * 
-	 * @param bool $bool
-	 */
-	public function ignorePhpDocErrors($bool)
-	{
-		$this->ignorePhpDocErrors = $bool;		
-		return $this;
-	}
+     * Enable or disable throwing errors when PhpDoc Errors occur (when parsing annotations)
+     * 
+     * @param bool $bool
+     */
+    public function ignorePhpDocErrors($bool)
+    {
+        $this->ignorePhpDocErrors = $bool;
+        return $this;
+    }
 
     /**
      * Enables the use of a cache for the definitions.
