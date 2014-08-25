@@ -48,6 +48,19 @@ class AnnotationDefinitionSource implements DefinitionSource
      * @var PhpDocReader
      */
     private $phpDocReader;
+    
+	/**
+     * @var bool
+     */
+    private $ignorePhpDocErrors;
+
+    /**
+     * @param bool $ignorePhpDocErrors
+     */
+    public function __construct($ignorePhpDocErrors = false)
+    {
+        $this->ignorePhpDocErrors = $ignorePhpDocErrors;
+    }
 
     /**
      * {@inheritdoc}
@@ -283,7 +296,7 @@ class AnnotationDefinitionSource implements DefinitionSource
     private function getPhpDocReader()
     {
         if ($this->phpDocReader === null) {
-            $this->phpDocReader = new PhpDocReader();
+            $this->phpDocReader = new PhpDocReader($this->ignorePhpDocErrors);
         }
 
         return $this->phpDocReader;

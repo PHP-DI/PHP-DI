@@ -52,6 +52,11 @@ class ContainerBuilder
     private $useAnnotations = true;
 
     /**
+     * @var boolean
+     */
+    private $ignorePhpDocErrors = false;
+
+    /**
      * @var Cache
      */
     private $cache;
@@ -120,10 +125,10 @@ class ContainerBuilder
             $lastSource = $source;
         }
         if ($this->useAnnotations) {
-            if ($lastSource) {
-                $lastSource->chain(new AnnotationDefinitionSource());
+            if ($lastSource) {				
+                $lastSource->chain(new AnnotationDefinitionSource($this->ignorePhpDocErrors));
             } else {
-                $firstSource = new AnnotationDefinitionSource();
+                $firstSource = new AnnotationDefinitionSource($this->ignorePhpDocErrors);
             }
         } elseif ($this->useAutowiring) {
             if ($lastSource) {
@@ -172,6 +177,17 @@ class ContainerBuilder
     public function useAnnotations($bool)
     {
         $this->useAnnotations = $bool;
+        return $this;
+    }
+
+    /**
+     * Enable or disable throwing errors when PhpDoc Errors occur (when parsing annotations)
+     * 
+     * @param bool $bool
+     */
+    public function ignorePhpDocErrors($bool)
+    {
+        $this->ignorePhpDocErrors = $bool;
         return $this;
     }
 
