@@ -44,12 +44,13 @@ class DefinitionManager
      */
     private $callableSource;
 
-    public function __construct(DefinitionSource $source = null)
+	public function __construct(DefinitionSource $source = null)
     {
         $this->source = new ArrayDefinitionSource();
         $this->callableSource = new ReflectionDefinitionSource();
 
-        if ($source) {
+        if ($source)
+        {
             $this->source->chain($source);
         }
     }
