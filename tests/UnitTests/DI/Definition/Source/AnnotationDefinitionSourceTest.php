@@ -234,4 +234,23 @@ class AnnotationDefinitionSourceTest extends \PHPUnit_Framework_TestCase
 
         $this->assertSame($reader, $source->getAnnotationReader());
     }
+
+    /**
+     * @see https://github.com/mnapoli/PHP-DI/issues/184
+     * @expectedException \PhpDocReader\AnnotationException
+     */
+    public function testFailWithPhpDocErrors()
+    {
+        $source = new AnnotationDefinitionSource();
+        $source->getDefinition('UnitTests\DI\Definition\Source\Fixtures\AnnotationFixture5');
+    }
+
+    /**
+     * @see https://github.com/mnapoli/PHP-DI/issues/184
+     */
+    public function testIgnorePhpDocErrors()
+    {
+        $source = new AnnotationDefinitionSource($ignorePhpDocErrors = true);
+        $source->getDefinition('UnitTests\DI\Definition\Source\Fixtures\AnnotationFixture5');
+    }
 }
