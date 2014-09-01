@@ -125,7 +125,7 @@ class ContainerBuilder
             $lastSource = $source;
         }
         if ($this->useAnnotations) {
-            if ($lastSource) {				
+            if ($lastSource) {
                 $lastSource->chain(new AnnotationDefinitionSource($this->ignorePhpDocErrors));
             } else {
                 $firstSource = new AnnotationDefinitionSource($this->ignorePhpDocErrors);
@@ -171,7 +171,7 @@ class ContainerBuilder
      *
      * By default, enabled.
      *
-     * @param $bool
+     * @param boolean $bool
      * @return ContainerBuilder
      */
     public function useAnnotations($bool)
@@ -181,9 +181,10 @@ class ContainerBuilder
     }
 
     /**
-     * Enable or disable throwing errors when PhpDoc Errors occur (when parsing annotations)
+     * Enable or disable ignoring phpdoc errors (non-existent classes in `@param` or `@var`)
      * 
-     * @param bool $bool
+     * @param boolean $bool
+     * @return ContainerBuilder
      */
     public function ignorePhpDocErrors($bool)
     {

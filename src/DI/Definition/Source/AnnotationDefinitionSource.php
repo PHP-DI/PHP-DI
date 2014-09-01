@@ -49,7 +49,7 @@ class AnnotationDefinitionSource implements DefinitionSource
      */
     private $phpDocReader;
     
-	/**
+    /**
      * @var bool
      */
     private $ignorePhpDocErrors;
@@ -59,7 +59,7 @@ class AnnotationDefinitionSource implements DefinitionSource
      */
     public function __construct($ignorePhpDocErrors = false)
     {
-        $this->ignorePhpDocErrors = $ignorePhpDocErrors;
+        $this->ignorePhpDocErrors = (bool) $ignorePhpDocErrors;
     }
 
     /**
