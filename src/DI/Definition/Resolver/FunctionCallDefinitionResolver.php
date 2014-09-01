@@ -49,18 +49,13 @@ class FunctionCallDefinitionResolver implements DefinitionResolver
      *
      * This will call the function and return its result.
      *
+     * @param FunctionCallDefinition $definition
+     *
      * {@inheritdoc}
      */
     public function resolve(Definition $definition, array $parameters = array())
     {
-        if (! $definition instanceof FunctionCallDefinition) {
-            throw new \InvalidArgumentException(
-                sprintf(
-                    'This definition resolver is only compatible with FunctionCallDefinition objects, %s given',
-                    get_class($definition)
-                )
-            );
-        }
+        $this->assertIsFunctionCallDefinition($definition);
 
         $callable = $definition->getCallable();
 
@@ -95,13 +90,18 @@ class FunctionCallDefinitionResolver implements DefinitionResolver
      */
     public function isResolvable(Definition $definition, array $parameters = array())
     {
-        if (! $definition instanceof FunctionCallDefinition) {
+        $this->assertIsFunctionCallDefinition($definition);
+
+        return true;
+    }
+
+    private function assertIsFunctionCallDefinition(Definition $definition)
+    {
+        if (!$definition instanceof FunctionCallDefinition) {
             throw new \InvalidArgumentException(sprintf(
                 'This definition resolver is only compatible with FunctionCallDefinition objects, %s given',
                 get_class($definition)
             ));
         }
-
-        return true;
     }
 }

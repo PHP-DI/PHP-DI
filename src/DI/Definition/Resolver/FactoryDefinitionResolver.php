@@ -42,18 +42,13 @@ class FactoryDefinitionResolver implements DefinitionResolver
      *
      * This will call the callable of the definition.
      *
+     * @param FactoryDefinition $definition
+     *
      * {@inheritdoc}
      */
     public function resolve(Definition $definition, array $parameters = array())
     {
-        if (! $definition instanceof FactoryDefinition) {
-            throw new \InvalidArgumentException(
-                sprintf(
-                    'This definition resolver is only compatible with FactoryDefinition objects, %s given',
-                    get_class($definition)
-                )
-            );
-        }
+        $this->assertIsFactoryDefinition($definition);
 
         $callable = $definition->getCallable();
 
@@ -65,12 +60,7 @@ class FactoryDefinitionResolver implements DefinitionResolver
      */
     public function isResolvable(Definition $definition, array $parameters = array())
     {
-        if (! $definition instanceof FactoryDefinition) {
-            throw new \InvalidArgumentException(sprintf(
-                'This definition resolver is only compatible with FactoryDefinition objects, %s given',
-                get_class($definition)
-            ));
-        }
+        $this->assertIsFactoryDefinition($definition);
 
         return true;
     }
@@ -81,5 +71,15 @@ class FactoryDefinitionResolver implements DefinitionResolver
     public function getContainer()
     {
         return $this->container;
+    }
+
+    private function assertIsFactoryDefinition(Definition $definition)
+    {
+        if (!$definition instanceof FactoryDefinition) {
+            throw new \InvalidArgumentException(sprintf(
+                'This definition resolver is only compatible with FactoryDefinition objects, %s given',
+                get_class($definition)
+            ));
+        }
     }
 }

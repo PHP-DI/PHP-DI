@@ -25,16 +25,13 @@ class ValueDefinitionResolver implements DefinitionResolver
      *
      * A value definition is simple, so this will just return the value of the ValueDefinition.
      *
+     * @param ValueDefinition $definition
+     *
      * {@inheritdoc}
      */
     public function resolve(Definition $definition, array $parameters = array())
     {
-        if (! $definition instanceof ValueDefinition) {
-            throw new \InvalidArgumentException(sprintf(
-                'This definition resolver is only compatible with ValueDefinition objects, %s given',
-                get_class($definition)
-            ));
-        }
+        $this->assertIsValueDefinition($definition);
 
         return $definition->getValue();
     }
@@ -44,13 +41,18 @@ class ValueDefinitionResolver implements DefinitionResolver
      */
     public function isResolvable(Definition $definition, array $parameters = array())
     {
-        if (! $definition instanceof ValueDefinition) {
+        $this->assertIsValueDefinition($definition);
+
+        return true;
+    }
+
+    private function assertIsValueDefinition(Definition $definition)
+    {
+        if (!$definition instanceof ValueDefinition) {
             throw new \InvalidArgumentException(sprintf(
                 'This definition resolver is only compatible with ValueDefinition objects, %s given',
                 get_class($definition)
             ));
         }
-
-        return true;
     }
 }
