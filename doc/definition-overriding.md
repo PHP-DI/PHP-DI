@@ -10,7 +10,7 @@ you can combine them by taking advantage of priorities that apply.
 From the highest priority to the least:
 
 - Explicit definition on the container (i.e. defined with `$container->set()`)
-- PHP file definitions (if A is added after B, then A prevails)
+- PHP file definitions (if B is added after A, then B prevails)
 - Annotations
 - Autowiring
 
