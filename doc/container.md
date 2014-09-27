@@ -47,6 +47,8 @@ Of course you can set entries on the container:
 
 ```php
 $container->set('foo', 'bar');
+
+$container->set('MyInterface', \DI\object('MyClass'));
 ```
 
 However it is recommended to use definition files.
@@ -161,6 +163,23 @@ interface InvokerInterface
      */
     public function call($callable, array $parameters = []);
 }
+```
+
+**New:** Since version 4.4, you can call:
+
+- callable class names: `$container->call('My\CallableClass')`
+- callable class methods: `$container->call(['MyClass', 'someMethod'])`
+
+In both case, `'My\CallableClass'` and `'MyClass'` will be instantiated using `$container->get()`.
+
+That saves you from a more verbose form, for example:
+
+```php
+$object = $container->get('My\CallableClass');
+$container->call($object);
+
+// can now be written as
+$container->call('My\CallableClass');
 ```
 
 ## injectOn()

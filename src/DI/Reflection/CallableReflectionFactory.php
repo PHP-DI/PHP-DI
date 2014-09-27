@@ -42,6 +42,11 @@ class CallableReflectionFactory
             return new \ReflectionMethod($callable, '__invoke');
         }
 
+        // Callable class (i.e. implementing __invoke())
+        if (is_string($callable) && class_exists($callable) && method_exists($callable, '__invoke')) {
+            return new \ReflectionMethod($callable, '__invoke');
+        }
+
         // Standard function
         return new \ReflectionFunction($callable);
     }
