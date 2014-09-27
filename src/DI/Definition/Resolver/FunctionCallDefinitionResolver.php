@@ -73,12 +73,19 @@ class FunctionCallDefinitionResolver implements DefinitionResolver
 
         /** @var \ReflectionMethod $functionReflection */
         if ($functionReflection->isStatic()) {
+            // Static method
             $object = null;
         } elseif (is_object($callable)) {
+            // Callable object
             $object = $callable;
+        } elseif (is_string($callable)) {
+            // Callable class (need to be instantiated)
+            $object = $this->container->get($callable);
         } elseif (is_string($callable[0])) {
+            // Class method
             $object = $this->container->get($callable[0]);
         } else {
+            // Object method
             $object = $callable[0];
         }
 

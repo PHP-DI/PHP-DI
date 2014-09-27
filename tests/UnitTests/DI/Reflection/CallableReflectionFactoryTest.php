@@ -41,8 +41,22 @@ class CallableReflectionFactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function should_support_callable_objects()
     {
+        /** @var \ReflectionMethod $reflection */
         $reflection = CallableReflectionFactory::fromCallable(new CallableTestClass());
         $this->assertInstanceOf('ReflectionMethod', $reflection);
+        $this->assertEquals('UnitTests\DI\CallableTestClass', $reflection->getDeclaringClass()->getName());
+        $this->assertEquals('__invoke', $reflection->getName());
+    }
+
+    /**
+     * @test
+     */
+    public function should_support_callable_classes()
+    {
+        /** @var \ReflectionMethod $reflection */
+        $reflection = CallableReflectionFactory::fromCallable('UnitTests\DI\CallableTestClass');
+        $this->assertInstanceOf('ReflectionMethod', $reflection);
+        $this->assertEquals('UnitTests\DI\CallableTestClass', $reflection->getDeclaringClass()->getName());
         $this->assertEquals('__invoke', $reflection->getName());
     }
 
