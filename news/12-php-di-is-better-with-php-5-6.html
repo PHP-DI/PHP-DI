@@ -65,65 +65,55 @@
 
                     
     <div class='single-post-w'>
-        <h1 class='post-title'>PHP-DI 3.1 released</h1>
+        <h1 class='post-title'>PHP 5.6 is out and PHP-DI just got better</h1>
 
         <p class='post-info'>
             <span class='info-item'>
               Posted by Matthieu Napoli
             </span>
-            <span class='info-item'>June 23rd 2013</span>
+            <span class='info-item'>September 27th 2014</span>
         </p>
         <div class='post-content'>
-            <p>I am happy to announce that I have just released PHP-DI version 3.1.</p>
-<p>The major new feature is the <strong>Zend Framework 1 integration</strong>. You can now use PHP-DI very easily with ZF1, and the integration will provide you dependency injection into your controllers.</p>
-<p>Mixing different definition sources (reflection, annotations, files, …) is now more reliable with orders and priorities. Sources are all now correctly priorized, allowing you to override definitions as you would expect. Read more in the <a href="../doc/definition-overriding.html"><strong>Definition overriding</strong> documentation</a>.</p>
-<p>Finally, <a href="https://github.com/mnapoli/PHP-DI/issues/79">a small fix</a> to allow to <strong>define <code>null</code> entries</strong>:</p>
-<pre><code class="language-php">// Set a null value for 'foo'
-$container-&gt;set('foo', null);
+            <p><a href="http://php.net/manual/en/migration56.new-features.php">PHP 5.6 has been released</a> a month ago and
+PHP-DI just got better because of it!</p>
+<p>As explained 9 months ago when I introduced the <a href="06-php-di-4-0-new-definitions.html">new definition format for PHP-DI 4</a>,
+that format has been thought for the future.</p>
+<p>It was imagined to take advantage of the short arrays introduced in PHP 5.4:</p>
+<pre><code class="language-php">return [
+    'Acme\SomeModule\Service\Foo' =&gt; DI\object()
+      -&gt;constructor(DI\link('Acme\SomeModule\Service\Bar')),
+];</code></pre>
+<p>Along with the <code>::class</code> of PHP 5.5:</p>
+<pre><code class="language-php">use Acme\SomeModule\Service\Foo;
+use Acme\SomeModule\Service\Bar;
 
-// No change: without a value given, returns a class definition helper
-$container-&gt;set('foo')
-    -&gt;bindTo('My\Foo\Class')
-    -&gt;withConstructor(array('SomeClass'));</code></pre>
-<h2>Zend Framework 1 integration</h2>
-<p>To set up your ZF1 project, you can install the dependencies with <a href="http://getcomposer.org/">Composer</a>:</p>
-<pre><code class="language-php">{
-    "require": {
-        "mnapoli/php-di": "3.1.*",
-        "mnapoli/php-di-zf1": "*"
-    }
-}</code></pre>
-<p>In your bootstrap, you only need to replace the default Dispatcher with the one provided into <code>mnapoli/php-di-zf1</code>:</p>
-<pre><code class="language-php">    protected function _initDependencyInjection() {
-        $container = new \DI\Container();
+return [
+    Foo::class =&gt; DI\object()
+      -&gt;constructor(DI\link(Bar::class)),
+];</code></pre>
+<p>And now the <code>use function</code> of PHP 5.6:</p>
+<pre><code class="language-php">use Acme\SomeModule\Service\Foo;
+use Acme\SomeModule\Service\Bar;
+use function DI\object;
+use function DI\link;
 
-        $dispatcher = new \DI\ZendFramework1\Dispatcher();
-        $dispatcher-&gt;setContainer($container);
-
-        Zend_Controller_Front::getInstance()-&gt;setDispatcher($dispatcher);
-    }</code></pre>
-<p>Easy right? Now you can inject dependencies into your controllers.</p>
-<p>Here is an example using annotations (you can't use constructor injection though since ZF1 controllers have a specific constructor):</p>
-<pre><code class="language-php">use DI\Annotation\Inject;
-
-class GuestbookController extends Zend_Controller_Action
-{
-    /**
-     * @Inject
-     * @var Application_Service_GuestbookService
-     */
-    private $guestbookService;
-
-    public function signAction()
-    {
-        $form = new Application_Form_Guestbook();
-        $this-&gt;guestbookService-&gt;addEntry($form-&gt;getValues());
-    }
-}</code></pre>
-<p>Read more about <a href="https://github.com/mnapoli/PHP-DI-ZF1">Zend Framework 1 integration</a>.</p>
-<h2>Integration with other frameworks (Symfony, ZF2, …)</h2>
-<p>Integration with other frameworks <a href="https://github.com/mnapoli/PHP-DI/issues?state=open">are planned</a>.</p>
-<p>If you want to help, feel free to submit a pull request or let's talk on <a href="https://twitter.com/PHPDI">Twitter</a>.</p>
+return [
+    Foo::class =&gt; object()
+      -&gt;constructor(link(Bar::class))
+];</code></pre>
+<p>Yay! Those helper functions can now be imported, which helps clearing up long configuration files:</p>
+<ul>
+<li><code>DI\object()</code></li>
+<li><code>DI\link()</code></li>
+<li><code>DI\factory()</code></li>
+<li><code>DI\env()</code></li>
+</ul>
+<p>I have been using PHP 5.6 to build <a href="http://isitmaintained.com/">isitmaintained.com</a> and I can
+confirm, after a few week of usage, that this is a noticeable improvement.</p>
+<p>If you want to see a real life example, have a look at the <a href="https://github.com/mnapoli/IsItMaintained/blob/master/app/config/config.php">configuration file</a>.</p>
+<h2>What about you?</h2>
+<p>After 9 months of using the new definition format, what do you think of it?</p>
+<p>Do you see any way to improve it? Or something to improve in the documentation?</p>
         </div>
     </div>
 
