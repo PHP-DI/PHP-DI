@@ -83,7 +83,7 @@ class FunctionCallDefinitionResolverTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function call_class_static_method()
+    public function call_static_method()
     {
         $container = $this->assert_container();
         $resolver = $this->assert_definition_resolver($container);
