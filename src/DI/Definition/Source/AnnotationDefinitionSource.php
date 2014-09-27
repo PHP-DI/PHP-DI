@@ -83,27 +83,7 @@ class AnnotationDefinitionSource implements DefinitionSource
         $class = new ReflectionClass($className);
         $definition = new ClassDefinition($name);
 
-        // Injectable annotation
-        /** @var $injectableAnnotation Injectable|null */
-        try {
-            $injectableAnnotation = $this->getAnnotationReader()
-                ->getClassAnnotation($class, 'DI\Annotation\Injectable');
-        } catch (UnexpectedValueException $e) {
-            throw new DefinitionException(sprintf(
-                'Error while reading @Injectable on %s: %s',
-                $class->getName(),
-                $e->getMessage()
-            ), 0, $e);
-        }
-
-        if ($injectableAnnotation) {
-            if ($injectableAnnotation->getScope()) {
-                $definition->setScope($injectableAnnotation->getScope());
-            }
-            if ($injectableAnnotation->isLazy() !== null) {
-                $definition->setLazy($injectableAnnotation->isLazy());
-            }
-        }
+        $this->readInjectableAnnotation($class, $definition);
 
         // Browse the class properties looking for annotated properties
         $this->readProperties($class, $definition);
@@ -300,5 +280,31 @@ class AnnotationDefinitionSource implements DefinitionSource
         }
 
         return $this->phpDocReader;
+    }
+
+    private function readInjectableAnnotation(ReflectionClass $class, ClassDefinition $definition)
+    {
+        try {
+            /** @var $annotation Injectable|null */
+            $annotation = $this->getAnnotationReader()
+                ->getClassAnnotation($class, 'DI\Annotation\Injectable');
+        } catch (UnexpectedValueException $e) {
+            throw new DefinitionException(sprintf(
+                'Error while reading @Injectable on %s: %s',
+                $class->getName(),
+                $e->getMessage()
+            ), 0, $e);
+        }
+
+        if (! $annotation) {
+            return;
+        }
+
+        if ($annotation->getScope()) {
+            $definition->setScope($annotation->getScope());
+        }
+        if ($annotation->isLazy() !== null) {
+            $definition->setLazy($annotation->isLazy());
+        }
     }
 }
