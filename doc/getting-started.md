@@ -7,7 +7,7 @@ tab: get-started
 
 ## Installation
 
-PHP-DI works with **PHP 5.3** or higher. But seriously, use 5.4 or even 5.5.
+PHP-DI works with **PHP 5.3** or higher. But seriously, use 5.4, 5.5 even 5.6.
 
 The easiest way is to install PHP-DI with [Composer](http://getcomposer.org/doc/00-intro.md).
 Create a file named `composer.json` in your project root:
