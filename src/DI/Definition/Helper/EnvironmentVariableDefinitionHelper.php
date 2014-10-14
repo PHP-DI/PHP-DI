@@ -41,11 +41,11 @@ class EnvironmentVariableDefinitionHelper implements DefinitionHelper
     private $defaultValue;
 
     /**
-     * @param string $variableName The name of the environment variable
-     * @param boolean $isOptional Whether or not the environment variable definition is optional
-     * @param mixed $defaultValue The default value to use if the environment variable is optional and not provided
+     * @param string  $variableName The name of the environment variable
+     * @param boolean $isOptional   Whether or not the environment variable definition is optional
+     * @param mixed   $defaultValue The default value to use if the environment variable is optional and not provided
      */
-    public function __construct($variableName, $isOptional, $defaultValue)
+    public function __construct($variableName, $isOptional, $defaultValue = null)
     {
         $this->variableName = $variableName;
         $this->isOptional = $isOptional;
@@ -54,6 +54,7 @@ class EnvironmentVariableDefinitionHelper implements DefinitionHelper
 
     /**
      * @param string $entryName Container entry name
+     *
      * @return EnvironmentVariableDefinition
      */
     public function getDefinition($entryName)

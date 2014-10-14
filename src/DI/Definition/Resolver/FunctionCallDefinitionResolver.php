@@ -12,6 +12,7 @@ namespace DI\Definition\Resolver;
 use DI\Definition\Definition;
 use DI\Definition\Exception\DefinitionException;
 use DI\Definition\FunctionCallDefinition;
+use DI\Reflection\CallableReflectionFactory;
 use Interop\Container\ContainerInterface;
 
 /**
@@ -48,27 +49,17 @@ class FunctionCallDefinitionResolver implements DefinitionResolver
      *
      * This will call the function and return its result.
      *
+     * @param FunctionCallDefinition $definition
+     *
      * {@inheritdoc}
      */
     public function resolve(Definition $definition, array $parameters = array())
     {
-        if (! $definition instanceof FunctionCallDefinition) {
-            throw new \InvalidArgumentException(
-                sprintf(
-                    'This definition resolver is only compatible with FunctionCallDefinition objects, %s given',
-                    get_class($definition)
-                )
-            );
-        }
+        $this->assertIsFunctionCallDefinition($definition);
 
         $callable = $definition->getCallable();
 
-        if (is_array($callable)) {
-            list($object, $method) = $callable;
-            $functionReflection = new \ReflectionMethod($object, $method);
-        } else {
-            $functionReflection = new \ReflectionFunction($callable);
-        }
+        $functionReflection = CallableReflectionFactory::fromCallable($callable);
 
         try {
             $args = $this->parameterResolver->resolveParameters($definition, $functionReflection, $parameters);
@@ -76,19 +67,29 @@ class FunctionCallDefinitionResolver implements DefinitionResolver
             throw DefinitionException::create($definition, $e->getMessage());
         }
 
-        if (is_array($callable)) {
-            if ($functionReflection->isStatic()) {
-                $object = null;
-            } elseif (is_string($callable[0])) {
-                $object = $this->container->get($callable[0]);
-            } else {
-                $object = $callable[0];
-            }
-
-            return $functionReflection->invokeArgs($object, $args);
-        } else {
+        if ($functionReflection instanceof \ReflectionFunction) {
             return $functionReflection->invokeArgs($args);
         }
+
+        /** @var \ReflectionMethod $functionReflection */
+        if ($functionReflection->isStatic()) {
+            // Static method
+            $object = null;
+        } elseif (is_object($callable)) {
+            // Callable object
+            $object = $callable;
+        } elseif (is_string($callable)) {
+            // Callable class (need to be instantiated)
+            $object = $this->container->get($callable);
+        } elseif (is_string($callable[0])) {
+            // Class method
+            $object = $this->container->get($callable[0]);
+        } else {
+            // Object method
+            $object = $callable[0];
+        }
+
+        return $functionReflection->invokeArgs($object, $args);
     }
 
     /**
@@ -96,13 +97,18 @@ class FunctionCallDefinitionResolver implements DefinitionResolver
      */
     public function isResolvable(Definition $definition, array $parameters = array())
     {
-        if (! $definition instanceof FunctionCallDefinition) {
+        $this->assertIsFunctionCallDefinition($definition);
+
+        return true;
+    }
+
+    private function assertIsFunctionCallDefinition(Definition $definition)
+    {
+        if (!$definition instanceof FunctionCallDefinition) {
             throw new \InvalidArgumentException(sprintf(
                 'This definition resolver is only compatible with FunctionCallDefinition objects, %s given',
                 get_class($definition)
             ));
         }
-
-        return true;
     }
 }

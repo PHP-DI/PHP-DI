@@ -14,6 +14,7 @@ use DI\Definition\EntryReference;
 use DI\Definition\ClassDefinition\MethodInjection;
 use DI\Definition\FunctionCallDefinition;
 use DI\Definition\MergeableDefinition;
+use DI\Reflection\CallableReflectionFactory;
 
 /**
  * Reads DI class definitions using reflection.
@@ -59,15 +60,11 @@ class ReflectionDefinitionSource implements DefinitionSource, CallableDefinition
 
     /**
      * {@inheritdoc}
+     * TODO use a `callable` type-hint once support is for PHP 5.4 and up
      */
     public function getCallableDefinition($callable)
     {
-        if (is_array($callable)) {
-            list($class, $method) = $callable;
-            $reflection = new \ReflectionMethod($class, $method);
-        } else {
-            $reflection = new \ReflectionFunction($callable);
-        }
+        $reflection = CallableReflectionFactory::fromCallable($callable);
 
         return new FunctionCallDefinition($callable, $this->getParametersDefinition($reflection));
     }

@@ -66,16 +66,13 @@ class ClassDefinitionResolver implements DefinitionResolver
      *
      * This will create a new instance of the class using the injections points defined.
      *
+     * @param ClassDefinition $definition
+     *
      * {@inheritdoc}
      */
     public function resolve(Definition $definition, array $parameters = array())
     {
-        if (! $definition instanceof ClassDefinition) {
-            throw new \InvalidArgumentException(sprintf(
-                'This definition resolver is only compatible with ClassDefinition objects, %s given',
-                get_class($definition)
-            ));
-        }
+        $this->assertIsClassDefinition($definition);
 
         // Lazy?
         if ($definition->isLazy()) {
@@ -89,16 +86,13 @@ class ClassDefinitionResolver implements DefinitionResolver
      * The definition is not resolvable if the class is not instantiable (interface or abstract)
      * or if the class doesn't exist.
      *
+     * @param ClassDefinition $definition
+     *
      * {@inheritdoc}
      */
     public function isResolvable(Definition $definition, array $parameters = array())
     {
-        if (! $definition instanceof ClassDefinition) {
-            throw new \InvalidArgumentException(sprintf(
-                'This definition resolver is only compatible with ClassDefinition objects, %s given',
-                get_class($definition)
-            ));
-        }
+        $this->assertIsClassDefinition($definition);
 
         if (! class_exists($definition->getClassName())) {
             return false;
@@ -173,23 +167,11 @@ class ClassDefinitionResolver implements DefinitionResolver
      */
     public function createInstance(ClassDefinition $classDefinition, array $parameters)
     {
-        if (! class_exists($classDefinition->getClassName()) && ! interface_exists($classDefinition->getClassName())) {
-            throw DefinitionException::create($classDefinition, sprintf(
-                "Entry %s cannot be resolved: class %s doesn't exist",
-                $classDefinition->getName(),
-                $classDefinition->getClassName()
-            ));
-        }
+        $this->assertClassExists($classDefinition);
 
         $classReflection = new ReflectionClass($classDefinition->getClassName());
 
-        if (!$classReflection->isInstantiable()) {
-            throw DefinitionException::create($classDefinition, sprintf(
-                "Entry %s cannot be resolved: class %s is not instantiable",
-                $classDefinition->getName(),
-                $classDefinition->getClassName()
-            ));
-        }
+        $this->assertClassIsInstantiable($classDefinition, $classReflection);
 
         $constructorInjection = $classDefinition->getConstructorInjection();
 
@@ -284,5 +266,39 @@ class ClassDefinitionResolver implements DefinitionResolver
     public function getContainer()
     {
         return $this->container;
+    }
+
+    private function assertIsClassDefinition(Definition $definition)
+    {
+        if (!$definition instanceof ClassDefinition) {
+            throw new \InvalidArgumentException(sprintf(
+                'This definition resolver is only compatible with ClassDefinition objects, %s given',
+                get_class($definition)
+            ));
+        }
+    }
+
+    private function assertClassExists(ClassDefinition $classDefinition)
+    {
+        if (!class_exists($classDefinition->getClassName()) && !interface_exists($classDefinition->getClassName())) {
+            throw DefinitionException::create($classDefinition,
+            sprintf(
+                "Entry %s cannot be resolved: class %s doesn't exist",
+                $classDefinition->getName(),
+                $classDefinition->getClassName()
+            ));
+        }
+    }
+
+    private function assertClassIsInstantiable(ClassDefinition $classDefinition, ReflectionClass $classReflection)
+    {
+        if (!$classReflection->isInstantiable()) {
+            throw DefinitionException::create($classDefinition,
+            sprintf(
+                "Entry %s cannot be resolved: class %s is not instantiable",
+                $classDefinition->getName(),
+                $classDefinition->getClassName()
+            ));
+        }
     }
 }

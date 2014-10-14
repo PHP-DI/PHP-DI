@@ -19,6 +19,7 @@ use ProxyManager\Factory\LazyLoadingValueHolderFactory;
 
 /**
  * @covers \DI\Definition\Resolver\ClassDefinitionResolver
+ * @covers \DI\Definition\Resolver\ParameterResolver
  */
 class ClassDefinitionResolverTest extends \PHPUnit_Framework_TestCase
 {

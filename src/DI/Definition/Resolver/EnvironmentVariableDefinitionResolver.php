@@ -41,16 +41,13 @@ class EnvironmentVariableDefinitionResolver implements DefinitionResolver
     /**
      * Resolve an environment variable definition to a value.
      *
+     * @param EnvironmentVariableDefinition $definition
+     *
      * {@inheritdoc}
      */
     public function resolve(Definition $definition, array $parameters = array())
     {
-        if (! $definition instanceof EnvironmentVariableDefinition) {
-            throw new \InvalidArgumentException(sprintf(
-                'This definition resolver is only compatible with EnvironmentVariableDefinition objects, %s given',
-                get_class($definition)
-            ));
-        }
+        $this->assertIsEnvironmentVariableDefinition($definition);
 
         $value = call_user_func($this->variableReader, $definition->getVariableName());
 
@@ -73,18 +70,25 @@ class EnvironmentVariableDefinitionResolver implements DefinitionResolver
     }
 
     /**
+     * @param EnvironmentVariableDefinition $definition
+     *
      * {@inheritdoc}
      */
     public function isResolvable(Definition $definition, array $parameters = array())
     {
-        if (! $definition instanceof EnvironmentVariableDefinition) {
+        $this->assertIsEnvironmentVariableDefinition($definition);
+
+        return $definition->isOptional()
+            || false !== call_user_func($this->variableReader, $definition->getVariableName());
+    }
+
+    private function assertIsEnvironmentVariableDefinition(Definition $definition)
+    {
+        if (!$definition instanceof EnvironmentVariableDefinition) {
             throw new \InvalidArgumentException(sprintf(
                 'This definition resolver is only compatible with EnvironmentVariableDefinition objects, %s given',
                 get_class($definition)
             ));
         }
-
-        return $definition->isOptional()
-            || false !== call_user_func($this->variableReader, $definition->getVariableName());
     }
 }

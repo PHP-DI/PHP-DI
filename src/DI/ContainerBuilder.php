@@ -52,6 +52,11 @@ class ContainerBuilder
     private $useAnnotations = true;
 
     /**
+     * @var boolean
+     */
+    private $ignorePhpDocErrors = false;
+
+    /**
      * @var Cache
      */
     private $cache;
@@ -121,9 +126,9 @@ class ContainerBuilder
         }
         if ($this->useAnnotations) {
             if ($lastSource) {
-                $lastSource->chain(new AnnotationDefinitionSource());
+                $lastSource->chain(new AnnotationDefinitionSource($this->ignorePhpDocErrors));
             } else {
-                $firstSource = new AnnotationDefinitionSource();
+                $firstSource = new AnnotationDefinitionSource($this->ignorePhpDocErrors);
             }
         } elseif ($this->useAutowiring) {
             if ($lastSource) {
@@ -166,12 +171,24 @@ class ContainerBuilder
      *
      * By default, enabled.
      *
-     * @param $bool
+     * @param boolean $bool
      * @return ContainerBuilder
      */
     public function useAnnotations($bool)
     {
         $this->useAnnotations = $bool;
+        return $this;
+    }
+
+    /**
+     * Enable or disable ignoring phpdoc errors (non-existent classes in `@param` or `@var`)
+     * 
+     * @param boolean $bool
+     * @return ContainerBuilder
+     */
+    public function ignorePhpDocErrors($bool)
+    {
+        $this->ignorePhpDocErrors = $bool;
         return $this;
     }
 

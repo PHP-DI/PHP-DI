@@ -72,7 +72,7 @@ class CallFunctionTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(42, $result);
     }
 
-    public function testCallStringMethodNonStatic() 
+    public function testCallClassMethod()
     {
         $container = ContainerBuilder::buildDevContainer();
         $class = __NAMESPACE__ . '\TestClass';
@@ -80,12 +80,34 @@ class CallFunctionTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(42, $result);
     }
 
-    public function testCallStringMethodStatic() 
+    public function testCallClassStaticMethod()
     {
         $container = ContainerBuilder::buildDevContainer();
         $class = __NAMESPACE__ . '\TestClass';
         $result = $container->call(array($class, 'bar'));
         $this->assertEquals(24, $result);
+    }
+
+    public function testCallCallableObject()
+    {
+        $container = ContainerBuilder::buildDevContainer();
+        $class = __NAMESPACE__ . '\CallableTestClass';
+        $result = $container->call(new $class);
+        $this->assertEquals(42, $result);
+    }
+
+    public function testCallCallableClass()
+    {
+        $container = ContainerBuilder::buildDevContainer();
+        $result = $container->call(__NAMESPACE__ . '\CallableTestClass');
+        $this->assertEquals(42, $result);
+    }
+
+    public function testCallFunction()
+    {
+        $container = ContainerBuilder::buildDevContainer();
+        $result = $container->call('strlen', array('str' => 'foo'));
+        $this->assertEquals(3, $result);
     }
 }
 
@@ -95,9 +117,17 @@ class TestClass
     {
         return 42;
     }
-    
+
     public static function bar()
     {
         return 24;
+    }
+}
+
+class CallableTestClass
+{
+    public function __invoke()
+    {
+        return 42;
     }
 }
