@@ -65,100 +65,99 @@
 
                     
     <div class='single-post-w'>
-        <h1 class='post-title'>PHP-DI 4.0 released</h1>
+        <h1 class='post-title'>PHP-DI 4.4 released</h1>
 
         <p class='post-info'>
             <span class='info-item'>
               Posted by Matthieu Napoli
             </span>
-            <span class='info-item'>February 1st 2014</span>
+            <span class='info-item'>October 12th 2014</span>
         </p>
         <div class='post-content'>
-            <p>I am extremely happy to announce that, after 4 months of work and more than 150 commits, PHP-DI version 4.0 has been released!</p>
-<p>This is a new major release, and it delivers. As indicated by "major release", it comes with BC breaks, but this is for the better.</p>
-<p><em>PHP-DI 3.x users: BC-breaks are detailed in the <a href="../change-log.html">change log</a>, read the <a href="../doc/migration/4.0.html">migration guide from 3.x to 4.0</a>.</em></p>
-<h2>What's new?</h2>
-<h3>Completely new definition format</h3>
-<p>PHP-DI 3.x offered several definition formats, such as:</p>
+            <p>I am happy to announce that PHP-DI version 4.4 has been released.
+This version contains mainly improvements to the <code>Container::call()</code> feature, and contains no BC-break.</p>
+<h2>Container::call()</h2>
+<p><code>Container::call()</code> was introduced in <a href="10-php-di-4-2-released.html">v4.2</a> and lets you invoke a callable while letting PHP-DI resolve its parameters:</p>
+<pre><code class="language-php">$container-&gt;call(function (LoggerInterface $logger) {
+    $logger-&gt;info('Hello world!');
+});</code></pre>
+<p>In the example above, PHP-DI would resolve the <code>$logger</code> dependency using the <code>LoggerInterface</code> type-hint and then invoke the closure.</p>
+<h3>Support for all types of callables</h3>
+<p><code>Container::call()</code> works great with closures, but it wasn't completely supporting all the different kinds of <em>callables</em>.</p>
+<p>PHP-DI 4.4 brings support for every callable type:</p>
 <ul>
-<li>autowiring (use of reflection)</li>
-<li>annotations</li>
-<li>YAML</li>
-<li>PHP array</li>
-<li>various undocumented, unstable formats (XML, JSON)…</li>
+<li>closures</li>
+<li>PHP functions: <code>'someFunction'</code> would call <code>someFunction(…)</code></li>
+<li>object method: <code>[$object, 'method']</code> would call <code>$object-&gt;method(…)</code></li>
+<li>static class method: <code>['MyClass', 'method']</code> would call <code>MyClass::method(…)</code></li>
+<li><a href="http://php.net/manual/en/language.oop5.magic.php#object.invoke">invokable object</a>: <code>$object</code> would call <code>$object(…)</code></li>
 </ul>
-<p>PHP-DI 4.0 now offers:</p>
-<ul>
-<li>autowiring (unchanged)</li>
-<li>annotations (very few changes)</li>
-<li>PHP definitions</li>
-</ul>
-<p>The last one is completely new, and is the result of several months of brainstorming and trials.
-It is meant to be much more powerful and simpler to write and understand.</p>
-<p>You can read more about <a href="06-php-di-4-0-new-definitions.html">why the definition format has changed</a>.</p>
-<h3>Container methods</h3>
-<p>The container now offers new methods in addition to <code>get($id)</code>:</p>
-<ul>
-<li><code>has($id)</code> will return <code>true</code> or <code>false</code> depending on if the container can provide the entry.</li>
-</ul>
-<p>This method is also useful to make PHP-DI comply with future standards, and to improve container interoperability
-(most containers have this method).</p>
-<ul>
-<li><code>make($id, $params = [])</code> will <strong>create</strong> a new instance of the service using the given parameters.</li>
-</ul>
-<p>Missing parameters are provided by the container. This is essentially the same as <code>get()</code>, except it ignores
-the singleton scope.</p>
-<p>This method makes the container work like a factory, so a new <code>FactoryInterface</code> has been introduced so that
-you can type-hint against the interface and not couple yourself to the container.</p>
-<h3>Framework integration</h3>
-<p>PHP-DI now works with Symfony 2 and Zend Framework 1 &amp; 2!</p>
-<p>It is actually pretty easy making PHP-DI work with any other framework, feel free to start a discussion
-about your favorite framework on GitHub.</p>
-<h3>Container interoperability</h3>
-<p>PHP-DI 4 has been thought so that it could work hand in hand with <strong>other</strong> containers.
-For example, in the Symfony 2 integration, PHP-DI works perfectly along Symfony's native container.</p>
-<p>PHP-DI also participates in the <a href="https://github.com/container-interop/container-interop">Container Interop</a> initiative.
-This group aims to provide interfaces that will help making different containers and frameworks work together.
-While Container Interop has not released a stable version yet, PHP-DI is ready and will probably use it in v4.1.</p>
-<h3>Better documentation</h3>
-<p>Documentation is extremely important and a great care has been taken to:</p>
-<ul>
-<li>update the documentation following the new major release</li>
-<li>improve the existing documentation and make it more readable</li>
-</ul>
-<h3>Code quality</h3>
-<p>This new major version also comes with even more code quality.</p>
-<ul>
-<li>Better architecture</li>
-</ul>
-<p>A large part of the internals of PHP-DI has been rewritten for this new version. The core is now much more maintainable,
-testable and extensible. Adding new features should be easier, and many edge cases that couldn't supported in 3.* are now fixed.</p>
-<ul>
-<li>Code coverage</li>
-</ul>
-<p>Functional tests have been removed from the code coverage reports, so that only unit tests are taken into account.
-Furthermore, every unit test uses the <a href="http://phpunit.de/manual/3.7/en/appendixes.annotations.html#appendixes.annotations.covers"><code>@covers</code> annotation</a> from PHPUnit.</p>
-<p>This allows to have a much more realistic and useful code coverage report. To give you an idea, the code coverage
-<strong>dropped from 91% to 60%</strong>! A lot of work has been put into testing, and now the code coverage is back up to more than 85%.</p>
-<ul>
-<li>Scrutinizer-CI</li>
-</ul>
-<p>The overall Scrutinizer-CI index went from <strong>7.9</strong> to <strong>9.0</strong>! Most issues have been fixed:</p>
-<p><img alt="Scrutinizer report" src="scrutinizer-issues.png" /></p>
-<h3>Many small improvements</h3>
-<p>PHP-DI 4 comes with many small improvements too, and rather than list them all, you can see them in the <a href="../change-log.html">change log</a>.</p>
-<h2>Installing PHP-DI 4.0</h2>
-<p>Just require <code>"mnapoli/php-di"</code> and <a href="../doc/getting-started.html">get started</a>.</p>
-<p>Already using PHP-DI 3? Then edit your composer configuration:</p>
-<pre><code class="language-json">{
-    "require": {
-        "mnapoli/php-di": "~4.0"
+<p>Invokable objects are objects implementing the <code>__invoke()</code> magic method. They can be called directly:</p>
+<pre><code class="language-php">class MyClass {
+    public function __invoke() {
+        ...
     }
+}
+
+$object = new MyClass;
+$object();</code></pre>
+<p>A good example to show how good these improvements are is with the example of a micro-framework:</p>
+<pre><code class="language-php">$controller = /* get from the router */;
+
+$container-&gt;call($controller, $_GET + $_POST);</code></pre>
+<p>This lets you write your controllers as PHP callables. That means you can use functions, closures, object methods or even invokable objects as controllers.</p>
+<h3>Auto-creation of callable objects</h3>
+<p>PHP-DI 4.3 introduced the possibility for auto-creating objects in <code>Container::call()</code>:</p>
+<pre><code class="language-php">class MyClass {
+    public function method() {
+        ...
+    }
+}
+
+$container-&gt;call(['MyClass', 'method']);</code></pre>
+<p>If <code>method()</code> is not a static method, then <code>MyClass</code> will be resolved from the container (a new instance will be created automatically). This results in the equivalent code:</p>
+<pre><code class="language-php">(new MyClass)-&gt;method();</code></pre>
+<p>With PHP-DI 4.4, you can now use the same feature for invokable objects:</p>
+<pre><code class="language-php">class MyClass {
+    public function __invoke() {
+        ...
+    }
+}
+
+$container-&gt;call('MyClass');</code></pre>
+<p>The example above is equivalent to:</p>
+<pre><code class="language-php">$object = new MyClass;
+$object();</code></pre>
+<p>If we take the "micro-framework" example again, we can turn this:</p>
+<pre><code class="language-php">class HomeController {
+    public function __invoke($name) {
+        echo 'Hello ' . $name;
+    }
+}
+
+$controller = $container-&gt;make('HomeController');
+$container-&gt;call($controller, $_GET + $_POST);</code></pre>
+<p>Into this:</p>
+<pre><code class="language-php">$container-&gt;call('HomeController', $_GET + $_POST);</code></pre>
+<p>Neat!</p>
+<p>If you want to learn more, read the <a href="../doc/container.html">Using the Container</a> documentation.</p>
+<h2>Silently ignore phpDoc errors</h2>
+<p>If you use annotations, PHP-DI reads the phpDoc to guess property and parameter types.</p>
+<p>If a dockblock contains non-existent classes like this:</p>
+<pre><code class="language-php">/**
+ * @param type $param
+ */
+public function __construct($param)
+{
+    // ...
 }</code></pre>
-<p>and run <code>composer update</code>.</p>
-<p>You can also read the <a href="../doc/migration/4.0.html">migration guide from 3.x to 4.0</a>.</p>
+<p>Then PHP-DI will throw an exception.</p>
+<p>Thanks to <a href="https://github.com/kdubois">@kdubois</a>, you now have an option to silently ignore those
+errors as long as they do not prevent resolving objects:</p>
+<pre><code class="language-php">$containerBuilder-&gt;ignorePhpDocErrors(true);</code></pre>
+<p>Read more about this in the <a href="../doc/container-configuration.html">Container configuration</a> documentation.</p>
 <h2>Change log</h2>
-<p>You can also read the complete <a href="../change-log.html">change log</a>.</p>
+<p>You can read the complete <a href="../change-log.html">change log</a>.</p>
         </div>
     </div>
 

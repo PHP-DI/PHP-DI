@@ -126,7 +126,9 @@ that means you will be able to use another container (compatible with ContainerI
 later.</p>
 <h2>set()</h2>
 <p>Of course you can set entries on the container:</p>
-<pre><code class="language-php">$container-&gt;set('foo', 'bar');</code></pre>
+<pre><code class="language-php">$container-&gt;set('foo', 'bar');
+
+$container-&gt;set('MyInterface', \DI\object('MyClass'));</code></pre>
 <p>However it is recommended to use definition files.
 See the <a href="definition.html">definition documentation</a>.</p>
 <h2>make()</h2>
@@ -208,6 +210,25 @@ interface InvokerInterface
      */
     public function call($callable, array $parameters = []);
 }</code></pre>
+<p><code>Container::call()</code> can call any callable, that means:</p>
+<ul>
+<li>closures</li>
+<li>functions</li>
+<li>object methods and static methods</li>
+<li>invokable objects (objects that implement [__invoke()(<a href="http://php.net/manual/en/language.oop5.magic.php#object.invoke">http://php.net/manual/en/language.oop5.magic.php#object.invoke</a>)])</li>
+</ul>
+<p><strong>New:</strong> Since version 4.4, you can call:</p>
+<ul>
+<li>callable class names: <code>$container-&gt;call('My\CallableClass')</code></li>
+<li>callable class methods: <code>$container-&gt;call(['MyClass', 'someMethod'])</code></li>
+</ul>
+<p>In both case, <code>'My\CallableClass'</code> and <code>'MyClass'</code> will be instantiated using <code>$container-&gt;get()</code>.</p>
+<p>That saves you from a more verbose form, for example:</p>
+<pre><code class="language-php">$object = $container-&gt;get('My\CallableClass');
+$container-&gt;call($object);
+
+// can now be written as
+$container-&gt;call('My\CallableClass');</code></pre>
 <h2>injectOn()</h2>
 <p>Sometimes you want to inject dependencies on an object that is already created.</p>
 <p>For example, some old frameworks don't allow you to control how controllers are created.

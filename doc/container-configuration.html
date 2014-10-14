@@ -142,6 +142,23 @@ $container-&gt;addContainer($acclimate-&gt;adaptContainer($phpdiContainer));
 
 // Good to go!
 $foo = $container-&gt;get('foo');</code></pre>
+<h2>Ignoring phpDoc errors</h2>
+<p><em>New in v4.4</em></p>
+<p>If your phpDoc annotations are not always correct, you can set up the container to silently ignore those errors:</p>
+<pre><code class="language-php">$builder-&gt;ignorePhpDocErrors(true);</code></pre>
+<p>For example:</p>
+<pre><code class="language-php">class Foo
+{
+    /**
+     * @param NonExistentClass $param
+     */
+    public function useAutowiring($param)
+    {
+    }
+}</code></pre>
+<p>Here, PHP-DI will throw an exception because <code>NonExistentClass</code> doesn't exist: this is a phpDoc error.</p>
+<p>This phpDoc error would not be a problem if you set up that parameter using an array configuration,
+so <code>$builder-&gt;ignorePhpDocErrors(true);</code> can help you to ignore those errors.</p>
     </div>
 
 
