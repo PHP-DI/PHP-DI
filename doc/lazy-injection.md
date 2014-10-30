@@ -77,6 +77,21 @@ $proxy->doSomething();
 
 You can define an object as "lazy". If it is injected as a dependency, then a proxy will be injected instead.
 
+### Installation
+
+Lazy injection requires the [Ocramius/ProxyManager](https://github.com/Ocramius/ProxyManager) library. This library is not installed by default with PHP-DI, you need to require it in your `composer.json`:
+
+```json
+{
+    "require": {
+        "mnapoli/php-di": "*",
+        "ocramius/proxy-manager": "~0.3"
+    }
+}
+```
+
+Then run `composer update`.
+
 ### Annotations
 
 ```php

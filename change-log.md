@@ -1,5 +1,15 @@
 # Change log
 
+## 5.0
+
+Improvements:
+
+- Lighter package: requires 4 less Composer dependencies by default
+
+BC breaks:
+
+- [#198](https://github.com/mnapoli/PHP-DI/issues/198) `ocramius/proxy-manager` is not installed by default anymore, you need to require it in `composer.json` if you want to use **lazy injection**
+
 ## 4.4
 
 Read the [news entry](news/13-php-di-4-4-released.md).
