@@ -21,10 +21,18 @@
         "doctrine/cache": "1.*",
         "mnapoli/phpdocreader": "~1.3",
         "myclabs/php-enum": "1.*",
-        "ocramius/proxy-manager": "~0.3",
         "container-interop/container-interop": "~1.0"
     },
     "require-dev": {
-        "phpunit/phpunit": "~4.0"
+        "phpunit/phpunit": "~4.0",
+        "ocramius/proxy-manager": "~0.3"
+    },
+    "suggest": {
+        "ocramius/proxy-manager": "Install it if you want to use lazy injection"
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "5.0.x-dev"
+        }
     }
 }
