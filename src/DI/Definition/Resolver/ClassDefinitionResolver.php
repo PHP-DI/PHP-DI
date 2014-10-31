@@ -15,10 +15,10 @@ use DI\Definition\EntryReference;
 use DI\Definition\Exception\DefinitionException;
 use DI\Definition\ClassDefinition\PropertyInjection;
 use DI\DependencyException;
+use DI\Proxy\ProxyFactory;
 use Exception;
 use Interop\Container\ContainerInterface;
 use Interop\Container\Exception\NotFoundException;
-use ProxyManager\Factory\LazyLoadingValueHolderFactory as ProxyFactory;
 use ReflectionClass;
 use ReflectionProperty;
 

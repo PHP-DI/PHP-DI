@@ -133,7 +133,7 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
     public function testGetDefinitionManager()
     {
         $definitionManager = new DefinitionManager();
-        $proxyFactory = $this->getMock('ProxyManager\Factory\LazyLoadingValueHolderFactory');
+        $proxyFactory = $this->getMock('DI\Proxy\ProxyFactory', array(), array(), '', false);
         $container = new Container($definitionManager, $proxyFactory);
 
         $this->assertSame($definitionManager, $container->getDefinitionManager());

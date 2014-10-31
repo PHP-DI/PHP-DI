@@ -15,7 +15,7 @@ use DI\Definition\ClassDefinition\MethodInjection;
 use DI\Definition\ClassDefinition\PropertyInjection;
 use DI\Definition\EntryReference;
 use DI\Definition\Resolver\ClassDefinitionResolver;
-use ProxyManager\Factory\LazyLoadingValueHolderFactory;
+use DI\Proxy\ProxyFactory;
 
 /**
  * @covers \DI\Definition\Resolver\ClassDefinitionResolver
@@ -102,8 +102,8 @@ class ClassDefinitionResolverTest extends \PHPUnit_Framework_TestCase
             ->method('get')
             ->with('foo')
             ->will($this->returnValue('bar'));
-        /** @var LazyLoadingValueHolderFactory $factory */
-        $factory = $this->getMock('ProxyManager\Factory\LazyLoadingValueHolderFactory', array(), array(), '', false);
+        /** @var ProxyFactory $factory */
+        $factory = $this->getMock('DI\Proxy\ProxyFactory', array(), array(), '', false);
 
         $resolver = new ClassDefinitionResolver($container, $factory);
 
@@ -162,8 +162,8 @@ class ClassDefinitionResolverTest extends \PHPUnit_Framework_TestCase
     {
         /** @var \DI\Container $container */
         $container = $this->getMock('DI\Container', array(), array(), '', false);
-        /** @var LazyLoadingValueHolderFactory $factory */
-        $factory = $this->getMock('ProxyManager\Factory\LazyLoadingValueHolderFactory', array(), array(), '', false);
+        /** @var ProxyFactory $factory */
+        $factory = $this->getMock('DI\Proxy\ProxyFactory', array(), array(), '', false);
 
         $resolver = new ClassDefinitionResolver($container, $factory);
 
@@ -235,8 +235,8 @@ MESSAGE;
     {
         /** @var \DI\Container $container */
         $container = $this->getMock('DI\Container', array(), array(), '', false);
-        /** @var LazyLoadingValueHolderFactory $factory */
-        $factory = $this->getMock('ProxyManager\Factory\LazyLoadingValueHolderFactory', array(), array(), '', false);
+        /** @var ProxyFactory $factory */
+        $factory = $this->getMock('DI\Proxy\ProxyFactory', array(), array(), '', false);
 
         $definition = new FactoryDefinition('foo', function () {
         });
@@ -263,8 +263,8 @@ MESSAGE;
     {
         /** @var \DI\Container $container */
         $container = $this->getMock('DI\Container', array(), array(), '', false);
-        /** @var LazyLoadingValueHolderFactory $factory */
-        $factory = $this->getMock('ProxyManager\Factory\LazyLoadingValueHolderFactory', array(), array(), '', false);
+        /** @var ProxyFactory $factory */
+        $factory = $this->getMock('DI\Proxy\ProxyFactory', array(), array(), '', false);
 
         return new ClassDefinitionResolver($container, $factory);
     }

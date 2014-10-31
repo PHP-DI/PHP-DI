@@ -21,10 +21,10 @@ use DI\Definition\Resolver\ClassDefinitionResolver;
 use DI\Definition\Resolver\DefinitionResolver;
 use DI\Definition\Resolver\ValueDefinitionResolver;
 use DI\Definition\Resolver\EnvironmentVariableDefinitionResolver;
+use DI\Proxy\ProxyFactory;
 use Exception;
 use Interop\Container\ContainerInterface as ContainerInteropInterface;
 use InvalidArgumentException;
-use ProxyManager\Factory\LazyLoadingValueHolderFactory;
 
 /**
  * Dependency Injection Container.
@@ -62,13 +62,13 @@ class Container implements ContainerInteropInterface, ContainerInterface, Factor
      *
      * @see ContainerBuilder
      *
-     * @param DefinitionManager             $definitionManager
-     * @param LazyLoadingValueHolderFactory $proxyFactory
-     * @param ContainerInteropInterface     $wrapperContainer If the container is wrapped by another container.
+     * @param DefinitionManager         $definitionManager
+     * @param ProxyFactory              $proxyFactory
+     * @param ContainerInteropInterface $wrapperContainer If the container is wrapped by another container.
      */
     public function __construct(
         DefinitionManager $definitionManager,
-        LazyLoadingValueHolderFactory $proxyFactory,
+        ProxyFactory $proxyFactory,
         ContainerInteropInterface $wrapperContainer = null
     ) {
         $this->definitionManager = $definitionManager;

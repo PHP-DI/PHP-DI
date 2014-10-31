@@ -13,12 +13,10 @@ use DI\Definition\DefinitionManager;
 use DI\Definition\Source\AnnotationDefinitionSource;
 use DI\Definition\Source\PHPFileDefinitionSource;
 use DI\Definition\Source\ReflectionDefinitionSource;
+use DI\Proxy\ProxyFactory;
 use Doctrine\Common\Cache\Cache;
 use Interop\Container\ContainerInterface as ContainerInteropInterface;
 use InvalidArgumentException;
-use ProxyManager\Configuration;
-use ProxyManager\Factory\LazyLoadingValueHolderFactory;
-use ProxyManager\GeneratorStrategy\EvaluatingGeneratorStrategy;
 
 /**
  * Helper to create and configure a Container.
@@ -144,8 +142,7 @@ class ContainerBuilder
             $definitionManager->setCache($this->cache);
         }
 
-        // Proxy factory
-        $proxyFactory = $this->buildProxyFactory();
+        $proxyFactory = new ProxyFactory($this->writeProxiesToFile, $this->proxyDirectory);
 
         $containerClass = $this->containerClass;
 
@@ -252,24 +249,5 @@ class ContainerBuilder
     public function addDefinitions($file)
     {
         $this->files[] = $file;
-    }
-
-    /**
-     * @return LazyLoadingValueHolderFactory
-     */
-    private function buildProxyFactory()
-    {
-        $config = new Configuration();
-        // TODO useless since ProxyManager 0.5, line kept for compatibility with previous versions
-        $config->setAutoGenerateProxies(true);
-
-        if ($this->writeProxiesToFile) {
-            $config->setProxiesTargetDir($this->proxyDirectory);
-            spl_autoload_register($config->getProxyAutoloader());
-        } else {
-            $config->setGeneratorStrategy(new EvaluatingGeneratorStrategy());
-        }
-
-        return new LazyLoadingValueHolderFactory($config);
     }
 }
