@@ -114,14 +114,14 @@ class ClassDefinitionDumper implements DefinitionDumper
         return $str;
     }
 
-    private function dumpMethodParameters($className, MethodInjection $methodInjection = null)
+    private function dumpMethodParameters($className, MethodInjection $methodInjection)
     {
         $methodReflection = new \ReflectionMethod($className, $methodInjection->getMethodName());
 
         $args = array();
 
         foreach ($methodReflection->getParameters() as $index => $parameter) {
-            if ($methodInjection && $methodInjection->hasParameter($index)) {
+            if ($methodInjection->hasParameter($index)) {
                 $value = $methodInjection->getParameter($index);
 
                 if ($value instanceof EntryReference) {
