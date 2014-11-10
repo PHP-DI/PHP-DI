@@ -22,9 +22,11 @@ use DI\Definition\Helper\EnvironmentVariableDefinitionHelper;
  *
  * @return ClassDefinitionHelper
  */
-function object($className = null)
-{
-    return new ClassDefinitionHelper($className);
+if (! function_exists('DI\object')) {
+    function object($className = null)
+    {
+        return new ClassDefinitionHelper($className);
+    }
 }
 
 /**
@@ -35,9 +37,11 @@ function object($className = null)
  *
  * @return FactoryDefinitionHelper
  */
-function factory($factory)
-{
-    return new FactoryDefinitionHelper($factory);
+if (! function_exists('DI\factory')) {
+    function factory($factory)
+    {
+        return new FactoryDefinitionHelper($factory);
+    }
 }
 
 /**
@@ -47,9 +51,11 @@ function factory($factory)
  *
  * @return EntryReference
  */
-function link($entryName)
-{
-    return new EntryReference($entryName);
+if (! function_exists('DI\link')) {
+    function link($entryName)
+    {
+        return new EntryReference($entryName);
+    }
 }
 
 /**
@@ -60,10 +66,12 @@ function link($entryName)
  *
  * @return EnvironmentVariableDefinitionHelper
  */
-function env($variableName, $defaultValue = null)
-{
-    // Only mark as optional if the default value was *explicitly* provided.
-    $isOptional = 2 === func_num_args();
+if (! function_exists('DI\env')) {
+    function env($variableName, $defaultValue = null)
+    {
+        // Only mark as optional if the default value was *explicitly* provided.
+        $isOptional = 2 === func_num_args();
 
-    return new EnvironmentVariableDefinitionHelper($variableName, $isOptional, $defaultValue);
+        return new EnvironmentVariableDefinitionHelper($variableName, $isOptional, $defaultValue);
+    }
 }
