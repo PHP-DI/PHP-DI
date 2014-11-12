@@ -11,6 +11,7 @@ namespace DI;
 
 use DI\Definition\DefinitionManager;
 use DI\Definition\Source\AnnotationDefinitionSource;
+use DI\Definition\Source\ChainableDefinitionSource;
 use DI\Definition\Source\PHPFileDefinitionSource;
 use DI\Definition\Source\ReflectionDefinitionSource;
 use Doctrine\Common\Cache\Cache;
@@ -80,10 +81,9 @@ class ContainerBuilder
     private $wrapperContainer;
 
     /**
-     * Files of definitions for the container.
-     * @var string[]
+     * @var ChainableDefinitionSource[]
      */
-    private $files = array();
+    private $definitionSources = array();
 
     /**
      * Build a container configured for the dev environment.
@@ -114,8 +114,8 @@ class ContainerBuilder
         // Definition sources
         $firstSource = null;
         $lastSource = null;
-        foreach (array_reverse($this->files) as $file) {
-            $source = new PHPFileDefinitionSource($file);
+        foreach (array_reverse($this->definitionSources) as $source) {
+            /** @var $source ChainableDefinitionSource */
             // Chain file sources
             if ($lastSource instanceof PHPFileDefinitionSource) {
                 $lastSource->chain($source);
@@ -245,13 +245,27 @@ class ContainerBuilder
     }
 
     /**
-     * Add a file containing definitions to the container.
+     * Add definitions to the container.
      *
-     * @param string $file
+     * @param string|ChainableDefinitionSource $definitions A file name (the file contains definitions)
+     *                                                      or a ChainableDefinitionSource object.
      */
-    public function addDefinitions($file)
+    public function addDefinitions($definitions)
     {
-        $this->files[] = $file;
+        // File
+        if (is_string($definitions)) {
+            $definitions = new PHPFileDefinitionSource($definitions);
+        }
+
+        if (! $definitions instanceof ChainableDefinitionSource) {
+            throw new InvalidArgumentException(sprintf(
+                '%s parameter must be a string or implement ChainableDefinitionSource, %s given',
+                'ContainerBuilder::addDefinitions()',
+                is_object($definitions) ? get_class($definitions) : gettype($definitions)
+            ));
+        }
+
+        $this->definitionSources[] = $definitions;
     }
 
     /**
