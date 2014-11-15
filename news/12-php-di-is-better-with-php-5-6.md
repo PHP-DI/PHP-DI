@@ -1,5 +1,5 @@
 ---
-template: blogpost
+layout: blogpost
 title: PHP 5.6 is out and PHP-DI just got better
 author: Matthieu Napoli
 date: September 27th 2014

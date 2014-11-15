@@ -1,5 +1,5 @@
 ---
-template: documentation
+layout: documentation
 ---
 
 # How PHP-DI works

@@ -1,5 +1,5 @@
 ---
-template: documentation
+layout: documentation
 ---
 
 # Injections depending on the environment

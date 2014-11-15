@@ -1,5 +1,5 @@
 ---
-template: home
+layout: home
 ---
 
 PHP-DI is a Dependency Injection Container made for humans.
