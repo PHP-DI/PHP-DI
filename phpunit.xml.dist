@@ -11,12 +11,14 @@
          processIsolation="false"
          stopOnFailure="false"
          syntaxCheck="false"
-         bootstrap="./tests/bootstrap.php">
+         bootstrap="./vendor/autoload.php">
 
     <testsuites>
-        <testsuite name="PHP-DI unit tests">
-            <directory>./tests/UnitTests/DI/</directory>
-            <directory>./tests/IntegrationTests/DI/</directory>
+        <testsuite name="unit">
+            <directory>./tests/UnitTest/</directory>
+        </testsuite>
+        <testsuite name="integration">
+            <directory>./tests/IntegrationTest/</directory>
         </testsuite>
     </testsuites>
 
