@@ -13,12 +13,12 @@ matrix:
     - php: hhvm
 
 before_script:
-  - if [[ TRAVIS_PHP_VERSION == '5.6' ]]; then composer require satooshi/php-coveralls:dev-master -n ; fi
-  - if [[ TRAVIS_PHP_VERSION != '5.6' ]]; then composer install -n ; fi
+  - if [[ $(phpenv version-name) == '5.6' ]]; then composer require satooshi/php-coveralls:dev-master -n ; fi
+  - if [[ $(phpenv version-name) != '5.6' ]]; then composer install -n ; fi
 
 script:
-  - if [[ TRAVIS_PHP_VERSION == '5.6' ]]; then phpunit --coverage-clover clover.xml ; fi
-  - if [[ TRAVIS_PHP_VERSION != '5.6' ]]; then phpunit ; fi
+  - if [[ $(phpenv version-name) == '5.6' ]]; then phpunit --coverage-clover clover.xml ; fi
+  - if [[ $(phpenv version-name) != '5.6' ]]; then phpunit ; fi
 
 after_script:
-  - if [[ TRAVIS_PHP_VERSION == '5.6' ]]; then php vendor/bin/coveralls -v ; fi
+  - if [[ $(phpenv version-name) == '5.6' ]]; then php vendor/bin/coveralls -v ; fi
