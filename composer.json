@@ -6,14 +6,18 @@
     "homepage": "http://mnapoli.github.com/PHP-DI/",
     "license": "MIT",
     "autoload": {
-        "psr-0": {
-            "DI\\": "src/",
-            "IntegrationTests\\": "tests/",
-            "UnitTests\\": "tests/"
+        "psr-4": {
+            "DI\\": "src/DI/"
         },
         "files": [
             "src/DI/functions.php"
         ]
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "DI\\Test\\IntegrationTest\\": "tests/IntegrationTest/",
+            "DI\\Test\\UnitTest\\": "tests/UnitTest/"
+        }
     },
     "require": {
         "php": ">=5.3.3",
