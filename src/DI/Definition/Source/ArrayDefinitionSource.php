@@ -9,6 +9,7 @@
 
 namespace DI\Definition\Source;
 
+use DI\Definition\ArrayDefinition;
 use DI\Definition\ClassDefinition;
 use DI\Definition\Definition;
 use DI\Definition\MergeableDefinition;
@@ -146,6 +147,9 @@ class ArrayDefinitionSource implements ChainableDefinitionSource
     {
         if ($definition instanceof DefinitionHelper) {
             $definition = $definition->getDefinition($name);
+        }
+        if (! $definition instanceof Definition && is_array($definition)) {
+            $definition = new ArrayDefinition($name, $definition);
         }
         if (! $definition instanceof Definition) {
             $definition = new ValueDefinition($name, $definition);

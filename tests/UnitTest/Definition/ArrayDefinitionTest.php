@@ -9,31 +9,31 @@
 
 namespace DI\Test\UnitTest\Definition;
 
-use DI\Definition\ValueDefinition;
+use DI\Definition\ArrayDefinition;
 use DI\Scope;
 
 /**
- * @covers \DI\Definition\ValueDefinition
+ * @covers \DI\Definition\ArrayDefinition
  */
-class ValueDefinitionTest extends \PHPUnit_Framework_TestCase
+class ArrayDefinitionTest extends \PHPUnit_Framework_TestCase
 {
     public function testGetters()
     {
-        $definition = new ValueDefinition('foo', 1);
+        $definition = new ArrayDefinition('foo', array('bar'));
 
         $this->assertEquals('foo', $definition->getName());
-        $this->assertEquals(1, $definition->getValue());
+        $this->assertEquals(array('bar'), $definition->getValues());
     }
 
     public function testScope()
     {
-        $definition = new ValueDefinition('foo', 1);
+        $definition = new ArrayDefinition('foo', array());
 
         $this->assertEquals(Scope::SINGLETON(), $definition->getScope());
     }
 
     public function testCacheable()
     {
-        $this->assertNotInstanceOf('DI\Definition\CacheableDefinition', new ValueDefinition('foo', 'bar'));
+        $this->assertNotInstanceOf('DI\Definition\CacheableDefinition', new ArrayDefinition('foo', array()));
     }
 }

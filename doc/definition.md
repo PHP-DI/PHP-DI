@@ -230,6 +230,12 @@ return [
     // With a default value that is another entry
     'db2.host' => DI\env('DATABASE_HOST', DI\link('db.host')),
 
+    // Arrays can contain links to other entries
+    'log.handlers' => [
+        DI\link('Monolog\Handler\StreamHandler'),
+        DI\link('Monolog\Handler\EmailHandler'),
+    ],
+
 ];
 ```
 

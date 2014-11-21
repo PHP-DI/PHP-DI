@@ -9,6 +9,7 @@
 
 namespace DI\Test\UnitTest\Definition\Source;
 
+use DI\Definition\ArrayDefinition;
 use DI\Definition\FactoryDefinition;
 use DI\Definition\ClassDefinition;
 use DI\Definition\ClassDefinition\PropertyInjection;
@@ -34,6 +35,8 @@ class ArrayDefinitionSourceTest extends \PHPUnit_Framework_TestCase
         $source->addDefinitions(array(
             'foo' => 'bar',
         ));
+
+        /** @var ValueDefinition $definition */
         $definition = $source->getDefinition('foo');
         $this->assertInstanceOf('DI\Definition\ValueDefinition', $definition);
         $this->assertEquals('foo', $definition->getName());
@@ -47,41 +50,57 @@ class ArrayDefinitionSourceTest extends \PHPUnit_Framework_TestCase
             'integer' => 1,
             'string'  => 'test',
             'float'   => 1.0,
-            'array'   => array('a', 'b', 'c'),
-            'assoc'   => array('a' => 'b'),
             'closure' => function () {
             },
         );
         $source->addDefinitions($definitions);
 
+        /** @var ValueDefinition $definition */
         $definition = $source->getDefinition('integer');
-        $this->assertNotNull($definition);
+        $this->assertTrue($definition instanceof ValueDefinition);
         $this->assertEquals(1, $definition->getValue());
         $this->assertInternalType('integer', $definition->getValue());
 
         $definition = $source->getDefinition('string');
-        $this->assertNotNull($definition);
+        $this->assertTrue($definition instanceof ValueDefinition);
         $this->assertEquals('test', $definition->getValue());
         $this->assertInternalType('string', $definition->getValue());
 
         $definition = $source->getDefinition('float');
-        $this->assertNotNull($definition);
+        $this->assertTrue($definition instanceof ValueDefinition);
         $this->assertEquals(1.0, $definition->getValue());
         $this->assertInternalType('float', $definition->getValue());
 
+        $definition = $source->getDefinition('closure');
+        $this->assertTrue($definition instanceof ValueDefinition);
+        $this->assertInstanceOf('Closure', $definition->getValue());
+    }
+
+    public function testArrayDefinitions()
+    {
+        $source = new ArrayDefinitionSource();
+        $definitions = array(
+            'array'   => array('a', 'b', 'c'),
+            'assoc'   => array('a' => 'b'),
+            'links'   => array('a' => \DI\link('b')),
+        );
+        $source->addDefinitions($definitions);
+
+        /** @var ArrayDefinition $definition */
         $definition = $source->getDefinition('array');
-        $this->assertNotNull($definition);
-        $this->assertEquals(array('a', 'b', 'c'), $definition->getValue());
-        $this->assertInternalType('array', $definition->getValue());
+        $this->assertTrue($definition instanceof ArrayDefinition);
+        $this->assertEquals(array('a', 'b', 'c'), $definition->getValues());
+        $this->assertInternalType('array', $definition->getValues());
 
         $definition = $source->getDefinition('assoc');
-        $this->assertNotNull($definition);
-        $this->assertEquals(array('a' => 'b'), $definition->getValue());
-        $this->assertInternalType('array', $definition->getValue());
+        $this->assertTrue($definition instanceof ArrayDefinition);
+        $this->assertEquals(array('a' => 'b'), $definition->getValues());
+        $this->assertInternalType('array', $definition->getValues());
 
-        $definition = $source->getDefinition('closure');
-        $this->assertNotNull($definition);
-        $this->assertInstanceOf('Closure', $definition->getValue());
+        $definition = $source->getDefinition('links');
+        $this->assertTrue($definition instanceof ArrayDefinition);
+        $this->assertEquals(array('a' => \DI\link('b')), $definition->getValues());
+        $this->assertInternalType('array', $definition->getValues());
     }
 
     public function testClassDefinition()

@@ -5,6 +5,7 @@
 Improvements:
 
 - Lighter package: requires 4 less Composer dependencies by default
+- [#207](https://github.com/mnapoli/PHP-DI/issues/207): Support for `DI\link()` in arrays
 
 BC breaks:
 
