@@ -133,7 +133,7 @@ class FunctionCallDefinitionResolverTest extends \PHPUnit_Framework_TestCase
     {
         $resolver = $this->assert_definition_resolver($this->assert_container());
 
-        $definition = $this->definition('strlen');
+        $definition = $this->definition(__NAMESPACE__ . '\FunctionCallDefinitionResolverTest_function');
 
         $this->assertEquals(3, $resolver->resolve($definition, array('str' => 'foo')));
     }
@@ -196,4 +196,8 @@ class CallableTestClass
     {
         return 42;
     }
+}
+
+function FunctionCallDefinitionResolverTest_function($str) {
+    return strlen($str);
 }
