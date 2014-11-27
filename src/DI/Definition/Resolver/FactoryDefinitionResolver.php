@@ -60,7 +60,7 @@ class FactoryDefinitionResolver implements DefinitionResolver
             ));
         }
 
-        return $callable($this->container);
+        return call_user_func($callable, $this->container);
     }
 
     /**
