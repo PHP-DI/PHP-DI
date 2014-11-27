@@ -9,6 +9,7 @@
 
 namespace DI\Definition\Resolver;
 
+use DI\Definition\Exception\DefinitionException;
 use DI\Definition\FactoryDefinition;
 use DI\Definition\Definition;
 use Interop\Container\ContainerInterface;
@@ -51,6 +52,13 @@ class FactoryDefinitionResolver implements DefinitionResolver
         $this->assertIsFactoryDefinition($definition);
 
         $callable = $definition->getCallable();
+
+        if (! is_callable($callable)) {
+            throw new DefinitionException(sprintf(
+                'The factory definition "%s" is not callable',
+                $definition->getName()
+            ));
+        }
 
         return $callable($this->container);
     }
