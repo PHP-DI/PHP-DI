@@ -27,19 +27,45 @@ class FactoryDefinitionResolverTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($container, $resolver->getContainer());
     }
 
-    public function testResolve()
+    public function provideCallables()
+    {
+        return array(
+            'closure'        => array(function () { return 'bar'; }),
+            'string'         => array(__NAMESPACE__ . '\FactoryDefinitionResolver_test'),
+            'array'          => array(array(new FactoryDefinitionResolverTestClass(), 'foo')),
+            'invokableClass' => array(new FactoryDefinitionResolverCallableClass()),
+        );
+    }
+
+    /**
+     * @dataProvider provideCallables
+     */
+    public function testResolve($callable)
     {
         /** @var \DI\Container $container */
         $container = $this->getMock('DI\Container', array(), array(), '', false);
 
-        $definition = new FactoryDefinition('foo', function () {
-            return 'bar';
-        });
+        $definition = new FactoryDefinition('foo', $callable);
         $resolver = new FactoryDefinitionResolver($container);
 
         $value = $resolver->resolve($definition);
 
         $this->assertEquals('bar', $value);
+    }
+
+    /**
+     * @expectedException \DI\Definition\Exception\DefinitionException
+     * @expectedExceptionMessage The factory definition "foo" is not callable
+     */
+    public function testNotCallable()
+    {
+        /** @var \DI\Container $container */
+        $container = $this->getMock('DI\Container', array(), array(), '', false);
+
+        $definition = new FactoryDefinition('foo', 'Hello world');
+        $resolver = new FactoryDefinitionResolver($container);
+
+        $resolver->resolve($definition);
     }
 
     /**
@@ -56,4 +82,25 @@ class FactoryDefinitionResolverTest extends \PHPUnit_Framework_TestCase
 
         $resolver->resolve($definition);
     }
+}
+
+class FactoryDefinitionResolverTestClass
+{
+    public function foo()
+    {
+        return 'bar';
+    }
+}
+
+class FactoryDefinitionResolverCallableClass
+{
+    public function __invoke()
+    {
+        return 'bar';
+    }
+}
+
+function FactoryDefinitionResolver_test()
+{
+    return 'bar';
 }

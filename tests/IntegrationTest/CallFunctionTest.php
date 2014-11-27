@@ -106,7 +106,7 @@ class CallFunctionTest extends \PHPUnit_Framework_TestCase
     public function testCallFunction()
     {
         $container = ContainerBuilder::buildDevContainer();
-        $result = $container->call('strlen', array('str' => 'foo'));
+        $result = $container->call(__NAMESPACE__ . '\CallFunctionTest_function', array('str' => 'foo'));
         $this->assertEquals(3, $result);
     }
 }
@@ -130,4 +130,8 @@ class CallableTestClass
     {
         return 42;
     }
+}
+
+function CallFunctionTest_function($str) {
+    return strlen($str);
 }
