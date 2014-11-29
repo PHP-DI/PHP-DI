@@ -249,6 +249,7 @@ class ContainerBuilder
      *
      * @param string|ChainableDefinitionSource $definitions A file name (the file contains definitions)
      *                                                      or a ChainableDefinitionSource object.
+     * @return $this
      */
     public function addDefinitions($definitions)
     {
@@ -266,6 +267,8 @@ class ContainerBuilder
         }
 
         $this->definitionSources[] = $definitions;
+
+        return $this;
     }
 
     /**
