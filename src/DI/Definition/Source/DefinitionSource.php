@@ -23,12 +23,10 @@ interface DefinitionSource
     /**
      * Returns the DI definition for the entry name.
      *
-     * @param string                   $name
-     * @param MergeableDefinition|null $parentDefinition Given if a definition already exists
-     *                                                   and we are supposed to enrich it.
+     * @param string $name
      *
      * @throws DefinitionException An invalid definition was found.
      * @return Definition|null
      */
-    public function getDefinition($name, MergeableDefinition $parentDefinition = null);
+    public function getDefinition($name);
 }

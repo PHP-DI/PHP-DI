@@ -258,4 +258,12 @@ class ClassDefinition implements MergeableDefinition, CacheableDefinition
 
         return $newDefinition;
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getExtendedDefinitionName()
+    {
+        return $this->getClassName();
+    }
 }

@@ -17,7 +17,6 @@ use DI\Definition\Exception\AnnotationException;
 use DI\Definition\Exception\DefinitionException;
 use DI\Definition\ClassDefinition\MethodInjection;
 use DI\Definition\ClassDefinition\PropertyInjection;
-use DI\Definition\MergeableDefinition;
 use Doctrine\Common\Annotations\AnnotationRegistry;
 use Doctrine\Common\Annotations\Reader;
 use Doctrine\Common\Annotations\SimpleAnnotationReader;
@@ -67,20 +66,13 @@ class AnnotationDefinitionSource implements DefinitionSource
      * @throws AnnotationException
      * @throws InvalidArgumentException The class doesn't exist
      */
-    public function getDefinition($name, MergeableDefinition $parentDefinition = null)
+    public function getDefinition($name)
     {
-        // Only merges with class definition
-        if ($parentDefinition && (! $parentDefinition instanceof ClassDefinition)) {
+        if (!class_exists($name) && !interface_exists($name)) {
             return null;
         }
 
-        $className = $parentDefinition ? $parentDefinition->getClassName() : $name;
-
-        if (!class_exists($className) && !interface_exists($className)) {
-            return $parentDefinition;
-        }
-
-        $class = new ReflectionClass($className);
+        $class = new ReflectionClass($name);
         $definition = new ClassDefinition($name);
 
         $this->readInjectableAnnotation($class, $definition);
@@ -90,11 +82,6 @@ class AnnotationDefinitionSource implements DefinitionSource
 
         // Browse the object's methods looking for annotated methods
         $this->readMethods($class, $definition);
-
-        // Merge with parent
-        if ($parentDefinition) {
-            $definition = $parentDefinition->merge($definition);
-        }
 
         return $definition;
     }

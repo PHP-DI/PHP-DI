@@ -94,4 +94,12 @@ abstract class AbstractFunctionCallDefinition implements Definition, MergeableDe
     {
         return Scope::PROTOTYPE();
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getExtendedDefinitionName()
+    {
+        return null;
+    }
 }

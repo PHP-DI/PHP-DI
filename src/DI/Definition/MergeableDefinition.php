@@ -26,4 +26,9 @@ interface MergeableDefinition extends Definition
      * @return MergeableDefinition Merged definition
      */
     public function merge(MergeableDefinition $definition);
+
+    /**
+     * @return string
+     */
+    public function getExtendedDefinitionName();
 }

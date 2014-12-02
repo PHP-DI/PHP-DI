@@ -10,7 +10,6 @@
 namespace DI\Definition\Source;
 
 use DI\Definition\Exception\DefinitionException;
-use DI\Definition\MergeableDefinition;
 
 /**
  * Reads DI definitions from a file returning a PHP array.
@@ -42,11 +41,11 @@ class PHPFileDefinitionSource extends ArrayDefinitionSource
     /**
      * {@inheritdoc}
      */
-    public function getDefinition($name, MergeableDefinition $parentDefinition = null)
+    public function getDefinition($name)
     {
         $this->initialize();
 
-        return parent::getDefinition($name, $parentDefinition);
+        return parent::getDefinition($name);
     }
 
     /**
