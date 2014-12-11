@@ -1,5 +1,5 @@
 ---
-template: documentation
+layout: documentation
 tab: get-started
 ---
 

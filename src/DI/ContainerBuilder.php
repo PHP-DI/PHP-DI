@@ -115,7 +115,7 @@ class ContainerBuilder
         foreach (array_reverse($this->definitionSources) as $source) {
             /** @var $source ChainableDefinitionSource */
             // Chain file sources
-            if ($lastSource instanceof PHPFileDefinitionSource) {
+            if ($lastSource instanceof ChainableDefinitionSource) {
                 $lastSource->chain($source);
             } else {
                 $firstSource = $source;
@@ -246,6 +246,7 @@ class ContainerBuilder
      *
      * @param string|ChainableDefinitionSource $definitions A file name (the file contains definitions)
      *                                                      or a ChainableDefinitionSource object.
+     * @return $this
      */
     public function addDefinitions($definitions)
     {
@@ -263,5 +264,7 @@ class ContainerBuilder
         }
 
         $this->definitionSources[] = $definitions;
+
+        return $this;
     }
 }

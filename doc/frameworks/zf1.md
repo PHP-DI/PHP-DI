@@ -1,5 +1,5 @@
 ---
-template: documentation
+layout: documentation
 ---
 
 # PHP-DI in Zend Framework 1

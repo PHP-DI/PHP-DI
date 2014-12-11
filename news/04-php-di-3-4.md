@@ -1,5 +1,5 @@
 ---
-template: blogpost
+layout: blogpost
 title: PHP-DI 3.4 released
 author: Matthieu Napoli
 date: September 24th 2013

@@ -35,6 +35,14 @@ class ArrayDefinitionSource extends ChainableDefinitionSource implements Definit
     private $definitions = array();
 
     /**
+     * @param array $definitions
+     */
+    public function __construct(array $definitions = array())
+    {
+        $this->definitions = $definitions;
+    }
+
+    /**
      * @param array $definitions DI definitions in a PHP array indexed by the definition name.
      */
     public function addDefinitions(array $definitions)

@@ -1,5 +1,5 @@
 ---
-template: blogpost
+layout: blogpost
 title: PHP-DI 3.1 released
 author: Matthieu Napoli
 date: June 23rd 2013

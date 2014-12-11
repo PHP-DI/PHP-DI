@@ -1,5 +1,5 @@
 ---
-template: documentation
+layout: documentation
 title: Documentation index
 subtitle: Learn how to use PHP-DI.
 tab: index

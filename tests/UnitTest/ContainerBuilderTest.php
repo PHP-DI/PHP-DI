@@ -10,6 +10,8 @@
 namespace DI\Test\UnitTest;
 
 use DI\ContainerBuilder;
+use DI\Definition\Source\ArrayDefinitionSource;
+use DI\Definition\ValueDefinition;
 use DI\Test\UnitTest\Fixtures\FakeContainer;
 
 /**
@@ -68,6 +70,27 @@ class ContainerBuilderTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($otherContainer, $container->wrapperContainer);
     }
 
+    public function testAddCustomDefinitionSource()
+    {
+        $builder = new ContainerBuilder('DI\Test\UnitTest\Fixtures\FakeContainer');
+
+        // Custom definition sources should be chained correctly
+        $builder->addDefinitions(new ArrayDefinitionSource(array('foo' => 'bar')));
+        $builder->addDefinitions(new ArrayDefinitionSource(array('foofoo' => 'barbar')));
+
+        /** @var FakeContainer $container */
+        $container = $builder->build();
+
+        // We should be able to get entries from our custom definition sources
+        /** @var ValueDefinition $definition */
+        $definition = $container->definitionManager->getDefinition('foo');
+        $this->assertInstanceOf('DI\Definition\ValueDefinition', $definition);
+        $this->assertSame('bar', $definition->getValue());
+        $definition = $container->definitionManager->getDefinition('foofoo');
+        $this->assertInstanceOf('DI\Definition\ValueDefinition', $definition);
+        $this->assertSame('barbar', $definition->getValue());
+    }
+    
     public function testFluentInterface()
     {
         $builder = new ContainerBuilder();

@@ -1,5 +1,5 @@
 ---
-template: blogpost
+layout: blogpost
 title: PHP-DI 3.2 released
 author: Matthieu Napoli
 date: July 23rd 2013
