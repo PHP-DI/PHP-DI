@@ -10,6 +10,8 @@
 namespace DI\Test\UnitTest;
 
 use DI\ContainerBuilder;
+use DI\Definition\Source\ArrayDefinitionSource;
+use DI\Definition\ValueDefinition;
 use DI\Test\UnitTest\Fixtures\FakeContainer;
 
 /**
@@ -68,26 +70,25 @@ class ContainerBuilderTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($otherContainer, $container->wrapperContainer);
     }
 
-    public function testAddArrayDefinitions()
+    public function testAddCustomDefinitionSource()
     {
-        $definition = new ArrayDefinitionSourceFixture;
-        $definition->addDefinitions(array('foo' => 'bar'));
-
-        $definition2Name = 'foofoo';
-        $definition2Value = 'barbar';
-        $definition2 = new ArrayDefinitionSourceFixture;
-        $definition2->addDefinitions(array($definition2Name => $definition2Value));
-
         $builder = new ContainerBuilder('DI\Test\UnitTest\Fixtures\FakeContainer');
-        $builder->addDefinitions($definition);
-        $builder->addDefinitions($definition2);
+
+        // Custom definition sources should be chained correctly
+        $builder->addDefinitions(new ArrayDefinitionSource(array('foo' => 'bar')));
+        $builder->addDefinitions(new ArrayDefinitionSource(array('foofoo' => 'barbar')));
 
         /** @var FakeContainer $container */
         $container = $builder->build();
 
-        $containerDefinition = $container->definitionManager->getDefinition($definition2Name);
-        $this->assertInstanceOf('DI\Definition\ValueDefinition', $containerDefinition);
-        $this->assertSame($definition2Value, $containerDefinition->getValue());
+        // We should be able to get entries from our custom definition sources
+        /** @var ValueDefinition $definition */
+        $definition = $container->definitionManager->getDefinition('foo');
+        $this->assertInstanceOf('DI\Definition\ValueDefinition', $definition);
+        $this->assertSame('bar', $definition->getValue());
+        $definition = $container->definitionManager->getDefinition('foofoo');
+        $this->assertInstanceOf('DI\Definition\ValueDefinition', $definition);
+        $this->assertSame('barbar', $definition->getValue());
     }
     
     public function testFluentInterface()
