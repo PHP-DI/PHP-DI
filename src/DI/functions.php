@@ -10,6 +10,7 @@
 namespace DI;
 
 use DI\Definition\EntryReference;
+use DI\Definition\Helper\DefinitionExtensionHelper;
 use DI\Definition\Helper\FactoryDefinitionHelper;
 use DI\Definition\Helper\ClassDefinitionHelper;
 use DI\Definition\Helper\EnvironmentVariableDefinitionHelper;
@@ -73,5 +74,28 @@ if (! function_exists('DI\env')) {
         $isOptional = 2 === func_num_args();
 
         return new EnvironmentVariableDefinitionHelper($variableName, $isOptional, $defaultValue);
+    }
+}
+
+if (! function_exists('DI\extend')) {
+    /**
+     * Helper for extending another definition.
+     *
+     * Example:
+     *
+     *     'log.backends' => DI\extend()->add(
+     *         DI\link('My\Custom\LogBackend')
+     *     )
+     *
+     * @param string|null $extendedEntryName Name of the entry to extend. If null, it will be the same name
+     *                                       as for this definition.
+     *
+     * @return DefinitionExtensionHelper
+     *
+     * @since 5.0
+     */
+    function extend($extendedEntryName = null)
+    {
+        return new DefinitionExtensionHelper($extendedEntryName);
     }
 }

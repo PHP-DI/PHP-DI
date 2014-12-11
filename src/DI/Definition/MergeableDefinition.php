@@ -21,11 +21,20 @@ interface MergeableDefinition extends Definition
      *
      * In case of conflicts, the current definition prevails.
      *
-     * @param MergeableDefinition $definition
+     * @param Definition $definition
      *
-     * @return MergeableDefinition Merged definition
+     * @return Definition Merged definition
      */
-    public function merge(MergeableDefinition $definition);
+    public function merge(Definition $definition);
+
+    /**
+     * Returns true if the given definition can be merged in the current one.
+     *
+     * @param Definition $definition
+     *
+     * @return bool
+     */
+    public function canMerge(Definition $definition);
 
     /**
      * @return string

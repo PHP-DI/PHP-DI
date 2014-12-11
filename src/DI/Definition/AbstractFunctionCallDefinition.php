@@ -68,15 +68,24 @@ abstract class AbstractFunctionCallDefinition implements Definition, MergeableDe
     /**
      * {@inheritdoc}
      */
-    public function merge(MergeableDefinition $definition)
+    public function merge(Definition $definition)
     {
-        if (!$definition instanceof AbstractFunctionCallDefinition) {
+        if (! $this->canMerge($definition)) {
             throw new DefinitionException(
                 "DI definition conflict: trying to merge incompatible definitions"
             );
         }
 
+        /** @var AbstractFunctionCallDefinition $definition */
         $this->parameters = $this->parameters + $definition->parameters;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function canMerge(Definition $definition)
+    {
+        return $definition instanceof self;
     }
 
     /**

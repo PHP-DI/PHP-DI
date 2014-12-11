@@ -50,4 +50,7 @@ return array(
         DI\link('DI\Test\IntegrationTest\Fixtures\Class1'),
         DI\link('DI\Test\IntegrationTest\Fixtures\Class2'),
     ),
+    'array2' => array(
+        'value',
+    ),
 );
