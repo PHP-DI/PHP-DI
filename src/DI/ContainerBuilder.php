@@ -117,7 +117,7 @@ class ContainerBuilder
         foreach (array_reverse($this->definitionSources) as $source) {
             /** @var $source ChainableDefinitionSource */
             // Chain file sources
-            if ($lastSource instanceof PHPFileDefinitionSource) {
+            if ($lastSource instanceof ChainableDefinitionSource) {
                 $lastSource->chain($source);
             } else {
                 $firstSource = $source;
