@@ -68,6 +68,28 @@ class ContainerBuilderTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($otherContainer, $container->wrapperContainer);
     }
 
+    public function testAddArrayDefinitions()
+    {
+        $definition = new ArrayDefinitionSourceFixture;
+        $definition->addDefinitions(array('foo' => 'bar'));
+
+        $definition2Name = 'foofoo';
+        $definition2Value = 'barbar';
+        $definition2 = new ArrayDefinitionSourceFixture;
+        $definition2->addDefinitions(array($definition2Name => $definition2Value));
+
+        $builder = new ContainerBuilder('DI\Test\UnitTest\Fixtures\FakeContainer');
+        $builder->addDefinitions($definition);
+        $builder->addDefinitions($definition2);
+
+        /** @var FakeContainer $container */
+        $container = $builder->build();
+
+        $containerDefinition = $container->definitionManager->getDefinition($definition2Name);
+        $this->assertInstanceOf('DI\Definition\ValueDefinition', $containerDefinition);
+        $this->assertSame($definition2Value, $containerDefinition->getValue());
+    }
+    
     public function testFluentInterface()
     {
         $builder = new ContainerBuilder();
