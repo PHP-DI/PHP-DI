@@ -40,6 +40,14 @@ class ArrayDefinitionSource implements ChainableDefinitionSource
     private $definitions = array();
 
     /**
+     * @param array $definitions
+     */
+    public function __construct(array $definitions = array())
+    {
+        $this->definitions = $definitions;
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function getDefinition($name, MergeableDefinition $parentDefinition = null)
