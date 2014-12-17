@@ -20,30 +20,11 @@ use DI\Definition\Exception\DefinitionException;
 class ArrayDefinitionExtension extends ArrayDefinition implements MergeableDefinition
 {
     /**
-     * Name of the extended definition.
-     *
-     * @var string
-     */
-    private $extendedDefinitionName;
-
-    /**
-     * @param string $name                   Entry name
-     * @param string $extendedDefinitionName Name of the extended definition
-     * @param array  $values                 Values to add to the extended array definition
-     */
-    public function __construct($name, $extendedDefinitionName, array $values)
-    {
-        $this->extendedDefinitionName = $extendedDefinitionName;
-
-        parent::__construct($name, $values);
-    }
-
-    /**
      * @return string
      */
     public function getExtendedDefinitionName()
     {
-        return $this->extendedDefinitionName;
+        return $this->getName();
     }
 
     /**
@@ -52,11 +33,9 @@ class ArrayDefinitionExtension extends ArrayDefinition implements MergeableDefin
     public function merge(Definition $definition)
     {
         if (! $this->canMerge($definition)) {
-            $name = $this->getName();
             throw new DefinitionException(sprintf(
-                'Definition %s tries to add entries to %s but it is not an array',
-                $name,
-                ($this->extendedDefinitionName === $name) ? 'its previous definition' : $this->extendedDefinitionName
+                'Definition %s tries to add array entries but the previous definition is not an array',
+                $this->getName()
             ));
         }
 

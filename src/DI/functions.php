@@ -10,7 +10,7 @@
 namespace DI;
 
 use DI\Definition\EntryReference;
-use DI\Definition\Helper\DefinitionExtensionHelper;
+use DI\Definition\Helper\ArrayDefinitionExtensionHelper;
 use DI\Definition\Helper\FactoryDefinitionHelper;
 use DI\Definition\Helper\ClassDefinitionHelper;
 use DI\Definition\Helper\EnvironmentVariableDefinitionHelper;
@@ -77,25 +77,32 @@ if (! function_exists('DI\env')) {
     }
 }
 
-if (! function_exists('DI\extend')) {
+if (! function_exists('DI\add')) {
     /**
      * Helper for extending another definition.
      *
      * Example:
      *
-     *     'log.backends' => DI\extend()->add(
+     *     'log.backends' => DI\add(DI\link('My\Custom\LogBackend'))
+     *
+     * or:
+     *
+     *     'log.backends' => DI\add([
      *         DI\link('My\Custom\LogBackend')
-     *     )
+     *     ])
      *
-     * @param string|null $extendedEntryName Name of the entry to extend. If null, it will be the same name
-     *                                       as for this definition.
+     * @param mixed|array $values A value or an array of values to add to the array.
      *
-     * @return DefinitionExtensionHelper
+     * @return ArrayDefinitionExtensionHelper
      *
      * @since 5.0
      */
-    function extend($extendedEntryName = null)
+    function add($values)
     {
-        return new DefinitionExtensionHelper($extendedEntryName);
+        if (! is_array($values)) {
+            $values = array($values);
+        }
+
+        return new ArrayDefinitionExtensionHelper($values);
     }
 }

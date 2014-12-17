@@ -22,10 +22,10 @@ class ArrayDefinitionExtensionTest extends \PHPUnit_Framework_TestCase
      */
     public function test_getters()
     {
-        $definition = new ArrayDefinitionExtension('foo', 'bar', array('hello'));
+        $definition = new ArrayDefinitionExtension('foo', array('hello'));
 
         $this->assertEquals('foo', $definition->getName());
-        $this->assertEquals('bar', $definition->getExtendedDefinitionName());
+        $this->assertEquals('foo', $definition->getExtendedDefinitionName());
         $this->assertEquals(array('hello'), $definition->getValues());
     }
 
@@ -34,7 +34,7 @@ class ArrayDefinitionExtensionTest extends \PHPUnit_Framework_TestCase
      */
     public function scope_should_be_singleton()
     {
-        $definition = new ArrayDefinitionExtension('foo', 'bar', array());
+        $definition = new ArrayDefinitionExtension('foo', array());
 
         $this->assertEquals(Scope::SINGLETON(), $definition->getScope());
     }
@@ -44,7 +44,7 @@ class ArrayDefinitionExtensionTest extends \PHPUnit_Framework_TestCase
      */
     public function should_not_be_cacheable()
     {
-        $definition = new ArrayDefinitionExtension('foo', 'bar', array());
+        $definition = new ArrayDefinitionExtension('foo', array());
 
         $this->assertNotInstanceOf('DI\Definition\CacheableDefinition', $definition);
     }

@@ -56,20 +56,36 @@ class FunctionsTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers ::\DI\extend
+     * @covers ::\DI\add
      */
-    public function test_extend()
+    public function test_add_value()
     {
-        $helper = \DI\extend('bar')
-            ->add(array('hello'));
+        $helper = \DI\add('hello');
 
-        $this->assertInstanceOf('DI\Definition\Helper\DefinitionExtensionHelper', $helper);
+        $this->assertInstanceOf('DI\Definition\Helper\ArrayDefinitionExtensionHelper', $helper);
 
         $definition = $helper->getDefinition('foo');
 
         $this->assertInstanceOf('DI\Definition\ArrayDefinitionExtension', $definition);
         $this->assertEquals('foo', $definition->getName());
-        $this->assertEquals('bar', $definition->getExtendedDefinitionName());
+        $this->assertEquals('foo', $definition->getExtendedDefinitionName());
         $this->assertEquals(array('hello'), $definition->getValues());
+    }
+
+    /**
+     * @covers ::\DI\add
+     */
+    public function test_add_array()
+    {
+        $helper = \DI\add(array('hello', 'world'));
+
+        $this->assertInstanceOf('DI\Definition\Helper\ArrayDefinitionExtensionHelper', $helper);
+
+        $definition = $helper->getDefinition('foo');
+
+        $this->assertInstanceOf('DI\Definition\ArrayDefinitionExtension', $definition);
+        $this->assertEquals('foo', $definition->getName());
+        $this->assertEquals('foo', $definition->getExtendedDefinitionName());
+        $this->assertEquals(array('hello', 'world'), $definition->getValues());
     }
 }
