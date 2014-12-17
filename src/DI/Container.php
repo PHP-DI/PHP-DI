@@ -76,9 +76,11 @@ class Container implements ContainerInteropInterface, ContainerInterface, Factor
 
         // Definition resolvers
         $wrapperContainer = $wrapperContainer ?: $this;
+        $arrayDefinitionResolver = new ArrayDefinitionResolver($wrapperContainer);
         $this->definitionResolvers = array(
             'DI\Definition\ValueDefinition'               => new ValueDefinitionResolver(),
-            'DI\Definition\ArrayDefinition'               => new ArrayDefinitionResolver($wrapperContainer),
+            'DI\Definition\ArrayDefinition'               => $arrayDefinitionResolver,
+            'DI\Definition\ArrayDefinitionExtension'      => $arrayDefinitionResolver,
             'DI\Definition\FactoryDefinition'             => new FactoryDefinitionResolver($wrapperContainer),
             'DI\Definition\AliasDefinition'               => new AliasDefinitionResolver($wrapperContainer),
             'DI\Definition\ClassDefinition'               => new ClassDefinitionResolver($wrapperContainer, $proxyFactory),

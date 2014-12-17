@@ -49,10 +49,19 @@ abstract class ChainableDefinitionSource implements DefinitionSource
             return null;
         }
 
-        // Enrich definition in sub-source
+        // Enrich definition
         if ($this->chainedSource && $definition instanceof MergeableDefinition) {
-            $subDefinition = $this->chainedSource->getDefinition($definition->getExtendedDefinitionName());
-            if ($subDefinition instanceof MergeableDefinition) {
+            $subDefinition = null;
+            // Extend a different definition: we search in the current source
+            if ($name !== $definition->getExtendedDefinitionName()) {
+                $subDefinition = $this->getDefinition($definition->getExtendedDefinitionName());
+            }
+            // Extend the same definition: we search in sub-sources (else infinite recursion...)
+            if ($subDefinition === null) {
+                $subDefinition = $this->chainedSource->getDefinition($definition->getExtendedDefinitionName());
+            }
+
+            if ($definition->canMerge($subDefinition)) {
                 $definition = $definition->merge($subDefinition);
             }
         }

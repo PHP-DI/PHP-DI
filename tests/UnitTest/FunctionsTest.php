@@ -17,7 +17,7 @@ class FunctionsTest extends \PHPUnit_Framework_TestCase
     /**
      * @covers ::\DI\object
      */
-    public function testObject()
+    public function test_object()
     {
         $definition = \DI\object();
 
@@ -33,7 +33,7 @@ class FunctionsTest extends \PHPUnit_Framework_TestCase
     /**
      * @covers ::\DI\factory
      */
-    public function testFactory()
+    public function test_factory()
     {
         $definition = \DI\factory(function () {
             return 42;
@@ -47,11 +47,45 @@ class FunctionsTest extends \PHPUnit_Framework_TestCase
     /**
      * @covers ::\DI\link
      */
-    public function testLink()
+    public function test_link()
     {
         $reference = \DI\link('foo');
 
         $this->assertInstanceOf('DI\Definition\EntryReference', $reference);
         $this->assertEquals('foo', $reference->getName());
+    }
+
+    /**
+     * @covers ::\DI\add
+     */
+    public function test_add_value()
+    {
+        $helper = \DI\add('hello');
+
+        $this->assertInstanceOf('DI\Definition\Helper\ArrayDefinitionExtensionHelper', $helper);
+
+        $definition = $helper->getDefinition('foo');
+
+        $this->assertInstanceOf('DI\Definition\ArrayDefinitionExtension', $definition);
+        $this->assertEquals('foo', $definition->getName());
+        $this->assertEquals('foo', $definition->getExtendedDefinitionName());
+        $this->assertEquals(array('hello'), $definition->getValues());
+    }
+
+    /**
+     * @covers ::\DI\add
+     */
+    public function test_add_array()
+    {
+        $helper = \DI\add(array('hello', 'world'));
+
+        $this->assertInstanceOf('DI\Definition\Helper\ArrayDefinitionExtensionHelper', $helper);
+
+        $definition = $helper->getDefinition('foo');
+
+        $this->assertInstanceOf('DI\Definition\ArrayDefinitionExtension', $definition);
+        $this->assertEquals('foo', $definition->getName());
+        $this->assertEquals('foo', $definition->getExtendedDefinitionName());
+        $this->assertEquals(array('hello', 'world'), $definition->getValues());
     }
 }

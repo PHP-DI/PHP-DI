@@ -204,14 +204,16 @@ class ClassDefinition implements MergeableDefinition, CacheableDefinition
     /**
      * {@inheritdoc}
      */
-    public function merge(MergeableDefinition $definition)
+    public function merge(Definition $definition)
     {
-        if (!$definition instanceof ClassDefinition) {
+        if (! $this->canMerge($definition)) {
             throw new DefinitionException(
                 "DI definition conflict: there are 2 different definitions for '" . $this->getName()
                 . "' that are incompatible, they are not of the same type"
             );
         }
+
+        /** @var ClassDefinition $definition */
 
         $newDefinition = clone $this;
 
@@ -257,6 +259,14 @@ class ClassDefinition implements MergeableDefinition, CacheableDefinition
         }
 
         return $newDefinition;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function canMerge(Definition $definition)
+    {
+        return $definition instanceof self;
     }
 
     /**

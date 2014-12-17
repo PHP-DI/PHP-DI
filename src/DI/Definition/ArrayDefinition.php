@@ -63,4 +63,9 @@ class ArrayDefinition implements Definition
     {
         return $this->values;
     }
+
+    protected function setValues(array $values)
+    {
+        $this->values = $values;
+    }
 }
