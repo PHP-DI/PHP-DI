@@ -48,6 +48,7 @@
                             <li><a href="http://php-di.org/doc/getting-started.html">Getting started</a></li>
                             <li><a href="http://php-di.org/doc/">Documentation</a></li>
                             <li><a href="http://php-di.org/change-log.html">Change log</a></li>
+                            <li><a href="http://php-di.org/support.html">Support</a></li>
                             <li><a href="https://github.com/mnapoli/PHP-DI"><i class="icon-github"></i> Github</a></li>
                         </ul>
                     </div>
@@ -180,8 +181,7 @@ From 3.2 and on, properties are injected after calling the constructor.</p>
 <li><code>Container::useAnnotations</code>, use ContainerBuilder::useAnnotations instead</li>
 <li><code>Container::setDefinitionCache</code>, use ContainerBuilder::setDefinitionCache instead</li>
 <li><code>Container::setDefinitionsValidation</code>, use ContainerBuilder::setDefinitionsValidation instead</li>
-</ul>
-</li>
+</ul></li>
 <li>The container is now auto-registered (as 'DI\Container'). You can now inject the container without registering it.</li>
 </ul>
 <h2>3.1.1</h2>
@@ -236,8 +236,7 @@ From 3.2 and on, properties are injected after calling the constructor.</p>
 <li>PHP code (<code>Container::set()</code>)</li>
 <li>PHP array</li>
 <li>YAML file</li>
-</ul>
-</li>
+</ul></li>
 <li>As a consequence, annotations are not mandatory anymore, all functionalities can be used with or without annotations.</li>
 <li>Renamed <code>DI\Annotations\</code> to <code>DI\Annotation\</code></li>
 <li><code>Container</code> no longer implements ArrayAccess, use only <code>$container-&gt;get($key)</code> now</li>
