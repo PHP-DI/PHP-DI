@@ -69,6 +69,11 @@ class ParameterResolver
                     continue;
                 }
 
+                if ($this->container->has($parameter->getName())) {
+                    $args[] = $this->container->get($parameter->getName());
+                    continue;
+                }
+
                 throw new DefinitionException(sprintf(
                     "The parameter '%s' of %s has no value defined or guessable",
                     $parameter->getName(),
