@@ -97,6 +97,8 @@ class DefinitionManager
      */
     public function addDefinition(Definition $definition)
     {
+        $this->clearCacheEntry($definition->getName());
+
         $this->source->addDefinition($definition);
     }
 
@@ -151,5 +153,20 @@ class DefinitionManager
 
         $cacheKey = self::CACHE_PREFIX . $name;
         $this->cache->save($cacheKey, $definition);
+    }
+
+    /**
+     * Clear a cache entry
+     *
+     * @param string $name Entry name
+     */
+    private function clearCacheEntry($name)
+    {
+        if ($this->cache === null) {
+            return;
+        }
+
+        $cacheKey = self::CACHE_PREFIX . $name;
+        $this->cache->delete($cacheKey);
     }
 }

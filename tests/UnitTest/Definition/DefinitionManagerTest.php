@@ -9,8 +9,10 @@
 
 namespace DI\Test\UnitTest\Definition;
 
+use DI\Definition\AliasDefinition;
 use DI\Definition\DefinitionManager;
 use DI\Definition\ValueDefinition;
+use Doctrine\Common\Cache\ArrayCache;
 
 /**
  * Test class for DefinitionManager
@@ -21,7 +23,6 @@ class DefinitionManagerTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @test
-     * @covers \DI\Definition\DefinitionManager
      */
     public function shouldGetFromCache()
     {
@@ -38,9 +39,9 @@ class DefinitionManagerTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals('foo', $definitionManager->getDefinition('foo'));
     }
+
     /**
      * @test
-     * @covers \DI\Definition\DefinitionManager
      */
     public function shouldSaveToCache()
     {
@@ -84,5 +85,24 @@ class DefinitionManagerTest extends \PHPUnit_Framework_TestCase
         $definitionManager->addDefinition($valueDefinition);
 
         $this->assertSame($valueDefinition, $definitionManager->getDefinition('foo'));
+    }
+
+    /**
+     * @test
+     * @see https://github.com/mnapoli/PHP-DI/issues/222
+     */
+    public function testAddDefinitionShouldClearCachedDefinition()
+    {
+        $definitionManager = new DefinitionManager();
+        $definitionManager->setCache(new ArrayCache());
+
+        $firstDefinition = new AliasDefinition('foo', 'bar');
+        $secondDefinition = new AliasDefinition('foo', 'bam');
+
+        $definitionManager->addDefinition($firstDefinition);
+        $this->assertSame($firstDefinition, $definitionManager->getDefinition('foo'));
+
+        $definitionManager->addDefinition($secondDefinition);
+        $this->assertSame($secondDefinition, $definitionManager->getDefinition('foo'));
     }
 }
