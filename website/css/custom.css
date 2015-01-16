@@ -19,3 +19,7 @@ strong {
     font-size: 18px;
     line-height: 28px;
 }
+
+.section-wrapper {
+    min-height: 400px;
+}
