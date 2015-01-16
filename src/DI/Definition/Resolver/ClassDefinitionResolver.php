@@ -133,7 +133,7 @@ class ClassDefinitionResolver implements DefinitionResolver
      * @param ClassDefinition $definition
      * @param array           $parameters
      *
-     * @return object Proxy instance
+     * @return \ProxyManager\Proxy\LazyLoadingInterface Proxy instance
      */
     private function createProxy(ClassDefinition $definition, array $parameters)
     {
