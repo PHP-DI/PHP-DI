@@ -14,6 +14,7 @@ use DI\Definition\Helper\ArrayDefinitionExtensionHelper;
 use DI\Definition\Helper\FactoryDefinitionHelper;
 use DI\Definition\Helper\ClassDefinitionHelper;
 use DI\Definition\Helper\EnvironmentVariableDefinitionHelper;
+use DI\Definition\Helper\StringDefinitionHelper;
 
 if (! function_exists('DI\object')) {
     /**
@@ -104,5 +105,25 @@ if (! function_exists('DI\add')) {
         }
 
         return new ArrayDefinitionExtensionHelper($values);
+    }
+}
+
+if (! function_exists('DI\string')) {
+    /**
+     * Helper for concatenating strings.
+     *
+     * Example:
+     *
+     *     'log.filename' => DI\string('{app.path}/app.log')
+     *
+     * @param string $expression A string expression. Use the `{}` placeholders to reference other container entries.
+     *
+     * @return StringDefinitionHelper
+     *
+     * @since 5.0
+     */
+    function string($expression)
+    {
+        return new StringDefinitionHelper((string) $expression);
     }
 }

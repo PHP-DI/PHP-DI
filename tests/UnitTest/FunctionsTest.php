@@ -88,4 +88,20 @@ class FunctionsTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('foo', $definition->getExtendedDefinitionName());
         $this->assertEquals(array('hello', 'world'), $definition->getValues());
     }
+
+    /**
+     * @covers ::\DI\string
+     */
+    public function test_string()
+    {
+        $helper = \DI\string('bar');
+
+        $this->assertInstanceOf('DI\Definition\Helper\StringDefinitionHelper', $helper);
+
+        $definition = $helper->getDefinition('foo');
+
+        $this->assertInstanceOf('DI\Definition\StringDefinition', $definition);
+        $this->assertEquals('foo', $definition->getName());
+        $this->assertEquals('bar', $definition->getExpression());
+    }
 }

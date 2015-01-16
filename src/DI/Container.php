@@ -14,6 +14,7 @@ use DI\Definition\Definition;
 use DI\Definition\DefinitionManager;
 use DI\Definition\Resolver\ArrayDefinitionResolver;
 use DI\Definition\Resolver\FunctionCallDefinitionResolver;
+use DI\Definition\Resolver\StringDefinitionResolver;
 use DI\Definition\ValueDefinition;
 use DI\Definition\Helper\DefinitionHelper;
 use DI\Definition\Resolver\AliasDefinitionResolver;
@@ -86,6 +87,7 @@ class Container implements ContainerInteropInterface, ContainerInterface, Factor
             'DI\Definition\ClassDefinition'               => new ClassDefinitionResolver($wrapperContainer, $proxyFactory),
             'DI\Definition\FunctionCallDefinition'        => new FunctionCallDefinitionResolver($wrapperContainer),
             'DI\Definition\EnvironmentVariableDefinition' => new EnvironmentVariableDefinitionResolver($wrapperContainer),
+            'DI\Definition\StringDefinition'              => new StringDefinitionResolver($wrapperContainer),
         );
 
         // Auto-register the container
