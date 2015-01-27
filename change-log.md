@@ -6,7 +6,7 @@ Improvements:
 
 - Lighter package: requires 4 less Composer dependencies by default
 - [#207](https://github.com/mnapoli/PHP-DI/issues/207): Support for `DI\link()` in arrays
-- `DI\factory()` can now be omitted with closures:
+- (#226](https://github.com/mnapoli/PHP-DI/pull/226): `DI\factory()` can now be omitted with closures:
 
     ```php
     // before
