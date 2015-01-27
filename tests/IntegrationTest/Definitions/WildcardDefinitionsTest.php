@@ -7,7 +7,7 @@
  * @license   http://www.opensource.org/licenses/mit-license.php MIT (see the LICENSE file)
  */
 
-namespace DI\Test\IntegrationTest;
+namespace DI\Test\IntegrationTest\Definitions;
 
 use DI\ContainerBuilder;
 use DI\Test\IntegrationTest\Fixtures\PropertyInjectionTest\Issue1;
@@ -22,7 +22,7 @@ class WildcardDefinitionsTest extends \PHPUnit_Framework_TestCase
     public function testWildcards()
     {
         $builder = new ContainerBuilder();
-        $builder->addDefinitions(__DIR__ . '/Fixtures/wildcards.php');
+        $builder->addDefinitions(__DIR__ . '/Fixtures/wildcard-definitions.php');
         $container = $builder->build();
 
         $this->assertEquals('bar', $container->get('foo1'));

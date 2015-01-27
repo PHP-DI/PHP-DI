@@ -7,7 +7,7 @@
  * @license   http://www.opensource.org/licenses/mit-license.php MIT (see the LICENSE file)
  */
 
-namespace DI\Test\IntegrationTest;
+namespace DI\Test\IntegrationTest\Definitions;
 
 use DI\ContainerBuilder;
 
@@ -23,7 +23,7 @@ class EnvironmentVariableDefinitionTest extends \PHPUnit_Framework_TestCase
     public function setUp()
     {
         $builder = new ContainerBuilder();
-        $builder->addDefinitions(__DIR__ . '/Fixtures/definitions.php');
+        $builder->addDefinitions(__DIR__ . '/Fixtures/env-var-definitions.php');
 
         $this->container = $builder->build();
     }
