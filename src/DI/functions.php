@@ -14,7 +14,22 @@ use DI\Definition\Helper\ArrayDefinitionExtensionHelper;
 use DI\Definition\Helper\FactoryDefinitionHelper;
 use DI\Definition\Helper\ClassDefinitionHelper;
 use DI\Definition\Helper\EnvironmentVariableDefinitionHelper;
+use DI\Definition\Helper\ValueDefinitionHelper;
 use DI\Definition\Helper\StringDefinitionHelper;
+
+if (! function_exists('DI\value')) {
+    /**
+     * Helper for defining an object.
+     *
+     * @param mixed $value
+     *
+     * @return ValueDefinitionHelper
+     */
+    function value($value)
+    {
+        return new ValueDefinitionHelper($value);
+    }
+}
 
 if (! function_exists('DI\object')) {
     /**
