@@ -16,7 +16,7 @@ use DI\Definition\Source\PHPFileDefinitionSource;
 use DI\Definition\Source\ReflectionDefinitionSource;
 use DI\Proxy\ProxyFactory;
 use Doctrine\Common\Cache\Cache;
-use Interop\Container\ContainerInterface as ContainerInteropInterface;
+use Interop\Container\ContainerInterface;
 use InvalidArgumentException;
 
 /**
@@ -74,7 +74,7 @@ class ContainerBuilder
 
     /**
      * If PHP-DI is wrapped in another container, this references the wrapper.
-     * @var ContainerInteropInterface
+     * @var ContainerInterface
      */
     private $wrapperContainer;
 
@@ -231,10 +231,10 @@ class ContainerBuilder
      * If PHP-DI's container is wrapped by another container, we can
      * set this so that PHP-DI will use the wrapper rather than itself for building objects.
      *
-     * @param ContainerInteropInterface $otherContainer
+     * @param ContainerInterface $otherContainer
      * @return $this
      */
-    public function wrapContainer(ContainerInteropInterface $otherContainer)
+    public function wrapContainer(ContainerInterface $otherContainer)
     {
         $this->wrapperContainer = $otherContainer;
 
