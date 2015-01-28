@@ -12,6 +12,7 @@ namespace DI\Definition\Source;
 use DI\Definition\ArrayDefinition;
 use DI\Definition\ClassDefinition;
 use DI\Definition\Definition;
+use DI\Definition\FactoryDefinition;
 use DI\Definition\ValueDefinition;
 use DI\Definition\Helper\DefinitionHelper;
 
@@ -111,6 +112,9 @@ class ArrayDefinitionSource extends ChainableDefinitionSource implements Definit
         }
         if (! $definition instanceof Definition && is_array($definition)) {
             $definition = new ArrayDefinition($name, $definition);
+        }
+        if ($definition instanceof \Closure) {
+            $definition = new FactoryDefinition($name, $definition);
         }
         if (! $definition instanceof Definition) {
             $definition = new ValueDefinition($name, $definition);

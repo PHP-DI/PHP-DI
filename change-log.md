@@ -6,10 +6,23 @@ Improvements:
 
 - Lighter package: requires 4 less Composer dependencies by default
 - [#207](https://github.com/mnapoli/PHP-DI/issues/207): Support for `DI\link()` in arrays
+- (#226](https://github.com/mnapoli/PHP-DI/pull/226): `DI\factory()` can now be omitted with closures:
+
+    ```php
+    // before
+    'My\Class' => DI\factory(function () {
+        return new Foo();
+    })
+    // now (optional shortcut)
+    'My\Class' => function () {
+        return new Foo();
+    }
+    ```
 
 BC breaks:
 
 - [#198](https://github.com/mnapoli/PHP-DI/issues/198) `ocramius/proxy-manager` is not installed by default anymore, you need to require it in `composer.json` if you want to use **lazy injection**
+- Closure definitions are now converted into factory definitions automatically. If you ever defined a closure as a value (e.g. to have the closure injected and now executed), you need to wrap the closure with the new `DI\value()` helper.
 
 Internal changes in case you were replacing/extending some parts:
 

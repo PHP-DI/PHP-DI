@@ -15,6 +15,17 @@ namespace DI\Test\UnitTest;
 class FunctionsTest extends \PHPUnit_Framework_TestCase
 {
     /**
+     * @covers ::\DI\value
+     */
+    public function test_value()
+    {
+        $definition = \DI\value('foo');
+
+        $this->assertInstanceOf('DI\Definition\Helper\ValueDefinitionHelper', $definition);
+        $this->assertEquals('foo', $definition->getDefinition('entry')->getValue());
+    }
+
+    /**
      * @covers ::\DI\object
      */
     public function test_object()

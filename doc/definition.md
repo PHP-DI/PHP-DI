@@ -165,6 +165,7 @@ PHP-DI provides function helpers for this (to define *values*, you don't need a 
 - `DI\object($classname = null)`: define an object entry
 - `DI\factory($factory)`: define a factory that returns an entry
 - `DI\link($entryName)`: used to define alias entries, and also to reference other entries in object definitions (see below)
+- `DI\value($value)`: defines a simple value. This helper is not needed as anything is a value by default. The only use case for this helper is to define a container entry that is a closure (as closure are turned into factory definitions automatically)
 
 Example of a `config.php` file (using [PHP 5.4 short arrays](http://php.net/manual/en/migration54.new-features.php)):
 
@@ -209,13 +210,13 @@ return [
     // Defining a named instance
     'myNamedInstance' => DI\object('My\Class'),
 
-    // Using an anonymous function
-    'My\Stuff' => DI\factory(function (Container $c) {
+    // Using an anonymous function (no need to use DI\factory with a closure)
+    'My\Stuff' => function (Container $c) {
         return new MyClass($c->get('db.host'));
-    }),
+    },
 
-    // We can set the scope on the factory too
-    // This will return a new object each time we request SomeOtherClass
+    // To set additional options, use the DI\factory helper
+    // The prototype scope will return a new object each time we request SomeOtherClass
     'SomeOtherClass' => DI\factory(function () {
         return new SomeOtherClass();
     })->scope(Scope::PROTOTYPE()),

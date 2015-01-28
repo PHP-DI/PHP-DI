@@ -17,8 +17,6 @@ use DI\Definition\Source\ArrayDefinitionSource;
 use DI\Definition\ValueDefinition;
 
 /**
- * Test class for ArrayDefinitionSource
- *
  * @covers \DI\Definition\Source\ArrayDefinitionSource
  */
 class ArrayDefinitionSourceTest extends \PHPUnit_Framework_TestCase
@@ -48,8 +46,6 @@ class ArrayDefinitionSourceTest extends \PHPUnit_Framework_TestCase
             'integer' => 1,
             'string'  => 'test',
             'float'   => 1.0,
-            'closure' => function () {
-            },
         );
         $source = new ArrayDefinitionSource($definitions);
 
@@ -68,10 +64,6 @@ class ArrayDefinitionSourceTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($definition instanceof ValueDefinition);
         $this->assertEquals(1.0, $definition->getValue());
         $this->assertInternalType('float', $definition->getValue());
-
-        $definition = $source->getDefinition('closure');
-        $this->assertTrue($definition instanceof ValueDefinition);
-        $this->assertInstanceOf('Closure', $definition->getValue());
     }
 
     public function testArrayDefinitions()
@@ -113,7 +105,7 @@ class ArrayDefinitionSourceTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('foo', $definition->getClassName());
     }
 
-    public function testClosureDefinition()
+    public function testFactoryDefinition()
     {
         $callable = function () {
             return 'bar';
@@ -121,6 +113,22 @@ class ArrayDefinitionSourceTest extends \PHPUnit_Framework_TestCase
         $source = new ArrayDefinitionSource();
         $source->addDefinitions(array(
             'foo' => \DI\factory($callable),
+        ));
+        /** @var FactoryDefinition $definition */
+        $definition = $source->getDefinition('foo');
+        $this->assertInstanceOf('DI\Definition\FactoryDefinition', $definition);
+        $this->assertEquals('foo', $definition->getName());
+        $this->assertEquals($callable, $definition->getCallable());
+    }
+
+    public function testClosureIsCastedToFactoryDefinition()
+    {
+        $callable = function () {
+            return 'bar';
+        };
+        $source = new ArrayDefinitionSource();
+        $source->addDefinitions(array(
+            'foo' => $callable,
         ));
         /** @var FactoryDefinition $definition */
         $definition = $source->getDefinition('foo');
