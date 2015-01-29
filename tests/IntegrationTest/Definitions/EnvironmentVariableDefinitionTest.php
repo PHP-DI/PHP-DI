@@ -18,7 +18,7 @@ use DI\ContainerBuilder;
  */
 class EnvironmentVariableDefinitionTest extends \PHPUnit_Framework_TestCase
 {
-    public function testEnvironmentVariable()
+    public function test_existing_env_variable()
     {
         $expectedValue = getenv('USER');
         if (! $expectedValue) {
@@ -40,7 +40,7 @@ class EnvironmentVariableDefinitionTest extends \PHPUnit_Framework_TestCase
      * @expectedException \DI\Definition\Exception\DefinitionException
      * @expectedExceptionMessage The environment variable 'PHP_DI_DO_NOT_DEFINE_THIS' has not been defined
      */
-    public function testUndefinedEnvironmentVariable()
+    public function test_nonexistent_env_variable()
     {
         $builder = new ContainerBuilder();
         $builder->addDefinitions(array(
@@ -51,7 +51,7 @@ class EnvironmentVariableDefinitionTest extends \PHPUnit_Framework_TestCase
         $container->get('var');
     }
 
-    public function testOptionalEnvironmentVariable()
+    public function test_nonexistent_env_variable_with_default_value()
     {
         $builder = new ContainerBuilder();
         $builder->addDefinitions(array(
@@ -62,7 +62,7 @@ class EnvironmentVariableDefinitionTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('<default>', $container->get('var'));
     }
 
-    public function testOptionalEnvironmentVariableWithNullDefault()
+    public function test_nonexistent_env_variable_with_null_as_default()
     {
         $builder = new ContainerBuilder();
         $builder->addDefinitions(array(
@@ -73,7 +73,7 @@ class EnvironmentVariableDefinitionTest extends \PHPUnit_Framework_TestCase
         $this->assertNull($container->get('var'));
     }
 
-    public function testOptionalEnvironmentVariableWithLinkedDefaultValue()
+    public function test_nonexistent_env_variable_with_other_entry_as_default()
     {
         $builder = new ContainerBuilder();
         $builder->addDefinitions(array(
