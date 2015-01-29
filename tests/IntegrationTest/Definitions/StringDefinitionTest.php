@@ -9,7 +9,6 @@
 
 namespace DI\Test\IntegrationTest\Definitions;
 
-use DI\Container;
 use DI\ContainerBuilder;
 
 /**
@@ -19,24 +18,54 @@ use DI\ContainerBuilder;
  */
 class StringDefinitionTest extends \PHPUnit_Framework_TestCase
 {
-    /**
-     * @var Container
-     */
-    private $container;
-
-    public function setUp()
+    public function test_string_without_placeholder()
     {
         $builder = new ContainerBuilder();
         $builder->addDefinitions(array(
-            'foo' => 'bar',
-            'test-string' => \DI\string('Hello {foo}'),
+            'foo' => \DI\string('bar'),
         ));
+        $container = $builder->build();
 
-        $this->container = $builder->build();
+        $this->assertEquals('bar', $container->get('foo'));
     }
 
-    public function test_string_definition()
+    public function test_string_with_placeholder()
     {
-        $this->assertEquals('Hello bar', $this->container->get('test-string'));
+        $builder = new ContainerBuilder();
+        $builder->addDefinitions(array(
+            'foo'         => 'bar',
+            'test-string' => \DI\string('Hello {foo}'),
+        ));
+        $container = $builder->build();
+
+        $this->assertEquals('Hello bar', $container->get('test-string'));
+    }
+
+    public function test_string_with_multiple_placeholders()
+    {
+        $builder = new ContainerBuilder();
+        $builder->addDefinitions(array(
+            'foo'         => 'bar',
+            'bim'         => 'bam',
+            'test-string' => \DI\string('Hello {foo}, {bim}'),
+        ));
+        $container = $builder->build();
+
+        $this->assertEquals('Hello bar, bam', $container->get('test-string'));
+    }
+
+    /**
+     * @expectedException \DI\DependencyException
+     * @expectedExceptionMessage Error while parsing string expression for entry 'test-string': No entry or class found for 'foo'
+     */
+    public function test_string_with_nonexistent_placeholder()
+    {
+        $builder = new ContainerBuilder();
+        $builder->addDefinitions(array(
+            'test-string' => \DI\string('Hello {foo}'),
+        ));
+        $container = $builder->build();
+
+        $container->get('test-string');
     }
 }

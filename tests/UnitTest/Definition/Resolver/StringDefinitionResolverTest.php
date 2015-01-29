@@ -74,7 +74,7 @@ class StringDefinitionResolverTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      * @expectedException \DI\DependencyException
-     * @expectedExceptionMessage Error while parsing string expression for entry foo: No entry or class found for 'test'
+     * @expectedExceptionMessage Error while parsing string expression for entry 'foo': No entry or class found for 'test'
      */
     public function it_should_throw_on_unknown_entry_name()
     {
