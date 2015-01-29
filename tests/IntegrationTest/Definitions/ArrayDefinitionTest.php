@@ -9,11 +9,8 @@
 
 namespace DI\Test\IntegrationTest\Definitions;
 
-use DI\Container;
 use DI\ContainerBuilder;
-use DI\Test\IntegrationTest\Fixtures\Class1;
-use DI\Test\IntegrationTest\Fixtures\Class2;
-use DI\Test\IntegrationTest\Fixtures\Interface1;
+use DI\Scope;
 
 /**
  * Test array definitions
@@ -22,22 +19,18 @@ use DI\Test\IntegrationTest\Fixtures\Interface1;
  */
 class ArrayDefinitionTest extends \PHPUnit_Framework_TestCase
 {
-    /**
-     * @var Container
-     */
-    private $container;
-
-    public function setUp()
-    {
-        $builder = new ContainerBuilder();
-        $builder->addDefinitions(__DIR__ . '/Fixtures/array-definitions.php');
-
-        $this->container = $builder->build();
-    }
-
     public function test_array_with_values()
     {
-        $array = $this->container->get('values');
+        $builder = new ContainerBuilder();
+        $builder->addDefinitions(array(
+            'values' => array(
+                'value 1',
+                'value 2',
+            ),
+        ));
+        $container = $builder->build();
+
+        $array = $container->get('values');
 
         $this->assertEquals('value 1', $array[0]);
         $this->assertEquals('value 2', $array[1]);
@@ -45,13 +38,25 @@ class ArrayDefinitionTest extends \PHPUnit_Framework_TestCase
 
     public function test_array_with_links()
     {
-        $array = $this->container->get('links');
+        $builder = new ContainerBuilder();
+        $builder->addDefinitions(array(
+            'links'     => array(
+                \DI\link('singleton'),
+                \DI\link('prototype'),
+            ),
+            'singleton' => \DI\object('stdClass'),
+            'prototype' => \DI\object('stdClass')
+                ->scope(Scope::PROTOTYPE()),
+        ));
+        $container = $builder->build();
+
+        $array = $container->get('links');
 
         $this->assertTrue($array[0] instanceof \stdClass);
         $this->assertTrue($array[1] instanceof \stdClass);
 
-        $singleton = $this->container->get('singleton');
-        $prototype = $this->container->get('prototype');
+        $singleton = $container->get('singleton');
+        $prototype = $container->get('prototype');
 
         $this->assertSame($singleton, $array[0]);
         $this->assertNotSame($prototype, $array[1]);
@@ -60,8 +65,20 @@ class ArrayDefinitionTest extends \PHPUnit_Framework_TestCase
     public function test_add_entries()
     {
         $builder = new ContainerBuilder();
-        $builder->addDefinitions(__DIR__ . '/Fixtures/array-definitions.php');
-        $builder->addDefinitions(__DIR__ . '/Fixtures/array-extensions.php');
+        $builder->addDefinitions(array(
+            'values' => array(
+                'value 1',
+                'value 2',
+            ),
+        ));
+        $builder->addDefinitions(array(
+            'values' => \DI\add(array(
+                'another value',
+                \DI\link('foo'),
+            )),
+            'foo' => \DI\object('stdClass'),
+
+        ));
         $container = $builder->build();
 
         $array = $container->get('values');

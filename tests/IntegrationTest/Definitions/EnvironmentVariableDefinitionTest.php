@@ -18,27 +18,22 @@ use DI\ContainerBuilder;
  */
 class EnvironmentVariableDefinitionTest extends \PHPUnit_Framework_TestCase
 {
-    private $container;
-
-    public function setUp()
-    {
-        $builder = new ContainerBuilder();
-        $builder->addDefinitions(__DIR__ . '/Fixtures/env-var-definitions.php');
-
-        $this->container = $builder->build();
-    }
-
     public function testEnvironmentVariable()
     {
         $expectedValue = getenv('USER');
-
-        if (!$expectedValue) {
+        if (! $expectedValue) {
             $this->markTestSkipped(
                 'This test relies on the presence of the USER environment variable.'
             );
         }
 
-        $this->assertEquals($expectedValue, $this->container->get('defined-env'));
+        $builder = new ContainerBuilder();
+        $builder->addDefinitions(array(
+            'var' => \DI\env('USER'),
+        ));
+        $container = $builder->build();
+
+        $this->assertEquals($expectedValue, $container->get('var'));
     }
 
     /**
@@ -47,21 +42,46 @@ class EnvironmentVariableDefinitionTest extends \PHPUnit_Framework_TestCase
      */
     public function testUndefinedEnvironmentVariable()
     {
-        $this->container->get('undefined-env');
+        $builder = new ContainerBuilder();
+        $builder->addDefinitions(array(
+            'var' => \DI\env('PHP_DI_DO_NOT_DEFINE_THIS'),
+        ));
+        $container = $builder->build();
+
+        $container->get('var');
     }
 
     public function testOptionalEnvironmentVariable()
     {
-        $this->assertEquals('<default>', $this->container->get('optional-env'));
+        $builder = new ContainerBuilder();
+        $builder->addDefinitions(array(
+            'var' => \DI\env('PHP_DI_DO_NOT_DEFINE_THIS', '<default>'),
+        ));
+        $container = $builder->build();
+
+        $this->assertEquals('<default>', $container->get('var'));
     }
 
     public function testOptionalEnvironmentVariableWithNullDefault()
     {
-        $this->assertNull($this->container->get('optional-env-null'));
+        $builder = new ContainerBuilder();
+        $builder->addDefinitions(array(
+            'var' => \DI\env('PHP_DI_DO_NOT_DEFINE_THIS', null),
+        ));
+        $container = $builder->build();
+
+        $this->assertNull($container->get('var'));
     }
 
     public function testOptionalEnvironmentVariableWithLinkedDefaultValue()
     {
-        $this->assertEquals('bar', $this->container->get('optional-env-linked'));
+        $builder = new ContainerBuilder();
+        $builder->addDefinitions(array(
+            'var' => \DI\env('PHP_DI_DO_NOT_DEFINE_THIS', \DI\link('foo')),
+            'foo' => 'bar',
+        ));
+        $container = $builder->build();
+
+        $this->assertEquals('bar', $container->get('var'));
     }
 }

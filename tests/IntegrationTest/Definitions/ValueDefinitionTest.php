@@ -11,6 +11,7 @@ namespace DI\Test\IntegrationTest\Definitions;
 
 use DI\Container;
 use DI\ContainerBuilder;
+use stdClass;
 
 /**
  * Test value definitions
@@ -27,7 +28,12 @@ class ValueDefinitionTest extends \PHPUnit_Framework_TestCase
     public function setUp()
     {
         $builder = new ContainerBuilder();
-        $builder->addDefinitions(__DIR__ . '/Fixtures/value-definitions.php');
+        $builder->addDefinitions(array(
+            'string' => 'foo',
+            'int'    => 123,
+            'object' => new stdClass(),
+            'helper' => \DI\value('foo'),
+        ));
 
         $this->container = $builder->build();
     }

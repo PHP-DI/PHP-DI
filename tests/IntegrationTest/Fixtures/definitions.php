@@ -4,7 +4,6 @@ use DI\Scope;
 
 return array(
     'foo' => 'bar',
-    'test-string' => DI\string('Hello {foo}'),
 
     'DI\Test\IntegrationTest\Fixtures\Class1' => DI\object()
             ->scope(Scope::PROTOTYPE())

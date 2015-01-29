@@ -7,7 +7,7 @@
  * @license   http://www.opensource.org/licenses/mit-license.php MIT (see the LICENSE file)
  */
 
-namespace DI\Test\IntegrationTest;
+namespace DI\Test\IntegrationTest\Definitions;
 
 use DI\Container;
 use DI\ContainerBuilder;
@@ -27,7 +27,10 @@ class StringDefinitionTest extends \PHPUnit_Framework_TestCase
     public function setUp()
     {
         $builder = new ContainerBuilder();
-        $builder->addDefinitions(__DIR__ . '/Fixtures/definitions.php');
+        $builder->addDefinitions(array(
+            'foo' => 'bar',
+            'test-string' => \DI\string('Hello {foo}'),
+        ));
 
         $this->container = $builder->build();
     }
