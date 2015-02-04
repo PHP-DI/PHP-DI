@@ -113,7 +113,7 @@ is thrown when attempting to resolve the value.</p>
 <p>This change will allow you to call an array callable using a class name, like so:</p>
 <pre><code class="language-php">$container-&gt;call(['MyClass', 'method']);</code></pre>
 <p>If the method is not static, <code>MyClass</code> will be resolved using the container.</p>
-<p>Don't know what <code>Container::call()</code> is? <a href="http://php-di.org/doc/container.html">Check out the "Container API" documentation</a>.</p>
+<p>Don't know what <code>Container::call()</code> is? <a href="http://php-di.org/doc/container.html">Check out the &quot;Container API&quot; documentation</a>.</p>
 <h2>FactoryInterface and InvokerInterface are auto-registered</h2>
 <p><em>contributed by <a href="https://github.com/drealecs">@drealecs</a></em></p>
 <p>Before 4.3, if you wanted to inject <code>DI\FactoryInterface</code> or <code>DI\InvokerInterface</code>, you needed to bind
@@ -121,7 +121,7 @@ them in the configuration to <code>DI\Container</code>.</p>
 <p>They are now auto-registered (just like <code>DI\ContainerInterface</code>) as links to <code>DI\Container</code> so that
 you can inject them without any configuration.</p>
 <p>If you had previously defined them, there is no problem: your definitions always override the internal ones.</p>
-<p>Don't know what these interfaces are for? <a href="http://php-di.org/doc/container.html">Check out the "Container API" documentation</a>.</p>
+<p>Don't know what these interfaces are for? <a href="http://php-di.org/doc/container.html">Check out the &quot;Container API&quot; documentation</a>.</p>
 <h2>Change log</h2>
 <p>You can read the complete <a href="../change-log.html">change log</a>.</p>
         </div>
@@ -149,6 +149,9 @@ you can inject them without any configuration.</p>
                                 All posts
                             </h3>
                             <ul>
+                                <li>
+                                    <a href="http://php-di.org/news/14-php-di-5-syntaxic-sugar.html">Syntactic sugar in PHP-DI 5</a>
+                                </li>
                                 <li>
                                     <a href="http://php-di.org/news/13-php-di-4-4-released.html">PHP-DI 4.4 released</a>
                                 </li>

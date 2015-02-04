@@ -123,7 +123,7 @@ class Foo
 <p>You may wonder then: why injecting <code>a</code> <strong>and</strong> <code>b</code> if they may not be used? Especially if creating those objects is heavy in time or memory.</p>
 <p>That's where lazy injection can help.</p>
 <h2>How it works</h2>
-<p>If you define an object as "lazy", PHP-DI will inject:</p>
+<p>If you define an object as &quot;lazy&quot;, PHP-DI will inject:</p>
 <ul>
 <li>the object, if it has already been created</li>
 <li>or else a <strong>proxy</strong> to the object, if it is not yet created</li>
@@ -151,7 +151,7 @@ var_dump($proxy instanceof Foo); // true
 $proxy-&gt;doSomething();
 // Now the proxy is initialized, the real instance of Foo has been created and called</code></pre>
 <h2>How to use</h2>
-<p>You can define an object as "lazy". If it is injected as a dependency, then a proxy will be injected instead.</p>
+<p>You can define an object as &quot;lazy&quot;. If it is injected as a dependency, then a proxy will be injected instead.</p>
 <h3>Annotations</h3>
 <pre><code class="language-php">/**
  * @Injectable(lazy=true)

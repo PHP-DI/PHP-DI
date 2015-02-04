@@ -275,7 +275,7 @@ return [
 
 ];</code></pre>
 <p><em>Watch out:</em> remember the helper functions (<code>DI\object()</code> for example) are just namespaced functions, not classes.
-Do not use <code>new</code> (e.g. <code>new DI\object()</code>) else you will get a fatal error "Class 'DI\object' not found".</p>
+Do not use <code>new</code> (e.g. <code>new DI\object()</code>) else you will get a fatal error &quot;Class 'DI\object' not found&quot;.</p>
 <p>In addition to defining entries in an array, you can set them directly in the container as shown below.
 <strong>Using an array is however recommended since it allows to cache the definitions.</strong></p>
 <pre><code class="language-php">// Value
@@ -300,7 +300,7 @@ $container-&gt;set('My\Class', \DI\object()
 <li>the wildcard does not match across namespaces</li>
 <li>an exact match (i.e. without <code>*</code>) will always be chosen over a match with a wildcard
 (first PHP-DI looks for an exact match, then it searches in the wildcards)</li>
-<li>in case of "conflicts" (i.e. 2 different matches with wildcards), the first match will prevail</li>
+<li>in case of &quot;conflicts&quot; (i.e. 2 different matches with wildcards), the first match will prevail</li>
 </ul>
     </div>
 

@@ -124,7 +124,7 @@ Of course, do not use this one in production.</p>
 for more details.</p>
 <h3>Cache prefixes</h3>
 <p>If you run the same application twice on the same machine, both installs will use the same cache, and there might be conflicts.</p>
-<p>To avoid this situation, you should use a cache "prefix": each installation of your app has a unique ID, and this ID is used to prefix cache keys
+<p>To avoid this situation, you should use a cache &quot;prefix&quot;: each installation of your app has a unique ID, and this ID is used to prefix cache keys
 to avoid collisions.</p>
 <pre><code class="language-php">$cache = new Doctrine\Common\Cache\ApcCache();
 $cache-&gt;setNamespace('MyApplication');
