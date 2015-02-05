@@ -12,17 +12,11 @@ namespace DI;
 use DI\Definition\ClassDefinition;
 use DI\Definition\Definition;
 use DI\Definition\DefinitionManager;
-use DI\Definition\Resolver\ArrayDefinitionResolver;
-use DI\Definition\Resolver\FunctionCallDefinitionResolver;
-use DI\Definition\Resolver\StringDefinitionResolver;
+use DI\Definition\InstanceDefinition;
+use DI\Definition\Resolver\ResolverDispatcher;
 use DI\Definition\ValueDefinition;
 use DI\Definition\Helper\DefinitionHelper;
-use DI\Definition\Resolver\AliasDefinitionResolver;
-use DI\Definition\Resolver\FactoryDefinitionResolver;
-use DI\Definition\Resolver\ClassDefinitionResolver;
 use DI\Definition\Resolver\DefinitionResolver;
-use DI\Definition\Resolver\ValueDefinitionResolver;
-use DI\Definition\Resolver\EnvironmentVariableDefinitionResolver;
 use DI\Proxy\ProxyFactory;
 use Exception;
 use Interop\Container\ContainerInterface;
@@ -47,11 +41,9 @@ class Container implements ContainerInterface, FactoryInterface, InvokerInterfac
     private $definitionManager;
 
     /**
-     * Map of definition resolvers, indexed by the classname of the definition it resolves.
-     *
-     * @var DefinitionResolver[]
+     * @var DefinitionResolver
      */
-    private $definitionResolvers;
+    private $definitionResolver;
 
     /**
      * Array of entries being resolved. Used to avoid circular dependencies and infinite loops.
@@ -73,22 +65,10 @@ class Container implements ContainerInterface, FactoryInterface, InvokerInterfac
         ProxyFactory $proxyFactory,
         ContainerInterface $wrapperContainer = null
     ) {
-        $this->definitionManager = $definitionManager;
-
-        // Definition resolvers
         $wrapperContainer = $wrapperContainer ?: $this;
-        $arrayDefinitionResolver = new ArrayDefinitionResolver($wrapperContainer);
-        $this->definitionResolvers = array(
-            'DI\Definition\ValueDefinition'               => new ValueDefinitionResolver(),
-            'DI\Definition\ArrayDefinition'               => $arrayDefinitionResolver,
-            'DI\Definition\ArrayDefinitionExtension'      => $arrayDefinitionResolver,
-            'DI\Definition\FactoryDefinition'             => new FactoryDefinitionResolver($wrapperContainer),
-            'DI\Definition\AliasDefinition'               => new AliasDefinitionResolver($wrapperContainer),
-            'DI\Definition\ClassDefinition'               => new ClassDefinitionResolver($wrapperContainer, $proxyFactory),
-            'DI\Definition\FunctionCallDefinition'        => new FunctionCallDefinitionResolver($wrapperContainer),
-            'DI\Definition\EnvironmentVariableDefinition' => new EnvironmentVariableDefinitionResolver($wrapperContainer),
-            'DI\Definition\StringDefinition'              => new StringDefinitionResolver($wrapperContainer),
-        );
+
+        $this->definitionManager = $definitionManager;
+        $this->definitionResolver = ResolverDispatcher::createDefault($wrapperContainer, $proxyFactory);
 
         // Auto-register the container
         $this->singletonEntries['DI\Container'] = $this;
@@ -198,9 +178,7 @@ class Container implements ContainerInterface, FactoryInterface, InvokerInterfac
             return false;
         }
 
-        $definitionResolver = $this->getDefinitionResolver($definition);
-
-        return $definitionResolver->isResolvable($definition);
+        return $this->definitionResolver->isResolvable($definition);
     }
 
     /**
@@ -213,13 +191,14 @@ class Container implements ContainerInterface, FactoryInterface, InvokerInterfac
      */
     public function injectOn($instance)
     {
-        $definition = $this->definitionManager->getDefinition(get_class($instance));
-        $definitionResolver = $this->getDefinitionResolver($definition);
-
-        // Check that the definition is a class definition
-        if ($definition instanceof ClassDefinition && $definitionResolver instanceof ClassDefinitionResolver) {
-            $definitionResolver->injectOnInstance($definition, $instance);
+        $classDefinition = $this->definitionManager->getDefinition(get_class($instance));
+        if (! $classDefinition instanceof ClassDefinition) {
+            return $instance;
         }
+
+        $definition = new InstanceDefinition($instance, $classDefinition);
+
+        $this->definitionResolver->resolve($definition);
 
         return $instance;
     }
@@ -230,16 +209,15 @@ class Container implements ContainerInterface, FactoryInterface, InvokerInterfac
      * Missing parameters will be resolved from the container.
      *
      * @param callable $callable   Function to call.
-     * @param array    $parameters Parameters to use.
+     * @param array    $parameters Parameters to use. Must be an array indexed by the parameter names.
      *
      * @return mixed Result of the function.
      */
     public function call($callable, array $parameters = array())
     {
         $definition = $this->definitionManager->getCallableDefinition($callable);
-        $resolver = $this->getDefinitionResolver($definition);
 
-        return $resolver->resolve($definition, $parameters);
+        return $this->definitionResolver->resolve($definition, $parameters);
     }
 
     /**
@@ -287,8 +265,6 @@ class Container implements ContainerInterface, FactoryInterface, InvokerInterfac
     {
         $entryName = $definition->getName();
 
-        $definitionResolver = $this->getDefinitionResolver($definition);
-
         // Check if we are already getting this entry -> circular dependency
         if (isset($this->entriesBeingResolved[$entryName])) {
             throw new DependencyException("Circular dependency detected while trying to resolve entry '$entryName'");
@@ -297,7 +273,7 @@ class Container implements ContainerInterface, FactoryInterface, InvokerInterfac
 
         // Resolve the definition
         try {
-            $value = $definitionResolver->resolve($definition, $parameters);
+            $value = $this->definitionResolver->resolve($definition, $parameters);
         } catch (Exception $exception) {
             unset($this->entriesBeingResolved[$entryName]);
             throw $exception;
@@ -306,24 +282,5 @@ class Container implements ContainerInterface, FactoryInterface, InvokerInterfac
         unset($this->entriesBeingResolved[$entryName]);
 
         return $value;
-    }
-
-    /**
-     * Returns a resolver capable of handling the given definition.
-     *
-     * @param Definition $definition
-     *
-     * @throws \RuntimeException No definition resolver was found for this type of definition.
-     * @return DefinitionResolver
-     */
-    private function getDefinitionResolver(Definition $definition)
-    {
-        $definitionType = get_class($definition);
-
-        if (! isset($this->definitionResolvers[$definitionType])) {
-            throw new \RuntimeException("No definition resolver was configured for definition of type $definitionType");
-        }
-
-        return $this->definitionResolvers[$definitionType];
     }
 }

@@ -104,30 +104,6 @@ class ClassDefinitionResolver implements DefinitionResolver
     }
 
     /**
-     * Injects dependencies on an existing instance.
-     *
-     * @param ClassDefinition $classDefinition
-     * @param object          $instance
-     *
-     * @throws DependencyException Error while injecting dependencies
-     * @throws DefinitionException
-     * @return object The instance
-     */
-    public function injectOnInstance(ClassDefinition $classDefinition, $instance)
-    {
-        try {
-            $this->injectMethodsAndProperties($instance, $classDefinition);
-        } catch (NotFoundException $e) {
-            $message = sprintf(
-                "Error while injecting dependencies into %s: %s",
-                $classDefinition->getClassName(),
-                $e->getMessage()
-            );
-            throw new DependencyException($message, 0, $e);
-        }
-    }
-
-    /**
      * Returns a proxy instance
      *
      * @param ClassDefinition $definition
@@ -206,7 +182,7 @@ class ClassDefinitionResolver implements DefinitionResolver
         return $object;
     }
 
-    private function injectMethodsAndProperties($object, ClassDefinition $classDefinition)
+    protected function injectMethodsAndProperties($object, ClassDefinition $classDefinition)
     {
         // Property injections
         foreach ($classDefinition->getPropertyInjections() as $propertyInjection) {

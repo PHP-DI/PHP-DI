@@ -23,9 +23,14 @@ use DI\Proxy\ProxyFactory;
  */
 class ClassDefinitionResolverTest extends \PHPUnit_Framework_TestCase
 {
+    const FIXTURE_CLASS = 'DI\Test\UnitTest\Definition\Resolver\Fixture\FixtureClass';
+    const FIXTURE_CLASS_NO_CONSTRUCTOR = 'DI\Test\UnitTest\Definition\Resolver\Fixture\NoConstructor';
+    const FIXTURE_INTERFACE = 'DI\Test\UnitTest\Definition\Resolver\Fixture\FixtureInterface';
+    const FIXTURE_ABSTRACT_CLASS = 'DI\Test\UnitTest\Definition\Resolver\Fixture\FixtureAbstractClass';
+
     public function testResolve()
     {
-        $definition = new ClassDefinition('DI\Test\UnitTest\Definition\Resolver\FixtureClass');
+        $definition = new ClassDefinition(self::FIXTURE_CLASS);
         $definition->addPropertyInjection(new PropertyInjection('prop', 'value1'));
         $definition->setConstructorInjection(MethodInjection::constructor(array('value2')));
         $definition->addMethodInjection(new MethodInjection('method', array('value3')));
@@ -33,7 +38,7 @@ class ClassDefinitionResolverTest extends \PHPUnit_Framework_TestCase
 
         $object = $resolver->resolve($definition);
 
-        $this->assertInstanceOf('DI\Test\UnitTest\Definition\Resolver\FixtureClass', $object);
+        $this->assertInstanceOf(self::FIXTURE_CLASS, $object);
         $this->assertEquals('value1', $object->prop);
         $this->assertEquals('value2', $object->constructorParam1);
         $this->assertEquals('value3', $object->methodParam1);
@@ -41,21 +46,21 @@ class ClassDefinitionResolverTest extends \PHPUnit_Framework_TestCase
 
     public function testResolveNoConstructorClass()
     {
-        $definition = new ClassDefinition('DI\Test\UnitTest\Definition\Resolver\NoConstructor');
+        $definition = new ClassDefinition(self::FIXTURE_CLASS_NO_CONSTRUCTOR);
         $resolver = $this->buildResolver();
 
         $object = $resolver->resolve($definition);
-        $this->assertInstanceOf('DI\Test\UnitTest\Definition\Resolver\NoConstructor', $object);
+        $this->assertInstanceOf(self::FIXTURE_CLASS_NO_CONSTRUCTOR, $object);
     }
 
     public function testResolveWithParameters()
     {
-        $definition = new ClassDefinition('DI\Test\UnitTest\Definition\Resolver\FixtureClass');
+        $definition = new ClassDefinition(self::FIXTURE_CLASS);
         $resolver = $this->buildResolver();
 
         $object = $resolver->resolve($definition, array('param1' => 'value'));
 
-        $this->assertInstanceOf('DI\Test\UnitTest\Definition\Resolver\FixtureClass', $object);
+        $this->assertInstanceOf(self::FIXTURE_CLASS, $object);
         $this->assertEquals('value', $object->constructorParam1);
     }
 
@@ -64,13 +69,13 @@ class ClassDefinitionResolverTest extends \PHPUnit_Framework_TestCase
      */
     public function testResolveWithParametersAndDefinition()
     {
-        $definition = new ClassDefinition('DI\Test\UnitTest\Definition\Resolver\FixtureClass');
+        $definition = new ClassDefinition(self::FIXTURE_CLASS);
         $definition->setConstructorInjection(MethodInjection::constructor(array('foo')));
         $resolver = $this->buildResolver();
 
         $object = $resolver->resolve($definition, array('param1' => 'bar'));
 
-        $this->assertInstanceOf('DI\Test\UnitTest\Definition\Resolver\FixtureClass', $object);
+        $this->assertInstanceOf(self::FIXTURE_CLASS, $object);
         $this->assertEquals('bar', $object->constructorParam1);
     }
 
@@ -79,12 +84,12 @@ class ClassDefinitionResolverTest extends \PHPUnit_Framework_TestCase
      */
     public function testResolveWithUselessParameters()
     {
-        $definition = new ClassDefinition('DI\Test\UnitTest\Definition\Resolver\FixtureClass');
+        $definition = new ClassDefinition(self::FIXTURE_CLASS);
         $resolver = $this->buildResolver();
 
         $object = $resolver->resolve($definition, array('param1' => 'value', 'unknown' => 'foo'));
 
-        $this->assertInstanceOf('DI\Test\UnitTest\Definition\Resolver\FixtureClass', $object);
+        $this->assertInstanceOf(self::FIXTURE_CLASS, $object);
         $this->assertEquals('value', $object->constructorParam1);
     }
 
@@ -93,7 +98,7 @@ class ClassDefinitionResolverTest extends \PHPUnit_Framework_TestCase
      */
     public function testResolveWithEntryReference()
     {
-        $definition = new ClassDefinition('DI\Test\UnitTest\Definition\Resolver\FixtureClass');
+        $definition = new ClassDefinition(self::FIXTURE_CLASS);
         // The constructor definition uses an EntryReference
         $definition->setConstructorInjection(MethodInjection::constructor(array(new EntryReference('foo'))));
 
@@ -109,7 +114,7 @@ class ClassDefinitionResolverTest extends \PHPUnit_Framework_TestCase
 
         $object = $resolver->resolve($definition);
 
-        $this->assertInstanceOf('DI\Test\UnitTest\Definition\Resolver\FixtureClass', $object);
+        $this->assertInstanceOf(self::FIXTURE_CLASS, $object);
         $this->assertEquals('bar', $object->constructorParam1);
     }
 
@@ -118,43 +123,28 @@ class ClassDefinitionResolverTest extends \PHPUnit_Framework_TestCase
      */
     public function testResolveNullInjections()
     {
-        $definition = new ClassDefinition('DI\Test\UnitTest\Definition\Resolver\FixtureClass');
+        $definition = new ClassDefinition(self::FIXTURE_CLASS);
         $definition->setConstructorInjection(MethodInjection::constructor(array(null)));
         $definition->addPropertyInjection(new PropertyInjection('prop', null));
         $resolver = $this->buildResolver();
 
         $object = $resolver->resolve($definition);
 
-        $this->assertInstanceOf('DI\Test\UnitTest\Definition\Resolver\FixtureClass', $object);
+        $this->assertInstanceOf(self::FIXTURE_CLASS, $object);
         $this->assertNull($object->constructorParam1);
         $this->assertNull($object->prop);
     }
 
-    public function testInjectOnInstance()
-    {
-        $definition = new ClassDefinition('DI\Test\UnitTest\Definition\Resolver\FixtureClass');
-        $definition->addPropertyInjection(new PropertyInjection('prop', 'value1'));
-        $definition->addMethodInjection(new MethodInjection('method', array('value2')));
-        $resolver = $this->buildResolver();
-
-        $object = new FixtureClass('');
-
-        $resolver->injectOnInstance($definition, $object);
-
-        $this->assertEquals('value1', $object->prop);
-        $this->assertEquals('value2', $object->methodParam1);
-    }
-
     public function testDefaultParameterValue()
     {
-        $definition = new ClassDefinition('DI\Test\UnitTest\Definition\Resolver\FixtureClass');
+        $definition = new ClassDefinition(self::FIXTURE_CLASS);
         $definition->setConstructorInjection(MethodInjection::constructor(array('')));
         $definition->addMethodInjection(new MethodInjection('methodDefaultValue'));
         $resolver = $this->buildResolver();
 
         $object = $resolver->resolve($definition);
 
-        $this->assertInstanceOf('DI\Test\UnitTest\Definition\Resolver\FixtureClass', $object);
+        $this->assertInstanceOf(self::FIXTURE_CLASS, $object);
         $this->assertEquals('defaultValue', $object->methodParam2);
     }
 
@@ -211,17 +201,17 @@ MESSAGE;
     public function testUndefinedInjection()
     {
         $message = <<<MESSAGE
-Entry DI\Test\UnitTest\Definition\Resolver\FixtureClass cannot be resolved: The parameter 'param1' of DI\Test\UnitTest\Definition\Resolver\FixtureClass::__construct has no value defined or guessable
+Entry DI\Test\UnitTest\Definition\Resolver\Fixture\FixtureClass cannot be resolved: The parameter 'param1' of DI\Test\UnitTest\Definition\Resolver\Fixture\FixtureClass::__construct has no value defined or guessable
 Full definition:
 Object (
-    class = DI\Test\UnitTest\Definition\Resolver\FixtureClass
+    class = DI\Test\UnitTest\Definition\Resolver\Fixture\FixtureClass
     scope = singleton
     lazy = false
 )
 MESSAGE;
         $this->setExpectedException('DI\Definition\Exception\DefinitionException', $message);
 
-        $definition = new ClassDefinition('DI\Test\UnitTest\Definition\Resolver\FixtureClass');
+        $definition = new ClassDefinition(self::FIXTURE_CLASS);
         $resolver = $this->buildResolver();
 
         $resolver->resolve($definition);
@@ -249,13 +239,13 @@ MESSAGE;
     {
         $resolver = $this->buildResolver();
 
-        $classDefinition = new ClassDefinition('DI\Test\UnitTest\Definition\Resolver\FixtureClass');
+        $classDefinition = new ClassDefinition(self::FIXTURE_CLASS);
         $this->assertTrue($resolver->isResolvable($classDefinition));
 
-        $interfaceDefinition = new ClassDefinition('DI\Test\UnitTest\Definition\Resolver\FixtureInterface');
+        $interfaceDefinition = new ClassDefinition(self::FIXTURE_INTERFACE);
         $this->assertFalse($resolver->isResolvable($interfaceDefinition));
 
-        $abstractClassDefinition = new ClassDefinition('DI\Test\UnitTest\Definition\Resolver\FixtureAbstractClass');
+        $abstractClassDefinition = new ClassDefinition(self::FIXTURE_ABSTRACT_CLASS);
         $this->assertFalse($resolver->isResolvable($abstractClassDefinition));
     }
 
@@ -268,39 +258,4 @@ MESSAGE;
 
         return new ClassDefinitionResolver($container, $factory);
     }
-}
-
-class FixtureClass
-{
-    public $prop;
-    public $constructorParam1;
-    public $methodParam1;
-    public $methodParam2;
-
-    public function __construct($param1)
-    {
-        $this->constructorParam1 = $param1;
-    }
-
-    public function method($param1)
-    {
-        $this->methodParam1 = $param1;
-    }
-
-    public function methodDefaultValue($param = 'defaultValue')
-    {
-        $this->methodParam2 = $param;
-    }
-}
-
-class NoConstructor
-{
-}
-
-interface FixtureInterface
-{
-}
-
-abstract class FixtureAbstractClass
-{
 }
