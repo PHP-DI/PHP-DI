@@ -34,14 +34,13 @@ class FunctionCallDefinitionResolver implements DefinitionResolver
     private $parameterResolver;
 
     /**
-     * The resolver needs a container. This container will be used to fetch dependencies.
-     *
-     * @param ContainerInterface $container
+     * @param ContainerInterface $container Used to fetch dependencies.
+     * @param DefinitionResolver $definitionResolver Used to resolve nested definitions.
      */
-    public function __construct(ContainerInterface $container)
+    public function __construct(ContainerInterface $container, DefinitionResolver $definitionResolver)
     {
         $this->container = $container;
-        $this->parameterResolver = new ParameterResolver($container);
+        $this->parameterResolver = new ParameterResolver($definitionResolver);
     }
 
     /**

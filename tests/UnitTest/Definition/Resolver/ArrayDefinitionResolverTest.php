@@ -13,68 +13,107 @@ use DI\Definition\AliasDefinition;
 use DI\Definition\ArrayDefinition;
 use DI\Definition\Resolver\AliasDefinitionResolver;
 use DI\Definition\Resolver\ArrayDefinitionResolver;
+use DI\Definition\Resolver\DefinitionResolver;
 use DI\Definition\ValueDefinition;
+use EasyMock\EasyMock;
+use PHPUnit_Framework_MockObject_MockObject;
 
 /**
  * @covers \DI\Definition\Resolver\ArrayDefinitionResolver
  */
 class ArrayDefinitionResolverTest extends \PHPUnit_Framework_TestCase
 {
-    public function testGetContainer()
+    /**
+     * @var DefinitionResolver|PHPUnit_Framework_MockObject_MockObject
+     */
+    private $parentResolver;
+
+    /**
+     * @var ArrayDefinitionResolver
+     */
+    private $resolver;
+
+    public function setUp()
     {
-        $container = $this->getMock('DI\Container', array(), array(), '', false);
-
-        $resolver = new ArrayDefinitionResolver($container);
-
-        $this->assertSame($container, $resolver->getContainer());
+        $this->parentResolver = EasyMock::mock('DI\Definition\Resolver\DefinitionResolver');
+        $this->resolver = new ArrayDefinitionResolver($this->parentResolver);
     }
 
-    public function testResolve()
+    /**
+     * @test
+     */
+    public function should_resolve_array_of_values()
     {
-        $container = $this->getMock('DI\Container', array(), array(), '', false);
-        $container->expects($this->once())
-            ->method('get')
-            ->with('bar')
-            ->will($this->returnValue(42));
-        $resolver = new ArrayDefinitionResolver($container);
+        $definition = new ArrayDefinition('foo', array(
+            'bar',
+            42,
+        ));
 
-        $definition = new ArrayDefinition('foo', array('bar', \DI\link('bar')));
-
-        $value = $resolver->resolve($definition);
+        $value = $this->resolver->resolve($definition);
 
         $this->assertEquals(array('bar', 42), $value);
     }
 
-    public function testResolveShouldPreserveKeys()
+    /**
+     * @test
+     */
+    public function should_resolve_nested_definitions()
     {
-        $container = $this->getMock('DI\Container', array(), array(), '', false);
-        $container->expects($this->once())
-            ->method('get')
-            ->with('bar')
-            ->will($this->returnValue(42));
-        $resolver = new ArrayDefinitionResolver($container);
+        $this->parentResolver->expects($this->exactly(2))
+            ->method('resolve')
+            ->withConsecutive(
+                $this->isInstanceOf('DI\Definition\AliasDefinition'),
+                $this->isInstanceOf('DI\Definition\ClassDefinition')
+            )
+            ->willReturnOnConsecutiveCalls(42, new \stdClass());
 
         $definition = new ArrayDefinition('foo', array(
-            'hello' => \DI\link('bar')
+            'bar',
+            \DI\link('bar'),
+            \DI\object('bar'),
         ));
 
-        $value = $resolver->resolve($definition);
+        $value = $this->resolver->resolve($definition);
 
-        $this->assertEquals(array('hello' => 42), $value);
+        $this->assertEquals(array('bar', 42, new \stdClass()), $value);
+    }
+
+    /**
+     * @test
+     */
+    public function resolve_should_preserve_keys()
+    {
+        $definition = new ArrayDefinition('foo', array(
+            'hello' => 'world',
+        ));
+
+        $value = $this->resolver->resolve($definition);
+
+        $this->assertEquals(array('hello' => 'world'), $value);
     }
 
     /**
      * @expectedException \InvalidArgumentException
      * @expectedExceptionMessage This definition resolver is only compatible with ArrayDefinition objects, DI\Definition\ValueDefinition given
      */
-    public function testInvalidDefinitionType()
+    public function should_only_resolve_array_definitions()
     {
-        /** @var \DI\Container $container */
-        $container = $this->getMock('DI\Container', array(), array(), '', false);
+        $this->resolver->resolve(new ValueDefinition('foo', 'bar'));
+    }
 
-        $definition = new ValueDefinition('foo', 'bar');
-        $resolver = new ArrayDefinitionResolver($container);
+    /**
+     * @test
+     * @expectedException \DI\DependencyException
+     * @expectedExceptionMessage Error while resolving foo[0]. This is a message
+     */
+    public function should_throw_with_a_nice_message()
+    {
+        $this->parentResolver->expects($this->once())
+            ->method('resolve')
+            ->willThrowException(new \Exception('This is a message'));
 
-        $resolver->resolve($definition);
+        $this->resolver->resolve(new ArrayDefinition('foo', array(
+            \DI\link('bar'),
+        )));
     }
 }

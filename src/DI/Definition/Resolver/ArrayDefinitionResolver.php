@@ -11,10 +11,9 @@ namespace DI\Definition\Resolver;
 
 use DI\Definition\ArrayDefinition;
 use DI\Definition\Definition;
-use DI\Definition\EntryReference;
+use DI\Definition\Helper\DefinitionHelper;
 use DI\DependencyException;
 use Exception;
-use Interop\Container\ContainerInterface;
 
 /**
  * Resolves an array definition to a value.
@@ -25,19 +24,16 @@ use Interop\Container\ContainerInterface;
 class ArrayDefinitionResolver implements DefinitionResolver
 {
     /**
-     * @var ContainerInterface
+     * @var DefinitionResolver
      */
-    private $container;
+    private $definitionResolver;
 
     /**
-     * The resolver needs a container.
-     * This container will be used to get the entry to which the alias points to.
-     *
-     * @param ContainerInterface $container
+     * @param DefinitionResolver $definitionResolver Used to resolve nested definitions.
      */
-    public function __construct(ContainerInterface $container)
+    public function __construct(DefinitionResolver $definitionResolver)
     {
-        $this->container = $container;
+        $this->definitionResolver = $definitionResolver;
     }
 
     /**
@@ -55,7 +51,7 @@ class ArrayDefinitionResolver implements DefinitionResolver
 
         $values = $definition->getValues();
 
-        $values = $this->resolveAliases($definition, $values);
+        $values = $this->resolveNestedDefinitions($definition, $values);
 
         return $values;
     }
@@ -70,14 +66,6 @@ class ArrayDefinitionResolver implements DefinitionResolver
         return true;
     }
 
-    /**
-     * @return ContainerInterface
-     */
-    public function getContainer()
-    {
-        return $this->container;
-    }
-
     private function assertIsArrayDefinition(Definition $definition)
     {
         if (!$definition instanceof ArrayDefinition) {
@@ -88,27 +76,26 @@ class ArrayDefinitionResolver implements DefinitionResolver
         }
     }
 
-    private function resolveAliases(ArrayDefinition $definition, array $values)
+    private function resolveNestedDefinitions(ArrayDefinition $definition, array $values)
     {
         foreach ($values as $key => $value) {
-            if ($value instanceof EntryReference) {
-                $values[$key] = $this->resolveReference($value, $definition, $key);
+            if ($value instanceof DefinitionHelper) {
+                $values[$key] = $this->resolveDefinition($value, $definition, $key);
             }
         }
 
         return $values;
     }
 
-    private function resolveReference(EntryReference $reference, ArrayDefinition $definition, $key)
+    private function resolveDefinition(DefinitionHelper $value, ArrayDefinition $definition, $key)
     {
         try {
-            return $this->container->get($reference->getName());
+            return $this->definitionResolver->resolve($value->getDefinition(''));
         } catch (DependencyException $e) {
             throw $e;
         } catch (Exception $e) {
             throw new DependencyException(sprintf(
-                "Error while resolving '%s' in %s[%s]. %s",
-                $reference->getName(),
+                "Error while resolving %s[%s]. %s",
                 $definition->getName(),
                 $key,
                 $e->getMessage()

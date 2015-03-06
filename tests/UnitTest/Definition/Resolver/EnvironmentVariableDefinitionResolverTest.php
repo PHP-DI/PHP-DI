@@ -9,19 +9,29 @@
 
 namespace DI\Test\UnitTest\Definition\Resolver;
 
+use DI\Definition\AliasDefinition;
 use DI\Definition\EntryReference;
 use DI\Definition\FactoryDefinition;
 use DI\Definition\EnvironmentVariableDefinition;
+use DI\Definition\Resolver\DefinitionResolver;
 use DI\Definition\Resolver\EnvironmentVariableDefinitionResolver;
+use EasyMock\EasyMock;
+use PHPUnit_Framework_MockObject_MockObject;
 
 /**
  * @covers \DI\Definition\Resolver\EnvironmentVariableDefinitionResolver
  */
 class EnvironmentVariableDefinitionResolverTest extends \PHPUnit_Framework_TestCase
 {
-    private $container;
-    private $variableReader;
+    /**
+     * @var EnvironmentVariableDefinitionResolver
+     */
     private $resolver;
+    /**
+     * @var DefinitionResolver|PHPUnit_Framework_MockObject_MockObject
+     */
+    private $parentResolver;
+    private $variableReader;
     private $definedDefinition;
     private $undefinedDefinition;
     private $optionalDefinition;
@@ -30,7 +40,7 @@ class EnvironmentVariableDefinitionResolverTest extends \PHPUnit_Framework_TestC
 
     public function setUp()
     {
-        $this->container = $this->getMock('Interop\Container\ContainerInterface');
+        $this->parentResolver = EasyMock::mock('DI\Definition\Resolver\DefinitionResolver');
 
         $this->variableReader = function ($variableName) {
             if ('DEFINED' === $variableName) {
@@ -40,11 +50,11 @@ class EnvironmentVariableDefinitionResolverTest extends \PHPUnit_Framework_TestC
             return false;
         };
 
-        $this->resolver = new EnvironmentVariableDefinitionResolver($this->container, $this->variableReader);
+        $this->resolver = new EnvironmentVariableDefinitionResolver($this->parentResolver, $this->variableReader);
         $this->definedDefinition = new EnvironmentVariableDefinition('foo', 'DEFINED');
         $this->undefinedDefinition = new EnvironmentVariableDefinition('foo', 'UNDEFINED');
         $this->optionalDefinition = new EnvironmentVariableDefinition('foo', 'UNDEFINED', true, '<default>');
-        $this->linkedDefinition = new EnvironmentVariableDefinition('foo', 'UNDEFINED', true, new EntryReference('foo'));
+        $this->linkedDefinition = new EnvironmentVariableDefinition('foo', 'UNDEFINED', true, \DI\link('foo'));
         $this->invalidDefinition = new FactoryDefinition('foo', function () {});
     }
 
@@ -64,9 +74,9 @@ class EnvironmentVariableDefinitionResolverTest extends \PHPUnit_Framework_TestC
 
     public function testResolveWithLinkedDefault()
     {
-        $this->container->expects($this->once())
-            ->method('get')
-            ->with('foo')
+        $this->parentResolver->expects($this->once())
+            ->method('resolve')
+            ->with(new AliasDefinition('', 'foo'))
             ->will($this->returnValue('bar'));
 
         $value = $this->resolver->resolve($this->linkedDefinition);
