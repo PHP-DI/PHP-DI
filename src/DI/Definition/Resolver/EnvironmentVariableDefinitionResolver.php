@@ -10,10 +10,9 @@
 namespace DI\Definition\Resolver;
 
 use DI\Definition\Definition;
-use DI\Definition\EntryReference;
 use DI\Definition\EnvironmentVariableDefinition;
 use DI\Definition\Exception\DefinitionException;
-use Interop\Container\ContainerInterface;
+use DI\Definition\Helper\DefinitionHelper;
 
 /**
  * Resolves a environment variable definition to a value.
@@ -23,18 +22,18 @@ use Interop\Container\ContainerInterface;
 class EnvironmentVariableDefinitionResolver implements DefinitionResolver
 {
     /**
-     * @var ContainerInterface
+     * @var DefinitionResolver
      */
-    private $container;
+    private $definitionResolver;
 
     /**
      * @var callable
      */
     private $variableReader;
 
-    public function __construct(ContainerInterface $container, $variableReader = 'getenv')
+    public function __construct(DefinitionResolver $definitionResolver, $variableReader = 'getenv')
     {
-        $this->container = $container;
+        $this->definitionResolver = $definitionResolver;
         $this->variableReader = $variableReader;
     }
 
@@ -62,8 +61,9 @@ class EnvironmentVariableDefinitionResolver implements DefinitionResolver
 
         $value = $definition->getDefaultValue();
 
-        if ($value instanceof EntryReference) {
-            return $this->container->get($value->getName());
+        // Nested definition
+        if ($value instanceof DefinitionHelper) {
+            return $this->definitionResolver->resolve($value->getDefinition(''));
         }
 
         return $value;

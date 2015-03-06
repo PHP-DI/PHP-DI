@@ -11,6 +11,7 @@ namespace DI\Test\UnitTest\Definition\Resolver;
 
 use DI\Container;
 use DI\Definition\FunctionCallDefinition;
+use DI\Definition\Resolver\AliasDefinitionResolver;
 use DI\Definition\Resolver\FunctionCallDefinitionResolver;
 use DI\Definition\ValueDefinition;
 
@@ -160,7 +161,7 @@ class FunctionCallDefinitionResolverTest extends \PHPUnit_Framework_TestCase
 
     private function assert_definition_resolver(Container $container)
     {
-        return new FunctionCallDefinitionResolver($container);
+        return new FunctionCallDefinitionResolver($container, new AliasDefinitionResolver($container));
     }
 
     private function assert_container_get(\PHPUnit_Framework_MockObject_MockObject $container, $id, $returnedValue)

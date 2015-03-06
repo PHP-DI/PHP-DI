@@ -40,7 +40,7 @@ class BuggyInjectionsTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException \DI\DependencyException
-     * @expectedExceptionMessage Error while injecting 'namedDependency' in DI\Test\IntegrationTest\Fixtures\SetterInjectionTest\NamedInjectionClass::dependency. No entry or class found for 'namedDependency'
+     * @expectedExceptionMessage Error while injecting in DI\Test\IntegrationTest\Fixtures\SetterInjectionTest\NamedInjectionClass::dependency. No entry or class found for 'namedDependency'
      */
     public function testSetterNamedInjectionNotFound()
     {
@@ -71,7 +71,7 @@ class BuggyInjectionsTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException \DI\DependencyException
-     * @expectedExceptionMessage Error while injecting 'db.host' in DI\Test\IntegrationTest\Fixtures\ValueInjectionTest\ValueInjectionClass::value. No entry or class found for 'db.host'
+     * @expectedExceptionMessage Error while injecting in DI\Test\IntegrationTest\Fixtures\ValueInjectionTest\ValueInjectionClass::value. No entry or class found for 'db.host'
      */
     public function testValueException()
     {
