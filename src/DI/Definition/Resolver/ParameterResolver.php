@@ -11,9 +11,8 @@ namespace DI\Definition\Resolver;
 
 use DI\Definition\AbstractFunctionCallDefinition;
 use DI\Definition\ClassDefinition;
-use DI\Definition\EntryReference;
 use DI\Definition\Exception\DefinitionException;
-use Interop\Container\ContainerInterface;
+use DI\Definition\Helper\DefinitionHelper;
 
 /**
  * Resolves parameters for a function call.
@@ -24,16 +23,16 @@ use Interop\Container\ContainerInterface;
 class ParameterResolver
 {
     /**
-     * @var ContainerInterface
+     * @var DefinitionResolver
      */
-    private $container;
+    private $definitionResolver;
 
     /**
-     * @param ContainerInterface $container Will be used to fetch dependencies.
+     * @param DefinitionResolver $definitionResolver Will be used to resolve nested definitions.
      */
-    public function __construct(ContainerInterface $container)
+    public function __construct(DefinitionResolver $definitionResolver)
     {
-        $this->container = $container;
+        $this->definitionResolver = $definitionResolver;
     }
 
     /**
@@ -76,12 +75,14 @@ class ParameterResolver
                 ));
             }
 
-            if ($value instanceof EntryReference) {
+            if ($value instanceof DefinitionHelper) {
+                $nestedDefinition = $value->getDefinition('');
+
                 // If the container cannot produce the entry, we can use the default parameter value
-                if (!$this->container->has($value->getName()) && $parameter->isOptional()) {
+                if (!$this->definitionResolver->isResolvable($nestedDefinition) && $parameter->isOptional()) {
                     $value = $this->getParameterDefaultValue($parameter, $functionReflection);
                 } else {
-                    $value = $this->container->get($value->getName());
+                    $value = $this->definitionResolver->resolve($nestedDefinition);
                 }
             }
 
@@ -89,14 +90,6 @@ class ParameterResolver
         }
 
         return $args;
-    }
-
-    /**
-     * @return ContainerInterface
-     */
-    public function getContainer()
-    {
-        return $this->container;
     }
 
     /**

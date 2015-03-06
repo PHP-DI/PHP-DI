@@ -22,7 +22,7 @@ class ResolverDispatcher implements DefinitionResolver
      */
     private $definitionResolvers;
 
-    public function __construct(array $definitionResolvers)
+    public function __construct(array $definitionResolvers = array())
     {
         $this->definitionResolvers = $definitionResolvers;
     }
@@ -38,20 +38,24 @@ class ResolverDispatcher implements DefinitionResolver
     {
         $arrayDefinitionResolver = new ArrayDefinitionResolver($container);
 
+        $resolver = new self();
+
         $definitionResolvers = array(
             'DI\Definition\ValueDefinition'               => new ValueDefinitionResolver(),
             'DI\Definition\ArrayDefinition'               => $arrayDefinitionResolver,
             'DI\Definition\ArrayDefinitionExtension'      => $arrayDefinitionResolver,
             'DI\Definition\FactoryDefinition'             => new FactoryDefinitionResolver($container),
             'DI\Definition\AliasDefinition'               => new AliasDefinitionResolver($container),
-            'DI\Definition\ClassDefinition'               => new ClassDefinitionResolver($container, $proxyFactory),
-            'DI\Definition\InstanceDefinition'            => new InstanceDefinitionResolver($container, $proxyFactory),
-            'DI\Definition\FunctionCallDefinition'        => new FunctionCallDefinitionResolver($container),
-            'DI\Definition\EnvironmentVariableDefinition' => new EnvironmentVariableDefinitionResolver($container),
+            'DI\Definition\ClassDefinition'               => new ClassDefinitionResolver($resolver, $proxyFactory),
+            'DI\Definition\InstanceDefinition'            => new InstanceDefinitionResolver($resolver, $proxyFactory),
+            'DI\Definition\FunctionCallDefinition'        => new FunctionCallDefinitionResolver($container, $resolver),
+            'DI\Definition\EnvironmentVariableDefinition' => new EnvironmentVariableDefinitionResolver($resolver),
             'DI\Definition\StringDefinition'              => new StringDefinitionResolver($container),
         );
 
-        return new self($definitionResolvers);
+        $resolver->setDefinitionResolvers($definitionResolvers);
+
+        return $resolver;
     }
 
     /**
@@ -103,5 +107,13 @@ class ResolverDispatcher implements DefinitionResolver
         }
 
         return $this->definitionResolvers[$definitionType];
+    }
+
+    /**
+     * @param DefinitionResolver[] $definitionResolvers
+     */
+    public function setDefinitionResolvers(array $definitionResolvers)
+    {
+        $this->definitionResolvers = $definitionResolvers;
     }
 }

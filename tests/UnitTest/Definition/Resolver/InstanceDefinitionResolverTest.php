@@ -14,6 +14,7 @@ use DI\Definition\ClassDefinition\MethodInjection;
 use DI\Definition\ClassDefinition\PropertyInjection;
 use DI\Definition\InstanceDefinition;
 use DI\Definition\Resolver\InstanceDefinitionResolver;
+use DI\Definition\Resolver\ResolverDispatcher;
 use DI\Proxy\ProxyFactory;
 use DI\Test\UnitTest\Definition\Resolver\Fixture\FixtureClass;
 use EasyMock\EasyMock;
@@ -57,11 +58,11 @@ class InstanceDefinitionResolverTest extends \PHPUnit_Framework_TestCase
 
     private function buildResolver()
     {
-        /** @var \DI\Container $container */
-        $container = EasyMock::mock('DI\Container');
+        /** @var ResolverDispatcher $resolverDispatcher */
+        $resolverDispatcher = EasyMock::mock('DI\Definition\Resolver\ResolverDispatcher');
         /** @var ProxyFactory $factory */
         $factory = EasyMock::mock('DI\Proxy\ProxyFactory');
 
-        return new InstanceDefinitionResolver($container, $factory);
+        return new InstanceDefinitionResolver($resolverDispatcher, $factory);
     }
 }
