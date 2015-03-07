@@ -65,14 +65,6 @@ class AliasDefinitionResolver implements DefinitionResolver
         return $this->container->has($definition->getTargetEntryName());
     }
 
-    /**
-     * @return ContainerInterface
-     */
-    public function getContainer()
-    {
-        return $this->container;
-    }
-
     private function assertIsAliasDefinition(Definition $definition)
     {
         if (!$definition instanceof AliasDefinition) {

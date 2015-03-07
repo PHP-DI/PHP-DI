@@ -18,15 +18,6 @@ use DI\Definition\ValueDefinition;
  */
 class AliasDefinitionResolverTest extends \PHPUnit_Framework_TestCase
 {
-    public function testGetContainer()
-    {
-        $container = $this->getMock('DI\Container', array(), array(), '', false);
-
-        $resolver = new AliasDefinitionResolver($container);
-
-        $this->assertSame($container, $resolver->getContainer());
-    }
-
     public function testResolve()
     {
         $container = $this->getMock('DI\Container', array(), array(), '', false);
