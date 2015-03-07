@@ -14,8 +14,6 @@ use DI\Definition\Source\AnnotationDefinitionSource;
 use DI\Scope;
 
 /**
- * Test class for AnnotationDefinitionSource
- *
  * @covers \DI\Definition\Source\AnnotationDefinitionSource
  */
 class AnnotationDefinitionSourceTest extends \PHPUnit_Framework_TestCase

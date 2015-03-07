@@ -18,7 +18,10 @@ use DI\Definition\ValueDefinition;
  */
 class ArrayDefinitionDumperTest extends \PHPUnit_Framework_TestCase
 {
-    public function testDumpArray()
+    /**
+     * @test
+     */
+    public function should_dump_array_definitions()
     {
         $definition = new ArrayDefinition('foo', array(
             'hello',
@@ -34,7 +37,10 @@ class ArrayDefinitionDumperTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($str, $dumper->dump($definition));
     }
 
-    public function testDumpArrayWithKeys()
+    /**
+     * @test
+     */
+    public function should_dump_array_with_keys()
     {
         $definition = new ArrayDefinition('foo', array(
             'test' => 'hello',
@@ -49,10 +55,11 @@ class ArrayDefinitionDumperTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @test
      * @expectedException \InvalidArgumentException
      * @expectedExceptionMessage This definition dumper is only compatible with ArrayDefinition objects, DI\Definition\ValueDefinition given
      */
-    public function testInvalidDefinitionType()
+    public function should_only_accept_array_definitions()
     {
         $definition = new ValueDefinition('foo', 'bar');
         $dumper = new ArrayDefinitionDumper();

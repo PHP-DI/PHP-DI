@@ -11,24 +11,27 @@ namespace DI\Test\UnitTest\Definition\Source;
 
 use DI\Definition\ClassDefinition;
 use DI\Definition\Source\PHPFileDefinitionSource;
+use DI\Definition\ValueDefinition;
 
 /**
- * Test class for PHPFileDefinitionSource
- *
  * @covers \DI\Definition\Source\PHPFileDefinitionSource
  */
 class PHPFileDefinitionSourceTest extends \PHPUnit_Framework_TestCase
 {
-    public function testLoadFromFile()
+    /**
+     * @test
+     */
+    public function should_load_definition_from_file()
     {
         $source = new PHPFileDefinitionSource(__DIR__ . '/Fixtures/definitions.php');
 
+        /** @var ValueDefinition $definition */
         $definition = $source->getDefinition('foo');
-        $this->assertNotNull($definition);
+        $this->assertInstanceOf('DI\Definition\ValueDefinition', $definition);
         $this->assertEquals('bar', $definition->getValue());
         $this->assertInternalType('string', $definition->getValue());
 
-        /** @var $definition ClassDefinition */
+        /** @var ClassDefinition $definition */
         $definition = $source->getDefinition('bim');
         $this->assertInstanceOf('DI\Definition\ClassDefinition', $definition);
         $this->assertEquals('bim', $definition->getName());

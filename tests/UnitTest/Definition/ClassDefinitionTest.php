@@ -13,15 +13,14 @@ use DI\Definition\ClassDefinition;
 use DI\Definition\ClassDefinition\MethodInjection;
 use DI\Definition\ClassDefinition\PropertyInjection;
 use DI\Scope;
+use EasyMock\EasyMock;
 
 /**
- * Test class for ClassDefinition
- *
  * @covers \DI\Definition\ClassDefinition
  */
 class ClassDefinitionTest extends \PHPUnit_Framework_TestCase
 {
-    public function testProperties()
+    public function test_getters_setters()
     {
         $definition = new ClassDefinition('foo', 'bar');
         $definition->setLazy(true);
@@ -33,7 +32,7 @@ class ClassDefinitionTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(Scope::PROTOTYPE(), $definition->getScope());
     }
 
-    public function testDefaultValues()
+    public function test_defaults()
     {
         $definition = new ClassDefinition('foo');
 
@@ -47,22 +46,26 @@ class ClassDefinitionTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @test
      * @expectedException \DI\Definition\Exception\DefinitionException
      * @expectedExceptionMessage DI definition conflict: there are 2 different definitions for 'foo' that are incompatible, they are not of the same type
      */
-    public function testMergeIncompatibleTypes()
+    public function should_only_merge_with_compatible_definitions()
     {
-        $otherDefinition = $this->getMockForAbstractClass('DI\Definition\MergeableDefinition');
+        $otherDefinition = EasyMock::mock('DI\Definition\MergeableDefinition');
 
         $definition = new ClassDefinition('foo', 'bar');
         $definition->merge($otherDefinition);
     }
 
     /**
+     * @test
      * @dataProvider mergeDataProvider
      */
-    public function testMerge(ClassDefinition $definition1, ClassDefinition $definition2)
-    {
+    public function should_merge_with_another_class_definition(
+        ClassDefinition $definition1,
+        ClassDefinition $definition2
+    ) {
         $merged = $definition1->merge($definition2);
 
         // Check that the object is cloned
@@ -103,7 +106,7 @@ class ClassDefinitionTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    public function testCacheable()
+    public function should_be_cacheable()
     {
         $this->assertInstanceOf('DI\Definition\CacheableDefinition', new ClassDefinition('foo'));
     }

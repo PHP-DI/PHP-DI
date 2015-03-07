@@ -13,13 +13,17 @@ use DI\ContainerBuilder;
 use DI\Definition\Source\ArrayDefinitionSource;
 use DI\Definition\ValueDefinition;
 use DI\Test\UnitTest\Fixtures\FakeContainer;
+use EasyMock\EasyMock;
 
 /**
  * @covers \DI\ContainerBuilder
  */
 class ContainerBuilderTest extends \PHPUnit_Framework_TestCase
 {
-    public function testDefaultConfiguration()
+    /**
+     * @test
+     */
+    public function should_configure_for_development_by_default()
     {
         // Make the ContainerBuilder use our fake class to catch constructor parameters
         $builder = new ContainerBuilder('DI\Test\UnitTest\Fixtures\FakeContainer');
@@ -28,11 +32,16 @@ class ContainerBuilderTest extends \PHPUnit_Framework_TestCase
 
         // No cache
         $this->assertNull($container->definitionManager->getCache());
+        // Proxies evaluated in memory
+        $this->assertFalse($this->getObjectAttribute($container->proxyFactory, 'writeProxiesToFile'));
     }
 
-    public function testSetCache()
+    /**
+     * @test
+     */
+    public function should_allow_to_configure_a_cache()
     {
-        $cache = $this->getMockForAbstractClass('Doctrine\Common\Cache\Cache');
+        $cache = EasyMock::mock('Doctrine\Common\Cache\Cache');
 
         $builder = new ContainerBuilder('DI\Test\UnitTest\Fixtures\FakeContainer');
         $builder->setDefinitionCache($cache);
@@ -44,9 +53,9 @@ class ContainerBuilderTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * By default, the definition resolvers should not be overridden
+     * @test
      */
-    public function testContainerNotWrapped()
+    public function the_container_should_not_be_wrapped_by_default()
     {
         $builder = new ContainerBuilder('DI\Test\UnitTest\Fixtures\FakeContainer');
         /** @var FakeContainer $container */
@@ -55,9 +64,12 @@ class ContainerBuilderTest extends \PHPUnit_Framework_TestCase
         $this->assertNull($container->wrapperContainer);
     }
 
-    public function testContainerWrapped()
+    /**
+     * @test
+     */
+    public function should_allow_to_set_a_wrapper_container()
     {
-        $otherContainer = $this->getMockForAbstractClass('Interop\Container\ContainerInterface');
+        $otherContainer = EasyMock::mock('Interop\Container\ContainerInterface');
 
         $builder = new ContainerBuilder('DI\Test\UnitTest\Fixtures\FakeContainer');
         $builder->wrapContainer($otherContainer);
@@ -68,7 +80,10 @@ class ContainerBuilderTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($otherContainer, $container->wrapperContainer);
     }
 
-    public function testAddCustomDefinitionSource()
+    /**
+     * @test
+     */
+    public function should_allow_to_add_custom_definition_sources()
     {
         $builder = new ContainerBuilder('DI\Test\UnitTest\Fixtures\FakeContainer');
 
@@ -89,7 +104,10 @@ class ContainerBuilderTest extends \PHPUnit_Framework_TestCase
         $this->assertSame('barbar', $definition->getValue());
     }
 
-    public function testAddDefinitionArray()
+    /**
+     * @test
+     */
+    public function should_allow_to_add_definitions_in_an_array()
     {
         $builder = new ContainerBuilder('DI\Test\UnitTest\Fixtures\FakeContainer');
 
@@ -108,8 +126,11 @@ class ContainerBuilderTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf('DI\Definition\ValueDefinition', $definition);
         $this->assertSame('barbar', $definition->getValue());
     }
-    
-    public function testFluentInterface()
+
+    /**
+     * @test
+     */
+    public function should_have_a_fluent_interface()
     {
         $builder = new ContainerBuilder();
 
@@ -131,11 +152,11 @@ class ContainerBuilderTest extends \PHPUnit_Framework_TestCase
         $result = $builder->writeProxiesToFile(false);
         $this->assertSame($builder, $result);
 
-        $mockCache = $this->getMockForAbstractClass('Doctrine\Common\Cache\Cache');
+        $mockCache = EasyMock::mock('Doctrine\Common\Cache\Cache');
         $result = $builder->setDefinitionCache($mockCache);
         $this->assertSame($builder, $result);
 
-        $result = $builder->wrapContainer($this->getMockForAbstractClass('Interop\Container\ContainerInterface'));
+        $result = $builder->wrapContainer(EasyMock::mock('Interop\Container\ContainerInterface'));
         $this->assertSame($builder, $result);
     }
 }

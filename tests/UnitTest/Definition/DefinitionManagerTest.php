@@ -13,10 +13,9 @@ use DI\Definition\AliasDefinition;
 use DI\Definition\DefinitionManager;
 use DI\Definition\ValueDefinition;
 use Doctrine\Common\Cache\ArrayCache;
+use EasyMock\EasyMock;
 
 /**
- * Test class for DefinitionManager
- *
  * @covers \DI\Definition\DefinitionManager
  */
 class DefinitionManagerTest extends \PHPUnit_Framework_TestCase
@@ -24,14 +23,13 @@ class DefinitionManagerTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldGetFromCache()
+    public function should_get_from_cache()
     {
         $definitionManager = new DefinitionManager();
 
-        $cache = $this->getMockForAbstractClass('Doctrine\Common\Cache\Cache');
-        $cache->expects($this->once())
-            ->method('fetch')
-            ->will($this->returnValue('foo'));
+        $cache = EasyMock::spy('Doctrine\Common\Cache\Cache', array(
+            'fetch' => 'foo',
+        ));
 
         $definitionManager->setCache($cache);
 
@@ -43,16 +41,14 @@ class DefinitionManagerTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldSaveToCache()
+    public function should_save_to_cache()
     {
         $definitionManager = new DefinitionManager();
 
-        $cache = $this->getMockForAbstractClass('Doctrine\Common\Cache\Cache');
-        $cache->expects($this->once())
-            ->method('fetch')
-            ->will($this->returnValue(false));
-        $cache->expects($this->once())
-            ->method('save');
+        $cache = EasyMock::spy('Doctrine\Common\Cache\Cache', array(
+            'fetch' => false,
+            'save'  => null,
+        ));
 
         $definitionManager->setCache($cache);
 
@@ -60,13 +56,14 @@ class DefinitionManagerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @test
      * Tests that the given definition source is chained to the ArraySource and used.
      */
-    public function testDefinitionSource()
+    public function should_get_definitions_from_definition_source()
     {
-        $definition = $this->getMockForAbstractClass('DI\Definition\CacheableDefinition');
+        $definition = EasyMock::mock('DI\Definition\CacheableDefinition');
 
-        $source = $this->getMockForAbstractClass('DI\Definition\Source\DefinitionSource');
+        $source = EasyMock::mock('DI\Definition\Source\DefinitionSource');
         $source->expects($this->once())
             ->method('getDefinition')
             ->with('foo')
@@ -77,7 +74,10 @@ class DefinitionManagerTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($definition, $definitionManager->getDefinition('foo'));
     }
 
-    public function testAddDefinition()
+    /**
+     * @test
+     */
+    public function should_allow_to_add_definitions()
     {
         $definitionManager = new DefinitionManager();
         $valueDefinition = new ValueDefinition('foo', 'bar');
@@ -91,7 +91,7 @@ class DefinitionManagerTest extends \PHPUnit_Framework_TestCase
      * @test
      * @see https://github.com/mnapoli/PHP-DI/issues/222
      */
-    public function testAddDefinitionShouldClearCachedDefinition()
+    public function adding_a_definition_should_clear_the_cached_value()
     {
         $definitionManager = new DefinitionManager();
         $definitionManager->setCache(new ArrayCache());

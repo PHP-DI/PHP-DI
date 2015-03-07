@@ -73,14 +73,6 @@ class FactoryDefinitionResolver implements DefinitionResolver
         return true;
     }
 
-    /**
-     * @return ContainerInterface
-     */
-    public function getContainer()
-    {
-        return $this->container;
-    }
-
     private function assertIsFactoryDefinition(Definition $definition)
     {
         if (!$definition instanceof FactoryDefinition) {

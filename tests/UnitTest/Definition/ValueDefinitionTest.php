@@ -17,7 +17,7 @@ use DI\Scope;
  */
 class ValueDefinitionTest extends \PHPUnit_Framework_TestCase
 {
-    public function testGetters()
+    public function test_getters()
     {
         $definition = new ValueDefinition('foo', 1);
 
@@ -25,14 +25,20 @@ class ValueDefinitionTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(1, $definition->getValue());
     }
 
-    public function testScope()
+    /**
+     * @test
+     */
+    public function should_have_singleton_scope()
     {
         $definition = new ValueDefinition('foo', 1);
 
         $this->assertEquals(Scope::SINGLETON(), $definition->getScope());
     }
 
-    public function testCacheable()
+    /**
+     * @test
+     */
+    public function should_not_be_cacheable()
     {
         $this->assertNotInstanceOf('DI\Definition\CacheableDefinition', new ValueDefinition('foo', 'bar'));
     }

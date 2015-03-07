@@ -9,11 +9,13 @@
 
 namespace DI\Test\UnitTest\Definition\Resolver;
 
-use DI\Container;
 use DI\Definition\FunctionCallDefinition;
 use DI\Definition\Resolver\AliasDefinitionResolver;
 use DI\Definition\Resolver\FunctionCallDefinitionResolver;
 use DI\Definition\ValueDefinition;
+use EasyMock\EasyMock;
+use Interop\Container\ContainerInterface;
+use PHPUnit_Framework_MockObject_MockObject;
 
 /**
  * @covers \DI\Definition\Resolver\FunctionCallDefinitionResolver
@@ -22,121 +24,121 @@ use DI\Definition\ValueDefinition;
 class FunctionCallDefinitionResolverTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @test
+     * @var ContainerInterface|PHPUnit_Framework_MockObject_MockObject
      */
-    public function call_closure()
+    private $container;
+
+    /**
+     * @var FunctionCallDefinitionResolver
+     */
+    private $resolver;
+
+    public function setUp()
     {
-        $resolver = $this->assert_definition_resolver($this->assert_container());
-
-        $definition = $this->definition(function () {
-            return 42;
-        });
-
-        $this->assertEquals(42, $resolver->resolve($definition));
+        $this->container = EasyMock::mock('Interop\Container\ContainerInterface');
+        $resolver = new AliasDefinitionResolver($this->container);
+        $this->resolver = new FunctionCallDefinitionResolver($this->container, $resolver);
     }
 
     /**
      * @test
      */
-    public function call_closure_with_parameters()
+    public function should_call_closure()
     {
-        $container = $this->assert_container();
-        $resolver = $this->assert_definition_resolver($container);
+        $definition = $this->definition(function () {
+            return 42;
+        });
 
-        $this->assert_container_get($container, 'bar', 42);
+        $this->assertEquals(42, $this->resolver->resolve($definition));
+    }
+
+    /**
+     * @test
+     */
+    public function should_call_closure_with_parameters()
+    {
+        $this->assert_container_get($this->container, 'bar', 42);
 
         $definition = $this->definition(function ($foo, $bar) {
             return array($foo, $bar);
         }, array('foo', \DI\link('bar')));
 
-        $this->assertEquals(array('foo', 42), $resolver->resolve($definition));
+        $this->assertEquals(array('foo', 42), $this->resolver->resolve($definition));
     }
 
     /**
      * @test
      */
-    public function call_object_method()
+    public function should_call_object_method()
     {
-        $resolver = $this->assert_definition_resolver($this->assert_container());
-
         $definition = $this->definition(array(new TestClass(), 'foo'));
 
-        $this->assertEquals(42, $resolver->resolve($definition));
+        $this->assertEquals(42, $this->resolver->resolve($definition));
     }
 
     /**
      * @test
      */
-    public function call_class_method()
+    public function should_call_class_method()
     {
-        $container = $this->assert_container();
-        $resolver = $this->assert_definition_resolver($container);
         $class = __NAMESPACE__ . '\TestClass';
 
         // It should instantiate the class with Container::get()
-        $this->assert_container_get($container, $class, new TestClass());
+        $this->assert_container_get($this->container, $class, new TestClass());
 
         $definition = $this->definition(array($class, 'foo'));
 
-        $this->assertEquals(42, $resolver->resolve($definition));
+        $this->assertEquals(42, $this->resolver->resolve($definition));
     }
 
     /**
      * @test
      */
-    public function call_static_method()
+    public function should_call_static_method()
     {
-        $container = $this->assert_container();
-        $resolver = $this->assert_definition_resolver($container);
         $class = __NAMESPACE__ . '\TestClass';
 
         // It should NOT instantiate the class with Container::get()
-        $container->expects($this->never())->method('get');
+        $this->container->expects($this->never())->method('get');
 
         $definition = $this->definition(array($class, 'bar'));
 
-        $this->assertEquals(24, $resolver->resolve($definition));
+        $this->assertEquals(24, $this->resolver->resolve($definition));
     }
 
     /**
      * @test
      */
-    public function call_callable_object()
+    public function should_call_callable_object()
     {
-        $resolver = $this->assert_definition_resolver($this->assert_container());
-
         $definition = $this->definition(new CallableTestClass());
 
-        $this->assertEquals(42, $resolver->resolve($definition));
+        $this->assertEquals(42, $this->resolver->resolve($definition));
     }
 
     /**
      * @test
      */
-    public function call_callable_class()
+    public function should_call_callable_class()
     {
-        $container = $this->assert_container();
-        $resolver = $this->assert_definition_resolver($container);
         $class = __NAMESPACE__ . '\CallableTestClass';
 
         // It should instantiate the class with Container::get()
-        $this->assert_container_get($container, $class, new CallableTestClass());
+        $this->assert_container_get($this->container, $class, new CallableTestClass());
 
         $definition = $this->definition($class);
 
-        $this->assertEquals(42, $resolver->resolve($definition));
+        $this->assertEquals(42, $this->resolver->resolve($definition));
     }
 
     /**
      * @test
      */
-    public function call_function()
+    public function should_call_function()
     {
-        $resolver = $this->assert_definition_resolver($this->assert_container());
-
         $definition = $this->definition(__NAMESPACE__ . '\FunctionCallDefinitionResolverTest_function');
 
-        $this->assertEquals(3, $resolver->resolve($definition, array('str' => 'foo')));
+        $this->assertEquals(3, $this->resolver->resolve($definition, array('str' => 'foo')));
     }
 
     /**
@@ -144,24 +146,9 @@ class FunctionCallDefinitionResolverTest extends \PHPUnit_Framework_TestCase
      * @expectedException \InvalidArgumentException
      * @expectedExceptionMessage This definition resolver is only compatible with FunctionCallDefinition objects, DI\Definition\ValueDefinition given
      */
-    public function call_invalid_definition()
+    public function should_only_resolve_function_call_definitions()
     {
-        $resolver = $this->assert_definition_resolver($this->assert_container());
-
-        $resolver->resolve(new ValueDefinition('foo', 'bar'));
-    }
-
-    /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|Container
-     */
-    private function assert_container()
-    {
-        return $this->getMock('DI\Container', array(), array(), '', false);
-    }
-
-    private function assert_definition_resolver(Container $container)
-    {
-        return new FunctionCallDefinitionResolver($container, new AliasDefinitionResolver($container));
+        $this->resolver->resolve(new ValueDefinition('foo', 'bar'));
     }
 
     private function assert_container_get(\PHPUnit_Framework_MockObject_MockObject $container, $id, $returnedValue)

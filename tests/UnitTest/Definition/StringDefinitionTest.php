@@ -17,7 +17,7 @@ use DI\Scope;
  */
 class StringDefinitionTest extends \PHPUnit_Framework_TestCase
 {
-    public function testGetters()
+    public function test_getters()
     {
         $definition = new StringDefinition('foo', 'bar');
 
@@ -25,14 +25,20 @@ class StringDefinitionTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('bar', $definition->getExpression());
     }
 
-    public function testScope()
+    /**
+     * @test
+     */
+    public function should_have_singleton_scope()
     {
         $definition = new StringDefinition('foo', 'bar');
 
         $this->assertEquals(Scope::SINGLETON(), $definition->getScope());
     }
 
-    public function testCacheable()
+    /**
+     * @test
+     */
+    public function should_not_be_cacheable()
     {
         $this->assertNotInstanceOf('DI\Definition\CacheableDefinition', new StringDefinition('foo', 'bar'));
     }

@@ -12,8 +12,6 @@ namespace DI\Test\UnitTest\Definition\ClassDefinition;
 use DI\Definition\ClassDefinition\PropertyInjection;
 
 /**
- * Test class for PropertyInjection
- *
  * @covers \DI\Definition\ClassDefinition\PropertyInjection
  */
 class PropertyInjectionTest extends \PHPUnit_Framework_TestCase

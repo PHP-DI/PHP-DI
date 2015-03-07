@@ -28,8 +28,8 @@
         "container-interop/container-interop": "~1.0"
     },
     "require-dev": {
-        "phpunit/phpunit": "~4.4",
-        "mnapoli/phpunit-easymock": "~0.1.1",
+        "phpunit/phpunit": "~4.5",
+        "mnapoli/phpunit-easymock": "~0.1.4",
         "ocramius/proxy-manager": "~0.5"
     },
     "suggest": {

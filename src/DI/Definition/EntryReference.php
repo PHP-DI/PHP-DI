@@ -14,6 +14,8 @@ use DI\Definition\Helper\DefinitionHelper;
 /**
  * Represents a reference to a container entry.
  *
+ * TODO should EntryReference and AliasDefinition be merged into a ReferenceDefinition?
+ *
  * @author Matthieu Napoli <matthieu@mnapoli.fr>
  */
 class EntryReference implements DefinitionHelper

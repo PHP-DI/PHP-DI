@@ -9,9 +9,7 @@
 
 namespace DI\Test\UnitTest\Definition\Resolver;
 
-use DI\Definition\AliasDefinition;
 use DI\Definition\ArrayDefinition;
-use DI\Definition\Resolver\AliasDefinitionResolver;
 use DI\Definition\Resolver\ArrayDefinitionResolver;
 use DI\Definition\Resolver\DefinitionResolver;
 use DI\Definition\ValueDefinition;

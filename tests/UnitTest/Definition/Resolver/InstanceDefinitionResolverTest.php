@@ -27,7 +27,7 @@ class InstanceDefinitionResolverTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function it_should_inject_properties_on_instance()
+    public function should_inject_properties_on_instance()
     {
         $instance = new FixtureClass('');
 
@@ -43,7 +43,7 @@ class InstanceDefinitionResolverTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function it_should_inject_methods_on_instance()
+    public function should_inject_methods_on_instance()
     {
         $instance = new FixtureClass('');
 

@@ -29,7 +29,10 @@ class EnvironmentVariableDefinitionDumperTest extends \PHPUnit_Framework_TestCas
         $this->dumper = new EnvironmentVariableDefinitionDumper();
     }
 
-    public function testDump()
+    /**
+     * @test
+     */
+    public function should_dump_env_variable_definitions()
     {
         $str = 'Environment variable (
     variable = bar
@@ -44,7 +47,10 @@ class EnvironmentVariableDefinitionDumperTest extends \PHPUnit_Framework_TestCas
         );
     }
 
-    public function testDumpOptional()
+    /**
+     * @test
+     */
+    public function should_dump_env_variable_definitions_with_default_value()
     {
         $str = 'Environment variable (
     variable = bar
@@ -60,7 +66,10 @@ class EnvironmentVariableDefinitionDumperTest extends \PHPUnit_Framework_TestCas
         );
     }
 
-    public function testDumpOptionalWithLinkedDefault()
+    /**
+     * @test
+     */
+    public function should_dump_env_variable_definitions_with_nested_definition_as_default_value()
     {
         $str = 'Environment variable (
     variable = bar
@@ -71,12 +80,13 @@ class EnvironmentVariableDefinitionDumperTest extends \PHPUnit_Framework_TestCas
         $this->assertEquals(
             $str,
             $this->dumper->dump(
-                new EnvironmentVariableDefinition('foo', 'bar', true, new EntryReference('foo'))
+                new EnvironmentVariableDefinition('foo', 'bar', true, \DI\link('foo'))
             )
         );
     }
 
     /**
+     * @test
      * @expectedException \InvalidArgumentException
      * @expectedExceptionMessage This definition dumper is only compatible with EnvironmentVariableDefinition objects, DI\Definition\FactoryDefinition given
      */

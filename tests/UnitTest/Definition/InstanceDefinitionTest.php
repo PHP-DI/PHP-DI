@@ -21,7 +21,7 @@ class InstanceDefinitionTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function it_should_contain_an_instance()
+    public function should_contain_an_instance()
     {
         $instance = new \stdClass();
 
@@ -29,10 +29,11 @@ class InstanceDefinitionTest extends \PHPUnit_Framework_TestCase
 
         $this->assertSame($instance, $definition->getInstance());
     }
+
     /**
      * @test
      */
-    public function it_should_contain_a_class_definition()
+    public function should_contain_a_class_definition()
     {
         $classDefinition = EasyMock::mock('DI\Definition\ClassDefinition');
 

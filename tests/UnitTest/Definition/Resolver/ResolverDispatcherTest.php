@@ -15,14 +15,14 @@ use DI\Definition\ValueDefinition;
 use EasyMock\EasyMock;
 
 /**
- * @covers \DI\Definition\Resolver\InstanceDefinitionResolver
+ * @covers \DI\Definition\Resolver\ResolverDispatcher
  */
 class ResolverDispatcherTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @test
      */
-    public function it_should_resolve_using_sub_resolvers()
+    public function should_resolve_using_sub_resolvers()
     {
         $resolvers = array(
             'DI\Definition\ValueDefinition' => EasyMock::mock('DI\Definition\Resolver\DefinitionResolver', array(
@@ -42,7 +42,7 @@ class ResolverDispatcherTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function it_should_test_if_resolvable_using_sub_resolvers()
+    public function should_test_if_resolvable_using_sub_resolvers()
     {
         $resolvers = array(
             'DI\Definition\ValueDefinition' => EasyMock::mock('DI\Definition\Resolver\DefinitionResolver', array(
@@ -64,7 +64,7 @@ class ResolverDispatcherTest extends \PHPUnit_Framework_TestCase
      * @expectedException \RuntimeException
      * @expectedExceptionMessage No definition resolver was configured for definition of type DI\Definition\ValueDefinition
      */
-    public function it_should_throw_if_non_handled_definition()
+    public function should_throw_if_non_handled_definition()
     {
         $dispatcher = new ResolverDispatcher(array());
         $dispatcher->resolve(new ValueDefinition('name', 'value'));

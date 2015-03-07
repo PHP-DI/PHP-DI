@@ -17,7 +17,10 @@ use DI\Scope;
  */
 class ArrayDefinitionTest extends \PHPUnit_Framework_TestCase
 {
-    public function testGetters()
+    /**
+     * @test
+     */
+    public function should_contain_values()
     {
         $definition = new ArrayDefinition('foo', array('bar'));
 
@@ -25,14 +28,20 @@ class ArrayDefinitionTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(array('bar'), $definition->getValues());
     }
 
-    public function testScope()
+    /**
+     * @test
+     */
+    public function should_have_singleton_scope()
     {
         $definition = new ArrayDefinition('foo', array());
 
         $this->assertEquals(Scope::SINGLETON(), $definition->getScope());
     }
 
-    public function testCacheable()
+    /**
+     * @test
+     */
+    public function should_be_cacheable()
     {
         $this->assertNotInstanceOf('DI\Definition\CacheableDefinition', new ArrayDefinition('foo', array()));
     }

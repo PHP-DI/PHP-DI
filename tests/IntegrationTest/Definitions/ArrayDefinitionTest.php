@@ -62,6 +62,27 @@ class ArrayDefinitionTest extends \PHPUnit_Framework_TestCase
         $this->assertNotSame($prototype, $array[1]);
     }
 
+    /**
+     * An array entry is a singleton
+     */
+    public function test_array_with_prototype_entries()
+    {
+        $builder = new ContainerBuilder();
+        $builder->addDefinitions(array(
+            'array'     => array(
+                \DI\link('prototype'),
+            ),
+            'prototype' => \DI\object('stdClass')
+                ->scope(Scope::PROTOTYPE()),
+        ));
+        $container = $builder->build();
+
+        $array1 = $container->get('array');
+        $array2 = $container->get('array');
+
+        $this->assertSame($array1[0], $array2[0]);
+    }
+
     public function test_add_entries()
     {
         $builder = new ContainerBuilder();
@@ -76,7 +97,7 @@ class ArrayDefinitionTest extends \PHPUnit_Framework_TestCase
                 'another value',
                 \DI\link('foo'),
             )),
-            'foo' => \DI\object('stdClass'),
+            'foo'    => \DI\object('stdClass'),
 
         ));
         $container = $builder->build();

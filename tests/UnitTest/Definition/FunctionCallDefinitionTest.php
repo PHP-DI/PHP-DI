@@ -12,13 +12,14 @@ namespace DI\Test\UnitTest\Definition;
 use DI\Definition\FunctionCallDefinition;
 
 /**
- * Test class for FunctionCallDefinition
- *
  * @covers \DI\Definition\FunctionCallDefinition
  */
 class FunctionCallDefinitionTest extends \PHPUnit_Framework_TestCase
 {
-    public function testCallable()
+    /**
+     * @test
+     */
+    public function should_accept_any_callable()
     {
         $definition = new FunctionCallDefinition('foo');
         $this->assertEquals('foo', $definition->getCallable());
