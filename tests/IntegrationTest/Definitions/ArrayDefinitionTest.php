@@ -62,6 +62,23 @@ class ArrayDefinitionTest extends \PHPUnit_Framework_TestCase
         $this->assertNotSame($prototype, $array[1]);
     }
 
+    public function test_array_with_nested_definitions()
+    {
+        $builder = new ContainerBuilder();
+        $builder->addDefinitions(array(
+            'array' => array(
+                \DI\env('PHP_DI_DO_NOT_DEFINE_THIS', 'env'),
+                \DI\object('stdClass'),
+            ),
+        ));
+        $container = $builder->build();
+
+        $array = $container->get('array');
+
+        $this->assertEquals('env', $array[0]);
+        $this->assertEquals(new \stdClass, $array[1]);
+    }
+
     /**
      * An array entry is a singleton
      */
@@ -98,7 +115,6 @@ class ArrayDefinitionTest extends \PHPUnit_Framework_TestCase
                 \DI\link('foo'),
             )),
             'foo'    => \DI\object('stdClass'),
-
         ));
         $container = $builder->build();
 
@@ -109,5 +125,30 @@ class ArrayDefinitionTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('value 2', $array[1]);
         $this->assertEquals('another value', $array[2]);
         $this->assertTrue($array[3] instanceof \stdClass);
+    }
+
+    public function test_add_entries_with_nested_definitions()
+    {
+        $builder = new ContainerBuilder();
+        $builder->addDefinitions(array(
+            'array' => array(
+                \DI\env('PHP_DI_DO_NOT_DEFINE_THIS', 'env'),
+                \DI\object('stdClass'),
+            ),
+        ));
+        $builder->addDefinitions(array(
+            'array' => \DI\add(array(
+                \DI\env('PHP_DI_DO_NOT_DEFINE_THIS', 'foo'),
+                \DI\object('stdClass'),
+            )),
+        ));
+        $container = $builder->build();
+
+        $array = $container->get('array');
+
+        $this->assertEquals('env', $array[0]);
+        $this->assertEquals(new \stdClass, $array[1]);
+        $this->assertEquals('foo', $array[2]);
+        $this->assertEquals(new \stdClass, $array[3]);
     }
 }
