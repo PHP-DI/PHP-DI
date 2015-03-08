@@ -32,9 +32,16 @@ class AliasDefinitionDumper implements DefinitionDumper
             ));
         }
 
+        if ($definition->getName()) {
+            return sprintf(
+                "link(%s => %s)",
+                $definition->getName(),
+                $definition->getTargetEntryName()
+            );
+        }
+
         return sprintf(
-            "Alias (\n    %s => %s\n)",
-            $definition->getName(),
+            "link(%s)",
             $definition->getTargetEntryName()
         );
     }

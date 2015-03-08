@@ -25,14 +25,14 @@ class ArrayDefinitionDumperTest extends \PHPUnit_Framework_TestCase
     {
         $definition = new ArrayDefinition('foo', array(
             'hello',
-            \DI\link('foo'),
+            'world',
         ));
         $dumper = new ArrayDefinitionDumper();
 
-        $str = '[
-    0 => string(5) "hello",
-    1 => link(foo),
-]';
+        $str = "[
+    0 => 'hello',
+    1 => 'world',
+]";
 
         $this->assertEquals($str, $dumper->dump($definition));
     }
@@ -47,8 +47,30 @@ class ArrayDefinitionDumperTest extends \PHPUnit_Framework_TestCase
         ));
         $dumper = new ArrayDefinitionDumper();
 
+        $str = "[
+    'test' => 'hello',
+]";
+
+        $this->assertEquals($str, $dumper->dump($definition));
+    }
+
+    /**
+     * @test
+     */
+    public function should_dump_array_containing_nested_definitions()
+    {
+        $definition = new ArrayDefinition('foo', array(
+            \DI\link('foo'),
+            \DI\env('foo'),
+        ));
+        $dumper = new ArrayDefinitionDumper();
+
         $str = '[
-    "test" => string(5) "hello",
+    0 => link(foo),
+    1 => Environment variable (
+        variable = foo
+        optional = no
+    ),
 ]';
 
         $this->assertEquals($str, $dumper->dump($definition));

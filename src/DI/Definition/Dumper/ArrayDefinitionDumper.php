@@ -9,9 +9,11 @@
 
 namespace DI\Definition\Dumper;
 
+use DI\Debug;
 use DI\Definition\ArrayDefinition;
 use DI\Definition\Definition;
 use DI\Definition\EntryReference;
+use DI\Definition\Helper\DefinitionHelper;
 
 /**
  * Dumps array definitions.
@@ -37,15 +39,16 @@ class ArrayDefinitionDumper implements DefinitionDumper
 
         foreach ($definition->getValues() as $key => $value) {
             if (is_string($key)) {
-                $key = '"' . $key . '"';
+                $key = "'" . $key . "'";
             }
 
             $str .= '    ' . $key . ' => ';
 
-            if ($value instanceof EntryReference) {
-                $str .= 'link(' . $value->getName() . ')';
+            if ($value instanceof DefinitionHelper) {
+                $nestedDefinition = Debug::dumpDefinition($value->getDefinition(''));
+                $str .= $this->indent($nestedDefinition);
             } else {
-                $str .= $this->dumpVariable($value);
+                $str .= var_export($value, true);
             }
 
             $str .= ',' . PHP_EOL;
@@ -56,12 +59,8 @@ class ArrayDefinitionDumper implements DefinitionDumper
         return $str;
     }
 
-    private function dumpVariable($var)
+    private function indent($str)
     {
-        ob_start();
-
-        var_dump($var);
-
-        return trim(ob_get_clean());
+        return str_replace("\n", "\n    ", $str);
     }
 }
