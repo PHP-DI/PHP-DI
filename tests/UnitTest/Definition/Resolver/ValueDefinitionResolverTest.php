@@ -25,9 +25,10 @@ class ValueDefinitionResolverTest extends \PHPUnit_Framework_TestCase
     {
         $resolver = new ValueDefinitionResolver();
 
-        $value = $resolver->resolve(new ValueDefinition('foo', 'bar'));
+        $definition = new ValueDefinition('foo', 'bar');
 
-        $this->assertEquals('bar', $value);
+        $this->assertTrue($resolver->isResolvable($definition));
+        $this->assertEquals('bar', $resolver->resolve($definition));
     }
 
     /**
