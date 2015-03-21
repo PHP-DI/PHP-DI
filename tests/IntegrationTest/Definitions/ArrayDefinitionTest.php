@@ -41,8 +41,8 @@ class ArrayDefinitionTest extends \PHPUnit_Framework_TestCase
         $builder = new ContainerBuilder();
         $builder->addDefinitions(array(
             'links'     => array(
-                \DI\link('singleton'),
-                \DI\link('prototype'),
+                \DI\get('singleton'),
+                \DI\get('prototype'),
             ),
             'singleton' => \DI\object('stdClass'),
             'prototype' => \DI\object('stdClass')
@@ -87,7 +87,7 @@ class ArrayDefinitionTest extends \PHPUnit_Framework_TestCase
         $builder = new ContainerBuilder();
         $builder->addDefinitions(array(
             'array'     => array(
-                \DI\link('prototype'),
+                \DI\get('prototype'),
             ),
             'prototype' => \DI\object('stdClass')
                 ->scope(Scope::PROTOTYPE()),
@@ -112,7 +112,7 @@ class ArrayDefinitionTest extends \PHPUnit_Framework_TestCase
         $builder->addDefinitions(array(
             'values' => \DI\add(array(
                 'another value',
-                \DI\link('foo'),
+                \DI\get('foo'),
             )),
             'foo'    => \DI\object('stdClass'),
         ));

@@ -67,7 +67,7 @@ class ArrayDefinitionResolverTest extends \PHPUnit_Framework_TestCase
 
         $definition = new ArrayDefinition('foo', array(
             'bar',
-            \DI\link('bar'),
+            \DI\get('bar'),
             \DI\object('bar'),
         ));
 
@@ -111,7 +111,7 @@ class ArrayDefinitionResolverTest extends \PHPUnit_Framework_TestCase
             ->willThrowException(new \Exception('This is a message'));
 
         $this->resolver->resolve(new ArrayDefinition('foo', array(
-            \DI\link('bar'),
+            \DI\get('bar'),
         )));
     }
 }

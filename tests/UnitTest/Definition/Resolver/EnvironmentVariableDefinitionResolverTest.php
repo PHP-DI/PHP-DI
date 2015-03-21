@@ -53,7 +53,7 @@ class EnvironmentVariableDefinitionResolverTest extends \PHPUnit_Framework_TestC
         $this->definedDefinition = new EnvironmentVariableDefinition('foo', 'DEFINED');
         $this->undefinedDefinition = new EnvironmentVariableDefinition('foo', 'UNDEFINED');
         $this->optionalDefinition = new EnvironmentVariableDefinition('foo', 'UNDEFINED', true, '<default>');
-        $this->nestedDefinition = new EnvironmentVariableDefinition('foo', 'UNDEFINED', true, \DI\link('foo'));
+        $this->nestedDefinition = new EnvironmentVariableDefinition('foo', 'UNDEFINED', true, \DI\get('foo'));
         $this->invalidDefinition = new FactoryDefinition('foo', function () {});
     }
 

@@ -55,7 +55,7 @@ class FunctionCallDefinitionDumper implements DefinitionDumper
                 $value = $definition->getParameter($index);
 
                 if ($value instanceof EntryReference) {
-                    $args[] = sprintf('$%s = link(%s)', $parameter->getName(), $value->getName());
+                    $args[] = sprintf('$%s = get(%s)', $parameter->getName(), $value->getName());
                 } else {
                     $args[] = sprintf('$%s = %s', $parameter->getName(), var_export($value, true));
                 }

@@ -46,7 +46,7 @@ class CallFunctionTest extends \PHPUnit_Framework_TestCase
         $result = $container->call(function($foo) {
             return $foo;
         }, array(
-            'foo' => \DI\link('bar'),
+            'foo' => \DI\get('bar'),
         ));
         $this->assertEquals('bam', $result);
     }

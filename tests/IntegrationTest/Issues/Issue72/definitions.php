@@ -7,5 +7,5 @@ return array(
         return $value;
     }),
     'DI\Test\IntegrationTest\Issues\Issue72\Class1' => \DI\object()
-            ->constructor(\DI\link('service2')),
+            ->constructor(\DI\get('service2')),
 );
