@@ -211,7 +211,7 @@ return [
     'myNamedInstance' => DI\object('My\Class'),
 
     // Using an anonymous function (no need to use DI\factory with a closure)
-    'My\Stuff' => function (Container $c) {
+    'My\Stuff' => function (\Interop\Container\ContainerInterface $c) {
         return new MyClass($c->get('db.host'));
     },
 
