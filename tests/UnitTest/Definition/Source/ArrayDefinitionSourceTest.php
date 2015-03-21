@@ -72,7 +72,7 @@ class ArrayDefinitionSourceTest extends \PHPUnit_Framework_TestCase
         $definitions = array(
             'array'   => array('a', 'b', 'c'),
             'assoc'   => array('a' => 'b'),
-            'links'   => array('a' => \DI\link('b')),
+            'links'   => array('a' => \DI\get('b')),
         );
         $source->addDefinitions($definitions);
 
@@ -89,7 +89,7 @@ class ArrayDefinitionSourceTest extends \PHPUnit_Framework_TestCase
 
         $definition = $source->getDefinition('links');
         $this->assertTrue($definition instanceof ArrayDefinition);
-        $this->assertEquals(array('a' => \DI\link('b')), $definition->getValues());
+        $this->assertEquals(array('a' => \DI\get('b')), $definition->getValues());
         $this->assertInternalType('array', $definition->getValues());
     }
 

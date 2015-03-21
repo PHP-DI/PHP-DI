@@ -26,14 +26,14 @@ class FunctionCallDefinitionDumperTest extends \PHPUnit_Framework_TestCase
         });
         $definition->replaceParameters(array(
             1  => 'bar',
-            2 => \DI\link('foo'),
+            2 => \DI\get('foo'),
         ));
         $dumper = new FunctionCallDefinitionDumper();
 
         $str = 'closure defined in ' . __FILE__ . ' at line 25(
     $undefined = #UNDEFINED#
     $foo = \'bar\'
-    $link = link(foo)
+    $link = get(foo)
     $default = (default value) \'foo\'
 )';
 

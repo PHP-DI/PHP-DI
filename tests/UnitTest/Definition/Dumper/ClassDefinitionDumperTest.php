@@ -23,8 +23,8 @@ class ClassDefinitionDumperTest extends \PHPUnit_Framework_TestCase
     {
         $definition = \DI\object('DI\Test\UnitTest\Definition\Dumper\FixtureClass')
             ->lazy()
-            ->constructor(\DI\link('Mailer'), 'email@example.com')
-            ->method('setFoo', \DI\link('SomeDependency'))
+            ->constructor(\DI\get('Mailer'), 'email@example.com')
+            ->method('setFoo', \DI\get('SomeDependency'))
             ->property('prop', 'Some value')
             ->getDefinition('foo');
         $dumper = new ClassDefinitionDumper();
@@ -34,12 +34,12 @@ class ClassDefinitionDumperTest extends \PHPUnit_Framework_TestCase
     scope = singleton
     lazy = true
     __construct(
-        $mailer = link(Mailer)
+        $mailer = get(Mailer)
         $contactEmail = \'email@example.com\'
     )
     $prop = \'Some value\'
     setFoo(
-        $foo = link(SomeDependency)
+        $foo = get(SomeDependency)
     )
 )';
 
@@ -127,7 +127,7 @@ class ClassDefinitionDumperTest extends \PHPUnit_Framework_TestCase
     public function testConstructorParameters()
     {
         $definition = \DI\object('DI\Test\UnitTest\Definition\Dumper\FixtureClass')
-            ->constructor(\DI\link('Mailer'), 'email@example.com')
+            ->constructor(\DI\get('Mailer'), 'email@example.com')
             ->getDefinition('foo');
         $resolver = new ClassDefinitionDumper();
 
@@ -136,7 +136,7 @@ class ClassDefinitionDumperTest extends \PHPUnit_Framework_TestCase
     scope = singleton
     lazy = false
     __construct(
-        $mailer = link(Mailer)
+        $mailer = get(Mailer)
         $contactEmail = \'email@example.com\'
     )
 )';
@@ -147,7 +147,7 @@ class ClassDefinitionDumperTest extends \PHPUnit_Framework_TestCase
     public function testUndefinedConstructorParameter()
     {
         $definition = \DI\object('DI\Test\UnitTest\Definition\Dumper\FixtureClass')
-            ->constructor(\DI\link('Mailer'))
+            ->constructor(\DI\get('Mailer'))
             ->getDefinition('foo');
         $resolver = new ClassDefinitionDumper();
 
@@ -156,7 +156,7 @@ class ClassDefinitionDumperTest extends \PHPUnit_Framework_TestCase
     scope = singleton
     lazy = false
     __construct(
-        $mailer = link(Mailer)
+        $mailer = get(Mailer)
         $contactEmail = #UNDEFINED#
     )
 )';
@@ -181,10 +181,10 @@ class ClassDefinitionDumperTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($str, $resolver->dump($definition));
     }
 
-    public function testPropertyLink()
+    public function testPropertyget()
     {
         $definition = \DI\object('DI\Test\UnitTest\Definition\Dumper\FixtureClass')
-            ->property('prop', \DI\link('foo'))
+            ->property('prop', \DI\get('foo'))
             ->getDefinition('foo');
         $resolver = new ClassDefinitionDumper();
 
@@ -192,7 +192,7 @@ class ClassDefinitionDumperTest extends \PHPUnit_Framework_TestCase
     class = DI\Test\UnitTest\Definition\Dumper\FixtureClass
     scope = singleton
     lazy = false
-    $prop = link(foo)
+    $prop = get(foo)
 )';
 
         $this->assertEquals($str, $resolver->dump($definition));
@@ -201,7 +201,7 @@ class ClassDefinitionDumperTest extends \PHPUnit_Framework_TestCase
     public function testMethodLinkParameter()
     {
         $definition = \DI\object('DI\Test\UnitTest\Definition\Dumper\FixtureClass')
-            ->method('setFoo', \DI\link('Mailer'))
+            ->method('setFoo', \DI\get('Mailer'))
             ->getDefinition('foo');
         $resolver = new ClassDefinitionDumper();
 
@@ -210,7 +210,7 @@ class ClassDefinitionDumperTest extends \PHPUnit_Framework_TestCase
     scope = singleton
     lazy = false
     setFoo(
-        $foo = link(Mailer)
+        $foo = get(Mailer)
     )
 )';
 

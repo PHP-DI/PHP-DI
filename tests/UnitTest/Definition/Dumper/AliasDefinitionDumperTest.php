@@ -26,7 +26,7 @@ class AliasDefinitionDumperTest extends \PHPUnit_Framework_TestCase
         $definition = new AliasDefinition('foo', 'bar');
         $dumper = new AliasDefinitionDumper();
 
-        $str = 'link(foo => bar)';
+        $str = 'get(foo => bar)';
 
         $this->assertEquals($str, $dumper->dump($definition));
     }

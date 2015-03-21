@@ -61,7 +61,7 @@ class FunctionCallDefinitionResolverTest extends \PHPUnit_Framework_TestCase
 
         $definition = $this->definition(function ($foo, $bar) {
             return array($foo, $bar);
-        }, array('foo', \DI\link('bar')));
+        }, array('foo', \DI\get('bar')));
 
         $this->assertEquals(array('foo', 42), $this->resolver->resolve($definition));
     }

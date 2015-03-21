@@ -77,7 +77,7 @@ class EnvironmentVariableDefinitionTest extends \PHPUnit_Framework_TestCase
     {
         $builder = new ContainerBuilder();
         $builder->addDefinitions(array(
-            'var' => \DI\env('PHP_DI_DO_NOT_DEFINE_THIS', \DI\link('foo')),
+            'var' => \DI\env('PHP_DI_DO_NOT_DEFINE_THIS', \DI\get('foo')),
             'foo' => 'bar',
         ));
         $container = $builder->build();

@@ -119,7 +119,7 @@ class ContainerMakeTest extends \PHPUnit_Framework_TestCase
     {
         $container = ContainerBuilder::buildDevContainer();
         // Alias to itself -> infinite recursive loop
-        $container->set('foo', \DI\link('foo'));
+        $container->set('foo', \DI\get('foo'));
         $container->make('foo');
     }
 

@@ -61,9 +61,25 @@ if (! function_exists('DI\factory')) {
     }
 }
 
+if (! function_exists('DI\get')) {
+    /**
+     * Helper for referencing another container entry in an object definition.
+     *
+     * @param string $entryName
+     *
+     * @return EntryReference
+     */
+    function get($entryName)
+    {
+        return new EntryReference($entryName);
+    }
+}
+
 if (! function_exists('DI\link')) {
     /**
      * Helper for referencing another container entry in an object definition.
+     *
+     * @deprecated \DI\link() has been replaced by \DI\get()
      *
      * @param string $entryName
      *
@@ -99,12 +115,12 @@ if (! function_exists('DI\add')) {
      *
      * Example:
      *
-     *     'log.backends' => DI\add(DI\link('My\Custom\LogBackend'))
+     *     'log.backends' => DI\add(DI\get('My\Custom\LogBackend'))
      *
      * or:
      *
      *     'log.backends' => DI\add([
-     *         DI\link('My\Custom\LogBackend')
+     *         DI\get('My\Custom\LogBackend')
      *     ])
      *
      * @param mixed|array $values A value or an array of values to add to the array.

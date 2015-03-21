@@ -90,7 +90,7 @@ class ClassDefinitionDumper implements DefinitionDumper
         foreach ($definition->getPropertyInjections() as $propertyInjection) {
             $value = $propertyInjection->getValue();
             if ($value instanceof EntryReference) {
-                $valueStr = sprintf('link(%s)', $value->getName());
+                $valueStr = sprintf('get(%s)', $value->getName());
             } else {
                 $valueStr = var_export($value, true);
             }
@@ -125,7 +125,7 @@ class ClassDefinitionDumper implements DefinitionDumper
                 $value = $methodInjection->getParameter($index);
 
                 if ($value instanceof EntryReference) {
-                    $args[] = sprintf('$%s = link(%s)', $parameter->getName(), $value->getName());
+                    $args[] = sprintf('$%s = get(%s)', $parameter->getName(), $value->getName());
                 } else {
                     $args[] = sprintf('$%s = %s', $parameter->getName(), var_export($value, true));
                 }

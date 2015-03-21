@@ -60,13 +60,13 @@ class ArrayDefinitionDumperTest extends \PHPUnit_Framework_TestCase
     public function should_dump_array_containing_nested_definitions()
     {
         $definition = new ArrayDefinition('foo', array(
-            \DI\link('foo'),
+            \DI\get('foo'),
             \DI\env('foo'),
         ));
         $dumper = new ArrayDefinitionDumper();
 
         $str = '[
-    0 => link(foo),
+    0 => get(foo),
     1 => Environment variable (
         variable = foo
         optional = no

@@ -49,7 +49,7 @@ You can go even further by overriding this definition using file-based definitio
 
 return [
     'Foo' => DI\object()
-        ->constructor(DI\link('another.specific.service')),
+        ->constructor(DI\get('another.specific.service')),
 
     'another.specific.service' => DI\object('Bar'),
 ];
@@ -59,5 +59,5 @@ Finally, you can also override the file-based definition by directly calling the
 
 ```php
 $container->set('Foo')
-    ->constructor(DI\link('yet.another.specific.service'));
+    ->constructor(DI\get('yet.another.specific.service'));
 ```

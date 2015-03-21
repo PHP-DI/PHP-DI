@@ -73,13 +73,13 @@ class EnvironmentVariableDefinitionDumperTest extends \PHPUnit_Framework_TestCas
         $str = 'Environment variable (
     variable = bar
     optional = yes
-    default = link(foo)
+    default = get(foo)
 )';
 
         $this->assertEquals(
             $str,
             $this->dumper->dump(
-                new EnvironmentVariableDefinition('foo', 'bar', true, \DI\link('foo'))
+                new EnvironmentVariableDefinition('foo', 'bar', true, \DI\get('foo'))
             )
         );
     }

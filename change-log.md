@@ -19,6 +19,7 @@ Improvements:
         return new Foo();
     }
     ```
+- [#235](https://github.com/mnapoli/PHP-DI/issues/235) `DI\link()` is now deprecated in favor of `DI\get()`. There is no BC break as `DI\link()` still works.
 
 BC breaks:
 
