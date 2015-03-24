@@ -59,7 +59,7 @@ class ArrayDefinitionSource implements ChainableDefinitionSource
             if ($this->chainedSource) {
                 return $this->chainedSource->getDefinition($name, $parentDefinition);
             }
-            return null;
+            return $parentDefinition;
         }
 
         // If the definition we have is not mergeable, and we are supposed to merge, we ignore it
