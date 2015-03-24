@@ -139,16 +139,38 @@ class ArrayDefinitionSourceTest extends \PHPUnit_Framework_TestCase
 
     public function testChainableSource()
     {
-        $source = new ArrayDefinitionSource();
+        $source1 = new ArrayDefinitionSource();
+        $source1->addDefinitions(array(
+            'foo1' => 'bar1',
+        ));
 
         $source2 = new ArrayDefinitionSource();
         $source2->addDefinitions(array(
-            'foo' => 'bar',
+            'foo2' => 'bar2',
         ));
 
-        $source->chain($source2);
+        $source1->chain($source2);
 
-        $this->assertEquals(new ValueDefinition('foo', 'bar'), $source->getDefinition('foo'));
+        $this->assertEquals(new ValueDefinition('foo1', 'bar1'), $source1->getDefinition('foo1'));
+        $this->assertEquals(new ValueDefinition('foo2', 'bar2'), $source1->getDefinition('foo2'));
+    }
+
+    public function testChainableSourceWithMergeableDefinitions()
+    {
+        $source1 = new ArrayDefinitionSource();
+        $source1->addDefinitions(array(
+            'foo1' => \DI\object('stdClass'),
+        ));
+
+        $source2 = new ArrayDefinitionSource();
+        $source2->addDefinitions(array(
+            'foo2' => \DI\object('stdClass'),
+        ));
+
+        $source1->chain($source2);
+
+        $this->assertEquals(new ClassDefinition('foo1', 'stdClass'), $source1->getDefinition('foo1'));
+        $this->assertEquals(new ClassDefinition('foo2', 'stdClass'), $source1->getDefinition('foo2'));
     }
 
     public function testAddDefinition()
