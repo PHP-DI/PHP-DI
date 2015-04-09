@@ -45,4 +45,10 @@ class MethodInjection extends AbstractFunctionCallDefinition
     {
         return $this->methodName;
     }
+
+    public function merge(self $definition)
+    {
+        // In case of conflicts, the current definition prevails.
+        $this->parameters = $this->parameters + $definition->parameters;
+    }
 }

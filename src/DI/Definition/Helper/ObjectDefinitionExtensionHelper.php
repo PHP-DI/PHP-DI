@@ -16,11 +16,11 @@ use DI\Definition\ObjectDefinitionExtension;
 use DI\Scope;
 
 /**
- * Helps defining how to create an instance of a class.
+ * Helps defining how to create an instance of a class, by extending another definition.
  *
  * @author Matthieu Napoli <matthieu@mnapoli.fr>
  */
-class ClassDefinitionHelper implements DefinitionHelper
+class ObjectDefinitionExtensionHelper implements DefinitionHelper
 {
     /**
      * @var string|null
@@ -56,23 +56,16 @@ class ClassDefinitionHelper implements DefinitionHelper
     private $methods = array();
 
     /**
-     * @var bool
-     */
-    private $extension;
-
-    /**
      * Helper for defining an object.
      *
      * @param string|null $className Class name of the object.
      *                               If null, the name of the entry (in the container) will be used as class name.
-     * @param bool        $extension Does this definition extend another?
      *
      * @return ClassDefinitionHelper
      */
-    public function __construct($className = null, $extension = false)
+    public function __construct($className = null)
     {
         $this->className = $className;
-        $this->extension = $extension;
     }
 
     /**
@@ -203,11 +196,7 @@ class ClassDefinitionHelper implements DefinitionHelper
      */
     public function getDefinition($entryName)
     {
-        if ($this->extension) {
-            $definition = new ObjectDefinitionExtension($entryName, $this->className);
-        } else {
-            $definition = new ClassDefinition($entryName, $this->className);
-        }
+        $definition = new ObjectDefinitionExtension($entryName, $this->className);
 
         if ($this->lazy !== null) {
             $definition->setLazy($this->lazy);

@@ -17,12 +17,29 @@ use DI\Definition\Exception\DefinitionException;
  * @since 5.0
  * @author Matthieu Napoli <matthieu@mnapoli.fr>
  */
-class ArrayDefinitionExtension extends ArrayDefinition implements MergeableDefinition
+class ArrayDefinitionExtension extends ArrayDefinition implements HasSubDefinition
 {
+    /**
+     * @var ArrayDefinition
+     */
+    private $subDefinition;
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getValues()
+    {
+        if (! $this->subDefinition) {
+            return parent::getValues();
+        }
+
+        return array_merge($this->subDefinition->getValues(), parent::getValues());
+    }
+
     /**
      * @return string
      */
-    public function getExtendedDefinitionName()
+    public function getSubDefinitionName()
     {
         return $this->getName();
     }
@@ -30,28 +47,15 @@ class ArrayDefinitionExtension extends ArrayDefinition implements MergeableDefin
     /**
      * {@inheritdoc}
      */
-    public function merge(Definition $definition)
+    public function setSubDefinition(Definition $definition)
     {
-        if (! $this->canMerge($definition)) {
+        if (! $definition instanceof ArrayDefinition) {
             throw new DefinitionException(sprintf(
                 'Definition %s tries to add array entries but the previous definition is not an array',
                 $this->getName()
             ));
         }
 
-        /** @var ArrayDefinition $definition */
-
-        $newValues = array_merge($definition->getValues(), parent::getValues());
-        parent::setValues($newValues);
-
-        return $this;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function canMerge(Definition $definition)
-    {
-        return $definition instanceof ArrayDefinition;
+        $this->subDefinition = $definition;
     }
 }

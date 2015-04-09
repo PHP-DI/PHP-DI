@@ -21,7 +21,7 @@ use DI\Definition\Helper\DefinitionHelper;
  *
  * @author Matthieu Napoli <matthieu@mnapoli.fr>
  */
-class ArrayDefinitionSource extends ChainableDefinitionSource implements DefinitionSource
+class ArrayDefinitionSource implements DefinitionSource, MutableDefinitionSource
 {
     const WILDCARD = '*';
     /**
@@ -54,7 +54,7 @@ class ArrayDefinitionSource extends ChainableDefinitionSource implements Definit
     }
 
     /**
-     * @param Definition $definition
+     * {@inheritdoc}
      */
     public function addDefinition(Definition $definition)
     {
@@ -62,10 +62,9 @@ class ArrayDefinitionSource extends ChainableDefinitionSource implements Definit
     }
 
     /**
-     * @param string $name
-     * @return Definition|null
+     * {@inheritdoc}
      */
-    protected function findDefinition($name)
+    public function getDefinition($name)
     {
         // Look for the definition by name
         if (array_key_exists($name, $this->definitions)) {

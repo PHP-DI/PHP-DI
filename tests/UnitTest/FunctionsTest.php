@@ -9,6 +9,13 @@
 
 namespace DI\Test\UnitTest;
 
+use DI\Definition\ArrayDefinition;
+use DI\Definition\ArrayDefinitionExtension;
+use DI\Definition\ClassDefinition;
+use DI\Definition\Helper\ArrayDefinitionExtensionHelper;
+use DI\Definition\Helper\ClassDefinitionHelper;
+use DI\Definition\ObjectDefinitionExtension;
+
 /**
  * Tests the helper functions.
  */
@@ -30,15 +37,34 @@ class FunctionsTest extends \PHPUnit_Framework_TestCase
      */
     public function test_object()
     {
-        $definition = \DI\object();
+        $helper = \DI\object();
 
-        $this->assertInstanceOf('DI\Definition\Helper\ClassDefinitionHelper', $definition);
-        $this->assertEquals('entry', $definition->getDefinition('entry')->getClassName());
+        $this->assertTrue($helper instanceof ClassDefinitionHelper);
+        $definition = $helper->getDefinition('entry');
+        $this->assertTrue($definition instanceof ClassDefinition);
+        $this->assertFalse($definition instanceof ObjectDefinitionExtension);
+        $this->assertEquals('entry', $definition->getClassName());
 
-        $definition = \DI\object('foo');
+        $helper = \DI\object('foo');
 
-        $this->assertInstanceOf('DI\Definition\Helper\ClassDefinitionHelper', $definition);
-        $this->assertEquals('foo', $definition->getDefinition('entry')->getClassName());
+        $this->assertTrue($helper instanceof ClassDefinitionHelper);
+        $definition = $helper->getDefinition('entry');
+        $this->assertTrue($definition instanceof ClassDefinition);
+        $this->assertFalse($definition instanceof ObjectDefinitionExtension);
+        $this->assertEquals('foo', $definition->getClassName());
+    }
+
+    /**
+     * @covers ::\DI\extend
+     */
+    public function test_extend()
+    {
+        $helper = \DI\extend();
+
+        $this->assertTrue($helper instanceof ClassDefinitionHelper);
+        $definition = $helper->getDefinition('entry');
+        $this->assertTrue($definition instanceof ObjectDefinitionExtension);
+        $this->assertEquals('entry', $definition->getSubDefinitionName());
     }
 
     /**
@@ -84,13 +110,14 @@ class FunctionsTest extends \PHPUnit_Framework_TestCase
     {
         $helper = \DI\add('hello');
 
-        $this->assertInstanceOf('DI\Definition\Helper\ArrayDefinitionExtensionHelper', $helper);
+        $this->assertTrue($helper instanceof ArrayDefinitionExtensionHelper);
 
         $definition = $helper->getDefinition('foo');
 
-        $this->assertInstanceOf('DI\Definition\ArrayDefinitionExtension', $definition);
+        $this->assertTrue($definition instanceof ArrayDefinitionExtension);
         $this->assertEquals('foo', $definition->getName());
-        $this->assertEquals('foo', $definition->getExtendedDefinitionName());
+        $this->assertEquals('foo', $definition->getSubDefinitionName());
+        $definition->setSubDefinition(new ArrayDefinition('foo', array()));
         $this->assertEquals(array('hello'), $definition->getValues());
     }
 
@@ -101,13 +128,14 @@ class FunctionsTest extends \PHPUnit_Framework_TestCase
     {
         $helper = \DI\add(array('hello', 'world'));
 
-        $this->assertInstanceOf('DI\Definition\Helper\ArrayDefinitionExtensionHelper', $helper);
+        $this->assertTrue($helper instanceof ArrayDefinitionExtensionHelper);
 
         $definition = $helper->getDefinition('foo');
 
-        $this->assertInstanceOf('DI\Definition\ArrayDefinitionExtension', $definition);
+        $this->assertTrue($definition instanceof ArrayDefinitionExtension);
         $this->assertEquals('foo', $definition->getName());
-        $this->assertEquals('foo', $definition->getExtendedDefinitionName());
+        $this->assertEquals('foo', $definition->getSubDefinitionName());
+        $definition->setSubDefinition(new ArrayDefinition('foo', array()));
         $this->assertEquals(array('hello', 'world'), $definition->getValues());
     }
 

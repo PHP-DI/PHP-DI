@@ -25,7 +25,7 @@ class ArrayDefinitionExtensionTest extends \PHPUnit_Framework_TestCase
         $definition = new ArrayDefinitionExtension('foo', array('hello'));
 
         $this->assertEquals('foo', $definition->getName());
-        $this->assertEquals('foo', $definition->getExtendedDefinitionName());
+        $this->assertEquals('foo', $definition->getSubDefinitionName());
         $this->assertEquals(array('hello'), $definition->getValues());
     }
 

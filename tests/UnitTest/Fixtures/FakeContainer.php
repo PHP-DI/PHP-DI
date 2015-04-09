@@ -9,7 +9,7 @@
 
 namespace DI\Test\UnitTest\Fixtures;
 
-use DI\Definition\DefinitionManager;
+use DI\Definition\Source\DefinitionSource;
 use DI\Proxy\ProxyFactory;
 use Interop\Container\ContainerInterface;
 
@@ -21,9 +21,9 @@ use Interop\Container\ContainerInterface;
 class FakeContainer
 {
     /**
-     * @var DefinitionManager
+     * @var DefinitionSource
      */
-    public $definitionManager;
+    public $definitionSource;
 
     /**
      * @var ProxyFactory
@@ -36,11 +36,11 @@ class FakeContainer
     public $wrapperContainer;
 
     public function __construct(
-        DefinitionManager $definitionManager,
+        DefinitionSource $definitionSource,
         ProxyFactory $proxyFactory,
         ContainerInterface $wrapperContainer = null
     ) {
-        $this->definitionManager = $definitionManager;
+        $this->definitionSource = $definitionSource;
         $this->proxyFactory = $proxyFactory;
         $this->wrapperContainer = $wrapperContainer;
     }
