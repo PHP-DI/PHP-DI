@@ -46,6 +46,21 @@ if (! function_exists('DI\object')) {
     }
 }
 
+if (! function_exists('DI\extend')) {
+    /**
+     * Helper for defining an object by extending another definition.
+     *
+     * @param string|null $entryName Name of the entry to extend. If null, extend the previous
+     *                               definition of the current entry.
+     *
+     * @return ClassDefinitionHelper
+     */
+    function extend($entryName = null)
+    {
+        return new ClassDefinitionHelper($entryName, true);
+    }
+}
+
 if (! function_exists('DI\factory')) {
     /**
      * Helper for defining a container entry using a factory function/callable.

@@ -39,6 +39,7 @@ class ResolverDispatcher implements DefinitionResolver
         $resolver = new self();
 
         $arrayDefinitionResolver = new ArrayDefinitionResolver($resolver);
+        $classDefinitionResolver = new ClassDefinitionResolver($resolver, $proxyFactory);
 
         $definitionResolvers = array(
             'DI\Definition\ValueDefinition'               => new ValueDefinitionResolver(),
@@ -46,7 +47,8 @@ class ResolverDispatcher implements DefinitionResolver
             'DI\Definition\ArrayDefinitionExtension'      => $arrayDefinitionResolver,
             'DI\Definition\FactoryDefinition'             => new FactoryDefinitionResolver($container),
             'DI\Definition\AliasDefinition'               => new AliasDefinitionResolver($container),
-            'DI\Definition\ClassDefinition'               => new ClassDefinitionResolver($resolver, $proxyFactory),
+            'DI\Definition\ClassDefinition'               => $classDefinitionResolver,
+            'DI\Definition\ObjectDefinitionExtension'     => $classDefinitionResolver,
             'DI\Definition\InstanceDefinition'            => new InstanceDefinitionResolver($resolver, $proxyFactory),
             'DI\Definition\FunctionCallDefinition'        => new FunctionCallDefinitionResolver($container, $resolver),
             'DI\Definition\EnvironmentVariableDefinition' => new EnvironmentVariableDefinitionResolver($resolver),

@@ -9,6 +9,7 @@
 
 namespace DI\Definition\Source;
 
+use DI\Definition\Definition;
 use DI\Definition\Exception\DefinitionException;
 
 /**
@@ -36,6 +37,8 @@ class PHPFileDefinitionSource extends ArrayDefinitionSource
     {
         // Lazy-loading to improve performances
         $this->file = $file;
+
+        parent::__construct(array());
     }
 
     /**

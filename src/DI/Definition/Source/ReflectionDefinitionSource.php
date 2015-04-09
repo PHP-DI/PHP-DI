@@ -13,7 +13,6 @@ use DI\Definition\ClassDefinition;
 use DI\Definition\EntryReference;
 use DI\Definition\ClassDefinition\MethodInjection;
 use DI\Definition\FunctionCallDefinition;
-use DI\Definition\MergeableDefinition;
 use DI\Reflection\CallableReflectionFactory;
 
 /**
@@ -26,33 +25,21 @@ class ReflectionDefinitionSource implements DefinitionSource, CallableDefinition
     /**
      * {@inheritdoc}
      */
-    public function getDefinition($name, MergeableDefinition $parentDefinition = null)
+    public function getDefinition($name)
     {
-        // Only merges with class definition
-        if ($parentDefinition && (! $parentDefinition instanceof ClassDefinition)) {
+        if (!class_exists($name) && !interface_exists($name)) {
             return null;
         }
 
-        $className = $parentDefinition ? $parentDefinition->getClassName() : $name;
-
-        if (!class_exists($className) && !interface_exists($className)) {
-            return null;
-        }
-
-        $class = new \ReflectionClass($className);
         $definition = new ClassDefinition($name);
 
         // Constructor
+        $class = new \ReflectionClass($name);
         $constructor = $class->getConstructor();
         if ($constructor && $constructor->isPublic()) {
             $definition->setConstructorInjection(
                 MethodInjection::constructor($this->getParametersDefinition($constructor))
             );
-        }
-
-        // Merge with parent
-        if ($parentDefinition) {
-            $definition = $parentDefinition->merge($definition);
         }
 
         return $definition;

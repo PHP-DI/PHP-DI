@@ -251,4 +251,15 @@ class AnnotationDefinitionSourceTest extends \PHPUnit_Framework_TestCase
         $source = new AnnotationDefinitionSource($ignorePhpDocErrors = true);
         $source->getDefinition('DI\Test\UnitTest\Definition\Source\Fixtures\AnnotationFixture5');
     }
+
+    public function testMergedWithParentDefinition()
+    {
+        $source = new AnnotationDefinitionSource();
+        $definition = $source->getDefinition('DI\Test\UnitTest\Definition\Source\Fixtures\AnnotationFixtureChild');
+
+        $this->assertNotNull($definition->getPropertyInjection('propertyChild'));
+        $this->assertNotNull($definition->getMethodInjection('methodChild'));
+        $this->assertNotNull($definition->getPropertyInjection('propertyParent'));
+        $this->assertNotNull($definition->getMethodInjection('methodParent'));
+    }
 }
