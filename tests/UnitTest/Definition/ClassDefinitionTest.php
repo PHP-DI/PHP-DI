@@ -30,6 +30,9 @@ class ClassDefinitionTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('bar', $definition->getClassName());
         $this->assertTrue($definition->isLazy());
         $this->assertEquals(Scope::PROTOTYPE(), $definition->getScope());
+
+        $definition->setClassName('classname');
+        $this->assertEquals('classname', $definition->getClassName());
     }
 
     public function test_defaults()
