@@ -10,20 +10,20 @@
 namespace DI\Test\UnitTest\Definition\Source;
 
 use DI\Definition\ClassDefinition;
-use DI\Definition\Source\PHPFileDefinitionSource;
+use DI\Definition\Source\DefinitionFile;
 use DI\Definition\ValueDefinition;
 
 /**
- * @covers \DI\Definition\Source\PHPFileDefinitionSource
+ * @covers \DI\Definition\Source\DefinitionFile
  */
-class PHPFileDefinitionSourceTest extends \PHPUnit_Framework_TestCase
+class DefinitionFileTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @test
      */
     public function should_load_definition_from_file()
     {
-        $source = new PHPFileDefinitionSource(__DIR__ . '/Fixtures/definitions.php');
+        $source = new DefinitionFile(__DIR__ . '/Fixtures/definitions.php');
 
         /** @var ValueDefinition $definition */
         $definition = $source->getDefinition('foo');

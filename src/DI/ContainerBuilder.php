@@ -9,12 +9,13 @@
 
 namespace DI;
 
-use DI\Definition\DefinitionManager;
-use DI\Definition\Source\AnnotationDefinitionSource;
-use DI\Definition\Source\ArrayDefinitionSource;
-use DI\Definition\Source\ChainableDefinitionSource;
-use DI\Definition\Source\PHPFileDefinitionSource;
-use DI\Definition\Source\ReflectionDefinitionSource;
+use DI\Definition\Source\AnnotationReader;
+use DI\Definition\Source\DefinitionArray;
+use DI\Definition\Source\CachedDefinitionSource;
+use DI\Definition\Source\DefinitionSource;
+use DI\Definition\Source\DefinitionFile;
+use DI\Definition\Source\Autowiring;
+use DI\Definition\Source\SourceChain;
 use DI\Proxy\ProxyFactory;
 use Doctrine\Common\Cache\Cache;
 use Interop\Container\ContainerInterface;
@@ -80,7 +81,7 @@ class ContainerBuilder
     private $wrapperContainer;
 
     /**
-     * @var ChainableDefinitionSource[]
+     * @var DefinitionSource[]
      */
     private $definitionSources = array();
 
@@ -110,44 +111,29 @@ class ContainerBuilder
      */
     public function build()
     {
-        // Definition sources
-        $firstSource = null;
-        $lastSource = null;
-        foreach (array_reverse($this->definitionSources) as $source) {
-            /** @var $source ChainableDefinitionSource */
-            // Chain file sources
-            if ($lastSource instanceof ChainableDefinitionSource) {
-                $lastSource->chain($source);
-            } else {
-                $firstSource = $source;
-            }
-            $lastSource = $source;
-        }
+        $sources = array_reverse($this->definitionSources);
         if ($this->useAnnotations) {
-            if ($lastSource) {
-                $lastSource->chain(new AnnotationDefinitionSource($this->ignorePhpDocErrors));
-            } else {
-                $firstSource = new AnnotationDefinitionSource($this->ignorePhpDocErrors);
-            }
+            $sources[] = new AnnotationReader($this->ignorePhpDocErrors);
         } elseif ($this->useAutowiring) {
-            if ($lastSource) {
-                $lastSource->chain(new ReflectionDefinitionSource());
-            } else {
-                $firstSource = new ReflectionDefinitionSource();
-            }
+            $sources[] = new Autowiring();
         }
 
-        // Definition manager
-        $definitionManager = new DefinitionManager($firstSource);
+        $chain = new SourceChain($sources);
+
         if ($this->cache) {
-            $definitionManager->setCache($this->cache);
+            $source = new CachedDefinitionSource($chain, $this->cache);
+            $chain->setRootDefinitionSource($source);
+        } else {
+            $source = $chain;
+            // Mutable definition source
+            $source->setMutableDefinitionSource(new DefinitionArray());
         }
 
         $proxyFactory = new ProxyFactory($this->writeProxiesToFile, $this->proxyDirectory);
 
         $containerClass = $this->containerClass;
 
-        return new $containerClass($definitionManager, $proxyFactory, $this->wrapperContainer);
+        return new $containerClass($source, $proxyFactory, $this->wrapperContainer);
     }
 
     /**
@@ -245,21 +231,21 @@ class ContainerBuilder
     /**
      * Add definitions to the container.
      *
-     * @param string|array|ChainableDefinitionSource $definitions Can be an array of definitions,
-     *                                                            the name of a file containing definitions
-     *                                                            or a ChainableDefinitionSource object.
+     * @param string|array|DefinitionSource $definitions Can be an array of definitions, the
+     *                                                   name of a file containing definitions
+     *                                                   or a DefinitionSource object.
      * @return $this
      */
     public function addDefinitions($definitions)
     {
         if (is_string($definitions)) {
             // File
-            $definitions = new PHPFileDefinitionSource($definitions);
+            $definitions = new DefinitionFile($definitions);
         } elseif (is_array($definitions)) {
-            $definitions = new ArrayDefinitionSource($definitions);
-        } elseif (! $definitions instanceof ChainableDefinitionSource) {
+            $definitions = new DefinitionArray($definitions);
+        } elseif (! $definitions instanceof DefinitionSource) {
             throw new InvalidArgumentException(sprintf(
-                '%s parameter must be a string or implement ChainableDefinitionSource, %s given',
+                '%s parameter must be a string, an array or a DefinitionSource object, %s given',
                 'ContainerBuilder::addDefinitions()',
                 is_object($definitions) ? get_class($definitions) : gettype($definitions)
             ));

@@ -15,11 +15,13 @@ use DI\Definition\Exception\DefinitionException;
 use DI\Scope;
 
 /**
- * Defines how a class can be instantiated.
+ * Defines how an object can be instantiated.
+ *
+ * TODO rename to ObjectDefinition
  *
  * @author Matthieu Napoli <matthieu@mnapoli.fr>
  */
-class ClassDefinition implements MergeableDefinition, CacheableDefinition
+class ClassDefinition implements Definition, CacheableDefinition, HasSubDefinition
 {
     /**
      * Entry name (most of the time, same as $classname)
@@ -204,76 +206,63 @@ class ClassDefinition implements MergeableDefinition, CacheableDefinition
     /**
      * {@inheritdoc}
      */
-    public function merge(Definition $definition)
+    public function getSubDefinitionName()
     {
-        if (! $this->canMerge($definition)) {
-            throw new DefinitionException(
-                "DI definition conflict: there are 2 different definitions for '" . $this->getName()
-                . "' that are incompatible, they are not of the same type"
-            );
+        return $this->getClassName();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setSubDefinition(Definition $definition)
+    {
+        if (! $definition instanceof ClassDefinition) {
+            throw new DefinitionException(sprintf(
+                "Container entry '%s' extends entry '%s' which is not an object",
+                $this->getName(),
+                $definition->getName()
+            ));
         }
-
-        /** @var ClassDefinition $definition */
-
-        $newDefinition = clone $this;
 
         // The current prevails
-        if ($newDefinition->className === null) {
-            $newDefinition->setClassName($definition->className);
+        if ($this->className === null) {
+            $this->className = $definition->className;
         }
-        if ($newDefinition->scope === null) {
-            $newDefinition->scope = $definition->scope;
+        if ($this->scope === null) {
+            $this->scope = $definition->scope;
         }
-        if ($newDefinition->lazy === null) {
-            $newDefinition->lazy = $definition->lazy;
+        if ($this->lazy === null) {
+            $this->lazy = $definition->lazy;
         }
 
         // Merge constructor injection
         if ($definition->getConstructorInjection() !== null) {
-            if ($newDefinition->constructorInjection !== null) {
+            if ($this->constructorInjection !== null) {
                 // Merge
-                $newDefinition->constructorInjection->merge($definition->getConstructorInjection());
+                $this->constructorInjection->merge($definition->getConstructorInjection());
             } else {
                 // Set
-                $newDefinition->constructorInjection = $definition->getConstructorInjection();
+                $this->constructorInjection = $definition->getConstructorInjection();
             }
         }
 
         // Merge property injections
         foreach ($definition->getPropertyInjections() as $propertyName => $propertyInjection) {
-            if (! array_key_exists($propertyName, $newDefinition->propertyInjections)) {
+            if (! array_key_exists($propertyName, $this->propertyInjections)) {
                 // Add
-                $newDefinition->propertyInjections[$propertyName] = $propertyInjection;
+                $this->propertyInjections[$propertyName] = $propertyInjection;
             }
         }
 
         // Merge method injections
         foreach ($definition->getMethodInjections() as $methodName => $methodInjection) {
-            if (array_key_exists($methodName, $newDefinition->methodInjections)) {
+            if (array_key_exists($methodName, $this->methodInjections)) {
                 // Merge
-                $newDefinition->methodInjections[$methodName]->merge($methodInjection);
+                $this->methodInjections[$methodName]->merge($methodInjection);
             } else {
                 // Add
-                $newDefinition->methodInjections[$methodName] = $methodInjection;
+                $this->methodInjections[$methodName] = $methodInjection;
             }
         }
-
-        return $newDefinition;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function canMerge(Definition $definition)
-    {
-        return $definition instanceof self;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getExtendedDefinitionName()
-    {
-        return $this->getClassName();
     }
 }

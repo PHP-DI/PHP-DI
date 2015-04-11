@@ -10,7 +10,8 @@
 namespace DI\Test\UnitTest;
 
 use DI\ContainerBuilder;
-use DI\Definition\Source\ArrayDefinitionSource;
+use DI\Definition\Source\DefinitionArray;
+use DI\Definition\Source\CachedDefinitionSource;
 use DI\Definition\ValueDefinition;
 use DI\Test\UnitTest\Fixtures\FakeContainer;
 use EasyMock\EasyMock;
@@ -31,7 +32,7 @@ class ContainerBuilderTest extends \PHPUnit_Framework_TestCase
         $container = $builder->build();
 
         // No cache
-        $this->assertNull($container->definitionManager->getCache());
+        $this->assertFalse($container->definitionSource instanceof CachedDefinitionSource);
         // Proxies evaluated in memory
         $this->assertFalse($this->getObjectAttribute($container->proxyFactory, 'writeProxiesToFile'));
     }
@@ -49,7 +50,8 @@ class ContainerBuilderTest extends \PHPUnit_Framework_TestCase
         /** @var FakeContainer $container */
         $container = $builder->build();
 
-        $this->assertSame($cache, $container->definitionManager->getCache());
+        $this->assertTrue($container->definitionSource instanceof CachedDefinitionSource);
+        $this->assertSame($cache, $container->definitionSource->getCache());
     }
 
     /**
@@ -88,20 +90,38 @@ class ContainerBuilderTest extends \PHPUnit_Framework_TestCase
         $builder = new ContainerBuilder('DI\Test\UnitTest\Fixtures\FakeContainer');
 
         // Custom definition sources should be chained correctly
-        $builder->addDefinitions(new ArrayDefinitionSource(array('foo' => 'bar')));
-        $builder->addDefinitions(new ArrayDefinitionSource(array('foofoo' => 'barbar')));
+        $builder->addDefinitions(new DefinitionArray(array('foo' => 'bar')));
+        $builder->addDefinitions(new DefinitionArray(array('foofoo' => 'barbar')));
 
         /** @var FakeContainer $container */
         $container = $builder->build();
 
         // We should be able to get entries from our custom definition sources
         /** @var ValueDefinition $definition */
-        $definition = $container->definitionManager->getDefinition('foo');
+        $definition = $container->definitionSource->getDefinition('foo');
         $this->assertInstanceOf('DI\Definition\ValueDefinition', $definition);
         $this->assertSame('bar', $definition->getValue());
-        $definition = $container->definitionManager->getDefinition('foofoo');
+        $definition = $container->definitionSource->getDefinition('foofoo');
         $this->assertInstanceOf('DI\Definition\ValueDefinition', $definition);
         $this->assertSame('barbar', $definition->getValue());
+    }
+
+    /**
+     * @test
+     */
+    public function should_chain_definition_sources_in_reverse_order()
+    {
+        $builder = new ContainerBuilder('DI\Test\UnitTest\Fixtures\FakeContainer');
+
+        $builder->addDefinitions(new DefinitionArray(array('foo' => 'bar')));
+        $builder->addDefinitions(new DefinitionArray(array('foo' => 'bim')));
+
+        /** @var FakeContainer $container */
+        $container = $builder->build();
+
+        /** @var ValueDefinition $definition */
+        $definition = $container->definitionSource->getDefinition('foo');
+        $this->assertSame('bim', $definition->getValue());
     }
 
     /**
@@ -119,12 +139,23 @@ class ContainerBuilderTest extends \PHPUnit_Framework_TestCase
         $container = $builder->build();
 
         /** @var ValueDefinition $definition */
-        $definition = $container->definitionManager->getDefinition('foo');
+        $definition = $container->definitionSource->getDefinition('foo');
         $this->assertInstanceOf('DI\Definition\ValueDefinition', $definition);
         $this->assertSame('bar', $definition->getValue());
-        $definition = $container->definitionManager->getDefinition('foofoo');
+        $definition = $container->definitionSource->getDefinition('foofoo');
         $this->assertInstanceOf('DI\Definition\ValueDefinition', $definition);
         $this->assertSame('barbar', $definition->getValue());
+    }
+
+    /**
+     * @test
+     * @expectedException \InvalidArgumentException
+     * @expectedExceptionMessage ContainerBuilder::addDefinitions() parameter must be a string, an array or a DefinitionSource object, integer given
+     */
+    public function errors_when_adding_invalid_definitions()
+    {
+        $builder = new ContainerBuilder('DI\Test\UnitTest\Fixtures\FakeContainer');
+        $builder->addDefinitions(123);
     }
 
     /**

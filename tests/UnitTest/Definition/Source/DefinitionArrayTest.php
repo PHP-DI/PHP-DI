@@ -12,24 +12,23 @@ namespace DI\Test\UnitTest\Definition\Source;
 use DI\Definition\ArrayDefinition;
 use DI\Definition\FactoryDefinition;
 use DI\Definition\ClassDefinition;
-use DI\Definition\ClassDefinition\PropertyInjection;
-use DI\Definition\Source\ArrayDefinitionSource;
+use DI\Definition\Source\DefinitionArray;
 use DI\Definition\ValueDefinition;
 
 /**
- * @covers \DI\Definition\Source\ArrayDefinitionSource
+ * @covers \DI\Definition\Source\DefinitionArray
  */
-class ArrayDefinitionSourceTest extends \PHPUnit_Framework_TestCase
+class DefinitionArrayTest extends \PHPUnit_Framework_TestCase
 {
     public function testEntryNotFound()
     {
-        $source = new ArrayDefinitionSource();
+        $source = new DefinitionArray();
         $this->assertNull($source->getDefinition('foo'));
     }
 
     public function testValueDefinition()
     {
-        $source = new ArrayDefinitionSource(array(
+        $source = new DefinitionArray(array(
             'foo' => 'bar',
         ));
 
@@ -47,7 +46,7 @@ class ArrayDefinitionSourceTest extends \PHPUnit_Framework_TestCase
             'string'  => 'test',
             'float'   => 1.0,
         );
-        $source = new ArrayDefinitionSource($definitions);
+        $source = new DefinitionArray($definitions);
 
         /** @var ValueDefinition $definition */
         $definition = $source->getDefinition('integer');
@@ -68,7 +67,7 @@ class ArrayDefinitionSourceTest extends \PHPUnit_Framework_TestCase
 
     public function testArrayDefinitions()
     {
-        $source = new ArrayDefinitionSource();
+        $source = new DefinitionArray();
         $definitions = array(
             'array'   => array('a', 'b', 'c'),
             'assoc'   => array('a' => 'b'),
@@ -95,7 +94,7 @@ class ArrayDefinitionSourceTest extends \PHPUnit_Framework_TestCase
 
     public function testClassDefinition()
     {
-        $source = new ArrayDefinitionSource(array(
+        $source = new DefinitionArray(array(
             'foo' => \DI\object(),
         ));
         /** @var $definition ClassDefinition */
@@ -110,7 +109,7 @@ class ArrayDefinitionSourceTest extends \PHPUnit_Framework_TestCase
         $callable = function () {
             return 'bar';
         };
-        $source = new ArrayDefinitionSource();
+        $source = new DefinitionArray();
         $source->addDefinitions(array(
             'foo' => \DI\factory($callable),
         ));
@@ -126,7 +125,7 @@ class ArrayDefinitionSourceTest extends \PHPUnit_Framework_TestCase
         $callable = function () {
             return 'bar';
         };
-        $source = new ArrayDefinitionSource();
+        $source = new DefinitionArray();
         $source->addDefinitions(array(
             'foo' => $callable,
         ));
@@ -137,45 +136,9 @@ class ArrayDefinitionSourceTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($callable, $definition->getCallable());
     }
 
-    public function testChainableSource()
-    {
-        $source1 = new ArrayDefinitionSource();
-        $source1->addDefinitions(array(
-            'foo1' => 'bar1',
-        ));
-
-        $source2 = new ArrayDefinitionSource();
-        $source2->addDefinitions(array(
-            'foo2' => 'bar2',
-        ));
-
-        $source1->chain($source2);
-
-        $this->assertEquals(new ValueDefinition('foo1', 'bar1'), $source1->getDefinition('foo1'));
-        $this->assertEquals(new ValueDefinition('foo2', 'bar2'), $source1->getDefinition('foo2'));
-    }
-
-    public function testChainableSourceWithMergeableDefinitions()
-    {
-        $source1 = new ArrayDefinitionSource();
-        $source1->addDefinitions(array(
-            'foo1' => \DI\object('stdClass'),
-        ));
-
-        $source2 = new ArrayDefinitionSource();
-        $source2->addDefinitions(array(
-            'foo2' => \DI\object('stdClass'),
-        ));
-
-        $source1->chain($source2);
-
-        $this->assertEquals(new ClassDefinition('foo1', 'stdClass'), $source1->getDefinition('foo1'));
-        $this->assertEquals(new ClassDefinition('foo2', 'stdClass'), $source1->getDefinition('foo2'));
-    }
-
     public function testAddDefinition()
     {
-        $source = new ArrayDefinitionSource();
+        $source = new DefinitionArray();
         $definition = new ValueDefinition('foo', 'bar');
 
         $source->addDefinition($definition);
@@ -184,7 +147,7 @@ class ArrayDefinitionSourceTest extends \PHPUnit_Framework_TestCase
 
     public function testAddDefinitions()
     {
-        $source = new ArrayDefinitionSource();
+        $source = new DefinitionArray();
         $definition = new ValueDefinition('foo', 'bar');
 
         $source->addDefinitions(array('foo' => $definition));
@@ -195,13 +158,13 @@ class ArrayDefinitionSourceTest extends \PHPUnit_Framework_TestCase
     {
         $definition = new ValueDefinition('foo', 'bar');
 
-        $source = new ArrayDefinitionSource(array('foo' => $definition));
+        $source = new DefinitionArray(array('foo' => $definition));
         $this->assertSame($definition, $source->getDefinition('foo'));
     }
 
     public function testAddDefinitionsOverrideExisting()
     {
-        $source = new ArrayDefinitionSource();
+        $source = new DefinitionArray();
         $definition1 = new ValueDefinition('foo', 'bar');
         $definition2 = new ValueDefinition('foo', 'bar');
 
@@ -211,49 +174,9 @@ class ArrayDefinitionSourceTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($definition2, $source->getDefinition('foo'));
     }
 
-    public function testUseChainedSource()
-    {
-        $chainedSource = new ArrayDefinitionSource();
-        $definition = new ValueDefinition('foo', 'bar');
-        $chainedSource->addDefinition($definition);
-
-        $source = new ArrayDefinitionSource();
-        $source->chain($chainedSource);
-
-        $this->assertSame($definition, $source->getDefinition('foo'));
-    }
-
-    /**
-     * Tests that if the source is chained to another, then mergeable definitions are merged
-     */
-    public function testChainedSourceMergeableDefinitions()
-    {
-        $source1 = new ArrayDefinitionSource();
-        $definition1 = new ClassDefinition('foo');
-        $definition1->addPropertyInjection(new PropertyInjection('p1', 'val1'));
-        $source1->addDefinition($definition1);
-
-        $source2 = new ArrayDefinitionSource();
-        $definition2 = new ClassDefinition('foo');
-        $definition2->addPropertyInjection(new PropertyInjection('p2', 'val2'));
-        $source2->addDefinition($definition2);
-
-        $source1->chain($source2);
-
-        /** @var ClassDefinition $mergedDefinition */
-        $mergedDefinition = $source1->getDefinition('foo');
-
-        // Check that it's a different, merged, definition
-        $this->assertNotSame($definition1, $mergedDefinition);
-        $this->assertNotSame($definition2, $mergedDefinition);
-        $this->assertInstanceOf('DI\Definition\ClassDefinition', $mergedDefinition);
-        $this->assertEquals(new PropertyInjection('p1', 'val1'), $mergedDefinition->getPropertyInjection('p1'));
-        $this->assertEquals(new PropertyInjection('p2', 'val2'), $mergedDefinition->getPropertyInjection('p2'));
-    }
-
     public function testWildcards()
     {
-        $source = new ArrayDefinitionSource(array(
+        $source = new DefinitionArray(array(
             'foo*' => 'bar',
             'Namespaced\*Interface' => \DI\object('Namespaced\*'),
             'Namespaced2\*Interface' => \DI\object('Namespaced2\Foo'),
@@ -286,7 +209,7 @@ class ArrayDefinitionSourceTest extends \PHPUnit_Framework_TestCase
      */
     public function testExactMatchShouldPrevailOverWildcard()
     {
-        $source = new ArrayDefinitionSource(array(
+        $source = new DefinitionArray(array(
             'fo*' => 'bar',
             'foo' => 'bim',
         ));
@@ -301,7 +224,7 @@ class ArrayDefinitionSourceTest extends \PHPUnit_Framework_TestCase
      */
     public function testWildcardShouldNotMatchEmptyString()
     {
-        $source = new ArrayDefinitionSource(array(
+        $source = new DefinitionArray(array(
             'foo*' => 'bar',
         ));
         $this->assertNull($source->getDefinition('foo'));
@@ -312,7 +235,7 @@ class ArrayDefinitionSourceTest extends \PHPUnit_Framework_TestCase
      */
     public function testWildcardShouldNotMatchAcrossNamespaces()
     {
-        $source = new ArrayDefinitionSource(array(
+        $source = new DefinitionArray(array(
             'My\*Interface' => \DI\object('My\*'),
         ));
         $this->assertNull($source->getDefinition('My\Foo\BarInterface'));

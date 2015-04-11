@@ -29,14 +29,14 @@ use ReflectionProperty;
 use UnexpectedValueException;
 
 /**
- * Source of DI class definitions in annotations such as @ Inject and @ var annotations.
+ * Provides DI definitions by reading annotations such as @ Inject and @ var annotations.
  *
- * Uses ReflectionDefinitionSource, Doctrine's Annotations and regex docblock parsing.
+ * Uses Autowiring, Doctrine's Annotations and regex docblock parsing.
  * This source automatically includes the reflection source.
  *
  * @author Matthieu Napoli <matthieu@mnapoli.fr>
  */
-class AnnotationDefinitionSource implements DefinitionSource
+class AnnotationReader implements DefinitionSource
 {
     /**
      * @var Reader

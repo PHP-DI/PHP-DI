@@ -12,7 +12,6 @@ namespace DI\Definition\Dumper;
 use DI\Debug;
 use DI\Definition\ArrayDefinition;
 use DI\Definition\Definition;
-use DI\Definition\EntryReference;
 use DI\Definition\Helper\DefinitionHelper;
 
 /**

@@ -10,8 +10,8 @@
 namespace DI\Test\UnitTest\Annotation;
 
 use DI\Annotation\Inject;
-use DI\Definition\Source\AnnotationDefinitionSource;
-use Doctrine\Common\Annotations\AnnotationReader;
+use DI\Definition\Source\AnnotationReader;
+use Doctrine\Common\Annotations\AnnotationReader as DoctrineAnnotationReader;
 use ReflectionClass;
 
 /**
@@ -22,7 +22,7 @@ use ReflectionClass;
 class InjectTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var AnnotationReader
+     * @var DoctrineAnnotationReader
      */
     private $annotationReader;
 
@@ -33,7 +33,7 @@ class InjectTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $definitionReader = new AnnotationDefinitionSource();
+        $definitionReader = new AnnotationReader();
         $this->annotationReader = $definitionReader->getAnnotationReader();
         $this->reflectionClass = new ReflectionClass('DI\Test\UnitTest\Annotation\Fixtures\InjectFixture');
     }
