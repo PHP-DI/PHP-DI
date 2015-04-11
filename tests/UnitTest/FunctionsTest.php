@@ -14,6 +14,7 @@ use DI\Definition\ArrayDefinitionExtension;
 use DI\Definition\ClassDefinition;
 use DI\Definition\Helper\ArrayDefinitionExtensionHelper;
 use DI\Definition\Helper\ClassDefinitionHelper;
+use DI\Definition\Helper\EnvironmentVariableDefinitionHelper;
 
 /**
  * Tests the helper functions.
@@ -85,6 +86,47 @@ class FunctionsTest extends \PHPUnit_Framework_TestCase
 
         $this->assertInstanceOf('DI\Definition\EntryReference', $reference);
         $this->assertEquals('foo', $reference->getName());
+    }
+
+    /**
+     * @covers ::\DI\env
+     */
+    public function test_env()
+    {
+        $definition = \DI\env('foo');
+
+        $this->assertTrue($definition instanceof EnvironmentVariableDefinitionHelper);
+        $definition = $definition->getDefinition('entry');
+        $this->assertEquals('foo', $definition->getVariableName());
+        $this->assertFalse($definition->isOptional());
+    }
+
+    /**
+     * @covers ::\DI\env
+     */
+    public function test_env_default_value()
+    {
+        $definition = \DI\env('foo', 'default');
+
+        $this->assertTrue($definition instanceof EnvironmentVariableDefinitionHelper);
+        $definition = $definition->getDefinition('entry');
+        $this->assertEquals('foo', $definition->getVariableName());
+        $this->assertTrue($definition->isOptional());
+        $this->assertEquals('default', $definition->getDefaultValue());
+    }
+
+    /**
+     * @covers ::\DI\env
+     */
+    public function test_env_default_value_null()
+    {
+        $definition = \DI\env('foo', null);
+
+        $this->assertTrue($definition instanceof EnvironmentVariableDefinitionHelper);
+        $definition = $definition->getDefinition('entry');
+        $this->assertEquals('foo', $definition->getVariableName());
+        $this->assertTrue($definition->isOptional());
+        $this->assertSame(null, $definition->getDefaultValue());
     }
 
     /**
