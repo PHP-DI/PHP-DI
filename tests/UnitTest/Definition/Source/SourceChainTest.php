@@ -78,11 +78,27 @@ class SourceChainTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function should_get_sub_definitions_with_different_name_from_root()
+    public function adding_definitions_should_go_in_the_mutable_definition_source()
+    {
+        $chain = new SourceChain(array());
+        $mutableSource = new DefinitionArray();
+        $chain->setMutableDefinitionSource($mutableSource);
+
+        $chain->addDefinition(new ValueDefinition('foo', 'bar'));
+
+        $this->assertValueDefinition($chain->getDefinition('foo'), 'bar');
+        $this->assertSame($mutableSource->getDefinition('foo'), $chain->getDefinition('foo'));
+    }
+
+    /**
+     * @test
+     */
+    public function search_sub_definitions_with_different_name_from_root()
     {
         $chain = new SourceChain(array(
             new DefinitionArray(array(
-                'subdef' => \DI\object('stdClass'),
+                'subdef' => \DI\object('stdClass')
+                    ->lazy(),
             )),
             new DefinitionArray(array(
                 'def' => \DI\object('subdef'),
@@ -95,6 +111,56 @@ class SourceChainTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($definition instanceof ClassDefinition);
         $this->assertEquals('def', $definition->getName());
         $this->assertEquals('subdef', $definition->getClassName());
+        $this->assertTrue($definition->isLazy());
+
+        // Define a new root source: should be used
+        $chain->setRootDefinitionSource(new DefinitionArray(array(
+            'subdef' => \DI\object('stdClass'), // this one is not lazy
+        )));
+        $definition = $chain->getDefinition('def');
+        $this->assertFalse($definition->isLazy()); // shouldn't be lazy
+    }
+
+    /**
+     * @test
+     */
+    public function search_sub_definitions_with_same_name_from_next_source()
+    {
+        $chain = new SourceChain(array(
+            new DefinitionArray(array(
+                'def' => \DI\object(),
+            )),
+            new DefinitionArray(array(
+                'def' => \DI\object('stdClass') // Should use this definition
+                    ->lazy(),
+            )),
+            new DefinitionArray(array(
+                'def' => \DI\object('DateTime'), // Should NOT use this one
+            )),
+            new Autowiring(),
+        ));
+
+        /** @var ClassDefinition $definition */
+        $definition = $chain->getDefinition('def');
+        $this->assertTrue($definition instanceof ClassDefinition);
+        $this->assertEquals('def', $definition->getName());
+        $this->assertEquals('stdClass', $definition->getClassName());
+        $this->assertTrue($definition->isLazy());
+    }
+
+    /**
+     * @test
+     * @expectedException \DI\Definition\Exception\DefinitionException
+     * @expectedExceptionMessage Definition 'def' extends a non-existing definition 'subdef'
+     */
+    public function errors_if_extending_an_unknown_different_definition()
+    {
+        $chain = new SourceChain(array(
+            new DefinitionArray(array(
+                'def' => \DI\object('subdef'),
+            )),
+        ));
+        $chain->getDefinition('def');
     }
 
     private function assertValueDefinition(Definition $definition, $value)
