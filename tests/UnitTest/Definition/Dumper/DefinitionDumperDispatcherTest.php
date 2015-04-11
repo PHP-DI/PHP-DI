@@ -26,7 +26,10 @@ use DI\Definition\EnvironmentVariableDefinition;
  */
 class DefinitionDumperDispatcherTest extends \PHPUnit_Framework_TestCase
 {
-    public function testRegisterDumper()
+    /**
+     * @test
+     */
+    public function should_register_definition_dumpers()
     {
         $definition = new ValueDefinition('foo', 'bar');
 
@@ -43,7 +46,10 @@ class DefinitionDumperDispatcherTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('foo', $dumper->dump($definition));
     }
 
-    public function testDumpValueDefinition()
+    /**
+     * @test
+     */
+    public function should_dump_value_definitions_by_default()
     {
         $dumper = new DefinitionDumperDispatcher();
         $dumper->registerDefaultDumpers();
@@ -54,7 +60,10 @@ class DefinitionDumperDispatcherTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($valueDumper->dump($definition), $dumper->dump($definition));
     }
 
-    public function testDumpAliasDefinition()
+    /**
+     * @test
+     */
+    public function should_dump_alias_definitions_by_default()
     {
         $dumper = new DefinitionDumperDispatcher();
         $dumper->registerDefaultDumpers();
@@ -65,7 +74,10 @@ class DefinitionDumperDispatcherTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($aliasDumper->dump($definition), $dumper->dump($definition));
     }
 
-    public function testDumpFactoryDefinition()
+    /**
+     * @test
+     */
+    public function should_dump_factory_definitions_by_default()
     {
         $dumper = new DefinitionDumperDispatcher();
         $dumper->registerDefaultDumpers();
@@ -76,7 +88,10 @@ class DefinitionDumperDispatcherTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($factoryDumper->dump($definition), $dumper->dump($definition));
     }
 
-    public function testDumpClassDefinition()
+    /**
+     * @test
+     */
+    public function should_dump_class_definitions_by_default()
     {
         $dumper = new DefinitionDumperDispatcher();
         $dumper->registerDefaultDumpers();
@@ -87,7 +102,10 @@ class DefinitionDumperDispatcherTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($classDumper->dump($definition), $dumper->dump($definition));
     }
 
-    public function testDumpEnvironmentVariableDefinition()
+    /**
+     * @test
+     */
+    public function should_dump_env_variables_definitions_by_default()
     {
         $dumper = new DefinitionDumperDispatcher();
         $dumper->registerDefaultDumpers();
@@ -99,10 +117,11 @@ class DefinitionDumperDispatcherTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @test
      * @expectedException \RuntimeException
      * @expectedExceptionMessage There is no DefinitionDumper capable of dumping this definition of type DI\Definition\ValueDefinition
      */
-    public function testInvalidDefinitionType()
+    public function should_only_accept_definitions_it_can_dump()
     {
         $dumper = new DefinitionDumperDispatcher(false);
         $dumper->dump(new ValueDefinition('foo', 'bar'));

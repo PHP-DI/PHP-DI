@@ -36,19 +36,6 @@ class ContainerMakeTest extends \PHPUnit_Framework_TestCase
         $container->make('key');
     }
 
-    /**
-     * @coversNothing
-     */
-    public function testClosureIsNotResolved()
-    {
-        $closure = function () {
-            return 'hello';
-        };
-        $container = ContainerBuilder::buildDevContainer();
-        $container->set('key', $closure);
-        $this->assertSame($closure, $container->make('key'));
-    }
-
     public function testMakeWithClassName()
     {
         $container = ContainerBuilder::buildDevContainer();
@@ -119,7 +106,7 @@ class ContainerMakeTest extends \PHPUnit_Framework_TestCase
     {
         $container = ContainerBuilder::buildDevContainer();
         // Alias to itself -> infinite recursive loop
-        $container->set('foo', \DI\link('foo'));
+        $container->set('foo', \DI\get('foo'));
         $container->make('foo');
     }
 

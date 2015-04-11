@@ -164,7 +164,8 @@ PHP-DI provides function helpers for this (to define *values*, you don't need a 
 
 - `DI\object($classname = null)`: define an object entry
 - `DI\factory($factory)`: define a factory that returns an entry
-- `DI\link($entryName)`: used to define alias entries, and also to reference other entries in object definitions (see below)
+- `DI\get($entryName)`: used to define alias entries, and also to reference other entries in object definitions (see below) - was previously `DI\link()` in PHP-DI 4, which is kept for backward compatibility
+- `DI\value($value)`: defines a simple value. This helper is not needed as anything is a value by default. The only use case for this helper is to define a container entry that is a closure (as closure are turned into factory definitions automatically)
 
 Example of a `config.php` file (using [PHP 5.4 short arrays](http://php.net/manual/en/migration54.new-features.php)):
 
@@ -190,18 +191,18 @@ return [
 
     // Defines an instance of My\Class
     'My\Class' => DI\object()
-        ->constructor(DI\link('db.host'), DI\link('My\OtherClass')),
+        ->constructor(DI\get('db.host'), DI\get('My\OtherClass')),
 
     'My\OtherClass' => DI\object()
         ->scope(Scope::PROTOTYPE())
-        ->constructor(DI\link('db.host'), DI\link('db.port'))
-        ->method('setFoo2', DI\link('My\Foo1'), DI\link('My\Foo2'))
+        ->constructor(DI\get('db.host'), DI\get('db.port'))
+        ->method('setFoo2', DI\get('My\Foo1'), DI\get('My\Foo2'))
         ->property('bar', 'My\Bar'),
 
     // Define only specific parameters
     'My\AnotherClass' => DI\object()
         ->constructorParameter('someParam', 'value to inject')
-        ->methodParameter('setFoo2', 'someParam', DI\link('My\Foo')),
+        ->methodParameter('setFoo2', 'someParam', DI\get('My\Foo')),
 
     // Mapping an interface to an implementation
     'My\Interface' => DI\object('My\Implementation'),
@@ -209,26 +210,32 @@ return [
     // Defining a named instance
     'myNamedInstance' => DI\object('My\Class'),
 
-    // Using an anonymous function
-    'My\Stuff' => DI\factory(function (\Interop\Container\ContainerInterface $c) {
+    // Using an anonymous function (no need to use DI\factory with a closure)
+    'My\Stuff' => function (\Interop\Container\ContainerInterface $c) {
         return new MyClass($c->get('db.host'));
-    }),
+    },
 
-    // We can set the scope on the factory too
-    // This will return a new object each time we request SomeOtherClass
+    // To set additional options, use the DI\factory helper
+    // The prototype scope will return a new object each time we request SomeOtherClass
     'SomeOtherClass' => DI\factory(function () {
         return new SomeOtherClass();
     })->scope(Scope::PROTOTYPE()),
 
     // Defining an alias to another entry
-    'some.entry' => DI\link('some.other.entry'),
+    'some.entry' => DI\get('some.other.entry'),
 
     // Defining a value based on an environment variable
     'db1.url' => DI\env('DATABASE_URL'),
     // With a default value
     'db2.url' => DI\env('DATABASE_URL', 'postgresql://user:pass@localhost/db'),
     // With a default value that is another entry
-    'db2.host' => DI\env('DATABASE_HOST', DI\link('db.host')),
+    'db2.host' => DI\env('DATABASE_HOST', DI\get('db.host')),
+
+    // Arrays can contain links to other entries
+    'log.handlers' => [
+        DI\get('Monolog\Handler\StreamHandler'),
+        DI\get('Monolog\Handler\EmailHandler'),
+    ],
 
 ];
 ```

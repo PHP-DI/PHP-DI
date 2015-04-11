@@ -18,23 +18,25 @@ use DI\Definition\ValueDefinition;
  */
 class AliasDefinitionDumperTest extends \PHPUnit_Framework_TestCase
 {
-    public function testDump()
+    /**
+     * @test
+     */
+    public function should_dump_alias_definitions()
     {
         $definition = new AliasDefinition('foo', 'bar');
         $dumper = new AliasDefinitionDumper();
 
-        $str = 'Alias (
-    foo => bar
-)';
+        $str = 'get(foo => bar)';
 
         $this->assertEquals($str, $dumper->dump($definition));
     }
 
     /**
+     * @test
      * @expectedException \InvalidArgumentException
      * @expectedExceptionMessage This definition dumper is only compatible with AliasDefinition objects, DI\Definition\ValueDefinition given
      */
-    public function testInvalidDefinitionType()
+    public function should_only_accept_alias_definitions()
     {
         $definition = new ValueDefinition('foo', 'bar');
         $dumper = new AliasDefinitionDumper();

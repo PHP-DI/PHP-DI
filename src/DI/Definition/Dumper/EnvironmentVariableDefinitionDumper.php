@@ -9,9 +9,11 @@
 
 namespace DI\Definition\Dumper;
 
+use DI\Debug;
 use DI\Definition\Definition;
 use DI\Definition\EntryReference;
 use DI\Definition\EnvironmentVariableDefinition;
+use DI\Definition\Helper\DefinitionHelper;
 
 /**
  * Dumps environment variable definitions.
@@ -38,8 +40,9 @@ class EnvironmentVariableDefinitionDumper implements DefinitionDumper
         if ($definition->isOptional()) {
             $defaultValue = $definition->getDefaultValue();
 
-            if ($defaultValue instanceof EntryReference) {
-                $defaultValueStr = sprintf('link(%s)', $defaultValue->getName());
+            if ($defaultValue instanceof DefinitionHelper) {
+                $nestedDefinition = Debug::dumpDefinition($defaultValue->getDefinition(''));
+                $defaultValueStr = $this->indent($nestedDefinition);
             } else {
                 $defaultValueStr = var_export($defaultValue, true);
             }
@@ -51,5 +54,10 @@ class EnvironmentVariableDefinitionDumper implements DefinitionDumper
             "Environment variable (\n%s\n)",
             $str
         );
+    }
+
+    private function indent($str)
+    {
+        return str_replace("\n", "\n    ", $str);
     }
 }

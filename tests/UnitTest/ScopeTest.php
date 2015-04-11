@@ -16,13 +16,19 @@ use DI\Scope;
  */
 class ScopeTest extends \PHPUnit_Framework_TestCase
 {
-    public function testPrototype()
+    /**
+     * @test
+     */
+    public function should_provide_prototype_scope()
     {
         $scope = Scope::PROTOTYPE();
         $this->assertEquals('prototype', $scope->getValue());
     }
 
-    public function testSingleton()
+    /**
+     * @test
+     */
+    public function should_provide_singleton_scope()
     {
         $scope = Scope::SINGLETON();
         $this->assertEquals('singleton', $scope->getValue());

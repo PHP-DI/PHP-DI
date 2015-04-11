@@ -18,25 +18,30 @@ use DI\Definition\Resolver\ValueDefinitionResolver;
  */
 class ValueDefinitionResolverTest extends \PHPUnit_Framework_TestCase
 {
-    public function testResolve()
+    /**
+     * @test
+     */
+    public function should_resolve_value_definitions()
     {
-        $definition = new ValueDefinition('foo', 'bar');
         $resolver = new ValueDefinitionResolver();
 
-        $value = $resolver->resolve($definition);
+        $definition = new ValueDefinition('foo', 'bar');
 
-        $this->assertEquals('bar', $value);
+        $this->assertTrue($resolver->isResolvable($definition));
+        $this->assertEquals('bar', $resolver->resolve($definition));
     }
 
     /**
+     * @test
      * @expectedException \InvalidArgumentException
      * @expectedExceptionMessage This definition resolver is only compatible with ValueDefinition objects, DI\Definition\FactoryDefinition given
      */
-    public function testInvalidDefinitionType()
+    public function should_only_resolve_value_definitions()
     {
+        $resolver = new ValueDefinitionResolver();
+
         $definition = new FactoryDefinition('foo', function () {
         });
-        $resolver = new ValueDefinitionResolver();
 
         $resolver->resolve($definition);
     }

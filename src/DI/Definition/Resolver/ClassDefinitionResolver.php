@@ -11,14 +11,13 @@ namespace DI\Definition\Resolver;
 
 use DI\Definition\ClassDefinition;
 use DI\Definition\Definition;
-use DI\Definition\EntryReference;
 use DI\Definition\Exception\DefinitionException;
 use DI\Definition\ClassDefinition\PropertyInjection;
+use DI\Definition\Helper\DefinitionHelper;
 use DI\DependencyException;
+use DI\Proxy\ProxyFactory;
 use Exception;
-use Interop\Container\ContainerInterface;
 use Interop\Container\Exception\NotFoundException;
-use ProxyManager\Factory\LazyLoadingValueHolderFactory as ProxyFactory;
 use ReflectionClass;
 use ReflectionProperty;
 
@@ -31,11 +30,6 @@ use ReflectionProperty;
 class ClassDefinitionResolver implements DefinitionResolver
 {
     /**
-     * @var ContainerInterface
-     */
-    private $container;
-
-    /**
      * @var ProxyFactory
      */
     private $proxyFactory;
@@ -46,19 +40,21 @@ class ClassDefinitionResolver implements DefinitionResolver
     private $parameterResolver;
 
     /**
-     * The resolver needs a container.
-     * This container will be used to get the entry to which the alias points to.
-     *
-     * @param ContainerInterface $container
-     * @param ProxyFactory       $proxyFactory Used to create proxies for lazy injections.
+     * @var DefinitionResolver
+     */
+    private $definitionResolver;
+
+    /**
+     * @param DefinitionResolver $definitionResolver Used to resolve nested definitions.
+     * @param ProxyFactory       $proxyFactory       Used to create proxies for lazy injections.
      */
     public function __construct(
-        ContainerInterface $container,
+        DefinitionResolver $definitionResolver,
         ProxyFactory $proxyFactory
     ) {
-        $this->container = $container;
+        $this->definitionResolver = $definitionResolver;
         $this->proxyFactory = $proxyFactory;
-        $this->parameterResolver = new ParameterResolver($container);
+        $this->parameterResolver = new ParameterResolver($definitionResolver);
     }
 
     /**
@@ -104,36 +100,12 @@ class ClassDefinitionResolver implements DefinitionResolver
     }
 
     /**
-     * Injects dependencies on an existing instance.
-     *
-     * @param ClassDefinition $classDefinition
-     * @param object          $instance
-     *
-     * @throws DependencyException Error while injecting dependencies
-     * @throws DefinitionException
-     * @return object The instance
-     */
-    public function injectOnInstance(ClassDefinition $classDefinition, $instance)
-    {
-        try {
-            $this->injectMethodsAndProperties($instance, $classDefinition);
-        } catch (NotFoundException $e) {
-            $message = sprintf(
-                "Error while injecting dependencies into %s: %s",
-                $classDefinition->getClassName(),
-                $e->getMessage()
-            );
-            throw new DependencyException($message, 0, $e);
-        }
-    }
-
-    /**
      * Returns a proxy instance
      *
      * @param ClassDefinition $definition
      * @param array           $parameters
      *
-     * @return object Proxy instance
+     * @return \ProxyManager\Proxy\LazyLoadingInterface Proxy instance
      */
     private function createProxy(ClassDefinition $definition, array $parameters)
     {
@@ -206,7 +178,7 @@ class ClassDefinitionResolver implements DefinitionResolver
         return $object;
     }
 
-    private function injectMethodsAndProperties($object, ClassDefinition $classDefinition)
+    protected function injectMethodsAndProperties($object, ClassDefinition $classDefinition)
     {
         // Property injections
         foreach ($classDefinition->getPropertyInjections() as $propertyInjection) {
@@ -238,15 +210,17 @@ class ClassDefinitionResolver implements DefinitionResolver
 
         $value = $propertyInjection->getValue();
 
-        if ($value instanceof EntryReference) {
+        if ($value instanceof DefinitionHelper) {
+            /** @var Definition $nestedDefinition */
+            $nestedDefinition = $value->getDefinition('');
+
             try {
-                $value = $this->container->get($value->getName());
+                $value = $this->definitionResolver->resolve($nestedDefinition);
             } catch (DependencyException $e) {
                 throw $e;
             } catch (Exception $e) {
                 throw new DependencyException(sprintf(
-                    "Error while injecting '%s' in %s::%s. %s",
-                    $value->getName(),
+                    "Error while injecting in %s::%s. %s",
                     get_class($object),
                     $propertyName,
                     $e->getMessage()
@@ -258,14 +232,6 @@ class ClassDefinitionResolver implements DefinitionResolver
             $property->setAccessible(true);
         }
         $property->setValue($object, $value);
-    }
-
-    /**
-     * @return ContainerInterface
-     */
-    public function getContainer()
-    {
-        return $this->container;
     }
 
     private function assertIsClassDefinition(Definition $definition)

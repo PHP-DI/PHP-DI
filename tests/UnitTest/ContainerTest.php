@@ -9,9 +9,7 @@
 
 namespace DI\Test\UnitTest;
 
-use DI\Container;
 use DI\ContainerBuilder;
-use DI\Definition\DefinitionManager;
 use stdClass;
 
 /**
@@ -128,14 +126,5 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
         $container->set('foo', 'hello');
 
         $this->assertSame('hello', $container->get('foo'));
-    }
-
-    public function testGetDefinitionManager()
-    {
-        $definitionManager = new DefinitionManager();
-        $proxyFactory = $this->getMock('ProxyManager\Factory\LazyLoadingValueHolderFactory');
-        $container = new Container($definitionManager, $proxyFactory);
-
-        $this->assertSame($definitionManager, $container->getDefinitionManager());
     }
 }

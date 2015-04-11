@@ -10,9 +10,26 @@
 namespace DI;
 
 use DI\Definition\EntryReference;
+use DI\Definition\Helper\ArrayDefinitionExtensionHelper;
 use DI\Definition\Helper\FactoryDefinitionHelper;
 use DI\Definition\Helper\ClassDefinitionHelper;
 use DI\Definition\Helper\EnvironmentVariableDefinitionHelper;
+use DI\Definition\Helper\ValueDefinitionHelper;
+use DI\Definition\Helper\StringDefinitionHelper;
+
+if (! function_exists('DI\value')) {
+    /**
+     * Helper for defining an object.
+     *
+     * @param mixed $value
+     *
+     * @return ValueDefinitionHelper
+     */
+    function value($value)
+    {
+        return new ValueDefinitionHelper($value);
+    }
+}
 
 if (! function_exists('DI\object')) {
     /**
@@ -44,9 +61,25 @@ if (! function_exists('DI\factory')) {
     }
 }
 
+if (! function_exists('DI\get')) {
+    /**
+     * Helper for referencing another container entry in an object definition.
+     *
+     * @param string $entryName
+     *
+     * @return EntryReference
+     */
+    function get($entryName)
+    {
+        return new EntryReference($entryName);
+    }
+}
+
 if (! function_exists('DI\link')) {
     /**
      * Helper for referencing another container entry in an object definition.
+     *
+     * @deprecated \DI\link() has been replaced by \DI\get()
      *
      * @param string $entryName
      *
@@ -73,5 +106,55 @@ if (! function_exists('DI\env')) {
         $isOptional = 2 === func_num_args();
 
         return new EnvironmentVariableDefinitionHelper($variableName, $isOptional, $defaultValue);
+    }
+}
+
+if (! function_exists('DI\add')) {
+    /**
+     * Helper for extending another definition.
+     *
+     * Example:
+     *
+     *     'log.backends' => DI\add(DI\get('My\Custom\LogBackend'))
+     *
+     * or:
+     *
+     *     'log.backends' => DI\add([
+     *         DI\get('My\Custom\LogBackend')
+     *     ])
+     *
+     * @param mixed|array $values A value or an array of values to add to the array.
+     *
+     * @return ArrayDefinitionExtensionHelper
+     *
+     * @since 5.0
+     */
+    function add($values)
+    {
+        if (! is_array($values)) {
+            $values = array($values);
+        }
+
+        return new ArrayDefinitionExtensionHelper($values);
+    }
+}
+
+if (! function_exists('DI\string')) {
+    /**
+     * Helper for concatenating strings.
+     *
+     * Example:
+     *
+     *     'log.filename' => DI\string('{app.path}/app.log')
+     *
+     * @param string $expression A string expression. Use the `{}` placeholders to reference other container entries.
+     *
+     * @return StringDefinitionHelper
+     *
+     * @since 5.0
+     */
+    function string($expression)
+    {
+        return new StringDefinitionHelper((string) $expression);
     }
 }

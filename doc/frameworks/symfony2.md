@@ -120,7 +120,7 @@ That's because PHP-DI is designed to play nice with others:
 ```php
 return [
     'Acme\MyBundle\Controller\ProductController' => DI\object()
-        ->constructor(DI\link('doctrine.orm.entity_manager')),
+        ->constructor(DI\get('doctrine.orm.entity_manager')),
 ];
 ```
 
@@ -139,9 +139,9 @@ like these:
 
 ```php
 return [
-    'Psr\Log\LoggerInterface' => DI\link('logger'),
+    'Psr\Log\LoggerInterface' => DI\get('logger'),
     // PHP 5.5 notation:
-    ObjectManager::class => DI\link('doctrine.orm.entity_manager'),
+    ObjectManager::class => DI\get('doctrine.orm.entity_manager'),
 ];
 ```
 

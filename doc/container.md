@@ -122,7 +122,7 @@ Note that you can also define injections on the fly if you don't use type-hints:
 
 ```php
 $parameters = [
-    'logger' => \DI\link('Logger')
+    'logger' => \DI\get('Logger')
 ];
 
 $container->call(function ($logger) {

@@ -9,9 +9,10 @@
 
 namespace DI\Definition\Source;
 
+use DI\Definition\ArrayDefinition;
 use DI\Definition\ClassDefinition;
 use DI\Definition\Definition;
-use DI\Definition\MergeableDefinition;
+use DI\Definition\FactoryDefinition;
 use DI\Definition\ValueDefinition;
 use DI\Definition\Helper\DefinitionHelper;
 
@@ -20,18 +21,13 @@ use DI\Definition\Helper\DefinitionHelper;
  *
  * @author Matthieu Napoli <matthieu@mnapoli.fr>
  */
-class ArrayDefinitionSource implements ChainableDefinitionSource
+class ArrayDefinitionSource implements DefinitionSource, MutableDefinitionSource
 {
     const WILDCARD = '*';
     /**
      * Matches anything except "\"
      */
     const WILDCARD_PATTERN = '([^\\\\]+)';
-
-    /**
-     * @var DefinitionSource
-     */
-    private $chainedSource;
 
     /**
      * DI definitions in a PHP array
@@ -48,39 +44,6 @@ class ArrayDefinitionSource implements ChainableDefinitionSource
     }
 
     /**
-     * {@inheritdoc}
-     */
-    public function getDefinition($name, MergeableDefinition $parentDefinition = null)
-    {
-        $definition = $this->findDefinition($name);
-
-        if ($definition === null) {
-            // Not found, we use the chain or return null
-            if ($this->chainedSource) {
-                return $this->chainedSource->getDefinition($name, $parentDefinition);
-            }
-            return $parentDefinition;
-        }
-
-        // If the definition we have is not mergeable, and we are supposed to merge, we ignore it
-        if ($parentDefinition && (! $definition instanceof MergeableDefinition)) {
-            return $parentDefinition;
-        }
-
-        // Merge with parent
-        if ($parentDefinition) {
-            $definition = $parentDefinition->merge($definition);
-        }
-
-        // Enrich definition in sub-source
-        if ($this->chainedSource && $definition instanceof MergeableDefinition) {
-            $definition = $this->chainedSource->getDefinition($name, $definition);
-        }
-
-        return $definition;
-    }
-
-    /**
      * @param array $definitions DI definitions in a PHP array indexed by the definition name.
      */
     public function addDefinitions(array $definitions)
@@ -91,7 +54,7 @@ class ArrayDefinitionSource implements ChainableDefinitionSource
     }
 
     /**
-     * @param Definition $definition
+     * {@inheritdoc}
      */
     public function addDefinition(Definition $definition)
     {
@@ -101,16 +64,7 @@ class ArrayDefinitionSource implements ChainableDefinitionSource
     /**
      * {@inheritdoc}
      */
-    public function chain(DefinitionSource $source)
-    {
-        $this->chainedSource = $source;
-    }
-
-    /**
-     * @param string $name
-     * @return Definition|null
-     */
-    private function findDefinition($name)
+    public function getDefinition($name)
     {
         // Look for the definition by name
         if (array_key_exists($name, $this->definitions)) {
@@ -154,6 +108,12 @@ class ArrayDefinitionSource implements ChainableDefinitionSource
     {
         if ($definition instanceof DefinitionHelper) {
             $definition = $definition->getDefinition($name);
+        }
+        if (! $definition instanceof Definition && is_array($definition)) {
+            $definition = new ArrayDefinition($name, $definition);
+        }
+        if ($definition instanceof \Closure) {
+            $definition = new FactoryDefinition($name, $definition);
         }
         if (! $definition instanceof Definition) {
             $definition = new ValueDefinition($name, $definition);

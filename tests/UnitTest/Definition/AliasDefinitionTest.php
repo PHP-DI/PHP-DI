@@ -13,28 +13,44 @@ use DI\Definition\AliasDefinition;
 use DI\Scope;
 
 /**
- * Test class for AliasDefinition
- *
  * @covers \DI\Definition\AliasDefinition
  */
 class AliasDefinitionTest extends \PHPUnit_Framework_TestCase
 {
-    public function testGetters()
+    /**
+     * @test
+     */
+    public function should_have_a_name()
     {
         $definition = new AliasDefinition('foo', 'bar');
 
         $this->assertEquals('foo', $definition->getName());
+    }
+
+    /**
+     * @test
+     */
+    public function should_have_a_target_entry_name()
+    {
+        $definition = new AliasDefinition('foo', 'bar');
+
         $this->assertEquals('bar', $definition->getTargetEntryName());
     }
 
-    public function testScope()
+    /**
+     * @test
+     */
+    public function should_have_prototype_scope()
     {
         $definition = new AliasDefinition('foo', 'bar');
 
         $this->assertEquals(Scope::PROTOTYPE(), $definition->getScope());
     }
 
-    public function testCacheable()
+    /**
+     * @test
+     */
+    public function should_be_cacheable()
     {
         $this->assertInstanceOf('DI\Definition\CacheableDefinition', new AliasDefinition('foo', 'bar'));
     }

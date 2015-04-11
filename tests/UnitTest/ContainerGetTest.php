@@ -39,14 +39,14 @@ class ContainerGetTest extends \PHPUnit_Framework_TestCase
     /**
      * @coversNothing
      */
-    public function testClosureIsNotResolved()
+    public function testClosureIsResolved()
     {
         $closure = function () {
             return 'hello';
         };
         $container = ContainerBuilder::buildDevContainer();
         $container->set('key', $closure);
-        $this->assertSame($closure, $container->get('key'));
+        $this->assertEquals('hello', $container->get('key'));
     }
 
     public function testGetWithClassName()
@@ -116,7 +116,7 @@ class ContainerGetTest extends \PHPUnit_Framework_TestCase
     {
         $container = ContainerBuilder::buildDevContainer();
         // Alias to itself -> infinite recursive loop
-        $container->set('foo', \DI\link('foo'));
+        $container->set('foo', \DI\get('foo'));
         $container->get('foo');
     }
 

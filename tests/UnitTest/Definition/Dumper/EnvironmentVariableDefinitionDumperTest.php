@@ -10,7 +10,6 @@
 namespace DI\Test\UnitTest\Definition\Dumper;
 
 use DI\Definition\Dumper\EnvironmentVariableDefinitionDumper;
-use DI\Definition\EntryReference;
 use DI\Definition\EnvironmentVariableDefinition;
 use DI\Definition\FactoryDefinition;
 
@@ -29,7 +28,10 @@ class EnvironmentVariableDefinitionDumperTest extends \PHPUnit_Framework_TestCas
         $this->dumper = new EnvironmentVariableDefinitionDumper();
     }
 
-    public function testDump()
+    /**
+     * @test
+     */
+    public function should_dump_env_variable_definitions()
     {
         $str = 'Environment variable (
     variable = bar
@@ -44,7 +46,10 @@ class EnvironmentVariableDefinitionDumperTest extends \PHPUnit_Framework_TestCas
         );
     }
 
-    public function testDumpOptional()
+    /**
+     * @test
+     */
+    public function should_dump_env_variable_definitions_with_default_value()
     {
         $str = 'Environment variable (
     variable = bar
@@ -60,27 +65,53 @@ class EnvironmentVariableDefinitionDumperTest extends \PHPUnit_Framework_TestCas
         );
     }
 
-    public function testDumpOptionalWithLinkedDefault()
+    /**
+     * @test
+     */
+    public function should_dump_env_variable_definitions_with_reference_as_default_value()
     {
         $str = 'Environment variable (
     variable = bar
     optional = yes
-    default = link(foo)
+    default = get(foo)
 )';
 
         $this->assertEquals(
             $str,
             $this->dumper->dump(
-                new EnvironmentVariableDefinition('foo', 'bar', true, new EntryReference('foo'))
+                new EnvironmentVariableDefinition('foo', 'bar', true, \DI\get('foo'))
             )
         );
     }
 
     /**
+     * @test
+     */
+    public function should_dump_env_variable_definitions_with_nested_definition_as_default_value()
+    {
+        $str = 'Environment variable (
+    variable = bar
+    optional = yes
+    default = Environment variable (
+        variable = foo
+        optional = no
+    )
+)';
+
+        $this->assertEquals(
+            $str,
+            $this->dumper->dump(
+                new EnvironmentVariableDefinition('foo', 'bar', true, \DI\env('foo'))
+            )
+        );
+    }
+
+    /**
+     * @test
      * @expectedException \InvalidArgumentException
      * @expectedExceptionMessage This definition dumper is only compatible with EnvironmentVariableDefinition objects, DI\Definition\FactoryDefinition given
      */
-    public function testDumpWithInvalidDefinitionType()
+    public function should_only_accept_env_variable_definitions()
     {
         $this->dumper->dump(
             new FactoryDefinition('foo', function () {})

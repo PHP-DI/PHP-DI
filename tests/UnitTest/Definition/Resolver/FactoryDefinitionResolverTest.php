@@ -12,19 +12,22 @@ namespace DI\Test\UnitTest\Definition\Resolver;
 use DI\Definition\FactoryDefinition;
 use DI\Definition\ValueDefinition;
 use DI\Definition\Resolver\FactoryDefinitionResolver;
+use EasyMock\EasyMock;
 
 /**
  * @covers \DI\Definition\Resolver\FactoryDefinitionResolver
  */
 class FactoryDefinitionResolverTest extends \PHPUnit_Framework_TestCase
 {
-    public function testGetContainer()
+    /**
+     * @var FactoryDefinitionResolver
+     */
+    private $resolver;
+
+    public function setUp()
     {
-        $container = $this->getMock('DI\Container', array(), array(), '', false);
-
-        $resolver = new FactoryDefinitionResolver($container);
-
-        $this->assertSame($container, $resolver->getContainer());
+        $container = EasyMock::mock('Interop\Container\ContainerInterface');
+        $this->resolver = new FactoryDefinitionResolver($container);
     }
 
     public function provideCallables()
@@ -38,49 +41,40 @@ class FactoryDefinitionResolverTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @test
      * @dataProvider provideCallables
      */
-    public function testResolve($callable)
+    public function should_resolve_callables($callable)
     {
-        /** @var \DI\Container $container */
-        $container = $this->getMock('DI\Container', array(), array(), '', false);
-
         $definition = new FactoryDefinition('foo', $callable);
-        $resolver = new FactoryDefinitionResolver($container);
 
-        $value = $resolver->resolve($definition);
+        $value = $this->resolver->resolve($definition);
 
         $this->assertEquals('bar', $value);
     }
 
     /**
+     * @test
      * @expectedException \DI\Definition\Exception\DefinitionException
      * @expectedExceptionMessage The factory definition "foo" is not callable
      */
-    public function testNotCallable()
+    public function should_throw_if_the_factory_is_not_callable()
     {
-        /** @var \DI\Container $container */
-        $container = $this->getMock('DI\Container', array(), array(), '', false);
-
         $definition = new FactoryDefinition('foo', 'Hello world');
-        $resolver = new FactoryDefinitionResolver($container);
 
-        $resolver->resolve($definition);
+        $this->resolver->resolve($definition);
     }
 
     /**
+     * @test
      * @expectedException \InvalidArgumentException
      * @expectedExceptionMessage This definition resolver is only compatible with FactoryDefinition objects, DI\Definition\ValueDefinition given
      */
-    public function testInvalidDefinitionType()
+    public function should_only_resolve_factory_definitions()
     {
-        /** @var \DI\Container $container */
-        $container = $this->getMock('DI\Container', array(), array(), '', false);
-
         $definition = new ValueDefinition('foo', 'bar');
-        $resolver = new FactoryDefinitionResolver($container);
 
-        $resolver->resolve($definition);
+        $this->resolver->resolve($definition);
     }
 }
 

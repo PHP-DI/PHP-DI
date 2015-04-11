@@ -9,9 +9,9 @@
 
 namespace DI\Test\UnitTest\Fixtures;
 
-use DI\Definition\DefinitionManager;
+use DI\Definition\Source\DefinitionSource;
+use DI\Proxy\ProxyFactory;
 use Interop\Container\ContainerInterface;
-use ProxyManager\Factory\LazyLoadingValueHolderFactory;
 
 /**
  * Fake container class that exposes all constructor parameters.
@@ -21,12 +21,12 @@ use ProxyManager\Factory\LazyLoadingValueHolderFactory;
 class FakeContainer
 {
     /**
-     * @var DefinitionManager
+     * @var DefinitionSource
      */
-    public $definitionManager;
+    public $definitionSource;
 
     /**
-     * @var LazyLoadingValueHolderFactory
+     * @var ProxyFactory
      */
     public $proxyFactory;
 
@@ -36,11 +36,11 @@ class FakeContainer
     public $wrapperContainer;
 
     public function __construct(
-        DefinitionManager $definitionManager,
-        LazyLoadingValueHolderFactory $proxyFactory,
+        DefinitionSource $definitionSource,
+        ProxyFactory $proxyFactory,
         ContainerInterface $wrapperContainer = null
     ) {
-        $this->definitionManager = $definitionManager;
+        $this->definitionSource = $definitionSource;
         $this->proxyFactory = $proxyFactory;
         $this->wrapperContainer = $wrapperContainer;
     }

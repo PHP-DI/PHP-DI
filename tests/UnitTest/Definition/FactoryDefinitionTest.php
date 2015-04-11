@@ -13,13 +13,11 @@ use DI\Definition\FactoryDefinition;
 use DI\Scope;
 
 /**
- * Test class for FactoryDefinition
- *
  * @covers \DI\Definition\FactoryDefinition
  */
 class FactoryDefinitionTest extends \PHPUnit_Framework_TestCase
 {
-    public function testGetters()
+    public function test_getters()
     {
         $callable = function () {
         };
@@ -32,9 +30,9 @@ class FactoryDefinitionTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Test that the definition accepts callable (not closures)
+     * @test
      */
-    public function testAcceptArrayCallable()
+    public function should_accept_callables_other_than_closures()
     {
         $callable = array($this, 'foo');
         $definition = new FactoryDefinition('foo', $callable);
@@ -43,7 +41,10 @@ class FactoryDefinitionTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($callable, $definition->getCallable());
     }
 
-    public function testScope()
+    /**
+     * @test
+     */
+    public function can_have_a_custom_scope()
     {
         $definition = new FactoryDefinition('foo', function () {
         }, Scope::PROTOTYPE());
@@ -51,7 +52,10 @@ class FactoryDefinitionTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(Scope::PROTOTYPE(), $definition->getScope());
     }
 
-    public function testNotCacheable()
+    /**
+     * @test
+     */
+    public function should_not_be_cacheable()
     {
         $definition = new FactoryDefinition('foo', function () {
         });

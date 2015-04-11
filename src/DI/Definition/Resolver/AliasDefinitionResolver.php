@@ -54,21 +54,15 @@ class AliasDefinitionResolver implements DefinitionResolver
     }
 
     /**
+     * @param AliasDefinition $definition
+     *
      * {@inheritdoc}
      */
     public function isResolvable(Definition $definition, array $parameters = array())
     {
         $this->assertIsAliasDefinition($definition);
 
-        return true;
-    }
-
-    /**
-     * @return ContainerInterface
-     */
-    public function getContainer()
-    {
-        return $this->container;
+        return $this->container->has($definition->getTargetEntryName());
     }
 
     private function assertIsAliasDefinition(Definition $definition)

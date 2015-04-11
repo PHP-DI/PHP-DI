@@ -1,5 +1,36 @@
 # Change log
 
+## 5.0
+
+Improvements:
+
+- Lighter package: requires 4 less Composer dependencies by default
+- [#207](https://github.com/mnapoli/PHP-DI/issues/207): Support for `DI\link()` in arrays
+- [#208](https://github.com/mnapoli/PHP-DI/issues/208): Support for nested definitions
+- [#226](https://github.com/mnapoli/PHP-DI/pull/226): `DI\factory()` can now be omitted with closures:
+
+    ```php
+    // before
+    'My\Class' => DI\factory(function () {
+        return new Foo();
+    })
+    // now (optional shortcut)
+    'My\Class' => function () {
+        return new Foo();
+    }
+    ```
+- [#235](https://github.com/mnapoli/PHP-DI/issues/235) `DI\link()` is now deprecated in favor of `DI\get()`. There is no BC break as `DI\link()` still works.
+
+BC breaks:
+
+- [#198](https://github.com/mnapoli/PHP-DI/issues/198) `ocramius/proxy-manager` is not installed by default anymore, you need to require it in `composer.json` if you want to use **lazy injection**
+- Closure definitions are now converted into factory definitions automatically. If you ever defined a closure as a value (e.g. to have the closure injected and now executed), you need to wrap the closure with the new `DI\value()` helper.
+- [#223](https://github.com/mnapoli/PHP-DI/issues/223) `DI\ContainerInterface` was deprecated since v4.1 and has been removed
+
+Internal changes in case you were replacing/extending some parts:
+
+- `DI\Definition\Source\ChainableDefinitionSource` is now an abstract class (was previously an interface).
+
 ## 4.4
 
 Read the [news entry](news/13-php-di-4-4-released.md).
