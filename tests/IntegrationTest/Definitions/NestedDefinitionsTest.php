@@ -52,7 +52,7 @@ class NestedDefinitionsTest extends \PHPUnit_Framework_TestCase
         $builder->addDefinitions(array(
             'foo'                                             => 'bar',
             'DI\Test\IntegrationTest\Fixtures\LazyDependency' => $lazyDep,
-            'obj'                                             => \DI\extend('DI\Test\IntegrationTest\Fixtures\Class1')
+            'obj'                                             => \DI\object('DI\Test\IntegrationTest\Fixtures\Class1')
                 ->constructor(
                     \DI\object('DI\Test\IntegrationTest\Fixtures\Class2'),
                     \DI\factory(function () use ($impl) {

@@ -11,6 +11,7 @@ namespace DI\Definition;
 
 use DI\Definition\ClassDefinition\MethodInjection;
 use DI\Definition\ClassDefinition\PropertyInjection;
+use DI\Definition\Exception\DefinitionException;
 use DI\Scope;
 
 /**
@@ -20,7 +21,7 @@ use DI\Scope;
  *
  * @author Matthieu Napoli <matthieu@mnapoli.fr>
  */
-class ClassDefinition implements Definition, CacheableDefinition
+class ClassDefinition implements Definition, CacheableDefinition, HasSubDefinition
 {
     /**
      * Entry name (most of the time, same as $classname)
@@ -32,35 +33,35 @@ class ClassDefinition implements Definition, CacheableDefinition
      * Class name (if null, then the class name is $name)
      * @var string|null
      */
-    protected $className;
+    private $className;
 
     /**
      * Constructor injection
      * @var MethodInjection|null
      */
-    protected $constructorInjection;
+    private $constructorInjection;
 
     /**
      * Property injections
      * @var PropertyInjection[]
      */
-    protected $propertyInjections = array();
+    private $propertyInjections = array();
 
     /**
      * Method injections indexed by the method name
      * @var MethodInjection[]
      */
-    protected $methodInjections = array();
+    private $methodInjections = array();
 
     /**
      * @var Scope|null
      */
-    protected $scope;
+    private $scope;
 
     /**
      * @var boolean|null
      */
-    protected $lazy;
+    private $lazy;
 
     /**
      * @param string $name Class name
@@ -199,6 +200,69 @@ class ClassDefinition implements Definition, CacheableDefinition
         } else {
             // Default value
             return false;
+        }
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getSubDefinitionName()
+    {
+        return $this->getClassName();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setSubDefinition(Definition $definition)
+    {
+        if (! $definition instanceof ClassDefinition) {
+            throw new DefinitionException(sprintf(
+                "Container entry '%s' extends entry '%s' which is not an object",
+                $this->getName(),
+                $definition->getName()
+            ));
+        }
+
+        // The current prevails
+        if ($this->className === null) {
+            $this->className = $definition->className;
+        }
+        if ($this->scope === null) {
+            $this->scope = $definition->scope;
+        }
+        if ($this->lazy === null) {
+            $this->lazy = $definition->lazy;
+        }
+
+        // Merge constructor injection
+        if ($definition->getConstructorInjection() !== null) {
+            if ($this->constructorInjection !== null) {
+                // Merge
+                $this->constructorInjection->merge($definition->getConstructorInjection());
+            } else {
+                // Set
+                $this->constructorInjection = $definition->getConstructorInjection();
+            }
+        }
+
+        // Merge property injections
+        foreach ($definition->getPropertyInjections() as $propertyName => $propertyInjection) {
+            if (! array_key_exists($propertyName, $this->propertyInjections)) {
+                // Add
+                $this->propertyInjections[$propertyName] = $propertyInjection;
+            }
+        }
+
+        // Merge method injections
+        foreach ($definition->getMethodInjections() as $methodName => $methodInjection) {
+            if (array_key_exists($methodName, $this->methodInjections)) {
+                // Merge
+                $this->methodInjections[$methodName]->merge($methodInjection);
+            } else {
+                // Add
+                $this->methodInjections[$methodName] = $methodInjection;
+            }
         }
     }
 }

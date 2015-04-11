@@ -91,10 +91,7 @@ class SourceChain implements DefinitionSource, MutableDefinitionSource
             $subDefinition = $this->getDefinition($subDefinitionName, $currentIndex + 1);
 
             if (! $subDefinition) {
-                throw new DefinitionException(sprintf(
-                    "Definition '%s' extends a non-existing definition",
-                    $definition->getName()
-                ));
+                return;
             }
         } else {
             // Extending another definition: look from the root

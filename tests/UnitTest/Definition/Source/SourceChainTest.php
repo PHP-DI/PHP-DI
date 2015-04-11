@@ -9,8 +9,10 @@
 
 namespace DI\Test\UnitTest\Definition\Source;
 
+use DI\Definition\ClassDefinition;
 use DI\Definition\Definition;
 use DI\Definition\Source\ArrayDefinitionSource;
+use DI\Definition\Source\ReflectionDefinitionSource;
 use DI\Definition\Source\SourceChain;
 use DI\Definition\ValueDefinition;
 
@@ -71,6 +73,28 @@ class SourceChainTest extends \PHPUnit_Framework_TestCase
             'foo' => 'bim',
         )));
         $this->assertValueDefinition($chain->getDefinition('foo'), 'bim');
+    }
+
+    /**
+     * @test
+     */
+    public function should_get_sub_definitions_with_different_name_from_root()
+    {
+        $chain = new SourceChain(array(
+            new ArrayDefinitionSource(array(
+                'subdef' => \DI\object('stdClass'),
+            )),
+            new ArrayDefinitionSource(array(
+                'def' => \DI\object('subdef'),
+            )),
+            new ReflectionDefinitionSource(),
+        ));
+
+        /** @var ClassDefinition $definition */
+        $definition = $chain->getDefinition('def');
+        $this->assertTrue($definition instanceof ClassDefinition);
+        $this->assertEquals('def', $definition->getName());
+        $this->assertEquals('subdef', $definition->getClassName());
     }
 
     private function assertValueDefinition(Definition $definition, $value)

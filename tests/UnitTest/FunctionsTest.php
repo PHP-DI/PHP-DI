@@ -14,7 +14,6 @@ use DI\Definition\ArrayDefinitionExtension;
 use DI\Definition\ClassDefinition;
 use DI\Definition\Helper\ArrayDefinitionExtensionHelper;
 use DI\Definition\Helper\ClassDefinitionHelper;
-use DI\Definition\ObjectDefinitionExtension;
 
 /**
  * Tests the helper functions.
@@ -42,7 +41,6 @@ class FunctionsTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($helper instanceof ClassDefinitionHelper);
         $definition = $helper->getDefinition('entry');
         $this->assertTrue($definition instanceof ClassDefinition);
-        $this->assertFalse($definition instanceof ObjectDefinitionExtension);
         $this->assertEquals('entry', $definition->getClassName());
 
         $helper = \DI\object('foo');
@@ -50,21 +48,7 @@ class FunctionsTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($helper instanceof ClassDefinitionHelper);
         $definition = $helper->getDefinition('entry');
         $this->assertTrue($definition instanceof ClassDefinition);
-        $this->assertFalse($definition instanceof ObjectDefinitionExtension);
         $this->assertEquals('foo', $definition->getClassName());
-    }
-
-    /**
-     * @covers ::\DI\extend
-     */
-    public function test_extend()
-    {
-        $helper = \DI\extend();
-
-        $this->assertTrue($helper instanceof ClassDefinitionHelper);
-        $definition = $helper->getDefinition('entry');
-        $this->assertTrue($definition instanceof ObjectDefinitionExtension);
-        $this->assertEquals('entry', $definition->getSubDefinitionName());
     }
 
     /**

@@ -67,7 +67,7 @@ class InheritanceTest extends \PHPUnit_Framework_TestCase
         $containerAnnotations = $builder->build();
         $containerAnnotations->set(
             'DI\Test\IntegrationTest\Fixtures\InheritanceTest\BaseClass',
-            \DI\extend('DI\Test\IntegrationTest\Fixtures\InheritanceTest\SubClass')
+            \DI\object('DI\Test\IntegrationTest\Fixtures\InheritanceTest\SubClass')
         );
 
         // Test with a container using PHP configuration -> entries are different,
