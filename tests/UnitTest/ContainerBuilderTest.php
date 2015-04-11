@@ -149,6 +149,17 @@ class ContainerBuilderTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @test
+     * @expectedException \InvalidArgumentException
+     * @expectedExceptionMessage ContainerBuilder::addDefinitions() parameter must be a string, an array or a DefinitionSource object, integer given
+     */
+    public function errors_when_adding_invalid_definitions()
+    {
+        $builder = new ContainerBuilder('DI\Test\UnitTest\Fixtures\FakeContainer');
+        $builder->addDefinitions(123);
+    }
+
+    /**
+     * @test
      */
     public function should_have_a_fluent_interface()
     {
