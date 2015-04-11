@@ -10,7 +10,7 @@
 namespace DI\Test\UnitTest;
 
 use DI\ContainerBuilder;
-use DI\Definition\Source\ArrayDefinitionSource;
+use DI\Definition\Source\DefinitionArray;
 use DI\Definition\Source\CachedDefinitionSource;
 use DI\Definition\ValueDefinition;
 use DI\Test\UnitTest\Fixtures\FakeContainer;
@@ -90,8 +90,8 @@ class ContainerBuilderTest extends \PHPUnit_Framework_TestCase
         $builder = new ContainerBuilder('DI\Test\UnitTest\Fixtures\FakeContainer');
 
         // Custom definition sources should be chained correctly
-        $builder->addDefinitions(new ArrayDefinitionSource(array('foo' => 'bar')));
-        $builder->addDefinitions(new ArrayDefinitionSource(array('foofoo' => 'barbar')));
+        $builder->addDefinitions(new DefinitionArray(array('foo' => 'bar')));
+        $builder->addDefinitions(new DefinitionArray(array('foofoo' => 'barbar')));
 
         /** @var FakeContainer $container */
         $container = $builder->build();
@@ -113,8 +113,8 @@ class ContainerBuilderTest extends \PHPUnit_Framework_TestCase
     {
         $builder = new ContainerBuilder('DI\Test\UnitTest\Fixtures\FakeContainer');
 
-        $builder->addDefinitions(new ArrayDefinitionSource(array('foo' => 'bar')));
-        $builder->addDefinitions(new ArrayDefinitionSource(array('foo' => 'bim')));
+        $builder->addDefinitions(new DefinitionArray(array('foo' => 'bar')));
+        $builder->addDefinitions(new DefinitionArray(array('foo' => 'bim')));
 
         /** @var FakeContainer $container */
         $container = $builder->build();

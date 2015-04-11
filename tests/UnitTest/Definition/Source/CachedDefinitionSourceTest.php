@@ -9,7 +9,7 @@
 
 namespace DI\Test\UnitTest\Definition\Source;
 
-use DI\Definition\Source\ArrayDefinitionSource;
+use DI\Definition\Source\DefinitionArray;
 use DI\Definition\Source\CachedDefinitionSource;
 use DI\Definition\ValueDefinition;
 use Doctrine\Common\Cache\Cache;
@@ -30,7 +30,7 @@ class CachedDefinitionSourceTest extends \PHPUnit_Framework_TestCase
             'fetch' => 'foo',
         ));
 
-        $source = new CachedDefinitionSource(new ArrayDefinitionSource(), $cache);
+        $source = new CachedDefinitionSource(new DefinitionArray(), $cache);
 
         $this->assertEquals($cache, $source->getCache());
 
@@ -46,7 +46,7 @@ class CachedDefinitionSourceTest extends \PHPUnit_Framework_TestCase
             'fetch' => false,
         ));
 
-        $cachedSource = new ArrayDefinitionSource(array(
+        $cachedSource = new DefinitionArray(array(
             'foo' => 'bar',
         ));
 
@@ -69,7 +69,7 @@ class CachedDefinitionSourceTest extends \PHPUnit_Framework_TestCase
             'fetch' => false,
         ));
 
-        $source = new CachedDefinitionSource(new ArrayDefinitionSource(), $cache);
+        $source = new CachedDefinitionSource(new DefinitionArray(), $cache);
 
         $cache->expects($this->once())
             ->method('save')

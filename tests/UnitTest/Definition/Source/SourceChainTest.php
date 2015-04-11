@@ -11,8 +11,8 @@ namespace DI\Test\UnitTest\Definition\Source;
 
 use DI\Definition\ClassDefinition;
 use DI\Definition\Definition;
-use DI\Definition\Source\ArrayDefinitionSource;
-use DI\Definition\Source\ReflectionDefinitionSource;
+use DI\Definition\Source\DefinitionArray;
+use DI\Definition\Source\Autowiring;
 use DI\Definition\Source\SourceChain;
 use DI\Definition\ValueDefinition;
 
@@ -27,13 +27,13 @@ class SourceChainTest extends \PHPUnit_Framework_TestCase
     public function should_get_from_all_sources()
     {
         $chain = new SourceChain(array(
-            new ArrayDefinitionSource(array(
+            new DefinitionArray(array(
                 'test1' => 'test1',
             )),
-            new ArrayDefinitionSource(array(
+            new DefinitionArray(array(
                 'test2' => 'test2',
             )),
-            new ArrayDefinitionSource(array(
+            new DefinitionArray(array(
                 'test3' => 'test3',
             )),
         ));
@@ -48,10 +48,10 @@ class SourceChainTest extends \PHPUnit_Framework_TestCase
     public function should_stop_when_definition_found()
     {
         $chain = new SourceChain(array(
-            new ArrayDefinitionSource(array(
+            new DefinitionArray(array(
                 'foo' => 'bar',
             )),
-            new ArrayDefinitionSource(array(
+            new DefinitionArray(array(
                 'foo' => 'bim',
             )),
         ));
@@ -64,12 +64,12 @@ class SourceChainTest extends \PHPUnit_Framework_TestCase
     public function setting_the_mutable_definition_source_should_chain_it_at_the_top()
     {
         $chain = new SourceChain(array(
-            new ArrayDefinitionSource(array(
+            new DefinitionArray(array(
                 'foo' => 'bar',
             )),
         ));
 
-        $chain->setMutableDefinitionSource(new ArrayDefinitionSource(array(
+        $chain->setMutableDefinitionSource(new DefinitionArray(array(
             'foo' => 'bim',
         )));
         $this->assertValueDefinition($chain->getDefinition('foo'), 'bim');
@@ -81,13 +81,13 @@ class SourceChainTest extends \PHPUnit_Framework_TestCase
     public function should_get_sub_definitions_with_different_name_from_root()
     {
         $chain = new SourceChain(array(
-            new ArrayDefinitionSource(array(
+            new DefinitionArray(array(
                 'subdef' => \DI\object('stdClass'),
             )),
-            new ArrayDefinitionSource(array(
+            new DefinitionArray(array(
                 'def' => \DI\object('subdef'),
             )),
-            new ReflectionDefinitionSource(),
+            new Autowiring(),
         ));
 
         /** @var ClassDefinition $definition */

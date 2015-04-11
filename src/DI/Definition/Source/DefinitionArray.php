@@ -21,7 +21,7 @@ use DI\Definition\Helper\DefinitionHelper;
  *
  * @author Matthieu Napoli <matthieu@mnapoli.fr>
  */
-class ArrayDefinitionSource implements DefinitionSource, MutableDefinitionSource
+class DefinitionArray implements DefinitionSource, MutableDefinitionSource
 {
     const WILDCARD = '*';
     /**

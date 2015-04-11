@@ -9,12 +9,12 @@
 
 namespace DI;
 
-use DI\Definition\Source\AnnotationDefinitionSource;
-use DI\Definition\Source\ArrayDefinitionSource;
+use DI\Definition\Source\AnnotationReader;
+use DI\Definition\Source\DefinitionArray;
 use DI\Definition\Source\CachedDefinitionSource;
 use DI\Definition\Source\DefinitionSource;
-use DI\Definition\Source\PHPFileDefinitionSource;
-use DI\Definition\Source\ReflectionDefinitionSource;
+use DI\Definition\Source\DefinitionFile;
+use DI\Definition\Source\Autowiring;
 use DI\Definition\Source\SourceChain;
 use DI\Proxy\ProxyFactory;
 use Doctrine\Common\Cache\Cache;
@@ -113,9 +113,9 @@ class ContainerBuilder
     {
         $sources = array_reverse($this->definitionSources);
         if ($this->useAnnotations) {
-            $sources[] = new AnnotationDefinitionSource($this->ignorePhpDocErrors);
+            $sources[] = new AnnotationReader($this->ignorePhpDocErrors);
         } elseif ($this->useAutowiring) {
-            $sources[] = new ReflectionDefinitionSource();
+            $sources[] = new Autowiring();
         }
 
         $chain = new SourceChain($sources);
@@ -126,7 +126,7 @@ class ContainerBuilder
         } else {
             $source = $chain;
             // Mutable definition source
-            $source->setMutableDefinitionSource(new ArrayDefinitionSource());
+            $source->setMutableDefinitionSource(new DefinitionArray());
         }
 
         $proxyFactory = new ProxyFactory($this->writeProxiesToFile, $this->proxyDirectory);
@@ -240,9 +240,9 @@ class ContainerBuilder
     {
         if (is_string($definitions)) {
             // File
-            $definitions = new PHPFileDefinitionSource($definitions);
+            $definitions = new DefinitionFile($definitions);
         } elseif (is_array($definitions)) {
-            $definitions = new ArrayDefinitionSource($definitions);
+            $definitions = new DefinitionArray($definitions);
         } elseif (! $definitions instanceof DefinitionSource) {
             throw new InvalidArgumentException(sprintf(
                 '%s parameter must be a string, an array or a DefinitionSource object, %s given',

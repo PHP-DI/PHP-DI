@@ -17,7 +17,7 @@ use DI\Definition\Exception\DefinitionException;
  *
  * @author Matthieu Napoli <matthieu@mnapoli.fr>
  */
-class PHPFileDefinitionSource extends ArrayDefinitionSource
+class DefinitionFile extends DefinitionArray
 {
     /**
      * @var bool

@@ -20,7 +20,7 @@ use DI\Reflection\CallableReflectionFactory;
  *
  * @author Matthieu Napoli <matthieu@mnapoli.fr>
  */
-class ReflectionDefinitionSource implements DefinitionSource, CallableDefinitionSource
+class Autowiring implements DefinitionSource, CallableDefinitionSource
 {
     /**
      * {@inheritdoc}

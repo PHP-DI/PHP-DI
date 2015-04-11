@@ -10,11 +10,11 @@
 namespace DI\Test\UnitTest\Definition\Source\Fixtures;
 
 /**
- * Fixture class for the ReflectionDefinitionSource tests
+ * Fixture class for the Autowiring tests
  */
-class ReflectionFixture
+class AutowiringFixture
 {
-    public function __construct(ReflectionFixture $param1, $param2, $param3 = null)
+    public function __construct(AutowiringFixture $param1, $param2, $param3 = null)
     {
     }
 }

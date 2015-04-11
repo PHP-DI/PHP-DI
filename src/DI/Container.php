@@ -18,7 +18,7 @@ use DI\Definition\Source\CachedDefinitionSource;
 use DI\Definition\Source\CallableDefinitionSource;
 use DI\Definition\Source\DefinitionSource;
 use DI\Definition\Source\MutableDefinitionSource;
-use DI\Definition\Source\ReflectionDefinitionSource;
+use DI\Definition\Source\Autowiring;
 use DI\Definition\Helper\DefinitionHelper;
 use DI\Definition\Resolver\DefinitionResolver;
 use DI\Proxy\ProxyFactory;
@@ -78,7 +78,7 @@ class Container implements ContainerInterface, FactoryInterface, InvokerInterfac
 
         $this->definitionSource = $definitionSource;
         $this->definitionResolver = ResolverDispatcher::createDefault($wrapperContainer, $proxyFactory);
-        $this->callableDefinitionSource = new ReflectionDefinitionSource();
+        $this->callableDefinitionSource = new Autowiring();
 
         // Auto-register the container
         $this->singletonEntries['DI\Container'] = $this;

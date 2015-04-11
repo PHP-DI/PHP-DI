@@ -11,23 +11,23 @@ namespace DI\Test\UnitTest\Definition\Source;
 
 use DI\Definition\EntryReference;
 use DI\Definition\FunctionCallDefinition;
-use DI\Definition\Source\ReflectionDefinitionSource;
+use DI\Definition\Source\Autowiring;
 
 /**
- * @covers \DI\Definition\Source\ReflectionDefinitionSource
+ * @covers \DI\Definition\Source\Autowiring
  */
-class ReflectionDefinitionSourceTest extends \PHPUnit_Framework_TestCase
+class AutowiringTest extends \PHPUnit_Framework_TestCase
 {
     public function testUnknownClass()
     {
-        $source = new ReflectionDefinitionSource();
+        $source = new Autowiring();
         $this->assertNull($source->getDefinition('foo'));
     }
 
     public function testConstructor()
     {
-        $source = new ReflectionDefinitionSource();
-        $definition = $source->getDefinition('DI\Test\UnitTest\Definition\Source\Fixtures\ReflectionFixture');
+        $source = new Autowiring();
+        $definition = $source->getDefinition('DI\Test\UnitTest\Definition\Source\Fixtures\AutowiringFixture');
         $this->assertInstanceOf('DI\Definition\ClassDefinition', $definition);
 
         $constructorInjection = $definition->getConstructorInjection();
@@ -37,13 +37,13 @@ class ReflectionDefinitionSourceTest extends \PHPUnit_Framework_TestCase
         $this->assertCount(1, $parameters);
 
         $param1 = $parameters[0];
-        $this->assertEquals(new EntryReference('DI\Test\UnitTest\Definition\Source\Fixtures\ReflectionFixture'), $param1);
+        $this->assertEquals(new EntryReference('DI\Test\UnitTest\Definition\Source\Fixtures\AutowiringFixture'), $param1);
     }
 
     public function testConstructorInParentClass()
     {
-        $source = new ReflectionDefinitionSource();
-        $definition = $source->getDefinition('DI\Test\UnitTest\Definition\Source\Fixtures\ReflectionFixtureChild');
+        $source = new Autowiring();
+        $definition = $source->getDefinition('DI\Test\UnitTest\Definition\Source\Fixtures\AutowiringFixtureChild');
         $this->assertInstanceOf('DI\Definition\ClassDefinition', $definition);
 
         $constructorInjection = $definition->getConstructorInjection();
@@ -53,12 +53,12 @@ class ReflectionDefinitionSourceTest extends \PHPUnit_Framework_TestCase
         $this->assertCount(1, $parameters);
 
         $param1 = $parameters[0];
-        $this->assertEquals(new EntryReference('DI\Test\UnitTest\Definition\Source\Fixtures\ReflectionFixture'), $param1);
+        $this->assertEquals(new EntryReference('DI\Test\UnitTest\Definition\Source\Fixtures\AutowiringFixture'), $param1);
     }
 
     public function testClosureDefinition()
     {
-        $source = new ReflectionDefinitionSource();
+        $source = new Autowiring();
 
         $definition = $source->getCallableDefinition(function (\stdClass $foo, $bar) {
         });
@@ -70,7 +70,7 @@ class ReflectionDefinitionSourceTest extends \PHPUnit_Framework_TestCase
 
     public function testMethodCallDefinition()
     {
-        $source = new ReflectionDefinitionSource();
+        $source = new Autowiring();
 
         $object = new TestClass();
         $definition = $source->getCallableDefinition(array($object, 'foo'));
@@ -85,7 +85,7 @@ class ReflectionDefinitionSourceTest extends \PHPUnit_Framework_TestCase
      */
     public function optionalParameterShouldBeIgnored()
     {
-        $source = new ReflectionDefinitionSource();
+        $source = new Autowiring();
 
         $object = new TestClass();
         $definition = $source->getCallableDefinition(array($object, 'optional'));
@@ -99,7 +99,7 @@ class ReflectionDefinitionSourceTest extends \PHPUnit_Framework_TestCase
      */
     public function callableObjectShouldWork()
     {
-        $source = new ReflectionDefinitionSource();
+        $source = new Autowiring();
 
         $definition = $source->getCallableDefinition(new CallableTestClass());
 
