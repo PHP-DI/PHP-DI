@@ -71,16 +71,6 @@ class CachedDefinitionSource implements DefinitionSource
     }
 
     /**
-     * Enables the use of a cache
-     *
-     * @param Cache|null $cache
-     */
-    public function setCache(Cache $cache = null)
-    {
-        $this->cache = $cache;
-    }
-
-    /**
      * Fetches a definition from the cache
      *
      * @param string $name Entry name
