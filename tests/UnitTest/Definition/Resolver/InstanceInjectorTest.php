@@ -13,16 +13,16 @@ use DI\Definition\ObjectDefinition;
 use DI\Definition\ObjectDefinition\MethodInjection;
 use DI\Definition\ObjectDefinition\PropertyInjection;
 use DI\Definition\InstanceDefinition;
-use DI\Definition\Resolver\InstanceDefinitionResolver;
+use DI\Definition\Resolver\InstanceInjector;
 use DI\Definition\Resolver\ResolverDispatcher;
 use DI\Proxy\ProxyFactory;
 use DI\Test\UnitTest\Definition\Resolver\Fixture\FixtureClass;
 use EasyMock\EasyMock;
 
 /**
- * @covers \DI\Definition\Resolver\InstanceDefinitionResolver
+ * @covers \DI\Definition\Resolver\InstanceInjector
  */
-class InstanceDefinitionResolverTest extends \PHPUnit_Framework_TestCase
+class InstanceInjectorTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @test
@@ -63,6 +63,6 @@ class InstanceDefinitionResolverTest extends \PHPUnit_Framework_TestCase
         /** @var ProxyFactory $factory */
         $factory = EasyMock::mock('DI\Proxy\ProxyFactory');
 
-        return new InstanceDefinitionResolver($resolverDispatcher, $factory);
+        return new InstanceInjector($resolverDispatcher, $factory);
     }
 }

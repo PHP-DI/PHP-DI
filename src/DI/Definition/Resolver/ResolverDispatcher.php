@@ -38,19 +38,19 @@ class ResolverDispatcher implements DefinitionResolver
     {
         $resolver = new self();
 
-        $arrayDefinitionResolver = new ArrayDefinitionResolver($resolver);
+        $arrayDefinitionResolver = new ArrayResolver($resolver);
 
         $definitionResolvers = array(
-            'DI\Definition\ValueDefinition'               => new ValueDefinitionResolver(),
+            'DI\Definition\ValueDefinition'               => new ValueResolver(),
             'DI\Definition\ArrayDefinition'               => $arrayDefinitionResolver,
             'DI\Definition\ArrayDefinitionExtension'      => $arrayDefinitionResolver,
-            'DI\Definition\FactoryDefinition'             => new FactoryDefinitionResolver($container),
-            'DI\Definition\AliasDefinition'               => new AliasDefinitionResolver($container),
-            'DI\Definition\ObjectDefinition'              => new ObjectDefinitionResolver($resolver, $proxyFactory),
-            'DI\Definition\InstanceDefinition'            => new InstanceDefinitionResolver($resolver, $proxyFactory),
-            'DI\Definition\FunctionCallDefinition'        => new FunctionCallDefinitionResolver($container, $resolver),
-            'DI\Definition\EnvironmentVariableDefinition' => new EnvironmentVariableDefinitionResolver($resolver),
-            'DI\Definition\StringDefinition'              => new StringDefinitionResolver($container),
+            'DI\Definition\FactoryDefinition'             => new FactoryResolver($container),
+            'DI\Definition\AliasDefinition'               => new AliasResolver($container),
+            'DI\Definition\ObjectDefinition'              => new ObjectCreator($resolver, $proxyFactory),
+            'DI\Definition\InstanceDefinition'            => new InstanceInjector($resolver, $proxyFactory),
+            'DI\Definition\FunctionCallDefinition'        => new FunctionInvoker($container, $resolver),
+            'DI\Definition\EnvironmentVariableDefinition' => new EnvironmentVariableResolver($resolver),
+            'DI\Definition\StringDefinition'              => new StringResolver($container),
         );
 
         $resolver->setDefinitionResolvers($definitionResolvers);

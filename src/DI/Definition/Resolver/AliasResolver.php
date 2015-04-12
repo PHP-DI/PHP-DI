@@ -19,7 +19,7 @@ use Interop\Container\ContainerInterface;
  * @since 4.0
  * @author Matthieu Napoli <matthieu@mnapoli.fr>
  */
-class AliasDefinitionResolver implements DefinitionResolver
+class AliasResolver implements DefinitionResolver
 {
     /**
      * @var ContainerInterface

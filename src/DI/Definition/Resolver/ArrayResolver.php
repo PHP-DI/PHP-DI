@@ -21,7 +21,7 @@ use Exception;
  * @since 5.0
  * @author Matthieu Napoli <matthieu@mnapoli.fr>
  */
-class ArrayDefinitionResolver implements DefinitionResolver
+class ArrayResolver implements DefinitionResolver
 {
     /**
      * @var DefinitionResolver

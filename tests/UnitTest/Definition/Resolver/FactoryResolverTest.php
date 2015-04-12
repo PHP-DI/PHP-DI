@@ -11,23 +11,23 @@ namespace DI\Test\UnitTest\Definition\Resolver;
 
 use DI\Definition\FactoryDefinition;
 use DI\Definition\ValueDefinition;
-use DI\Definition\Resolver\FactoryDefinitionResolver;
+use DI\Definition\Resolver\FactoryResolver;
 use EasyMock\EasyMock;
 
 /**
- * @covers \DI\Definition\Resolver\FactoryDefinitionResolver
+ * @covers \DI\Definition\Resolver\FactoryResolver
  */
-class FactoryDefinitionResolverTest extends \PHPUnit_Framework_TestCase
+class FactoryResolverTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var FactoryDefinitionResolver
+     * @var FactoryResolver
      */
     private $resolver;
 
     public function setUp()
     {
         $container = EasyMock::mock('Interop\Container\ContainerInterface');
-        $this->resolver = new FactoryDefinitionResolver($container);
+        $this->resolver = new FactoryResolver($container);
     }
 
     public function provideCallables()

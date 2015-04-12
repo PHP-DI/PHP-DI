@@ -21,7 +21,7 @@ use Interop\Container\Exception\NotFoundException;
  * @since 5.0
  * @author Matthieu Napoli <matthieu@mnapoli.fr>
  */
-class InstanceDefinitionResolver extends ObjectDefinitionResolver
+class InstanceInjector extends ObjectCreator
 {
     /**
      * Injects dependencies on an existing instance.

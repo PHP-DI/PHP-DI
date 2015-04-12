@@ -22,12 +22,12 @@ use ReflectionClass;
 use ReflectionProperty;
 
 /**
- * Resolves an object definition to a value.
+ * Create objects based on an object definition.
  *
  * @since 4.0
  * @author Matthieu Napoli <matthieu@mnapoli.fr>
  */
-class ObjectDefinitionResolver implements DefinitionResolver
+class ObjectCreator implements DefinitionResolver
 {
     /**
      * @var ProxyFactory

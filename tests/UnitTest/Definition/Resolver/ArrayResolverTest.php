@@ -10,16 +10,16 @@
 namespace DI\Test\UnitTest\Definition\Resolver;
 
 use DI\Definition\ArrayDefinition;
-use DI\Definition\Resolver\ArrayDefinitionResolver;
+use DI\Definition\Resolver\ArrayResolver;
 use DI\Definition\Resolver\DefinitionResolver;
 use DI\Definition\ValueDefinition;
 use EasyMock\EasyMock;
 use PHPUnit_Framework_MockObject_MockObject;
 
 /**
- * @covers \DI\Definition\Resolver\ArrayDefinitionResolver
+ * @covers \DI\Definition\Resolver\ArrayResolver
  */
-class ArrayDefinitionResolverTest extends \PHPUnit_Framework_TestCase
+class ArrayResolverTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @var DefinitionResolver|PHPUnit_Framework_MockObject_MockObject
@@ -27,14 +27,14 @@ class ArrayDefinitionResolverTest extends \PHPUnit_Framework_TestCase
     private $parentResolver;
 
     /**
-     * @var ArrayDefinitionResolver
+     * @var ArrayResolver
      */
     private $resolver;
 
     public function setUp()
     {
         $this->parentResolver = EasyMock::mock('DI\Definition\Resolver\DefinitionResolver');
-        $this->resolver = new ArrayDefinitionResolver($this->parentResolver);
+        $this->resolver = new ArrayResolver($this->parentResolver);
     }
 
     /**

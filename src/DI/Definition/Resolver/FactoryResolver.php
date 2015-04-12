@@ -20,7 +20,7 @@ use Interop\Container\ContainerInterface;
  * @since 4.0
  * @author Matthieu Napoli <matthieu@mnapoli.fr>
  */
-class FactoryDefinitionResolver implements DefinitionResolver
+class FactoryResolver implements DefinitionResolver
 {
     /**
      * @var ContainerInterface

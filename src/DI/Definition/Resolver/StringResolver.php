@@ -21,7 +21,7 @@ use Interop\Container\ContainerInterface;
  * @since 5.0
  * @author Matthieu Napoli <matthieu@mnapoli.fr>
  */
-class StringDefinitionResolver implements DefinitionResolver
+class StringResolver implements DefinitionResolver
 {
     /**
      * @var ContainerInterface

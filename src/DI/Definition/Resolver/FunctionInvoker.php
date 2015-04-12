@@ -16,12 +16,12 @@ use DI\Reflection\CallableReflectionFactory;
 use Interop\Container\ContainerInterface;
 
 /**
- * Resolves a factory definition to a value.
+ * Calls a function with dependency injection.
  *
  * @since 4.2
  * @author Matthieu Napoli <matthieu@mnapoli.fr>
  */
-class FunctionCallDefinitionResolver implements DefinitionResolver
+class FunctionInvoker implements DefinitionResolver
 {
     /**
      * @var ContainerInterface

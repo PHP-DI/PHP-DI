@@ -13,17 +13,17 @@ use DI\Definition\AliasDefinition;
 use DI\Definition\FactoryDefinition;
 use DI\Definition\EnvironmentVariableDefinition;
 use DI\Definition\Resolver\DefinitionResolver;
-use DI\Definition\Resolver\EnvironmentVariableDefinitionResolver;
+use DI\Definition\Resolver\EnvironmentVariableResolver;
 use EasyMock\EasyMock;
 use PHPUnit_Framework_MockObject_MockObject;
 
 /**
- * @covers \DI\Definition\Resolver\EnvironmentVariableDefinitionResolver
+ * @covers \DI\Definition\Resolver\EnvironmentVariableResolver
  */
-class EnvironmentVariableDefinitionResolverTest extends \PHPUnit_Framework_TestCase
+class EnvironmentVariableResolverTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var EnvironmentVariableDefinitionResolver
+     * @var EnvironmentVariableResolver
      */
     private $resolver;
     /**
@@ -49,7 +49,7 @@ class EnvironmentVariableDefinitionResolverTest extends \PHPUnit_Framework_TestC
             return false;
         };
 
-        $this->resolver = new EnvironmentVariableDefinitionResolver($this->parentResolver, $variableReader);
+        $this->resolver = new EnvironmentVariableResolver($this->parentResolver, $variableReader);
         $this->definedDefinition = new EnvironmentVariableDefinition('foo', 'DEFINED');
         $this->undefinedDefinition = new EnvironmentVariableDefinition('foo', 'UNDEFINED');
         $this->optionalDefinition = new EnvironmentVariableDefinition('foo', 'UNDEFINED', true, '<default>');

@@ -10,14 +10,14 @@
 namespace DI\Test\UnitTest\Definition\Resolver;
 
 use DI\Definition\AliasDefinition;
-use DI\Definition\Resolver\AliasDefinitionResolver;
+use DI\Definition\Resolver\AliasResolver;
 use DI\Definition\ValueDefinition;
 use EasyMock\EasyMock;
 
 /**
- * @covers \DI\Definition\Resolver\AliasDefinitionResolver
+ * @covers \DI\Definition\Resolver\AliasResolver
  */
-class AliasDefinitionResolverTest extends \PHPUnit_Framework_TestCase
+class AliasResolverTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @test
@@ -27,7 +27,7 @@ class AliasDefinitionResolverTest extends \PHPUnit_Framework_TestCase
         $container = EasyMock::mock('Interop\Container\ContainerInterface', array(
             'get' => 42,
         ));
-        $resolver = new AliasDefinitionResolver($container);
+        $resolver = new AliasResolver($container);
 
         $value = $resolver->resolve(new AliasDefinition('foo', 'bar'));
 
@@ -42,7 +42,7 @@ class AliasDefinitionResolverTest extends \PHPUnit_Framework_TestCase
     public function should_only_resolve_aliases()
     {
         $container = EasyMock::mock('Interop\Container\ContainerInterface');
-        $resolver = new AliasDefinitionResolver($container);
+        $resolver = new AliasResolver($container);
 
         $resolver->resolve(new ValueDefinition('foo', 'bar'));
     }

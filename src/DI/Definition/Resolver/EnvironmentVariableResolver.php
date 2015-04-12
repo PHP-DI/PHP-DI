@@ -19,7 +19,7 @@ use DI\Definition\Helper\DefinitionHelper;
  *
  * @author James Harris <james.harris@icecave.com.au>
  */
-class EnvironmentVariableDefinitionResolver implements DefinitionResolver
+class EnvironmentVariableResolver implements DefinitionResolver
 {
     /**
      * @var DefinitionResolver

@@ -11,19 +11,19 @@ namespace DI\Test\UnitTest\Definition\Resolver;
 
 use DI\Definition\FactoryDefinition;
 use DI\Definition\ValueDefinition;
-use DI\Definition\Resolver\ValueDefinitionResolver;
+use DI\Definition\Resolver\ValueResolver;
 
 /**
- * @covers \DI\Definition\Resolver\ValueDefinitionResolver
+ * @covers \DI\Definition\Resolver\ValueResolver
  */
-class ValueDefinitionResolverTest extends \PHPUnit_Framework_TestCase
+class ValueResolverTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @test
      */
     public function should_resolve_value_definitions()
     {
-        $resolver = new ValueDefinitionResolver();
+        $resolver = new ValueResolver();
 
         $definition = new ValueDefinition('foo', 'bar');
 
@@ -38,7 +38,7 @@ class ValueDefinitionResolverTest extends \PHPUnit_Framework_TestCase
      */
     public function should_only_resolve_value_definitions()
     {
-        $resolver = new ValueDefinitionResolver();
+        $resolver = new ValueResolver();
 
         $definition = new FactoryDefinition('foo', function () {
         });

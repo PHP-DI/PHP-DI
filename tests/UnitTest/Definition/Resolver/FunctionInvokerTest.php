@@ -10,18 +10,18 @@
 namespace DI\Test\UnitTest\Definition\Resolver;
 
 use DI\Definition\FunctionCallDefinition;
-use DI\Definition\Resolver\AliasDefinitionResolver;
-use DI\Definition\Resolver\FunctionCallDefinitionResolver;
+use DI\Definition\Resolver\AliasResolver;
+use DI\Definition\Resolver\FunctionInvoker;
 use DI\Definition\ValueDefinition;
 use EasyMock\EasyMock;
 use Interop\Container\ContainerInterface;
 use PHPUnit_Framework_MockObject_MockObject;
 
 /**
- * @covers \DI\Definition\Resolver\FunctionCallDefinitionResolver
+ * @covers \DI\Definition\Resolver\FunctionInvoker
  * @covers \DI\Definition\Resolver\ParameterResolver
  */
-class FunctionCallDefinitionResolverTest extends \PHPUnit_Framework_TestCase
+class FunctionInvokerTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @var ContainerInterface|PHPUnit_Framework_MockObject_MockObject
@@ -29,15 +29,15 @@ class FunctionCallDefinitionResolverTest extends \PHPUnit_Framework_TestCase
     private $container;
 
     /**
-     * @var FunctionCallDefinitionResolver
+     * @var FunctionInvoker
      */
     private $resolver;
 
     public function setUp()
     {
         $this->container = EasyMock::mock('Interop\Container\ContainerInterface');
-        $resolver = new AliasDefinitionResolver($this->container);
-        $this->resolver = new FunctionCallDefinitionResolver($this->container, $resolver);
+        $resolver = new AliasResolver($this->container);
+        $this->resolver = new FunctionInvoker($this->container, $resolver);
     }
 
     /**

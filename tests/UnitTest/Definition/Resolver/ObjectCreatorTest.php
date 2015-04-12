@@ -13,17 +13,17 @@ use DI\Definition\FactoryDefinition;
 use DI\Definition\ObjectDefinition;
 use DI\Definition\ObjectDefinition\MethodInjection;
 use DI\Definition\ObjectDefinition\PropertyInjection;
-use DI\Definition\Resolver\ObjectDefinitionResolver;
+use DI\Definition\Resolver\ObjectCreator;
 use DI\Definition\Resolver\DefinitionResolver;
 use DI\Proxy\ProxyFactory;
 use EasyMock\EasyMock;
 use PHPUnit_Framework_MockObject_MockObject;
 
 /**
- * @covers \DI\Definition\Resolver\ObjectDefinitionResolver
+ * @covers \DI\Definition\Resolver\ObjectCreator
  * @covers \DI\Definition\Resolver\ParameterResolver
  */
-class ObjectDefinitionResolverTest extends \PHPUnit_Framework_TestCase
+class ObjectCreatorTest extends \PHPUnit_Framework_TestCase
 {
     const FIXTURE_CLASS = 'DI\Test\UnitTest\Definition\Resolver\Fixture\FixtureClass';
     const FIXTURE_CLASS_NO_CONSTRUCTOR = 'DI\Test\UnitTest\Definition\Resolver\Fixture\NoConstructor';
@@ -41,7 +41,7 @@ class ObjectDefinitionResolverTest extends \PHPUnit_Framework_TestCase
     private $parentResolver;
 
     /**
-     * @var ObjectDefinitionResolver
+     * @var ObjectCreator
      */
     private $resolver;
 
@@ -50,7 +50,7 @@ class ObjectDefinitionResolverTest extends \PHPUnit_Framework_TestCase
         $this->proxyFactory = EasyMock::mock('DI\Proxy\ProxyFactory');
         $this->parentResolver = EasyMock::mock('DI\Definition\Resolver\DefinitionResolver');
 
-        $this->resolver = new ObjectDefinitionResolver($this->parentResolver, $this->proxyFactory);
+        $this->resolver = new ObjectCreator($this->parentResolver, $this->proxyFactory);
     }
 
     public function testResolve()

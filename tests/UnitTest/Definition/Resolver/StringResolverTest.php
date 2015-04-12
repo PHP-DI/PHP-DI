@@ -10,15 +10,15 @@
 namespace DI\Test\UnitTest\Definition\Resolver;
 
 use DI\Definition\FactoryDefinition;
-use DI\Definition\Resolver\StringDefinitionResolver;
+use DI\Definition\Resolver\StringResolver;
 use DI\Definition\StringDefinition;
 use DI\NotFoundException;
 use EasyMock\EasyMock;
 
 /**
- * @covers \DI\Definition\Resolver\StringDefinitionResolver
+ * @covers \DI\Definition\Resolver\StringResolver
  */
-class StringDefinitionResolverTest extends \PHPUnit_Framework_TestCase
+class StringResolverTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @test
@@ -26,7 +26,7 @@ class StringDefinitionResolverTest extends \PHPUnit_Framework_TestCase
     public function should_resolve_bare_strings()
     {
         $container = EasyMock::mock('Interop\Container\ContainerInterface');
-        $resolver = new StringDefinitionResolver($container);
+        $resolver = new StringResolver($container);
 
         $definition = new StringDefinition('foo', 'bar');
 
@@ -41,7 +41,7 @@ class StringDefinitionResolverTest extends \PHPUnit_Framework_TestCase
         $container = EasyMock::mock('Interop\Container\ContainerInterface', array(
             'get' => 'bar',
         ));
-        $resolver = new StringDefinitionResolver($container);
+        $resolver = new StringResolver($container);
 
         $definition = new StringDefinition('foo', '{test}');
 
@@ -58,7 +58,7 @@ class StringDefinitionResolverTest extends \PHPUnit_Framework_TestCase
             ->method('get')
             ->withConsecutive(array('tmp'), array('logs'))
             ->willReturnOnConsecutiveCalls('/private/tmp', 'myapp-logs');
-        $resolver = new StringDefinitionResolver($container);
+        $resolver = new StringResolver($container);
 
         $definition = new StringDefinition('foo', '{tmp}/{logs}/app.log');
 
@@ -77,7 +77,7 @@ class StringDefinitionResolverTest extends \PHPUnit_Framework_TestCase
         $container = EasyMock::mock('Interop\Container\ContainerInterface', array(
             'get' => new NotFoundException("No entry or class found for 'test'"),
         ));
-        $resolver = new StringDefinitionResolver($container);
+        $resolver = new StringResolver($container);
 
         $resolver->resolve(new StringDefinition('foo', '{test}'));
     }
@@ -90,7 +90,7 @@ class StringDefinitionResolverTest extends \PHPUnit_Framework_TestCase
     public function should_error_with_unsupported_definitions()
     {
         $container = EasyMock::mock('Interop\Container\ContainerInterface');
-        $resolver = new StringDefinitionResolver($container);
+        $resolver = new StringResolver($container);
 
         $definition = new FactoryDefinition('foo', function () {
         });

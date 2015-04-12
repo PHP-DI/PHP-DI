@@ -18,7 +18,7 @@ use DI\Definition\ValueDefinition;
  * @since 4.0
  * @author Matthieu Napoli <matthieu@mnapoli.fr>
  */
-class ValueDefinitionResolver implements DefinitionResolver
+class ValueResolver implements DefinitionResolver
 {
     /**
      * Resolve a value definition to a value.
