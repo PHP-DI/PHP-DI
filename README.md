@@ -20,4 +20,4 @@ Read more on the website: **[php-di.org](http://php-di.org)**
 
 Join us in the Gitter chat room: [![Gitter chat](https://badges.gitter.im/mnapoli/PHP-DI.png)](https://gitter.im/mnapoli/PHP-DI)
 
-Support is always appreciated: [![Gratipay](https://img.shields.io/gratipay/JSFiddle.svg)]()
+Support is always appreciated: [![Gratipay](https://img.shields.io/gratipay/JSFiddle.svg)](https://gratipay.com/mnapoli/)
