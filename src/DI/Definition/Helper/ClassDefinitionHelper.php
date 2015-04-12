@@ -144,7 +144,10 @@ class ClassDefinitionHelper implements DefinitionHelper
      * Defines a method to call and the arguments to use.
      *
      * This method takes a variable number of arguments after the method name, example:
+     *
      *     ->method('myMethod', $param1, $param2)
+     *
+     * Can be used multiple times to declare multiple calls.
      *
      * @param string $method Name of the method to call.
      * @param mixed  ...     Parameters to use for calling the method.
@@ -155,7 +158,13 @@ class ClassDefinitionHelper implements DefinitionHelper
     {
         $args = func_get_args();
         array_shift($args);
-        $this->methods[$method] = $args;
+
+        if (! isset($this->methods[$method])) {
+            $this->methods[$method] = array();
+        }
+
+        $this->methods[$method][] = $args;
+
         return $this;
     }
 
@@ -164,11 +173,14 @@ class ClassDefinitionHelper implements DefinitionHelper
      *
      * This method is usually used together with annotations or autowiring, when a parameter
      * is not (or cannot be) type-hinted. Using this method instead of method() allows to
-     * avoid defining all the parameters (letting them being resolved using annotations or autowiring)
-     * and only define one.
+     * avoid defining all the parameters (letting them being resolved using annotations or
+     * autowiring) and only define one.
+     *
+     * If multiple calls to the method have been configured already (e.g. in a previous definition)
+     * then this method only overrides the parameter for the *first* call.
      *
      * @param string $method    Name of the method to call.
-     * @param string $parameter Parameter for which the value will be given.
+     * @param string $parameter Name or index of the parameter for which the value will be given.
      * @param mixed  $value     Value to give to this parameter.
      *
      * @return ClassDefinitionHelper
@@ -182,9 +194,11 @@ class ClassDefinitionHelper implements DefinitionHelper
         }
 
         if (! isset($this->methods[$method])) {
-            $this->methods[$method] = array();
+            $this->methods[$method] = array(0 => array());
         }
-        $this->methods[$method][$parameter] = $value;
+
+        $this->methods[$method][0][$parameter] = $value;
+
         return $this;
     }
 
@@ -217,10 +231,12 @@ class ClassDefinitionHelper implements DefinitionHelper
         }
 
         if (! empty($this->methods)) {
-            foreach ($this->methods as $method => $parameters) {
-                $parameters = $this->fixParameters($definition, $method, $parameters);
-                $methodInjection = new MethodInjection($method, $parameters);
-                $definition->addMethodInjection($methodInjection);
+            foreach ($this->methods as $method => $calls) {
+                foreach ($calls as $parameters) {
+                    $parameters = $this->fixParameters($definition, $method, $parameters);
+                    $methodInjection = new MethodInjection($method, $parameters);
+                    $definition->addMethodInjection($methodInjection);
+                }
             }
         }
 

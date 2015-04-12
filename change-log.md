@@ -20,6 +20,7 @@ Improvements:
     }
     ```
 - [#235](https://github.com/mnapoli/PHP-DI/issues/235) `DI\link()` is now deprecated in favor of `DI\get()`. There is no BC break as `DI\link()` still works.
+- [#193](https://github.com/mnapoli/PHP-DI/issues/193) `DI\object()->method()` now supports calling the same method twice (or more).
 
 BC breaks:
 

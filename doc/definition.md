@@ -199,6 +199,11 @@ return [
         ->method('setFoo2', DI\get('My\Foo1'), DI\get('My\Foo2'))
         ->property('bar', 'My\Bar'),
 
+    // Call a method twice
+    'My\Logger' => DI\object()
+        ->method('addBackend', 'file')
+        ->method('addBackend', 'syslog'),
+
     // Define only specific parameters
     'My\AnotherClass' => DI\object()
         ->constructorParameter('someParam', 'value to inject')
