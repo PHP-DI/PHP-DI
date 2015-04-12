@@ -18,7 +18,10 @@ use DI\Scope;
  */
 class ClassDefinitionHelperTest extends \PHPUnit_Framework_TestCase
 {
-    public function testDefaultValues()
+    /**
+     * @test
+     */
+    public function test_default_config()
     {
         $helper = new ClassDefinitionHelper();
         $definition = $helper->getDefinition('foo');
@@ -31,7 +34,10 @@ class ClassDefinitionHelperTest extends \PHPUnit_Framework_TestCase
         $this->assertEmpty($definition->getMethodInjections());
     }
 
-    public function testClassName()
+    /**
+     * @test
+     */
+    public function allows_to_define_the_class_name()
     {
         $helper = new ClassDefinitionHelper('bar');
         $definition = $helper->getDefinition('foo');
@@ -40,7 +46,10 @@ class ClassDefinitionHelperTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('bar', $definition->getClassName());
     }
 
-    public function testScope()
+    /**
+     * @test
+     */
+    public function allows_to_define_the_scope()
     {
         $helper = new ClassDefinitionHelper();
         $helper->scope(Scope::PROTOTYPE());
@@ -49,7 +58,10 @@ class ClassDefinitionHelperTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(Scope::PROTOTYPE(), $definition->getScope());
     }
 
-    public function testLazy()
+    /**
+     * @test
+     */
+    public function allows_to_declare_the_service_as_lazy()
     {
         $helper = new ClassDefinitionHelper();
         $helper->lazy();
@@ -58,7 +70,10 @@ class ClassDefinitionHelperTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($definition->isLazy());
     }
 
-    public function testConstructor()
+    /**
+     * @test
+     */
+    public function allows_to_define_constructor_parameters()
     {
         $helper = new ClassDefinitionHelper();
         $helper->constructor(1, 2, 3);
@@ -67,7 +82,10 @@ class ClassDefinitionHelperTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(array(1, 2, 3), $definition->getConstructorInjection()->getParameters());
     }
 
-    public function testConstructorParameter()
+    /**
+     * @test
+     */
+    public function allows_to_override_a_parameter_injection()
     {
         $helper = new ClassDefinitionHelper();
         $helper->constructorParameter(0, 42);
@@ -78,7 +96,10 @@ class ClassDefinitionHelperTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(42, $constructorInjection->getParameter(0));
     }
 
-    public function testPropertyInjections()
+    /**
+     * @test
+     */
+    public function allows_to_define_a_property_injection()
     {
         $helper = new ClassDefinitionHelper();
         $helper->property('prop', 1);
@@ -89,7 +110,10 @@ class ClassDefinitionHelperTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(1, $propertyInjection->getValue());
     }
 
-    public function testMethodInjections()
+    /**
+     * @test
+     */
+    public function allows_to_define_a_method_call()
     {
         $helper = new ClassDefinitionHelper();
         $helper->method('method', 1, 2, 3);
@@ -100,7 +124,28 @@ class ClassDefinitionHelperTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(array(1, 2, 3), $methodInjection->getParameters());
     }
 
-    public function testMethodParameter()
+    /**
+     * @test
+     */
+    public function allows_to_define_multiple_method_calls()
+    {
+        $helper = new ClassDefinitionHelper();
+        $helper->method('method', 1, 2);
+        $helper->method('method', 3, 4);
+        $definition = $helper->getDefinition('foo');
+
+        $methodCalls = $definition->getMethodInjections();
+        $this->assertCount(2, $methodCalls);
+        $methodInjection = array_shift($methodCalls);
+        $this->assertEquals(array(1, 2), $methodInjection->getParameters());
+        $methodInjection = array_shift($methodCalls);
+        $this->assertEquals(array(3, 4), $methodInjection->getParameters());
+    }
+
+    /**
+     * @test
+     */
+    public function allows_to_override_a_parameter_injection_by_index()
     {
         $helper = new ClassDefinitionHelper();
         $helper->methodParameter('method', 0, 42);
@@ -115,24 +160,9 @@ class ClassDefinitionHelperTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * If using methodParameter() for "__construct", then the constructor definition should be updated
-     */
-    public function testMethodParameterOnConstructor()
-    {
-        $helper = new ClassDefinitionHelper();
-        $helper->methodParameter('__construct', 0, 42);
-        $definition = $helper->getDefinition('foo');
-
-        $this->assertCount(0, $definition->getMethodInjections());
-        $this->assertNotNull($definition->getConstructorInjection());
-
-        $this->assertEquals(42, $definition->getConstructorInjection()->getParameter(0));
-    }
-
-    /**
      * Check using the parameter name, not its index
      */
-    public function testMethodParameterByParameterName()
+    public function allows_to_override_a_parameter_injection_by_name()
     {
         $helper = new ClassDefinitionHelper();
         $helper->methodParameter('method', 'param2', 'val2');
@@ -144,5 +174,20 @@ class ClassDefinitionHelperTest extends \PHPUnit_Framework_TestCase
 
         // Check that injections are in the good order (matching the real parameters order)
         $this->assertEquals(array('val1', 'val2'), $methodInjection->getParameters());
+    }
+
+    /**
+     * If using methodParameter() for "__construct", then the constructor definition should be updated
+     */
+    public function should_update_constructor_definition_if_overriding_parameter_for_constructor()
+    {
+        $helper = new ClassDefinitionHelper();
+        $helper->methodParameter('__construct', 0, 42);
+        $definition = $helper->getDefinition('foo');
+
+        $this->assertCount(0, $definition->getMethodInjections());
+        $this->assertNotNull($definition->getConstructorInjection());
+
+        $this->assertEquals(42, $definition->getConstructorInjection()->getParameter(0));
     }
 }

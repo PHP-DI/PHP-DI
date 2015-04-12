@@ -36,7 +36,7 @@ class ClassDefinition implements Definition, CacheableDefinition, HasSubDefiniti
     private $className;
 
     /**
-     * Constructor injection
+     * Constructor parameter injection
      * @var MethodInjection|null
      */
     private $constructorInjection;
@@ -48,8 +48,8 @@ class ClassDefinition implements Definition, CacheableDefinition, HasSubDefiniti
     private $propertyInjections = array();
 
     /**
-     * Method injections indexed by the method name
-     * @var MethodInjection[]
+     * Method calls
+     * @var MethodInjection[][]
      */
     private $methodInjections = array();
 
@@ -146,16 +146,12 @@ class ClassDefinition implements Definition, CacheableDefinition, HasSubDefiniti
      */
     public function getMethodInjections()
     {
-        return $this->methodInjections;
-    }
-
-    /**
-     * @param string $methodName
-     * @return MethodInjection|null
-     */
-    public function getMethodInjection($methodName)
-    {
-        return isset($this->methodInjections[$methodName]) ? $this->methodInjections[$methodName] : null;
+        // Return array leafs
+        $injections = array();
+        array_walk_recursive($this->methodInjections, function ($injection) use (&$injections) {
+            $injections[] = $injection;
+        });;
+        return $injections;
     }
 
     /**
@@ -163,7 +159,11 @@ class ClassDefinition implements Definition, CacheableDefinition, HasSubDefiniti
      */
     public function addMethodInjection(MethodInjection $methodInjection)
     {
-        $this->methodInjections[$methodInjection->getMethodName()] = $methodInjection;
+        $method = $methodInjection->getMethodName();
+        if (! isset($this->methodInjections[$method])) {
+            $this->methodInjections[$method] = array();
+        }
+        $this->methodInjections[$method][] = $methodInjection;
     }
 
     /**
@@ -236,6 +236,17 @@ class ClassDefinition implements Definition, CacheableDefinition, HasSubDefiniti
         }
 
         // Merge constructor injection
+        $this->mergeConstructorInjection($definition);
+
+        // Merge property injections
+        $this->mergePropertyInjections($definition);
+
+        // Merge method injections
+        $this->mergeMethodInjections($definition);
+    }
+
+    private function mergeConstructorInjection(ClassDefinition $definition)
+    {
         if ($definition->getConstructorInjection() !== null) {
             if ($this->constructorInjection !== null) {
                 // Merge
@@ -245,23 +256,40 @@ class ClassDefinition implements Definition, CacheableDefinition, HasSubDefiniti
                 $this->constructorInjection = $definition->getConstructorInjection();
             }
         }
+    }
 
-        // Merge property injections
+    private function mergePropertyInjections(ClassDefinition $definition)
+    {
         foreach ($definition->getPropertyInjections() as $propertyName => $propertyInjection) {
             if (! array_key_exists($propertyName, $this->propertyInjections)) {
                 // Add
                 $this->propertyInjections[$propertyName] = $propertyInjection;
             }
         }
+    }
 
-        // Merge method injections
-        foreach ($definition->getMethodInjections() as $methodName => $methodInjection) {
+    private function mergeMethodInjections(ClassDefinition $definition)
+    {
+        foreach ($definition->methodInjections as $methodName => $calls) {
             if (array_key_exists($methodName, $this->methodInjections)) {
-                // Merge
-                $this->methodInjections[$methodName]->merge($methodInjection);
+                $this->mergeMethodCalls($calls, $methodName);
             } else {
                 // Add
-                $this->methodInjections[$methodName] = $methodInjection;
+                $this->methodInjections[$methodName] = $calls;
+            }
+        }
+    }
+
+    private function mergeMethodCalls(array $calls, $methodName)
+    {
+        foreach ($calls as $index => $methodInjection) {
+            // Merge
+            if (array_key_exists($index, $this->methodInjections[$methodName])) {
+                // Merge
+                $this->methodInjections[$methodName][$index]->merge($methodInjection);
+            } else {
+                // Add
+                $this->methodInjections[$methodName][$index] = $methodInjection;
             }
         }
     }

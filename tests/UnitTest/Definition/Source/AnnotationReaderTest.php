@@ -9,6 +9,7 @@
 
 namespace DI\Test\UnitTest\Definition\Source;
 
+use DI\Definition\ClassDefinition;
 use DI\Definition\EntryReference;
 use DI\Definition\Source\AnnotationReader;
 use DI\Scope;
@@ -85,8 +86,7 @@ class AnnotationReaderTest extends \PHPUnit_Framework_TestCase
         $definition = $source->getDefinition('DI\Test\UnitTest\Definition\Source\Fixtures\AnnotationFixture');
         $this->assertInstanceOf('DI\Definition\Definition', $definition);
 
-        $methodInjections = $definition->getMethodInjections();
-        $methodInjection = $methodInjections['method1'];
+        $methodInjection = $this->getMethodInjection($definition, 'method1');
         $this->assertInstanceOf('DI\Definition\ClassDefinition\MethodInjection', $methodInjection);
 
         $this->assertEmpty($methodInjection->getParameters());
@@ -98,8 +98,7 @@ class AnnotationReaderTest extends \PHPUnit_Framework_TestCase
         $definition = $source->getDefinition('DI\Test\UnitTest\Definition\Source\Fixtures\AnnotationFixture');
         $this->assertInstanceOf('DI\Definition\Definition', $definition);
 
-        $methodInjections = $definition->getMethodInjections();
-        $methodInjection = $methodInjections['method2'];
+        $methodInjection = $this->getMethodInjection($definition, 'method2');
         $this->assertInstanceOf('DI\Definition\ClassDefinition\MethodInjection', $methodInjection);
 
         $parameters = $methodInjection->getParameters();
@@ -114,8 +113,7 @@ class AnnotationReaderTest extends \PHPUnit_Framework_TestCase
         $definition = $source->getDefinition('DI\Test\UnitTest\Definition\Source\Fixtures\AnnotationFixture');
         $this->assertInstanceOf('DI\Definition\Definition', $definition);
 
-        $methodInjections = $definition->getMethodInjections();
-        $methodInjection = $methodInjections['method3'];
+        $methodInjection = $this->getMethodInjection($definition, 'method3');
         $this->assertInstanceOf('DI\Definition\ClassDefinition\MethodInjection', $methodInjection);
 
         $parameters = $methodInjection->getParameters();
@@ -132,8 +130,7 @@ class AnnotationReaderTest extends \PHPUnit_Framework_TestCase
         $definition = $source->getDefinition('DI\Test\UnitTest\Definition\Source\Fixtures\AnnotationFixture');
         $this->assertInstanceOf('DI\Definition\Definition', $definition);
 
-        $methodInjections = $definition->getMethodInjections();
-        $methodInjection = $methodInjections['method4'];
+        $methodInjection = $this->getMethodInjection($definition, 'method4');
         $this->assertInstanceOf('DI\Definition\ClassDefinition\MethodInjection', $methodInjection);
 
         $parameters = $methodInjection->getParameters();
@@ -148,8 +145,7 @@ class AnnotationReaderTest extends \PHPUnit_Framework_TestCase
         $definition = $source->getDefinition('DI\Test\UnitTest\Definition\Source\Fixtures\AnnotationFixture');
         $this->assertInstanceOf('DI\Definition\Definition', $definition);
 
-        $methodInjections = $definition->getMethodInjections();
-        $methodInjection = $methodInjections['method5'];
+        $methodInjection = $this->getMethodInjection($definition, 'method5');
         $this->assertInstanceOf('DI\Definition\ClassDefinition\MethodInjection', $methodInjection);
 
         $parameters = $methodInjection->getParameters();
@@ -164,7 +160,7 @@ class AnnotationReaderTest extends \PHPUnit_Framework_TestCase
         $source = new AnnotationReader();
         $definition = $source->getDefinition('DI\Test\UnitTest\Definition\Source\Fixtures\AnnotationFixture');
 
-        $this->assertNull($definition->getMethodInjection('unannotatedMethod'));
+        $this->assertNull($this->getMethodInjection($definition, 'unannotatedMethod'));
     }
 
     /**
@@ -175,7 +171,7 @@ class AnnotationReaderTest extends \PHPUnit_Framework_TestCase
         $source = new AnnotationReader();
         $definition = $source->getDefinition('DI\Test\UnitTest\Definition\Source\Fixtures\AnnotationFixture');
 
-        $methodInjection = $definition->getMethodInjection('optionalParameter');
+        $methodInjection = $this->getMethodInjection($definition, 'optionalParameter');
 
         $parameters = $methodInjection->getParameters();
         $this->assertCount(1, $parameters);
@@ -189,7 +185,7 @@ class AnnotationReaderTest extends \PHPUnit_Framework_TestCase
         $source = new AnnotationReader();
         $definition = $source->getDefinition('DI\Test\UnitTest\Definition\Source\Fixtures\AnnotationFixture');
 
-        $this->assertNull($definition->getMethodInjection('staticMethod'));
+        $this->assertNull($this->getMethodInjection($definition, 'staticMethod'));
     }
 
     public function testInjectable()
@@ -211,8 +207,7 @@ class AnnotationReaderTest extends \PHPUnit_Framework_TestCase
         $definition = $source->getDefinition('DI\Test\UnitTest\Definition\Source\Fixtures\AnnotationFixture3');
         $this->assertInstanceOf('DI\Definition\Definition', $definition);
 
-        $methodInjections = $definition->getMethodInjections();
-        $methodInjection = $methodInjections['method1'];
+        $methodInjection = $this->getMethodInjection($definition, 'method1');
         $this->assertInstanceOf('DI\Definition\ClassDefinition\MethodInjection', $methodInjection);
 
         $parameters = $methodInjection->getParameters();
@@ -258,8 +253,19 @@ class AnnotationReaderTest extends \PHPUnit_Framework_TestCase
         $definition = $source->getDefinition('DI\Test\UnitTest\Definition\Source\Fixtures\AnnotationFixtureChild');
 
         $this->assertNotNull($definition->getPropertyInjection('propertyChild'));
-        $this->assertNotNull($definition->getMethodInjection('methodChild'));
+        $this->assertNotNull($this->getMethodInjection($definition, 'methodChild'));
         $this->assertNotNull($definition->getPropertyInjection('propertyParent'));
-        $this->assertNotNull($definition->getMethodInjection('methodParent'));
+        $this->assertNotNull($this->getMethodInjection($definition, 'methodParent'));
+    }
+
+    private function getMethodInjection(ClassDefinition $definition, $name)
+    {
+        $methodInjections = $definition->getMethodInjections();
+        foreach ($methodInjections as $methodInjection) {
+            if ($methodInjection->getMethodName() === $name) {
+                return $methodInjection;
+            }
+        }
+        return null;
     }
 }
