@@ -243,7 +243,7 @@ class ObjectDefinition implements Definition, CacheableDefinition, HasSubDefinit
         $this->mergeMethodInjections($definition);
     }
 
-    private function mergeConstructorInjection(ClassDefinition $definition)
+    private function mergeConstructorInjection(ObjectDefinition $definition)
     {
         if ($definition->getConstructorInjection() !== null) {
             if ($this->constructorInjection !== null) {
@@ -256,7 +256,7 @@ class ObjectDefinition implements Definition, CacheableDefinition, HasSubDefinit
         }
     }
 
-    private function mergePropertyInjections(ClassDefinition $definition)
+    private function mergePropertyInjections(ObjectDefinition $definition)
     {
         foreach ($definition->getPropertyInjections() as $propertyName => $propertyInjection) {
             if (! array_key_exists($propertyName, $this->propertyInjections)) {
@@ -266,7 +266,7 @@ class ObjectDefinition implements Definition, CacheableDefinition, HasSubDefinit
         }
     }
 
-    private function mergeMethodInjections(ClassDefinition $definition)
+    private function mergeMethodInjections(ObjectDefinition $definition)
     {
         foreach ($definition->methodInjections as $methodName => $calls) {
             if (array_key_exists($methodName, $this->methodInjections)) {

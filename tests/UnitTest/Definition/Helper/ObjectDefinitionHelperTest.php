@@ -129,7 +129,7 @@ class ObjectDefinitionHelperTest extends \PHPUnit_Framework_TestCase
      */
     public function allows_to_define_multiple_method_calls()
     {
-        $helper = new ObjectDefinition();
+        $helper = new ObjectDefinitionHelper();
         $helper->method('method', 1, 2);
         $helper->method('method', 3, 4);
         $definition = $helper->getDefinition('foo');
@@ -147,7 +147,7 @@ class ObjectDefinitionHelperTest extends \PHPUnit_Framework_TestCase
      */
     public function allows_to_override_a_parameter_injection_by_index()
     {
-        $helper = new ObjectDefinition();
+        $helper = new ObjectDefinitionHelper();
         $helper->methodParameter('method', 0, 42);
         $definition = $helper->getDefinition('foo');
 
@@ -181,7 +181,7 @@ class ObjectDefinitionHelperTest extends \PHPUnit_Framework_TestCase
      */
     public function should_update_constructor_definition_if_overriding_parameter_for_constructor()
     {
-        $helper = new ClassDefinitionHelper();
+        $helper = new ObjectDefinitionHelper();
         $helper->methodParameter('__construct', 0, 42);
         $definition = $helper->getDefinition('foo');
 

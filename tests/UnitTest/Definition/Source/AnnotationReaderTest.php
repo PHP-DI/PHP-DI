@@ -9,8 +9,8 @@
 
 namespace DI\Test\UnitTest\Definition\Source;
 
-use DI\Definition\ClassDefinition;
 use DI\Definition\EntryReference;
+use DI\Definition\ObjectDefinition;
 use DI\Definition\Source\AnnotationReader;
 use DI\Scope;
 
@@ -258,7 +258,7 @@ class AnnotationReaderTest extends \PHPUnit_Framework_TestCase
         $this->assertNotNull($this->getMethodInjection($definition, 'methodParent'));
     }
 
-    private function getMethodInjection(ClassDefinition $definition, $name)
+    private function getMethodInjection(ObjectDefinition $definition, $name)
     {
         $methodInjections = $definition->getMethodInjections();
         foreach ($methodInjections as $methodInjection) {

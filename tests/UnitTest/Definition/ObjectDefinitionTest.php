@@ -105,12 +105,12 @@ class ObjectDefinitionTest extends \PHPUnit_Framework_TestCase
      */
     public function should_merge_multiple_method_calls()
     {
-        $definition = new ClassDefinition('foo');
+        $definition = new ObjectDefinition('foo');
         $definition->addMethodInjection(new MethodInjection('method1'));
         $definition->addMethodInjection(new MethodInjection('method2', array('bam')));
         $definition->addMethodInjection(new MethodInjection('method2', array('baz')));
 
-        $subDefinition = new ClassDefinition('bar');
+        $subDefinition = new ObjectDefinition('bar');
         $subDefinition->addMethodInjection(new MethodInjection('method1', array('bar')));
         $subDefinition->addMethodInjection(new MethodInjection('method2', array('foo', 'bar')));
         $subDefinition->addMethodInjection(new MethodInjection('method3'));
