@@ -108,6 +108,35 @@ class ProductController
 }
 ```
 
+### Routing annotations
+
+It is possible to use [annotations for routing](http://richardmiller.co.uk/2011/10/25/symfony2-routing-to-controller-as-service-with-annotations/) and still have the controller created by PHP-DI.
+
+You achieve that by specifying the service ID in the `@Route` annotation (which is most probably the class name itself unless you have a custom setup):
+
+```php
+/**
+ * @Route(service="My\TestController")
+ */
+class TestController extends Controller
+{
+    private $dependency;
+
+    public function __construct(SomeDependency $dependency)
+    {
+        $this->dependency = $dependency;
+    }
+
+    /**
+     * @Route("test")
+     */
+    public function testAction()
+    {
+        return new Response('ok');
+    }
+}
+```
+
 
 ## Using Symfony's services in PHP-DI
 
