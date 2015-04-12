@@ -7,12 +7,12 @@
  * @license   http://www.opensource.org/licenses/mit-license.php MIT (see the LICENSE file)
  */
 
-namespace DI\Definition\ClassDefinition;
+namespace DI\Definition\ObjectDefinition;
 
 use DI\Definition\AbstractFunctionCallDefinition;
 
 /**
- * Describe an injection in a class method.
+ * Describe an injection in an object method.
  *
  * @author Matthieu Napoli <matthieu@mnapoli.fr>
  */

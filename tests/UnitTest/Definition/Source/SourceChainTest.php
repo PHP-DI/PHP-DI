@@ -9,7 +9,7 @@
 
 namespace DI\Test\UnitTest\Definition\Source;
 
-use DI\Definition\ClassDefinition;
+use DI\Definition\ObjectDefinition;
 use DI\Definition\Definition;
 use DI\Definition\Source\DefinitionArray;
 use DI\Definition\Source\Autowiring;
@@ -106,9 +106,9 @@ class SourceChainTest extends \PHPUnit_Framework_TestCase
             new Autowiring(),
         ));
 
-        /** @var ClassDefinition $definition */
+        /** @var ObjectDefinition $definition */
         $definition = $chain->getDefinition('def');
-        $this->assertTrue($definition instanceof ClassDefinition);
+        $this->assertTrue($definition instanceof ObjectDefinition);
         $this->assertEquals('def', $definition->getName());
         $this->assertEquals('subdef', $definition->getClassName());
         $this->assertTrue($definition->isLazy());
@@ -140,9 +140,9 @@ class SourceChainTest extends \PHPUnit_Framework_TestCase
             new Autowiring(),
         ));
 
-        /** @var ClassDefinition $definition */
+        /** @var ObjectDefinition $definition */
         $definition = $chain->getDefinition('def');
-        $this->assertTrue($definition instanceof ClassDefinition);
+        $this->assertTrue($definition instanceof ObjectDefinition);
         $this->assertEquals('def', $definition->getName());
         $this->assertEquals('stdClass', $definition->getClassName());
         $this->assertTrue($definition->isLazy());

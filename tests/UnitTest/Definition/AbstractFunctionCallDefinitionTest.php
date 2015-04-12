@@ -10,7 +10,7 @@
 namespace DI\Test\UnitTest\Definition;
 
 use DI\Definition\AbstractFunctionCallDefinition;
-use DI\Definition\ClassDefinition;
+use DI\Definition\ObjectDefinition;
 use DI\Scope;
 
 /**

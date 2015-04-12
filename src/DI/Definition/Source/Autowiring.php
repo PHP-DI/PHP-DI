@@ -9,9 +9,9 @@
 
 namespace DI\Definition\Source;
 
-use DI\Definition\ClassDefinition;
+use DI\Definition\ObjectDefinition;
 use DI\Definition\EntryReference;
-use DI\Definition\ClassDefinition\MethodInjection;
+use DI\Definition\ObjectDefinition\MethodInjection;
 use DI\Definition\FunctionCallDefinition;
 use DI\Reflection\CallableReflectionFactory;
 
@@ -31,7 +31,7 @@ class Autowiring implements DefinitionSource, CallableDefinitionSource
             return null;
         }
 
-        $definition = new ClassDefinition($name);
+        $definition = new ObjectDefinition($name);
 
         // Constructor
         $class = new \ReflectionClass($name);

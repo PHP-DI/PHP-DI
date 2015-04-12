@@ -61,7 +61,7 @@ class ArrayDefinitionResolverTest extends \PHPUnit_Framework_TestCase
             ->method('resolve')
             ->withConsecutive(
                 $this->isInstanceOf('DI\Definition\AliasDefinition'),
-                $this->isInstanceOf('DI\Definition\ClassDefinition')
+                $this->isInstanceOf('DI\Definition\ObjectDefinition')
             )
             ->willReturnOnConsecutiveCalls(42, new \stdClass());
 

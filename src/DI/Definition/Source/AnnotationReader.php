@@ -11,12 +11,12 @@ namespace DI\Definition\Source;
 
 use DI\Annotation\Inject;
 use DI\Annotation\Injectable;
-use DI\Definition\ClassDefinition;
+use DI\Definition\ObjectDefinition;
 use DI\Definition\EntryReference;
 use DI\Definition\Exception\AnnotationException;
 use DI\Definition\Exception\DefinitionException;
-use DI\Definition\ClassDefinition\MethodInjection;
-use DI\Definition\ClassDefinition\PropertyInjection;
+use DI\Definition\ObjectDefinition\MethodInjection;
+use DI\Definition\ObjectDefinition\PropertyInjection;
 use Doctrine\Common\Annotations\AnnotationRegistry;
 use Doctrine\Common\Annotations\Reader;
 use Doctrine\Common\Annotations\SimpleAnnotationReader;
@@ -73,7 +73,7 @@ class AnnotationReader implements DefinitionSource
         }
 
         $class = new ReflectionClass($name);
-        $definition = new ClassDefinition($name);
+        $definition = new ObjectDefinition($name);
 
         $this->readInjectableAnnotation($class, $definition);
 
@@ -89,10 +89,10 @@ class AnnotationReader implements DefinitionSource
     /**
      * Browse the class properties looking for annotated properties.
      *
-     * @param ReflectionClass $reflectionClass
-     * @param ClassDefinition $classDefinition
+     * @param ReflectionClass  $reflectionClass
+     * @param ObjectDefinition $objectDefinition
      */
-    private function readProperties(ReflectionClass $reflectionClass, ClassDefinition $classDefinition)
+    private function readProperties(ReflectionClass $reflectionClass, ObjectDefinition $objectDefinition)
     {
         // This will look in all the properties, including those of the parent classes
         foreach ($reflectionClass->getProperties() as $property) {
@@ -104,7 +104,7 @@ class AnnotationReader implements DefinitionSource
             $propertyInjection = $this->getPropertyInjection($property);
 
             if ($propertyInjection) {
-                $classDefinition->addPropertyInjection($propertyInjection);
+                $objectDefinition->addPropertyInjection($propertyInjection);
             }
         }
     }
@@ -139,9 +139,9 @@ class AnnotationReader implements DefinitionSource
      * Browse the object's methods looking for annotated methods.
      *
      * @param ReflectionClass $class
-     * @param ClassDefinition $classDefinition
+     * @param ObjectDefinition $objectDefinition
      */
-    private function readMethods(ReflectionClass $class, ClassDefinition $classDefinition)
+    private function readMethods(ReflectionClass $class, ObjectDefinition $objectDefinition)
     {
         // This will look in all the methods, including those of the parent classes
         foreach ($class->getMethods(ReflectionMethod::IS_PUBLIC) as $method) {
@@ -156,9 +156,9 @@ class AnnotationReader implements DefinitionSource
             }
 
             if ($method->isConstructor()) {
-                $classDefinition->setConstructorInjection($methodInjection);
+                $objectDefinition->setConstructorInjection($methodInjection);
             } else {
-                $classDefinition->addMethodInjection($methodInjection);
+                $objectDefinition->addMethodInjection($methodInjection);
             }
         }
     }
@@ -269,7 +269,7 @@ class AnnotationReader implements DefinitionSource
         return $this->phpDocReader;
     }
 
-    private function readInjectableAnnotation(ReflectionClass $class, ClassDefinition $definition)
+    private function readInjectableAnnotation(ReflectionClass $class, ObjectDefinition $definition)
     {
         try {
             /** @var $annotation Injectable|null */

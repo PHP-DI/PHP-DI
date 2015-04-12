@@ -9,7 +9,7 @@
 
 namespace DI;
 
-use DI\Definition\ClassDefinition;
+use DI\Definition\ObjectDefinition;
 use DI\Definition\Definition;
 use DI\Definition\FactoryDefinition;
 use DI\Definition\InstanceDefinition;
@@ -206,12 +206,12 @@ class Container implements ContainerInterface, FactoryInterface, InvokerInterfac
      */
     public function injectOn($instance)
     {
-        $classDefinition = $this->definitionSource->getDefinition(get_class($instance));
-        if (! $classDefinition instanceof ClassDefinition) {
+        $objectDefinition = $this->definitionSource->getDefinition(get_class($instance));
+        if (! $objectDefinition instanceof ObjectDefinition) {
             return $instance;
         }
 
-        $definition = new InstanceDefinition($instance, $classDefinition);
+        $definition = new InstanceDefinition($instance, $objectDefinition);
 
         $this->definitionResolver->resolve($definition);
 

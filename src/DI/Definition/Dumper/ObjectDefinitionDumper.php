@@ -9,29 +9,29 @@
 
 namespace DI\Definition\Dumper;
 
-use DI\Definition\ClassDefinition;
-use DI\Definition\ClassDefinition\MethodInjection;
+use DI\Definition\ObjectDefinition;
+use DI\Definition\ObjectDefinition\MethodInjection;
 use DI\Definition\Definition;
 use DI\Definition\EntryReference;
 use ReflectionException;
 use ReflectionMethod;
 
 /**
- * Dumps class definitions.
+ * Dumps object definitions.
  *
  * @since 4.1
  * @author Matthieu Napoli <matthieu@mnapoli.fr>
  */
-class ClassDefinitionDumper implements DefinitionDumper
+class ObjectDefinitionDumper implements DefinitionDumper
 {
     /**
      * {@inheritdoc}
      */
     public function dump(Definition $definition)
     {
-        if (! $definition instanceof ClassDefinition) {
+        if (! $definition instanceof ObjectDefinition) {
             throw new \InvalidArgumentException(sprintf(
-                'This definition dumper is only compatible with ClassDefinition objects, %s given',
+                'This definition dumper is only compatible with ObjectDefinition objects, %s given',
                 get_class($definition)
             ));
         }
@@ -68,7 +68,7 @@ class ClassDefinitionDumper implements DefinitionDumper
         return sprintf("Object (\n%s\n)", $str);
     }
 
-    private function dumpConstructor($className, ClassDefinition $definition)
+    private function dumpConstructor($className, ObjectDefinition $definition)
     {
         $str = '';
 
@@ -83,7 +83,7 @@ class ClassDefinitionDumper implements DefinitionDumper
         return $str;
     }
 
-    private function dumpProperties(ClassDefinition $definition)
+    private function dumpProperties(ObjectDefinition $definition)
     {
         $str = '';
 
@@ -101,7 +101,7 @@ class ClassDefinitionDumper implements DefinitionDumper
         return $str;
     }
 
-    private function dumpMethods($className, ClassDefinition $definition)
+    private function dumpMethods($className, ObjectDefinition $definition)
     {
         $str = '';
 

@@ -9,21 +9,21 @@
 
 namespace DI\Test\UnitTest\Definition\Helper;
 
-use DI\Definition\ClassDefinition\MethodInjection;
-use DI\Definition\Helper\ClassDefinitionHelper;
+use DI\Definition\ObjectDefinition\MethodInjection;
+use DI\Definition\Helper\ObjectDefinitionHelper;
 use DI\Scope;
 
 /**
- * @covers \DI\Definition\Helper\ClassDefinitionHelper
+ * @covers \DI\Definition\Helper\ObjectDefinitionHelper
  */
-class ClassDefinitionHelperTest extends \PHPUnit_Framework_TestCase
+class ObjectDefinitionHelperTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @test
      */
     public function test_default_config()
     {
-        $helper = new ClassDefinitionHelper();
+        $helper = new ObjectDefinitionHelper();
         $definition = $helper->getDefinition('foo');
 
         $this->assertEquals('foo', $definition->getName());
@@ -39,7 +39,7 @@ class ClassDefinitionHelperTest extends \PHPUnit_Framework_TestCase
      */
     public function allows_to_define_the_class_name()
     {
-        $helper = new ClassDefinitionHelper('bar');
+        $helper = new ObjectDefinitionHelper('bar');
         $definition = $helper->getDefinition('foo');
 
         $this->assertEquals('foo', $definition->getName());
@@ -51,7 +51,7 @@ class ClassDefinitionHelperTest extends \PHPUnit_Framework_TestCase
      */
     public function allows_to_define_the_scope()
     {
-        $helper = new ClassDefinitionHelper();
+        $helper = new ObjectDefinitionHelper();
         $helper->scope(Scope::PROTOTYPE());
         $definition = $helper->getDefinition('foo');
 
@@ -63,7 +63,7 @@ class ClassDefinitionHelperTest extends \PHPUnit_Framework_TestCase
      */
     public function allows_to_declare_the_service_as_lazy()
     {
-        $helper = new ClassDefinitionHelper();
+        $helper = new ObjectDefinitionHelper();
         $helper->lazy();
         $definition = $helper->getDefinition('foo');
 
@@ -75,7 +75,7 @@ class ClassDefinitionHelperTest extends \PHPUnit_Framework_TestCase
      */
     public function allows_to_define_constructor_parameters()
     {
-        $helper = new ClassDefinitionHelper();
+        $helper = new ObjectDefinitionHelper();
         $helper->constructor(1, 2, 3);
         $definition = $helper->getDefinition('foo');
 
@@ -87,7 +87,7 @@ class ClassDefinitionHelperTest extends \PHPUnit_Framework_TestCase
      */
     public function allows_to_override_a_parameter_injection()
     {
-        $helper = new ClassDefinitionHelper();
+        $helper = new ObjectDefinitionHelper();
         $helper->constructorParameter(0, 42);
         $definition = $helper->getDefinition('foo');
 
@@ -101,7 +101,7 @@ class ClassDefinitionHelperTest extends \PHPUnit_Framework_TestCase
      */
     public function allows_to_define_a_property_injection()
     {
-        $helper = new ClassDefinitionHelper();
+        $helper = new ObjectDefinitionHelper();
         $helper->property('prop', 1);
         $definition = $helper->getDefinition('foo');
 
@@ -115,7 +115,7 @@ class ClassDefinitionHelperTest extends \PHPUnit_Framework_TestCase
      */
     public function allows_to_define_a_method_call()
     {
-        $helper = new ClassDefinitionHelper();
+        $helper = new ObjectDefinitionHelper();
         $helper->method('method', 1, 2, 3);
         $definition = $helper->getDefinition('foo');
 
@@ -129,7 +129,7 @@ class ClassDefinitionHelperTest extends \PHPUnit_Framework_TestCase
      */
     public function allows_to_define_multiple_method_calls()
     {
-        $helper = new ClassDefinitionHelper();
+        $helper = new ObjectDefinition();
         $helper->method('method', 1, 2);
         $helper->method('method', 3, 4);
         $definition = $helper->getDefinition('foo');
@@ -147,7 +147,7 @@ class ClassDefinitionHelperTest extends \PHPUnit_Framework_TestCase
      */
     public function allows_to_override_a_parameter_injection_by_index()
     {
-        $helper = new ClassDefinitionHelper();
+        $helper = new ObjectDefinition();
         $helper->methodParameter('method', 0, 42);
         $definition = $helper->getDefinition('foo');
 
@@ -164,7 +164,7 @@ class ClassDefinitionHelperTest extends \PHPUnit_Framework_TestCase
      */
     public function allows_to_override_a_parameter_injection_by_name()
     {
-        $helper = new ClassDefinitionHelper();
+        $helper = new ObjectDefinitionHelper();
         $helper->methodParameter('method', 'param2', 'val2');
         $helper->methodParameter('method', 'param1', 'val1');
         $definition = $helper->getDefinition('DI\Test\UnitTest\Definition\Helper\Fixtures\Class1');

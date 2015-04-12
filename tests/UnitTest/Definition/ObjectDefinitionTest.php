@@ -9,20 +9,20 @@
 
 namespace DI\Test\UnitTest\Definition;
 
-use DI\Definition\ClassDefinition;
-use DI\Definition\ClassDefinition\MethodInjection;
-use DI\Definition\ClassDefinition\PropertyInjection;
+use DI\Definition\ObjectDefinition;
+use DI\Definition\ObjectDefinition\MethodInjection;
+use DI\Definition\ObjectDefinition\PropertyInjection;
 use DI\Definition\ValueDefinition;
 use DI\Scope;
 
 /**
- * @covers \DI\Definition\ClassDefinition
+ * @covers \DI\Definition\ObjectDefinition
  */
-class ClassDefinitionTest extends \PHPUnit_Framework_TestCase
+class ObjectDefinitionTest extends \PHPUnit_Framework_TestCase
 {
     public function test_getters_setters()
     {
-        $definition = new ClassDefinition('foo', 'bar');
+        $definition = new ObjectDefinition('foo', 'bar');
         $definition->setLazy(true);
         $definition->setScope(Scope::PROTOTYPE());
 
@@ -37,7 +37,7 @@ class ClassDefinitionTest extends \PHPUnit_Framework_TestCase
 
     public function test_defaults()
     {
-        $definition = new ClassDefinition('foo');
+        $definition = new ObjectDefinition('foo');
 
         $this->assertEquals('foo', $definition->getName());
         $this->assertEquals('foo', $definition->getClassName());
@@ -50,7 +50,7 @@ class ClassDefinitionTest extends \PHPUnit_Framework_TestCase
 
     public function should_be_cacheable()
     {
-        $this->assertInstanceOf('DI\Definition\CacheableDefinition', new ClassDefinition('foo'));
+        $this->assertInstanceOf('DI\Definition\CacheableDefinition', new ObjectDefinition('foo'));
     }
 
     /**
@@ -60,7 +60,7 @@ class ClassDefinitionTest extends \PHPUnit_Framework_TestCase
      */
     public function should_only_accept_compatible_subdefinitions()
     {
-        $definition = new ClassDefinition('foo', 'bar');
+        $definition = new ObjectDefinition('foo', 'bar');
         $definition->setSubDefinition(new ValueDefinition('bar', 'Hello'));
     }
 
@@ -69,13 +69,13 @@ class ClassDefinitionTest extends \PHPUnit_Framework_TestCase
      */
     public function should_merge_with_its_subdefinition()
     {
-        $definition = new ClassDefinition('foo', 'bar');
+        $definition = new ObjectDefinition('foo', 'bar');
         $definition->addPropertyInjection(new PropertyInjection('property1', 'Property1'));
         $definition->addPropertyInjection(new PropertyInjection('property2', 'Property2'));
         $definition->addMethodInjection(new MethodInjection('method1', array('foo')));
         $definition->addMethodInjection(new MethodInjection('method2'));
 
-        $subDefinition = new ClassDefinition('bar');
+        $subDefinition = new ObjectDefinition('bar');
         $subDefinition->setLazy(true);
         $subDefinition->setScope(Scope::PROTOTYPE());
         $subDefinition->setConstructorInjection(MethodInjection::constructor());

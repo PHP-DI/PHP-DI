@@ -46,7 +46,7 @@ class ResolverDispatcher implements DefinitionResolver
             'DI\Definition\ArrayDefinitionExtension'      => $arrayDefinitionResolver,
             'DI\Definition\FactoryDefinition'             => new FactoryDefinitionResolver($container),
             'DI\Definition\AliasDefinition'               => new AliasDefinitionResolver($container),
-            'DI\Definition\ClassDefinition'               => new ClassDefinitionResolver($resolver, $proxyFactory),
+            'DI\Definition\ObjectDefinition'              => new ObjectDefinitionResolver($resolver, $proxyFactory),
             'DI\Definition\InstanceDefinition'            => new InstanceDefinitionResolver($resolver, $proxyFactory),
             'DI\Definition\FunctionCallDefinition'        => new FunctionCallDefinitionResolver($container, $resolver),
             'DI\Definition\EnvironmentVariableDefinition' => new EnvironmentVariableDefinitionResolver($resolver),

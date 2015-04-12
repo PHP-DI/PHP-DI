@@ -9,10 +9,10 @@
 
 namespace DI\Definition\Resolver;
 
-use DI\Definition\ClassDefinition;
+use DI\Definition\ObjectDefinition;
 use DI\Definition\Definition;
 use DI\Definition\Exception\DefinitionException;
-use DI\Definition\ClassDefinition\PropertyInjection;
+use DI\Definition\ObjectDefinition\PropertyInjection;
 use DI\Definition\Helper\DefinitionHelper;
 use DI\DependencyException;
 use DI\Proxy\ProxyFactory;
@@ -22,12 +22,12 @@ use ReflectionClass;
 use ReflectionProperty;
 
 /**
- * Resolves a class definition to a value.
+ * Resolves an object definition to a value.
  *
  * @since 4.0
  * @author Matthieu Napoli <matthieu@mnapoli.fr>
  */
-class ClassDefinitionResolver implements DefinitionResolver
+class ObjectDefinitionResolver implements DefinitionResolver
 {
     /**
      * @var ProxyFactory
@@ -62,13 +62,13 @@ class ClassDefinitionResolver implements DefinitionResolver
      *
      * This will create a new instance of the class using the injections points defined.
      *
-     * @param ClassDefinition $definition
+     * @param ObjectDefinition $definition
      *
      * {@inheritdoc}
      */
     public function resolve(Definition $definition, array $parameters = array())
     {
-        $this->assertIsClassDefinition($definition);
+        $this->assertIsObjectDefinition($definition);
 
         // Lazy?
         if ($definition->isLazy()) {
@@ -82,13 +82,13 @@ class ClassDefinitionResolver implements DefinitionResolver
      * The definition is not resolvable if the class is not instantiable (interface or abstract)
      * or if the class doesn't exist.
      *
-     * @param ClassDefinition $definition
+     * @param ObjectDefinition $definition
      *
      * {@inheritdoc}
      */
     public function isResolvable(Definition $definition, array $parameters = array())
     {
-        $this->assertIsClassDefinition($definition);
+        $this->assertIsObjectDefinition($definition);
 
         if (! class_exists($definition->getClassName())) {
             return false;
@@ -102,12 +102,12 @@ class ClassDefinitionResolver implements DefinitionResolver
     /**
      * Returns a proxy instance
      *
-     * @param ClassDefinition $definition
+     * @param ObjectDefinition $definition
      * @param array           $parameters
      *
      * @return \ProxyManager\Proxy\LazyLoadingInterface Proxy instance
      */
-    private function createProxy(ClassDefinition $definition, array $parameters)
+    private function createProxy(ObjectDefinition $definition, array $parameters)
     {
         // waiting for PHP 5.4+ support
         $resolver = $this;
@@ -128,7 +128,7 @@ class ClassDefinitionResolver implements DefinitionResolver
     /**
      * Creates an instance of the class and injects dependencies..
      *
-     * @param ClassDefinition $classDefinition
+     * @param ObjectDefinition $definition
      * @param array           $parameters      Optional parameters to use to create the instance.
      *
      * @throws DefinitionException
@@ -137,15 +137,15 @@ class ClassDefinitionResolver implements DefinitionResolver
      *
      * @todo Make private once PHP-DI supports PHP > 5.4 only
      */
-    public function createInstance(ClassDefinition $classDefinition, array $parameters)
+    public function createInstance(ObjectDefinition $definition, array $parameters)
     {
-        $this->assertClassExists($classDefinition);
+        $this->assertClassExists($definition);
 
-        $classReflection = new ReflectionClass($classDefinition->getClassName());
+        $classReflection = new ReflectionClass($definition->getClassName());
 
-        $this->assertClassIsInstantiable($classDefinition, $classReflection);
+        $this->assertClassIsInstantiable($definition, $classReflection);
 
-        $constructorInjection = $classDefinition->getConstructorInjection();
+        $constructorInjection = $definition->getConstructorInjection();
 
         try {
             $args = $this->parameterResolver->resolveParameters(
@@ -160,7 +160,7 @@ class ClassDefinitionResolver implements DefinitionResolver
                 $object = $classReflection->newInstance();
             }
 
-            $this->injectMethodsAndProperties($object, $classDefinition);
+            $this->injectMethodsAndProperties($object, $definition);
         } catch (NotFoundException $e) {
             throw new DependencyException(sprintf(
                 "Error while injecting dependencies into %s: %s",
@@ -168,9 +168,9 @@ class ClassDefinitionResolver implements DefinitionResolver
                 $e->getMessage()
             ), 0, $e);
         } catch (DefinitionException $e) {
-            throw DefinitionException::create($classDefinition, sprintf(
+            throw DefinitionException::create($definition, sprintf(
                 "Entry %s cannot be resolved: %s",
-                $classDefinition->getName(),
+                $definition->getName(),
                 $e->getMessage()
             ));
         }
@@ -178,15 +178,15 @@ class ClassDefinitionResolver implements DefinitionResolver
         return $object;
     }
 
-    protected function injectMethodsAndProperties($object, ClassDefinition $classDefinition)
+    protected function injectMethodsAndProperties($object, ObjectDefinition $objectDefinition)
     {
         // Property injections
-        foreach ($classDefinition->getPropertyInjections() as $propertyInjection) {
+        foreach ($objectDefinition->getPropertyInjections() as $propertyInjection) {
             $this->injectProperty($object, $propertyInjection);
         }
 
         // Method injections
-        foreach ($classDefinition->getMethodInjections() as $methodInjection) {
+        foreach ($objectDefinition->getMethodInjections() as $methodInjection) {
             $methodReflection = new \ReflectionMethod($object, $methodInjection->getMethodName());
             $args = $this->parameterResolver->resolveParameters($methodInjection, $methodReflection);
 
@@ -234,36 +234,36 @@ class ClassDefinitionResolver implements DefinitionResolver
         $property->setValue($object, $value);
     }
 
-    private function assertIsClassDefinition(Definition $definition)
+    private function assertIsObjectDefinition(Definition $definition)
     {
-        if (!$definition instanceof ClassDefinition) {
+        if (!$definition instanceof ObjectDefinition) {
             throw new \InvalidArgumentException(sprintf(
-                'This definition resolver is only compatible with ClassDefinition objects, %s given',
+                'This definition resolver is only compatible with ObjectDefinition objects, %s given',
                 get_class($definition)
             ));
         }
     }
 
-    private function assertClassExists(ClassDefinition $classDefinition)
+    private function assertClassExists(ObjectDefinition $definition)
     {
-        if (!class_exists($classDefinition->getClassName()) && !interface_exists($classDefinition->getClassName())) {
-            throw DefinitionException::create($classDefinition,
+        if (!class_exists($definition->getClassName()) && !interface_exists($definition->getClassName())) {
+            throw DefinitionException::create($definition,
             sprintf(
                 "Entry %s cannot be resolved: class %s doesn't exist",
-                $classDefinition->getName(),
-                $classDefinition->getClassName()
+                $definition->getName(),
+                $definition->getClassName()
             ));
         }
     }
 
-    private function assertClassIsInstantiable(ClassDefinition $classDefinition, ReflectionClass $classReflection)
+    private function assertClassIsInstantiable(ObjectDefinition $definition, ReflectionClass $classReflection)
     {
         if (!$classReflection->isInstantiable()) {
-            throw DefinitionException::create($classDefinition,
+            throw DefinitionException::create($definition,
             sprintf(
                 "Entry %s cannot be resolved: class %s is not instantiable",
-                $classDefinition->getName(),
-                $classDefinition->getClassName()
+                $definition->getName(),
+                $definition->getClassName()
             ));
         }
     }

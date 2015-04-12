@@ -12,7 +12,7 @@ namespace DI;
 use DI\Definition\EntryReference;
 use DI\Definition\Helper\ArrayDefinitionExtensionHelper;
 use DI\Definition\Helper\FactoryDefinitionHelper;
-use DI\Definition\Helper\ClassDefinitionHelper;
+use DI\Definition\Helper\ObjectDefinitionHelper;
 use DI\Definition\Helper\EnvironmentVariableDefinitionHelper;
 use DI\Definition\Helper\ValueDefinitionHelper;
 use DI\Definition\Helper\StringDefinitionHelper;
@@ -38,11 +38,11 @@ if (! function_exists('DI\object')) {
      * @param string|null $className Class name of the object.
      *                               If null, the name of the entry (in the container) will be used as class name.
      *
-     * @return ClassDefinitionHelper
+     * @return ObjectDefinitionHelper
      */
     function object($className = null)
     {
-        return new ClassDefinitionHelper($className);
+        return new ObjectDefinitionHelper($className);
     }
 }
 

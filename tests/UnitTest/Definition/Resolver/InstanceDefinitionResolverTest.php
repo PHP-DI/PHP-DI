@@ -9,9 +9,9 @@
 
 namespace DI\Test\UnitTest\Definition\Resolver;
 
-use DI\Definition\ClassDefinition;
-use DI\Definition\ClassDefinition\MethodInjection;
-use DI\Definition\ClassDefinition\PropertyInjection;
+use DI\Definition\ObjectDefinition;
+use DI\Definition\ObjectDefinition\MethodInjection;
+use DI\Definition\ObjectDefinition\PropertyInjection;
 use DI\Definition\InstanceDefinition;
 use DI\Definition\Resolver\InstanceDefinitionResolver;
 use DI\Definition\Resolver\ResolverDispatcher;
@@ -31,11 +31,11 @@ class InstanceDefinitionResolverTest extends \PHPUnit_Framework_TestCase
     {
         $instance = new FixtureClass('');
 
-        $classDefinition = new ClassDefinition(get_class($instance));
-        $classDefinition->addPropertyInjection(new PropertyInjection('prop', 'value'));
+        $objectDefinition = new ObjectDefinition(get_class($instance));
+        $objectDefinition->addPropertyInjection(new PropertyInjection('prop', 'value'));
 
         $resolver = $this->buildResolver();
-        $resolver->resolve(new InstanceDefinition($instance, $classDefinition));
+        $resolver->resolve(new InstanceDefinition($instance, $objectDefinition));
 
         $this->assertEquals('value', $instance->prop);
     }
@@ -47,11 +47,11 @@ class InstanceDefinitionResolverTest extends \PHPUnit_Framework_TestCase
     {
         $instance = new FixtureClass('');
 
-        $classDefinition = new ClassDefinition(get_class($instance));
-        $classDefinition->addMethodInjection(new MethodInjection('method', array('value')));
+        $objectDefinition = new ObjectDefinition(get_class($instance));
+        $objectDefinition->addMethodInjection(new MethodInjection('method', array('value')));
 
         $resolver = $this->buildResolver();
-        $resolver->resolve(new InstanceDefinition($instance, $classDefinition));
+        $resolver->resolve(new InstanceDefinition($instance, $objectDefinition));
 
         $this->assertEquals('value', $instance->methodParam1);
     }

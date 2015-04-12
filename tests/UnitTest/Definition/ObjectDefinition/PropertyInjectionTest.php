@@ -7,12 +7,12 @@
  * @license   http://www.opensource.org/licenses/mit-license.php MIT (see the LICENSE file)
  */
 
-namespace DI\Test\UnitTest\Definition\ClassDefinition;
+namespace DI\Test\UnitTest\Definition\ObjectDefinition;
 
-use DI\Definition\ClassDefinition\PropertyInjection;
+use DI\Definition\ObjectDefinition\PropertyInjection;
 
 /**
- * @covers \DI\Definition\ClassDefinition\PropertyInjection
+ * @covers \DI\Definition\ObjectDefinition\PropertyInjection
  */
 class PropertyInjectionTest extends \PHPUnit_Framework_TestCase
 {

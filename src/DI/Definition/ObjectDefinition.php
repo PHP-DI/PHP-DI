@@ -9,19 +9,17 @@
 
 namespace DI\Definition;
 
-use DI\Definition\ClassDefinition\MethodInjection;
-use DI\Definition\ClassDefinition\PropertyInjection;
+use DI\Definition\ObjectDefinition\MethodInjection;
+use DI\Definition\ObjectDefinition\PropertyInjection;
 use DI\Definition\Exception\DefinitionException;
 use DI\Scope;
 
 /**
  * Defines how an object can be instantiated.
  *
- * TODO rename to ObjectDefinition
- *
  * @author Matthieu Napoli <matthieu@mnapoli.fr>
  */
-class ClassDefinition implements Definition, CacheableDefinition, HasSubDefinition
+class ObjectDefinition implements Definition, CacheableDefinition, HasSubDefinition
 {
     /**
      * Entry name (most of the time, same as $classname)
@@ -216,7 +214,7 @@ class ClassDefinition implements Definition, CacheableDefinition, HasSubDefiniti
      */
     public function setSubDefinition(Definition $definition)
     {
-        if (! $definition instanceof ClassDefinition) {
+        if (! $definition instanceof ObjectDefinition) {
             throw new DefinitionException(sprintf(
                 "Container entry '%s' extends entry '%s' which is not an object",
                 $this->getName(),

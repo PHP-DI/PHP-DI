@@ -10,7 +10,7 @@
 namespace DI\Definition\Source;
 
 use DI\Definition\ArrayDefinition;
-use DI\Definition\ClassDefinition;
+use DI\Definition\ObjectDefinition;
 use DI\Definition\Definition;
 use DI\Definition\FactoryDefinition;
 use DI\Definition\ValueDefinition;
@@ -85,7 +85,7 @@ class DefinitionArray implements DefinitionSource, MutableDefinitionSource
 
                 // For a class definition, we replace * in the class name with the matches
                 // *Interface -> *Impl => FooInterface -> FooImpl
-                if ($definition instanceof ClassDefinition) {
+                if ($definition instanceof ObjectDefinition) {
                     array_shift($matches);
                     $definition->setClassName(
                         $this->replaceWildcards($definition->getClassName(), $matches)

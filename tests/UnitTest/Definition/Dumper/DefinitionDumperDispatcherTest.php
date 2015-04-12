@@ -10,9 +10,9 @@
 namespace DI\Test\UnitTest\Definition\Dumper;
 
 use DI\Definition\AliasDefinition;
-use DI\Definition\ClassDefinition;
+use DI\Definition\ObjectDefinition;
 use DI\Definition\Dumper\AliasDefinitionDumper;
-use DI\Definition\Dumper\ClassDefinitionDumper;
+use DI\Definition\Dumper\ObjectDefinitionDumper;
 use DI\Definition\Dumper\DefinitionDumperDispatcher;
 use DI\Definition\Dumper\FactoryDefinitionDumper;
 use DI\Definition\Dumper\ValueDefinitionDumper;
@@ -96,9 +96,9 @@ class DefinitionDumperDispatcherTest extends \PHPUnit_Framework_TestCase
         $dumper = new DefinitionDumperDispatcher();
         $dumper->registerDefaultDumpers();
 
-        $definition = new ClassDefinition('foo', 'MyClass');
+        $definition = new ObjectDefinition('foo', 'MyClass');
 
-        $classDumper = new ClassDefinitionDumper();
+        $classDumper = new ObjectDefinitionDumper();
         $this->assertEquals($classDumper->dump($definition), $dumper->dump($definition));
     }
 

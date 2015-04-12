@@ -27,18 +27,18 @@ class InstanceDefinition implements Definition
     private $instance;
 
     /**
-     * @var ClassDefinition
+     * @var ObjectDefinition
      */
-    private $classDefinition;
+    private $objectDefinition;
 
     /**
      * @param object          $instance
-     * @param ClassDefinition $classDefinition
+     * @param ObjectDefinition $objectDefinition
      */
-    public function __construct($instance, ClassDefinition $classDefinition)
+    public function __construct($instance, ObjectDefinition $objectDefinition)
     {
         $this->instance = $instance;
-        $this->classDefinition = $classDefinition;
+        $this->objectDefinition = $objectDefinition;
     }
 
     /**
@@ -67,10 +67,10 @@ class InstanceDefinition implements Definition
     }
 
     /**
-     * @return ClassDefinition
+     * @return ObjectDefinition
      */
-    public function getClassDefinition()
+    public function getObjectDefinition()
     {
-        return $this->classDefinition;
+        return $this->objectDefinition;
     }
 }

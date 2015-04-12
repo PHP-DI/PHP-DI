@@ -9,9 +9,9 @@
 
 namespace DI\Definition\Helper;
 
-use DI\Definition\ClassDefinition;
-use DI\Definition\ClassDefinition\MethodInjection;
-use DI\Definition\ClassDefinition\PropertyInjection;
+use DI\Definition\ObjectDefinition;
+use DI\Definition\ObjectDefinition\MethodInjection;
+use DI\Definition\ObjectDefinition\PropertyInjection;
 use DI\Scope;
 
 /**
@@ -19,7 +19,7 @@ use DI\Scope;
  *
  * @author Matthieu Napoli <matthieu@mnapoli.fr>
  */
-class ClassDefinitionHelper implements DefinitionHelper
+class ObjectDefinitionHelper implements DefinitionHelper
 {
     /**
      * @var string|null
@@ -70,7 +70,7 @@ class ClassDefinitionHelper implements DefinitionHelper
      *
      * A lazy entry is created only when it is used, a proxy is injected instead.
      *
-     * @return ClassDefinitionHelper
+     * @return ObjectDefinitionHelper
      */
     public function lazy()
     {
@@ -83,7 +83,7 @@ class ClassDefinitionHelper implements DefinitionHelper
      *
      * @param Scope $scope
      *
-     * @return ClassDefinitionHelper
+     * @return ObjectDefinitionHelper
      */
     public function scope(Scope $scope)
     {
@@ -99,7 +99,7 @@ class ClassDefinitionHelper implements DefinitionHelper
      *
      * @param mixed ... Parameters to use for calling the constructor of the class.
      *
-     * @return ClassDefinitionHelper
+     * @return ObjectDefinitionHelper
      */
     public function constructor()
     {
@@ -118,7 +118,7 @@ class ClassDefinitionHelper implements DefinitionHelper
      * @param string $parameter Parameter for which the value will be given.
      * @param mixed  $value     Value to give to this parameter.
      *
-     * @return ClassDefinitionHelper
+     * @return ObjectDefinitionHelper
      */
     public function constructorParameter($parameter, $value)
     {
@@ -132,7 +132,7 @@ class ClassDefinitionHelper implements DefinitionHelper
      * @param string $property Entry in which to inject the value.
      * @param mixed  $value    Value to inject in the property.
      *
-     * @return ClassDefinitionHelper
+     * @return ObjectDefinitionHelper
      */
     public function property($property, $value)
     {
@@ -152,7 +152,7 @@ class ClassDefinitionHelper implements DefinitionHelper
      * @param string $method Name of the method to call.
      * @param mixed  ...     Parameters to use for calling the method.
      *
-     * @return ClassDefinitionHelper
+     * @return ObjectDefinitionHelper
      */
     public function method($method)
     {
@@ -183,7 +183,7 @@ class ClassDefinitionHelper implements DefinitionHelper
      * @param string $parameter Name or index of the parameter for which the value will be given.
      * @param mixed  $value     Value to give to this parameter.
      *
-     * @return ClassDefinitionHelper
+     * @return ObjectDefinitionHelper
      */
     public function methodParameter($method, $parameter, $value)
     {
@@ -207,7 +207,7 @@ class ClassDefinitionHelper implements DefinitionHelper
      */
     public function getDefinition($entryName)
     {
-        $definition = new ClassDefinition($entryName, $this->className);
+        $definition = new ObjectDefinition($entryName, $this->className);
 
         if ($this->lazy !== null) {
             $definition->setLazy($this->lazy);
@@ -248,12 +248,12 @@ class ClassDefinitionHelper implements DefinitionHelper
      *
      * This is necessary so that merging definitions between sources is possible.
      *
-     * @param ClassDefinition $definition
+     * @param ObjectDefinition $definition
      * @param string          $method
      * @param array           $parameters
      * @return array
      */
-    private function fixParameters(ClassDefinition $definition, $method, $parameters)
+    private function fixParameters(ObjectDefinition $definition, $method, $parameters)
     {
         $fixedParameters = array();
 

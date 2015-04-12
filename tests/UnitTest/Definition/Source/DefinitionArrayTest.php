@@ -11,7 +11,7 @@ namespace DI\Test\UnitTest\Definition\Source;
 
 use DI\Definition\ArrayDefinition;
 use DI\Definition\FactoryDefinition;
-use DI\Definition\ClassDefinition;
+use DI\Definition\ObjectDefinition;
 use DI\Definition\Source\DefinitionArray;
 use DI\Definition\ValueDefinition;
 
@@ -92,14 +92,14 @@ class DefinitionArrayTest extends \PHPUnit_Framework_TestCase
         $this->assertInternalType('array', $definition->getValues());
     }
 
-    public function testClassDefinition()
+    public function testObjectDefinition()
     {
         $source = new DefinitionArray(array(
             'foo' => \DI\object(),
         ));
-        /** @var $definition ClassDefinition */
+        /** @var $definition ObjectDefinition */
         $definition = $source->getDefinition('foo');
-        $this->assertInstanceOf('DI\Definition\ClassDefinition', $definition);
+        $this->assertInstanceOf('DI\Definition\ObjectDefinition', $definition);
         $this->assertEquals('foo', $definition->getName());
         $this->assertEquals('foo', $definition->getClassName());
     }
@@ -189,17 +189,17 @@ class DefinitionArrayTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('bar', $definition->getValue());
 
         $definition = $source->getDefinition('Namespaced\FooInterface');
-        $this->assertInstanceOf('DI\Definition\ClassDefinition', $definition);
+        $this->assertInstanceOf('DI\Definition\ObjectDefinition', $definition);
         $this->assertEquals('Namespaced\FooInterface', $definition->getName());
         $this->assertEquals('Namespaced\Foo', $definition->getClassName());
 
         $definition = $source->getDefinition('Namespaced2\FooInterface');
-        $this->assertInstanceOf('DI\Definition\ClassDefinition', $definition);
+        $this->assertInstanceOf('DI\Definition\ObjectDefinition', $definition);
         $this->assertEquals('Namespaced2\FooInterface', $definition->getName());
         $this->assertEquals('Namespaced2\Foo', $definition->getClassName());
 
         $definition = $source->getDefinition('Multiple\Foo\Bar\Matches');
-        $this->assertInstanceOf('DI\Definition\ClassDefinition', $definition);
+        $this->assertInstanceOf('DI\Definition\ObjectDefinition', $definition);
         $this->assertEquals('Multiple\Foo\Bar\Matches', $definition->getName());
         $this->assertEquals('Multiple\Foo\Bar\Implementation', $definition->getClassName());
     }

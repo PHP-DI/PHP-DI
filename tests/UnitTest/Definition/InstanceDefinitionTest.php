@@ -9,7 +9,7 @@
 
 namespace DI\Test\UnitTest\Definition;
 
-use DI\Definition\ClassDefinition;
+use DI\Definition\ObjectDefinition;
 use DI\Definition\InstanceDefinition;
 use DI\Scope;
 use EasyMock\EasyMock;
@@ -26,7 +26,7 @@ class InstanceDefinitionTest extends \PHPUnit_Framework_TestCase
     {
         $instance = new \stdClass();
 
-        $definition = new InstanceDefinition($instance, EasyMock::mock('DI\Definition\ClassDefinition'));
+        $definition = new InstanceDefinition($instance, EasyMock::mock('DI\Definition\ObjectDefinition'));
 
         $this->assertSame($instance, $definition->getInstance());
     }
@@ -34,13 +34,13 @@ class InstanceDefinitionTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function should_contain_a_class_definition()
+    public function should_contain_an_object_definition()
     {
-        $classDefinition = EasyMock::mock('DI\Definition\ClassDefinition');
+        $objectDefinition = EasyMock::mock('DI\Definition\ObjectDefinition');
 
-        $definition = new InstanceDefinition(new \stdClass(), $classDefinition);
+        $definition = new InstanceDefinition(new \stdClass(), $objectDefinition);
 
-        $this->assertSame($classDefinition, $definition->getClassDefinition());
+        $this->assertSame($objectDefinition, $definition->getObjectDefinition());
     }
 
     /**
@@ -49,7 +49,7 @@ class InstanceDefinitionTest extends \PHPUnit_Framework_TestCase
     public function should_have_the_prototype_scope()
     {
         $instance = new \stdClass();
-        $definition = new InstanceDefinition($instance, EasyMock::mock('DI\Definition\ClassDefinition'));
+        $definition = new InstanceDefinition($instance, EasyMock::mock('DI\Definition\ObjectDefinition'));
 
         $this->assertEquals(Scope::PROTOTYPE(), $definition->getScope());
     }

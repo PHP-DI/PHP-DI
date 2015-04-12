@@ -9,15 +9,15 @@
 
 namespace DI\Test\UnitTest\Definition\Dumper;
 
-use DI\Definition\ClassDefinition;
-use DI\Definition\Dumper\ClassDefinitionDumper;
+use DI\Definition\ObjectDefinition;
+use DI\Definition\Dumper\ObjectDefinitionDumper;
 use DI\Definition\ValueDefinition;
 use DI\Scope;
 
 /**
- * @covers \DI\Definition\Dumper\ClassDefinitionDumper
+ * @covers \DI\Definition\Dumper\ObjectDefinitionDumper
  */
-class ClassDefinitionDumperTest extends \PHPUnit_Framework_TestCase
+class ObjectDefinitionDumperTest extends \PHPUnit_Framework_TestCase
 {
     public function testAll()
     {
@@ -27,7 +27,7 @@ class ClassDefinitionDumperTest extends \PHPUnit_Framework_TestCase
             ->method('setFoo', \DI\get('SomeDependency'))
             ->property('prop', 'Some value')
             ->getDefinition('foo');
-        $dumper = new ClassDefinitionDumper();
+        $dumper = new ObjectDefinitionDumper();
 
         $str = 'Object (
     class = DI\Test\UnitTest\Definition\Dumper\FixtureClass
@@ -50,7 +50,7 @@ class ClassDefinitionDumperTest extends \PHPUnit_Framework_TestCase
     {
         $definition = \DI\object('DI\Test\UnitTest\Definition\Dumper\FixtureClass')
             ->getDefinition('foo');
-        $dumper = new ClassDefinitionDumper();
+        $dumper = new ObjectDefinitionDumper();
 
         $str = 'Object (
     class = DI\Test\UnitTest\Definition\Dumper\FixtureClass
@@ -66,7 +66,7 @@ class ClassDefinitionDumperTest extends \PHPUnit_Framework_TestCase
         $definition = \DI\object('foobar')
             ->constructor('foo', 'bar')
             ->getDefinition('foo');
-        $resolver = new ClassDefinitionDumper();
+        $resolver = new ObjectDefinitionDumper();
 
         $str = 'Object (
     class = #UNKNOWN# foobar
@@ -81,7 +81,7 @@ class ClassDefinitionDumperTest extends \PHPUnit_Framework_TestCase
     {
         $definition = \DI\object('ArrayAccess')
             ->getDefinition('foo');
-        $resolver = new ClassDefinitionDumper();
+        $resolver = new ObjectDefinitionDumper();
 
         $str = 'Object (
     class = #NOT INSTANTIABLE# ArrayAccess
@@ -97,7 +97,7 @@ class ClassDefinitionDumperTest extends \PHPUnit_Framework_TestCase
         $definition = \DI\object('stdClass')
             ->scope(Scope::PROTOTYPE())
             ->getDefinition('foo');
-        $resolver = new ClassDefinitionDumper();
+        $resolver = new ObjectDefinitionDumper();
 
         $str = 'Object (
     class = stdClass
@@ -113,7 +113,7 @@ class ClassDefinitionDumperTest extends \PHPUnit_Framework_TestCase
         $definition = \DI\object('stdClass')
             ->lazy()
             ->getDefinition('foo');
-        $resolver = new ClassDefinitionDumper();
+        $resolver = new ObjectDefinitionDumper();
 
         $str = 'Object (
     class = stdClass
@@ -129,7 +129,7 @@ class ClassDefinitionDumperTest extends \PHPUnit_Framework_TestCase
         $definition = \DI\object('DI\Test\UnitTest\Definition\Dumper\FixtureClass')
             ->constructor(\DI\get('Mailer'), 'email@example.com')
             ->getDefinition('foo');
-        $resolver = new ClassDefinitionDumper();
+        $resolver = new ObjectDefinitionDumper();
 
         $str = 'Object (
     class = DI\Test\UnitTest\Definition\Dumper\FixtureClass
@@ -149,7 +149,7 @@ class ClassDefinitionDumperTest extends \PHPUnit_Framework_TestCase
         $definition = \DI\object('DI\Test\UnitTest\Definition\Dumper\FixtureClass')
             ->constructor(\DI\get('Mailer'))
             ->getDefinition('foo');
-        $resolver = new ClassDefinitionDumper();
+        $resolver = new ObjectDefinitionDumper();
 
         $str = 'Object (
     class = DI\Test\UnitTest\Definition\Dumper\FixtureClass
@@ -169,7 +169,7 @@ class ClassDefinitionDumperTest extends \PHPUnit_Framework_TestCase
         $definition = \DI\object('DI\Test\UnitTest\Definition\Dumper\FixtureClass')
             ->property('prop', 'Some value')
             ->getDefinition('foo');
-        $resolver = new ClassDefinitionDumper();
+        $resolver = new ObjectDefinitionDumper();
 
         $str = 'Object (
     class = DI\Test\UnitTest\Definition\Dumper\FixtureClass
@@ -186,7 +186,7 @@ class ClassDefinitionDumperTest extends \PHPUnit_Framework_TestCase
         $definition = \DI\object('DI\Test\UnitTest\Definition\Dumper\FixtureClass')
             ->property('prop', \DI\get('foo'))
             ->getDefinition('foo');
-        $resolver = new ClassDefinitionDumper();
+        $resolver = new ObjectDefinitionDumper();
 
         $str = 'Object (
     class = DI\Test\UnitTest\Definition\Dumper\FixtureClass
@@ -203,7 +203,7 @@ class ClassDefinitionDumperTest extends \PHPUnit_Framework_TestCase
         $definition = \DI\object('DI\Test\UnitTest\Definition\Dumper\FixtureClass')
             ->method('setFoo', \DI\get('Mailer'))
             ->getDefinition('foo');
-        $resolver = new ClassDefinitionDumper();
+        $resolver = new ObjectDefinitionDumper();
 
         $str = 'Object (
     class = DI\Test\UnitTest\Definition\Dumper\FixtureClass
@@ -222,7 +222,7 @@ class ClassDefinitionDumperTest extends \PHPUnit_Framework_TestCase
         $definition = \DI\object('DI\Test\UnitTest\Definition\Dumper\FixtureClass')
             ->method('setFoo', 'foo')
             ->getDefinition('foo');
-        $resolver = new ClassDefinitionDumper();
+        $resolver = new ObjectDefinitionDumper();
 
         $str = 'Object (
     class = DI\Test\UnitTest\Definition\Dumper\FixtureClass
@@ -241,7 +241,7 @@ class ClassDefinitionDumperTest extends \PHPUnit_Framework_TestCase
         $definition = \DI\object('DI\Test\UnitTest\Definition\Dumper\FixtureClass')
             ->method('defaultValue')
             ->getDefinition('foo');
-        $resolver = new ClassDefinitionDumper();
+        $resolver = new ObjectDefinitionDumper();
 
         $str = 'Object (
     class = DI\Test\UnitTest\Definition\Dumper\FixtureClass
@@ -257,12 +257,12 @@ class ClassDefinitionDumperTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage This definition dumper is only compatible with ClassDefinition objects, DI\Definition\ValueDefinition given
+     * @expectedExceptionMessage This definition dumper is only compatible with ObjectDefinition objects, DI\Definition\ValueDefinition given
      */
     public function testInvalidDefinitionType()
     {
         $definition = new ValueDefinition('foo', 'bar');
-        $resolver = new ClassDefinitionDumper();
+        $resolver = new ObjectDefinitionDumper();
 
         $resolver->dump($definition);
     }

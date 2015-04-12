@@ -1,11 +1,11 @@
 <?php
 
-namespace DI\Test\UnitTest\Definition\ClassDefinition;
+namespace DI\Test\UnitTest\Definition\ObjectDefinition;
 
-use DI\Definition\ClassDefinition\MethodInjection;
+use DI\Definition\ObjectDefinition\MethodInjection;
 
 /**
- * @covers \DI\Definition\ClassDefinition\MethodInjection
+ * @covers \DI\Definition\ObjectDefinition\MethodInjection
  */
 class MethodInjectionTest extends \PHPUnit_Framework_TestCase
 {

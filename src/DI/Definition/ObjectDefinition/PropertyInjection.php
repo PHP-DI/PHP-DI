@@ -7,7 +7,7 @@
  * @license   http://www.opensource.org/licenses/mit-license.php MIT (see the LICENSE file)
  */
 
-namespace DI\Definition\ClassDefinition;
+namespace DI\Definition\ObjectDefinition;
 
 /**
  * Describe an injection in a class property.

@@ -9,7 +9,7 @@
 
 namespace DI\Definition\Resolver;
 
-use DI\Definition\ClassDefinition;
+use DI\Definition\ObjectDefinition;
 use DI\Definition\Definition;
 use DI\Definition\InstanceDefinition;
 use DI\DependencyException;
@@ -21,7 +21,7 @@ use Interop\Container\Exception\NotFoundException;
  * @since 5.0
  * @author Matthieu Napoli <matthieu@mnapoli.fr>
  */
-class InstanceDefinitionResolver extends ClassDefinitionResolver
+class InstanceDefinitionResolver extends ObjectDefinitionResolver
 {
     /**
      * Injects dependencies on an existing instance.
@@ -35,7 +35,7 @@ class InstanceDefinitionResolver extends ClassDefinitionResolver
         $this->assertIsInstanceDefinition($definition);
 
         try {
-            $this->injectMethodsAndProperties($definition->getInstance(), $definition->getClassDefinition());
+            $this->injectMethodsAndProperties($definition->getInstance(), $definition->getObjectDefinition());
         } catch (NotFoundException $e) {
             $message = sprintf(
                 "Error while injecting dependencies into %s: %s",

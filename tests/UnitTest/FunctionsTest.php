@@ -11,9 +11,9 @@ namespace DI\Test\UnitTest;
 
 use DI\Definition\ArrayDefinition;
 use DI\Definition\ArrayDefinitionExtension;
-use DI\Definition\ClassDefinition;
+use DI\Definition\ObjectDefinition;
 use DI\Definition\Helper\ArrayDefinitionExtensionHelper;
-use DI\Definition\Helper\ClassDefinitionHelper;
+use DI\Definition\Helper\ObjectDefinitionHelper;
 use DI\Definition\Helper\EnvironmentVariableDefinitionHelper;
 
 /**
@@ -39,16 +39,16 @@ class FunctionsTest extends \PHPUnit_Framework_TestCase
     {
         $helper = \DI\object();
 
-        $this->assertTrue($helper instanceof ClassDefinitionHelper);
+        $this->assertTrue($helper instanceof ObjectDefinitionHelper);
         $definition = $helper->getDefinition('entry');
-        $this->assertTrue($definition instanceof ClassDefinition);
+        $this->assertTrue($definition instanceof ObjectDefinition);
         $this->assertEquals('entry', $definition->getClassName());
 
         $helper = \DI\object('foo');
 
-        $this->assertTrue($helper instanceof ClassDefinitionHelper);
+        $this->assertTrue($helper instanceof ObjectDefinitionHelper);
         $definition = $helper->getDefinition('entry');
-        $this->assertTrue($definition instanceof ClassDefinition);
+        $this->assertTrue($definition instanceof ObjectDefinition);
         $this->assertEquals('foo', $definition->getClassName());
     }
 

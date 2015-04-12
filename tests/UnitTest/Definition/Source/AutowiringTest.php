@@ -28,10 +28,10 @@ class AutowiringTest extends \PHPUnit_Framework_TestCase
     {
         $source = new Autowiring();
         $definition = $source->getDefinition('DI\Test\UnitTest\Definition\Source\Fixtures\AutowiringFixture');
-        $this->assertInstanceOf('DI\Definition\ClassDefinition', $definition);
+        $this->assertInstanceOf('DI\Definition\ObjectDefinition', $definition);
 
         $constructorInjection = $definition->getConstructorInjection();
-        $this->assertInstanceOf('DI\Definition\ClassDefinition\MethodInjection', $constructorInjection);
+        $this->assertInstanceOf('DI\Definition\ObjectDefinition\MethodInjection', $constructorInjection);
 
         $parameters = $constructorInjection->getParameters();
         $this->assertCount(1, $parameters);
@@ -44,10 +44,10 @@ class AutowiringTest extends \PHPUnit_Framework_TestCase
     {
         $source = new Autowiring();
         $definition = $source->getDefinition('DI\Test\UnitTest\Definition\Source\Fixtures\AutowiringFixtureChild');
-        $this->assertInstanceOf('DI\Definition\ClassDefinition', $definition);
+        $this->assertInstanceOf('DI\Definition\ObjectDefinition', $definition);
 
         $constructorInjection = $definition->getConstructorInjection();
-        $this->assertInstanceOf('DI\Definition\ClassDefinition\MethodInjection', $constructorInjection);
+        $this->assertInstanceOf('DI\Definition\ObjectDefinition\MethodInjection', $constructorInjection);
 
         $parameters = $constructorInjection->getParameters();
         $this->assertCount(1, $parameters);

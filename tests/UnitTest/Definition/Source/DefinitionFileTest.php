@@ -9,7 +9,7 @@
 
 namespace DI\Test\UnitTest\Definition\Source;
 
-use DI\Definition\ClassDefinition;
+use DI\Definition\ObjectDefinition;
 use DI\Definition\Source\DefinitionFile;
 use DI\Definition\ValueDefinition;
 
@@ -31,9 +31,9 @@ class DefinitionFileTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('bar', $definition->getValue());
         $this->assertInternalType('string', $definition->getValue());
 
-        /** @var ClassDefinition $definition */
+        /** @var ObjectDefinition $definition */
         $definition = $source->getDefinition('bim');
-        $this->assertInstanceOf('DI\Definition\ClassDefinition', $definition);
+        $this->assertInstanceOf('DI\Definition\ObjectDefinition', $definition);
         $this->assertEquals('bim', $definition->getName());
         $this->assertEquals('bim', $definition->getClassName());
     }

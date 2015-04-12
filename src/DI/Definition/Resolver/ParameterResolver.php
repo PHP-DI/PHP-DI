@@ -10,7 +10,7 @@
 namespace DI\Definition\Resolver;
 
 use DI\Definition\AbstractFunctionCallDefinition;
-use DI\Definition\ClassDefinition;
+use DI\Definition\ObjectDefinition;
 use DI\Definition\Exception\DefinitionException;
 use DI\Definition\Helper\DefinitionHelper;
 
