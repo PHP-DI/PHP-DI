@@ -79,7 +79,7 @@ menu:
                     text: How PHP-DI works
                     url: doc/how-it-works.html
         versions:
-            section: Older versions
+            section: Old documentation
             items:
                 v3:
                     text: PHP-DI 3.x
