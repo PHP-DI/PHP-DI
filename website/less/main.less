@@ -37,10 +37,12 @@ h3 {
 code {
     font-size: 80%;
     color: #A83838;
-    background-color: #F7F7F7;
+    background-color: @grey-background-light;
 }
 pre {
     border-radius: 0;
+    background-color: @grey-background-light;
+    border-color: @background-colored;
 }
 pre code {
     background: transparent;
@@ -55,6 +57,9 @@ pre code {
 }
 
 .navbar {
+    .navbar-default {
+        background-color: @grey-background-light;
+    }
     .navbar-nav {
         a {
             text-transform: uppercase;
