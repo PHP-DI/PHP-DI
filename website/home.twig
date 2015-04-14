@@ -80,86 +80,16 @@
 
 {% endblock %}
 
-{% block footer %}
-    <footer>
-        <div class="container">
-            <div class='row'>
-                <div class='col-md-6'>
-                    <h5 class='footer-header'>Developed with care</h5>
-                    <div class="row-fluid">
-                        <ul class="list-unstyled col-md-6">
-                            <li>
-                                PSR-0, PSR-1 and PSR-2 compliant
-                            </li>
-                            <li>
-                                Compliant with <a href="https://github.com/container-interop/container-interop">Container Interop</a>
-                            </li>
-                            <li>
-                                Follows <a href="http://semver.org/">Semantic Versioning</a>
-                            </li>
-                        </ul>
-                        <ul class="list-unstyled col-md-6">
-                            <li>
-                                <a href='https://travis-ci.org/mnapoli/PHP-DI'>
-                                    <img src="https://img.shields.io/travis/mnapoli/PHP-DI.svg?style=flat-square"></a>
-                            </li>
-                            <li>
-                                <a href='https://scrutinizer-ci.com/g/mnapoli/PHP-DI/'>
-                                    <img src="https://img.shields.io/scrutinizer/g/mnapoli/PHP-DI.svg?style=flat-square"></a>
-                            </li>
-                            <li>
-                                <a href='https://coveralls.io/r/mnapoli/PHP-DI?branch=master'>
-                                    <img src="https://img.shields.io/coveralls/mnapoli/PHP-DI/master.svg?style=flat-square" alt='Coverage Status'></a>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-                <div class='col-md-6'>
-                    <h5>Contributors</h5>
-                    <ul class='list-unstyled'>
-                        <li class='col-md-1'>
-                            <a class='thumbnail'>
-                                <img src="images/test-user.png"/>
-                            </a>
-                        </li>
-                        <li class='col-md-1'>
-                            <a class='thumbnail'>
-                                <img src="images/test-user.png"/>
-                            </a>
-                        </li>
-                        <li class='col-md-1'>
-                            <a class='thumbnail'>
-                                <img src="images/test-user.png"/>
-                            </a>
-                        </li>
-                        <li class='col-md-1'>
-                            <a class='thumbnail'>
-                                <img src="images/test-user.png"/>
-                            </a>
-                        </li>
-                        <li class='col-md-1'>
-                            <a class='thumbnail'>
-                                <img src="images/test-user.png"/>
-                            </a>
-                        </li>
-                        <li class='col-md-1'>
-                            <a class='thumbnail'>
-                                <img src="images/test-user.png"/>
-                            </a>
-                        </li>
-                    </ul>
-                    <p class="text-right">
-                        <a href="https://github.com/mnapoli/PHP-DI/graphs/contributors">All contributors »</a>
-                    </p>
-                </div>
-            </div>
-            <div class='copyright'>
-                Copyright &copy; 2014 <a href="http://mnapoli.fr">Matthieu Napoli</a>
-                Website generated with
-                <a href="http://mnapoli.fr/Couscous/" target="_blank">Couscous</a>.
-            </div>
-        </div>
-    </footer>
+{% block footerTop %}
+    <p>
+        Developed with care -
+        <a href='https://travis-ci.org/mnapoli/PHP-DI'>
+            <img src="https://img.shields.io/travis/mnapoli/PHP-DI.svg?style=flat-square"></a>
+        <a href='https://scrutinizer-ci.com/g/mnapoli/PHP-DI/'>
+            <img src="https://img.shields.io/scrutinizer/g/mnapoli/PHP-DI.svg?style=flat-square"></a>
+        <a href='https://coveralls.io/r/mnapoli/PHP-DI?branch=master'>
+            <img src="https://img.shields.io/coveralls/mnapoli/PHP-DI/master.svg?style=flat-square" alt='Coverage Status'></a>
+    </p>
 {% endblock %}
 
 {% block javascripts %}
