@@ -18,6 +18,7 @@ use DI\DependencyException;
 use DI\Proxy\ProxyFactory;
 use Exception;
 use Interop\Container\Exception\NotFoundException;
+use ProxyManager\Proxy\LazyLoadingInterface;
 use ReflectionClass;
 use ReflectionProperty;
 
@@ -105,7 +106,7 @@ class ObjectCreator implements DefinitionResolver
      * @param ObjectDefinition $definition
      * @param array           $parameters
      *
-     * @return \ProxyManager\Proxy\LazyLoadingInterface Proxy instance
+     * @return LazyLoadingInterface Proxy instance
      */
     private function createProxy(ObjectDefinition $definition, array $parameters)
     {
@@ -115,7 +116,7 @@ class ObjectCreator implements DefinitionResolver
         /** @noinspection PhpUnusedParameterInspection */
         $proxy = $this->proxyFactory->createProxy(
             $definition->getClassName(),
-            function (& $wrappedObject, $proxy, $method, $parameters, & $initializer) use ($resolver, $definition, $parameters) {
+            function (& $wrappedObject, $proxy, $method, $params, & $initializer) use ($resolver, $definition, $parameters) {
                 $wrappedObject = $resolver->createInstance($definition, $parameters);
                 $initializer = null; // turning off further lazy initialization
                 return true;
