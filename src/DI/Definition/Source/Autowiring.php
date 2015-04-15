@@ -47,7 +47,6 @@ class Autowiring implements DefinitionSource, CallableDefinitionSource
 
     /**
      * {@inheritdoc}
-     * TODO use a `callable` type-hint once support is for PHP 5.4 and up
      */
     public function getCallableDefinition($callable)
     {

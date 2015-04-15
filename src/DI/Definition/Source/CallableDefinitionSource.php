@@ -25,7 +25,7 @@ interface CallableDefinitionSource
      * @param callable $callable
      *
      * @throws DefinitionException An invalid definition was found.
-     * @return Definition|null
+     * @return Definition
      */
     public function getCallableDefinition($callable);
 }

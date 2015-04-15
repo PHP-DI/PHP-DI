@@ -63,7 +63,7 @@ class CachedDefinitionSource implements DefinitionSource
     }
 
     /**
-     * @return Cache|null
+     * @return Cache
      */
     public function getCache()
     {

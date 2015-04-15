@@ -9,7 +9,6 @@
 
 namespace DI\Definition\Resolver;
 
-use DI\Definition\ObjectDefinition;
 use DI\Definition\Definition;
 use DI\Definition\InstanceDefinition;
 use DI\DependencyException;
