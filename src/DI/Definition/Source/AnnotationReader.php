@@ -110,7 +110,8 @@ class AnnotationReader implements DefinitionSource
     }
 
     /**
-     * {@inheritdoc}
+     * @param ReflectionProperty $property
+     * @return PropertyInjection|null
      */
     private function getPropertyInjection(ReflectionProperty $property)
     {
@@ -122,7 +123,7 @@ class AnnotationReader implements DefinitionSource
         }
 
         // @Inject("name") or look for @var content
-        $entryName = $annotation->getName() ?: $this->getPhpDocReader()->getPropertyType($property);
+        $entryName = $annotation->getName() ?: $this->getPhpDocReader()->getPropertyClass($property);
 
         if ($entryName === null) {
             throw new AnnotationException(sprintf(
