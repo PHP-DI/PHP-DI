@@ -23,57 +23,23 @@
         </section>
 
         <section class="odd">
-            <div class="container">
-
-                <h2>Framework integrations</h2>
-
-                <div class="row">
-                    <div class="col-md-4">
-                        <img class="framework-logo" src="{{ baseUrl }}/img/zf-logo.png" alt="Zend Framework 1 & 2">
-                        <h5>Zend Framework 1 & 2</h5>
-
-                        <p>
-                            Integrates in Zend Framework 1 & 2.
-                        </p>
-                    </div>
-                    <div class="col-md-4">
-                        <i class="fa fa-globe"></i>
-                        <h5>Open</h5>
-
-                        <p>
-                            Integrates easily to your project or any framework.
-                        </p>
-                        <p>
-                            Designed to work along with other containers.
-                        </p>
-                    </div>
-                    <div class="col-md-4">
-                        <img class="framework-logo" src="{{ baseUrl }}/img/symfony-logo.png" alt="Symfony 2">
-                        <h5>Symfony 2</h5>
-
-                        <p>
-                            Integrates in Symfony 2 and works along with Symfony's default container.
-                        </p>
-                    </div>
-                </div>
-
-            </div>
-        </section>
-
-        <section>
             {% include 'home_autowiring.twig' %}
         </section>
 
-        <section class="odd">
+        <section class="">
             {% include 'home_configuration.twig' %}
         </section>
 
-        <section>
+        <section class="odd">
             {% include 'home_modules.twig' %}
         </section>
 
-        <section class="odd">
+        <section class="">
             {% include 'home_container.twig' %}
+        </section>
+
+        <section class="odd">
+            {% include 'home_frameworks.twig' %}
         </section>
 
     </div>
