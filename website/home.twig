@@ -57,25 +57,3 @@
             <img src="https://img.shields.io/coveralls/mnapoli/PHP-DI/master.svg?style=flat-square" alt='Coverage Status'></a>
     </p>
 {% endblock %}
-
-{% block javascripts %}
-    {{ parent() }}
-
-    <script>
-        $(function() {
-            var url = "https://api.github.com/repos/mnapoli/php-di/contributors?callback=?";
-
-            $.getJSON(url, function (result) {
-                var elem = $('.contributors');
-                elem.empty();
-                for (var i = 0; i < Math.min(result.data.length, 6); ++i) {
-                    var img = result.data[i].avatar_url;
-                    var name = result.data[i].login;
-                    var url = result.data[i].html_url;
-                    elem.append($("<li class='col-md-1'><a class='thumbnail' title='" + name + "' href='" + url + "'><img src='" + img + "'/></a></li>"));
-                }
-            });
-        });
-    </script>
-
-{% endblock %}
