@@ -9,8 +9,8 @@ tab: index
 
 ## Introduction
 
-* [Understanding dependency injection](understanding-di.md)
 * [Getting started](getting-started.md)
+* [Understanding dependency injection](understanding-di.md)
 * [Best practices guide](best-practices.md)
 
 ## Usage

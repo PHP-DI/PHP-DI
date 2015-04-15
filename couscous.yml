@@ -9,12 +9,12 @@ menu:
         introduction:
             section: Introduction
             items:
-                understanding-di:
-                    text: Understanding dependency injection
-                    url: doc/understanding-di.html
                 getting-started:
                     text: Getting started
                     url: doc/getting-started.html
+                understanding-di:
+                    text: Understanding dependency injection
+                    url: doc/understanding-di.html
                 best-practices:
                     text: "\"Best practices\" guide"
                     url: doc/best-practices.html
