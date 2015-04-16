@@ -48,9 +48,9 @@ menu:
                 zf1:
                     text: Zend Framework 1
                     url: doc/frameworks/zf1.html
-                zf2:
-                    text: Zend Framework 2 (beta version)
-                    url: doc/frameworks/zf2.html
+                silly:
+                    text: Silly
+                    url: doc/frameworks/silly.html
         advanced:
             section: Advanced topics
             items:
