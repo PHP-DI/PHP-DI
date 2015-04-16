@@ -9,6 +9,7 @@
 
 namespace DI\Definition\Helper;
 
+use DI\Definition\DecoratorDefinition;
 use DI\Definition\FactoryDefinition;
 use DI\Scope;
 
@@ -30,11 +31,18 @@ class FactoryDefinitionHelper implements DefinitionHelper
     private $scope;
 
     /**
-     * @param callable $factory
+     * @var bool
      */
-    public function __construct($factory)
+    private $decorate;
+
+    /**
+     * @param callable $factory
+     * @param bool     $decorate Is the factory decorating a previous definition?
+     */
+    public function __construct($factory, $decorate = false)
     {
         $this->factory = $factory;
+        $this->decorate = $decorate;
     }
 
     /**
@@ -56,6 +64,10 @@ class FactoryDefinitionHelper implements DefinitionHelper
      */
     public function getDefinition($entryName)
     {
+        if ($this->decorate) {
+            return new DecoratorDefinition($entryName, $this->factory, $this->scope);
+        }
+
         return new FactoryDefinition($entryName, $this->factory, $this->scope);
     }
 }
