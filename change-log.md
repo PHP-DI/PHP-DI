@@ -35,12 +35,12 @@ Improvements:
 BC breaks:
 
 - [#198](https://github.com/mnapoli/PHP-DI/issues/198) `ocramius/proxy-manager` is not installed by default anymore, you need to require it in `composer.json` if you want to use **lazy injection**
-- Closure definitions are now converted into factory definitions automatically. If you ever defined a closure as a value (e.g. to have the closure injected and now executed), you need to wrap the closure with the new `DI\value()` helper.
+- Closures are now converted into factory definitions automatically. If you ever defined a closure as a value (e.g. to have the closure injected in a class), you need to wrap the closure with the new `DI\value()` helper.
 - [#223](https://github.com/mnapoli/PHP-DI/issues/223) `DI\ContainerInterface` was deprecated since v4.1 and has been removed
 
 Internal changes in case you were replacing/extending some parts:
 
-- `DI\Definition\Source\ChainableDefinitionSource` is now an abstract class (was previously an interface).
+- the definition sources architecture has been refactored, if you defined custom definition sources you will need to update your code (it should be much easier now)
 
 ## 4.4
 

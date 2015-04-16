@@ -69,6 +69,9 @@ menu:
                 4:
                     text: From PHP-DI 3.x to 4.0
                     url: doc/migration/4.0.html
+                5:
+                    text: From PHP-DI 4.x to 5.0
+                    url: doc/migration/5.0.html
         internals:
             section: Internals
             items:
