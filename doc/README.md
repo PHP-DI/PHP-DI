@@ -5,13 +5,15 @@ subtitle: Learn how to use PHP-DI.
 tab: index
 ---
 
+# Documentation
+
 ## Introduction
 
-* [Understanding dependency injection](understanding-di.md)
 * [Getting started](getting-started.md)
+* [Understanding dependency injection](understanding-di.md)
 * [Best practices guide](best-practices.md)
 
-## PHP-DI's documentation
+## Usage
 
 * [Configure the container](container-configuration.md)
 * [Use the container](container.md)
@@ -26,7 +28,7 @@ tab: index
 - [Zend Framework 1](frameworks/zf1.md)
 - [Zend Framework 2](https://github.com/mnapoli/PHP-DI-ZF2) (beta version)
 
-### Extra topics
+### Advanced topics
 
 * [Performances](performances.md)
 * [Inject on an existing instance](inject-on-instance.md)
@@ -41,7 +43,9 @@ tab: index
 * [Contribute](../CONTRIBUTING.md)
 * [How PHP-DI works](how-it-works.md)
 
-PHP-DI is under the MIT license.
+## License
 
-This documentation is also embedded in [PHP-DI's git repository](https://github.com/mnapoli/PHP-DI/tree/4.0/doc)
+PHP-DI is released under the MIT license.
+
+This documentation is also embedded in [PHP-DI's git repository](https://github.com/mnapoli/PHP-DI/tree/master/doc)
 so you can read it offline (in the `doc/` folder).

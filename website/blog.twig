@@ -2,206 +2,200 @@
 
 {% block content %}
 
-    <section class='section-wrapper post-w'>
-        <div class='container'>
-            <div class='row'>
+    <section class="container">
+        <div class="row">
+            <div class="col-md-9">
 
-                <div class='span8'>
+                {% block blogcontent %}
 
-                    {% block blogcontent %}
+                    <h1>Latest news</h1>
 
-                        <div class='white-card recent-post clearfix extra-padding'>
-                            <h5 class='recent-post-header'>
-                                Syntactic sugar in PHP-DI 5
-                            </h5>
+                    <div class="article-extract">
+                        <h3>
+                            Syntactic sugar in PHP-DI 5
+                        </h3>
 
-                            <p class='post-content'>
-                                It's been quite some time since there was a bit of news here. The reason is that a lot of work has been done for PHP-DI 5! It is not yet ready, but it is coming along great!
-                            </p>
-                            <p class='post-content'>
-                                I am not going to list everything that will be included in this next major version today. For now I'll simply give you a glimpse of the syntactic sugar that it will bring.
-                            </p>
-                            <a href="{{ baseUrl }}/news/14-php-di-5-syntaxic-sugar.html" class="btn btn-extra pull-right">
-                                Read More &gt;</a>
-                        </div>
-
-                        <div class='white-card recent-post clearfix extra-padding'>
-                            <h5 class='recent-post-header'>
-                                PHP-DI 4.4 released
-                            </h5>
-
-                            <p class='post-content'>
-                                I am happy to announce that PHP-DI version 4.4 has been released.
-                                This version contains mainly improvements to the <code>Container::call()</code> feature, and contains no BC-break.
-                            </p>
-                            <a href="{{ baseUrl }}/news/13-php-di-4-4-released.html" class="btn btn-extra pull-right">
-                                Read More &gt;</a>
-                        </div>
-
-                        <div class='white-card recent-post clearfix extra-padding'>
-                            <h5 class='recent-post-header'>
-                                PHP 5.6 is out and PHP-DI just got better
-                            </h5>
-
-                            <p class='post-content'>
-                                PHP 5.6 has been released a month ago and PHP-DI just got better because of it!
-                            </p>
-                            <p class="post-content">
-                                As explained 9 months ago when I introduced the new definition format for PHP-DI 4,
-                                that format has been thought for the future.
-                            </p>
-                            <a href="{{ baseUrl }}/news/12-php-di-is-better-with-php-5-6.html" class="btn btn-extra pull-right">
-                                Read More &gt;</a>
-                        </div>
-
-                        <div class='white-card recent-post clearfix extra-padding'>
-                            <h5 class='recent-post-header'>
-                                PHP-DI 4.3 released
-                            </h5>
-
-                            <p class='post-content'>
-                                I am happy to announce that PHP-DI version 4.3 has been released.
-                                This version contains features that have all been
-                                implemented by contributors other than me, this is very encouraging :)
-                                This is also the quickest release, since 4.2 was released only 14 days ago.
-                            </p>
-                            <p class="post-content">
-                                It comes without any BC break, and with a new main feature: <code>DI\env()</code>
-                                to import <strong>environment variables</strong>.
-                            </p>
-                            <a href="{{ baseUrl }}/news/11-php-di-4-3-released.html" class="btn btn-extra pull-right">
-                                Read More &gt;</a>
-                        </div>
-
-                        <div class='white-card recent-post clearfix extra-padding'>
-                            <h5 class='recent-post-header'>
-                                PHP-DI 4.2 released
-                            </h5>
-
-                            <p class='post-content'>
-                                I am happy to announce that PHP-DI version 4.2 has been released.
-                            </p>
-                            <a href="{{ baseUrl }}/news/10-php-di-4-2-released.html" class="btn btn-extra pull-right">
-                                Read More &gt;</a>
-                        </div>
-
-                        <div class='white-card recent-post clearfix extra-padding'>
-                            <h5 class='recent-post-header'>
-                                PHP-DI 4.1 released
-                            </h5>
-
-                            <p class='post-content'>
-                                I am happy to announce that PHP-DI version 4.1 has been released.
-                                This version was focused on stability and documentation improvements,
-                                with full backward compatibility.
-                            </p>
-                            <a href="{{ baseUrl }}/news/09-php-di-4-1-released.html" class="btn btn-extra pull-right">
-                                Read More &gt;</a>
-                        </div>
-
-                        <div class='white-card recent-post clearfix extra-padding'>
-                            <h5 class='recent-post-header'>
-                                10.000 installs!
-                            </h5>
-
-                            <p class='post-content'>
-                                PHP-DI just reached 200 stars on GitHub and 10 000 installs through
-                                <a href="https://packagist.org/packages/mnapoli/php-di">Packagist</a>!
-                            </p>
-                            <a href="{{ baseUrl }}/news/08-10000-installs.html" class="btn btn-extra pull-right">
-                                Read More &gt;</a>
-                        </div>
-
-                        <div class='white-card recent-post clearfix extra-padding'>
-                            <h5 class='recent-post-header'>
-                                PHP-DI 4.0 released
-                            </h5>
-
-                            <p class='post-content'>
-                                I am extremely happy to announce that, after 4 months of work and more than 150 commits,
-                                PHP-DI version 4.0 has been released!
-                                This is a new major release, and it delivers. As indicated by "major release",
-                                it comes with BC breaks, but this is for the better.
-                            </p>
-                            <a href="{{ baseUrl }}/news/07-php-di-4-0-released.html" class="btn btn-extra pull-right">
-                                Read More &gt;</a>
-                        </div>
-
-                        <div class='white-card recent-post clearfix extra-padding'>
-                            <h5 class='recent-post-header'>
-                                What will change in PHP-DI 4: the new definition format
-                            </h5>
-
-                            <p class='post-content'>
-                                In PHP-DI 4, the definition format will change.
-                                Autowiring and Annotations are still there, but the YAML
-                                and PHP array definitions have disappeared. Let's see why.
-                            </p>
-                            <a href="{{ baseUrl }}/news/06-php-di-4-0-new-definitions.html" class="btn btn-extra pull-right">
-                                Read More &gt;</a>
-                        </div>
-
-                    {% endblock %}
-
-                </div>
-
-                <div class='span4'>
-                    <div class='blog-side-bar'>
-
-                        <div class='blog-categories widget-tp'>
-                            <h3>
-                                <i class='icon-th-list'></i>
-                                All posts
-                            </h3>
-                            <ul>
-                                <li>
-                                    <a href="{{ baseUrl }}/news/14-php-di-5-syntaxic-sugar.html">Syntactic sugar in PHP-DI 5</a>
-                                </li>
-                                <li>
-                                    <a href="{{ baseUrl }}/news/13-php-di-4-4-released.html">PHP-DI 4.4 released</a>
-                                </li>
-                                <li>
-                                    <a href="{{ baseUrl }}/news/12-php-di-is-better-with-php-5-6.html">PHP 5.6 is out and PHP-DI just got better</a>
-                                </li>
-                                <li>
-                                    <a href="{{ baseUrl }}/news/11-php-di-4-3-released.html">PHP-DI 4.3 released</a>
-                                </li>
-                                <li>
-                                    <a href="{{ baseUrl }}/news/10-php-di-4-2-released.html">PHP-DI 4.2 released</a>
-                                </li>
-                                <li>
-                                    <a href="{{ baseUrl }}/news/09-php-di-4-1-released.html">PHP-DI 4.1 released</a>
-                                </li>
-                                <li>
-                                    <a href="{{ baseUrl }}/news/08-10000-installs.html">10.000 installs!</a>
-                                </li>
-                                <li>
-                                    <a href="{{ baseUrl }}/news/07-php-di-4-0-released.html">PHP-DI 4.0 released</a>
-                                </li>
-                                <li>
-                                    <a href="{{ baseUrl }}/news/06-php-di-4-0-new-definitions.html">What will change in PHP-DI 4: the new definition format</a>
-                                </li>
-                                <li>
-                                    <a href="{{ baseUrl }}/news/05-php-di-3-5.html">PHP-DI 3.5 released</a>
-                                </li>
-                                <li>
-                                    <a href="{{ baseUrl }}/news/04-php-di-3-4.html">PHP-DI 3.4 released</a>
-                                </li>
-                                <li>
-                                    <a href="{{ baseUrl }}/news/03-php-di-3-3.html">PHP-DI 3.3 released</a>
-                                </li>
-                                <li>
-                                    <a href="{{ baseUrl }}/news/02-php-di-3-2.html">PHP-DI 3.2 released</a>
-                                </li>
-                                <li>
-                                    <a href="{{ baseUrl }}/news/01-php-di-3-1.html">PHP-DI 3.1 released</a>
-                                </li>
-                            </ul>
-                        </div>
-
+                        <p>
+                            It's been quite some time since there was a bit of news here. The reason is that a lot of work has been done for PHP-DI 5! It is not yet ready, but it is coming along great!
+                        </p>
+                        <p>
+                            I am not going to list everything that will be included in this next major version today. For now I'll simply give you a glimpse of the syntactic sugar that it will bring.
+                        </p>
+                        <a href="{{ baseUrl }}/news/14-php-di-5-syntaxic-sugar.html" class="btn btn-default">
+                            Read More &gt;</a>
                     </div>
-                </div>
+
+                    <div class="article-extract">
+                        <h3>
+                            PHP-DI 4.4 released
+                        </h3>
+
+                        <p>
+                            I am happy to announce that PHP-DI version 4.4 has been released.
+                            This version contains mainly improvements to the <code>Container::call()</code> feature, and contains no BC-break.
+                        </p>
+                        <a href="{{ baseUrl }}/news/13-php-di-4-4-released.html" class="btn btn-default">
+                            Read More &gt;</a>
+                    </div>
+
+                    <div class="article-extract">
+                        <h3>
+                            PHP 5.6 is out and PHP-DI just got better
+                        </h3>
+
+                        <p>
+                            PHP 5.6 has been released a month ago and PHP-DI just got better because of it!
+                        </p>
+                        <p>
+                            As explained 9 months ago when I introduced the new definition format for PHP-DI 4,
+                            that format has been thought for the future.
+                        </p>
+                        <a href="{{ baseUrl }}/news/12-php-di-is-better-with-php-5-6.html" class="btn btn-default">
+                            Read More &gt;</a>
+                    </div>
+
+                    <div class="article-extract">
+                        <h3>
+                            PHP-DI 4.3 released
+                        </h3>
+
+                        <p>
+                            I am happy to announce that PHP-DI version 4.3 has been released.
+                            This version contains features that have all been
+                            implemented by contributors other than me, this is very encouraging :)
+                            This is also the quickest release, since 4.2 was released only 14 days ago.
+                        </p>
+                        <p>
+                            It comes without any BC break, and with a new main feature: <code>DI\env()</code>
+                            to import <strong>environment variables</strong>.
+                        </p>
+                        <a href="{{ baseUrl }}/news/11-php-di-4-3-released.html" class="btn btn-default">
+                            Read More &gt;</a>
+                    </div>
+
+                    <div class="article-extract">
+                        <h3>
+                            PHP-DI 4.2 released
+                        </h3>
+
+                        <p>
+                            I am happy to announce that PHP-DI version 4.2 has been released.
+                        </p>
+                        <a href="{{ baseUrl }}/news/10-php-di-4-2-released.html" class="btn btn-default">
+                            Read More &gt;</a>
+                    </div>
+
+                    <div class="article-extract">
+                        <h3>
+                            PHP-DI 4.1 released
+                        </h3>
+
+                        <p>
+                            I am happy to announce that PHP-DI version 4.1 has been released.
+                            This version was focused on stability and documentation improvements,
+                            with full backward compatibility.
+                        </p>
+                        <a href="{{ baseUrl }}/news/09-php-di-4-1-released.html" class="btn btn-default">
+                            Read More &gt;</a>
+                    </div>
+
+                    <div class="article-extract">
+                        <h3>
+                            10.000 installs!
+                        </h3>
+
+                        <p>
+                            PHP-DI just reached 200 stars on GitHub and 10 000 installs through
+                            <a href="https://packagist.org/packages/mnapoli/php-di">Packagist</a>!
+                        </p>
+                        <a href="{{ baseUrl }}/news/08-10000-installs.html" class="btn btn-default">
+                            Read More &gt;</a>
+                    </div>
+
+                    <div class="article-extract">
+                        <h3>
+                            PHP-DI 4.0 released
+                        </h3>
+
+                        <p>
+                            I am extremely happy to announce that, after 4 months of work and more than 150 commits,
+                            PHP-DI version 4.0 has been released!
+                            This is a new major release, and it delivers. As indicated by "major release",
+                            it comes with BC breaks, but this is for the better.
+                        </p>
+                        <a href="{{ baseUrl }}/news/07-php-di-4-0-released.html" class="btn btn-default">
+                            Read More &gt;</a>
+                    </div>
+
+                    <div class="article-extract">
+                        <h3>
+                            What will change in PHP-DI 4: the new definition format
+                        </h3>
+
+                        <p>
+                            In PHP-DI 4, the definition format will change.
+                            Autowiring and Annotations are still there, but the YAML
+                            and PHP array definitions have disappeared. Let's see why.
+                        </p>
+                        <a href="{{ baseUrl }}/news/06-php-di-4-0-new-definitions.html" class="btn btn-default">
+                            Read More &gt;</a>
+                    </div>
+
+                {% endblock %}
+
             </div>
+
+            <div class="col-md-3">
+                <h2>
+                    All posts
+                </h2>
+
+                <ul class="all-posts list-unstyled">
+                    <li>
+                        <a href="{{ baseUrl }}/news/14-php-di-5-syntaxic-sugar.html">Syntactic sugar in PHP-DI 5</a>
+                    </li>
+                    <li>
+                        <a href="{{ baseUrl }}/news/13-php-di-4-4-released.html">PHP-DI 4.4 released</a>
+                    </li>
+                    <li>
+                        <a href="{{ baseUrl }}/news/12-php-di-is-better-with-php-5-6.html">PHP 5.6 is out and PHP-DI just got better</a>
+                    </li>
+                    <li>
+                        <a href="{{ baseUrl }}/news/11-php-di-4-3-released.html">PHP-DI 4.3 released</a>
+                    </li>
+                    <li>
+                        <a href="{{ baseUrl }}/news/10-php-di-4-2-released.html">PHP-DI 4.2 released</a>
+                    </li>
+                    <li>
+                        <a href="{{ baseUrl }}/news/09-php-di-4-1-released.html">PHP-DI 4.1 released</a>
+                    </li>
+                    <li>
+                        <a href="{{ baseUrl }}/news/08-10000-installs.html">10.000 installs!</a>
+                    </li>
+                    <li>
+                        <a href="{{ baseUrl }}/news/07-php-di-4-0-released.html">PHP-DI 4.0 released</a>
+                    </li>
+                    <li>
+                        <a href="{{ baseUrl }}/news/06-php-di-4-0-new-definitions.html">What will change in PHP-DI 4: the new definition format</a>
+                    </li>
+                    <li>
+                        <a href="{{ baseUrl }}/news/05-php-di-3-5.html">PHP-DI 3.5 released</a>
+                    </li>
+                    <li>
+                        <a href="{{ baseUrl }}/news/04-php-di-3-4.html">PHP-DI 3.4 released</a>
+                    </li>
+                    <li>
+                        <a href="{{ baseUrl }}/news/03-php-di-3-3.html">PHP-DI 3.3 released</a>
+                    </li>
+                    <li>
+                        <a href="{{ baseUrl }}/news/02-php-di-3-2.html">PHP-DI 3.2 released</a>
+                    </li>
+                    <li>
+                        <a href="{{ baseUrl }}/news/01-php-di-3-1.html">PHP-DI 3.1 released</a>
+                    </li>
+                </ul>
+            </div>
+
         </div>
     </section>
 

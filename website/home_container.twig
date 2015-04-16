@@ -1,0 +1,44 @@
+<div class="container">
+
+    <h2>Framework developer friendly</h2>
+
+    <p class="text-center">
+        PHP-DI provides the classic API of a container as well as advanced features useful to build or extend a framework.
+    </p>
+
+    <div class="row">
+
+        <div class="col-md-6">
+            <h4>Get & Has</h4>
+            <p>
+                PHP-DI is compliant with <a href="https://github.com/container-interop/container-interop">container-interop</a>:
+            </p>
+            <pre><code class="php">$container->get($name);
+$container->has($name);</code></pre>
+        </div>
+
+        <div class="col-md-6">
+            <h4>Make</h4>
+            <p>
+                Use the container as a factory:
+            </p>
+            <pre><code class="php">$parameters = [ ... ];
+$container->make(Foo::class, $parameters);</code></pre>
+            <p>
+                Missing constructor parameters will be resolved from the container.
+            </p>
+        </div>
+
+        <div class="col-md-12">
+            <h4>Invoke a callable</h4>
+            <p>
+                Dependency injection in callables, à la AngularJS:
+            </p>
+            <pre><code class="php">$container->call(function (Logger $logger, EntityManager $em) {
+    // ...
+});</code></pre>
+        </div>
+
+    </div>
+
+</div>

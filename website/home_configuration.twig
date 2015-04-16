@@ -1,0 +1,75 @@
+<div class='container'>
+
+    <h2>Expressive configuration</h2>
+
+    <p class="text-center">
+        PHP-DI's configuration is written in PHP, allowing to benefit from auto-completion, static analysis and refactoring support with any IDE.
+    </p>
+
+    <div class='row'>
+        <div class='col-md-6'>
+            <h4>Object creation</h4>
+<pre><code class="php">return [
+    Foo::class => object()
+        ->constructor(
+            get(Bar::class)
+        )
+];</code></pre>
+        </div>
+        <div class='col-md-6'>
+            <h4>Inline factories</h4>
+<pre><code class="php">return [
+    Foo::class => function ($container) {
+        $dependency = $container->get(Bar::class);
+        return Foo::create($dependency);
+    }
+];</code></pre>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-6">
+            <h4>Interface-to-implementation binding</h4>
+<pre><code class="php">return [
+    NotifierInterface::class => get(EmailNotifier::class)
+];</code></pre>
+        </div>
+        <div class="col-md-6">
+            <h4>Environment variables</h4>
+<pre><code class="php">return [
+    'db.host' => env('DB_HOST', 'default value')
+];</code></pre>
+        </div>
+    </div>
+
+    <hr>
+
+    <p>
+        The configuration format <a href="{{ baseUrl }}/news/06-php-di-4-0-new-definitions.html">has been imagined</a> as a successor of XML and YAML, taking advantages of all the latest features of PHP:
+    </p>
+
+    <div class="row">
+        <div class='col-md-4'>
+            <h4>PHP 5.4 short arrays</h4>
+<pre><code class="php">return [
+
+
+];</code></pre>
+        </div>
+        <div class='col-md-4'>
+            <h4>PHP 5.5 <code>::class</code> magic constant</h4>
+<pre><code class="php">return [
+    Foo::class => DI\object()
+      ->constructor(DI\get(Bar::class))
+];</code></pre>
+        </div>
+        <div class='col-md-4'>
+            <h4>PHP 5.6 <code>use function</code></h4>
+<pre><code class="php">return [
+    Foo::class => object()
+      ->constructor(get(Bar::class))
+];</code></pre>
+        </div>
+    </div>
+
+</div>

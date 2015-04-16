@@ -1,1 +1,89 @@
 baseUrl: http://php-di.org
+
+scripts:
+    before:
+        - lessc --clean-css website/less/main.less website/css/all.min.css
+
+menu:
+    items:
+        introduction:
+            section: Introduction
+            items:
+                getting-started:
+                    text: Getting started
+                    url: doc/getting-started.html
+                understanding-di:
+                    text: Understanding dependency injection
+                    url: doc/understanding-di.html
+                best-practices:
+                    text: "\"Best practices\" guide"
+                    url: doc/best-practices.html
+        usage:
+            section: Usage
+            items:
+                container-configuration:
+                    text: Configuring the container
+                    url: doc/container-configuration.html
+                container:
+                    text: Using the container
+                    url: doc/container.html
+                definition:
+                    text: Defining injections
+                    url: doc/definition.html
+                definition-overriding:
+                    text: Definition overriding
+                    url: doc/definition-overriding.html
+                lazy-injection:
+                    text: Lazy injection
+                    url: doc/lazy-injection.html
+                scopes:
+                    text: Scopes
+                    url: doc/scopes.html
+        frameworks:
+            section: Frameworks
+            items:
+                symfony2:
+                    text: Symfony 2
+                    url: doc/frameworks/symfony2.html
+                zf1:
+                    text: Zend Framework 1
+                    url: doc/frameworks/zf1.html
+                zf2:
+                    text: Zend Framework 2 (beta version)
+                    url: doc/frameworks/zf2.html
+        advanced:
+            section: Advanced topics
+            items:
+                performances:
+                    text: Performances
+                    url: doc/performances.html
+                inject-on-instance:
+                    text: Inject on an existing instance
+                    url: doc/inject-on-instance.html
+                environments:
+                    text: Injections depending on the environment
+                    url: doc/environments.html
+        migration:
+            section: Migration guides
+            items:
+                4:
+                    text: From PHP-DI 3.x to 4.0
+                    url: doc/migration/4.0.html
+        internals:
+            section: Internals
+            items:
+                contributing:
+                    text: Contributing
+                    url: contributing.html
+                how-it-works:
+                    text: How PHP-DI works
+                    url: doc/how-it-works.html
+        versions:
+            section: Old documentation
+            items:
+                v3:
+                    text: PHP-DI 3.x
+                    absoluteUrl: https://github.com/mnapoli/PHP-DI/tree/3.x/doc
+                v4:
+                    text: PHP-DI 4.x
+                    absoluteUrl: https://github.com/mnapoli/PHP-DI/tree/4.x/doc
