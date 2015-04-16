@@ -124,4 +124,22 @@ class DecoratorDefinitionTest extends \PHPUnit_Framework_TestCase
         $container = $builder->build();
         $container->get('foo');
     }
+
+    /**
+     * @expectedException \DI\DependencyException
+     * @expectedExceptionMessage Error while resolving foo[0]. Decorators cannot be nested in another definition
+     */
+    public function test_decorator_in_array()
+    {
+        $builder = new ContainerBuilder();
+        $builder->addDefinitions(array(
+            'foo' => array(
+                \DI\decorate(function ($previous) {
+                    return $previous;
+                }),
+            ),
+        ));
+        $container = $builder->build();
+        $container->get('foo');
+    }
 }

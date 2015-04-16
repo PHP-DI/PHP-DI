@@ -70,6 +70,10 @@ class DecoratorResolver implements DefinitionResolver
         $decoratedDefinition = $definition->getDecoratedDefinition();
 
         if (! $decoratedDefinition instanceof Definition) {
+            if (! $definition->getSubDefinitionName()) {
+                throw new DefinitionException('Decorators cannot be nested in another definition');
+            }
+
             throw new DefinitionException(sprintf(
                 'Entry "%s" decorates nothing: no previous definition with the same name was found',
                 $definition->getName()
