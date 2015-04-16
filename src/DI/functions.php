@@ -61,6 +61,27 @@ if (! function_exists('DI\factory')) {
     }
 }
 
+if (! function_exists('DI\decorate')) {
+    /**
+     * Decorate the previous definition using a callable.
+     *
+     * Example:
+     *
+     *     'foo' => decorate(function ($foo, $container) {
+     *         return new CachedFoo($foo, $container->get('cache'));
+     *     })
+     *
+     * @param callable $callable The callable takes the decorated object as first parameter and
+     *                           the container as second.
+     *
+     * @return FactoryDefinitionHelper
+     */
+    function decorate($callable)
+    {
+        return new FactoryDefinitionHelper($callable, true);
+    }
+}
+
 if (! function_exists('DI\get')) {
     /**
      * Helper for referencing another container entry in an object definition.

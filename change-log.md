@@ -21,6 +21,16 @@ Improvements:
     ```
 - [#235](https://github.com/mnapoli/PHP-DI/issues/235) `DI\link()` is now deprecated in favor of `DI\get()`. There is no BC break as `DI\link()` still works.
 - [#193](https://github.com/mnapoli/PHP-DI/issues/193) `DI\object()->method()` now supports calling the same method twice (or more).
+- [#248](https://github.com/mnapoli/PHP-DI/issues/248): New `DI\decorate()` function to decorate a previously defined entry:
+
+    ```php
+    // file A.php
+    ProductDaoInterface::class => DI\get(ProductDaoDatabase::class)
+    // file B.php
+    ProductDaoInterface::class => DI\decorate(function ($previous, ContainerInterface $c) {
+        return new ProductDaoCached($previous, $c->get('cache.backend'));
+    })
+    ```
 
 BC breaks:
 

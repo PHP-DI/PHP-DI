@@ -28,6 +28,7 @@ class DefinitionDumperDispatcher implements DefinitionDumper
 
     public function __construct($registerDefaultDumpers = true)
     {
+        // TODO lazy initialization
         if ($registerDefaultDumpers) {
             $this->registerDefaultDumpers();
         }
@@ -62,6 +63,7 @@ class DefinitionDumperDispatcher implements DefinitionDumper
         $this->dumpers = array(
             'DI\Definition\ValueDefinition'               => new ValueDefinitionDumper(),
             'DI\Definition\FactoryDefinition'             => new FactoryDefinitionDumper(),
+            'DI\Definition\DecoratorDefinition'           => new DecoratorDefinitionDumper(),
             'DI\Definition\AliasDefinition'               => new AliasDefinitionDumper(),
             'DI\Definition\ObjectDefinition'              => new ObjectDefinitionDumper(),
             'DI\Definition\FunctionCallDefinition'        => new FunctionCallDefinitionDumper(),

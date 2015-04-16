@@ -226,6 +226,11 @@ return [
         return new SomeOtherClass();
     })->scope(Scope::PROTOTYPE()),
 
+    // You can decorate an entry previously defined in another file
+    'WebserviceApi' => DI\decorate(function ($previous, ContainerInterface $c) {
+        return new CachedApi($previous, $c->get('cache'));
+    }),
+
     // Defining an alias to another entry
     'some.entry' => DI\get('some.other.entry'),
 

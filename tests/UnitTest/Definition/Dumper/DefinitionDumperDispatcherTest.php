@@ -10,6 +10,8 @@
 namespace DI\Test\UnitTest\Definition\Dumper;
 
 use DI\Definition\AliasDefinition;
+use DI\Definition\DecoratorDefinition;
+use DI\Definition\Dumper\DecoratorDefinitionDumper;
 use DI\Definition\ObjectDefinition;
 use DI\Definition\Dumper\AliasDefinitionDumper;
 use DI\Definition\Dumper\ObjectDefinitionDumper;
@@ -86,6 +88,20 @@ class DefinitionDumperDispatcherTest extends \PHPUnit_Framework_TestCase
 
         $factoryDumper = new FactoryDefinitionDumper();
         $this->assertEquals($factoryDumper->dump($definition), $dumper->dump($definition));
+    }
+
+    /**
+     * @test
+     */
+    public function should_dump_decorator_definitions_by_default()
+    {
+        $dumper = new DefinitionDumperDispatcher();
+        $dumper->registerDefaultDumpers();
+
+        $definition = new DecoratorDefinition('foo', 'strlen');
+
+        $decoratorDumper = new DecoratorDefinitionDumper();
+        $this->assertEquals($decoratorDumper->dump($definition), $dumper->dump($definition));
     }
 
     /**

@@ -59,7 +59,6 @@ class FactoryDefinitionTest extends \PHPUnit_Framework_TestCase
     {
         $definition = new FactoryDefinition('foo', function () {
         });
-
         $this->assertNotInstanceOf('DI\Definition\CacheableDefinition', $definition);
     }
 }

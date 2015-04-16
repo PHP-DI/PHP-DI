@@ -57,12 +57,30 @@ class FunctionsTest extends \PHPUnit_Framework_TestCase
      */
     public function test_factory()
     {
-        $definition = \DI\factory(function () {
+        $helper = \DI\factory(function () {
             return 42;
         });
 
-        $this->assertInstanceOf('DI\Definition\Helper\FactoryDefinitionHelper', $definition);
-        $callable = $definition->getDefinition('entry')->getCallable();
+        $this->assertInstanceOf('DI\Definition\Helper\FactoryDefinitionHelper', $helper);
+        $definition = $helper->getDefinition('entry');
+        $this->assertInstanceOf('DI\Definition\FactoryDefinition', $definition);
+        $callable = $definition->getCallable();
+        $this->assertEquals(42, $callable());
+    }
+
+    /**
+     * @covers ::\DI\decorate
+     */
+    public function test_decorate()
+    {
+        $helper = \DI\decorate(function () {
+            return 42;
+        });
+
+        $this->assertInstanceOf('DI\Definition\Helper\FactoryDefinitionHelper', $helper);
+        $definition = $helper->getDefinition('entry');
+        $this->assertInstanceOf('DI\Definition\DecoratorDefinition', $definition);
+        $callable = $definition->getCallable();
         $this->assertEquals(42, $callable());
     }
 
