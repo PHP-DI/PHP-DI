@@ -42,8 +42,9 @@ class DefinitionDumperDispatcherTest extends \PHPUnit_Framework_TestCase
             ->with($definition)
             ->will($this->returnValue('foo'));
 
-        $dumper = new DefinitionDumperDispatcher();
-        $dumper->registerDumper(get_class($definition), $subDumper);
+        $dumper = new DefinitionDumperDispatcher(array(
+            get_class($definition) => $subDumper
+        ));
 
         $this->assertEquals('foo', $dumper->dump($definition));
     }
@@ -54,7 +55,6 @@ class DefinitionDumperDispatcherTest extends \PHPUnit_Framework_TestCase
     public function should_dump_value_definitions_by_default()
     {
         $dumper = new DefinitionDumperDispatcher();
-        $dumper->registerDefaultDumpers();
 
         $definition = new ValueDefinition('foo', 'bar');
 
@@ -68,7 +68,6 @@ class DefinitionDumperDispatcherTest extends \PHPUnit_Framework_TestCase
     public function should_dump_alias_definitions_by_default()
     {
         $dumper = new DefinitionDumperDispatcher();
-        $dumper->registerDefaultDumpers();
 
         $definition = new AliasDefinition('foo', 'bar');
 
@@ -82,7 +81,6 @@ class DefinitionDumperDispatcherTest extends \PHPUnit_Framework_TestCase
     public function should_dump_factory_definitions_by_default()
     {
         $dumper = new DefinitionDumperDispatcher();
-        $dumper->registerDefaultDumpers();
 
         $definition = new FactoryDefinition('foo', 'strlen');
 
@@ -96,7 +94,6 @@ class DefinitionDumperDispatcherTest extends \PHPUnit_Framework_TestCase
     public function should_dump_decorator_definitions_by_default()
     {
         $dumper = new DefinitionDumperDispatcher();
-        $dumper->registerDefaultDumpers();
 
         $definition = new DecoratorDefinition('foo', 'strlen');
 
@@ -110,7 +107,6 @@ class DefinitionDumperDispatcherTest extends \PHPUnit_Framework_TestCase
     public function should_dump_class_definitions_by_default()
     {
         $dumper = new DefinitionDumperDispatcher();
-        $dumper->registerDefaultDumpers();
 
         $definition = new ObjectDefinition('foo', 'MyClass');
 
@@ -124,7 +120,6 @@ class DefinitionDumperDispatcherTest extends \PHPUnit_Framework_TestCase
     public function should_dump_env_variables_definitions_by_default()
     {
         $dumper = new DefinitionDumperDispatcher();
-        $dumper->registerDefaultDumpers();
 
         $definition = new EnvironmentVariableDefinition('foo', 'bar');
 
@@ -139,7 +134,7 @@ class DefinitionDumperDispatcherTest extends \PHPUnit_Framework_TestCase
      */
     public function should_only_accept_definitions_it_can_dump()
     {
-        $dumper = new DefinitionDumperDispatcher(false);
+        $dumper = new DefinitionDumperDispatcher(array());
         $dumper->dump(new ValueDefinition('foo', 'bar'));
     }
 }
