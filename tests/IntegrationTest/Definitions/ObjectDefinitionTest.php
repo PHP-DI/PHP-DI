@@ -29,12 +29,12 @@ class ObjectDefinitionTest extends \PHPUnit_Framework_TestCase
             // with the same name
             'stdClass' => \DI\object('stdClass'),
             // with a different name
-            'object' => \DI\object('DateTime')
-                ->constructor('now', null),
+            'object' => \DI\object('ArrayObject')
+                ->constructor(array()),
         ));
         $container = $builder->build();
 
         $this->assertInstanceOf('stdClass', $container->get('stdClass'));
-        $this->assertInstanceOf('DateTime', $container->get('object'));
+        $this->assertInstanceOf('ArrayObject', $container->get('object'));
     }
 }
