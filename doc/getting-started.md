@@ -5,56 +5,17 @@ tab: get-started
 
 # Getting started with PHP-DI
 
-Hi there and welcome! This guide will explain to you the basic usage of PHP-DI so that:
+Hi there and welcome! This guide will help you get started with using PHP-DI in your project.
 
-- you get an overview of what is PHP-DI and how to use it
-- you get started with using it in your project
-
-## Dependency injection
-
-First you need to know what dependency injection is. If you don't, no biggies! There's a whole article that explains it: [read it](understanding-di.md) and come back once finished.
-
-Now if you are aware of what DI is, you might fall in one of these categories:
-
-- you are overly enthusiastic with DI and can't wait to use a container!
-- you are wary of using a container because you know that they can get in the way…
-- you think that containers are the opposite of dependency injection and they should die in a fire (hi there!)
-
-Well in either case, you've come to the right place!
-
-PHP-DI exists to:
-
-- let you get started with dependency injection HERE AND NOW!
-- help you *for real* or get out of the way
-- guide you to do dependency injection **correctly**
-
-## What is a container and why do I need one?
-
-*You are allowed to skip this section if you already know the answer.*
-
-A container helps you to build your application. It is meant to be the thing that connects everything together.
-
-In a project that doesn't use dependency injection, have you ever wondered: **how do I use X from that class/view/controller/…?** The solutions where multiples: singletons, global variables, static methods, global functions, …
-
-Now you want to switch to dependency injection but the question now turns to: **how will I construct all my objects with all their dependencies?**
-
-That's what a container is for: building **object graphs**, i.e. objects and their dependencies. That way, you never have to wonder *how will this dependency be injected here?*, you just code and let the container do it for you.
-
-Now let's stop with the talking and see some code!
+Before beginning, you need to know what dependency injection is. If you don't, there's a whole article dedicated to it: [read it](understanding-di.md) and come back once finished.
 
 ## Installation
 
-Install PHP-DI with [Composer](http://getcomposer.org/doc/00-intro.md). Here is a code block for the lazy copy-pasters like me:
+Install PHP-DI with [Composer](http://getcomposer.org/doc/00-intro.md):
 
 ```json
-{
-    "require": {
-        "mnapoli/php-di": "~5.0"
-    }
-}
+composer require mnapoli/php-di
 ```
-
-Yes, PHP-DI works with **PHP 5.3** or higher. But seriously, use 5.5 or 5.6. Or even HHVM!
 
 ## Basic usage
 
