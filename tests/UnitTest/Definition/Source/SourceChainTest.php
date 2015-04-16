@@ -148,21 +148,6 @@ class SourceChainTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($definition->isLazy());
     }
 
-    /**
-     * @test
-     * @expectedException \DI\Definition\Exception\DefinitionException
-     * @expectedExceptionMessage Definition 'def' extends a non-existing definition 'subdef'
-     */
-    public function errors_if_extending_an_unknown_different_definition()
-    {
-        $chain = new SourceChain(array(
-            new DefinitionArray(array(
-                'def' => \DI\object('subdef'),
-            )),
-        ));
-        $chain->getDefinition('def');
-    }
-
     private function assertValueDefinition(Definition $definition, $value)
     {
         $this->assertTrue($definition instanceof ValueDefinition);

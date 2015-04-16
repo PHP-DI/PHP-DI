@@ -151,4 +151,20 @@ class ArrayDefinitionTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('foo', $array[2]);
         $this->assertEquals(new \stdClass, $array[3]);
     }
+
+    public function test_add_to_non_existing_array_works()
+    {
+        $builder = new ContainerBuilder();
+        $builder->addDefinitions(array(
+            'values' => \DI\add(array(
+                'value 1',
+            )),
+        ));
+        $container = $builder->build();
+
+        $array = $container->get('values');
+
+        $this->assertCount(1, $array);
+        $this->assertEquals('value 1', $array[0]);
+    }
 }

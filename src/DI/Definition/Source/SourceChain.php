@@ -10,7 +10,6 @@
 namespace DI\Definition\Source;
 
 use DI\Definition\Definition;
-use DI\Definition\Exception\DefinitionException;
 use DI\Definition\HasSubDefinition;
 
 /**
@@ -90,24 +89,14 @@ class SourceChain implements DefinitionSource, MutableDefinitionSource
         if ($subDefinitionName === $definition->getName()) {
             // Extending itself: look in the next sources only (else infinite recursion)
             $subDefinition = $this->getDefinition($subDefinitionName, $currentIndex + 1);
-
-            if (! $subDefinition) {
-                return;
-            }
         } else {
             // Extending another definition: look from the root
             $subDefinition = $this->rootSource->getDefinition($subDefinitionName);
-
-            if (! $subDefinition) {
-                throw new DefinitionException(sprintf(
-                    "Definition '%s' extends a non-existing definition '%s'",
-                    $definition->getName(),
-                    $subDefinitionName
-                ));
-            }
         }
 
-        $definition->setSubDefinition($subDefinition);
+        if ($subDefinition) {
+            $definition->setSubDefinition($subDefinition);
+        }
     }
 
     public function setMutableDefinitionSource(MutableDefinitionSource $mutableSource)
