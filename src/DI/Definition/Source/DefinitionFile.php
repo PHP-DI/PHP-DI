@@ -61,10 +61,6 @@ class DefinitionFile extends DefinitionArray
             return;
         }
 
-        if (! is_readable($this->file)) {
-            throw new DefinitionException("File {$this->file} doesn't exist or is not readable");
-        }
-
         $definitions = require $this->file;
 
         if (! is_array($definitions)) {
