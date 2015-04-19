@@ -34,7 +34,9 @@ class BuggyInjectionsTest extends \PHPUnit_Framework_TestCase
      */
     public function testConstructorNonExistentEntry()
     {
-        $container = ContainerBuilder::buildDevContainer();
+        $builder = new ContainerBuilder();
+        $builder->useAnnotations(true);
+        $container = $builder->build();
         $container->get('DI\Test\IntegrationTest\Fixtures\ConstructorInjectionTest\Buggy2');
     }
 
@@ -44,7 +46,9 @@ class BuggyInjectionsTest extends \PHPUnit_Framework_TestCase
      */
     public function testSetterNamedInjectionNotFound()
     {
-        $container = ContainerBuilder::buildDevContainer();
+        $builder = new ContainerBuilder();
+        $builder->useAnnotations(true);
+        $container = $builder->build();
         // Exception (bean not defined)
         $container->get('DI\Test\IntegrationTest\Fixtures\SetterInjectionTest\NamedInjectionClass');
     }
@@ -55,7 +59,9 @@ class BuggyInjectionsTest extends \PHPUnit_Framework_TestCase
      */
     public function testSetterNonTypeHintedMethod()
     {
-        $container = ContainerBuilder::buildDevContainer();
+        $builder = new ContainerBuilder();
+        $builder->useAnnotations(true);
+        $container = $builder->build();
         $container->get('DI\Test\IntegrationTest\Fixtures\SetterInjectionTest\Buggy1');
     }
 
@@ -65,7 +71,9 @@ class BuggyInjectionsTest extends \PHPUnit_Framework_TestCase
      */
     public function testSetterNamedUnknownBean()
     {
-        $container = ContainerBuilder::buildDevContainer();
+        $builder = new ContainerBuilder();
+        $builder->useAnnotations(true);
+        $container = $builder->build();
         $container->get('DI\Test\IntegrationTest\Fixtures\SetterInjectionTest\Buggy3');
     }
 
@@ -75,7 +83,9 @@ class BuggyInjectionsTest extends \PHPUnit_Framework_TestCase
      */
     public function testValueException()
     {
-        $container = ContainerBuilder::buildDevContainer();
+        $builder = new ContainerBuilder();
+        $builder->useAnnotations(true);
+        $container = $builder->build();
         $container->get('DI\Test\IntegrationTest\Fixtures\ValueInjectionTest\ValueInjectionClass');
     }
 }

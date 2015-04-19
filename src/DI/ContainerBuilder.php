@@ -50,7 +50,7 @@ class ContainerBuilder
     /**
      * @var boolean
      */
-    private $useAnnotations = true;
+    private $useAnnotations = false;
 
     /**
      * @var boolean
@@ -139,7 +139,7 @@ class ContainerBuilder
     /**
      * Enable or disable the use of autowiring to guess injections.
      *
-     * By default, enabled.
+     * Enabled by default.
      *
      * @param boolean $bool
      * @return ContainerBuilder
@@ -153,7 +153,7 @@ class ContainerBuilder
     /**
      * Enable or disable the use of annotations to guess injections.
      *
-     * By default, enabled.
+     * Disabled by default.
      *
      * @param boolean $bool
      * @return ContainerBuilder

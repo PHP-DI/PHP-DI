@@ -57,7 +57,9 @@ class ContainerGetTest extends \PHPUnit_Framework_TestCase
 
     public function testGetWithPrototypeScope()
     {
-        $container = ContainerBuilder::buildDevContainer();
+        $builder = new ContainerBuilder();
+        $builder->useAnnotations(true);
+        $container = $builder->build();
         // With @Injectable(scope="prototype") annotation
         $instance1 = $container->get('DI\Test\UnitTest\Fixtures\Prototype');
         $instance2 = $container->get('DI\Test\UnitTest\Fixtures\Prototype');
@@ -84,7 +86,9 @@ class ContainerGetTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetWithInvalidScope()
     {
-        $container = ContainerBuilder::buildDevContainer();
+        $builder = new ContainerBuilder();
+        $builder->useAnnotations(true);
+        $container = $builder->build();
         $container->get('DI\Test\UnitTest\Fixtures\InvalidScope');
     }
 
@@ -104,7 +108,9 @@ class ContainerGetTest extends \PHPUnit_Framework_TestCase
      */
     public function testCircularDependencyException()
     {
-        $container = ContainerBuilder::buildDevContainer();
+        $builder = new ContainerBuilder();
+        $builder->useAnnotations(true);
+        $container = $builder->build();
         $container->get('DI\Test\UnitTest\Fixtures\Class1CircularDependencies');
     }
 

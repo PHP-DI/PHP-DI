@@ -74,7 +74,9 @@ class ContainerMakeTest extends \PHPUnit_Framework_TestCase
      */
     public function testMakeWithInvalidScope()
     {
-        $container = ContainerBuilder::buildDevContainer();
+        $builder = new ContainerBuilder();
+        $builder->useAnnotations(true);
+        $container = $builder->build();
         $container->make('DI\Test\UnitTest\Fixtures\InvalidScope');
     }
 
@@ -94,7 +96,9 @@ class ContainerMakeTest extends \PHPUnit_Framework_TestCase
      */
     public function testCircularDependencyException()
     {
-        $container = ContainerBuilder::buildDevContainer();
+        $builder = new ContainerBuilder();
+        $builder->useAnnotations(true);
+        $container = $builder->build();
         $container->make('DI\Test\UnitTest\Fixtures\Class1CircularDependencies');
     }
 

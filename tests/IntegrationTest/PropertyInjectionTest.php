@@ -26,7 +26,9 @@ class PropertyInjectionTest extends \PHPUnit_Framework_TestCase
      */
     public function testNamedInjection()
     {
-        $container = ContainerBuilder::buildDevContainer();
+        $builder = new ContainerBuilder();
+        $builder->useAnnotations(true);
+        $container = $builder->build();
         // Configure the named bean
         $bean = new NamedBean();
         $bean->nameForTest = 'namedDependency';
@@ -49,8 +51,10 @@ class PropertyInjectionTest extends \PHPUnit_Framework_TestCase
      */
     public function testNamedInjectionNotFound()
     {
-        // Exception (bean not defined)
-        $container = ContainerBuilder::buildDevContainer();
+        $builder = new ContainerBuilder();
+        $builder->useAnnotations(true);
+        $container = $builder->build();
+        // Exception (service not defined)
         $container->get('DI\Test\IntegrationTest\Fixtures\PropertyInjectionTest\NamedInjectionClass');
     }
 
@@ -59,7 +63,9 @@ class PropertyInjectionTest extends \PHPUnit_Framework_TestCase
      */
     public function testIssue1()
     {
-        $container = ContainerBuilder::buildDevContainer();
+        $builder = new ContainerBuilder();
+        $builder->useAnnotations(true);
+        $container = $builder->build();
         /** @var $object Issue1 */
         $object = $container->get('DI\Test\IntegrationTest\Fixtures\PropertyInjectionTest\Issue1');
         $this->assertInstanceOf('DI\Test\IntegrationTest\Fixtures\PropertyInjectionTest\Class2', $object->class2);
@@ -78,7 +84,9 @@ class PropertyInjectionTest extends \PHPUnit_Framework_TestCase
      */
     public function testNotFoundVarAnnotation()
     {
-        $container = ContainerBuilder::buildDevContainer();
+        $builder = new ContainerBuilder();
+        $builder->useAnnotations(true);
+        $container = $builder->build();
         $container->get('DI\Test\IntegrationTest\Fixtures\PropertyInjectionTest\NotFoundVarAnnotation');
     }
 }
