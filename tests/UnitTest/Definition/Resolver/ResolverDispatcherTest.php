@@ -19,24 +19,27 @@ use EasyMock\EasyMock;
  */
 class ResolverDispatcherTest extends \PHPUnit_Framework_TestCase
 {
+    private $container;
+    private $proxyFactory;
+    /**
+     * @var ResolverDispatcher
+     */
+    private $resolver;
+
+    public function setUp()
+    {
+        $this->container = EasyMock::mock('Interop\Container\ContainerInterface');
+        $this->proxyFactory = EasyMock::mock('DI\Proxy\ProxyFactory');
+        $this->resolver = new ResolverDispatcher($this->container, $this->proxyFactory);
+    }
+
     /**
      * @test
      */
     public function should_resolve_using_sub_resolvers()
     {
-        $resolvers = array(
-            'DI\Definition\ValueDefinition' => EasyMock::mock('DI\Definition\Resolver\DefinitionResolver', array(
-                'resolve' => 'foo',
-            )),
-            'DI\Definition\StringDefinition' => EasyMock::mock('DI\Definition\Resolver\DefinitionResolver', array(
-                'resolve' => 'bar',
-            )),
-        );
-
-        $dispatcher = new ResolverDispatcher($resolvers);
-
-        $this->assertEquals('foo', $dispatcher->resolve(new ValueDefinition('name', 'value')));
-        $this->assertEquals('bar', $dispatcher->resolve(new StringDefinition('name', 'value')));
+        $this->assertEquals('foo', $this->resolver->resolve(new ValueDefinition('name', 'foo')));
+        $this->assertEquals('bar', $this->resolver->resolve(new StringDefinition('name', 'bar')));
     }
 
     /**
@@ -44,29 +47,17 @@ class ResolverDispatcherTest extends \PHPUnit_Framework_TestCase
      */
     public function should_test_if_resolvable_using_sub_resolvers()
     {
-        $resolvers = array(
-            'DI\Definition\ValueDefinition' => EasyMock::mock('DI\Definition\Resolver\DefinitionResolver', array(
-                'isResolvable' => true,
-            )),
-            'DI\Definition\StringDefinition' => EasyMock::mock('DI\Definition\Resolver\DefinitionResolver', array(
-                'isResolvable' => false,
-            )),
-        );
-
-        $dispatcher = new ResolverDispatcher($resolvers);
-
-        $this->assertTrue($dispatcher->isResolvable(new ValueDefinition('name', 'value')));
-        $this->assertFalse($dispatcher->isResolvable(new StringDefinition('name', 'value')));
+        $this->assertTrue($this->resolver->isResolvable(new ValueDefinition('name', 'value')));
+        $this->assertTrue($this->resolver->isResolvable(new StringDefinition('name', 'value')));
     }
 
     /**
      * @test
      * @expectedException \RuntimeException
-     * @expectedExceptionMessage No definition resolver was configured for definition of type DI\Definition\ValueDefinition
+     * @expectedExceptionMessage No definition resolver was configured for definition of type
      */
     public function should_throw_if_non_handled_definition()
     {
-        $dispatcher = new ResolverDispatcher(array());
-        $dispatcher->resolve(new ValueDefinition('name', 'value'));
+        $this->resolver->resolve(EasyMock::mock('DI\Definition\Definition'));
     }
 }

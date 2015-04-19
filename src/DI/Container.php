@@ -77,7 +77,7 @@ class Container implements ContainerInterface, FactoryInterface, InvokerInterfac
         $wrapperContainer = $wrapperContainer ?: $this;
 
         $this->definitionSource = $definitionSource;
-        $this->definitionResolver = ResolverDispatcher::createDefault($wrapperContainer, $proxyFactory);
+        $this->definitionResolver = new ResolverDispatcher($wrapperContainer, $proxyFactory);
         $this->callableDefinitionSource = new Autowiring();
 
         // Auto-register the container

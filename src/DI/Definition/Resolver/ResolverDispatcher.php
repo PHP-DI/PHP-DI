@@ -18,45 +18,30 @@ use Interop\Container\ContainerInterface;
 class ResolverDispatcher implements DefinitionResolver
 {
     /**
-     * @var DefinitionResolver[]
+     * @var ContainerInterface
      */
-    private $definitionResolvers;
-
-    public function __construct(array $definitionResolvers = array())
-    {
-        $this->definitionResolvers = $definitionResolvers;
-    }
+    private $container;
 
     /**
-     * Creates a dispatcher with the default configuration.
-     *
-     * @param ContainerInterface $container
-     * @param ProxyFactory       $proxyFactory
-     * @return ResolverDispatcher
+     * @var ProxyFactory
      */
-    public static function createDefault(ContainerInterface $container, ProxyFactory $proxyFactory)
+    private $proxyFactory;
+
+    private $valueResolver;
+    private $arrayResolver;
+    private $factoryResolver;
+    private $decoratorResolver;
+    private $aliasResolver;
+    private $objectResolver;
+    private $instanceResolver;
+    private $functionCallResolver;
+    private $envVariableResolver;
+    private $stringResolver;
+
+    public function __construct(ContainerInterface $container, ProxyFactory $proxyFactory)
     {
-        $resolver = new self();
-
-        $arrayDefinitionResolver = new ArrayResolver($resolver);
-
-        $definitionResolvers = array(
-            'DI\Definition\ValueDefinition'               => new ValueResolver(),
-            'DI\Definition\ArrayDefinition'               => $arrayDefinitionResolver,
-            'DI\Definition\ArrayDefinitionExtension'      => $arrayDefinitionResolver,
-            'DI\Definition\FactoryDefinition'             => new FactoryResolver($container),
-            'DI\Definition\DecoratorDefinition'           => new DecoratorResolver($container, $resolver),
-            'DI\Definition\AliasDefinition'               => new AliasResolver($container),
-            'DI\Definition\ObjectDefinition'              => new ObjectCreator($resolver, $proxyFactory),
-            'DI\Definition\InstanceDefinition'            => new InstanceInjector($resolver, $proxyFactory),
-            'DI\Definition\FunctionCallDefinition'        => new FunctionInvoker($container, $resolver),
-            'DI\Definition\EnvironmentVariableDefinition' => new EnvironmentVariableResolver($resolver),
-            'DI\Definition\StringDefinition'              => new StringResolver($container),
-        );
-
-        $resolver->setDefinitionResolvers($definitionResolvers);
-
-        return $resolver;
+        $this->container = $container;
+        $this->proxyFactory = $proxyFactory;
     }
 
     /**
@@ -103,18 +88,60 @@ class ResolverDispatcher implements DefinitionResolver
     {
         $definitionType = get_class($definition);
 
-        if (! isset($this->definitionResolvers[$definitionType])) {
-            throw new \RuntimeException("No definition resolver was configured for definition of type $definitionType");
+        switch ($definitionType) {
+            case 'DI\Definition\ValueDefinition':
+                if (! $this->valueResolver) {
+                    $this->valueResolver = new ValueResolver();
+                }
+                return $this->valueResolver;
+            case 'DI\Definition\ArrayDefinition':
+            case 'DI\Definition\ArrayDefinitionExtension':
+                if (! $this->arrayResolver) {
+                    $this->arrayResolver = new ArrayResolver($this);
+                }
+                return $this->arrayResolver;
+            case 'DI\Definition\FactoryDefinition':
+                if (! $this->factoryResolver) {
+                    $this->factoryResolver = new FactoryResolver($this->container);
+                }
+                return $this->factoryResolver;
+            case 'DI\Definition\DecoratorDefinition':
+                if (! $this->decoratorResolver) {
+                    $this->decoratorResolver = new DecoratorResolver($this->container, $this);
+                }
+                return $this->decoratorResolver;
+            case 'DI\Definition\AliasDefinition':
+                if (! $this->aliasResolver) {
+                    $this->aliasResolver = new AliasResolver($this->container);
+                }
+                return $this->aliasResolver;
+            case 'DI\Definition\ObjectDefinition':
+                if (! $this->objectResolver) {
+                    $this->objectResolver = new ObjectCreator($this, $this->proxyFactory);
+                }
+                return $this->objectResolver;
+            case 'DI\Definition\InstanceDefinition':
+                if (! $this->instanceResolver) {
+                    $this->instanceResolver = new InstanceInjector($this, $this->proxyFactory);
+                }
+                return $this->instanceResolver;
+            case 'DI\Definition\FunctionCallDefinition':
+                if (! $this->functionCallResolver) {
+                    $this->functionCallResolver = new FunctionInvoker($this->container, $this);
+                }
+                return $this->functionCallResolver;
+            case 'DI\Definition\EnvironmentVariableDefinition':
+                if (! $this->envVariableResolver) {
+                    $this->envVariableResolver = new EnvironmentVariableResolver($this);
+                }
+                return $this->envVariableResolver;
+            case 'DI\Definition\StringDefinition':
+                if (! $this->stringResolver) {
+                    $this->stringResolver = new StringResolver($this->container);
+                }
+                return $this->stringResolver;
+            default:
+                throw new \RuntimeException("No definition resolver was configured for definition of type $definitionType");
         }
-
-        return $this->definitionResolvers[$definitionType];
-    }
-
-    /**
-     * @param DefinitionResolver[] $definitionResolvers
-     */
-    public function setDefinitionResolvers(array $definitionResolvers)
-    {
-        $this->definitionResolvers = $definitionResolvers;
     }
 }
