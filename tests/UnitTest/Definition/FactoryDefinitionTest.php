@@ -26,7 +26,7 @@ class FactoryDefinitionTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('foo', $definition->getName());
         $this->assertEquals($callable, $definition->getCallable());
         // Default scope
-        $this->assertEquals(Scope::SINGLETON(), $definition->getScope());
+        $this->assertEquals(Scope::SINGLETON, $definition->getScope());
     }
 
     /**
@@ -47,9 +47,9 @@ class FactoryDefinitionTest extends \PHPUnit_Framework_TestCase
     public function can_have_a_custom_scope()
     {
         $definition = new FactoryDefinition('foo', function () {
-        }, Scope::PROTOTYPE());
+        }, Scope::PROTOTYPE);
 
-        $this->assertEquals(Scope::PROTOTYPE(), $definition->getScope());
+        $this->assertEquals(Scope::PROTOTYPE, $definition->getScope());
     }
 
     /**

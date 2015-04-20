@@ -77,6 +77,6 @@ abstract class AbstractFunctionCallDefinition implements Definition
      */
     public function getScope()
     {
-        return Scope::PROTOTYPE();
+        return Scope::PROTOTYPE;
     }
 }

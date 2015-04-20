@@ -6,7 +6,7 @@ return array(
     'foo' => 'bar',
 
     'DI\Test\IntegrationTest\Fixtures\Class1' => DI\object()
-            ->scope(Scope::PROTOTYPE())
+            ->scope(Scope::PROTOTYPE)
             ->property('property1', DI\get('DI\Test\IntegrationTest\Fixtures\Class2'))
             ->property('property2', DI\get('DI\Test\IntegrationTest\Fixtures\Interface1'))
             ->property('property3', DI\get('namedDependency'))
@@ -29,7 +29,7 @@ return array(
     'DI\Test\IntegrationTest\Fixtures\Implementation1' => DI\object(),
 
     'DI\Test\IntegrationTest\Fixtures\Interface1' => DI\object('DI\Test\IntegrationTest\Fixtures\Implementation1')
-            ->scope(Scope::SINGLETON()),
+            ->scope(Scope::SINGLETON),
     'DI\Test\IntegrationTest\Fixtures\Interface2' => DI\object('DI\Test\IntegrationTest\Fixtures\Class3'),
 
     'namedDependency' => DI\object('DI\Test\IntegrationTest\Fixtures\Class2'),

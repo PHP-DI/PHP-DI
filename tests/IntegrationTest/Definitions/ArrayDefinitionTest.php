@@ -46,7 +46,7 @@ class ArrayDefinitionTest extends \PHPUnit_Framework_TestCase
             ),
             'singleton' => \DI\object('stdClass'),
             'prototype' => \DI\object('stdClass')
-                ->scope(Scope::PROTOTYPE()),
+                ->scope(Scope::PROTOTYPE),
         ));
         $container = $builder->build();
 
@@ -90,7 +90,7 @@ class ArrayDefinitionTest extends \PHPUnit_Framework_TestCase
                 \DI\get('prototype'),
             ),
             'prototype' => \DI\object('stdClass')
-                ->scope(Scope::PROTOTYPE()),
+                ->scope(Scope::PROTOTYPE),
         ));
         $container = $builder->build();
 

@@ -12,7 +12,6 @@ namespace DI\Definition\Helper;
 use DI\Definition\ObjectDefinition;
 use DI\Definition\ObjectDefinition\MethodInjection;
 use DI\Definition\ObjectDefinition\PropertyInjection;
-use DI\Scope;
 
 /**
  * Helps defining how to create an instance of a class.
@@ -32,7 +31,7 @@ class ObjectDefinitionHelper implements DefinitionHelper
     private $lazy;
 
     /**
-     * @var Scope|null
+     * @var string|null
      */
     private $scope;
 
@@ -81,11 +80,11 @@ class ObjectDefinitionHelper implements DefinitionHelper
     /**
      * Defines the scope of the entry.
      *
-     * @param Scope $scope
+     * @param string $scope
      *
      * @return ObjectDefinitionHelper
      */
-    public function scope(Scope $scope)
+    public function scope($scope)
     {
         $this->scope = $scope;
         return $this;

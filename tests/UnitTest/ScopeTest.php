@@ -21,8 +21,7 @@ class ScopeTest extends \PHPUnit_Framework_TestCase
      */
     public function should_provide_prototype_scope()
     {
-        $scope = Scope::PROTOTYPE();
-        $this->assertEquals('prototype', $scope->getValue());
+        $this->assertEquals(Scope::PROTOTYPE, Scope::PROTOTYPE());
     }
 
     /**
@@ -30,7 +29,6 @@ class ScopeTest extends \PHPUnit_Framework_TestCase
      */
     public function should_provide_singleton_scope()
     {
-        $scope = Scope::SINGLETON();
-        $this->assertEquals('singleton', $scope->getValue());
+        $this->assertEquals(Scope::SINGLETON, Scope::SINGLETON());
     }
 }

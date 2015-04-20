@@ -4,7 +4,7 @@
 
 Improvements:
 
-- Lighter package: requires 4 less Composer dependencies by default
+- Lighter package: requires 5 less Composer dependencies by default
 - [#207](https://github.com/mnapoli/PHP-DI/issues/207): Support for `DI\link()` in arrays
 - [#208](https://github.com/mnapoli/PHP-DI/issues/208): Support for nested definitions
 - [#226](https://github.com/mnapoli/PHP-DI/pull/226): `DI\factory()` can now be omitted with closures:
@@ -42,6 +42,7 @@ BC breaks:
 Internal changes in case you were replacing/extending some parts:
 
 - the definition sources architecture has been refactored, if you defined custom definition sources you will need to update your code (it should be much easier now)
+- `DI\Scope` internal implementation has changed. You are encouraged to use the constants (`DI\Scope::SINGLETON` and `DI\Scope::PROTOTYPE`) instead of the static methods, but backward compatibility is kept (static methods still work).
 
 ## 4.4
 

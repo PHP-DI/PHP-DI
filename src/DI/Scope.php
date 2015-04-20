@@ -9,8 +9,6 @@
 
 namespace DI;
 
-use MyCLabs\Enum\Enum;
-
 /**
  * Scope enum.
  *
@@ -18,30 +16,39 @@ use MyCLabs\Enum\Enum;
  *
  * @author Matthieu Napoli <matthieu@mnapoli.fr>
  */
-class Scope extends Enum
+class Scope
 {
-    const SINGLETON = 'singleton';
-    const PROTOTYPE = 'prototype';
-
     /**
      * A singleton entry will be computed once and shared.
-     * For a class, only a single instance of the class will be created.
      *
-     * @return Scope
+     * For a class, only a single instance of the class will be created.
      */
-    public static function SINGLETON()
-    {
-        return new static(self::SINGLETON);
-    }
+    const SINGLETON = 'singleton';
 
     /**
      * A prototype entry will be recomputed each time it is asked.
-     * For a class, this will create a new instance each time.
      *
-     * @return Scope
+     * For a class, this will create a new instance each time.
+     */
+    const PROTOTYPE = 'prototype';
+
+    /**
+     * Method kept for backward compatibility, use the constant instead.
+     *
+     * @return string
+     */
+    public static function SINGLETON()
+    {
+        return self::SINGLETON;
+    }
+
+    /**
+     * Method kept for backward compatibility, use the constant instead.
+     *
+     * @return string
      */
     public static function PROTOTYPE()
     {
-        return new static(self::PROTOTYPE);
+        return self::PROTOTYPE;
     }
 }

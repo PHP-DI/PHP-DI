@@ -28,7 +28,7 @@ class ObjectDefinitionHelperTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals('foo', $definition->getName());
         $this->assertEquals('foo', $definition->getClassName());
-        $this->assertEquals(Scope::SINGLETON(), $definition->getScope());
+        $this->assertEquals(Scope::SINGLETON, $definition->getScope());
         $this->assertNull($definition->getConstructorInjection());
         $this->assertEmpty($definition->getPropertyInjections());
         $this->assertEmpty($definition->getMethodInjections());
@@ -52,10 +52,10 @@ class ObjectDefinitionHelperTest extends \PHPUnit_Framework_TestCase
     public function allows_to_define_the_scope()
     {
         $helper = new ObjectDefinitionHelper();
-        $helper->scope(Scope::PROTOTYPE());
+        $helper->scope(Scope::PROTOTYPE);
         $definition = $helper->getDefinition('foo');
 
-        $this->assertEquals(Scope::PROTOTYPE(), $definition->getScope());
+        $this->assertEquals(Scope::PROTOTYPE, $definition->getScope());
     }
 
     /**

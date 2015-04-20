@@ -24,7 +24,7 @@ class AbstractFunctionCallDefinitionTest extends \PHPUnit_Framework_TestCase
         $definition = $this->getMockForAbstractClass('DI\Definition\AbstractFunctionCallDefinition');
 
         $this->assertNull($definition->getName());
-        $this->assertEquals(Scope::PROTOTYPE(), $definition->getScope());
+        $this->assertEquals(Scope::PROTOTYPE, $definition->getScope());
         $this->assertEmpty($definition->getParameters());
     }
 

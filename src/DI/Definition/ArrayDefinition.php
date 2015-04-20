@@ -53,7 +53,7 @@ class ArrayDefinition implements Definition
      */
     public function getScope()
     {
-        return Scope::SINGLETON();
+        return Scope::SINGLETON;
     }
 
     /**
