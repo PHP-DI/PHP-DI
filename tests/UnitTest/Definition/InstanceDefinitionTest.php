@@ -51,6 +51,6 @@ class InstanceDefinitionTest extends \PHPUnit_Framework_TestCase
         $instance = new \stdClass();
         $definition = new InstanceDefinition($instance, EasyMock::mock('DI\Definition\ObjectDefinition'));
 
-        $this->assertEquals(Scope::PROTOTYPE(), $definition->getScope());
+        $this->assertEquals(Scope::PROTOTYPE, $definition->getScope());
     }
 }

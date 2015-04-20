@@ -32,7 +32,7 @@ class ValueDefinitionTest extends \PHPUnit_Framework_TestCase
     {
         $definition = new ValueDefinition('foo', 1);
 
-        $this->assertEquals(Scope::SINGLETON(), $definition->getScope());
+        $this->assertEquals(Scope::SINGLETON, $definition->getScope());
     }
 
     /**

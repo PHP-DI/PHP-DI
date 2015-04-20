@@ -40,6 +40,6 @@ You can specify the scope by using the `scope` method on the helper:
 
 return [
     'MyService' => DI\object()
-        ->scope(Scope::PROTOTYPE()),
+        ->scope(Scope::PROTOTYPE),
 ];
 ```

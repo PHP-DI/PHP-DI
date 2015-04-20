@@ -32,7 +32,7 @@ class StringDefinitionTest extends \PHPUnit_Framework_TestCase
     {
         $definition = new StringDefinition('foo', 'bar');
 
-        $this->assertEquals(Scope::SINGLETON(), $definition->getScope());
+        $this->assertEquals(Scope::SINGLETON, $definition->getScope());
     }
 
     /**

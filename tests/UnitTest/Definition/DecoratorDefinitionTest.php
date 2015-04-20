@@ -27,7 +27,7 @@ class DecoratorDefinitionTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('foo', $definition->getName());
         $this->assertEquals($callable, $definition->getCallable());
         // Default scope
-        $this->assertEquals(Scope::SINGLETON(), $definition->getScope());
+        $this->assertEquals(Scope::SINGLETON, $definition->getScope());
     }
 
     /**

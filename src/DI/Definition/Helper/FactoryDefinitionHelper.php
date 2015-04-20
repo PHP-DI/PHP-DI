@@ -11,7 +11,6 @@ namespace DI\Definition\Helper;
 
 use DI\Definition\DecoratorDefinition;
 use DI\Definition\FactoryDefinition;
-use DI\Scope;
 
 /**
  * Helps defining how to create an instance of a class using a factory (callable).
@@ -26,7 +25,7 @@ class FactoryDefinitionHelper implements DefinitionHelper
     private $factory;
 
     /**
-     * @var Scope|null
+     * @var string|null
      */
     private $scope;
 
@@ -48,11 +47,11 @@ class FactoryDefinitionHelper implements DefinitionHelper
     /**
      * Defines the scope of the entry.
      *
-     * @param Scope $scope
+     * @param string $scope
      *
      * @return FactoryDefinitionHelper
      */
-    public function scope(Scope $scope)
+    public function scope($scope)
     {
         $this->scope = $scope;
         return $this;

@@ -194,7 +194,7 @@ return [
         ->constructor(DI\get('db.host'), DI\get('My\OtherClass')),
 
     'My\OtherClass' => DI\object()
-        ->scope(Scope::PROTOTYPE())
+        ->scope(Scope::PROTOTYPE)
         ->constructor(DI\get('db.host'), DI\get('db.port'))
         ->method('setFoo2', DI\get('My\Foo1'), DI\get('My\Foo2'))
         ->property('bar', 'My\Bar'),
@@ -224,7 +224,7 @@ return [
     // The prototype scope will return a new object each time we request SomeOtherClass
     'SomeOtherClass' => DI\factory(function () {
         return new SomeOtherClass();
-    })->scope(Scope::PROTOTYPE()),
+    })->scope(Scope::PROTOTYPE),
 
     // You can decorate an entry previously defined in another file
     'WebserviceApi' => DI\decorate(function ($previous, ContainerInterface $c) {

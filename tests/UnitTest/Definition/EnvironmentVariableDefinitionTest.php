@@ -34,7 +34,7 @@ class EnvironmentVariableDefinitionTest extends \PHPUnit_Framework_TestCase
     {
         $definition = new EnvironmentVariableDefinition('foo', 'bar');
 
-        $this->assertEquals(Scope::SINGLETON(), $definition->getScope());
+        $this->assertEquals(Scope::SINGLETON, $definition->getScope());
     }
 
     /**

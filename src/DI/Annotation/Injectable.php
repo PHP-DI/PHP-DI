@@ -10,6 +10,7 @@
 namespace DI\Annotation;
 
 use DI\Scope;
+use UnexpectedValueException;
 
 /**
  * "Injectable" annotation
@@ -26,7 +27,7 @@ final class Injectable
 {
     /**
      * The scope of an class: prototype, singleton
-     * @var Scope|null
+     * @var string|null
      */
     private $scope;
 
@@ -42,7 +43,13 @@ final class Injectable
     public function __construct(array $values)
     {
         if (isset($values['scope'])) {
-            $this->scope = new Scope($values['scope']);
+            if ($values['scope'] === 'prototype') {
+                $this->scope = Scope::PROTOTYPE;
+            } elseif ($values['scope'] === 'singleton') {
+                $this->scope = Scope::SINGLETON;
+            } else {
+                throw new UnexpectedValueException(sprintf("Value '%s' is not a valid scope", $values['scope']));
+            }
         }
         if (isset($values['lazy'])) {
             $this->lazy = (boolean) $values['lazy'];
@@ -50,7 +57,7 @@ final class Injectable
     }
 
     /**
-     * @return Scope|null
+     * @return string|null
      */
     public function getScope()
     {

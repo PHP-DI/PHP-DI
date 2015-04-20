@@ -27,12 +27,12 @@ class FactoryDefinitionHelperTest extends \PHPUnit_Framework_TestCase
         $callable = function () {
         };
         $helper = new FactoryDefinitionHelper($callable);
-        $helper->scope(Scope::PROTOTYPE());
+        $helper->scope(Scope::PROTOTYPE);
         $definition = $helper->getDefinition('foo');
 
         $this->assertTrue($definition instanceof FactoryDefinition);
         $this->assertSame('foo', $definition->getName());
-        $this->assertEquals(Scope::PROTOTYPE(), $definition->getScope());
+        $this->assertEquals(Scope::PROTOTYPE, $definition->getScope());
         $this->assertSame($callable, $definition->getCallable());
     }
 
@@ -61,6 +61,6 @@ class FactoryDefinitionHelperTest extends \PHPUnit_Framework_TestCase
         $helper = new FactoryDefinitionHelper($callable);
         $definition = $helper->getDefinition('foo');
 
-        $this->assertEquals(Scope::SINGLETON(), $definition->getScope());
+        $this->assertEquals(Scope::SINGLETON, $definition->getScope());
     }
 }

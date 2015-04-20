@@ -38,7 +38,7 @@ class ArrayDefinitionExtensionTest extends \PHPUnit_Framework_TestCase
     {
         $definition = new ArrayDefinitionExtension('foo', array());
 
-        $this->assertEquals(Scope::SINGLETON(), $definition->getScope());
+        $this->assertEquals(Scope::SINGLETON, $definition->getScope());
     }
 
     /**

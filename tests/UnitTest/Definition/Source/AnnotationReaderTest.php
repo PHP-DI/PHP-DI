@@ -194,7 +194,7 @@ class AnnotationReaderTest extends \PHPUnit_Framework_TestCase
         $definition = $source->getDefinition('DI\Test\UnitTest\Definition\Source\Fixtures\AnnotationInjectableFixture');
         $this->assertInstanceOf('DI\Definition\Definition', $definition);
 
-        $this->assertEquals(Scope::PROTOTYPE(), $definition->getScope());
+        $this->assertEquals(Scope::PROTOTYPE, $definition->getScope());
         $this->assertTrue($definition->isLazy());
     }
 

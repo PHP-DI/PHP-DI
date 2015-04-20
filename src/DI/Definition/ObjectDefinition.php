@@ -52,7 +52,7 @@ class ObjectDefinition implements Definition, CacheableDefinition, HasSubDefinit
     private $methodInjections = array();
 
     /**
-     * @var Scope|null
+     * @var string|null
      */
     private $scope;
 
@@ -165,19 +165,19 @@ class ObjectDefinition implements Definition, CacheableDefinition, HasSubDefinit
     }
 
     /**
-     * @param Scope $scope
+     * @param string $scope
      */
-    public function setScope(Scope $scope)
+    public function setScope($scope)
     {
         $this->scope = $scope;
     }
 
     /**
-     * @return Scope
+     * {@inheritdoc}
      */
     public function getScope()
     {
-        return $this->scope ?: Scope::SINGLETON();
+        return $this->scope ?: Scope::SINGLETON;
     }
 
     /**

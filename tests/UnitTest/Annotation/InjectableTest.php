@@ -11,6 +11,7 @@ namespace DI\Test\UnitTest\Annotation;
 
 use DI\Annotation\Injectable;
 use DI\Definition\Source\AnnotationReader;
+use DI\Scope;
 use Doctrine\Common\Annotations\AnnotationReader as DoctrineAnnotationReader;
 use ReflectionClass;
 
@@ -61,7 +62,7 @@ class InjectableTest extends \PHPUnit_Framework_TestCase
         $annotation = $this->annotationReader->getClassAnnotation($class, 'DI\Annotation\Injectable');
 
         $this->assertInstanceOf('DI\Annotation\Injectable', $annotation);
-        $this->assertEquals('singleton', $annotation->getScope());
+        $this->assertEquals(Scope::SINGLETON, $annotation->getScope());
         $this->assertNull($annotation->isLazy());
     }
 }

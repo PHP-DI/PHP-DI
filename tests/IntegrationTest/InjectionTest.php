@@ -81,7 +81,7 @@ class InjectionTest extends \PHPUnit_Framework_TestCase
         $containerPHP->set(
             'DI\Test\IntegrationTest\Fixtures\Class1',
             \DI\object()
-                ->scope(Scope::PROTOTYPE())
+                ->scope(Scope::PROTOTYPE)
                 ->property('property1', \DI\get('DI\Test\IntegrationTest\Fixtures\Class2'))
                 ->property('property2', \DI\get('DI\Test\IntegrationTest\Fixtures\Interface1'))
                 ->property('property3', \DI\get('namedDependency'))
@@ -104,7 +104,7 @@ class InjectionTest extends \PHPUnit_Framework_TestCase
         $containerPHP->set(
             'DI\Test\IntegrationTest\Fixtures\Interface1',
             \DI\object('DI\Test\IntegrationTest\Fixtures\Implementation1')
-                ->scope(Scope::SINGLETON())
+                ->scope(Scope::SINGLETON)
         );
         $containerPHP->set('namedDependency', \DI\object('DI\Test\IntegrationTest\Fixtures\Class2'));
         $containerPHP->set('DI\Test\IntegrationTest\Fixtures\LazyDependency', \DI\object()->lazy());

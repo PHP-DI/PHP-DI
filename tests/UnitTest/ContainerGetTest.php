@@ -81,7 +81,7 @@ class ContainerGetTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException \DI\Definition\Exception\DefinitionException
-     * @expectedExceptionMessage Error while reading @Injectable on DI\Test\UnitTest\Fixtures\InvalidScope: Value 'foobar' is not part of the enum DI\Scope
+     * @expectedExceptionMessage Error while reading @Injectable on DI\Test\UnitTest\Fixtures\InvalidScope: Value 'foobar' is not a valid scope
      * @coversNothing
      */
     public function testGetWithInvalidScope()

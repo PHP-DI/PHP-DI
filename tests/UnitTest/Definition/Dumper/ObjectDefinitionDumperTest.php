@@ -95,7 +95,7 @@ class ObjectDefinitionDumperTest extends \PHPUnit_Framework_TestCase
     public function testScopePrototype()
     {
         $definition = \DI\object('stdClass')
-            ->scope(Scope::PROTOTYPE())
+            ->scope(Scope::PROTOTYPE)
             ->getDefinition('foo');
         $resolver = new ObjectDefinitionDumper();
 

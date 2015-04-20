@@ -119,7 +119,7 @@ class Container implements ContainerInterface, FactoryInterface, InvokerInterfac
         $value = $this->resolveDefinition($definition);
 
         // If the entry is singleton, we store it to always return it without recomputing it
-        if ($definition->getScope() == Scope::SINGLETON()) {
+        if ($definition->getScope() === Scope::SINGLETON) {
             $this->singletonEntries[$name] = $value;
         }
 
