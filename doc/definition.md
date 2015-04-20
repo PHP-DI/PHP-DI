@@ -28,10 +28,10 @@ Read more in the [Definition overriding documentation](definition-overriding.md)
 ## Autowiring
 
 ```php
-$container->useAutowiring(true);
+$containerBuilder->useAutowiring(true);
 ```
 
-**Note: autowiring is enabled by default**
+**Note: autowiring is enabled by default.**
 
 This solution is the simplest, but also restricted.
 
@@ -69,80 +69,7 @@ So use autowiring either:
 
 ## Annotations
 
-```php
-$container->useAnnotations(true);
-```
-
-**Note: Annotations are enabled by default**
-
-Annotations are written in PHP docblock comments. They are used by a lot of modern libraries and frameworks, like [Doctrine](http://docs.doctrine-project.org/projects/doctrine-orm/en/latest/index.html), [Symfony](http://symfony.com/), [Flow](http://flow.typo3.org/), [PHPUnit](http://www.phpunit.de/manual/3.7/en/)…
-
-`@Inject` let's you define where PHP-DI should inject stuff, and what should it inject. You can also use `@var` and `@param` PhpDoc tags to define what should be injected.
-
-It can be used over:
-
-- the constructor (constructor injection)
-- setters (setter injection) or any method actually
-- properties (property injection)
-
-Here is an example of all possible uses of the `@Inject` annotation:
-
-```php
-class Example {
-    /**
-     * @Inject
-     * @var Foo
-     */
-    protected $property1;
-    /**
-     * @Inject("db.host")
-     */
-    protected $property2;
-
-    /**
-     * @Inject
-     * @param Foo $param1
-     * @param Bar $param2
-     */
-    public function __construct($param1, $param2) {
-    }
-
-    /**
-     * @Inject
-     */
-    public function method1(Foo $param) {
-    }
-
-    /**
-     * @Inject({"db.host", "db.name"})
-     */
-    public function method2($param1, $param2) {
-    }
-}
-```
-
-*Note*: importing annotations with `use DI\Annotation\Inject;` is optional since v3.5.
-
-The `@Injectable` annotation let's you set options on injectable classes:
-
-```php
-/**
- * @Injectable(scope="prototype", lazy=true)
- */
-class Example {
-}
-```
-
-**The `@Injectable` annotation is optional: by default, all classes are injectable.**
-
-There are still things that can't be defined with annotations:
-
-- values (instead of classes)
-- mapping interfaces to implementations
-- defining entries with an anonymous function
-
-For that, you can combine annotations with definitions in PHP (see below).
-
+See the dedicated documentation about [annotations](annotations.md).
 
 ## PHP configuration
 

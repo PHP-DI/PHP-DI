@@ -1,11 +1,7 @@
 ---
 layout: documentation
 title: Documentation index
-subtitle: Learn how to use PHP-DI.
-tab: index
 ---
-
-# Documentation
 
 ## Introduction
 
@@ -18,8 +14,8 @@ tab: index
 * [Configure the container](container-configuration.md)
 * [Use the container](container.md)
 * [Define injections](definition.md)
+* [Annotations](annotations.md)
 * [Definition overriding](definition-overriding.md)
-* [Lazy injection](lazy-injection.md)
 * [Scopes](scopes.md)
 
 ### Frameworks integration
@@ -32,6 +28,7 @@ tab: index
 ### Advanced topics
 
 * [Performances](performances.md)
+* [Lazy injection](lazy-injection.md)
 * [Inject on an existing instance](inject-on-instance.md)
 * [Injections depending on the environment](environments.md)
 

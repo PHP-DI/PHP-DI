@@ -30,12 +30,12 @@ menu:
                 definition:
                     text: Defining injections
                     url: doc/definition.html
+                annotations:
+                    text: Annotations
+                    url: doc/annotations.html
                 definition-overriding:
                     text: Definition overriding
                     url: doc/definition-overriding.html
-                lazy-injection:
-                    text: Lazy injection
-                    url: doc/lazy-injection.html
                 scopes:
                     text: Scopes
                     url: doc/scopes.html
@@ -57,6 +57,9 @@ menu:
                 performances:
                     text: Performances
                     url: doc/performances.html
+                lazy-injection:
+                    text: Lazy injection
+                    url: doc/lazy-injection.html
                 inject-on-instance:
                     text: Inject on an existing instance
                     url: doc/inject-on-instance.html
