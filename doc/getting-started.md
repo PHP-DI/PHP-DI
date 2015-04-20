@@ -1,6 +1,6 @@
 ---
 layout: documentation
-tab: get-started
+title: Getting started
 ---
 
 # Getting started
