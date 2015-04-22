@@ -61,7 +61,6 @@ class DefinitionDumperDispatcher implements DefinitionDumper
                 'DI\Definition\DecoratorDefinition'           => new DecoratorDefinitionDumper(),
                 'DI\Definition\AliasDefinition'               => new AliasDefinitionDumper(),
                 'DI\Definition\ObjectDefinition'              => new ObjectDefinitionDumper(),
-                'DI\Definition\FunctionCallDefinition'        => new FunctionCallDefinitionDumper(),
                 'DI\Definition\EnvironmentVariableDefinition' => new EnvironmentVariableDefinitionDumper(),
             );
         }

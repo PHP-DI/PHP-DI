@@ -15,16 +15,21 @@ use DI\Definition\FactoryDefinition;
 use DI\Definition\InstanceDefinition;
 use DI\Definition\Resolver\ResolverDispatcher;
 use DI\Definition\Source\CachedDefinitionSource;
-use DI\Definition\Source\CallableDefinitionSource;
 use DI\Definition\Source\DefinitionSource;
 use DI\Definition\Source\MutableDefinitionSource;
-use DI\Definition\Source\Autowiring;
 use DI\Definition\Helper\DefinitionHelper;
 use DI\Definition\Resolver\DefinitionResolver;
+use DI\Invoker\DefinitionParameterResolver;
 use DI\Proxy\ProxyFactory;
 use Exception;
 use Interop\Container\ContainerInterface;
 use InvalidArgumentException;
+use Invoker\Invoker;
+use Invoker\InvokerInterface;
+use Invoker\ParameterResolver\AssociativeArrayResolver;
+use Invoker\ParameterResolver\Container\TypeHintContainerResolver;
+use Invoker\ParameterResolver\NumericArrayResolver;
+use Invoker\ParameterResolver\ResolverChain;
 
 /**
  * Dependency Injection Container.
@@ -56,9 +61,9 @@ class Container implements ContainerInterface, FactoryInterface, InvokerInterfac
     private $entriesBeingResolved = array();
 
     /**
-     * @var CallableDefinitionSource
+     * @var InvokerInterface|null
      */
-    private $callableDefinitionSource;
+    private $invoker;
 
     /**
      * Use the ContainerBuilder to ease constructing the Container.
@@ -78,7 +83,6 @@ class Container implements ContainerInterface, FactoryInterface, InvokerInterfac
 
         $this->definitionSource = $definitionSource;
         $this->definitionResolver = new ResolverDispatcher($wrapperContainer, $proxyFactory);
-        $this->callableDefinitionSource = new Autowiring();
 
         // Auto-register the container
         $this->singletonEntries['DI\Container'] = $this;
@@ -224,15 +228,15 @@ class Container implements ContainerInterface, FactoryInterface, InvokerInterfac
      * Missing parameters will be resolved from the container.
      *
      * @param callable $callable   Function to call.
-     * @param array    $parameters Parameters to use. Must be an array indexed by the parameter names.
+     * @param array    $parameters Parameters to use. Can be indexed by the parameter names
+     *                             or not indexed (same order as the parameters).
+     *                             The array can also contain DI definitions, e.g. DI\get().
      *
      * @return mixed Result of the function.
      */
     public function call($callable, array $parameters = array())
     {
-        $definition = $this->callableDefinitionSource->getCallableDefinition($callable);
-
-        return $this->definitionResolver->resolve($definition, $parameters);
+        return $this->getInvoker()->call($callable, $parameters);
     }
 
     /**
@@ -307,5 +311,21 @@ class Container implements ContainerInterface, FactoryInterface, InvokerInterfac
         }
 
         $this->definitionSource->addDefinition($definition);
+    }
+
+    private function getInvoker()
+    {
+        if (! $this->invoker) {
+            $parameterResolver = new ResolverChain(array(
+                new NumericArrayResolver,
+                new AssociativeArrayResolver,
+                new DefinitionParameterResolver($this->definitionResolver),
+                new TypeHintContainerResolver($this),
+            ));
+
+            $this->invoker = new Invoker($parameterResolver, $this);
+        }
+
+        return $this->invoker;
     }
 }
