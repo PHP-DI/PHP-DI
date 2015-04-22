@@ -25,7 +25,6 @@ use Exception;
 use Interop\Container\ContainerInterface;
 use InvalidArgumentException;
 use Invoker\Invoker;
-use Invoker\InvokerInterface;
 use Invoker\ParameterResolver\AssociativeArrayResolver;
 use Invoker\ParameterResolver\Container\TypeHintContainerResolver;
 use Invoker\ParameterResolver\NumericArrayResolver;
@@ -36,7 +35,7 @@ use Invoker\ParameterResolver\ResolverChain;
  *
  * @author Matthieu Napoli <matthieu@mnapoli.fr>
  */
-class Container implements ContainerInterface, FactoryInterface, InvokerInterface
+class Container implements ContainerInterface, FactoryInterface, \DI\InvokerInterface
 {
     /**
      * Map of entries with Singleton scope that are already resolved.
@@ -61,7 +60,7 @@ class Container implements ContainerInterface, FactoryInterface, InvokerInterfac
     private $entriesBeingResolved = array();
 
     /**
-     * @var InvokerInterface|null
+     * @var \Invoker\InvokerInterface|null
      */
     private $invoker;
 
