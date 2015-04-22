@@ -12,15 +12,13 @@ namespace DI\Definition\Source;
 use DI\Definition\ObjectDefinition;
 use DI\Definition\EntryReference;
 use DI\Definition\ObjectDefinition\MethodInjection;
-use DI\Definition\FunctionCallDefinition;
-use DI\Reflection\CallableReflectionFactory;
 
 /**
  * Reads DI class definitions using reflection.
  *
  * @author Matthieu Napoli <matthieu@mnapoli.fr>
  */
-class Autowiring implements DefinitionSource, CallableDefinitionSource
+class Autowiring implements DefinitionSource
 {
     /**
      * {@inheritdoc}
@@ -43,16 +41,6 @@ class Autowiring implements DefinitionSource, CallableDefinitionSource
         }
 
         return $definition;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getCallableDefinition($callable)
-    {
-        $reflection = CallableReflectionFactory::fromCallable($callable);
-
-        return new FunctionCallDefinition($callable, $this->getParametersDefinition($reflection));
     }
 
     /**

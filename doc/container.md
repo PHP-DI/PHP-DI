@@ -91,55 +91,69 @@ recommended you type-hint against `FactoryInterface`. That avoids coupling your 
 
 ## call()
 
-Since version 4.2, the container exposes a `call()` method:
+The container exposes a `call()` method that can invoke any PHP callable.
+
+It offers the following additional features over using `call_user_func()`:
+
+- named parameters (pass parameters indexed by name instead of position)
+
+    ```php
+    $container->call(function ($foo, $bar) {
+        // ...
+    }, [
+        'param1' => 'Hello',
+        'param2' => 'World',
+    ]);
+
+    // Can also be useful in a micro-framework for example
+    $container->call($controller, $_GET + $_POST);
+    ```
+
+- dependency injection based on the type-hinting
+
+    ```php
+    $container->call(function (Logger $logger, EntityManager $em) {
+        // ...
+    });
+    ```
+
+- dependency injection based on explicit definition
+
+    ```php
+    $container->call(function ($dbHost) {
+        // ...
+    }, [
+        // Either indexed by parameter names
+        'dbHost' => \DI\get('db.host'),
+    ]);
+
+    $container->call(function ($dbHost) {
+        // ...
+    }, [
+        // Or not indexed
+        \DI\get('db.host'),
+    ]);
+    ```
+
+The best part is that you can mix all that:
 
 ```php
-$container->call(function (Logger $logger, EntityManager $em) {
+$container->call(function (Logger $logger, $dbHost, $operation) {
     // ...
-});
+}, [
+    'operation' => 'delete',
+    'dbHost'    => \DI\get('db.host'),
+]);
 ```
 
-The parameters are resolved as container entries using autowiring.
-
-If some parameters shouldn't be resolved by the container, or if some can't be resolved
-using autowiring (for example if a parameter is not type-hinted), then you must define those
-parameters in an array:
+The `call()` method is particularly useful to invoke controllers, for example:
 
 ```php
-$parameters = [
-    'data' => /* some variable */
-];
-
-$container->call(function (Logger $logger, $data) {
-    // ...
-}, $parameters);
-```
-
-As you can see, you can mix explicitly defined parameters (i.e. `$data` above)
-and auto-resolved parameters (i.e. the `$logger`).
-
-Note that you can also define injections on the fly if you don't use type-hints:
-
-```php
-$parameters = [
-    'logger' => \DI\get('Logger')
-];
-
-$container->call(function ($logger) {
-    // ...
-}, $parameters);
-```
-
-The `call()` method is useful to invoke controllers defined as closures, for example:
-
-```php
-$requestParameters = $_GET;
-
-$controller = function ($id, EntityManager $em) {
+$controller = function ($name, EntityManager $em) {
     // ...
 }
 
-$container->call($controller, $requestParameters);
+$container->call($controller, $_GET); // $_GET contains ['name' => 'John']
 ```
 
 This leaves the liberty to the developer writing controllers to get request parameters
@@ -154,13 +168,6 @@ namespace DI;
 
 interface InvokerInterface
 {
-    /**
-     * Call the given function using the given parameters.
-     *
-     * @param callable $callable   Function to call.
-     * @param array    $parameters Parameters to use.
-     * @return mixed Result of the function.
-     */
     public function call($callable, array $parameters = []);
 }
 ```
@@ -172,12 +179,12 @@ interface InvokerInterface
 - object methods and static methods
 - invokable objects (objects that implement [__invoke()](http://php.net/manual/en/language.oop5.magic.php#object.invoke))
 
-**New:** Since version 4.4, you can call:
+Additionally you can call:
 
-- callable class names: `$container->call('My\CallableClass')`
-- callable class methods: `$container->call(['MyClass', 'someMethod'])`
+- name of [invokable](http://php.net/manual/en/language.oop5.magic.php#object.invoke) classes: `$container->call('My\CallableClass')`
+- object methods (give the class name, not an object): `$container->call(['MyClass', 'someMethod'])`
 
-In both case, `'My\CallableClass'` and `'MyClass'` will be instantiated using `$container->get()`.
+In both case, `'My\CallableClass'` and `'MyClass'` will be resolved by the container using `$container->get()`.
 
 That saves you from a more verbose form, for example:
 
@@ -185,7 +192,7 @@ That saves you from a more verbose form, for example:
 $object = $container->get('My\CallableClass');
 $container->call($object);
 
-// can now be written as
+// can be written as
 $container->call('My\CallableClass');
 ```
 

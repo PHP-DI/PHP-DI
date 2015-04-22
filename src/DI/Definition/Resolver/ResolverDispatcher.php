@@ -34,7 +34,6 @@ class ResolverDispatcher implements DefinitionResolver
     private $aliasResolver;
     private $objectResolver;
     private $instanceResolver;
-    private $functionCallResolver;
     private $envVariableResolver;
     private $stringResolver;
 
@@ -125,11 +124,6 @@ class ResolverDispatcher implements DefinitionResolver
                     $this->instanceResolver = new InstanceInjector($this, $this->proxyFactory);
                 }
                 return $this->instanceResolver;
-            case 'DI\Definition\FunctionCallDefinition':
-                if (! $this->functionCallResolver) {
-                    $this->functionCallResolver = new FunctionInvoker($this->container, $this);
-                }
-                return $this->functionCallResolver;
             case 'DI\Definition\EnvironmentVariableDefinition':
                 if (! $this->envVariableResolver) {
                     $this->envVariableResolver = new EnvironmentVariableResolver($this);

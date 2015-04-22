@@ -10,7 +10,6 @@
 namespace DI\Test\UnitTest\Definition\Source;
 
 use DI\Definition\EntryReference;
-use DI\Definition\FunctionCallDefinition;
 use DI\Definition\Source\Autowiring;
 
 /**
@@ -55,58 +54,6 @@ class AutowiringTest extends \PHPUnit_Framework_TestCase
         $param1 = $parameters[0];
         $this->assertEquals(new EntryReference('DI\Test\UnitTest\Definition\Source\Fixtures\AutowiringFixture'), $param1);
     }
-
-    public function testClosureDefinition()
-    {
-        $source = new Autowiring();
-
-        $definition = $source->getCallableDefinition(function (\stdClass $foo, $bar) {
-        });
-
-        $this->assertTrue($definition instanceof FunctionCallDefinition);
-        $this->assertCount(1, $definition->getParameters());
-        $this->assertEquals(new EntryReference('stdClass'), $definition->getParameter(0));
-    }
-
-    public function testMethodCallDefinition()
-    {
-        $source = new Autowiring();
-
-        $object = new TestClass();
-        $definition = $source->getCallableDefinition(array($object, 'foo'));
-
-        $this->assertTrue($definition instanceof FunctionCallDefinition);
-        $this->assertCount(1, $definition->getParameters());
-        $this->assertEquals(new EntryReference('stdClass'), $definition->getParameter(0));
-    }
-
-    /**
-     * @test
-     */
-    public function optionalParameterShouldBeIgnored()
-    {
-        $source = new Autowiring();
-
-        $object = new TestClass();
-        $definition = $source->getCallableDefinition(array($object, 'optional'));
-
-        $this->assertTrue($definition instanceof FunctionCallDefinition);
-        $this->assertCount(0, $definition->getParameters());
-    }
-
-    /**
-     * @test
-     */
-    public function callableObjectShouldWork()
-    {
-        $source = new Autowiring();
-
-        $definition = $source->getCallableDefinition(new CallableTestClass());
-
-        $this->assertTrue($definition instanceof FunctionCallDefinition);
-        $this->assertCount(1, $definition->getParameters());
-        $this->assertEquals(new EntryReference('stdClass'), $definition->getParameter(0));
-    }
 }
 
 class TestClass
@@ -116,13 +63,6 @@ class TestClass
     }
 
     public function optional(\stdClass $foo = null)
-    {
-    }
-}
-
-class CallableTestClass
-{
-    public function __invoke(\stdClass $foo)
     {
     }
 }
