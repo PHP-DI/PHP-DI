@@ -49,13 +49,20 @@
     }
 
     .framework-integrations {
+        @framework-image-height: 70px;
         text-align: center;
-        i {
-            font-size: 70px;
+        .fa-lg {
+            font-size: @framework-image-height / 2;
             color: white;
+            .fa-stack-2x {
+                font-size: 2.2em;
+            }
+            .fa {
+                color: white;
+            }
         }
         img {
-            height: 70px;
+            height: @framework-image-height;
         }
     }
 
