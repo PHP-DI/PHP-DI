@@ -9,75 +9,44 @@ This documentation describes the API of the container object itself.
 
 ## get() & has()
 
-The container implements the standard [ContainerInterop](https://github.com/container-interop/container-interop).
-That means it implements `Interop\Container\ContainerInterface`:
+The container implements the [container-interop](https://github.com/container-interop/container-interop) standard. That means it implements [`Interop\Container\ContainerInterface`](https://github.com/container-interop/container-interop/blob/master/src/Interop/Container/ContainerInterface.php):
 
 ```php
 namespace Interop\Container;
 
 interface ContainerInterface
 {
-    /**
-     * Finds an entry of the container by its identifier and returns it.
-     *
-     * @param string $id Identifier of the entry to look for.
-     * @throws NotFoundException  No entry was found for this identifier.
-     * @throws ContainerException Error while retrieving the entry.
-     * @return mixed Entry.
-     */
     public function get($id);
-
-    /**
-     * Returns true if the container can return an entry for the given identifier.
-     *
-     * @param string $id Identifier of the entry to look for.
-     * @return boolean
-     */
     public function has($id);
 }
 ```
 
-If you type-hint against this interface instead of the implementation (`DI\Container`),
-that means you will be able to use another container (compatible with ContainerInterop)
-later.
+You are encouraged to type-hint against this interface instead instead of the implementation (`DI\Container`) whenever possible. Doing so means your code is decoupled from PHP-DI and you can switch to another container anytime.
 
 ## set()
 
-Of course you can set entries on the container:
+You can set entries directly on the container:
 
 ```php
 $container->set('foo', 'bar');
-
 $container->set('MyInterface', \DI\object('MyClass'));
 ```
 
-However it is recommended to use definition files.
-See the [definition documentation](definition.md).
+However it is recommended to use definition files. See the [definition documentation](definition.md).
 
 ## make()
 
-The container also offers a `make` method. This method is defined in the `DI\FactoryInterface`:
+The container also offers a `make()` method. This method is defined in [`DI\FactoryInterface`](https://github.com/mnapoli/PHP-DI/blob/master/src/DI/FactoryInterface.php).
 
 ```php
-interface FactoryInterface
-{
-    /**
-     * Resolves an entry by its name. If given a class name, it will return a new instance of that class.
-     *
-     * @param string $name       Entry name or a class name.
-     * @param array  $parameters Optional parameters to use to build the entry. Use this to force specific
-     *                           parameters to specific values. Parameters not defined in this array will
-     *                           be automatically resolved.
-     *
-     * @throws DependencyException Error while resolving the entry.
-     * @throws NotFoundException   No entry or class found for the given name.
-     * @return mixed
-     */
-    public function make($name, array $parameters = array());
-}
+$container->make('MyClass', [
+    'param1' => 'Hello',
+    'param2' => 'world',
+]);
 ```
 
-The `make()` method works the same as `get()`, except it will create a new instance each time.
+The `make()` method works like `get()` except *it will create a new instance every time it is called*.
+
 It will use the parameters provided for the constructor, and the missing parameters will be
 resolved from the container.
 
