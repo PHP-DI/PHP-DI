@@ -39,9 +39,14 @@ However it is recommended to use definition files. See the [definition documenta
 The container also offers a `make()` method. This method is defined in [`DI\FactoryInterface`](https://github.com/mnapoli/PHP-DI/blob/master/src/DI/FactoryInterface.php).
 
 ```php
-$container->make('MyClass', [
-    'param1' => 'Hello',
-    'param2' => 'world',
+class GithubProfile
+{
+    public function __construct(ApiClient $client, $user)
+    ...
+}
+
+$container->make('GithubProfile', [
+    'user' => 'torvalds',
 ]);
 ```
 
@@ -50,12 +55,10 @@ The `make()` method works like `get()` except *it will create a new instance eve
 It will use the parameters provided for the constructor, and the missing parameters will be
 resolved from the container.
 
-It is very useful to create objects that do not belong *inside* the container (i.e. that are not services),
-but that may have dependencies. It is also useful if you want to override some parameters in the constructor.
-For example controllers, models, …
+It is useful to create objects that do not belong *inside* the container (i.e. that are not services, or that are not [**stateless**](https://igor.io/2013/03/31/stateless-services.html)), but that have dependencies. It is also useful if you want to override some parameters in the constructor.
 
 If you need to use the `make()` method inside a service, or a controller, or whatever, it is
-recommended you type-hint against `FactoryInterface`. That avoids coupling your code to the container.
+recommended that you type-hint against `FactoryInterface`. That avoids coupling your code to the container.
 `DI\FactoryInterface` is automatically bound to `DI\Container` so you can inject it without any configuration.
 
 ## call()
