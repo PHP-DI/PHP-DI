@@ -48,7 +48,7 @@ class AbstractFunctionCallDefinitionTest extends \PHPUnit_Framework_TestCase
     {
         /** @var AbstractFunctionCallDefinition $definition */
         $definition = $this->getMockForAbstractClass('DI\Definition\AbstractFunctionCallDefinition');
-        $definition->replaceParameters(array('bar'));
+        $definition->replaceParameters(['bar']);
 
         $this->assertEquals('bar', $definition->getParameter(0));
     }
@@ -57,7 +57,7 @@ class AbstractFunctionCallDefinitionTest extends \PHPUnit_Framework_TestCase
     {
         /** @var AbstractFunctionCallDefinition $definition */
         $definition = $this->getMockForAbstractClass('DI\Definition\AbstractFunctionCallDefinition');
-        $definition->replaceParameters(array('bar'));
+        $definition->replaceParameters(['bar']);
 
         $this->assertTrue($definition->hasParameter(0));
         $this->assertFalse($definition->hasParameter(1));
@@ -78,9 +78,9 @@ class AbstractFunctionCallDefinitionTest extends \PHPUnit_Framework_TestCase
     {
         /** @var AbstractFunctionCallDefinition $definition */
         $definition = $this->getMockForAbstractClass('DI\Definition\AbstractFunctionCallDefinition');
-        $definition->replaceParameters(array('bar'));
-        $definition->replaceParameters(array('bim'));
+        $definition->replaceParameters(['bar']);
+        $definition->replaceParameters(['bim']);
 
-        $this->assertEquals(array('bim'), $definition->getParameters());
+        $this->assertEquals(['bim'], $definition->getParameters());
     }
 }

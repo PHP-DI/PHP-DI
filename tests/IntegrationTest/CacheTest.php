@@ -26,9 +26,9 @@ class CacheTest extends \PHPUnit_Framework_TestCase
     {
         $builder = new ContainerBuilder();
         $builder->setDefinitionCache(new ArrayCache());
-        $builder->addDefinitions(array(
+        $builder->addDefinitions([
             'foo' => 'bar',
-        ));
+        ]);
 
         $container = $builder->build();
 

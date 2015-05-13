@@ -181,14 +181,14 @@ class AnnotationReader implements DefinitionSource
                 $e->getMessage()
             ), 0, $e);
         }
-        $annotationParameters = $annotation ? $annotation->getParameters() : array();
+        $annotationParameters = $annotation ? $annotation->getParameters() : [];
 
         // @Inject on constructor is implicit
         if (! ($annotation || $method->isConstructor())) {
             return null;
         }
 
-        $parameters = array();
+        $parameters = [];
         foreach ($method->getParameters() as $index => $parameter) {
             $entryName = $this->getMethodParameter($index, $parameter, $annotationParameters);
 

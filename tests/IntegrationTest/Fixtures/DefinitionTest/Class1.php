@@ -5,7 +5,7 @@ namespace DI\Test\IntegrationTest\Fixtures\DefinitionTest;
 class Class1
 {
     public $count = 0;
-    public $items = array();
+    public $items = [];
 
     public function increment()
     {

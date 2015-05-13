@@ -90,8 +90,8 @@ class ContainerBuilderTest extends \PHPUnit_Framework_TestCase
         $builder = new ContainerBuilder('DI\Test\UnitTest\Fixtures\FakeContainer');
 
         // Custom definition sources should be chained correctly
-        $builder->addDefinitions(new DefinitionArray(array('foo' => 'bar')));
-        $builder->addDefinitions(new DefinitionArray(array('foofoo' => 'barbar')));
+        $builder->addDefinitions(new DefinitionArray(['foo' => 'bar']));
+        $builder->addDefinitions(new DefinitionArray(['foofoo' => 'barbar']));
 
         /** @var FakeContainer $container */
         $container = $builder->build();
@@ -113,8 +113,8 @@ class ContainerBuilderTest extends \PHPUnit_Framework_TestCase
     {
         $builder = new ContainerBuilder('DI\Test\UnitTest\Fixtures\FakeContainer');
 
-        $builder->addDefinitions(new DefinitionArray(array('foo' => 'bar')));
-        $builder->addDefinitions(new DefinitionArray(array('foo' => 'bim')));
+        $builder->addDefinitions(new DefinitionArray(['foo' => 'bar']));
+        $builder->addDefinitions(new DefinitionArray(['foo' => 'bim']));
 
         /** @var FakeContainer $container */
         $container = $builder->build();
@@ -132,8 +132,8 @@ class ContainerBuilderTest extends \PHPUnit_Framework_TestCase
         $builder = new ContainerBuilder('DI\Test\UnitTest\Fixtures\FakeContainer');
 
         // Custom definition sources should be chained correctly
-        $builder->addDefinitions(array('foo' => 'bar'));
-        $builder->addDefinitions(array('foofoo' => 'barbar'));
+        $builder->addDefinitions(['foo' => 'bar']);
+        $builder->addDefinitions(['foofoo' => 'barbar']);
 
         /** @var FakeContainer $container */
         $container = $builder->build();

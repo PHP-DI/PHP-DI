@@ -24,7 +24,7 @@ class ArrayDefinitionExtensionHelper implements DefinitionHelper
     /**
      * @var array
      */
-    private $values = array();
+    private $values = [];
 
     /**
      * @param array $values Values to add to the array.

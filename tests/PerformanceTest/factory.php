@@ -10,7 +10,7 @@ $builder = new ContainerBuilder();
 $builder->useAutowiring(false);
 $builder->useAnnotations(false);
 
-$builder->addDefinitions(array(
+$builder->addDefinitions([
 
     'stdClass' => new stdClass(),
 
@@ -26,7 +26,7 @@ $builder->addDefinitions(array(
         return $c->get('stdClass');
     })->scope(Scope::PROTOTYPE),
 
-));
+]);
 
 $container = $builder->build();
 

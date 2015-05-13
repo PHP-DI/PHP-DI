@@ -22,10 +22,10 @@ class WildcardDefinitionsTest extends \PHPUnit_Framework_TestCase
     public function testWildcards()
     {
         $builder = new ContainerBuilder();
-        $builder->addDefinitions(array(
+        $builder->addDefinitions([
             'foo*'                                 => 'bar',
             'DI\Test\IntegrationTest\*\Interface*' => \DI\object('DI\Test\IntegrationTest\*\Implementation*'),
-        ));
+        ]);
         $container = $builder->build();
 
         $this->assertEquals('bar', $container->get('foo1'));

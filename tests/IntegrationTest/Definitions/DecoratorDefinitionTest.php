@@ -22,14 +22,14 @@ class DecoratorDefinitionTest extends \PHPUnit_Framework_TestCase
     public function test_decorate_value()
     {
         $builder = new ContainerBuilder();
-        $builder->addDefinitions(array(
+        $builder->addDefinitions([
             'foo' => 'bar',
-        ));
-        $builder->addDefinitions(array(
+        ]);
+        $builder->addDefinitions([
             'foo' => \DI\decorate(function ($previous) {
                 return $previous . 'baz';
             }),
-        ));
+        ]);
         $container = $builder->build();
 
         $this->assertEquals('barbaz', $container->get('foo'));
@@ -38,16 +38,16 @@ class DecoratorDefinitionTest extends \PHPUnit_Framework_TestCase
     public function test_decorate_factory()
     {
         $builder = new ContainerBuilder();
-        $builder->addDefinitions(array(
+        $builder->addDefinitions([
             'foo' => function () {
                 return 'bar';
             },
-        ));
-        $builder->addDefinitions(array(
+        ]);
+        $builder->addDefinitions([
             'foo' => \DI\decorate(function ($previous) {
                 return $previous . 'baz';
             }),
-        ));
+        ]);
         $container = $builder->build();
 
         $this->assertEquals('barbaz', $container->get('foo'));
@@ -56,15 +56,15 @@ class DecoratorDefinitionTest extends \PHPUnit_Framework_TestCase
     public function test_decorate_object()
     {
         $builder = new ContainerBuilder();
-        $builder->addDefinitions(array(
+        $builder->addDefinitions([
             'foo' => \DI\object('stdClass'),
-        ));
-        $builder->addDefinitions(array(
+        ]);
+        $builder->addDefinitions([
             'foo' => \DI\decorate(function ($previous) {
                 $previous->foo = 'bar';
                 return $previous;
             }),
-        ));
+        ]);
         $container = $builder->build();
 
         $object = $container->get('foo');
@@ -74,15 +74,15 @@ class DecoratorDefinitionTest extends \PHPUnit_Framework_TestCase
     public function test_decorator_gets_container()
     {
         $builder = new ContainerBuilder();
-        $builder->addDefinitions(array(
+        $builder->addDefinitions([
             'foo' => 'hello ',
             'bar' => 'world',
-        ));
-        $builder->addDefinitions(array(
+        ]);
+        $builder->addDefinitions([
             'foo' => \DI\decorate(function ($previous, ContainerInterface $container) {
                 return $previous . $container->get('bar');
             }),
-        ));
+        ]);
         $container = $builder->build();
 
         $this->assertEquals('hello world', $container->get('foo'));
@@ -91,19 +91,19 @@ class DecoratorDefinitionTest extends \PHPUnit_Framework_TestCase
     public function test_multiple_decorators()
     {
         $builder = new ContainerBuilder();
-        $builder->addDefinitions(array(
+        $builder->addDefinitions([
             'foo' => 'bar',
-        ));
-        $builder->addDefinitions(array(
+        ]);
+        $builder->addDefinitions([
             'foo' => \DI\decorate(function ($previous) {
                 return $previous . 'baz';
             }),
-        ));
-        $builder->addDefinitions(array(
+        ]);
+        $builder->addDefinitions([
             'foo' => \DI\decorate(function ($previous) {
                 return $previous . 'bam';
             }),
-        ));
+        ]);
         $container = $builder->build();
 
         $this->assertEquals('barbazbam', $container->get('foo'));
@@ -116,11 +116,11 @@ class DecoratorDefinitionTest extends \PHPUnit_Framework_TestCase
     public function test_decorate_must_have_previous_definition()
     {
         $builder = new ContainerBuilder();
-        $builder->addDefinitions(array(
+        $builder->addDefinitions([
             'foo' => \DI\decorate(function ($previous) {
                 return $previous;
             }),
-        ));
+        ]);
         $container = $builder->build();
         $container->get('foo');
     }
@@ -132,13 +132,13 @@ class DecoratorDefinitionTest extends \PHPUnit_Framework_TestCase
     public function test_decorator_in_array()
     {
         $builder = new ContainerBuilder();
-        $builder->addDefinitions(array(
-            'foo' => array(
+        $builder->addDefinitions([
+            'foo' => [
                 \DI\decorate(function ($previous) {
                     return $previous;
                 }),
-            ),
-        ));
+            ],
+        ]);
         $container = $builder->build();
         $container->get('foo');
     }

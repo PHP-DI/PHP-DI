@@ -39,7 +39,7 @@ class ContainerCallTest extends \PHPUnit_Framework_TestCase
     {
         $container = ContainerBuilder::buildDevContainer();
 
-        $result = $container->call(array($this, 'method'));
+        $result = $container->call([$this, 'method']);
 
         $this->assertEquals('foo', $result);
     }
@@ -51,7 +51,7 @@ class ContainerCallTest extends \PHPUnit_Framework_TestCase
     {
         $container = ContainerBuilder::buildDevContainer();
 
-        $result = $container->call(array(get_class(), 'staticMethod'));
+        $result = $container->call([get_class(), 'staticMethod']);
 
         $this->assertEquals('bar', $result);
     }
@@ -65,10 +65,10 @@ class ContainerCallTest extends \PHPUnit_Framework_TestCase
 
         $result = $container->call(function ($param1, $param2) {
             return $param1 . $param2;
-        }, array(
+        }, [
             'param1' => 'foo',
             'param2' => 'bar',
-        ));
+        ]);
 
         $this->assertEquals('foobar', $result);
     }
@@ -82,11 +82,11 @@ class ContainerCallTest extends \PHPUnit_Framework_TestCase
 
         $result = $container->call(function ($param1, $param2) {
             return $param1 . $param2;
-        }, array(
+        }, [
             // Reverse order: should still work
             'param2' => 'bar',
             'param1' => 'foo',
-        ));
+        ]);
 
         $this->assertEquals('foobar', $result);
     }

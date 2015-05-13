@@ -25,13 +25,13 @@ class ObjectDefinitionTest extends \PHPUnit_Framework_TestCase
         $builder = new ContainerBuilder();
         $builder->useAutowiring(false);
         $builder->useAnnotations(false);
-        $builder->addDefinitions(array(
+        $builder->addDefinitions([
             // with the same name
             'stdClass' => \DI\object('stdClass'),
             // with a different name
             'object' => \DI\object('ArrayObject')
-                ->constructor(array()),
-        ));
+                ->constructor([]),
+        ]);
         $container = $builder->build();
 
         $this->assertInstanceOf('stdClass', $container->get('stdClass'));

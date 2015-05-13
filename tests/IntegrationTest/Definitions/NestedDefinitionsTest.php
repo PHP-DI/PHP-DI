@@ -26,11 +26,11 @@ class NestedDefinitionsTest extends \PHPUnit_Framework_TestCase
     {
         $builder = new ContainerBuilder();
 
-        $builder->addDefinitions(array(
+        $builder->addDefinitions([
             'foo'    => 'bar',
             'link'   => \DI\env('PHP_DI_DO_NOT_DEFINE_THIS', \DI\get('foo')),
             'object' => \DI\env('PHP_DI_DO_NOT_DEFINE_THIS', \DI\object('stdClass')),
-        ));
+        ]);
 
         $container = $builder->build();
 
@@ -49,7 +49,7 @@ class NestedDefinitionsTest extends \PHPUnit_Framework_TestCase
         $impl = new Implementation1();
         $lazyDep = new LazyDependency();
 
-        $builder->addDefinitions(array(
+        $builder->addDefinitions([
             'foo'                                             => 'bar',
             'DI\Test\IntegrationTest\Fixtures\LazyDependency' => $lazyDep,
             'obj'                                             => \DI\object('DI\Test\IntegrationTest\Fixtures\Class1')
@@ -63,7 +63,7 @@ class NestedDefinitionsTest extends \PHPUnit_Framework_TestCase
                 ->property('property2', \DI\factory(function () use ($impl) {
                     return $impl;
                 })),
-        ));
+        ]);
 
         $container = $builder->build();
         /** @var Class1 $obj */
@@ -86,22 +86,22 @@ class NestedDefinitionsTest extends \PHPUnit_Framework_TestCase
     {
         $builder = new ContainerBuilder();
 
-        $builder->addDefinitions(array(
+        $builder->addDefinitions([
             'foo'   => 'bar',
-            'array' => array(
+            'array' => [
                 'env'    => \DI\env('PHP_DI_DO_NOT_DEFINE_THIS', \DI\get('foo')),
                 'link'   => \DI\get('foo'),
                 'object' => \DI\object('stdClass'),
-            ),
-        ));
+            ],
+        ]);
 
         $container = $builder->build();
 
-        $expected = array(
+        $expected = [
             'env'    => 'bar',
             'link'   => 'bar',
             'object' => new \stdClass(),
-        );
+        ];
 
         $this->assertEquals($expected, $container->get('array'));
     }

@@ -32,12 +32,12 @@ class FactoryResolverTest extends \PHPUnit_Framework_TestCase
 
     public function provideCallables()
     {
-        return array(
-            'closure'        => array(function () { return 'bar'; }),
-            'string'         => array(__NAMESPACE__ . '\FactoryDefinitionResolver_test'),
-            'array'          => array(array(new FactoryDefinitionResolverTestClass(), 'foo')),
-            'invokableClass' => array(new FactoryDefinitionResolverCallableClass()),
-        );
+        return [
+            'closure'        => [function () { return 'bar'; }],
+            'string'         => [__NAMESPACE__ . '\FactoryDefinitionResolver_test'],
+            'array'          => [[new FactoryDefinitionResolverTestClass(), 'foo']],
+            'invokableClass' => [new FactoryDefinitionResolverCallableClass()],
+        ];
     }
 
     /**

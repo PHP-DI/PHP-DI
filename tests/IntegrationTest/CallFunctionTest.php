@@ -41,7 +41,7 @@ class CallFunctionTest extends \PHPUnit_Framework_TestCase
     {
         $result = $this->container->call(function($foo, $bar) {
             return $foo . $bar;
-        }, array('foo', 'bar',));
+        }, ['foo', 'bar',]);
         $this->assertEquals('foobar', $result);
     }
 
@@ -49,10 +49,10 @@ class CallFunctionTest extends \PHPUnit_Framework_TestCase
     {
         $result = $this->container->call(function($foo, $bar) {
             return $foo . $bar;
-        }, array(
+        }, [
             'bar' => 'buzz',
             'foo' => 'fizz',
-        ));
+        ]);
         $this->assertEquals('fizzbuzz', $result);
     }
 
@@ -64,10 +64,10 @@ class CallFunctionTest extends \PHPUnit_Framework_TestCase
         $result = $this->container->call(function($foo, $bar) use ($self) {
             $self->assertInstanceOf('stdClass', $bar);
             return $foo;
-        }, array(
+        }, [
             'bar' => \DI\object('stdClass'),
             'foo' => \DI\get('bar'),
-        ));
+        ]);
         $this->assertEquals('bam', $result);
     }
 
@@ -79,7 +79,7 @@ class CallFunctionTest extends \PHPUnit_Framework_TestCase
         $result = $this->container->call(function($foo, $bar) use ($self) {
             $self->assertInstanceOf('stdClass', $bar);
             return $foo;
-        }, array(\DI\get('bar'),\DI\object('stdClass')));
+        }, [\DI\get('bar'),\DI\object('stdClass')]);
         $this->assertEquals('bam', $result);
     }
 
@@ -101,7 +101,7 @@ class CallFunctionTest extends \PHPUnit_Framework_TestCase
     {
         $container = ContainerBuilder::buildDevContainer();
         $object = new TestClass();
-        $result = $container->call(array($object, 'foo'));
+        $result = $container->call([$object, 'foo']);
         $this->assertEquals(42, $result);
     }
 
@@ -111,7 +111,7 @@ class CallFunctionTest extends \PHPUnit_Framework_TestCase
     public function creates_and_calls_class_methods_using_container()
     {
         $class = __NAMESPACE__ . '\TestClass';
-        $result = $this->container->call(array($class, 'foo'));
+        $result = $this->container->call([$class, 'foo']);
         $this->assertEquals(42, $result);
     }
 
@@ -121,7 +121,7 @@ class CallFunctionTest extends \PHPUnit_Framework_TestCase
     public function calls_static_methods()
     {
         $class = __NAMESPACE__ . '\TestClass';
-        $result = $this->container->call(array($class, 'bar'));
+        $result = $this->container->call([$class, 'bar']);
         $this->assertEquals(24, $result);
     }
 
@@ -149,9 +149,9 @@ class CallFunctionTest extends \PHPUnit_Framework_TestCase
      */
     public function calls_functions()
     {
-        $result = $this->container->call(__NAMESPACE__ . '\CallFunctionTest_function', array(
+        $result = $this->container->call(__NAMESPACE__ . '\CallFunctionTest_function', [
             'str' => 'foo',
-        ));
+        ]);
         $this->assertEquals(3, $result);
     }
 

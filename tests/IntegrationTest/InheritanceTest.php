@@ -94,9 +94,9 @@ class InheritanceTest extends \PHPUnit_Framework_TestCase
                 ->method('setProperty2', \DI\get('DI\Test\IntegrationTest\Fixtures\InheritanceTest\Dependency'))
         );
 
-        return array(
-            'annotation' => array($containerAnnotations),
-            'php'        => array($containerPHPDefinitions),
-        );
+        return [
+            'annotation' => [$containerAnnotations],
+            'php'        => [$containerPHPDefinitions],
+        ];
     }
 }

@@ -79,7 +79,7 @@ class ObjectDefinitionHelperTest extends \PHPUnit_Framework_TestCase
         $helper->constructor(1, 2, 3);
         $definition = $helper->getDefinition('foo');
 
-        $this->assertEquals(array(1, 2, 3), $definition->getConstructorInjection()->getParameters());
+        $this->assertEquals([1, 2, 3], $definition->getConstructorInjection()->getParameters());
     }
 
     /**
@@ -121,7 +121,7 @@ class ObjectDefinitionHelperTest extends \PHPUnit_Framework_TestCase
 
         $this->assertCount(1, $definition->getMethodInjections());
         $methodInjection = current($definition->getMethodInjections());
-        $this->assertEquals(array(1, 2, 3), $methodInjection->getParameters());
+        $this->assertEquals([1, 2, 3], $methodInjection->getParameters());
     }
 
     /**
@@ -137,9 +137,9 @@ class ObjectDefinitionHelperTest extends \PHPUnit_Framework_TestCase
         $methodCalls = $definition->getMethodInjections();
         $this->assertCount(2, $methodCalls);
         $methodInjection = array_shift($methodCalls);
-        $this->assertEquals(array(1, 2), $methodInjection->getParameters());
+        $this->assertEquals([1, 2], $methodInjection->getParameters());
         $methodInjection = array_shift($methodCalls);
-        $this->assertEquals(array(3, 4), $methodInjection->getParameters());
+        $this->assertEquals([3, 4], $methodInjection->getParameters());
     }
 
     /**
@@ -173,7 +173,7 @@ class ObjectDefinitionHelperTest extends \PHPUnit_Framework_TestCase
         $methodInjection = current($definition->getMethodInjections());
 
         // Check that injections are in the good order (matching the real parameters order)
-        $this->assertEquals(array('val1', 'val2'), $methodInjection->getParameters());
+        $this->assertEquals(['val1', 'val2'], $methodInjection->getParameters());
     }
 
     /**

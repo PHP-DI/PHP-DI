@@ -48,7 +48,7 @@ class InstanceInjectorTest extends \PHPUnit_Framework_TestCase
         $instance = new FixtureClass('');
 
         $objectDefinition = new ObjectDefinition(get_class($instance));
-        $objectDefinition->addMethodInjection(new MethodInjection('method', array('value')));
+        $objectDefinition->addMethodInjection(new MethodInjection('method', ['value']));
 
         $resolver = $this->buildResolver();
         $resolver->resolve(new InstanceDefinition($instance, $objectDefinition));

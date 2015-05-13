@@ -26,17 +26,17 @@ class SourceChainTest extends \PHPUnit_Framework_TestCase
      */
     public function should_get_from_all_sources()
     {
-        $chain = new SourceChain(array(
-            new DefinitionArray(array(
+        $chain = new SourceChain([
+            new DefinitionArray([
                 'test1' => 'test1',
-            )),
-            new DefinitionArray(array(
+            ]),
+            new DefinitionArray([
                 'test2' => 'test2',
-            )),
-            new DefinitionArray(array(
+            ]),
+            new DefinitionArray([
                 'test3' => 'test3',
-            )),
-        ));
+            ]),
+        ]);
         $this->assertValueDefinition($chain->getDefinition('test1'), 'test1');
         $this->assertValueDefinition($chain->getDefinition('test2'), 'test2');
         $this->assertValueDefinition($chain->getDefinition('test3'), 'test3');
@@ -47,14 +47,14 @@ class SourceChainTest extends \PHPUnit_Framework_TestCase
      */
     public function should_stop_when_definition_found()
     {
-        $chain = new SourceChain(array(
-            new DefinitionArray(array(
+        $chain = new SourceChain([
+            new DefinitionArray([
                 'foo' => 'bar',
-            )),
-            new DefinitionArray(array(
+            ]),
+            new DefinitionArray([
                 'foo' => 'bim',
-            )),
-        ));
+            ]),
+        ]);
         $this->assertValueDefinition($chain->getDefinition('foo'), 'bar');
     }
 
@@ -63,15 +63,15 @@ class SourceChainTest extends \PHPUnit_Framework_TestCase
      */
     public function setting_the_mutable_definition_source_should_chain_it_at_the_top()
     {
-        $chain = new SourceChain(array(
-            new DefinitionArray(array(
+        $chain = new SourceChain([
+            new DefinitionArray([
                 'foo' => 'bar',
-            )),
-        ));
+            ]),
+        ]);
 
-        $chain->setMutableDefinitionSource(new DefinitionArray(array(
+        $chain->setMutableDefinitionSource(new DefinitionArray([
             'foo' => 'bim',
-        )));
+        ]));
         $this->assertValueDefinition($chain->getDefinition('foo'), 'bim');
     }
 
@@ -80,7 +80,7 @@ class SourceChainTest extends \PHPUnit_Framework_TestCase
      */
     public function adding_definitions_should_go_in_the_mutable_definition_source()
     {
-        $chain = new SourceChain(array());
+        $chain = new SourceChain([]);
         $mutableSource = new DefinitionArray();
         $chain->setMutableDefinitionSource($mutableSource);
 
@@ -95,16 +95,16 @@ class SourceChainTest extends \PHPUnit_Framework_TestCase
      */
     public function search_sub_definitions_with_different_name_from_root()
     {
-        $chain = new SourceChain(array(
-            new DefinitionArray(array(
+        $chain = new SourceChain([
+            new DefinitionArray([
                 'subdef' => \DI\object('stdClass')
                     ->lazy(),
-            )),
-            new DefinitionArray(array(
+            ]),
+            new DefinitionArray([
                 'def' => \DI\object('subdef'),
-            )),
+            ]),
             new Autowiring(),
-        ));
+        ]);
 
         /** @var ObjectDefinition $definition */
         $definition = $chain->getDefinition('def');
@@ -114,9 +114,9 @@ class SourceChainTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($definition->isLazy());
 
         // Define a new root source: should be used
-        $chain->setRootDefinitionSource(new DefinitionArray(array(
+        $chain->setRootDefinitionSource(new DefinitionArray([
             'subdef' => \DI\object('stdClass'), // this one is not lazy
-        )));
+        ]));
         $definition = $chain->getDefinition('def');
         $this->assertFalse($definition->isLazy()); // shouldn't be lazy
     }
@@ -126,19 +126,19 @@ class SourceChainTest extends \PHPUnit_Framework_TestCase
      */
     public function search_sub_definitions_with_same_name_from_next_source()
     {
-        $chain = new SourceChain(array(
-            new DefinitionArray(array(
+        $chain = new SourceChain([
+            new DefinitionArray([
                 'def' => \DI\object(),
-            )),
-            new DefinitionArray(array(
+            ]),
+            new DefinitionArray([
                 'def' => \DI\object('stdClass') // Should use this definition
                     ->lazy(),
-            )),
-            new DefinitionArray(array(
+            ]),
+            new DefinitionArray([
                 'def' => \DI\object('DateTime'), // Should NOT use this one
-            )),
+            ]),
             new Autowiring(),
-        ));
+        ]);
 
         /** @var ObjectDefinition $definition */
         $definition = $chain->getDefinition('def');

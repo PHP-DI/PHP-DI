@@ -118,7 +118,7 @@ class ObjectDefinitionDumper implements DefinitionDumper
     {
         $methodReflection = new \ReflectionMethod($className, $methodInjection->getMethodName());
 
-        $args = array();
+        $args = [];
 
         foreach ($methodReflection->getParameters() as $index => $parameter) {
             if ($methodInjection->hasParameter($index)) {

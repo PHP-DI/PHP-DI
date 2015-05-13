@@ -1,5 +1,5 @@
 <?php
 
-return array(
+return [
     'foo1' => 'bar1',
-);
+];

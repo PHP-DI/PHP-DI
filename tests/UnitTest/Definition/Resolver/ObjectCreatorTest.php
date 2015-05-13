@@ -57,8 +57,8 @@ class ObjectCreatorTest extends \PHPUnit_Framework_TestCase
     {
         $definition = new ObjectDefinition(self::FIXTURE_CLASS);
         $definition->addPropertyInjection(new PropertyInjection('prop', 'value1'));
-        $definition->setConstructorInjection(MethodInjection::constructor(array('value2')));
-        $definition->addMethodInjection(new MethodInjection('method', array('value3')));
+        $definition->setConstructorInjection(MethodInjection::constructor(['value2']));
+        $definition->addMethodInjection(new MethodInjection('method', ['value3']));
 
         $object = $this->resolver->resolve($definition);
 
@@ -80,7 +80,7 @@ class ObjectCreatorTest extends \PHPUnit_Framework_TestCase
     {
         $definition = new ObjectDefinition(self::FIXTURE_CLASS);
 
-        $object = $this->resolver->resolve($definition, array('param1' => 'value'));
+        $object = $this->resolver->resolve($definition, ['param1' => 'value']);
 
         $this->assertInstanceOf(self::FIXTURE_CLASS, $object);
         $this->assertEquals('value', $object->constructorParam1);
@@ -92,9 +92,9 @@ class ObjectCreatorTest extends \PHPUnit_Framework_TestCase
     public function testResolveWithParametersAndDefinition()
     {
         $definition = new ObjectDefinition(self::FIXTURE_CLASS);
-        $definition->setConstructorInjection(MethodInjection::constructor(array('foo')));
+        $definition->setConstructorInjection(MethodInjection::constructor(['foo']));
 
-        $object = $this->resolver->resolve($definition, array('param1' => 'bar'));
+        $object = $this->resolver->resolve($definition, ['param1' => 'bar']);
 
         $this->assertInstanceOf(self::FIXTURE_CLASS, $object);
         $this->assertEquals('bar', $object->constructorParam1);
@@ -107,7 +107,7 @@ class ObjectCreatorTest extends \PHPUnit_Framework_TestCase
     {
         $definition = new ObjectDefinition(self::FIXTURE_CLASS);
 
-        $object = $this->resolver->resolve($definition, array('param1' => 'value', 'unknown' => 'foo'));
+        $object = $this->resolver->resolve($definition, ['param1' => 'value', 'unknown' => 'foo']);
 
         $this->assertInstanceOf(self::FIXTURE_CLASS, $object);
         $this->assertEquals('value', $object->constructorParam1);
@@ -120,9 +120,9 @@ class ObjectCreatorTest extends \PHPUnit_Framework_TestCase
     {
         $definition = new ObjectDefinition(self::FIXTURE_CLASS);
         // The constructor definition uses a nested definition
-        $definition->setConstructorInjection(MethodInjection::constructor(array(
+        $definition->setConstructorInjection(MethodInjection::constructor([
             \DI\object(self::FIXTURE_CLASS_NO_CONSTRUCTOR),
-        )));
+        ]));
 
         $this->parentResolver->expects($this->once())
             ->method('resolve')
@@ -143,7 +143,7 @@ class ObjectCreatorTest extends \PHPUnit_Framework_TestCase
         $definition = new ObjectDefinition(self::FIXTURE_CLASS);
         $definition->addPropertyInjection(new PropertyInjection('prop', \DI\object(self::FIXTURE_CLASS_NO_CONSTRUCTOR)));
         // Unrelated to the test but necessary since it's a mandatory parameter
-        $definition->setConstructorInjection(MethodInjection::constructor(array('foo')));
+        $definition->setConstructorInjection(MethodInjection::constructor(['foo']));
 
         $this->parentResolver->expects($this->once())
             ->method('resolve')
@@ -162,7 +162,7 @@ class ObjectCreatorTest extends \PHPUnit_Framework_TestCase
     public function testResolveNullInjections()
     {
         $definition = new ObjectDefinition(self::FIXTURE_CLASS);
-        $definition->setConstructorInjection(MethodInjection::constructor(array(null)));
+        $definition->setConstructorInjection(MethodInjection::constructor([null]));
         $definition->addPropertyInjection(new PropertyInjection('prop', null));
 
         $object = $this->resolver->resolve($definition);
@@ -175,7 +175,7 @@ class ObjectCreatorTest extends \PHPUnit_Framework_TestCase
     public function testDefaultParameterValue()
     {
         $definition = new ObjectDefinition(self::FIXTURE_CLASS);
-        $definition->setConstructorInjection(MethodInjection::constructor(array('')));
+        $definition->setConstructorInjection(MethodInjection::constructor(['']));
         $definition->addMethodInjection(new MethodInjection('methodDefaultValue'));
 
         $object = $this->resolver->resolve($definition);

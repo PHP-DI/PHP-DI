@@ -33,12 +33,12 @@ class DefinitionArray implements DefinitionSource, MutableDefinitionSource
      * DI definitions in a PHP array
      * @var array
      */
-    private $definitions = array();
+    private $definitions = [];
 
     /**
      * @param array $definitions
      */
-    public function __construct(array $definitions = array())
+    public function __construct(array $definitions = [])
     {
         $this->definitions = $definitions;
     }

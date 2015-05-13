@@ -42,9 +42,9 @@ class DefinitionDumperDispatcherTest extends \PHPUnit_Framework_TestCase
             ->with($definition)
             ->will($this->returnValue('foo'));
 
-        $dumper = new DefinitionDumperDispatcher(array(
+        $dumper = new DefinitionDumperDispatcher([
             get_class($definition) => $subDumper
-        ));
+        ]);
 
         $this->assertEquals('foo', $dumper->dump($definition));
     }
@@ -134,7 +134,7 @@ class DefinitionDumperDispatcherTest extends \PHPUnit_Framework_TestCase
      */
     public function should_only_accept_definitions_it_can_dump()
     {
-        $dumper = new DefinitionDumperDispatcher(array());
+        $dumper = new DefinitionDumperDispatcher([]);
         $dumper->dump(new ValueDefinition('foo', 'bar'));
     }
 }

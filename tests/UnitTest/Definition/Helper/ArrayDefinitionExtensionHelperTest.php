@@ -22,15 +22,15 @@ class ArrayDefinitionExtensionHelperTest extends \PHPUnit_Framework_TestCase
      */
     public function test_array_extension()
     {
-        $helper = new ArrayDefinitionExtensionHelper(array(
+        $helper = new ArrayDefinitionExtensionHelper([
             'hello',
-        ));
+        ]);
 
         $definition = $helper->getDefinition('foo');
 
         $this->assertTrue($definition instanceof ArrayDefinitionExtension);
         $this->assertSame('foo', $definition->getName());
         $this->assertSame('foo', $definition->getSubDefinitionName());
-        $this->assertEquals(array('hello'), $definition->getValues());
+        $this->assertEquals(['hello'], $definition->getValues());
     }
 }

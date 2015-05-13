@@ -153,7 +153,7 @@ if (! function_exists('DI\add')) {
     function add($values)
     {
         if (! is_array($values)) {
-            $values = array($values);
+            $values = [$values];
         }
 
         return new ArrayDefinitionExtensionHelper($values);

@@ -24,9 +24,9 @@ class AliasResolverTest extends \PHPUnit_Framework_TestCase
      */
     public function should_resolve_aliases()
     {
-        $container = EasyMock::mock('Interop\Container\ContainerInterface', array(
+        $container = EasyMock::mock('Interop\Container\ContainerInterface', [
             'get' => 42,
-        ));
+        ]);
         $resolver = new AliasResolver($container);
 
         $value = $resolver->resolve(new AliasDefinition('foo', 'bar'));

@@ -48,7 +48,7 @@ class Autowiring implements DefinitionSource
      */
     private function getParametersDefinition(\ReflectionFunctionAbstract $constructor)
     {
-        $parameters = array();
+        $parameters = [];
 
         foreach ($constructor->getParameters() as $index => $parameter) {
             // Skip optional parameters

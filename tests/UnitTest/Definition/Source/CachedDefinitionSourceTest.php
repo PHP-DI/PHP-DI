@@ -26,9 +26,9 @@ class CachedDefinitionSourceTest extends \PHPUnit_Framework_TestCase
     public function should_get_from_cache()
     {
         /** @var Cache $cache */
-        $cache = EasyMock::spy('Doctrine\Common\Cache\Cache', array(
+        $cache = EasyMock::spy('Doctrine\Common\Cache\Cache', [
             'fetch' => 'foo',
-        ));
+        ]);
 
         $source = new CachedDefinitionSource(new DefinitionArray(), $cache);
 
@@ -42,13 +42,13 @@ class CachedDefinitionSourceTest extends \PHPUnit_Framework_TestCase
      */
     public function should_save_to_cache_and_return()
     {
-        $cache = EasyMock::spy('Doctrine\Common\Cache\Cache', array(
+        $cache = EasyMock::spy('Doctrine\Common\Cache\Cache', [
             'fetch' => false,
-        ));
+        ]);
 
-        $cachedSource = new DefinitionArray(array(
+        $cachedSource = new DefinitionArray([
             'foo' => 'bar',
-        ));
+        ]);
 
         $source = new CachedDefinitionSource($cachedSource, $cache);
 
@@ -65,9 +65,9 @@ class CachedDefinitionSourceTest extends \PHPUnit_Framework_TestCase
      */
     public function should_save_null_to_cache_and_return_null()
     {
-        $cache = EasyMock::spy('Doctrine\Common\Cache\Cache', array(
+        $cache = EasyMock::spy('Doctrine\Common\Cache\Cache', [
             'fetch' => false,
-        ));
+        ]);
 
         $source = new CachedDefinitionSource(new DefinitionArray(), $cache);
 

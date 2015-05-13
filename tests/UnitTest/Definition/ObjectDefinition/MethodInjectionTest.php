@@ -11,18 +11,18 @@ class MethodInjectionTest extends \PHPUnit_Framework_TestCase
 {
     public function testMergeParameters()
     {
-        $definition1 = new MethodInjection('foo', array(
+        $definition1 = new MethodInjection('foo', [
             0 => 'a',
             1 => 'b',
-        ));
-        $definition2 = new MethodInjection('foo', array(
+        ]);
+        $definition2 = new MethodInjection('foo', [
             1 => 'c',
             2 => 'd',
-        ));
+        ]);
 
         $definition1->merge($definition2);
 
-        $this->assertEquals(array('a', 'b', 'd'), $definition1->getParameters());
+        $this->assertEquals(['a', 'b', 'd'], $definition1->getParameters());
     }
 
     /**
@@ -30,15 +30,15 @@ class MethodInjectionTest extends \PHPUnit_Framework_TestCase
      */
     public function testMergeParametersPreservesNull()
     {
-        $definition1 = new MethodInjection('foo', array(
+        $definition1 = new MethodInjection('foo', [
             0 => null,
-        ));
-        $definition2 = new MethodInjection('foo', array(
+        ]);
+        $definition2 = new MethodInjection('foo', [
             0 => 'bar',
-        ));
+        ]);
 
         $definition1->merge($definition2);
 
-        $this->assertEquals(array(null), $definition1->getParameters());
+        $this->assertEquals([null], $definition1->getParameters());
     }
 }

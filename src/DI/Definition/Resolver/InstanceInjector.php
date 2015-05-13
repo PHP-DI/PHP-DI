@@ -29,7 +29,7 @@ class InstanceInjector extends ObjectCreator
      *
      * {@inheritdoc}
      */
-    public function resolve(Definition $definition, array $parameters = array())
+    public function resolve(Definition $definition, array $parameters = [])
     {
         $this->assertIsInstanceDefinition($definition);
 
@@ -48,7 +48,7 @@ class InstanceInjector extends ObjectCreator
     /**
      * {@inheritdoc}
      */
-    public function isResolvable(Definition $definition, array $parameters = array())
+    public function isResolvable(Definition $definition, array $parameters = [])
     {
         $this->assertIsInstanceDefinition($definition);
 

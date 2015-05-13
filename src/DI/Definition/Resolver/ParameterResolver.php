@@ -46,9 +46,9 @@ class ParameterResolver
     public function resolveParameters(
         AbstractFunctionCallDefinition $definition = null,
         \ReflectionFunctionAbstract $functionReflection = null,
-        array $parameters = array()
+        array $parameters = []
     ) {
-        $args = array();
+        $args = [];
 
         if (! $functionReflection) {
             return $args;

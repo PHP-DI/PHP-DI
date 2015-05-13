@@ -35,7 +35,7 @@ class DecoratorDefinitionTest extends \PHPUnit_Framework_TestCase
      */
     public function should_accept_callables_other_than_closures()
     {
-        $callable = array($this, 'foo');
+        $callable = [$this, 'foo'];
         $definition = new DecoratorDefinition('foo', $callable);
 
         $this->assertEquals('foo', $definition->getName());

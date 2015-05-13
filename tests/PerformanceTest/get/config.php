@@ -1,6 +1,6 @@
 <?php
 
-return array(
+return [
     'object1'  => \DI\object('DI\Test\PerformanceTest\Get\GetFixture'),
     'object2'  => \DI\object('DI\Test\PerformanceTest\Get\GetFixture'),
     'object3'  => \DI\object('DI\Test\PerformanceTest\Get\GetFixture'),
@@ -11,4 +11,4 @@ return array(
     'object8'  => \DI\object('DI\Test\PerformanceTest\Get\GetFixture'),
     'object9'  => \DI\object('DI\Test\PerformanceTest\Get\GetFixture'),
     'object10' => \DI\object('DI\Test\PerformanceTest\Get\GetFixture'),
-);
+];

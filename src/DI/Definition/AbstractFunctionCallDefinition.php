@@ -21,7 +21,7 @@ abstract class AbstractFunctionCallDefinition implements Definition
     /**
      * @var array
      */
-    protected $parameters = array();
+    protected $parameters = [];
 
     /**
      * @return array

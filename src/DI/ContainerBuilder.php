@@ -83,7 +83,7 @@ class ContainerBuilder
     /**
      * @var DefinitionSource[]
      */
-    private $definitionSources = array();
+    private $definitionSources = [];
 
     /**
      * Build a container configured for the dev environment.

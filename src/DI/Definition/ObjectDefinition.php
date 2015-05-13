@@ -43,13 +43,13 @@ class ObjectDefinition implements Definition, CacheableDefinition, HasSubDefinit
      * Property injections
      * @var PropertyInjection[]
      */
-    private $propertyInjections = array();
+    private $propertyInjections = [];
 
     /**
      * Method calls
      * @var MethodInjection[][]
      */
-    private $methodInjections = array();
+    private $methodInjections = [];
 
     /**
      * @var string|null
@@ -145,7 +145,7 @@ class ObjectDefinition implements Definition, CacheableDefinition, HasSubDefinit
     public function getMethodInjections()
     {
         // Return array leafs
-        $injections = array();
+        $injections = [];
         array_walk_recursive($this->methodInjections, function ($injection) use (&$injections) {
             $injections[] = $injection;
         });;
@@ -159,7 +159,7 @@ class ObjectDefinition implements Definition, CacheableDefinition, HasSubDefinit
     {
         $method = $methodInjection->getMethodName();
         if (! isset($this->methodInjections[$method])) {
-            $this->methodInjections[$method] = array();
+            $this->methodInjections[$method] = [];
         }
         $this->methodInjections[$method][] = $methodInjection;
     }

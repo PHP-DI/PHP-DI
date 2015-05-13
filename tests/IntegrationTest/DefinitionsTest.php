@@ -20,11 +20,11 @@ class DefinitionsTest extends \PHPUnit_Framework_TestCase
 {
     public function test_multiple_method_call()
     {
-        $container = $this->createContainer(array(
+        $container = $this->createContainer([
             'DI\Test\IntegrationTest\Fixtures\DefinitionTest\Class1' => \DI\object()
                 ->method('increment')
                 ->method('increment'),
-        ));
+        ]);
 
         $class = $container->get('DI\Test\IntegrationTest\Fixtures\DefinitionTest\Class1');
         $this->assertEquals(2, $class->count);
@@ -33,24 +33,24 @@ class DefinitionsTest extends \PHPUnit_Framework_TestCase
     public function test_override_parameter_with_multiple_method_call()
     {
         $container = $this->createContainer(
-            array(
+            [
                 'DI\Test\IntegrationTest\Fixtures\DefinitionTest\Class1' => \DI\object()
                     ->method('add', 'foo')
                     ->method('add', 'foo'),
-            ),
-            array(
+            ],
+            [
                 // Override a method parameter
                 'DI\Test\IntegrationTest\Fixtures\DefinitionTest\Class1' => \DI\object()
                     ->methodParameter('add', 0, 'bar'),
-            )
+            ]
         );
 
         // Should override only the first method call
         $class = $container->get('DI\Test\IntegrationTest\Fixtures\DefinitionTest\Class1');
-        $this->assertEquals(array('bar', 'foo'), $class->items);
+        $this->assertEquals(['bar', 'foo'], $class->items);
     }
 
-    private function createContainer(array $definitions, array $definitions2 = array())
+    private function createContainer(array $definitions, array $definitions2 = [])
     {
         $builder = new ContainerBuilder();
         $builder->useAutowiring(false);

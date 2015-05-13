@@ -28,12 +28,12 @@ class ValueDefinitionTest extends \PHPUnit_Framework_TestCase
     public function setUp()
     {
         $builder = new ContainerBuilder();
-        $builder->addDefinitions(array(
+        $builder->addDefinitions([
             'string' => 'foo',
             'int'    => 123,
             'object' => new stdClass(),
             'helper' => \DI\value('foo'),
-        ));
+        ]);
 
         $this->container = $builder->build();
     }

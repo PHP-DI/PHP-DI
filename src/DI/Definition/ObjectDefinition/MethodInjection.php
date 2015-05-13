@@ -27,13 +27,13 @@ class MethodInjection extends AbstractFunctionCallDefinition
      * @param string $methodName
      * @param array  $parameters
      */
-    public function __construct($methodName, array $parameters = array())
+    public function __construct($methodName, array $parameters = [])
     {
         $this->methodName = (string) $methodName;
         $this->parameters = $parameters;
     }
 
-    public static function constructor(array $parameters = array())
+    public static function constructor(array $parameters = [])
     {
         return new self('__construct', $parameters);
     }

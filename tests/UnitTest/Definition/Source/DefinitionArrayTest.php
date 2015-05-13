@@ -28,9 +28,9 @@ class DefinitionArrayTest extends \PHPUnit_Framework_TestCase
 
     public function testValueDefinition()
     {
-        $source = new DefinitionArray(array(
+        $source = new DefinitionArray([
             'foo' => 'bar',
-        ));
+        ]);
 
         /** @var ValueDefinition $definition */
         $definition = $source->getDefinition('foo');
@@ -41,11 +41,11 @@ class DefinitionArrayTest extends \PHPUnit_Framework_TestCase
 
     public function testValueTypes()
     {
-        $definitions = array(
+        $definitions = [
             'integer' => 1,
             'string'  => 'test',
             'float'   => 1.0,
-        );
+        ];
         $source = new DefinitionArray($definitions);
 
         /** @var ValueDefinition $definition */
@@ -68,35 +68,35 @@ class DefinitionArrayTest extends \PHPUnit_Framework_TestCase
     public function testArrayDefinitions()
     {
         $source = new DefinitionArray();
-        $definitions = array(
-            'array'   => array('a', 'b', 'c'),
-            'assoc'   => array('a' => 'b'),
-            'links'   => array('a' => \DI\get('b')),
-        );
+        $definitions = [
+            'array'   => ['a', 'b', 'c'],
+            'assoc'   => ['a' => 'b'],
+            'links'   => ['a' => \DI\get('b')],
+        ];
         $source->addDefinitions($definitions);
 
         /** @var ArrayDefinition $definition */
         $definition = $source->getDefinition('array');
         $this->assertTrue($definition instanceof ArrayDefinition);
-        $this->assertEquals(array('a', 'b', 'c'), $definition->getValues());
+        $this->assertEquals(['a', 'b', 'c'], $definition->getValues());
         $this->assertInternalType('array', $definition->getValues());
 
         $definition = $source->getDefinition('assoc');
         $this->assertTrue($definition instanceof ArrayDefinition);
-        $this->assertEquals(array('a' => 'b'), $definition->getValues());
+        $this->assertEquals(['a' => 'b'], $definition->getValues());
         $this->assertInternalType('array', $definition->getValues());
 
         $definition = $source->getDefinition('links');
         $this->assertTrue($definition instanceof ArrayDefinition);
-        $this->assertEquals(array('a' => \DI\get('b')), $definition->getValues());
+        $this->assertEquals(['a' => \DI\get('b')], $definition->getValues());
         $this->assertInternalType('array', $definition->getValues());
     }
 
     public function testObjectDefinition()
     {
-        $source = new DefinitionArray(array(
+        $source = new DefinitionArray([
             'foo' => \DI\object(),
-        ));
+        ]);
         /** @var $definition ObjectDefinition */
         $definition = $source->getDefinition('foo');
         $this->assertInstanceOf('DI\Definition\ObjectDefinition', $definition);
@@ -110,9 +110,9 @@ class DefinitionArrayTest extends \PHPUnit_Framework_TestCase
             return 'bar';
         };
         $source = new DefinitionArray();
-        $source->addDefinitions(array(
+        $source->addDefinitions([
             'foo' => \DI\factory($callable),
-        ));
+        ]);
         /** @var FactoryDefinition $definition */
         $definition = $source->getDefinition('foo');
         $this->assertInstanceOf('DI\Definition\FactoryDefinition', $definition);
@@ -126,9 +126,9 @@ class DefinitionArrayTest extends \PHPUnit_Framework_TestCase
             return 'bar';
         };
         $source = new DefinitionArray();
-        $source->addDefinitions(array(
+        $source->addDefinitions([
             'foo' => $callable,
-        ));
+        ]);
         /** @var FactoryDefinition $definition */
         $definition = $source->getDefinition('foo');
         $this->assertInstanceOf('DI\Definition\FactoryDefinition', $definition);
@@ -150,7 +150,7 @@ class DefinitionArrayTest extends \PHPUnit_Framework_TestCase
         $source = new DefinitionArray();
         $definition = new ValueDefinition('foo', 'bar');
 
-        $source->addDefinitions(array('foo' => $definition));
+        $source->addDefinitions(['foo' => $definition]);
         $this->assertSame($definition, $source->getDefinition('foo'));
     }
 
@@ -158,7 +158,7 @@ class DefinitionArrayTest extends \PHPUnit_Framework_TestCase
     {
         $definition = new ValueDefinition('foo', 'bar');
 
-        $source = new DefinitionArray(array('foo' => $definition));
+        $source = new DefinitionArray(['foo' => $definition]);
         $this->assertSame($definition, $source->getDefinition('foo'));
     }
 
@@ -168,20 +168,20 @@ class DefinitionArrayTest extends \PHPUnit_Framework_TestCase
         $definition1 = new ValueDefinition('foo', 'bar');
         $definition2 = new ValueDefinition('foo', 'bar');
 
-        $source->addDefinitions(array('foo' => $definition1));
-        $source->addDefinitions(array('foo' => $definition2));
+        $source->addDefinitions(['foo' => $definition1]);
+        $source->addDefinitions(['foo' => $definition2]);
 
         $this->assertSame($definition2, $source->getDefinition('foo'));
     }
 
     public function testWildcards()
     {
-        $source = new DefinitionArray(array(
+        $source = new DefinitionArray([
             'foo*' => 'bar',
             'Namespaced\*Interface' => \DI\object('Namespaced\*'),
             'Namespaced2\*Interface' => \DI\object('Namespaced2\Foo'),
             'Multiple\*\*\Matches' => \DI\object('Multiple\*\*\Implementation')
-        ));
+        ]);
 
         $definition = $source->getDefinition('foo1');
         $this->assertInstanceOf('DI\Definition\ValueDefinition', $definition);
@@ -209,10 +209,10 @@ class DefinitionArrayTest extends \PHPUnit_Framework_TestCase
      */
     public function testExactMatchShouldPrevailOverWildcard()
     {
-        $source = new DefinitionArray(array(
+        $source = new DefinitionArray([
             'fo*' => 'bar',
             'foo' => 'bim',
-        ));
+        ]);
         $definition = $source->getDefinition('foo');
         $this->assertInstanceOf('DI\Definition\ValueDefinition', $definition);
         $this->assertEquals('foo', $definition->getName());
@@ -224,9 +224,9 @@ class DefinitionArrayTest extends \PHPUnit_Framework_TestCase
      */
     public function testWildcardShouldNotMatchEmptyString()
     {
-        $source = new DefinitionArray(array(
+        $source = new DefinitionArray([
             'foo*' => 'bar',
-        ));
+        ]);
         $this->assertNull($source->getDefinition('foo'));
     }
 
@@ -235,9 +235,9 @@ class DefinitionArrayTest extends \PHPUnit_Framework_TestCase
      */
     public function testWildcardShouldNotMatchAcrossNamespaces()
     {
-        $source = new DefinitionArray(array(
+        $source = new DefinitionArray([
             'My\*Interface' => \DI\object('My\*'),
-        ));
+        ]);
         $this->assertNull($source->getDefinition('My\Foo\BarInterface'));
     }
 }

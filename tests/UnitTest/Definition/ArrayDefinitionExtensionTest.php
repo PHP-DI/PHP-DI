@@ -24,11 +24,11 @@ class ArrayDefinitionExtensionTest extends \PHPUnit_Framework_TestCase
      */
     public function test_getters()
     {
-        $definition = new ArrayDefinitionExtension('foo', array('hello'));
+        $definition = new ArrayDefinitionExtension('foo', ['hello']);
 
         $this->assertEquals('foo', $definition->getName());
         $this->assertEquals('foo', $definition->getSubDefinitionName());
-        $this->assertEquals(array('hello'), $definition->getValues());
+        $this->assertEquals(['hello'], $definition->getValues());
     }
 
     /**
@@ -36,7 +36,7 @@ class ArrayDefinitionExtensionTest extends \PHPUnit_Framework_TestCase
      */
     public function scope_should_be_singleton()
     {
-        $definition = new ArrayDefinitionExtension('foo', array());
+        $definition = new ArrayDefinitionExtension('foo', []);
 
         $this->assertEquals(Scope::SINGLETON, $definition->getScope());
     }
@@ -46,7 +46,7 @@ class ArrayDefinitionExtensionTest extends \PHPUnit_Framework_TestCase
      */
     public function should_not_be_cacheable()
     {
-        $definition = new ArrayDefinitionExtension('foo', array());
+        $definition = new ArrayDefinitionExtension('foo', []);
 
         $this->assertNotInstanceOf('DI\Definition\CacheableDefinition', $definition);
     }
@@ -56,13 +56,13 @@ class ArrayDefinitionExtensionTest extends \PHPUnit_Framework_TestCase
      */
     public function should_append_values_after_sub_definitions_values()
     {
-        $definition = new ArrayDefinitionExtension('name', array('foo'));
-        $definition->setSubDefinition(new ArrayDefinition('name', array('bar')));
+        $definition = new ArrayDefinitionExtension('name', ['foo']);
+        $definition->setSubDefinition(new ArrayDefinition('name', ['bar']));
 
-        $expected = array(
+        $expected = [
             'bar',
             'foo',
-        );
+        ];
 
         $this->assertEquals($expected, $definition->getValues());
     }
@@ -74,7 +74,7 @@ class ArrayDefinitionExtensionTest extends \PHPUnit_Framework_TestCase
      */
     public function should_error_if_not_extending_an_array()
     {
-        $definition = new ArrayDefinitionExtension('name', array('foo'));
+        $definition = new ArrayDefinitionExtension('name', ['foo']);
         $definition->setSubDefinition(new ValueDefinition('name', 'value'));
     }
 }

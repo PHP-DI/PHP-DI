@@ -54,7 +54,7 @@ class DecoratorResolver implements DefinitionResolver
      *
      * {@inheritdoc}
      */
-    public function resolve(Definition $definition, array $parameters = array())
+    public function resolve(Definition $definition, array $parameters = [])
     {
         $this->assertIsDecoratorDefinition($definition);
 
@@ -88,7 +88,7 @@ class DecoratorResolver implements DefinitionResolver
     /**
      * {@inheritdoc}
      */
-    public function isResolvable(Definition $definition, array $parameters = array())
+    public function isResolvable(Definition $definition, array $parameters = [])
     {
         $this->assertIsDecoratorDefinition($definition);
 

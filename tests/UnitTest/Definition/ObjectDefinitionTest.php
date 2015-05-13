@@ -72,7 +72,7 @@ class ObjectDefinitionTest extends \PHPUnit_Framework_TestCase
         $definition = new ObjectDefinition('foo', 'bar');
         $definition->addPropertyInjection(new PropertyInjection('property1', 'Property1'));
         $definition->addPropertyInjection(new PropertyInjection('property2', 'Property2'));
-        $definition->addMethodInjection(new MethodInjection('method1', array('foo')));
+        $definition->addMethodInjection(new MethodInjection('method1', ['foo']));
         $definition->addMethodInjection(new MethodInjection('method2'));
 
         $subDefinition = new ObjectDefinition('bar');
@@ -81,7 +81,7 @@ class ObjectDefinitionTest extends \PHPUnit_Framework_TestCase
         $subDefinition->setConstructorInjection(MethodInjection::constructor());
         $subDefinition->addPropertyInjection(new PropertyInjection('property1', 'Property1'));
         $subDefinition->addPropertyInjection(new PropertyInjection('property3', 'Property3'));
-        $subDefinition->addMethodInjection(new MethodInjection('method1', array('bar')));
+        $subDefinition->addMethodInjection(new MethodInjection('method1', ['bar']));
         $subDefinition->addMethodInjection(new MethodInjection('method3'));
 
         $definition->setSubDefinition($subDefinition);
@@ -93,11 +93,11 @@ class ObjectDefinitionTest extends \PHPUnit_Framework_TestCase
         $this->assertNotNull($definition->getConstructorInjection());
         $this->assertCount(3, $definition->getPropertyInjections());
         $this->assertCount(3, $definition->getMethodInjections());
-        $this->assertEquals(array(
-            new MethodInjection('method1', array('foo')),
+        $this->assertEquals([
+            new MethodInjection('method1', ['foo']),
             new MethodInjection('method2'),
             new MethodInjection('method3'),
-        ), $definition->getMethodInjections());
+        ], $definition->getMethodInjections());
     }
 
     /**
@@ -107,23 +107,23 @@ class ObjectDefinitionTest extends \PHPUnit_Framework_TestCase
     {
         $definition = new ObjectDefinition('foo');
         $definition->addMethodInjection(new MethodInjection('method1'));
-        $definition->addMethodInjection(new MethodInjection('method2', array('bam')));
-        $definition->addMethodInjection(new MethodInjection('method2', array('baz')));
+        $definition->addMethodInjection(new MethodInjection('method2', ['bam']));
+        $definition->addMethodInjection(new MethodInjection('method2', ['baz']));
 
         $subDefinition = new ObjectDefinition('bar');
-        $subDefinition->addMethodInjection(new MethodInjection('method1', array('bar')));
-        $subDefinition->addMethodInjection(new MethodInjection('method2', array('foo', 'bar')));
+        $subDefinition->addMethodInjection(new MethodInjection('method1', ['bar']));
+        $subDefinition->addMethodInjection(new MethodInjection('method2', ['foo', 'bar']));
         $subDefinition->addMethodInjection(new MethodInjection('method3'));
         $subDefinition->addMethodInjection(new MethodInjection('method3'));
 
         $definition->setSubDefinition($subDefinition);
 
-        $this->assertEquals(array(
-            new MethodInjection('method1', array('bar')),
-            new MethodInjection('method2', array('bam', 'bar')),
-            new MethodInjection('method2', array('baz')),
+        $this->assertEquals([
+            new MethodInjection('method1', ['bar']),
+            new MethodInjection('method2', ['bam', 'bar']),
+            new MethodInjection('method2', ['baz']),
             new MethodInjection('method3'),
             new MethodInjection('method3'),
-        ), $definition->getMethodInjections());
+        ], $definition->getMethodInjections());
     }
 }

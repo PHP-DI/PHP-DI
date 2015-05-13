@@ -41,7 +41,7 @@ class Container implements ContainerInterface, FactoryInterface, \DI\InvokerInte
      * Map of entries with Singleton scope that are already resolved.
      * @var array
      */
-    private $singletonEntries = array();
+    private $singletonEntries = [];
 
     /**
      * @var DefinitionSource
@@ -57,10 +57,10 @@ class Container implements ContainerInterface, FactoryInterface, \DI\InvokerInte
      * Array of entries being resolved. Used to avoid circular dependencies and infinite loops.
      * @var array
      */
-    private $entriesBeingResolved = array();
+    private $entriesBeingResolved = [];
 
     /**
-     * @var \Invoker\InvokerInterface|null
+     * @var InvokerInterface|null
      */
     private $invoker;
 
@@ -148,7 +148,7 @@ class Container implements ContainerInterface, FactoryInterface, \DI\InvokerInte
      * @throws NotFoundException No entry found for the given name.
      * @return mixed
      */
-    public function make($name, array $parameters = array())
+    public function make($name, array $parameters = [])
     {
         if (! is_string($name)) {
             throw new InvalidArgumentException(sprintf(
@@ -233,7 +233,7 @@ class Container implements ContainerInterface, FactoryInterface, \DI\InvokerInte
      *
      * @return mixed Result of the function.
      */
-    public function call($callable, array $parameters = array())
+    public function call($callable, array $parameters = [])
     {
         return $this->getInvoker()->call($callable, $parameters);
     }
@@ -270,7 +270,7 @@ class Container implements ContainerInterface, FactoryInterface, \DI\InvokerInte
      * @throws DependencyException Error while resolving the entry.
      * @return mixed
      */
-    private function resolveDefinition(Definition $definition, array $parameters = array())
+    private function resolveDefinition(Definition $definition, array $parameters = [])
     {
         $entryName = $definition->getName();
 
@@ -315,12 +315,12 @@ class Container implements ContainerInterface, FactoryInterface, \DI\InvokerInte
     private function getInvoker()
     {
         if (! $this->invoker) {
-            $parameterResolver = new ResolverChain(array(
+            $parameterResolver = new ResolverChain([
                 new NumericArrayResolver,
                 new AssociativeArrayResolver,
                 new DefinitionParameterResolver($this->definitionResolver),
                 new TypeHintContainerResolver($this),
-            ));
+            ]);
 
             $this->invoker = new Invoker($parameterResolver, $this);
         }

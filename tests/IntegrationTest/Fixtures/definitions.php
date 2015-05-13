@@ -2,7 +2,7 @@
 
 use DI\Scope;
 
-return array(
+return [
     'foo' => 'bar',
 
     'DI\Test\IntegrationTest\Fixtures\Class1' => DI\object()
@@ -38,4 +38,4 @@ return array(
             ->lazy(),
 
     'alias' => DI\get('namedDependency'),
-);
+];

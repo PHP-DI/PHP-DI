@@ -24,7 +24,7 @@ class DefinitionDumperDispatcher implements DefinitionDumper
      *
      * @var DefinitionDumper[]|null
      */
-    private $dumpers = array();
+    private $dumpers = [];
 
     public function __construct($dumpers = null)
     {
@@ -55,14 +55,14 @@ class DefinitionDumperDispatcher implements DefinitionDumper
     private function initialize()
     {
         if ($this->dumpers === null) {
-            $this->dumpers = array(
+            $this->dumpers = [
                 'DI\Definition\ValueDefinition'               => new ValueDefinitionDumper(),
                 'DI\Definition\FactoryDefinition'             => new FactoryDefinitionDumper(),
                 'DI\Definition\DecoratorDefinition'           => new DecoratorDefinitionDumper(),
                 'DI\Definition\AliasDefinition'               => new AliasDefinitionDumper(),
                 'DI\Definition\ObjectDefinition'              => new ObjectDefinitionDumper(),
                 'DI\Definition\EnvironmentVariableDefinition' => new EnvironmentVariableDefinitionDumper(),
-            );
+            ];
         }
     }
 }

@@ -38,9 +38,9 @@ class StringResolverTest extends \PHPUnit_Framework_TestCase
      */
     public function should_resolve_references()
     {
-        $container = EasyMock::mock('Interop\Container\ContainerInterface', array(
+        $container = EasyMock::mock('Interop\Container\ContainerInterface', [
             'get' => 'bar',
-        ));
+        ]);
         $resolver = new StringResolver($container);
 
         $definition = new StringDefinition('foo', '{test}');
@@ -56,7 +56,7 @@ class StringResolverTest extends \PHPUnit_Framework_TestCase
         $container = EasyMock::mock('Interop\Container\ContainerInterface');
         $container->expects($this->exactly(2))
             ->method('get')
-            ->withConsecutive(array('tmp'), array('logs'))
+            ->withConsecutive(['tmp'], ['logs'])
             ->willReturnOnConsecutiveCalls('/private/tmp', 'myapp-logs');
         $resolver = new StringResolver($container);
 
@@ -74,9 +74,9 @@ class StringResolverTest extends \PHPUnit_Framework_TestCase
      */
     public function should_throw_on_unknown_entry_name()
     {
-        $container = EasyMock::mock('Interop\Container\ContainerInterface', array(
+        $container = EasyMock::mock('Interop\Container\ContainerInterface', [
             'get' => new NotFoundException("No entry or class found for 'test'"),
-        ));
+        ]);
         $resolver = new StringResolver($container);
 
         $resolver->resolve(new StringDefinition('foo', '{test}'));

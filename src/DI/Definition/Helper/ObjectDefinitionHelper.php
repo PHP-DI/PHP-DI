@@ -39,19 +39,19 @@ class ObjectDefinitionHelper implements DefinitionHelper
      * Array of constructor parameters.
      * @var array
      */
-    private $constructor = array();
+    private $constructor = [];
 
     /**
      * Array of properties and their value.
      * @var array
      */
-    private $properties = array();
+    private $properties = [];
 
     /**
      * Array of methods and their parameters.
      * @var array
      */
-    private $methods = array();
+    private $methods = [];
 
     /**
      * Helper for defining an object.
@@ -159,7 +159,7 @@ class ObjectDefinitionHelper implements DefinitionHelper
         array_shift($args);
 
         if (! isset($this->methods[$method])) {
-            $this->methods[$method] = array();
+            $this->methods[$method] = [];
         }
 
         $this->methods[$method][] = $args;
@@ -193,7 +193,7 @@ class ObjectDefinitionHelper implements DefinitionHelper
         }
 
         if (! isset($this->methods[$method])) {
-            $this->methods[$method] = array(0 => array());
+            $this->methods[$method] = [0 => []];
         }
 
         $this->methods[$method][0][$parameter] = $value;
@@ -254,12 +254,12 @@ class ObjectDefinitionHelper implements DefinitionHelper
      */
     private function fixParameters(ObjectDefinition $definition, $method, $parameters)
     {
-        $fixedParameters = array();
+        $fixedParameters = [];
 
         foreach ($parameters as $index => $parameter) {
             // Parameter indexed by the parameter name, we reindex it with its position
             if (is_string($index)) {
-                $callable = array($definition->getClassName(), $method);
+                $callable = [$definition->getClassName(), $method];
                 $reflectionParameter = new \ReflectionParameter($callable, $index);
 
                 $index = $reflectionParameter->getPosition();

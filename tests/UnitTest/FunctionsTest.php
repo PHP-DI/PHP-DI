@@ -161,8 +161,8 @@ class FunctionsTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($definition instanceof ArrayDefinitionExtension);
         $this->assertEquals('foo', $definition->getName());
         $this->assertEquals('foo', $definition->getSubDefinitionName());
-        $definition->setSubDefinition(new ArrayDefinition('foo', array()));
-        $this->assertEquals(array('hello'), $definition->getValues());
+        $definition->setSubDefinition(new ArrayDefinition('foo', []));
+        $this->assertEquals(['hello'], $definition->getValues());
     }
 
     /**
@@ -170,7 +170,7 @@ class FunctionsTest extends \PHPUnit_Framework_TestCase
      */
     public function test_add_array()
     {
-        $helper = \DI\add(array('hello', 'world'));
+        $helper = \DI\add(['hello', 'world']);
 
         $this->assertTrue($helper instanceof ArrayDefinitionExtensionHelper);
 
@@ -179,8 +179,8 @@ class FunctionsTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($definition instanceof ArrayDefinitionExtension);
         $this->assertEquals('foo', $definition->getName());
         $this->assertEquals('foo', $definition->getSubDefinitionName());
-        $definition->setSubDefinition(new ArrayDefinition('foo', array()));
-        $this->assertEquals(array('hello', 'world'), $definition->getValues());
+        $definition->setSubDefinition(new ArrayDefinition('foo', []));
+        $this->assertEquals(['hello', 'world'], $definition->getValues());
     }
 
     /**

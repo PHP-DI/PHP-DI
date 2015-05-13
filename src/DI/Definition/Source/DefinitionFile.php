@@ -38,7 +38,7 @@ class DefinitionFile extends DefinitionArray
         // Lazy-loading to improve performances
         $this->file = $file;
 
-        parent::__construct(array());
+        parent::__construct([]);
     }
 
     /**

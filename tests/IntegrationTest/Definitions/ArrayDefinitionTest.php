@@ -22,12 +22,12 @@ class ArrayDefinitionTest extends \PHPUnit_Framework_TestCase
     public function test_array_with_values()
     {
         $builder = new ContainerBuilder();
-        $builder->addDefinitions(array(
-            'values' => array(
+        $builder->addDefinitions([
+            'values' => [
                 'value 1',
                 'value 2',
-            ),
-        ));
+            ],
+        ]);
         $container = $builder->build();
 
         $array = $container->get('values');
@@ -39,15 +39,15 @@ class ArrayDefinitionTest extends \PHPUnit_Framework_TestCase
     public function test_array_with_links()
     {
         $builder = new ContainerBuilder();
-        $builder->addDefinitions(array(
-            'links'     => array(
+        $builder->addDefinitions([
+            'links'     => [
                 \DI\get('singleton'),
                 \DI\get('prototype'),
-            ),
+            ],
             'singleton' => \DI\object('stdClass'),
             'prototype' => \DI\object('stdClass')
                 ->scope(Scope::PROTOTYPE),
-        ));
+        ]);
         $container = $builder->build();
 
         $array = $container->get('links');
@@ -65,12 +65,12 @@ class ArrayDefinitionTest extends \PHPUnit_Framework_TestCase
     public function test_array_with_nested_definitions()
     {
         $builder = new ContainerBuilder();
-        $builder->addDefinitions(array(
-            'array' => array(
+        $builder->addDefinitions([
+            'array' => [
                 \DI\env('PHP_DI_DO_NOT_DEFINE_THIS', 'env'),
                 \DI\object('stdClass'),
-            ),
-        ));
+            ],
+        ]);
         $container = $builder->build();
 
         $array = $container->get('array');
@@ -85,13 +85,13 @@ class ArrayDefinitionTest extends \PHPUnit_Framework_TestCase
     public function test_array_with_prototype_entries()
     {
         $builder = new ContainerBuilder();
-        $builder->addDefinitions(array(
-            'array'     => array(
+        $builder->addDefinitions([
+            'array'     => [
                 \DI\get('prototype'),
-            ),
+            ],
             'prototype' => \DI\object('stdClass')
                 ->scope(Scope::PROTOTYPE),
-        ));
+        ]);
         $container = $builder->build();
 
         $array1 = $container->get('array');
@@ -103,19 +103,19 @@ class ArrayDefinitionTest extends \PHPUnit_Framework_TestCase
     public function test_add_entries()
     {
         $builder = new ContainerBuilder();
-        $builder->addDefinitions(array(
-            'values' => array(
+        $builder->addDefinitions([
+            'values' => [
                 'value 1',
                 'value 2',
-            ),
-        ));
-        $builder->addDefinitions(array(
-            'values' => \DI\add(array(
+            ],
+        ]);
+        $builder->addDefinitions([
+            'values' => \DI\add([
                 'another value',
                 \DI\get('foo'),
-            )),
+            ]),
             'foo'    => \DI\object('stdClass'),
-        ));
+        ]);
         $container = $builder->build();
 
         $array = $container->get('values');
@@ -130,18 +130,18 @@ class ArrayDefinitionTest extends \PHPUnit_Framework_TestCase
     public function test_add_entries_with_nested_definitions()
     {
         $builder = new ContainerBuilder();
-        $builder->addDefinitions(array(
-            'array' => array(
+        $builder->addDefinitions([
+            'array' => [
                 \DI\env('PHP_DI_DO_NOT_DEFINE_THIS', 'env'),
                 \DI\object('stdClass'),
-            ),
-        ));
-        $builder->addDefinitions(array(
-            'array' => \DI\add(array(
+            ],
+        ]);
+        $builder->addDefinitions([
+            'array' => \DI\add([
                 \DI\env('PHP_DI_DO_NOT_DEFINE_THIS', 'foo'),
                 \DI\object('stdClass'),
-            )),
-        ));
+            ]),
+        ]);
         $container = $builder->build();
 
         $array = $container->get('array');
@@ -155,11 +155,11 @@ class ArrayDefinitionTest extends \PHPUnit_Framework_TestCase
     public function test_add_to_non_existing_array_works()
     {
         $builder = new ContainerBuilder();
-        $builder->addDefinitions(array(
-            'values' => \DI\add(array(
+        $builder->addDefinitions([
+            'values' => \DI\add([
                 'value 1',
-            )),
-        ));
+            ]),
+        ]);
         $container = $builder->build();
 
         $array = $container->get('values');

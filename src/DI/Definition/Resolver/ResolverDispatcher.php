@@ -53,7 +53,7 @@ class ResolverDispatcher implements DefinitionResolver
      *
      * @return mixed Value obtained from the definition.
      */
-    public function resolve(Definition $definition, array $parameters = array())
+    public function resolve(Definition $definition, array $parameters = [])
     {
         $definitionResolver = $this->getDefinitionResolver($definition);
 
@@ -68,7 +68,7 @@ class ResolverDispatcher implements DefinitionResolver
      *
      * @return bool
      */
-    public function isResolvable(Definition $definition, array $parameters = array())
+    public function isResolvable(Definition $definition, array $parameters = [])
     {
         $definitionResolver = $this->getDefinitionResolver($definition);
 

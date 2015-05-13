@@ -110,12 +110,12 @@ class InjectionTest extends \PHPUnit_Framework_TestCase
         $containerPHP->set('DI\Test\IntegrationTest\Fixtures\LazyDependency', \DI\object()->lazy());
         $containerPHP->set('alias', \DI\get('namedDependency'));
 
-        return array(
-            'autowiring' => array(self::DEFINITION_REFLECTION, $containerReflection),
-            'annotation' => array(self::DEFINITION_ANNOTATIONS, $containerAnnotations),
-            'array'      => array(self::DEFINITION_ARRAY, $containerArray),
-            'php'        => array(self::DEFINITION_PHP, $containerPHP),
-        );
+        return [
+            'autowiring' => [self::DEFINITION_REFLECTION, $containerReflection],
+            'annotation' => [self::DEFINITION_ANNOTATIONS, $containerAnnotations],
+            'array'      => [self::DEFINITION_ARRAY, $containerArray],
+            'php'        => [self::DEFINITION_PHP, $containerPHP],
+        ];
     }
 
     /**
@@ -138,7 +138,7 @@ class InjectionTest extends \PHPUnit_Framework_TestCase
     {
         $obj = $container->get('DI\Test\IntegrationTest\Fixtures\Class1');
 
-        $proxies = array();
+        $proxies = [];
 
         $proxies[] = $this->validateConstructorInjection($obj, $type);
 
@@ -159,7 +159,7 @@ class InjectionTest extends \PHPUnit_Framework_TestCase
     {
         $obj = $container->make('DI\Test\IntegrationTest\Fixtures\Class1');
 
-        $proxies = array();
+        $proxies = [];
 
         $proxies[] = $this->validateConstructorInjection($obj, $type);
 
@@ -181,7 +181,7 @@ class InjectionTest extends \PHPUnit_Framework_TestCase
         $obj = new Class1(new Class2(), new Implementation1(), new LazyDependency());
         $container->injectOn($obj);
 
-        $proxies = array();
+        $proxies = [];
 
         // Only constructor injection with autowiring
         if ($type != self::DEFINITION_REFLECTION) {
