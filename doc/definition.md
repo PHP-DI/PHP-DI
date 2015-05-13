@@ -94,7 +94,7 @@ PHP-DI provides function helpers for this (to define *values*, you don't need a 
 - `DI\get($entryName)`: used to define alias entries, and also to reference other entries in object definitions (see below) - was previously `DI\link()` in PHP-DI 4, which is kept for backward compatibility
 - `DI\value($value)`: defines a simple value. This helper is not needed as anything is a value by default. The only use case for this helper is to define a container entry that is a closure (as closure are turned into factory definitions automatically)
 
-Example of a `config.php` file (using [PHP 5.4 short arrays](http://php.net/manual/en/migration54.new-features.php)):
+Example of a `config.php` file:
 
 ```php
 <?php

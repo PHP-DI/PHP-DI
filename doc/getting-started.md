@@ -100,7 +100,7 @@ See also the [complete documentation about annotations](definition.md).
 
 ### PHP array
 
-You can define injections with a PHP array too (this example uses PHP 5.4 and 5.5 features):
+You can define injections with a PHP array too (this example uses PHP 5.5 features):
 
 ```php
 <?php

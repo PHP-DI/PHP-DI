@@ -110,14 +110,11 @@ class ObjectCreator implements DefinitionResolver
      */
     private function createProxy(ObjectDefinition $definition, array $parameters)
     {
-        // waiting for PHP 5.4+ support
-        $resolver = $this;
-
         /** @noinspection PhpUnusedParameterInspection */
         $proxy = $this->proxyFactory->createProxy(
             $definition->getClassName(),
-            function (& $wrappedObject, $proxy, $method, $params, & $initializer) use ($resolver, $definition, $parameters) {
-                $wrappedObject = $resolver->createInstance($definition, $parameters);
+            function (& $wrappedObject, $proxy, $method, $params, & $initializer) use ($definition, $parameters) {
+                $wrappedObject = $this->createInstance($definition, $parameters);
                 $initializer = null; // turning off further lazy initialization
                 return true;
             }
@@ -135,10 +132,8 @@ class ObjectCreator implements DefinitionResolver
      * @throws DefinitionException
      * @throws DependencyException
      * @return object
-     *
-     * @todo Make private once PHP-DI supports PHP > 5.4 only
      */
-    public function createInstance(ObjectDefinition $definition, array $parameters)
+    private function createInstance(ObjectDefinition $definition, array $parameters)
     {
         $this->assertClassExists($definition);
 

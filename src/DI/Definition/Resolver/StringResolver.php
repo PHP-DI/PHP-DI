@@ -54,12 +54,9 @@ class StringResolver implements DefinitionResolver
 
         $expression = $definition->getExpression();
 
-        // TODO Remove PHP 5.3 support
-        $container = $this->container;
-
-        $result = preg_replace_callback('#\{([^\{\}]+)\}#', function (array $matches) use ($container, $definition) {
+        $result = preg_replace_callback('#\{([^\{\}]+)\}#', function (array $matches) use ($definition) {
             try {
-                return $container->get($matches[1]);
+                return $this->container->get($matches[1]);
             } catch (NotFoundException $e) {
                 throw new DependencyException(sprintf(
                     "Error while parsing string expression for entry '%s': %s",

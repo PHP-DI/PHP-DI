@@ -76,13 +76,6 @@ class ProxyFactory
 
         $config = new Configuration();
 
-        /**
-         * @todo useless since ProxyManager 0.5, line kept for compatibility with 0.3 and 0.4 which are
-         * the only versions that work with PHP < 5.3.23
-         * Remove when support for PHP 5.3 is dropped
-         */
-        $config->setAutoGenerateProxies(true);
-
         if ($this->writeProxiesToFile) {
             $config->setProxiesTargetDir($this->proxyDirectory);
             spl_autoload_register($config->getProxyAutoloader());
