@@ -34,8 +34,9 @@ Improvements:
 
 BC breaks:
 
+- PHP-DI now requires a version of PHP >= 5.4.0
 - [#251](https://github.com/mnapoli/PHP-DI/issues/251) Annotations are disabled by default, if you use annotations enable them with `$containerBuilder->useAnnotations(true)`.
-- [#198](https://github.com/mnapoli/PHP-DI/issues/198) `ocramius/proxy-manager` is not installed by default anymore, you need to require it in `composer.json` if you want to use **lazy injection**
+- [#198](https://github.com/mnapoli/PHP-DI/issues/198) `ocramius/proxy-manager` is not installed by default anymore, you need to require it in `composer.json` (`~1.0`) if you want to use **lazy injection**
 - Closures are now converted into factory definitions automatically. If you ever defined a closure as a value (e.g. to have the closure injected in a class), you need to wrap the closure with the new `DI\value()` helper.
 - [#223](https://github.com/mnapoli/PHP-DI/issues/223) `DI\ContainerInterface` was deprecated since v4.1 and has been removed
 
