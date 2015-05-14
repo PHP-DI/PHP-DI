@@ -142,12 +142,12 @@ Here is an example where a module replaces the default "Product DAO" for by deco
 
 ```php
 // application config
-ProductDaoInterface::class => get(ProductDaoMySQL::class)
+ProductDaoInterface::class => DI\get(ProductDaoMySQL::class)
 ```
 
 ```php
 // module config
-ProductDaoInterface::class => decorate(function ($previous, ContainerInterface $c) {
+ProductDaoInterface::class => DI\decorate(function ($previous, ContainerInterface $c) {
     return new ProductDaoCached($previous);
 })
 ```
@@ -159,3 +159,9 @@ The example above is equivalent to:
 ```php
 $dao = new ProductDaoCached(new ProductDaoMySQL());
 ```
+
+## Wrapping it up
+
+I hope you will like this new version, as well as the new website. If you want the complete list of changes, head over to [the change log](../change-log.md).
+
+If something isn't right in the package or the documentation, please [open an issue](https://github.com/mnapoli/PHP-DI/issues/new). You can also find support in the [Gitter chatroom](https://gitter.im/mnapoli/PHP-DI).
