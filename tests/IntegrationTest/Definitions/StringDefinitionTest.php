@@ -54,9 +54,23 @@ class StringDefinitionTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('Hello bar, bam', $container->get('test-string'));
     }
 
+    public function test_nested_string_expressions()
+    {
+        $builder = new ContainerBuilder();
+        $builder->addDefinitions([
+            'name'        => 'John',
+            'welcome'     => \DI\string('Welcome {name}'),
+            'test-string' => \DI\string('{welcome}!'),
+        ]);
+        $container = $builder->build();
+
+        $this->assertEquals('Welcome John!', $container->get('test-string'));
+    }
+
     /**
      * @expectedException \DI\DependencyException
-     * @expectedExceptionMessage Error while parsing string expression for entry 'test-string': No entry or class found for 'foo'
+     * @expectedExceptionMessage Error while parsing string expression for entry 'test-string': No entry or class found
+     *                           for 'foo'
      */
     public function test_string_with_nonexistent_placeholder()
     {

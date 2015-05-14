@@ -29,10 +29,13 @@ class ValueDefinitionTest extends \PHPUnit_Framework_TestCase
     {
         $builder = new ContainerBuilder();
         $builder->addDefinitions([
-            'string' => 'foo',
-            'int'    => 123,
-            'object' => new stdClass(),
-            'helper' => \DI\value('foo'),
+            'string'  => 'foo',
+            'int'     => 123,
+            'object'  => new stdClass(),
+            'helper'  => \DI\value('foo'),
+            'closure' => \DI\value(function () {
+                return 'foo';
+            }),
         ]);
 
         $this->container = $builder->build();
@@ -44,5 +47,6 @@ class ValueDefinitionTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(123, $this->container->get('int'));
         $this->assertEquals(new \stdClass(), $this->container->get('object'));
         $this->assertEquals('foo', $this->container->get('helper'));
+        $this->assertEquals('foo', call_user_func($this->container->get('closure')));
     }
 }

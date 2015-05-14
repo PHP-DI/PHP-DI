@@ -28,6 +28,9 @@ class ObjectDefinitionTest extends \PHPUnit_Framework_TestCase
         $builder->addDefinitions([
             // with the same name
             'stdClass' => \DI\object('stdClass'),
+            // with name inferred
+            'ArrayObject' => \DI\object()
+                ->constructor([]),
             // with a different name
             'object' => \DI\object('ArrayObject')
                 ->constructor([]),
@@ -36,5 +39,6 @@ class ObjectDefinitionTest extends \PHPUnit_Framework_TestCase
 
         $this->assertInstanceOf('stdClass', $container->get('stdClass'));
         $this->assertInstanceOf('ArrayObject', $container->get('object'));
+        $this->assertInstanceOf('ArrayObject', $container->get('ArrayObject'));
     }
 }
