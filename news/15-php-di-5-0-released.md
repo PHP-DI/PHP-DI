@@ -11,7 +11,7 @@ This is a new major version that comes with:
 
 - minor backward compatibility breaks (nothing to get too alarmed about)
 - API and syntax simplifications (aka syntactic sugar)
-- new major features for modular systems (aka bundles, modules, plugins, …)
+- new major features for modular applications (aka bundles, modules, plugins, …)
 - performance improvements and a lighter package
 - a new website, logo and half rewritten documentation
 
@@ -65,4 +65,97 @@ return [
     Cache::class => object(JsonFileCache::class)
         ->constructor(string('{path.cache}/cache.json')),
 ];
+```
+
+## Features for modular applications
+
+The main motivation behind PHP-DI 5 was to improve support for scenarios involving several configuration files. The best illustration for this are application built using modules/bundles/plugins, which is exactly what was needed for Piwik and its plugin system.
+
+### Lists
+
+Playing with lists is one of the most important feature. It involves defining array of services as well as adding new items to an existing array.
+
+Let's illustrate that with an example: your application can support many "authentication providers". By default, you can sign up to the application and create an account which will be stored in a database (using an email and a password):
+
+```php
+// application config file
+return [
+    'auth.providers' => [
+        get(DatabaseAuthProvider::class),
+    ],
+];
+```
+
+However you can have modules that can provide new authentication systems:
+
+```php
+// Facebook login module
+return [
+    'auth.providers' => DI\add([
+        get(FacebookAuthProvider::class),
+    ]),
+];
+```
+
+```php
+// Twitter login module
+return [
+    'auth.providers' => DI\add([
+        get(TwitterAuthProvider::class),
+    ]),
+];
+```
+
+Those modules can be registered by simply adding the configuration files:
+
+```php
+$builder = new ContainerBuilder();
+
+$builder->addDefinitions('app/config.php');
+$builder->addDefinitions('src/FacebookModule/config.php');
+$builder->addDefinitions('src/TwitterModule/config.php');
+```
+
+As a result getting the `auth.providers` list will return the 3 items merged:
+
+```php
+[
+    get(DatabaseAuthProvider::class),
+    get(FacebookAuthProvider::class),
+    get(TwitterAuthProvider::class),
+]
+```
+
+For those familiar with Symfony, the same result can be achieved using [tags](http://symfony.com/doc/current/components/dependency_injection/tags.html). The approach chosen for PHP-DI is a little different for multiple reasons:
+
+- adding an item to an array is more similar to what we do in vanilla PHP
+- tags require to write [compiler passes](http://symfony.com/doc/current/components/dependency_injection/tags.html#create-a-compilerpass) which are verbose and not trivial
+- tags don't work if the container isn't compiled
+
+In the end manipulating lists instead of tags is simpler and feels more natural to use. To be fair however tags offer an approach with more freedom, allowing to implement more advanced behaviors.
+
+### Decorating a previous entry
+
+A new `DI\decorate()` helper was added, allowing to decorate a previous entry using a closure. A common scenario for using this is to override object using the [decorator pattern](http://en.wikipedia.org/wiki/Decorator_pattern).
+
+Here is an example where a module replaces the default "Product DAO" for by decorating it with a cache wrapper:
+
+```php
+// application config
+ProductDaoInterface::class => get(ProductDaoMySQL::class)
+```
+
+```php
+// module config
+ProductDaoInterface::class => decorate(function ($previous, ContainerInterface $c) {
+    return new ProductDaoCached($previous);
+})
+```
+
+The first argument of the closure is the previous object (the one we decorate), the second argument is the container.
+
+The example above is equivalent to:
+
+```php
+$dao = new ProductDaoCached(new ProductDaoMySQL());
 ```
