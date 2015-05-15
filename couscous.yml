@@ -27,18 +27,24 @@ menu:
                 container:
                     text: Using the container
                     url: doc/container.html
-                definition:
-                    text: Defining injections
+        definition:
+            section: Definitions
+            items:
+                introduction:
+                    text: Introduction
                     url: doc/definition.html
+                autowiring:
+                    text: Autowiring
+                    url: doc/autowiring.html
+                php:
+                    text: PHP definitions
+                    url: doc/php-definitions.html
                 annotations:
                     text: Annotations
                     url: doc/annotations.html
                 definition-overriding:
                     text: Definition overriding
                     url: doc/definition-overriding.html
-                scopes:
-                    text: Scopes
-                    url: doc/scopes.html
         frameworks:
             section: Frameworks
             items:
@@ -57,6 +63,9 @@ menu:
                 performances:
                     text: Performances
                     url: doc/performances.html
+                scopes:
+                    text: Scopes
+                    url: doc/scopes.html
                 lazy-injection:
                     text: Lazy injection
                     url: doc/lazy-injection.html

@@ -97,4 +97,4 @@ There are things that can't be defined with annotations:
 - mapping interfaces to implementations
 - defining entries with an anonymous function
 
-For that, you can combine annotations with [definitions in PHP](definition.md).
+For that, you can combine annotations with [definitions in PHP](php-definitions.md).
