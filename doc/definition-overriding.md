@@ -10,7 +10,7 @@ you can combine them by taking advantage of priorities that apply.
 From the highest priority to the least:
 
 - Explicit definition on the container (i.e. defined with `$container->set()`)
-- PHP file definitions (if B is added after A, then B prevails)
+- PHP file definitions (if file B is added after file A, then B prevails)
 - Annotations
 - Autowiring
 
@@ -19,8 +19,10 @@ From the highest priority to the least:
 Given this simple example:
 
 ```php
-class Foo {
-    public function __construct(Bar $param1) {
+class Foo
+{
+    public function __construct(Bar $param1)
+    {
     }
 }
 ```
@@ -30,11 +32,13 @@ PHP-DI would inject an instance of `Bar`. What if we wanted to inject a specific
 While autowiring guesses that `$param1` should take a `Bar` instance, we can use annotations to override that:
 
 ```php
-class Foo {
+class Foo
+{
     /**
      * @Inject({"my.specific.service"})
      */
-    public function __construct(BarInterface $param1) {
+    public function __construct(BarInterface $param1)
+    {
     }
 }
 ```
@@ -45,19 +49,10 @@ than the autowiring definition (`Bar` for `$param1`).
 You can go even further by overriding this definition using file-based definitions:
 
 ```php
-# config/di.php
-
 return [
     'Foo' => DI\object()
         ->constructor(DI\get('another.specific.service')),
 
     'another.specific.service' => DI\object('Bar'),
 ];
-```
-
-Finally, you can also override the file-based definition by directly calling the container:
-
-```php
-$container->set('Foo')
-    ->constructor(DI\get('yet.another.specific.service'));
 ```
