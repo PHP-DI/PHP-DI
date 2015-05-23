@@ -40,7 +40,9 @@ The recommended cache is the `ApcCache`.
 
 ### Cache prefixes
 
-If you run the same application twice on the same machine, both installs will use the same cache, and there might be conflicts.
+If you run the same application twice on the same machine, both installs will use the same cache which can cause conflicts.
+
+Conflicts can also happen if an application runs on different "environments" (e.g. production, development…) on the same machine (see the [environments documentation](environments.md)).
 
 To avoid this situation, you should use a cache "prefix": each installation of your app has a unique ID, and this ID is used to prefix cache keys
 to avoid collisions.
@@ -50,5 +52,3 @@ $cache = new Doctrine\Common\Cache\ApcCache();
 $cache->setNamespace('MyApplication');
 $containerBuilder->setDefinitionCache($cache);
 ```
-
-You are also encouraged to use cache prefixes if your application can run in several different environments (for example "development" and "production"): you don't want to share the cache between environments.

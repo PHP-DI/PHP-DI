@@ -4,7 +4,7 @@ layout: documentation
 
 # Injections depending on the environment
 
-You may want to inject different parameters according to the environment, for example:
+You may want to inject different parameters or objects according to the environment, for example:
 
 ```php
 <?php
@@ -60,3 +60,7 @@ $builder->addDefinitions("config.$environment.php");
 
 $container = $builder->build();
 ```
+
+## Caches
+
+If you configure PHP-DI to use a cache, you need to make sure that different environments don't share the same cache. To solve that problem, it is recommended to use a **cache prefix**: read about this in the [Performances](performances.md) documentation.
