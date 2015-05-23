@@ -22,7 +22,7 @@ title: Documentation index
 
 - [Symfony 2](frameworks/symfony2.md)
 - [Zend Framework 1](frameworks/zf1.md)
-- [Zend Framework 2](https://github.com/mnapoli/PHP-DI-ZF2) (beta version)
+- [Zend Framework 2](https://github.com/PHP-DI/ZF2-Bridge) (beta version)
 - [Silly](frameworks/silly.md)
 
 ### Advanced topics

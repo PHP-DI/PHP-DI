@@ -11,19 +11,15 @@ to call the container (thus avoiding the Service Locator pattern).
 
 First, install the bridge to ZF1:
 
-```json
-{
-    "require": {
-        "mnapoli/php-di": "The version you want here",
-        "mnapoli/php-di-zf1": "*"
-    }
-}
+```
+composer require php-di/zf1-bridge
 ```
 
 To use PHP-DI in your ZF1 application, you need to change the Dispatcher used by the Front Controller in the Bootstrap.
 
 ```php
-    protected function _initContainer() {
+    protected function _initContainer()
+    {
         $builder = new \DI\ContainerBuilder();
         $container = $builder->build();
 
@@ -164,4 +160,4 @@ Obviously, the `setUp()` and `appBootstrap()` methods could go in a base abstrac
 
 ## More
 
-Read more on the [PHP-DI-ZF1 project on Github](https://github.com/mnapoli/PHP-DI-ZF1).
+Read more on the [PHP-DI-ZF1 project on Github](https://github.com/PHP-DI/ZF1-Bridge).

@@ -13,13 +13,8 @@ Just to be clear: PHP-DI will work alongside Symfony's container. So you can use
 
 First, install the bridge:
 
-```json
-{
-    "require": {
-        "mnapoli/php-di": "The version you want here",
-        "mnapoli/php-di-symfony2": "*"
-    }
-}
+```
+composer require php-di/symfony2-bridge
 ```
 
 Now you need to configure Symfony to use the alternative container in your `AppKernel`:
@@ -189,4 +184,4 @@ Full details are here: [FOSRestBundle#743](https://github.com/FriendsOfSymfony/F
 
 ## More
 
-Read more on the [PHP-DI-Symfony2 project on Github](https://github.com/mnapoli/PHP-DI-Symfony2).
+Read more on the [PHP-DI-Symfony2 project on Github](https://github.com/PHP-DI/Symfony2-Bridge).
