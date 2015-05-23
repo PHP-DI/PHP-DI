@@ -1,45 +1,33 @@
-{% extends "page.twig" %}
+{% extends "default.twig" %}
 
 {% block content %}
 
-    <header class="jumbotron subhead" id="overview">
-        <div class="container">
-            <div class="docs-header-icon">
-                <h1>Documentation</h1>
-                <p class="lead">
-                    This is the documentation for PHP-DI 4. The documentation for v3 is
-                    <a href="https://github.com/mnapoli/PHP-DI/tree/3.x/doc">still available here</a>.
-                </p>
-            </div>
-        </div>
-    </header>
-    <div class='sub-jumbotron'>
-        <div class='container'>
+    <div class="container documentation">
+
+        <div class="sidebar">
             <ul>
-                <li>
-                    <a href="{{ baseurl }}/doc/" class="{{ tab == 'index' ? 'active' }}">Full documentation</a>
-                </li>
-                <li>
-                    <a href="{{ baseurl }}/doc/getting-started.html" class="{{ tab == 'get-started' ? 'active' }}">Getting started</a>
-                </li>
-                <li>
-                    <a href="{{ baseurl }}/doc/best-practices.html" class="{{ tab == 'best-practices' ? 'active' }}">Best practices</a>
-                </li>
-                <li>
-                    <a href="{{ baseurl }}/doc/container-configuration.html" class="{{ tab == 'container-config' ? 'active' }}">Configuring the container</a>
-                </li>
-                <li>
-                    <a href="{{ baseurl }}/doc/container.html" class="{{ tab == 'container' ? 'active' }}">Using the container</a>
-                </li>
-                <li>
-                    <a href="{{ baseurl }}/doc/definition.html" class="{{ tab == 'definition' ? 'active' }}">Defining injections</a>
-                </li>
+                {% for itemId, item in menu.items %}
+                    <li>
+                        {{ item.section }}
+
+                        <ul>
+                            {% for itemId, item in item.items %}
+                                <li class="{{ itemId == current_menu ? 'active' }}">
+                                    <a href="{{ item.absoluteUrl|default(baseUrl ~ '/' ~ item.url) }}">
+                                        {{ item.text|raw }}
+                                    </a>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    </li>
+                {% endfor %}
             </ul>
         </div>
-    </div>
 
-    <div class="container docs-w">
-        {{ content|raw }}
+        <article>
+            {{ content|raw }}
+        </article>
+
     </div>
 
 {% endblock %}

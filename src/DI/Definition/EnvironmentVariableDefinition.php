@@ -48,7 +48,7 @@ class EnvironmentVariableDefinition implements CacheableDefinition
     private $defaultValue;
 
     /**
-     * @var Scope|null
+     * @var string|null
      */
     private $scope;
 
@@ -99,18 +99,18 @@ class EnvironmentVariableDefinition implements CacheableDefinition
     }
 
     /**
-     * @param Scope $scope
+     * @param string $scope
      */
-    public function setScope(Scope $scope)
+    public function setScope($scope)
     {
         $this->scope = $scope;
     }
 
     /**
-     * @return Scope
+     * {@inheritdoc}
      */
     public function getScope()
     {
-        return $this->scope ?: Scope::SINGLETON();
+        return $this->scope ?: Scope::SINGLETON;
     }
 }

@@ -1,5 +1,5 @@
 ---
-template: documentation
+layout: documentation
 ---
 
 # PHP-DI in Symfony 2
@@ -13,13 +13,8 @@ Just to be clear: PHP-DI will work alongside Symfony's container. So you can use
 
 First, install the bridge:
 
-```json
-{
-    "require": {
-        "mnapoli/php-di": "The version you want here",
-        "mnapoli/php-di-symfony2": "*"
-    }
-}
+```
+composer require php-di/symfony2-bridge
 ```
 
 Now you need to configure Symfony to use the alternative container in your `AppKernel`:
@@ -108,6 +103,35 @@ class ProductController
 }
 ```
 
+### Routing annotations
+
+It is possible to use [annotations for routing](http://richardmiller.co.uk/2011/10/25/symfony2-routing-to-controller-as-service-with-annotations/) and still have the controller created by PHP-DI.
+
+You achieve that by specifying the service ID in the `@Route` annotation (which is most probably the class name itself unless you have a custom setup):
+
+```php
+/**
+ * @Route(service="My\TestController")
+ */
+class TestController extends Controller
+{
+    private $dependency;
+
+    public function __construct(SomeDependency $dependency)
+    {
+        $this->dependency = $dependency;
+    }
+
+    /**
+     * @Route("test")
+     */
+    public function testAction()
+    {
+        return new Response('ok');
+    }
+}
+```
+
 
 ## Using Symfony's services in PHP-DI
 
@@ -120,7 +144,7 @@ That's because PHP-DI is designed to play nice with others:
 ```php
 return [
     'Acme\MyBundle\Controller\ProductController' => DI\object()
-        ->constructor(DI\link('doctrine.orm.entity_manager')),
+        ->constructor(DI\get('doctrine.orm.entity_manager')),
 ];
 ```
 
@@ -139,9 +163,9 @@ like these:
 
 ```php
 return [
-    'Psr\Log\LoggerInterface' => DI\link('logger'),
+    'Psr\Log\LoggerInterface' => DI\get('logger'),
     // PHP 5.5 notation:
-    ObjectManager::class => DI\link('doctrine.orm.entity_manager'),
+    ObjectManager::class => DI\get('doctrine.orm.entity_manager'),
 ];
 ```
 
@@ -160,4 +184,4 @@ Full details are here: [FOSRestBundle#743](https://github.com/FriendsOfSymfony/F
 
 ## More
 
-Read more on the [PHP-DI-Symfony2 project on Github](https://github.com/mnapoli/PHP-DI-Symfony2).
+Read more on the [PHP-DI-Symfony2 project on Github](https://github.com/PHP-DI/Symfony2-Bridge).

@@ -35,7 +35,7 @@ final class Inject
      * Used if the annotation is set on a method
      * @var array
      */
-    private $parameters = array();
+    private $parameters = [];
 
     /**
      * @param array $values

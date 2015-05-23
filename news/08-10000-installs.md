@@ -1,5 +1,5 @@
 ---
-template: blogpost
+layout: blogpost
 title: 10.000 installs!
 author: Matthieu Napoli
 date: April 2nd 2014

@@ -20,8 +20,6 @@ class CallableReflectionFactory
      * @param callable $callable
      *
      * @return \ReflectionFunctionAbstract
-     *
-     * TODO Use the `callable` type-hint once support for PHP 5.4 and up.
      */
     public static function fromCallable($callable)
     {

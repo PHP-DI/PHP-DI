@@ -1,5 +1,5 @@
 ---
-template: blog
+layout: blog
 ---
 
 # News

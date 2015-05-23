@@ -1,5 +1,5 @@
 ---
-template: blogpost
+layout: blogpost
 title: PHP-DI 4.0 released
 author: Matthieu Napoli
 date: February 1st 2014

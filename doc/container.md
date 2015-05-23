@@ -1,5 +1,5 @@
 ---
-template: documentation
+layout: documentation
 tab: container
 ---
 
@@ -9,137 +9,123 @@ This documentation describes the API of the container object itself.
 
 ## get() & has()
 
-The container implements the standard [ContainerInterop](https://github.com/container-interop/container-interop).
-That means it implements `Interop\Container\ContainerInterface`:
+The container implements the [container-interop](https://github.com/container-interop/container-interop) standard. That means it implements [`Interop\Container\ContainerInterface`](https://github.com/container-interop/container-interop/blob/master/src/Interop/Container/ContainerInterface.php):
 
 ```php
 namespace Interop\Container;
 
 interface ContainerInterface
 {
-    /**
-     * Finds an entry of the container by its identifier and returns it.
-     *
-     * @param string $id Identifier of the entry to look for.
-     * @throws NotFoundException  No entry was found for this identifier.
-     * @throws ContainerException Error while retrieving the entry.
-     * @return mixed Entry.
-     */
     public function get($id);
-
-    /**
-     * Returns true if the container can return an entry for the given identifier.
-     *
-     * @param string $id Identifier of the entry to look for.
-     * @return boolean
-     */
     public function has($id);
 }
 ```
 
-If you type-hint against this interface instead of the implementation (`DI\Container`),
-that means you will be able to use another container (compatible with ContainerInterop)
-later.
+You are encouraged to type-hint against this interface instead instead of the implementation (`DI\Container`) whenever possible. Doing so means your code is decoupled from PHP-DI and you can switch to another container anytime.
 
 ## set()
 
-Of course you can set entries on the container:
+You can set entries directly on the container:
 
 ```php
 $container->set('foo', 'bar');
-
 $container->set('MyInterface', \DI\object('MyClass'));
 ```
 
-However it is recommended to use definition files.
-See the [definition documentation](definition.md).
+However it is recommended to use definition files. See the [definition documentation](definition.md).
 
 ## make()
 
-The container also offers a `make` method. This method is defined in the `DI\FactoryInterface`:
+The container also offers a `make()` method. This method is defined in [`DI\FactoryInterface`](https://github.com/mnapoli/PHP-DI/blob/master/src/DI/FactoryInterface.php).
 
 ```php
-interface FactoryInterface
+class GithubProfile
 {
-    /**
-     * Resolves an entry by its name. If given a class name, it will return a new instance of that class.
-     *
-     * @param string $name       Entry name or a class name.
-     * @param array  $parameters Optional parameters to use to build the entry. Use this to force specific
-     *                           parameters to specific values. Parameters not defined in this array will
-     *                           be automatically resolved.
-     *
-     * @throws DependencyException Error while resolving the entry.
-     * @throws NotFoundException   No entry or class found for the given name.
-     * @return mixed
-     */
-    public function make($name, array $parameters = array());
+    public function __construct(ApiClient $client, $user)
+    ...
 }
+
+$container->make('GithubProfile', [
+    'user' => 'torvalds',
+]);
 ```
 
-The `make()` method works the same as `get()`, except it will create a new instance each time.
+The `make()` method works like `get()` except *it will create a new instance every time it is called*.
+
 It will use the parameters provided for the constructor, and the missing parameters will be
 resolved from the container.
 
-It is very useful to create objects that do not belong *inside* the container (i.e. that are not services),
-but that may have dependencies. It is also useful if you want to override some parameters in the constructor.
-For example controllers, models, …
+It is useful to create objects that do not belong *inside* the container (i.e. that are not services, or that are not [**stateless**](https://igor.io/2013/03/31/stateless-services.html)), but that have dependencies. It is also useful if you want to override some parameters in the constructor.
 
 If you need to use the `make()` method inside a service, or a controller, or whatever, it is
-recommended you type-hint against `FactoryInterface`. That avoids coupling your code to the container.
+recommended that you type-hint against `FactoryInterface`. That avoids coupling your code to the container.
 `DI\FactoryInterface` is automatically bound to `DI\Container` so you can inject it without any configuration.
 
 ## call()
 
-Since version 4.2, the container exposes a `call()` method:
+The container exposes a `call()` method that can invoke any PHP callable.
+
+It offers the following additional features over using `call_user_func()`:
+
+- named parameters (pass parameters indexed by name instead of position)
+
+    ```php
+    $container->call(function ($foo, $bar) {
+        // ...
+    }, [
+        'param1' => 'Hello',
+        'param2' => 'World',
+    ]);
+
+    // Can also be useful in a micro-framework for example
+    $container->call($controller, $_GET + $_POST);
+    ```
+
+- dependency injection based on the type-hinting
+
+    ```php
+    $container->call(function (Logger $logger, EntityManager $em) {
+        // ...
+    });
+    ```
+
+- dependency injection based on explicit definition
+
+    ```php
+    $container->call(function ($dbHost) {
+        // ...
+    }, [
+        // Either indexed by parameter names
+        'dbHost' => \DI\get('db.host'),
+    ]);
+
+    $container->call(function ($dbHost) {
+        // ...
+    }, [
+        // Or not indexed
+        \DI\get('db.host'),
+    ]);
+    ```
+
+The best part is that you can mix all that:
 
 ```php
-$container->call(function (Logger $logger, EntityManager $em) {
+$container->call(function (Logger $logger, $dbHost, $operation) {
     // ...
-});
+}, [
+    'operation' => 'delete',
+    'dbHost'    => \DI\get('db.host'),
+]);
 ```
 
-The parameters are resolved as container entries using autowiring.
-
-If some parameters shouldn't be resolved by the container, or if some can't be resolved
-using autowiring (for example if a parameter is not type-hinted), then you must define those
-parameters in an array:
+The `call()` method is particularly useful to invoke controllers, for example:
 
 ```php
-$parameters = [
-    'data' => /* some variable */
-];
-
-$container->call(function (Logger $logger, $data) {
-    // ...
-}, $parameters);
-```
-
-As you can see, you can mix explicitly defined parameters (i.e. `$data` above)
-and auto-resolved parameters (i.e. the `$logger`).
-
-Note that you can also define injections on the fly if you don't use type-hints:
-
-```php
-$parameters = [
-    'logger' => \DI\link('Logger')
-];
-
-$container->call(function ($logger) {
-    // ...
-}, $parameters);
-```
-
-The `call()` method is useful to invoke controllers defined as closures, for example:
-
-```php
-$requestParameters = $_GET;
-
-$controller = function ($id, EntityManager $em) {
+$controller = function ($name, EntityManager $em) {
     // ...
 }
 
-$container->call($controller, $requestParameters);
+$container->call($controller, $_GET); // $_GET contains ['name' => 'John']
 ```
 
 This leaves the liberty to the developer writing controllers to get request parameters
@@ -154,13 +140,6 @@ namespace DI;
 
 interface InvokerInterface
 {
-    /**
-     * Call the given function using the given parameters.
-     *
-     * @param callable $callable   Function to call.
-     * @param array    $parameters Parameters to use.
-     * @return mixed Result of the function.
-     */
     public function call($callable, array $parameters = []);
 }
 ```
@@ -170,14 +149,14 @@ interface InvokerInterface
 - closures
 - functions
 - object methods and static methods
-- invokable objects (objects that implement [__invoke()(http://php.net/manual/en/language.oop5.magic.php#object.invoke)])
+- invokable objects (objects that implement [__invoke()](http://php.net/manual/en/language.oop5.magic.php#object.invoke))
 
-**New:** Since version 4.4, you can call:
+Additionally you can call:
 
-- callable class names: `$container->call('My\CallableClass')`
-- callable class methods: `$container->call(['MyClass', 'someMethod'])`
+- name of [invokable](http://php.net/manual/en/language.oop5.magic.php#object.invoke) classes: `$container->call('My\CallableClass')`
+- object methods (give the class name, not an object): `$container->call(['MyClass', 'someMethod'])`
 
-In both case, `'My\CallableClass'` and `'MyClass'` will be instantiated using `$container->get()`.
+In both case, `'My\CallableClass'` and `'MyClass'` will be resolved by the container using `$container->get()`.
 
 That saves you from a more verbose form, for example:
 
@@ -185,7 +164,7 @@ That saves you from a more verbose form, for example:
 $object = $container->get('My\CallableClass');
 $container->call($object);
 
-// can now be written as
+// can be written as
 $container->call('My\CallableClass');
 ```
 

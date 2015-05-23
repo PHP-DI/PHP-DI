@@ -1,5 +1,5 @@
 ---
-template: documentation
+layout: documentation
 ---
 
 # How PHP-DI works
@@ -20,7 +20,7 @@ $entry = $container->get('entryName');
 
 A container instance has the following sub-components:
 
-- a `DefinitionManager` that returns a `Definition` for an entry name (by looking in severeal `DefinitionSource`)
+- a `DefinitionSource` that returns a `Definition` for an entry name (by looking in several sub-definition sources)
 - a list of `DefinitionResolver` that take a `Definition` and resolve it to a value (f.e. if it's an object, it will create it)
 
 ### Definitions
@@ -30,6 +30,7 @@ A definition defines what is an entry:
 - **a simple value** (string, number, object instance…): `ValueDefinition`
 - **a factory/callable returning the value**: `FactoryDefinition`
 - **a definition of an entry alias**: `AliasDefinition`
-- **a definition of a class**: `ClassDefinition`
+- **a definition of a class**: `ObjectDefinition`
+- **a definition of an environment variable**: `EnvironmentVariableDefinition`
 
 The last type (class definition) describes how the container should create a class instance (what parameters the constructor takes, …).

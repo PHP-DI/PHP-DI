@@ -2,29 +2,23 @@
 
 {% block blogcontent %}
 
-    <div class='single-post-w'>
-        <h1 class='post-title'>{{ title }}</h1>
+    <article>
+        <h1>{{ title }}</h1>
 
-        <p class='post-info'>
-            <span class='info-item'>
-              Posted by {{ author }}
-            </span>
-            <span class='info-item'>{{ date }}</span>
+        <p class="article-information">
+            Posted by {{ author }} on {{ date }}
         </p>
-        <div class='post-content'>
-            {{ content|raw }}
-        </div>
-    </div>
 
-    <div class='post-comments-w'>
-        <h3 class='section-header'>
-            Comments
-        </h3>
-        <div id="disqus_thread"></div>
-        <noscript>
-            Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a>
-        </noscript>
-    </div>
+        {{ content|raw }}
+    </article>
+
+    <h3>
+        Comments
+    </h3>
+    <div id="disqus_thread"></div>
+    <noscript>
+        Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+    </noscript>
 
 {% endblock %}
 

@@ -1,6 +1,6 @@
 ---
-template: documentation
-tab: get-started
+layout: documentation
+title: Getting started
 ---
 
 # Getting started with PHP-DI
@@ -102,7 +102,7 @@ But in total you have 3 ways to define what to inject in a class:
 
 ## Installation
 
-PHP-DI works with **PHP 5.3** or higher. But seriously, use 5.5 or even 5.6.
+PHP-DI works with **PHP 5.4** or higher. But seriously, use 5.5 or 5.6.
 
 The easiest way is to install PHP-DI with [Composer](http://getcomposer.org/doc/00-intro.md).
 Create a file named `composer.json` in your project root:
@@ -195,7 +195,7 @@ See also the [complete documentation about annotations](definition.md).
 
 ### PHP array
 
-You can define injections with a PHP array too (this example uses PHP 5.4 and 5.5 features):
+You can define injections with a PHP array too (this example uses PHP 5.5 features):
 
 ```php
 <?php
@@ -207,7 +207,7 @@ return [
 
     // Class
     MyDbAdapter::class => DI\object()
-        ->constructor(DI\link('db.host'), DI\link('db.port')),
+        ->constructor(DI\get('db.host'), DI\get('db.port')),
 
 ];
 ```
@@ -249,7 +249,7 @@ To sum up:
 
 - [Symfony 2](frameworks/symfony2.md)
 - [Zend Framework 1](frameworks/zf1.md)
-- [Zend Framework 2](https://github.com/mnapoli/PHP-DI-ZF2) (beta version)
+- [Zend Framework 2](https://github.com/PHP-DI/ZF2-Bridge) (beta version)
 
 
 ## What's next

@@ -1,5 +1,5 @@
 ---
-template: documentation
+layout: documentation
 ---
 
 # Injections depending on the environment
@@ -14,7 +14,7 @@ return [
     'db.port' => 3336,
 
     'DbAdapter' => DI\object()
-        ->constructor(DI\link('db.host'), DI\link('db.port')),
+        ->constructor(DI\get('db.host'), DI\get('db.port')),
 ];
 ```
 
@@ -43,7 +43,7 @@ return [
 // config.php
 return [
     'DbAdapter' => DI\object()
-        ->constructor(DI\link('db.host'), DI\link('db.port')),
+        ->constructor(DI\get('db.host'), DI\get('db.port')),
 ];
 ```
 
