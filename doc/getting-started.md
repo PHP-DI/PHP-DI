@@ -36,7 +36,8 @@ class UserManager
 {
     private $mailer;
 
-    public function __construct(Mailer $mailer) {
+    public function __construct(Mailer $mailer)
+    {
         $this->mailer = $mailer;
     }
 
@@ -74,13 +75,13 @@ Behind the scenes, PHP-DI will create both a Mailer object and a UserManager obj
 
 The container uses a technique called **autowiring**. This is not unique to PHP-DI, but this is still awesome. It will scan the code and see what are the parameters needed in the constructors.
 
-In our example, the `UserManager` constructor takes a `Mailer` object. So PHP-DI knows that it needs to create one. Pretty basic, but very efficient.
+In our example, the `UserManager` constructor takes a `Mailer` object: PHP-DI knows that it needs to create one. Pretty basic, but very efficient.
 
-*Wait, isn't that weird and risky to scan PHP code like that?* Don't worry, PHP-DI uses PHP's Reflection, this is pretty standard stuff. Laravel, Zend Framework or any decent container does the same.
+*Wait, isn't that weird and risky to scan PHP code like that?* Don't worry, PHP-DI uses [PHP's Reflection classes](http://php.net/manual/en/book.reflection.php) which is pretty standard: Laravel, Zend Framework and many other containers do the same. Performance wise, such information is read once and then cached, it has no impact.
 
 ## Defining injections
 
-So we have covered **autowiring**, which is when PHP-DI figures out automatically the dependencies a class needs.
+We have covered **autowiring**, which is when PHP-DI figures out automatically the dependencies a class needs.
 
 But in total you have 3 ways to define what to inject in a class:
 
