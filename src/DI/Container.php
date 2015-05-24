@@ -65,6 +65,13 @@ class Container implements ContainerInterface, FactoryInterface, \DI\InvokerInte
     private $invoker;
 
     /**
+     * Container that wraps this container. If none, points to $this.
+     *
+     * @var ContainerInterface
+     */
+    private $wrapperContainer;
+
+    /**
      * Use the ContainerBuilder to ease constructing the Container.
      *
      * @see ContainerBuilder
@@ -78,10 +85,10 @@ class Container implements ContainerInterface, FactoryInterface, \DI\InvokerInte
         ProxyFactory $proxyFactory,
         ContainerInterface $wrapperContainer = null
     ) {
-        $wrapperContainer = $wrapperContainer ?: $this;
+        $this->wrapperContainer = $wrapperContainer ?: $this;
 
         $this->definitionSource = $definitionSource;
-        $this->definitionResolver = new ResolverDispatcher($wrapperContainer, $proxyFactory);
+        $this->definitionResolver = new ResolverDispatcher($this->wrapperContainer, $proxyFactory);
 
         // Auto-register the container
         $this->singletonEntries['DI\Container'] = $this;
@@ -319,7 +326,7 @@ class Container implements ContainerInterface, FactoryInterface, \DI\InvokerInte
                 new NumericArrayResolver,
                 new AssociativeArrayResolver,
                 new DefinitionParameterResolver($this->definitionResolver),
-                new TypeHintContainerResolver($this),
+                new TypeHintContainerResolver($this->wrapperContainer),
             ]);
 
             $this->invoker = new Invoker($parameterResolver, $this);

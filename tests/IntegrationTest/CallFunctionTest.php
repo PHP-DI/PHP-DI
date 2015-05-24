@@ -94,6 +94,22 @@ class CallFunctionTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($value, $result);
     }
 
+    public function test_parameter_from_type_hint_with_root_container()
+    {
+        $rootContainer = ContainerBuilder::buildDevContainer();
+        $value = new \stdClass();
+        $rootContainer->set('stdClass', $value);
+
+        $subContainerBuilder = new ContainerBuilder;
+        $subContainerBuilder->wrapContainer($rootContainer);
+        $subContainer = $subContainerBuilder->build();
+
+        $result = $subContainer->call(function(\stdClass $foo) {
+            return $foo;
+        });
+        $this->assertSame($value, $result, 'The root container was not used for the type-hint');
+    }
+
     /**
      * @test
      */
