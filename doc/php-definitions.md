@@ -234,6 +234,17 @@ return [
 ];
 ```
 
+### String expressions
+
+You can use the `DI\string()` helper to concatenate strings entries:
+
+```php
+return [
+    'path.tmp' => '/tmp',
+    'log.file' => DI\string('{path.tmp}/app.log'),
+];
+```
+
 ### Arrays
 
 Entries can be arrays containing simple values or other entries:

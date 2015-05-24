@@ -43,7 +43,7 @@ menu:
                     text: Annotations
                     url: doc/annotations.html
                 definition-overriding:
-                    text: Definition overriding
+                    text: Definition extensions and overriding
                     url: doc/definition-overriding.html
         frameworks:
             section: Frameworks

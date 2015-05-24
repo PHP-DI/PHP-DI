@@ -20,7 +20,7 @@ title: Documentation index
 * [Autowiring](autowiring.md)
 * [PHP definitions](php-definitions.md)
 * [Annotations](annotations.md)
-* [Definition overriding](definition-overriding.md)
+* [Definition extensions and overriding](definition-overriding.md)
 
 ### Frameworks integration
 
