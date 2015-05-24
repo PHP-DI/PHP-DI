@@ -139,8 +139,10 @@ To quote the Symfony documentation:
 For this reason, PHP-DI integrates with some frameworks so that you don't have to call the container (dependencies are injected in controllers):
 
 - [Symfony 2](frameworks/symfony2.md)
+- [Silex](frameworks/silex.md)
 - [Zend Framework 1](frameworks/zf1.md)
 - [Zend Framework 2](https://github.com/PHP-DI/ZF2-Bridge) (beta version)
+- [Silly](frameworks/silly.md)
 
 If you want to use PHP-DI with another framework or your own code, try to use `$container->get()` in you root application class or front controller.
 

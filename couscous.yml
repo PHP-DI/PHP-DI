@@ -51,6 +51,9 @@ menu:
                 symfony2:
                     text: Symfony 2
                     url: doc/frameworks/symfony2.html
+                silex:
+                    text: Silex
+                    url: doc/frameworks/silex.html
                 zf1:
                     text: Zend Framework 1
                     url: doc/frameworks/zf1.html

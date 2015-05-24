@@ -4,6 +4,7 @@
 
 Improvements:
 
+- New [Silex integration](doc/frameworks/silex.md)
 - Lighter package: requires 4 less Composer dependencies by default
 - [#207](https://github.com/mnapoli/PHP-DI/issues/207): Support for `DI\link()` in arrays
 - [#208](https://github.com/mnapoli/PHP-DI/issues/208): Support for nested definitions

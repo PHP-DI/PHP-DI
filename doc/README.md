@@ -3,24 +3,29 @@ layout: documentation
 title: Documentation index
 ---
 
-## Introduction
+### Introduction
 
 * [Getting started](getting-started.md)
 * [Understanding dependency injection](understanding-di.md)
 * [Best practices guide](best-practices.md)
 
-## Usage
+### Usage
 
 * [Configure the container](container-configuration.md)
 * [Use the container](container.md)
-* [Define injections](definition.md)
+
+### Definitions
+
+* [Introduction](definition.md)
+* [Autowiring](autowiring.md)
+* [PHP definitions](php-definitions.md)
 * [Annotations](annotations.md)
 * [Definition overriding](definition-overriding.md)
-* [Scopes](scopes.md)
 
 ### Frameworks integration
 
 - [Symfony 2](frameworks/symfony2.md)
+- [Silex](frameworks/silex.md)
 - [Zend Framework 1](frameworks/zf1.md)
 - [Zend Framework 2](https://github.com/PHP-DI/ZF2-Bridge) (beta version)
 - [Silly](frameworks/silly.md)
@@ -28,6 +33,7 @@ title: Documentation index
 ### Advanced topics
 
 * [Performances](performances.md)
+* [Scopes](scopes.md)
 * [Lazy injection](lazy-injection.md)
 * [Inject on an existing instance](inject-on-instance.md)
 * [Injections depending on the environment](environments.md)
@@ -35,13 +41,14 @@ title: Documentation index
 ### Migration guides
 
 * [Migration from PHP-DI 3.x to 4.0](migration/4.0.md)
+* [Migration from PHP-DI 4.x to 5.0](migration/5.0.md)
 
-## Internals
+### Internals
 
 * [Contribute](../CONTRIBUTING.md)
 * [How PHP-DI works](how-it-works.md)
 
-## License
+### License
 
 PHP-DI is released under the MIT license.
 

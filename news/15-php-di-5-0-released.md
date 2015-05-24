@@ -14,6 +14,7 @@ This is a new major version that comes with:
 - new major features for modular applications (aka bundles, modules, plugins, …)
 - performance improvements and a lighter package
 - a new website, logo and half rewritten documentation
+- Silex integration
 
 But the best news of all is that this new major version wasn't produced out of thin air: it has been used in [Piwik](https://piwik.org/) and developed as a rolling release (i.e. always stable) to test and evaluate new features hands on. Because of that, PHP-DI 5 has been in production since January 2015. **More that 100 000 Piwik installs in the wild are running PHP-DI 5 already!**
 
@@ -159,6 +160,10 @@ The example above is equivalent to:
 ```php
 $dao = new ProductDaoCached(new ProductDaoMySQL());
 ```
+
+## Silex integration
+
+A new framework integration comes with this new version: the [Silex](http://silex.sensiolabs.org/) micro-framework. If you are interested to learn about it, head over to [the documentation](../doc/frameworks/silex.md).
 
 ## Wrapping it up
 
