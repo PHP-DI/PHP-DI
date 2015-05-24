@@ -12,7 +12,7 @@ This is a new major version that comes with:
 - minor backward compatibility breaks (nothing to get too alarmed about)
 - API and syntax simplifications (aka syntactic sugar)
 - new major features for modular applications (aka bundles, modules, plugins, …)
-- performance improvements and a lighter package
+- performance improvements (thanks [Blackfire](https://blackfire.io/)) and a lighter package
 - a new website, logo and half rewritten documentation
 - Silex integration
 

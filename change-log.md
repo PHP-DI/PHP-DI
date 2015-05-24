@@ -2,50 +2,45 @@
 
 ## 5.0
 
+This is the complete change log. You can also read the [migration guide](doc/migration/5.0.md) for upgrading, or [the news article](news/15-php-di-5-0-released.md) for a nicer introduction to this new version.
+
 Improvements:
 
 - New [Silex integration](doc/frameworks/silex.md)
 - Lighter package: requires 4 less Composer dependencies by default
+- [#235](https://github.com/mnapoli/PHP-DI/issues/235): `DI\link()` is now deprecated in favor of `DI\get()`. There is no BC break as `DI\link()` still works.
 - [#207](https://github.com/mnapoli/PHP-DI/issues/207): Support for `DI\link()` in arrays
+- [#203](https://github.com/mnapoli/PHP-DI/issues/203): New `DI\string()` helper ([documentation](doc/php-definitions.md))
 - [#208](https://github.com/mnapoli/PHP-DI/issues/208): Support for nested definitions
 - [#226](https://github.com/mnapoli/PHP-DI/pull/226): `DI\factory()` can now be omitted with closures:
 
     ```php
     // before
-    'My\Class' => DI\factory(function () {
-        return new Foo();
-    })
+    'My\Class' => DI\factory(function () { ... })
     // now (optional shortcut)
-    'My\Class' => function () {
-        return new Foo();
-    }
+    'My\Class' => function () { ... }
     ```
-- [#235](https://github.com/mnapoli/PHP-DI/issues/235) `DI\link()` is now deprecated in favor of `DI\get()`. There is no BC break as `DI\link()` still works.
-- [#193](https://github.com/mnapoli/PHP-DI/issues/193) `DI\object()->method()` now supports calling the same method twice (or more).
-- [#248](https://github.com/mnapoli/PHP-DI/issues/248): New `DI\decorate()` function to decorate a previously defined entry:
-
-    ```php
-    // file A.php
-    ProductDaoInterface::class => DI\get(ProductDaoDatabase::class)
-    // file B.php
-    ProductDaoInterface::class => DI\decorate(function ($previous, ContainerInterface $c) {
-        return new ProductDaoCached($previous, $c->get('cache.backend'));
-    })
-    ```
+- [#193](https://github.com/mnapoli/PHP-DI/issues/193): `DI\object()->method()` now supports calling the same method twice (or more).
+- [#248](https://github.com/mnapoli/PHP-DI/issues/248): New `DI\decorate()` helper to decorate a previously defined entry ([documentation](doc/definition-overriding.md))
+- [#215](https://github.com/mnapoli/PHP-DI/pull/215): New `DI\add()` helper to add entries to an existing array ([documentation](doc/definition-overriding.md))
+- [#218](https://github.com/mnapoli/PHP-DI/issues/218): `ContainerBuilder::addDefinitions()` can now take an array of definitions
+- [#211](https://github.com/mnapoli/PHP-DI/pull/211): `ContainerBuilder::addDefinitions()` is now fluent (return `$this`)
+- [#250](https://github.com/mnapoli/PHP-DI/issues/250): `Container::call()` now also accepts parameters not indexed by name as well as embedded definitions ([documentation](doc/container.md))
+- Various performance improvements, e.g. lower the number of files loaded, simpler architecture, …
 
 BC breaks:
 
 - PHP-DI now requires a version of PHP >= 5.4.0
-- [#251](https://github.com/mnapoli/PHP-DI/issues/251) Annotations are disabled by default, if you use annotations enable them with `$containerBuilder->useAnnotations(true)`.
-- [#198](https://github.com/mnapoli/PHP-DI/issues/198) `ocramius/proxy-manager` is not installed by default anymore, you need to require it in `composer.json` (`~1.0`) if you want to use **lazy injection**
+- [#251](https://github.com/mnapoli/PHP-DI/issues/251): Annotations are disabled by default, if you use annotations enable them with `$containerBuilder->useAnnotations(true)`.
+- [#198](https://github.com/mnapoli/PHP-DI/issues/198): `ocramius/proxy-manager` is not installed by default anymore, you need to require it in `composer.json` (`~1.0`) if you want to use **lazy injection**
 - Closures are now converted into factory definitions automatically. If you ever defined a closure as a value (e.g. to have the closure injected in a class), you need to wrap the closure with the new `DI\value()` helper.
-- [#223](https://github.com/mnapoli/PHP-DI/issues/223) `DI\ContainerInterface` was deprecated since v4.1 and has been removed
+- [#223](https://github.com/mnapoli/PHP-DI/issues/223): `DI\ContainerInterface` was deprecated since v4.1 and has been removed
 
 Internal changes in case you were replacing/extending some parts:
 
 - the definition sources architecture has been refactored, if you defined custom definition sources you will need to update your code (it should be much easier now)
-- `DI\Scope` internal implementation has changed. You are encouraged to use the constants (`DI\Scope::SINGLETON` and `DI\Scope::PROTOTYPE`) instead of the static methods, but backward compatibility is kept (static methods still work).
-- `Container::call()` now uses the *Invoker* external library
+- [#252](https://github.com/mnapoli/PHP-DI/pull/252): `DI\Scope` internal implementation has changed. You are encouraged to use the constants (`DI\Scope::SINGLETON` and `DI\Scope::PROTOTYPE`) instead of the static methods, but backward compatibility is kept (static methods still work).
+- [#241](https://github.com/mnapoli/PHP-DI/issues/241): `Container::call()` now uses the *Invoker* external library
 
 ## 4.4
 
