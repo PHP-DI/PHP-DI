@@ -284,6 +284,17 @@ Good to know:
 (first PHP-DI looks for an exact match, then it searches in the wildcards)
 - in case of "conflicts" (i.e. 2 different matches with wildcards), the first match will prevail
 
+### Nesting definitions
+
+You can nest definitions inside others to avoid polluting the container with unnecessary entries. For example:
+
+```php
+return [
+    'Foo' => DI\object()
+        ->constructor(DI\string('{root_directory}/test.json'), DI\object('Bar')),
+];
+```
+
 ## Setting in the container directly
 
 In addition to defining entries in an array, you can set them directly in the container as shown below.
