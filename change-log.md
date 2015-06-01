@@ -7,7 +7,7 @@ This is the complete change log. You can also read the [migration guide](doc/mig
 Improvements:
 
 - New [Silex integration](doc/frameworks/silex.md)
-- Lighter package: requires 4 less Composer dependencies by default
+- Lighter package: from 10 to 3 Composer dependencies!
 - [#235](https://github.com/mnapoli/PHP-DI/issues/235): `DI\link()` is now deprecated in favor of `DI\get()`. There is no BC break as `DI\link()` still works.
 - [#207](https://github.com/mnapoli/PHP-DI/issues/207): Support for `DI\link()` in arrays
 - [#203](https://github.com/mnapoli/PHP-DI/issues/203): New `DI\string()` helper ([documentation](doc/php-definitions.md))
@@ -31,8 +31,10 @@ Improvements:
 BC breaks:
 
 - PHP-DI now requires a version of PHP >= 5.4.0
-- [#251](https://github.com/mnapoli/PHP-DI/issues/251): Annotations are disabled by default, if you use annotations enable them with `$containerBuilder->useAnnotations(true)`.
-- [#198](https://github.com/mnapoli/PHP-DI/issues/198): `ocramius/proxy-manager` is not installed by default anymore, you need to require it in `composer.json` (`~1.0`) if you want to use **lazy injection**
+- The package is lighter by default:
+    - [#251](https://github.com/mnapoli/PHP-DI/issues/251): Annotations are disabled by default, if you use annotations enable them with `$containerBuilder->useAnnotations(true)`. Additionally the `doctrine/annotations` package isn't required by default anymore, so you also need to run `composer require doctrine/annotations`.
+    - `doctrine/cache` is not installed by default anymore, you need to require it in `composer.json` (`~1.0`) if you want to configure a cache for PHP-DI
+    - [#198](https://github.com/mnapoli/PHP-DI/issues/198): `ocramius/proxy-manager` is not installed by default anymore, you need to require it in `composer.json` (`~1.0`) if you want to use **lazy injection**
 - Closures are now converted into factory definitions automatically. If you ever defined a closure as a value (e.g. to have the closure injected in a class), you need to wrap the closure with the new `DI\value()` helper.
 - [#223](https://github.com/mnapoli/PHP-DI/issues/223): `DI\ContainerInterface` was deprecated since v4.1 and has been removed
 
