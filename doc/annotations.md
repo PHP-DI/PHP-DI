@@ -4,7 +4,18 @@ layout: documentation
 
 # Annotations
 
-Annotations **are disabled by default**. You need to [configure the `ContainerBuilder`](container-configuration.md) to use them:
+Annotations **are disabled by default**. To be able to use them, you first need to install the [Doctrine Annotations](http://doctrine-common.readthedocs.org/en/latest/reference/annotations.html) library using Composer:
+
+```json
+{
+    "require": {
+        ...
+        "doctrine/annotations": "~1.2"
+    }
+}
+```
+
+Then you need to [configure the `ContainerBuilder`](container-configuration.md) to use them:
 
 ```php
 $containerBuilder->useAnnotations(true);

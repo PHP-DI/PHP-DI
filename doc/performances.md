@@ -8,16 +8,28 @@ layout: documentation
 
 PHP-DI uses the [definitions](definition.md) you configured to instantiate classes.
 
-Reading those definitions (and, if enabled, reading annotations or autowiring) on each request can be avoided by using a cache. The caching system PHP-DI uses is the Doctrine Cache library.
+Reading those definitions (and, if enabled, reading annotations or autowiring) on each request can be avoided by using a cache. The caching system PHP-DI uses is the [Doctrine Cache](http://doctrine-common.readthedocs.org/en/latest/reference/caching.html) library.
 
 ### Setup
+
+The Doctrine Cache library is not installed by default with PHP-DI, you need to install it with Composer:
+
+```json
+{
+    "require": {
+        ...
+        "doctrine/cache": "~1.0"
+    }
+}
+```
+
+Then you can then pass a cache instance to the container builder:
 
 ```php
 $containerBuilder->setDefinitionCache(new Doctrine\Common\Cache\ApcCache());
 ```
 
-Heads up: do not use a cache in a development environment, else changes you make to the definitions (annotations, configuration files, etc.) may not be taken into account.
-The only cache you might use in development is the `ArrayCache` because it doesn't persist data between requests.
+Heads up: do not use a cache in a development environment, else changes you make to the definitions (annotations, configuration files, etc.) may not be taken into account. The only cache you might use in development is the `ArrayCache` because it doesn't persist data between requests.
 
 ### Cache types
 
