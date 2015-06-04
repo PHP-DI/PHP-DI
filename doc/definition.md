@@ -28,7 +28,7 @@ Read more in the [Definition overriding documentation](definition-overriding.md)
 ## Autowiring
 
 ```php
-$container->useAutowiring(true);
+$builder->useAutowiring(true);
 ```
 
 **Note: autowiring is enabled by default**
@@ -70,7 +70,7 @@ So use autowiring either:
 ## Annotations
 
 ```php
-$container->useAnnotations(true);
+$builder->useAnnotations(true);
 ```
 
 **Note: Annotations are enabled by default**
