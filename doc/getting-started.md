@@ -144,7 +144,7 @@ For this reason, PHP-DI integrates with some frameworks so that you don't have t
 - [Zend Framework 2](https://github.com/PHP-DI/ZF2-Bridge) (beta version)
 - [Silly](frameworks/silly.md)
 
-If you want to use PHP-DI with another framework or your own code, try to use `$container->get()` in you root application class or front controller.
+If you want to use PHP-DI with another framework or your own code, try to use `$container->get()` in you root application class or front controller. Have a look at this [**demo application**](https://github.com/PHP-DI/demo) built around PHP-DI for a practical example.
 
 ## What's next
 
