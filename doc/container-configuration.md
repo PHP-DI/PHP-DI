@@ -108,5 +108,7 @@ class Foo
 
 Here, PHP-DI will throw an exception because `NonExistentClass` doesn't exist: this is a phpDoc error.
 
-This phpDoc error would not be a problem if you set up that parameter using an array configuration,
-so `$builder->ignorePhpDocErrors(true);` can help you to ignore those errors.
+This phpDoc error *would* be a problem if you set up that parameter using an array configuration,
+so `$builder->ignorePhpDocErrors(true);` can help you to ignore those errors. PHP-FPM enviroments might choke on such errors and report it with a message like: ```Handler for fastcgi-script returned invalid result code 1```.
+
+In case errors still occur, make sure your annotations are correct or use ```$builder->useAnnotations(false);``` to prevent fatal errors and try to clean up your configuration form there.
