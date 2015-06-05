@@ -84,9 +84,9 @@ $foo = $container->get('foo');
 
 ## Ignoring phpDoc errors
 
-*New in v4.4*
+*Added in v4.4*
 
-If your phpDoc annotations are not always correct, you can set up the container to silently ignore those errors:
+If you use annotations and your phpDoc is not always correct, you can set up the container to silently ignore those errors:
 
 ```php
 $builder->ignorePhpDocErrors(true);
@@ -108,7 +108,8 @@ class Foo
 
 Here, PHP-DI will throw an exception because `NonExistentClass` doesn't exist: this is a phpDoc error.
 
-This phpDoc error *would* be a problem if you set up that parameter using an array configuration,
-so `$builder->ignorePhpDocErrors(true);` can help you to ignore those errors. PHP-FPM enviroments might choke on such errors and report it with a message like: ```Handler for fastcgi-script returned invalid result code 1```.
+There has been reports that PHP-FPM might choke on such errors and report it with a message like this:
 
-In case errors still occur, make sure your annotations are correct or use ```$builder->useAnnotations(false);``` to prevent fatal errors and try to clean up your configuration form there.
+> Handler for fastcgi-script returned invalid result code 1
+
+In case the errors still occur, make sure your annotations are correct or temporarily disable annotations (`$builder->useAnnotations(false)`) to prevent fatal errors and try to clean up your configuration form there.
