@@ -6,6 +6,8 @@ This is the complete change log. You can also read the [migration guide](doc/mig
 
 Improvements:
 
+- Moved to an organization on GitHub: [github.com/PHP-DI/PHP-DI](https://github.com/PHP-DI/PHP-DI)
+- The package has been renamed to: from `mnapoli/php-di` to [`php-di/php-di`](https://packagist.org/packages/php-di/php-di)
 - New [Silex integration](doc/frameworks/silex.md)
 - Lighter package: from 10 to 3 Composer dependencies!
 - [#235](https://github.com/PHP-DI/PHP-DI/issues/235): `DI\link()` is now deprecated in favor of `DI\get()`. There is no BC break as `DI\link()` still works.
