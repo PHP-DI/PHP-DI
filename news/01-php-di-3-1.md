@@ -11,7 +11,7 @@ The major new feature is the **Zend Framework 1 integration**. You can now use P
 
 Mixing different definition sources (reflection, annotations, files, …) is now more reliable with orders and priorities. Sources are all now correctly priorized, allowing you to override definitions as you would expect. Read more in the [**Definition overriding** documentation](../doc/definition-overriding.md).
 
-Finally, [a small fix](https://github.com/mnapoli/PHP-DI/issues/79) to allow to **define `null` entries**:
+Finally, [a small fix](https://github.com/PHP-DI/PHP-DI/issues/79) to allow to **define `null` entries**:
 
 ```php
 // Set a null value for 'foo'
@@ -72,10 +72,10 @@ class GuestbookController extends Zend_Controller_Action
 }
 ```
 
-Read more about [Zend Framework 1 integration](https://github.com/mnapoli/PHP-DI-ZF1).
+Read more about [Zend Framework 1 integration](https://github.com/PHP-DI/PHP-DI-ZF1).
 
 ## Integration with other frameworks (Symfony, ZF2, …)
 
-Integration with other frameworks [are planned](https://github.com/mnapoli/PHP-DI/issues?state=open).
+Integration with other frameworks [are planned](https://github.com/PHP-DI/PHP-DI/issues?state=open).
 
 If you want to help, feel free to submit a pull request or let's talk on [Twitter](https://twitter.com/PHPDI).

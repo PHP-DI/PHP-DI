@@ -225,5 +225,5 @@ or set a value for non-object parameters (which cannot be done using autowiring 
 
 The second one is for when the definition is a bit more complex.
 
-**PHP-DI 4 is not released yet**. You can however try the [4.0.0-beta2 version](https://github.com/mnapoli/PHP-DI/releases/tag/4.0.0-beta2)
-or follow the [4.0 pull request](https://github.com/mnapoli/PHP-DI/pull/119).
+**PHP-DI 4 is not released yet**. You can however try the [4.0.0-beta2 version](https://github.com/PHP-DI/PHP-DI/releases/tag/4.0.0-beta2)
+or follow the [4.0 pull request](https://github.com/PHP-DI/PHP-DI/pull/119).

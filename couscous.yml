@@ -101,7 +101,7 @@ menu:
             items:
                 v3:
                     text: PHP-DI 3.x
-                    absoluteUrl: https://github.com/mnapoli/PHP-DI/tree/3.x/doc
+                    absoluteUrl: https://github.com/PHP-DI/PHP-DI/tree/3.x/doc
                 v4:
                     text: PHP-DI 4.x
-                    absoluteUrl: https://github.com/mnapoli/PHP-DI/tree/4.x/doc
+                    absoluteUrl: https://github.com/PHP-DI/PHP-DI/tree/4.x/doc

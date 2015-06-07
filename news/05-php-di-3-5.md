@@ -49,7 +49,7 @@ Of course, you don't have to change you code, everything will still work if you 
 
 This is made possible thanks to the amazing [Doctrine Annotation](https://github.com/doctrine/annotations) library.
 
-Related to the same change, [#124](https://github.com/mnapoli/PHP-DI/issues/124) is now fixed, that means **there is
+Related to the same change, [#124](https://github.com/PHP-DI/PHP-DI/issues/124) is now fixed, that means **there is
 no conflict with other annotations anymore**.
 
 For example, you can now use `@Inject` in PHPUnit, the `@test` and `@expectedException` annotations are not a problem.

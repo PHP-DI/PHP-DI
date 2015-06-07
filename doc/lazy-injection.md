@@ -84,8 +84,8 @@ Lazy injection requires the [Ocramius/ProxyManager](https://github.com/Ocramius/
 ```json
 {
     "require": {
-        "mnapoli/php-di": "*",
-        "ocramius/proxy-manager": "~0.3"
+        "php-di/php-di": "*",
+        "ocramius/proxy-manager": "~1.0"
     }
 }
 ```

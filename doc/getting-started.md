@@ -14,7 +14,7 @@ Before beginning, you need to know what dependency injection is. If you don't, t
 Install PHP-DI with [Composer](http://getcomposer.org/doc/00-intro.md):
 
 ```json
-composer require mnapoli/php-di
+composer require php-di/php-di
 ```
 
 ## Basic usage

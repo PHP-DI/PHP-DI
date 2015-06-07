@@ -169,4 +169,4 @@ A new framework integration comes with this new version: the [Silex](http://sile
 
 I hope you will like this new version, as well as the new website. If you want the complete list of changes, head over to [the change log](../change-log.md).
 
-If something isn't right in the package or the documentation, please [open an issue](https://github.com/mnapoli/PHP-DI/issues/new). You can also find support in the [Gitter chatroom](https://gitter.im/mnapoli/PHP-DI).
+If something isn't right in the package or the documentation, please [open an issue](https://github.com/PHP-DI/PHP-DI/issues/new). You can also find support in the [Gitter chatroom](https://gitter.im/PHP-DI/PHP-DI).

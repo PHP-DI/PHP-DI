@@ -52,5 +52,5 @@ title: Documentation index
 
 PHP-DI is released under the MIT license.
 
-This documentation is also embedded in [PHP-DI's git repository](https://github.com/mnapoli/PHP-DI/tree/master/doc)
+This documentation is also embedded in [PHP-DI's git repository](https://github.com/PHP-DI/PHP-DI/tree/master/doc)
 so you can read it offline (in the `doc/` folder).

@@ -82,4 +82,4 @@ return [
 
 I will not get in more details today, things can always change before the release. Be also aware that **syntactic sugar is absolutely not the major feature for PHP-DI 5** :) But more on that in a future article!
 
-If you have any comment or question, please use the comment box below or pop up on [GitHub](https://github.com/mnapoli/PHP-DI) or in the [Gitter chat](https://gitter.im/mnapoli/PHP-DI).
+If you have any comment or question, please use the comment box below or pop up on [GitHub](https://github.com/PHP-DI/PHP-DI) or in the [Gitter chat](https://gitter.im/PHP-DI/PHP-DI).

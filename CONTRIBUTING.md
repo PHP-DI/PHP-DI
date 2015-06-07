@@ -1,6 +1,6 @@
 # Contributing
 
-[![Build Status](https://travis-ci.org/mnapoli/PHP-DI.png?branch=master)](https://travis-ci.org/mnapoli/PHP-DI) [![Coverage Status](https://coveralls.io/repos/mnapoli/PHP-DI/badge.png?branch=master)](https://coveralls.io/r/mnapoli/PHP-DI?branch=master)
+[![Build Status](https://travis-ci.org/PHP-DI/PHP-DI.png?branch=master)](https://travis-ci.org/PHP-DI/PHP-DI) [![Coverage Status](https://coveralls.io/repos/PHP-DI/PHP-DI/badge.png?branch=master)](https://coveralls.io/r/PHP-DI/PHP-DI?branch=master)
 
 PHP-DI is license under the MIT License.
 
@@ -10,7 +10,7 @@ PHP-DI is license under the MIT License.
 * Check out the sources using git or download them
 
 ```bash
-$ git clone https://github.com/mnapoli/PHP-DI.git
+$ git clone https://github.com/PHP-DI/PHP-DI.git
 ```
 
 * Install the libraries using composer:
@@ -39,8 +39,8 @@ Read the [How it works](doc/how-it-works.md) documentation.
 
 ## What to do?
 
-- Add tests: pick up uncovered situations in the [code coverage report](https://coveralls.io/r/mnapoli/PHP-DI)
-- Resolve issues: [issue list](https://github.com/mnapoli/PHP-DI/issues)
+- Add tests: pick up uncovered situations in the [code coverage report](https://coveralls.io/r/PHP-DI/PHP-DI)
+- Resolve issues: [issue list](https://github.com/PHP-DI/PHP-DI/issues)
 - Improve the documentation
 - …
 
