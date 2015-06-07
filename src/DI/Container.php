@@ -60,7 +60,7 @@ class Container implements ContainerInterface, FactoryInterface, \DI\InvokerInte
     private $entriesBeingResolved = [];
 
     /**
-     * @var InvokerInterface|null
+     * @var \Invoker\InvokerInterface|null
      */
     private $invoker;
 
@@ -319,6 +319,9 @@ class Container implements ContainerInterface, FactoryInterface, \DI\InvokerInte
         $this->definitionSource->addDefinition($definition);
     }
 
+    /**
+     * @return \Invoker\InvokerInterface
+     */
     private function getInvoker()
     {
         if (! $this->invoker) {
