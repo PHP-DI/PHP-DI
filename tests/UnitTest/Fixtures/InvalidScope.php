@@ -18,5 +18,4 @@ use DI\Annotation\Injectable;
  */
 class InvalidScope
 {
-
 }

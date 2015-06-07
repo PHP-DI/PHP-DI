@@ -4,19 +4,19 @@ layout: documentation
 
 # Understanding Dependency Injection
 
-Dependency injection and DI containers are separate notions:
+*Dependency injection* and *dependency injection containers* are different things:
 
 - **dependency injection is a method** for writing better code
 - **a container is a tool** to help injecting dependencies
 
-You do not **need** a container to do dependency injection. However, a container can help you.
+You don't *need* a container to do dependency injection. However a container can help you.
 
 PHP-DI is about this: making dependency injection more practical.
 
 
 ## The theory
 
-### How classic PHP code works
+### Classic PHP code
 
 Here is how a code **not** using DI will roughly work:
 
@@ -30,7 +30,7 @@ Here is how a code **not** using DI will roughly work:
         * Bar creates Bim
         * Bar does something
 
-### How Dependency Injection works
+### Using dependency injection
 
 Here is how a code using DI will roughly work:
 
@@ -44,11 +44,11 @@ Here is how a code using DI will roughly work:
 
 This is the pattern of **Inversion of Control**. The control of the dependencies is **inverted** from one being called to the one calling.
 
-The main advantage: the one at the end of the caller chain is always **you**. You can control all dependencies and have complete control over how your application works. You can replace a dependency by another (one you made for example).
+The main advantage: the one at the top of the caller chain is always **you**. You can control all dependencies and have complete control over how your application works. You can replace a dependency by another (one you made for example).
 
-For example that wouldn't be so easy if Library X uses Logger Y and you have to change the code of Library X to make it use your logger Z.
+For example what if Library X uses Logger Y and you want to make it use your logger Z? With dependency injection, you don't have to change the code of Library X.
 
-### How code using a container works
+### Using a container
 
 Now how does a code using PHP-DI works:
 
@@ -61,7 +61,7 @@ Now how does a code using PHP-DI works:
     * Foo calls Bar
         * Bar does something
 
-In short, the container takes away all the work of creating and injecting dependencies.
+In short, **the container takes away all the work of creating and injecting dependencies**.
 
 
 ## Understanding with an example
@@ -104,8 +104,7 @@ class StoreService
 Now we want to use the `OpenStreetMap` instead of `GoogleMaps`, how do we do?
 We have to change the code of `StoreService`, and all the other classes that use `GoogleMaps`.
 
-**Without dependency injection, your classes are tightly coupled with their dependencies.**
-
+**Without dependency injection, your classes are tightly coupled to their dependencies.**
 
 ### With dependency injection
 
@@ -140,8 +139,7 @@ class OpenStreetMap implements GeolocationService { ...
 Now, it is for the user of the StoreService to decide which implementation to use. And it can be changed anytime, without
 having to rewrite the `StoreService`.
 
-**The `StoreService` is no longer tightly coupled with its dependency.**
-
+**The `StoreService` is no longer tightly coupled to its dependency.**
 
 ## With PHP-DI
 

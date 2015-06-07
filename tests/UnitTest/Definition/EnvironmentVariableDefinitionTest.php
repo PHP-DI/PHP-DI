@@ -13,13 +13,11 @@ use DI\Definition\EnvironmentVariableDefinition;
 use DI\Scope;
 
 /**
- * Test class for EnvironmentVariableDefinition
- *
  * @covers \DI\Definition\EnvironmentVariableDefinition
  */
 class EnvironmentVariableDefinitionTest extends \PHPUnit_Framework_TestCase
 {
-    public function testGetters()
+    public function test_getters()
     {
         $definition = new EnvironmentVariableDefinition('foo', 'bar', false, 'default');
 
@@ -29,14 +27,20 @@ class EnvironmentVariableDefinitionTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('default', $definition->getDefaultValue());
     }
 
-    public function testScope()
+    /**
+     * @test
+     */
+    public function should_have_singleton_scope()
     {
         $definition = new EnvironmentVariableDefinition('foo', 'bar');
 
-        $this->assertEquals(Scope::SINGLETON(), $definition->getScope());
+        $this->assertEquals(Scope::SINGLETON, $definition->getScope());
     }
 
-    public function testCacheable()
+    /**
+     * @test
+     */
+    public function should_be_cacheable()
     {
         $this->assertInstanceOf('DI\Definition\CacheableDefinition', new EnvironmentVariableDefinition('foo', 'bar'));
     }

@@ -34,17 +34,21 @@ class BuggyInjectionsTest extends \PHPUnit_Framework_TestCase
      */
     public function testConstructorNonExistentEntry()
     {
-        $container = ContainerBuilder::buildDevContainer();
+        $builder = new ContainerBuilder();
+        $builder->useAnnotations(true);
+        $container = $builder->build();
         $container->get('DI\Test\IntegrationTest\Fixtures\ConstructorInjectionTest\Buggy2');
     }
 
     /**
      * @expectedException \DI\DependencyException
-     * @expectedExceptionMessage Error while injecting 'namedDependency' in DI\Test\IntegrationTest\Fixtures\SetterInjectionTest\NamedInjectionClass::dependency. No entry or class found for 'namedDependency'
+     * @expectedExceptionMessage Error while injecting in DI\Test\IntegrationTest\Fixtures\SetterInjectionTest\NamedInjectionClass::dependency. No entry or class found for 'namedDependency'
      */
     public function testSetterNamedInjectionNotFound()
     {
-        $container = ContainerBuilder::buildDevContainer();
+        $builder = new ContainerBuilder();
+        $builder->useAnnotations(true);
+        $container = $builder->build();
         // Exception (bean not defined)
         $container->get('DI\Test\IntegrationTest\Fixtures\SetterInjectionTest\NamedInjectionClass');
     }
@@ -55,7 +59,9 @@ class BuggyInjectionsTest extends \PHPUnit_Framework_TestCase
      */
     public function testSetterNonTypeHintedMethod()
     {
-        $container = ContainerBuilder::buildDevContainer();
+        $builder = new ContainerBuilder();
+        $builder->useAnnotations(true);
+        $container = $builder->build();
         $container->get('DI\Test\IntegrationTest\Fixtures\SetterInjectionTest\Buggy1');
     }
 
@@ -65,17 +71,21 @@ class BuggyInjectionsTest extends \PHPUnit_Framework_TestCase
      */
     public function testSetterNamedUnknownBean()
     {
-        $container = ContainerBuilder::buildDevContainer();
+        $builder = new ContainerBuilder();
+        $builder->useAnnotations(true);
+        $container = $builder->build();
         $container->get('DI\Test\IntegrationTest\Fixtures\SetterInjectionTest\Buggy3');
     }
 
     /**
      * @expectedException \DI\DependencyException
-     * @expectedExceptionMessage Error while injecting 'db.host' in DI\Test\IntegrationTest\Fixtures\ValueInjectionTest\ValueInjectionClass::value. No entry or class found for 'db.host'
+     * @expectedExceptionMessage Error while injecting in DI\Test\IntegrationTest\Fixtures\ValueInjectionTest\ValueInjectionClass::value. No entry or class found for 'db.host'
      */
     public function testValueException()
     {
-        $container = ContainerBuilder::buildDevContainer();
+        $builder = new ContainerBuilder();
+        $builder->useAnnotations(true);
+        $container = $builder->build();
         $container->get('DI\Test\IntegrationTest\Fixtures\ValueInjectionTest\ValueInjectionClass');
     }
 }

@@ -126,7 +126,7 @@ Example:
 return [
     // ...
     OrderService::class => DI\object()
-        ->constructor(DI\link(SomeOtherService::class), 'a value'),
+        ->constructor(DI\get(SomeOtherService::class), 'a value'),
 ];
 ```
 

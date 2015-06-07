@@ -1,11 +1,11 @@
 <?php
 
-return array(
+return [
     'service3' => \DI\factory(function () {
         $value = new \stdClass();
         $value->foo = 'baz';
         return $value;
     }),
     'DI\Test\IntegrationTest\Issues\Issue72\Class1' => \DI\object()
-            ->constructor(\DI\link('service3')),
-);
+            ->constructor(\DI\get('service3')),
+];

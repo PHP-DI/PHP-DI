@@ -30,7 +30,7 @@ interface DefinitionResolver
      *
      * @return mixed Value obtained from the definition.
      */
-    public function resolve(Definition $definition, array $parameters = array());
+    public function resolve(Definition $definition, array $parameters = []);
 
     /**
      * Check if a definition can be resolved.
@@ -40,5 +40,5 @@ interface DefinitionResolver
      *
      * @return bool
      */
-    public function isResolvable(Definition $definition, array $parameters = array());
+    public function isResolvable(Definition $definition, array $parameters = []);
 }

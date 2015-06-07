@@ -1,0 +1,68 @@
+<div class='container'>
+
+    <h2>Scales with your application</h2>
+
+    <div class="row">
+
+        <div class='col-md-6'>
+
+            <h4>From simple applications</h4>
+
+            <p>
+                Just create the container and you are good to go thanks to autowiring.
+            </p>
+
+<pre><code class="php">$container = ContainerBuilder::buildDevContainer();
+
+$home = $container->get(HomeController::class);
+</code></pre>
+
+            <p>
+                You can also define services à la Pimple:
+            </p>
+
+<pre><code class="php">$container->set('db', new Database($options));
+
+$container->set('logger', function () {
+    $logger = new Monolog\Logger();
+    $logger->pushHandler(new StreamHandler('app.log'));
+    return $logger;
+});
+
+$db = $container->get('db');
+$logger = $container->get('logger');
+</code></pre>
+
+        </div>
+
+        <div class='col-md-6'>
+
+            <h4>To complex and modular systems</h4>
+
+            <p>
+                Register as many configuration files as you want.
+            </p>
+
+<pre><code class="php">// base config
+return [
+    'notifiers' => [
+        get(EmailNotifier::class),
+    ]
+];</code></pre>
+
+            <p>
+                Use definition overriding to extend lists, decorate or replace previous entries…
+            </p>
+
+<pre><code class="php">// module (aka bundle) config
+return [
+    'notifiers' => add([
+        get(TextNotifier::class),
+        get(MobilePushNotifier::class),
+    ])
+];</code></pre>
+
+        </div>
+
+    </div>
+</div>

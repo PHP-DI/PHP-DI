@@ -21,7 +21,7 @@ class CallableReflectionFactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function should_support_array_callable()
     {
-        $reflection = CallableReflectionFactory::fromCallable(array(new TestClass, 'foo'));
+        $reflection = CallableReflectionFactory::fromCallable([new TestClass, 'foo']);
         $this->assertInstanceOf('ReflectionMethod', $reflection);
     }
 

@@ -30,5 +30,5 @@ interface FactoryInterface
      * @throws NotFoundException         No entry or class found for the given name.
      * @return mixed
      */
-    public function make($name, array $parameters = array());
+    public function make($name, array $parameters = []);
 }

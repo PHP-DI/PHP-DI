@@ -22,15 +22,13 @@ class DefinitionDumperDispatcher implements DefinitionDumper
     /**
      * Definition dumpers, indexed by the class of the definition they can dump.
      *
-     * @var DefinitionDumper[]
+     * @var DefinitionDumper[]|null
      */
-    private $dumpers = array();
+    private $dumpers = [];
 
-    public function __construct($registerDefaultDumpers = true)
+    public function __construct($dumpers = null)
     {
-        if ($registerDefaultDumpers) {
-            $this->registerDefaultDumpers();
-        }
+        $this->dumpers = $dumpers;
     }
 
     /**
@@ -38,6 +36,8 @@ class DefinitionDumperDispatcher implements DefinitionDumper
      */
     public function dump(Definition $definition)
     {
+        $this->initialize();
+
         $class = get_class($definition);
 
         if (! array_key_exists($class, $this->dumpers)) {
@@ -52,20 +52,17 @@ class DefinitionDumperDispatcher implements DefinitionDumper
         return $dumper->dump($definition);
     }
 
-    public function registerDumper($definitionClass, DefinitionDumper $dumper)
+    private function initialize()
     {
-        $this->dumpers[$definitionClass] = $dumper;
-    }
-
-    public function registerDefaultDumpers()
-    {
-        $this->dumpers = array(
-            'DI\Definition\ValueDefinition'               => new ValueDefinitionDumper(),
-            'DI\Definition\FactoryDefinition'             => new FactoryDefinitionDumper(),
-            'DI\Definition\AliasDefinition'               => new AliasDefinitionDumper(),
-            'DI\Definition\ClassDefinition'               => new ClassDefinitionDumper(),
-            'DI\Definition\FunctionCallDefinition'        => new FunctionCallDefinitionDumper(),
-            'DI\Definition\EnvironmentVariableDefinition' => new EnvironmentVariableDefinitionDumper(),
-        );
+        if ($this->dumpers === null) {
+            $this->dumpers = [
+                'DI\Definition\ValueDefinition'               => new ValueDefinitionDumper(),
+                'DI\Definition\FactoryDefinition'             => new FactoryDefinitionDumper(),
+                'DI\Definition\DecoratorDefinition'           => new DecoratorDefinitionDumper(),
+                'DI\Definition\AliasDefinition'               => new AliasDefinitionDumper(),
+                'DI\Definition\ObjectDefinition'              => new ObjectDefinitionDumper(),
+                'DI\Definition\EnvironmentVariableDefinition' => new EnvironmentVariableDefinitionDumper(),
+            ];
+        }
     }
 }

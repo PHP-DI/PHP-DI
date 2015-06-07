@@ -12,13 +12,14 @@ namespace DI\Test\UnitTest;
 use DI\Debug;
 
 /**
- * Tests the helper functions.
- *
  * @covers \DI\Debug
  */
 class DebugTest extends \PHPUnit_Framework_TestCase
 {
-    public function testDumpDefinition()
+    /**
+     * @test
+     */
+    public function should_dump_definitions()
     {
         $definition = \DI\object()->getDefinition('foo');
         $str = <<<END

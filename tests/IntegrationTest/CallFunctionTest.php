@@ -9,6 +9,7 @@
 
 namespace DI\Test\IntegrationTest;
 
+use DI\Container;
 use DI\ContainerBuilder;
 
 /**
@@ -18,96 +19,174 @@ use DI\ContainerBuilder;
  */
 class CallFunctionTest extends \PHPUnit_Framework_TestCase
 {
-    public function testNoParameters()
+    /**
+     * @var Container
+     */
+    private $container;
+
+    public function setUp()
     {
-        $container = ContainerBuilder::buildDevContainer();
-        $result = $container->call(function() {
+        $this->container = ContainerBuilder::buildDevContainer();
+    }
+
+    public function test_no_parameters()
+    {
+        $result = $this->container->call(function() {
             return 42;
         });
         $this->assertEquals(42, $result);
     }
 
-    public function testParametersIndexedByName()
+    public function test_parameters_ordered()
     {
-        $container = ContainerBuilder::buildDevContainer();
-        $result = $container->call(function($foo) {
-            return $foo;
-        }, array(
-            'foo' => 'bar',
-        ));
-        $this->assertEquals('bar', $result);
+        $result = $this->container->call(function($foo, $bar) {
+            return $foo . $bar;
+        }, ['foo', 'bar',]);
+        $this->assertEquals('foobar', $result);
     }
 
-    public function testParameterWithLink()
+    public function test_parameters_indexed_by_name()
     {
-        $container = ContainerBuilder::buildDevContainer();
-        $container->set('bar', 'bam');
+        $result = $this->container->call(function($foo, $bar) {
+            return $foo . $bar;
+        }, [
+            'bar' => 'buzz',
+            'foo' => 'fizz',
+        ]);
+        $this->assertEquals('fizzbuzz', $result);
+    }
 
-        $result = $container->call(function($foo) {
+    public function test_parameter_with_definitions_indexed()
+    {
+        $this->container->set('bar', 'bam');
+
+        $self = $this;
+        $result = $this->container->call(function($foo, $bar) use ($self) {
+            $self->assertInstanceOf('stdClass', $bar);
             return $foo;
-        }, array(
-            'foo' => \DI\link('bar'),
-        ));
+        }, [
+            'bar' => \DI\object('stdClass'),
+            'foo' => \DI\get('bar'),
+        ]);
         $this->assertEquals('bam', $result);
     }
 
-    public function testParameterFromContainer()
+    public function test_parameter_with_definitions_not_indexed()
     {
-        $container = ContainerBuilder::buildDevContainer();
+        $this->container->set('bar', 'bam');
 
+        $self = $this;
+        $result = $this->container->call(function($foo, $bar) use ($self) {
+            $self->assertInstanceOf('stdClass', $bar);
+            return $foo;
+        }, [\DI\get('bar'),\DI\object('stdClass')]);
+        $this->assertEquals('bam', $result);
+    }
+
+    public function test_parameter_from_type_hint()
+    {
         $value = new \stdClass();
-        $container->set('stdClass', $value);
+        $this->container->set('stdClass', $value);
 
-        $result = $container->call(function(\stdClass $foo) {
+        $result = $this->container->call(function(\stdClass $foo) {
             return $foo;
         });
         $this->assertEquals($value, $result);
     }
 
-    public function testCallObjectMethod()
+    public function test_parameter_from_type_hint_with_root_container()
+    {
+        $rootContainer = ContainerBuilder::buildDevContainer();
+        $value = new \stdClass();
+        $rootContainer->set('stdClass', $value);
+
+        $subContainerBuilder = new ContainerBuilder;
+        $subContainerBuilder->wrapContainer($rootContainer);
+        $subContainer = $subContainerBuilder->build();
+
+        $result = $subContainer->call(function(\stdClass $foo) {
+            return $foo;
+        });
+        $this->assertSame($value, $result, 'The root container was not used for the type-hint');
+    }
+
+    /**
+     * @test
+     */
+    public function calls_object_methods()
     {
         $container = ContainerBuilder::buildDevContainer();
         $object = new TestClass();
-        $result = $container->call(array($object, 'foo'));
+        $result = $container->call([$object, 'foo']);
         $this->assertEquals(42, $result);
     }
 
-    public function testCallClassMethod()
+    /**
+     * @test
+     */
+    public function creates_and_calls_class_methods_using_container()
     {
-        $container = ContainerBuilder::buildDevContainer();
         $class = __NAMESPACE__ . '\TestClass';
-        $result = $container->call(array($class, 'foo'));
+        $result = $this->container->call([$class, 'foo']);
         $this->assertEquals(42, $result);
     }
 
-    public function testCallClassStaticMethod()
+    /**
+     * @test
+     */
+    public function calls_static_methods()
     {
-        $container = ContainerBuilder::buildDevContainer();
         $class = __NAMESPACE__ . '\TestClass';
-        $result = $container->call(array($class, 'bar'));
+        $result = $this->container->call([$class, 'bar']);
         $this->assertEquals(24, $result);
     }
 
-    public function testCallCallableObject()
+    /**
+     * @test
+     */
+    public function calls_invokable_object()
     {
-        $container = ContainerBuilder::buildDevContainer();
         $class = __NAMESPACE__ . '\CallableTestClass';
-        $result = $container->call(new $class);
+        $result = $this->container->call(new $class);
         $this->assertEquals(42, $result);
     }
 
-    public function testCallCallableClass()
+    /**
+     * @test
+     */
+    public function creates_and_calls_invokable_objects_using_container()
     {
-        $container = ContainerBuilder::buildDevContainer();
-        $result = $container->call(__NAMESPACE__ . '\CallableTestClass');
+        $result = $this->container->call(__NAMESPACE__ . '\CallableTestClass');
         $this->assertEquals(42, $result);
     }
 
-    public function testCallFunction()
+    /**
+     * @test
+     */
+    public function calls_functions()
     {
-        $container = ContainerBuilder::buildDevContainer();
-        $result = $container->call(__NAMESPACE__ . '\CallFunctionTest_function', array('str' => 'foo'));
+        $result = $this->container->call(__NAMESPACE__ . '\CallFunctionTest_function', [
+            'str' => 'foo',
+        ]);
         $this->assertEquals(3, $result);
+    }
+
+    /**
+     * @expectedException \Invoker\Exception\NotEnoughParametersException
+     * @expectedExceptionMessage Unable to invoke the callable because no value was given for parameter 1 ($foo)
+     */
+    public function test_not_enough_parameters()
+    {
+        $this->container->call(function($foo) {});
+    }
+
+    /**
+     * @expectedException \Invoker\Exception\NotCallableException
+     * @expectedExceptionMessage foo is neither a callable or a valid container entry
+     */
+    public function test_not_callable()
+    {
+        $this->container->call('foo');
     }
 }
 

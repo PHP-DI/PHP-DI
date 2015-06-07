@@ -39,14 +39,14 @@ class ContainerGetTest extends \PHPUnit_Framework_TestCase
     /**
      * @coversNothing
      */
-    public function testClosureIsNotResolved()
+    public function testClosureIsResolved()
     {
         $closure = function () {
             return 'hello';
         };
         $container = ContainerBuilder::buildDevContainer();
         $container->set('key', $closure);
-        $this->assertSame($closure, $container->get('key'));
+        $this->assertEquals('hello', $container->get('key'));
     }
 
     public function testGetWithClassName()
@@ -57,7 +57,9 @@ class ContainerGetTest extends \PHPUnit_Framework_TestCase
 
     public function testGetWithPrototypeScope()
     {
-        $container = ContainerBuilder::buildDevContainer();
+        $builder = new ContainerBuilder();
+        $builder->useAnnotations(true);
+        $container = $builder->build();
         // With @Injectable(scope="prototype") annotation
         $instance1 = $container->get('DI\Test\UnitTest\Fixtures\Prototype');
         $instance2 = $container->get('DI\Test\UnitTest\Fixtures\Prototype');
@@ -79,12 +81,14 @@ class ContainerGetTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException \DI\Definition\Exception\DefinitionException
-     * @expectedExceptionMessage Error while reading @Injectable on DI\Test\UnitTest\Fixtures\InvalidScope: Value 'foobar' is not part of the enum DI\Scope
+     * @expectedExceptionMessage Error while reading @Injectable on DI\Test\UnitTest\Fixtures\InvalidScope: Value 'foobar' is not a valid scope
      * @coversNothing
      */
     public function testGetWithInvalidScope()
     {
-        $container = ContainerBuilder::buildDevContainer();
+        $builder = new ContainerBuilder();
+        $builder->useAnnotations(true);
+        $container = $builder->build();
         $container->get('DI\Test\UnitTest\Fixtures\InvalidScope');
     }
 
@@ -104,7 +108,9 @@ class ContainerGetTest extends \PHPUnit_Framework_TestCase
      */
     public function testCircularDependencyException()
     {
-        $container = ContainerBuilder::buildDevContainer();
+        $builder = new ContainerBuilder();
+        $builder->useAnnotations(true);
+        $container = $builder->build();
         $container->get('DI\Test\UnitTest\Fixtures\Class1CircularDependencies');
     }
 
@@ -116,7 +122,7 @@ class ContainerGetTest extends \PHPUnit_Framework_TestCase
     {
         $container = ContainerBuilder::buildDevContainer();
         // Alias to itself -> infinite recursive loop
-        $container->set('foo', \DI\link('foo'));
+        $container->set('foo', \DI\get('foo'));
         $container->get('foo');
     }
 

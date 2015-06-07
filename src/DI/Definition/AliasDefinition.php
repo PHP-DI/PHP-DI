@@ -53,7 +53,7 @@ class AliasDefinition implements CacheableDefinition
      */
     public function getScope()
     {
-        return Scope::PROTOTYPE();
+        return Scope::PROTOTYPE;
     }
 
     /**

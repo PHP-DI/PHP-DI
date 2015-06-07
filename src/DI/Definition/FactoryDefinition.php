@@ -25,7 +25,7 @@ class FactoryDefinition implements Definition
     private $name;
 
     /**
-     * @var Scope
+     * @var string
      */
     private $scope;
 
@@ -36,11 +36,11 @@ class FactoryDefinition implements Definition
     private $factory;
 
     /**
-     * @param string     $name    Entry name
-     * @param callable   $factory Callable that returns the value associated to the entry name.
-     * @param Scope|null $scope
+     * @param string      $name    Entry name
+     * @param callable    $factory Callable that returns the value associated to the entry name.
+     * @param string|null $scope
      */
-    public function __construct($name, $factory, Scope $scope = null)
+    public function __construct($name, $factory, $scope = null)
     {
         $this->name = $name;
         $this->factory = $factory;
@@ -62,7 +62,7 @@ class FactoryDefinition implements Definition
      */
     public function getScope()
     {
-        return $this->scope ?: Scope::SINGLETON();
+        return $this->scope ?: Scope::SINGLETON;
     }
 
     /**

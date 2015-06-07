@@ -9,17 +9,17 @@
 
 namespace DI;
 
-use DI\Definition\DefinitionManager;
-use DI\Definition\Source\AnnotationDefinitionSource;
-use DI\Definition\Source\ChainableDefinitionSource;
-use DI\Definition\Source\PHPFileDefinitionSource;
-use DI\Definition\Source\ReflectionDefinitionSource;
+use DI\Definition\Source\AnnotationReader;
+use DI\Definition\Source\DefinitionArray;
+use DI\Definition\Source\CachedDefinitionSource;
+use DI\Definition\Source\DefinitionSource;
+use DI\Definition\Source\DefinitionFile;
+use DI\Definition\Source\Autowiring;
+use DI\Definition\Source\SourceChain;
+use DI\Proxy\ProxyFactory;
 use Doctrine\Common\Cache\Cache;
-use Interop\Container\ContainerInterface as ContainerInteropInterface;
+use Interop\Container\ContainerInterface;
 use InvalidArgumentException;
-use ProxyManager\Configuration;
-use ProxyManager\Factory\LazyLoadingValueHolderFactory;
-use ProxyManager\GeneratorStrategy\EvaluatingGeneratorStrategy;
 
 /**
  * Helper to create and configure a Container.
@@ -50,7 +50,7 @@ class ContainerBuilder
     /**
      * @var boolean
      */
-    private $useAnnotations = true;
+    private $useAnnotations = false;
 
     /**
      * @var boolean
@@ -76,14 +76,14 @@ class ContainerBuilder
 
     /**
      * If PHP-DI is wrapped in another container, this references the wrapper.
-     * @var ContainerInteropInterface
+     * @var ContainerInterface
      */
     private $wrapperContainer;
 
     /**
-     * @var ChainableDefinitionSource[]
+     * @var DefinitionSource[]
      */
-    private $definitionSources = array();
+    private $definitionSources = [];
 
     /**
      * Build a container configured for the dev environment.
@@ -111,51 +111,35 @@ class ContainerBuilder
      */
     public function build()
     {
-        // Definition sources
-        $firstSource = null;
-        $lastSource = null;
-        foreach (array_reverse($this->definitionSources) as $source) {
-            /** @var $source ChainableDefinitionSource */
-            // Chain file sources
-            if ($lastSource instanceof ChainableDefinitionSource) {
-                $lastSource->chain($source);
-            } else {
-                $firstSource = $source;
-            }
-            $lastSource = $source;
-        }
+        $sources = array_reverse($this->definitionSources);
         if ($this->useAnnotations) {
-            if ($lastSource) {
-                $lastSource->chain(new AnnotationDefinitionSource($this->ignorePhpDocErrors));
-            } else {
-                $firstSource = new AnnotationDefinitionSource($this->ignorePhpDocErrors);
-            }
+            $sources[] = new AnnotationReader($this->ignorePhpDocErrors);
         } elseif ($this->useAutowiring) {
-            if ($lastSource) {
-                $lastSource->chain(new ReflectionDefinitionSource());
-            } else {
-                $firstSource = new ReflectionDefinitionSource();
-            }
+            $sources[] = new Autowiring();
         }
 
-        // Definition manager
-        $definitionManager = new DefinitionManager($firstSource);
+        $chain = new SourceChain($sources);
+
         if ($this->cache) {
-            $definitionManager->setCache($this->cache);
+            $source = new CachedDefinitionSource($chain, $this->cache);
+            $chain->setRootDefinitionSource($source);
+        } else {
+            $source = $chain;
+            // Mutable definition source
+            $source->setMutableDefinitionSource(new DefinitionArray());
         }
 
-        // Proxy factory
-        $proxyFactory = $this->buildProxyFactory();
+        $proxyFactory = new ProxyFactory($this->writeProxiesToFile, $this->proxyDirectory);
 
         $containerClass = $this->containerClass;
 
-        return new $containerClass($definitionManager, $proxyFactory, $this->wrapperContainer);
+        return new $containerClass($source, $proxyFactory, $this->wrapperContainer);
     }
 
     /**
      * Enable or disable the use of autowiring to guess injections.
      *
-     * By default, enabled.
+     * Enabled by default.
      *
      * @param boolean $bool
      * @return ContainerBuilder
@@ -169,7 +153,7 @@ class ContainerBuilder
     /**
      * Enable or disable the use of annotations to guess injections.
      *
-     * By default, enabled.
+     * Disabled by default.
      *
      * @param boolean $bool
      * @return ContainerBuilder
@@ -234,10 +218,10 @@ class ContainerBuilder
      * If PHP-DI's container is wrapped by another container, we can
      * set this so that PHP-DI will use the wrapper rather than itself for building objects.
      *
-     * @param ContainerInteropInterface $otherContainer
+     * @param ContainerInterface $otherContainer
      * @return $this
      */
-    public function wrapContainer(ContainerInteropInterface $otherContainer)
+    public function wrapContainer(ContainerInterface $otherContainer)
     {
         $this->wrapperContainer = $otherContainer;
 
@@ -247,20 +231,21 @@ class ContainerBuilder
     /**
      * Add definitions to the container.
      *
-     * @param string|ChainableDefinitionSource $definitions A file name (the file contains definitions)
-     *                                                      or a ChainableDefinitionSource object.
+     * @param string|array|DefinitionSource $definitions Can be an array of definitions, the
+     *                                                   name of a file containing definitions
+     *                                                   or a DefinitionSource object.
      * @return $this
      */
     public function addDefinitions($definitions)
     {
-        // File
         if (is_string($definitions)) {
-            $definitions = new PHPFileDefinitionSource($definitions);
-        }
-
-        if (! $definitions instanceof ChainableDefinitionSource) {
+            // File
+            $definitions = new DefinitionFile($definitions);
+        } elseif (is_array($definitions)) {
+            $definitions = new DefinitionArray($definitions);
+        } elseif (! $definitions instanceof DefinitionSource) {
             throw new InvalidArgumentException(sprintf(
-                '%s parameter must be a string or implement ChainableDefinitionSource, %s given',
+                '%s parameter must be a string, an array or a DefinitionSource object, %s given',
                 'ContainerBuilder::addDefinitions()',
                 is_object($definitions) ? get_class($definitions) : gettype($definitions)
             ));
@@ -269,24 +254,5 @@ class ContainerBuilder
         $this->definitionSources[] = $definitions;
 
         return $this;
-    }
-
-    /**
-     * @return LazyLoadingValueHolderFactory
-     */
-    private function buildProxyFactory()
-    {
-        $config = new Configuration();
-        // TODO useless since ProxyManager 0.5, line kept for compatibility with previous versions
-        $config->setAutoGenerateProxies(true);
-
-        if ($this->writeProxiesToFile) {
-            $config->setProxiesTargetDir($this->proxyDirectory);
-            spl_autoload_register($config->getProxyAutoloader());
-        } else {
-            $config->setGeneratorStrategy(new EvaluatingGeneratorStrategy());
-        }
-
-        return new LazyLoadingValueHolderFactory($config);
     }
 }
