@@ -8,7 +8,7 @@ PHP-DI is a Dependency Injection Container made for humans.
 [![HHVM Status](https://img.shields.io/hhvm/php-di/php-di.svg?style=flat-square)](http://hhvm.h4cc.de/package/php-di/php-di)
 [![Coverage Status](https://img.shields.io/coveralls/PHP-DI/PHP-DI/master.svg?style=flat-square)](https://coveralls.io/r/PHP-DI/PHP-DI?branch=master)
 [![Scrutinizer Code Quality](https://img.shields.io/scrutinizer/g/PHP-DI/PHP-DI.svg?style=flat-square)](https://scrutinizer-ci.com/g/PHP-DI/PHP-DI/?branch=master)
-[![Latest Version](https://img.shields.io/github/release/PHP-DI/PHP-DI.svg?style=flat-square)](https://packagist.org/packages/PHP-DI/php-di)
+[![Latest Version](https://img.shields.io/github/release/PHP-DI/PHP-DI.svg?style=flat-square)](https://packagist.org/packages/php-di/php-di)
 [![Total Downloads](https://img.shields.io/packagist/dt/mnapoli/PHP-DI.svg?style=flat-square)](https://packagist.org/packages/mnapoli/php-di)
 
 [![Average time to resolve an issue](http://isitmaintained.com/badge/resolution/PHP-DI/PHP-DI.svg)](http://isitmaintained.com/project/PHP-DI/PHP-DI "Average time to resolve an issue")
