@@ -1,5 +1,5 @@
 {
-    "name": "mnapoli/php-di",
+    "name": "php-di/php-di",
     "type": "library",
     "description": "The dependency injection container for humans",
     "keywords": ["di", "dependency injection", "container"],
@@ -36,10 +36,5 @@
         "doctrine/cache": "Install it if you want to use the cache (version ~1.0)",
         "doctrine/annotations": "Install it if you want to use annotations (version ~1.2)",
         "ocramius/proxy-manager": "Install it if you want to use lazy injection (version ~1.0)"
-    },
-    "extra": {
-        "branch-alias": {
-            "dev-master": "5.0.x-dev"
-        }
     }
 }
