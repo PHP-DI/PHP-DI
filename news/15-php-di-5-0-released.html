@@ -174,7 +174,7 @@ $builder-&gt;addDefinitions('src/TwitterModule/config.php');</code></pre>
 <li>tags require to write <a href="http://symfony.com/doc/current/components/dependency_injection/tags.html#create-a-compilerpass">compiler passes</a> which are verbose and not trivial</li>
 <li>tags don't work if the container isn't compiled</li>
 </ul>
-<p>In the end manipulating lists instead of tags is simpler and feels more natural to use. To be fair however tags offer an approach with more freedom, allowing to implement more advanced behaviors.</p>
+<p>While tags offer an approach with more freedom, manipulating lists instead of tags is simpler and feels more natural to use.</p>
 <h3 id="decorating-a-previous-entry">Decorating a previous entry</h3>
 <p>A new <code>DI\decorate()</code> helper was added, allowing to decorate a previous entry using a closure. A common scenario for using this is to override object using the <a href="http://en.wikipedia.org/wiki/Decorator_pattern">decorator pattern</a>.</p>
 <p>Here is an example where a module replaces the default &quot;Product DAO&quot; for by decorating it with a cache wrapper:</p>
