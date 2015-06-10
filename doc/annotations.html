@@ -244,7 +244,7 @@
         </div>
 
         <article>
-            <h1>Annotations</h1>
+            <h1 id="annotations">Annotations</h1>
 <p>Annotations <strong>are disabled by default</strong>. To be able to use them, you first need to install the <a href="http://doctrine-common.readthedocs.org/en/latest/reference/annotations.html">Doctrine Annotations</a> library using Composer:</p>
 <pre><code class="language-json">{
     "require": {
@@ -255,7 +255,7 @@
 <p>Then you need to <a href="container-configuration.html">configure the <code>ContainerBuilder</code></a> to use them:</p>
 <pre><code class="language-php">$containerBuilder-&gt;useAnnotations(true);</code></pre>
 <p>Annotations are written in PHP docblock comments. They are used by a lot of modern libraries and frameworks, like <a href="http://docs.doctrine-project.org/projects/doctrine-orm/en/latest/index.html">Doctrine</a>, <a href="http://symfony.com/">Symfony</a>, <a href="http://flow.typo3.org/">Flow</a>, <a href="http://www.phpunit.de/manual/3.7/en/">PHPUnit</a>…</p>
-<h2>Inject</h2>
+<h2 id="inject">Inject</h2>
 <p><code>@Inject</code> let's you define where PHP-DI should inject something, and what should it inject. You can combine it with <code>@var</code> and <code>@param</code> phpdoc tags to define what should be injected.</p>
 <p>It can be used on:</p>
 <ul>
@@ -311,7 +311,7 @@
     }
 }</code></pre>
 <p><em>Note: importing annotations with <code>use DI\Annotation\Inject;</code> is optional.</em></p>
-<h2>Injectable</h2>
+<h2 id="injectable">Injectable</h2>
 <p>The <code>@Injectable</code> annotation let's you set options on injectable classes:</p>
 <pre><code class="language-php">/**
  * @Injectable(scope="prototype", lazy=true)
@@ -319,7 +319,7 @@
 class Example {
 }</code></pre>
 <p><strong>The <code>@Injectable</code> annotation is optional: by default, all classes are injectable.</strong></p>
-<h2>Limitations</h2>
+<h2 id="limitations">Limitations</h2>
 <p>There are things that can't be defined with annotations:</p>
 <ul>
 <li>values (instead of classes)</li>

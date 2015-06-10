@@ -244,14 +244,14 @@
         </div>
 
         <article>
-            <h1>Getting started with PHP-DI</h1>
+            <h1 id="getting-started-with-php-di">Getting started with PHP-DI</h1>
 <p>Welcome! This guide will help you get started with using PHP-DI in your project.</p>
 <p>Before beginning, you need to know what dependency injection is. If you don't, there's a whole article dedicated to it: <a href="understanding-di.html">Understanding dependency injection</a>.</p>
-<h2>Installation</h2>
-<p>Install PHP-DI with <a href="http://getcomposer.org/doc/00-intro.html">Composer</a>:</p>
+<h2 id="installation">Installation</h2>
+<p>Install PHP-DI with <a href="0-intro.html">Composer</a>:</p>
 <pre><code class="language-json">composer require php-di/php-di</code></pre>
-<h2>Basic usage</h2>
-<h3>1. Use dependency injection</h3>
+<h2 id="basic-usage">Basic usage</h2>
+<h3 id="1-use-dependency-injection">1. Use dependency injection</h3>
 <p>First, let's write code using dependency injection without thinking about PHP-DI:</p>
 <pre><code class="language-php">class Mailer
 {
@@ -279,14 +279,14 @@
     }
 }</code></pre>
 <p>As we can see, the <code>UserManager</code> takes the <code>Mailer</code> as a constructor parameter: this is dependency injection!</p>
-<h3>2. Create the container</h3>
+<h3 id="2-create-the-container">2. Create the container</h3>
 <p>You can create a container instance preconfigured for development very easily:</p>
 <pre><code class="language-php">$container = DI\ContainerBuilder::buildDevContainer();</code></pre>
 <p>If you want to register definition files (explained below) or tweak some options, you can use the container builder:</p>
 <pre><code class="language-php">$builder = new DI\ContainerBuilder();
 $builder-&gt;...
 $container = $builder-&gt;build();</code></pre>
-<h3>3. Create the objects</h3>
+<h3 id="3-create-the-objects">3. Create the objects</h3>
 <p>Without PHP-DI, we would have to &quot;wire&quot; the dependencies manually like this:</p>
 <pre><code class="language-php">$mailer = new Mailer();
 $userManager = new UserManager($mailer);</code></pre>
@@ -302,7 +302,7 @@ $userManager = new UserManager($mailer);</code></pre>
 <p>Wait, isn't that weird and risky to scan PHP code like that?</p>
 </blockquote>
 <p>Don't worry, PHP-DI uses <a href="http://php.net/manual/en/book.reflection.php">PHP's Reflection classes</a> which is pretty standard: Laravel, Zend Framework and many other containers do the same. Performance wise, such information is read once and then cached, it has no impact.</p>
-<h2>Defining injections</h2>
+<h2 id="defining-injections">Defining injections</h2>
 <p>We have seen <strong>autowiring</strong>, which is when PHP-DI figures out automatically the dependencies a class needs. But we have 3 ways to define what to inject in a class:</p>
 <ul>
 <li>using <a href="autowiring.html">autowiring</a></li>
@@ -319,7 +319,7 @@ $userManager = new UserManager($mailer);</code></pre>
         -&gt;constructor(DI\get('Webservice')),
 ];</code></pre>
 <p>Please read the <a href="definition.html">Defining injections</a> documentation to learn about autowiring, annotations and PHP definitions.</p>
-<h2>Framework integration</h2>
+<h2 id="framework-integration">Framework integration</h2>
 <p>We have seen in the example above that we can use the container to get objects:</p>
 <pre><code class="language-php">$userManager = $container-&gt;get('UserManager');</code></pre>
 <p>However we don't want to call the container everywhere in our application: it would <strong>couple our code to the container</strong>. This is known as the <em>service locator antipattern</em> - or dependency <em>fetching</em> rather than <em>injection</em>.</p>
@@ -336,8 +336,8 @@ $userManager = new UserManager($mailer);</code></pre>
 <li><a href="frameworks/silly.html">Silly</a></li>
 </ul>
 <p>If you want to use PHP-DI with another framework or your own code, try to use <code>$container-&gt;get()</code> in you root application class or front controller. Have a look at this <a href="https://github.com/PHP-DI/demo"><strong>demo application</strong></a> built around PHP-DI for a practical example.</p>
-<h2>What's next</h2>
-<p>You can head over to <a href="README.html">the documentation index</a>. You can also read the <a href="best-practices.html">Best practices guide</a>, it's a good way to get a good view on when to use each of PHP-DI's features.</p>
+<h2 id="whats-next">What's next</h2>
+<p>You can head over to <a href="index.html">the documentation index</a>. You can also read the <a href="best-practices.md">Best practices guide</a>, it's a good way to get a good view on when to use each of PHP-DI's features.</p>
 <p>Here are some other topics that might interest you right now:</p>
 <ul>
 <li><a href="container-configuration.html">Configuring the container</a></li>

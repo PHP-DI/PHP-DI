@@ -244,7 +244,7 @@
         </div>
 
         <article>
-            <h1>Scopes</h1>
+            <h1 id="scopes">Scopes</h1>
 <p>By default, PHP-DI will inject <strong>the same instance of an object</strong> everywhere.</p>
 <pre><code>class UserManager
 {
@@ -272,7 +272,7 @@ $object2 = $container-&gt;get('Database');
 </ul>
 <p>If injectable classes (aka services) are correctly designed, they should be <a href="https://igor.io/2013/03/31/stateless-services.html"><strong>stateless</strong></a>. That means that reusing the same instance in several places of the application doesn't have any side effect.</p>
 <p>This behavior is however configurable using <strong>scopes</strong>.</p>
-<h2>Available scopes</h2>
+<h2 id="available-scopes">Available scopes</h2>
 <p>Container entries can have the following scopes:</p>
 <ul>
 <li>
@@ -285,9 +285,9 @@ $object2 = $container-&gt;get('Database');
 <p>The object instance is not unique - each injection or call of the container's <code>get()</code> method returns a new instance.</p>
 </li>
 </ul>
-<h2>Configuring the scope</h2>
+<h2 id="configuring-the-scope">Configuring the scope</h2>
 <p>Scopes are part of the <a href="definition.html">definitions</a> of injections, so you can define them using annotations or PHP configuration.</p>
-<h3>PHP configuration</h3>
+<h3 id="php-configuration">PHP configuration</h3>
 <p>You can specify the scope by using the <code>scope</code> method:</p>
 <pre><code class="language-php">return [
     // A new object will be created every time it is used
@@ -304,7 +304,7 @@ $object2 = $container-&gt;get('Database');
     'Foo' =&gt; DI\get('Bar'),
 ];</code></pre>
 <p>The alias will be cached, instead it will be resolved every time because the target entry (<code>Bar</code>) could have the &quot;prototype&quot; scope.</p>
-<h3>Annotation</h3>
+<h3 id="annotation">Annotation</h3>
 <p>You can specify the scope by using the <code>@Injectable</code> annotation on the target class. Remember singleton is the default scope.</p>
 <pre><code class="language-php">/**
  * @Injectable(scope="prototype")

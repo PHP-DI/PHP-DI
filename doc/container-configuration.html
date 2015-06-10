@@ -244,12 +244,12 @@
         </div>
 
         <article>
-            <h1>Configuring the container</h1>
-<h2>Development environment</h2>
+            <h1 id="configuring-the-container">Configuring the container</h1>
+<h2 id="development-environment">Development environment</h2>
 <p>PHP-DI's container is preconfigured for &quot;plug'n'play&quot;, i.e. development environment. You can start using it simply like so:</p>
 <pre><code class="language-php">$container = ContainerBuilder::buildDevContainer();</code></pre>
 <p>By default, PHP-DI will have <a href="definition.html">Autowiring</a> enabled (annotations are disabled by default).</p>
-<h2>Production environment</h2>
+<h2 id="production-environment">Production environment</h2>
 <p>In production environment, you will of course favor speed:</p>
 <pre><code class="language-php">$builder = new \DI\ContainerBuilder();
 $builder-&gt;setDefinitionCache(new Doctrine\Common\Cache\ApcCache());
@@ -257,7 +257,7 @@ $builder-&gt;writeProxiesToFile(true, 'tmp/proxies');
 
 $container = $builder-&gt;build();</code></pre>
 <p>To choose a cache, read <a href="performances.html">the performances documentation</a>.</p>
-<h2>Lightweight container</h2>
+<h2 id="lightweight-container">Lightweight container</h2>
 <p>If you want to use PHP-DI's container as a simple container (no autowiring or annotation support), you will want to disable all extra features.</p>
 <pre><code class="language-php">$builder = new \DI\ContainerBuilder();
 $builder-&gt;useAutowiring(false);
@@ -266,7 +266,7 @@ $builder-&gt;useAnnotations(false);
 $container = $builder-&gt;build();</code></pre>
 <p>Note that this doesn't necessarily means that the container will be faster, since everything can be cached anyway.
 Read more about this in <a href="performances.html">the performances documentation</a>.</p>
-<h2>Using PHP-DI with other containers</h2>
+<h2 id="using-php-di-with-other-containers">Using PHP-DI with other containers</h2>
 <p>If you want to use several containers at once, for example to use PHP-DI in ZF2 or Symfony 2, you can
 use a tool like <a href="https://github.com/jeremeamia/acclimate">Acclimate</a>.</p>
 <p>You will just need to tell PHP-DI to look into the composite container, else PHP-DI will be unaware
@@ -287,7 +287,7 @@ $container-&gt;addContainer($acclimate-&gt;adaptContainer($phpdiContainer));
 
 // Good to go!
 $foo = $container-&gt;get('foo');</code></pre>
-<h2>Ignoring phpDoc errors</h2>
+<h2 id="ignoring-phpdoc-errors">Ignoring phpDoc errors</h2>
 <p><em>Added in v4.4</em></p>
 <p>If you use annotations and your phpDoc is not always correct, you can set up the container to silently ignore those errors:</p>
 <pre><code class="language-php">$builder-&gt;ignorePhpDocErrors(true);</code></pre>

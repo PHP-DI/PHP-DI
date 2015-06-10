@@ -244,9 +244,9 @@
         </div>
 
         <article>
-            <h1>How PHP-DI works</h1>
+            <h1 id="how-php-di-works">How PHP-DI works</h1>
 <p>Do you want to help out improving PHP-DI? Or are you simply curious? Here is a short presentation of how PHP-DI works.</p>
-<h2>Global architecture</h2>
+<h2 id="global-architecture">Global architecture</h2>
 <p>The main component is the <code>Container</code> class. It is created by a <code>ContainerBuilder</code>, which is just a helper class.</p>
 <p>It is the entry point from the user's point of view, it is also the component that coordinates all other sub-components.</p>
 <p>Its main role is to return <strong>entries</strong> by their <strong>entry name</strong>:</p>
@@ -256,7 +256,7 @@
 <li>a <code>DefinitionSource</code> that returns a <code>Definition</code> for an entry name (by looking in several sub-definition sources)</li>
 <li>a list of <code>DefinitionResolver</code> that take a <code>Definition</code> and resolve it to a value (f.e. if it's an object, it will create it)</li>
 </ul>
-<h3>Definitions</h3>
+<h3 id="definitions">Definitions</h3>
 <p>A definition defines what is an entry:</p>
 <ul>
 <li><strong>a simple value</strong> (string, number, object instance…): <code>ValueDefinition</code></li>

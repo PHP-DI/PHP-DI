@@ -244,7 +244,7 @@
         </div>
 
         <article>
-            <h1>Injections depending on the environment</h1>
+            <h1 id="injections-depending-on-the-environment">Injections depending on the environment</h1>
 <p>You may want to inject different parameters or objects according to the environment, for example:</p>
 <pre><code class="language-php">&lt;?php
 return [
@@ -284,7 +284,7 @@ $builder-&gt;addDefinitions("config.php");
 $builder-&gt;addDefinitions("config.$environment.php");
 
 $container = $builder-&gt;build();</code></pre>
-<h2>Caches</h2>
+<h2 id="caches">Caches</h2>
 <p>If you configure PHP-DI to use a cache, you need to make sure that different environments don't share the same cache. To solve that problem, it is recommended to use a <strong>cache prefix</strong>: read about this in the <a href="performances.html">Performances</a> documentation.</p>
         </article>
 

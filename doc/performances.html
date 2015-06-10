@@ -244,11 +244,11 @@
         </div>
 
         <article>
-            <h1>Performances</h1>
-<h2>Cache</h2>
+            <h1 id="performances">Performances</h1>
+<h2 id="cache">Cache</h2>
 <p>PHP-DI uses the <a href="definition.html">definitions</a> you configured to instantiate classes.</p>
 <p>Reading those definitions (and, if enabled, reading annotations or autowiring) on each request can be avoided by using a cache. The caching system PHP-DI uses is the <a href="http://doctrine-common.readthedocs.org/en/latest/reference/caching.html">Doctrine Cache</a> library.</p>
-<h3>Setup</h3>
+<h3 id="setup">Setup</h3>
 <p>The Doctrine Cache library is not installed by default with PHP-DI, you need to install it with Composer:</p>
 <pre><code class="language-json">{
     "require": {
@@ -259,7 +259,7 @@
 <p>Then you can then pass a cache instance to the container builder:</p>
 <pre><code class="language-php">$containerBuilder-&gt;setDefinitionCache(new Doctrine\Common\Cache\ApcCache());</code></pre>
 <p>Heads up: do not use a cache in a development environment, else changes you make to the definitions (annotations, configuration files, etc.) may not be taken into account. The only cache you might use in development is the <code>ArrayCache</code> because it doesn't persist data between requests.</p>
-<h3>Cache types</h3>
+<h3 id="cache-types">Cache types</h3>
 <p>The cache implementation is provided by Doctrine (because it works very well) and contains:</p>
 <ul>
 <li><code>ArrayCache</code> (in memory, lifetime of the request)</li>
@@ -275,7 +275,7 @@
 </ul>
 <p>Read the <a href="http://docs.doctrine-project.org/projects/doctrine-common/en/latest/reference/caching.html">Doctrine documentation</a> for more details.</p>
 <p>The recommended cache is the <code>ApcCache</code>.</p>
-<h3>Cache prefixes</h3>
+<h3 id="cache-prefixes">Cache prefixes</h3>
 <p>If you run the same application twice on the same machine, both installs will use the same cache which can cause conflicts.</p>
 <p>Conflicts can also happen if an application runs on different &quot;environments&quot; (e.g. production, development…) on the same machine (see the <a href="environments.html">environments documentation</a>).</p>
 <p>To avoid this situation, you should use a cache &quot;prefix&quot;: each installation of your app has a unique ID, and this ID is used to prefix cache keys

@@ -77,13 +77,13 @@
 
         <p>I am happy to announce that PHP-DI version 4.4 has been released.
 This version contains mainly improvements to the <code>Container::call()</code> feature, and contains no BC-break.</p>
-<h2>Container::call()</h2>
-<p><code>Container::call()</code> was introduced in <a href="10-php-di-4-2-released.html">v4.2</a> and lets you invoke a callable while letting PHP-DI resolve its parameters:</p>
+<h2 id="containercall">Container::call()</h2>
+<p><code>Container::call()</code> was introduced in <a href="0-php-di-4-2-released.html">v4.2</a> and lets you invoke a callable while letting PHP-DI resolve its parameters:</p>
 <pre><code class="language-php">$container-&gt;call(function (LoggerInterface $logger) {
     $logger-&gt;info('Hello world!');
 });</code></pre>
 <p>In the example above, PHP-DI would resolve the <code>$logger</code> dependency using the <code>LoggerInterface</code> type-hint and then invoke the closure.</p>
-<h3>Support for all types of callables</h3>
+<h3 id="support-for-all-types-of-callables">Support for all types of callables</h3>
 <p><code>Container::call()</code> works great with closures, but it wasn't completely supporting all the different kinds of <em>callables</em>.</p>
 <p>PHP-DI 4.4 brings support for every callable type:</p>
 <ul>
@@ -107,7 +107,7 @@ $object();</code></pre>
 
 $container-&gt;call($controller, $_GET + $_POST);</code></pre>
 <p>This lets you write your controllers as PHP callables. That means you can use functions, closures, object methods or even invokable objects as controllers.</p>
-<h3>Auto-creation of callable objects</h3>
+<h3 id="auto-creation-of-callable-objects">Auto-creation of callable objects</h3>
 <p>PHP-DI 4.3 introduced the possibility for auto-creating objects in <code>Container::call()</code>:</p>
 <pre><code class="language-php">class MyClass {
     public function method() {
@@ -142,7 +142,7 @@ $container-&gt;call($controller, $_GET + $_POST);</code></pre>
 <pre><code class="language-php">$container-&gt;call('HomeController', $_GET + $_POST);</code></pre>
 <p>Neat!</p>
 <p>If you want to learn more, read the <a href="../doc/container.html">Using the Container</a> documentation.</p>
-<h2>Silently ignore phpDoc errors</h2>
+<h2 id="silently-ignore-phpdoc-errors">Silently ignore phpDoc errors</h2>
 <p>If you use annotations, PHP-DI reads the phpDoc to guess property and parameter types.</p>
 <p>If a dockblock contains non-existent classes like this:</p>
 <pre><code class="language-php">/**
@@ -157,7 +157,7 @@ public function __construct($param)
 errors as long as they do not prevent resolving objects:</p>
 <pre><code class="language-php">$containerBuilder-&gt;ignorePhpDocErrors(true);</code></pre>
 <p>Read more about this in the <a href="../doc/container-configuration.html">Container configuration</a> documentation.</p>
-<h2>Change log</h2>
+<h2 id="change-log">Change log</h2>
 <p>You can read the complete <a href="../change-log.html">change log</a>.</p>
     </article>
 

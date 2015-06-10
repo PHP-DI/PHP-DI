@@ -77,7 +77,7 @@
 
         <p>In PHP-DI 4, the definition format will change. Autowiring and Annotations are still there, but the YAML
 and PHP array definitions have disappeared. Let's see why.</p>
-<h2>Why was YAML a bad choice</h2>
+<h2 id="why-was-yaml-a-bad-choice">Why was YAML a bad choice</h2>
 <p>The recommended definition format for PHP-DI 3.x was YAML. Everybody loves YAML. This is a clean, short and readable format.</p>
 <p>I started to question this choice though. There have always been limitations to using YAML, the main one would be that
 it's not PHP code:</p>
@@ -94,7 +94,7 @@ it's not PHP code:</p>
 And with that component, you are now able to write code in Symfony's container configuration. Isn't it great?</p>
 <p>Well, even though the component itself is very good, it really shows how stupid the situation is (not Symfony!).</p>
 <p><strong>If we need to configure our PHP app, and if for this we need to use code, then let's use PHP!</strong></p>
-<h3>PHP 5.4, 5.5 and 5.6 to the rescue</h3>
+<h3 id="php-54-55-and-56-to-the-rescue">PHP 5.4, 5.5 and 5.6 to the rescue</h3>
 <p>Moreover, since PHP 5.3, there has been very nice features added to PHP that make the code much more concise, even more than YAML sometimes.</p>
 <p>Here is a YAML configuration:</p>
 <pre><code class="language-yaml">Acme\BlogModule\Model\ArticleRepository:
@@ -126,7 +126,7 @@ return [
 refactoring support.</p>
 <p>And when we think about PHP 5.6, what new syntactic sugar will we get? <a href="https://wiki.php.net/rfc/use_function">Use function</a>.
 Keep that in mind, it's going to come up again later.</p>
-<h2>Why is the current PHP format not a good choice still</h2>
+<h2 id="why-is-the-current-php-format-not-a-good-choice-still">Why is the current PHP format not a good choice still</h2>
 <p>OK, we've decided that YAML may not be appropriate. Why not just use the PHP equivalent?</p>
 <p>The current format (YAML or PHP) is actually a data structure, an array. Here, it is obvious:</p>
 <pre><code class="language-php">return [
@@ -178,7 +178,7 @@ So in this example, the <code>use</code> at the beginning of the file are skippe
 use Doctrine\ORM\EntityManager;
 use function DI\object;
 use function DI\link;</code></pre>
-<h2>Not bulletproof, not perfect</h2>
+<h2 id="not-bulletproof-not-perfect">Not bulletproof, not perfect</h2>
 <p>What about a complex example:</p>
 <pre><code class="language-php">return [
     ArticleRepositoryInterface::class =&gt; object(ArticleRepository::class)
@@ -218,7 +218,7 @@ by the bridge/adapter/bundle? Or isn't documented?</p>
     }),
 ];</code></pre>
 <p>THAT is readable. You can't have it more readable and maintainable for PHP developers.</p>
-<h2>Conclusion</h2>
+<h2 id="conclusion">Conclusion</h2>
 <p>In PHP-DI 4, you can have:</p>
 <ul>
 <li>a nice, explicit API for defining entries easily</li>

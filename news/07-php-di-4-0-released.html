@@ -77,9 +77,9 @@
 
         <p>I am extremely happy to announce that, after 4 months of work and more than 150 commits, PHP-DI version 4.0 has been released!</p>
 <p>This is a new major release, and it delivers. As indicated by &quot;major release&quot;, it comes with BC breaks, but this is for the better.</p>
-<p><em>PHP-DI 3.x users: BC-breaks are detailed in the <a href="../change-log.html">change log</a>, read the <a href="../doc/migration/4.0.html">migration guide from 3.x to 4.0</a>.</em></p>
-<h2>What's new?</h2>
-<h3>Completely new definition format</h3>
+<p><em>PHP-DI 3.x users: BC-breaks are detailed in the <a href=".0.html">change log</a>.</em></p>
+<h2 id="whats-new">What's new?</h2>
+<h3 id="completely-new-definition-format">Completely new definition format</h3>
 <p>PHP-DI 3.x offered several definition formats, such as:</p>
 <ul>
 <li>autowiring (use of reflection)</li>
@@ -96,8 +96,8 @@
 </ul>
 <p>The last one is completely new, and is the result of several months of brainstorming and trials.
 It is meant to be much more powerful and simpler to write and understand.</p>
-<p>You can read more about <a href="06-php-di-4-0-new-definitions.html">why the definition format has changed</a>.</p>
-<h3>Container methods</h3>
+<p>You can read more about <a href="6-php-di-4-0-new-definitions.html">why the definition format has changed</a>.</p>
+<h3 id="container-methods">Container methods</h3>
 <p>The container now offers new methods in addition to <code>get($id)</code>:</p>
 <ul>
 <li><code>has($id)</code> will return <code>true</code> or <code>false</code> depending on if the container can provide the entry.</li>
@@ -111,23 +111,23 @@ It is meant to be much more powerful and simpler to write and understand.</p>
 the singleton scope.</p>
 <p>This method makes the container work like a factory, so a new <code>FactoryInterface</code> has been introduced so that
 you can type-hint against the interface and not couple yourself to the container.</p>
-<h3>Framework integration</h3>
+<h3 id="framework-integration">Framework integration</h3>
 <p>PHP-DI now works with Symfony 2 and Zend Framework 1 &amp; 2!</p>
 <p>It is actually pretty easy making PHP-DI work with any other framework, feel free to start a discussion
 about your favorite framework on GitHub.</p>
-<h3>Container interoperability</h3>
+<h3 id="container-interoperability">Container interoperability</h3>
 <p>PHP-DI 4 has been thought so that it could work hand in hand with <strong>other</strong> containers.
 For example, in the Symfony 2 integration, PHP-DI works perfectly along Symfony's native container.</p>
 <p>PHP-DI also participates in the <a href="https://github.com/container-interop/container-interop">Container Interop</a> initiative.
 This group aims to provide interfaces that will help making different containers and frameworks work together.
 While Container Interop has not released a stable version yet, PHP-DI is ready and will probably use it in v4.1.</p>
-<h3>Better documentation</h3>
+<h3 id="better-documentation">Better documentation</h3>
 <p>Documentation is extremely important and a great care has been taken to:</p>
 <ul>
 <li>update the documentation following the new major release</li>
 <li>improve the existing documentation and make it more readable</li>
 </ul>
-<h3>Code quality</h3>
+<h3 id="code-quality">Code quality</h3>
 <p>This new major version also comes with even more code quality.</p>
 <ul>
 <li>Better architecture</li>
@@ -146,9 +146,9 @@ Furthermore, every unit test uses the <a href="http://phpunit.de/manual/3.7/en/a
 </ul>
 <p>The overall Scrutinizer-CI index went from <strong>7.9</strong> to <strong>9.0</strong>! Most issues have been fixed:</p>
 <p><img src="scrutinizer-issues.png" alt="Scrutinizer report" /></p>
-<h3>Many small improvements</h3>
+<h3 id="many-small-improvements">Many small improvements</h3>
 <p>PHP-DI 4 comes with many small improvements too, and rather than list them all, you can see them in the <a href="../change-log.html">change log</a>.</p>
-<h2>Installing PHP-DI 4.0</h2>
+<h2 id="installing-php-di-40">Installing PHP-DI 4.0</h2>
 <p>Just require <code>"mnapoli/php-di"</code> and <a href="../doc/getting-started.html">get started</a>.</p>
 <p>Already using PHP-DI 3? Then edit your composer configuration:</p>
 <pre><code class="language-json">{
@@ -157,8 +157,8 @@ Furthermore, every unit test uses the <a href="http://phpunit.de/manual/3.7/en/a
     }
 }</code></pre>
 <p>and run <code>composer update</code>.</p>
-<p>You can also read the <a href="../doc/migration/4.0.html">migration guide from 3.x to 4.0</a>.</p>
-<h2>Change log</h2>
+<p>You can also read the <a href=".0.html">migration guide from 3.x to 4.0</a>.</p>
+<h2 id="change-log">Change log</h2>
 <p>You can also read the complete <a href="../change-log.html">change log</a>.</p>
     </article>
 

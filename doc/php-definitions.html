@@ -244,9 +244,9 @@
         </div>
 
         <article>
-            <h1>PHP definitions</h1>
-<p>On top of <a href="autowiring.html">Autowiring</a> and <a href="annotations.html">annotations</a>, you can use <strong>a PHP configuration format</strong> to define injections.</p>
-<h2>Configuration</h2>
+            <h1 id="php-definitions">PHP definitions</h1>
+<p>On top of <a href="autowiring.html">Autowiring</a> and <a href="annotations.md">annotations</a>, you can use <strong>a PHP configuration format</strong> to define injections.</p>
+<h2 id="configuration">Configuration</h2>
 <p>You can register such configuration either directly as an array, or by putting it into a file:</p>
 <pre><code class="language-php">// array
 $containerBuilder-&gt;addDefinitions([
@@ -259,7 +259,7 @@ $containerBuilder-&gt;addDefinitions('config.php');</code></pre>
 return [
     // place your definitions here
 ];</code></pre>
-<h2>Syntax</h2>
+<h2 id="syntax">Syntax</h2>
 <p>PHP-DI's definitions are written using a <em>DSL</em> (Domain Specific Language) written in PHP and based on helper functions.</p>
 <p>All the examples shown in this page are using a PHP 5.4 compatible syntax, but if you are using PHP 5.5 or 5.6, you are encouraged to use the following features:</p>
 <ul>
@@ -284,7 +284,7 @@ return [
 </li>
 </ul>
 <p><em>Watch out:</em> remember the helper functions (<code>DI\object()</code> for example) are namespaced functions, not classes. Do not use <code>new</code> (e.g. <code>new DI\object()</code>) or you will get a fatal error &quot;Class 'DI\object' not found&quot;.</p>
-<h2>Definition types</h2>
+<h2 id="definition-types">Definition types</h2>
 <p>This definition format is the most powerful of all. There are several kind of <strong>entries</strong> you can define:</p>
 <ul>
 <li><strong>values</strong></li>
@@ -293,7 +293,7 @@ return [
 <li><strong>aliases</strong></li>
 <li>...</li>
 </ul>
-<h3>Values</h3>
+<h3 id="values">Values</h3>
 <p>Values (aka parameters in Symfony) are simple PHP values.</p>
 <pre><code class="language-php">return [
     'database.host'     =&gt; 'localhost',
@@ -308,7 +308,7 @@ return [
     'Foo' =&gt; new Foo(),
 ];</code></pre>
 <p>However <strong>this is not recommended</strong> as that object will be created <em>for every PHP request</em>, even if not used. You should instead use one of the methods documented below.</p>
-<h3>Factories</h3>
+<h3 id="factories">Factories</h3>
 <p>Factories are PHP callables that return the instance. It allows to define an object <em>lazily</em>, i.e. it will be created only when actually used.</p>
 <p>Here is an example using a closure:</p>
 <pre><code class="language-php">use \Interop\Container\ContainerInterface;
@@ -343,7 +343,7 @@ return [
         return new CachedApi($previous, $c-&gt;get('cache'));
     }),
 ];</code></pre>
-<h3>Objects</h3>
+<h3 id="objects">Objects</h3>
 <p>Using factories to create object is very powerful (as we can do anything using PHP), but the <code>DI\object()</code> helper can sometimes be simpler.</p>
 <p>Simple examples:</p>
 <pre><code class="language-php">return [
@@ -384,12 +384,12 @@ return [
     'FormBuilder' =&gt; DI\object()
         -&gt;scope(Scope::PROTOTYPE),
 ];</code></pre>
-<h3>Aliases</h3>
+<h3 id="aliases">Aliases</h3>
 <p>You can alias an entry to another using the <code>DI\get()</code> helper:</p>
 <pre><code class="language-php">return [
     'doctrine.entity_manager' =&gt; DI\get('Doctrine\ORM\EntityManager'),
 ];</code></pre>
-<h3>Environment variables</h3>
+<h3 id="environment-variables">Environment variables</h3>
 <p>You can get an environment variable's value using the <code>DI\env()</code> helper:</p>
 <pre><code class="language-php">return [
     'db1.url' =&gt; DI\env('DATABASE_URL'),
@@ -398,13 +398,13 @@ return [
     // with a default value that is another entry
     'db2.host' =&gt; DI\env('DATABASE_HOST', DI\get('db.host')),
 ];</code></pre>
-<h3>String expressions</h3>
+<h3 id="string-expressions">String expressions</h3>
 <p>You can use the <code>DI\string()</code> helper to concatenate strings entries:</p>
 <pre><code class="language-php">return [
     'path.tmp' =&gt; '/tmp',
     'log.file' =&gt; DI\string('{path.tmp}/app.log'),
 ];</code></pre>
-<h3>Arrays</h3>
+<h3 id="arrays">Arrays</h3>
 <p>Entries can be arrays containing simple values or other entries:</p>
 <pre><code class="language-php">return [
     'report.recipients' =&gt; [
@@ -417,7 +417,7 @@ return [
     ],
 ];</code></pre>
 <p>Arrays have additional features if you have multiple definition files: read the <a href="definition-overriding.html">definition overriding</a> documentation.</p>
-<h3>Wildcards</h3>
+<h3 id="wildcards">Wildcards</h3>
 <p>You can use wildcards to define a batch of entries. It can be very useful to bind interfaces to implementations:</p>
 <pre><code class="language-php">return [
     'Blog\Domain\*RepositoryInterface' =&gt; DI\object('Blog\Architecture\*DoctrineRepository'),
@@ -431,13 +431,13 @@ return [
 (first PHP-DI looks for an exact match, then it searches in the wildcards)</li>
 <li>in case of &quot;conflicts&quot; (i.e. 2 different matches with wildcards), the first match will prevail</li>
 </ul>
-<h3>Nesting definitions</h3>
+<h3 id="nesting-definitions">Nesting definitions</h3>
 <p>You can nest definitions inside others to avoid polluting the container with unnecessary entries. For example:</p>
 <pre><code class="language-php">return [
     'Foo' =&gt; DI\object()
         -&gt;constructor(DI\string('{root_directory}/test.json'), DI\object('Bar')),
 ];</code></pre>
-<h2>Setting in the container directly</h2>
+<h2 id="setting-in-the-container-directly">Setting in the container directly</h2>
 <p>In addition to defining entries in an array, you can set them directly in the container as shown below.</p>
 <pre><code class="language-php">$container-&gt;set('db.host', 'localhost');
 $container-&gt;set('My\Class', \DI\object()

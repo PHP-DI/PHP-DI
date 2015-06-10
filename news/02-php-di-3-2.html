@@ -77,7 +77,7 @@
 
         <p>I am happy to announce that I have just released PHP-DI version 3.2.</p>
 <p>The major new feature is the full support of <strong>Lazy Injection</strong>. But first, let's talk about the <code>ContainerBuilder</code>.</p>
-<h2>ContainerBuilder</h2>
+<h2 id="containerbuilder">ContainerBuilder</h2>
 <p>The <code>ContainerBuilder</code> is an object helping you to configure and create your container.</p>
 <pre><code class="language-php">&lt;?php
 $builder = new \DI\ContainerBuilder();
@@ -92,12 +92,12 @@ $container = $builder-&gt;build();</code></pre>
 <li>lightweight configuration</li>
 </ul>
 <p>Read the documentation: <a href="../doc/container-configuration.html">Configuring the container</a>.</p>
-<h2>Lazy injection</h2>
+<h2 id="lazy-injection">Lazy injection</h2>
 <p>Until v3.1, PHP-DI offered limited support for injecting dependencies lazily: it was restricted to property injection. Up from v3.2, there are no restrictions anymore: you can now inject lazily in constructors, setters or properties.</p>
 <p>To achieve lazy dependencies, PHP-DI injects <strong>proxies</strong>. These proxies behave and look just like the real object, except they delay loading this object until it is really used.</p>
 <p>This can be really helpful to improve performances if you tend to inject unused dependencies.</p>
 <p><strong>Credits</strong>: lazy injection relies on creating proxy classes. PHP-DI uses <a href="https://github.com/Ocramius/ProxyManager">ProxyManager</a> by Marco Pivetta, the library now used by Symfony, Zend Framework, …. A big thanks to him.</p>
-<h3>Example</h3>
+<h3 id="example">Example</h3>
 <p>You can mark dependencies to be lazily injected, here is an example using annotations:</p>
 <pre><code class="language-php">&lt;?php
 use DI\Annotation\Inject;
@@ -127,7 +127,7 @@ class Example {
         name: My\Class
         lazy: true</code></pre>
 <p>Read the full documentation: <a href="../doc/lazy-injection.html">Lazy injection</a>.</p>
-<h2>Change log</h2>
+<h2 id="change-log">Change log</h2>
 <p>Read all the changes in the <a href="../change-log.html">change log</a>.</p>
     </article>
 

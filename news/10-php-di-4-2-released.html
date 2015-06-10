@@ -86,7 +86,7 @@ a small BC break! This BC break was a necessary evil to fix an buggy and inconsi
 This is not what one would expect, and this was causing unexpected bugs because it turned optional dependencies into required dependencies.</p>
 <p>Optional parameters are now ignored (i.e. their default value is injected unless configured otherwise).
 You can of course configure explicitly an injection in optional parameters (through PHP config or annotation).</p>
-<h2>Container::call()</h2>
+<h2 id="containercall">Container::call()</h2>
 <p>The container <a href="../doc/container.html">already provided <code>get()</code>, <code>has()</code> and <code>make()</code></a>.
 Now it can also <code>call</code> functions using dependency injection.</p>
 <p>Example:</p>
@@ -154,7 +154,7 @@ $container-&gt;call(
 <p>Of course, this is just an example, you are not supposed to re-write an MVC framework.
 But hopefully it helps to see the potential behind <code>call()</code>.</p>
 <p><a href="../doc/container.html">Read more in the documentation of the container's API</a></p>
-<h2>Wildcards in definitions</h2>
+<h2 id="wildcards-in-definitions">Wildcards in definitions</h2>
 <p>You can use wildcards to define a batch of entries. It can be very useful to bind interfaces to implementations:</p>
 <pre><code class="language-php">return [
     'Blog\Domain\*RepositoryInterface' =&gt; DI\object('Blog\Architecture\*DoctrineRepository'),
@@ -168,7 +168,7 @@ But hopefully it helps to see the potential behind <code>call()</code>.</p>
 (first PHP-DI looks for an exact match, then it searches in the wildcards)</li>
 <li>in case of &quot;conflicts&quot; (i.e. 2 different matches with wildcards), the first match will prevail</li>
 </ul>
-<h2>Prototype scope for factories</h2>
+<h2 id="prototype-scope-for-factories">Prototype scope for factories</h2>
 <p>Up till 4.1, factories where only in the Singleton scope: they were only called once.</p>
 <p>Now you can use the Prototype scope:</p>
 <pre><code class="language-php">return [
@@ -177,7 +177,7 @@ But hopefully it helps to see the potential behind <code>call()</code>.</p>
     })-&gt;scope(Scope::PROTOTYPE()),
 ];</code></pre>
 <p>With this scope, the factory will be called each time <code>foo</code> is retrieved.</p>
-<h2>4.1</h2>
+<h2 id="41">4.1</h2>
 <p>Are you still on v4.0? Here is a reminder of the cool things included in 4.1:</p>
 <ul>
 <li>HHVM support</li>
@@ -186,7 +186,7 @@ But hopefully it helps to see the potential behind <code>call()</code>.</p>
 integration in other frameworks</li>
 <li>better Symfony 2 documentation</li>
 </ul>
-<h2>Change log</h2>
+<h2 id="change-log">Change log</h2>
 <p>Some other minor bugfixes where included in the release.</p>
 <p>You can read the complete <a href="../change-log.html">change log</a>.</p>
     </article>

@@ -244,11 +244,11 @@
         </div>
 
         <article>
-            <h1>PHP-DI in Symfony 2</h1>
+            <h1 id="php-di-in-symfony-2">PHP-DI in Symfony 2</h1>
 <p>If you are using Symfony 2, PHP-DI provides easy and clean integration, without replacing the original container
 (so all bundles and existing code still work).</p>
 <p>Just to be clear: PHP-DI will work alongside Symfony's container. So you can use both at the same time.</p>
-<h2>Installation</h2>
+<h2 id="installation">Installation</h2>
 <p>First, install the bridge:</p>
 <pre><code>composer require php-di/symfony2-bridge</code></pre>
 <p>Now you need to configure Symfony to use the alternative container in your <code>AppKernel</code>:</p>
@@ -279,7 +279,7 @@
         $this-&gt;getContainer()-&gt;setFallbackContainer($builder-&gt;build());
     }
 }</code></pre>
-<h2>Usage</h2>
+<h2 id="usage">Usage</h2>
 <p>You can now define <a href="http://symfony.com/doc/current/cookbook/controller/service.html">controllers as services</a>,
 without any configuration, using PHP-DI's power!</p>
 <p>Example for the routing configuration:</p>
@@ -317,7 +317,7 @@ The <code>:</code> notation means <code>service_id:method</code>, whereas the <c
         $this-&gt;productService-&gt;clearStock();
     }
 }</code></pre>
-<h3>Routing annotations</h3>
+<h3 id="routing-annotations">Routing annotations</h3>
 <p>It is possible to use <a href="http://richardmiller.co.uk/2011/10/25/symfony2-routing-to-controller-as-service-with-annotations/">annotations for routing</a> and still have the controller created by PHP-DI.</p>
 <p>You achieve that by specifying the service ID in the <code>@Route</code> annotation (which is most probably the class name itself unless you have a custom setup):</p>
 <pre><code class="language-php">/**
@@ -340,7 +340,7 @@ class TestController extends Controller
         return new Response('ok');
     }
 }</code></pre>
-<h2>Using Symfony's services in PHP-DI</h2>
+<h2 id="using-symfonys-services-in-php-di">Using Symfony's services in PHP-DI</h2>
 <p>Let's say you want to inject the <code>EntityManager</code> in your controller: the entity manager is defined
 in Symfony's container, and the controller is resolved by PHP-DI.</p>
 <p><strong>You can reference services that are in Symfony's container in PHP-DI's configuration</strong>.
@@ -352,7 +352,7 @@ That's because PHP-DI is designed to play nice with others:</p>
 <p>However Symfony was not designed to play with his friends, so it has no idea that there is
 another container in the application. <strong>You can't inject PHP-DI's services in a Symfony service</strong>.
 That's however rarely a problem.</p>
-<h3>Service name aliases</h3>
+<h3 id="service-name-aliases">Service name aliases</h3>
 <p>PHP-DI can also work with autowiring or annotations. These rely on the fact that the service name
 is the class name (or interface name), e.g. you reference the entity manager by its class name
 instead of <code>doctrine.orm.entity_manager</code>.</p>
@@ -365,11 +365,11 @@ like these:</p>
 ];</code></pre>
 <p>Keep in mind that it's always better to type-hint against interfaces instead of class names!
 So write your aliases with interfaces as much as possible.</p>
-<h2>FOSRestBundle</h2>
+<h2 id="fosrestbundle">FOSRestBundle</h2>
 <p>There was a bug in FOSRestBundle that would prevent using &quot;Controller as services&quot; in some cases.</p>
 <p>This bug has been fixed and will be released in &gt;=1.3.2 (not released yet at the time of writing).</p>
 <p>Full details are here: <a href="https://github.com/FriendsOfSymfony/FOSRestBundle/pull/743">FOSRestBundle#743</a></p>
-<h2>More</h2>
+<h2 id="more">More</h2>
 <p>Read more on the <a href="https://github.com/PHP-DI/Symfony2-Bridge">Symfony2-Bridge project on Github</a>.</p>
         </article>
 

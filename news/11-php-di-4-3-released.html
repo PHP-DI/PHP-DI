@@ -79,7 +79,7 @@
 implemented by contributors other than me, this is very encouraging :) This is also the quickest release,
 since 4.2 was released only 14 days ago.</p>
 <p>It comes without any BC break, and with a new main feature: <code>DI\env()</code> to import <strong>environment variables</strong>.</p>
-<h2>DI\env()</h2>
+<h2 id="dienv">DI\env()</h2>
 <p><em>contributed by <a href="https://github.com/jmalloc">@jmalloc</a></em></p>
 <p>If you use environment variables, you might end up creating several container definitions looking like this:</p>
 <pre><code class="language-php">return [
@@ -108,13 +108,13 @@ is thrown when attempting to resolve the value.</p>
     'default-dsn' =&gt; 'postgresql://user:pass@localhost/db',
     'dsn' =&gt; DI\env('DATABASE_URL', DI\link('default-dsn')),
 ];</code></pre>
-<h2>Container::call() resolves array callable using class name</h2>
+<h2 id="containercall-resolves-array-callable-using-class-name">Container::call() resolves array callable using class name</h2>
 <p><em>contributed by <a href="https://github.com/thispagecannotbefound">@thispagecannotbefound</a></em></p>
 <p>This change will allow you to call an array callable using a class name, like so:</p>
 <pre><code class="language-php">$container-&gt;call(['MyClass', 'method']);</code></pre>
 <p>If the method is not static, <code>MyClass</code> will be resolved using the container.</p>
 <p>Don't know what <code>Container::call()</code> is? <a href="http://php-di.org/doc/container.html">Check out the &quot;Container API&quot; documentation</a>.</p>
-<h2>FactoryInterface and InvokerInterface are auto-registered</h2>
+<h2 id="factoryinterface-and-invokerinterface-are-auto-registered">FactoryInterface and InvokerInterface are auto-registered</h2>
 <p><em>contributed by <a href="https://github.com/drealecs">@drealecs</a></em></p>
 <p>Before 4.3, if you wanted to inject <code>DI\FactoryInterface</code> or <code>DI\InvokerInterface</code>, you needed to bind
 them in the configuration to <code>DI\Container</code>.</p>
@@ -122,7 +122,7 @@ them in the configuration to <code>DI\Container</code>.</p>
 you can inject them without any configuration.</p>
 <p>If you had previously defined them, there is no problem: your definitions always override the internal ones.</p>
 <p>Don't know what these interfaces are for? <a href="http://php-di.org/doc/container.html">Check out the &quot;Container API&quot; documentation</a>.</p>
-<h2>Change log</h2>
+<h2 id="change-log">Change log</h2>
 <p>You can read the complete <a href="../change-log.html">change log</a>.</p>
     </article>
 

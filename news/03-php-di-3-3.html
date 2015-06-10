@@ -78,14 +78,14 @@
         <p>I am happy to announce that PHP-DI version 3.3 has just been released.</p>
 <p>The major new feature is the possibility to inject all dependencies of <strong>an existing instance</strong>.</p>
 <p>But before jumping into that, did you know there's an article on <a href="../doc/how-it-works.html">how PHP-DI works</a>.</p>
-<h2>Container::injectOn()</h2>
+<h2 id="containerinjecton">Container::injectOn()</h2>
 <p><em>Read the full documentation <a href="../doc/inject-on-instance.html">here</a></em></p>
 <pre><code class="language-php">$myObject = new MyClass();
 
 $container-&gt;injectOn($myObject);</code></pre>
 <p>Now, <code>$myObject</code> has all its dependencies injected (setter injections and property injections).</p>
 <p>It is basically the same as <code>$myObject = $container-&gt;get('MyClass')</code> except <strong>you</strong> create the instance.</p>
-<h3>Why?</h3>
+<h3 id="why">Why?</h3>
 <p>Weird right? Well it's not supposed to be used everywhere.</p>
 <p>Hopefully, that will help <strong>a lot</strong> to integrate PHP-DI with other frameworks:</p>
 <ul>
@@ -100,9 +100,9 @@ $container-&gt;injectOn($myObject);</code></pre>
     }
 }</code></pre>
 <p><strong>Of course</strong>, the preferred method is still to use <code>$container-&gt;get()</code>. But sometimes you can't get to the root of the framework to intercept the creation of your objects (I'm looking at you most MVC frameworks, PHPUnit &amp; …)</p>
-<h3>Good to know</h3>
+<h3 id="good-to-know">Good to know</h3>
 <p>PHP-DI will not perform any constructor injection. But of course most of the time you'll be using that feature is when you can't/don't want to use the constructor for getting your dependencies.</p>
-<h2>Change log</h2>
+<h2 id="change-log">Change log</h2>
 <p>Except this feature, 3.3 contains an optimization for definition resolution and a bugfix for a rare situation.</p>
 <p>Read all the changes and their authors in the <a href="../change-log.html">change log</a>.</p>
     </article>

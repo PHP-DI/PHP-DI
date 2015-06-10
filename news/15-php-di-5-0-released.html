@@ -89,11 +89,11 @@
 </ul>
 <p>But the best news of all is that this new major version wasn't produced out of thin air: it has been used in <a href="https://piwik.org/">Piwik</a> and developed as a rolling release (i.e. always stable and deployed) to test and evaluate new features hands on. Because of that, PHP-DI 5 has been in production since January 2015. <strong>More that 100 000 Piwik installs in the wild are running PHP-DI 5 already!</strong></p>
 <p>So let's start and have a look at what's new.</p>
-<h2>A new organization</h2>
+<h2 id="a-new-organization">A new organization</h2>
 <p>PHP-DI has been moved from my own GitHub account to a separate <a href="https://github.com/PHP-DI">PHP-DI</a> organization on GitHub. The project can now be found at <a href="https://github.com/PHP-DI/PHP-DI">github.com/PHP-DI/PHP-DI</a>. Thankfully GitHub sets up redirects from the old URL so nothing bad should happen here.</p>
 <p>The Composer package has also changed name: from <code>mnapoli/php-di</code> to <a href="https://packagist.org/packages/php-di/php-di"><code>php-di/php-di</code></a>.</p>
 <p>While upgrading, you should change your <code>composer.json</code> to require <code>php-di/php-di</code>. Rest assured that you can still install older versions with <code>mnapoli/php-di</code> (backward compatibility is kept).</p>
-<h2>BC breaks</h2>
+<h2 id="bc-breaks">BC breaks</h2>
 <p>PHP-DI 5 doesn't break major features so you will not have a lot of work to upgrade. Here are the main changes:</p>
 <ul>
 <li>PHP 5.3 is no longer supported (5.4 or above is required)</li>
@@ -101,10 +101,10 @@
 <li>some optional dependencies are not installed by default anymore (ProxyManager for lazy injection, doctrine/annotations, doctrine/cache) -&gt; 7 less Composer dependencies</li>
 <li><code>DI\link()</code> is deprecated in favor of a new <code>DI\get()</code> (but still works, so not really a BC break)</li>
 </ul>
-<p>The complete list of changes are detailed extensively in the <a href="../doc/migration/5.0.html">migration guide to 5.0</a>.</p>
-<h2>API simplifications, aka syntactic sugar</h2>
+<p>The complete list of changes are detailed extensively in the <a href=".0.html">migration guide to 5.0</a>.</p>
+<h2 id="api-simplifications-aka-syntactic-sugar">API simplifications, aka syntactic sugar</h2>
 <p>PHP-DI wants to be the DI container <em>for humans</em>, simplicity of use is one of its most important feature. To improve that even more, a few things have been added.</p>
-<p>Most of these changes have been explained in the previous blog article: <a href="14-php-di-5-syntaxic-sugar.html">Syntactic sugar in PHP-DI 5</a>. Here is a reminder of the most important improvements:</p>
+<p>Most of these changes have been explained in the previous blog article: <a href="4-php-di-5-syntaxic-sugar.html">Syntactic sugar in PHP-DI 5</a>. Here is a reminder of the most important improvements:</p>
 <pre><code class="language-php">&lt;?php
 
 use ...;
@@ -132,9 +132,9 @@ return [
     Cache::class =&gt; object(JsonFileCache::class)
         -&gt;constructor(string('{path.cache}/cache.json')),
 ];</code></pre>
-<h2>Features for modular applications</h2>
+<h2 id="features-for-modular-applications">Features for modular applications</h2>
 <p>The main motivation behind PHP-DI 5 was to improve support for scenarios involving several configuration files. The best illustration for this are application built using modules/bundles/plugins, which is exactly what was needed for Piwik and its plugin system.</p>
-<h3>Lists</h3>
+<h3 id="lists">Lists</h3>
 <p>Playing with lists is one of the most important feature. It involves defining array of services as well as adding new items to an existing array.</p>
 <p>Let's illustrate that with an example: your application can support many &quot;authentication providers&quot;. By default, you can sign up to the application and create an account which will be stored in a database (using an email and a password):</p>
 <pre><code class="language-php">// application config file
@@ -175,7 +175,7 @@ $builder-&gt;addDefinitions('src/TwitterModule/config.php');</code></pre>
 <li>tags don't work if the container isn't compiled</li>
 </ul>
 <p>In the end manipulating lists instead of tags is simpler and feels more natural to use. To be fair however tags offer an approach with more freedom, allowing to implement more advanced behaviors.</p>
-<h3>Decorating a previous entry</h3>
+<h3 id="decorating-a-previous-entry">Decorating a previous entry</h3>
 <p>A new <code>DI\decorate()</code> helper was added, allowing to decorate a previous entry using a closure. A common scenario for using this is to override object using the <a href="http://en.wikipedia.org/wiki/Decorator_pattern">decorator pattern</a>.</p>
 <p>Here is an example where a module replaces the default &quot;Product DAO&quot; for by decorating it with a cache wrapper:</p>
 <pre><code class="language-php">// application config
@@ -187,11 +187,11 @@ ProductDaoInterface::class =&gt; DI\decorate(function ($previous, ContainerInter
 <p>The first argument of the closure is the previous object (the one we decorate), the second argument is the container.</p>
 <p>The example above is equivalent to:</p>
 <pre><code class="language-php">$dao = new ProductDaoCached(new ProductDaoMySQL());</code></pre>
-<h2>Silex integration</h2>
+<h2 id="silex-integration">Silex integration</h2>
 <p>A new framework integration comes with this new version: the <a href="http://silex.sensiolabs.org/">Silex</a> micro-framework. If you are interested to learn about it, head over to <a href="../doc/frameworks/silex.html">the documentation</a>.</p>
-<h2>Wrapping it up</h2>
+<h2 id="wrapping-it-up">Wrapping it up</h2>
 <p>I hope you will like this new version, as well as the new website. If you want the complete list of changes, head over to <a href="../change-log.html">the change log</a>.</p>
-<p>If you are migrating from a 4.x version, have a look at the detailed <a href="../doc/migration/5.0.html">migration guide</a>.</p>
+<p>If you are migrating from a 4.x version, have a look at the detailed <a href=".0.html">migration guide</a>.</p>
 <p>If something isn't right in the package or the documentation, please <a href="https://github.com/PHP-DI/PHP-DI/issues/new">open an issue</a>. You can also find support in the <a href="https://gitter.im/PHP-DI/PHP-DI">Gitter chatroom</a>.</p>
     </article>
 

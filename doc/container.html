@@ -244,9 +244,9 @@
         </div>
 
         <article>
-            <h1>Using the container</h1>
+            <h1 id="using-the-container">Using the container</h1>
 <p>This documentation describes the API of the container object itself.</p>
-<h2>get() &amp; has()</h2>
+<h2 id="get-amp-has">get() &amp; has()</h2>
 <p>The container implements the <a href="https://github.com/container-interop/container-interop">container-interop</a> standard. That means it implements <a href="https://github.com/container-interop/container-interop/blob/master/src/Interop/Container/ContainerInterface.php"><code>Interop\Container\ContainerInterface</code></a>:</p>
 <pre><code class="language-php">namespace Interop\Container;
 
@@ -256,12 +256,12 @@ interface ContainerInterface
     public function has($id);
 }</code></pre>
 <p>You are encouraged to type-hint against this interface instead instead of the implementation (<code>DI\Container</code>) whenever possible. Doing so means your code is decoupled from PHP-DI and you can switch to another container anytime.</p>
-<h2>set()</h2>
+<h2 id="set">set()</h2>
 <p>You can set entries directly on the container:</p>
 <pre><code class="language-php">$container-&gt;set('foo', 'bar');
 $container-&gt;set('MyInterface', \DI\object('MyClass'));</code></pre>
 <p>However it is recommended to use definition files. See the <a href="definition.html">definition documentation</a>.</p>
-<h2>make()</h2>
+<h2 id="make">make()</h2>
 <p>The container also offers a <code>make()</code> method. This method is defined in <a href="https://github.com/PHP-DI/PHP-DI/blob/master/src/DI/FactoryInterface.php"><code>DI\FactoryInterface</code></a>.</p>
 <pre><code class="language-php">class GithubProfile
 {
@@ -279,7 +279,7 @@ resolved from the container.</p>
 <p>If you need to use the <code>make()</code> method inside a service, or a controller, or whatever, it is
 recommended that you type-hint against <code>FactoryInterface</code>. That avoids coupling your code to the container.
 <code>DI\FactoryInterface</code> is automatically bound to <code>DI\Container</code> so you can inject it without any configuration.</p>
-<h2>call()</h2>
+<h2 id="call">call()</h2>
 <p>The container exposes a <code>call()</code> method that can invoke any PHP callable.</p>
 <p>It offers the following additional features over using <code>call_user_func()</code>:</p>
 <ul>
@@ -361,7 +361,7 @@ $container-&gt;call($object);
 
 // can be written as
 $container-&gt;call('My\CallableClass');</code></pre>
-<h2>injectOn()</h2>
+<h2 id="injecton">injectOn()</h2>
 <p>Sometimes you want to inject dependencies on an object that is already created.</p>
 <p>For example, some old frameworks don't allow you to control how controllers are created.
 With <code>injectOn</code>, you can ask the container to fulfill the dependencies after the object is created.</p>

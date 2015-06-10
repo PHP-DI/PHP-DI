@@ -244,10 +244,10 @@
         </div>
 
         <article>
-            <h1>PHP-DI in Silex</h1>
-<h2>Installation</h2>
+            <h1 id="php-di-in-silex">PHP-DI in Silex</h1>
+<h2 id="installation">Installation</h2>
 <pre><code>$ composer require php-di/silex-bridge</code></pre>
-<h2>Usage</h2>
+<h2 id="usage">Usage</h2>
 <p>In order to benefit from PHP-DI's integration in Silex, you only need to use <code>DI\Bridge\Silex\Application</code> instead of the original <code>Silex\Application</code>.</p>
 <p>Here is the classic Silex example updated:</p>
 <pre><code class="language-php">&lt;?php
@@ -261,7 +261,7 @@ $app-&gt;get('/hello/{name}', function ($name) use ($app) {
 });
 
 $app-&gt;run();</code></pre>
-<h2>Benefits</h2>
+<h2 id="benefits">Benefits</h2>
 <p>Using PHP-DI in Silex allows you to use all the awesome features of PHP-DI to wire your dependencies (using the definition files, autowiring, annotations, …).</p>
 <p>Another big benefit of the PHP-DI integration is the ability to use dependency injection inside controllers:</p>
 <pre><code class="language-php">class Mailer
@@ -280,7 +280,7 @@ $app-&gt;post('/register/{name}', function ($name, Mailer $mailer) {
 <li>the order of parameters doesn't matter, they are resolved by type-hint (for dependency injection) and by name (for request parameters)</li>
 <li>it only works with objects that you can type-hint: you can't inject string/int values for example, and you can't inject container entries whose name is not a class/interface name (e.g. <code>twig</code> or <code>doctrine.entity_manager</code>)</li>
 </ul>
-<h2>Configuring the container</h2>
+<h2 id="configuring-the-container">Configuring the container</h2>
 <p>You can configure PHP-DI's container by creating your own <code>ContainerBuilder</code> and passing it to the application:</p>
 <pre><code class="language-php">$containerBuilder = new DI\ContainerBuilder();
 
@@ -296,7 +296,7 @@ $containerBuilder-&gt;addDefinitions([
 $containerBuilder-&gt;addDefinitions('config.php');
 
 $app = new DI\Bridge\Silex\Application($containerBuilder);</code></pre>
-<h2>Silex service providers</h2>
+<h2 id="silex-service-providers">Silex service providers</h2>
 <p>Silex offers several &quot;service providers&quot; to pre-configure some 3rd party libraries, for example Twig or Doctrine. You can still use those service providers with this integration (even though in bigger projects you might want to configure everything yourself).</p>
 <p>Here is the example of the <a href="http://silex.sensiolabs.org/doc/providers/twig.html">TwigServiceProvider</a>:</p>
 <pre><code class="language-php">$app-&gt;register(new Silex\Provider\TwigServiceProvider(), [
@@ -319,7 +319,7 @@ $builder-&gt;addDefinitions([
 $app-&gt;post('/', function (Twig_Environment $twig) {
     return $twig-&gt;render('home.twig');
 });</code></pre>
-<h2>More</h2>
+<h2 id="more">More</h2>
 <p>Read more on the <a href="https://github.com/PHP-DI/Silex-Bridge">Silex-Bridge project on Github</a>.</p>
         </article>
 

@@ -244,22 +244,22 @@
         </div>
 
         <article>
-            <h1>Migrating from PHP-DI 4.x to 5.0</h1>
+            <h1 id="migrating-from-php-di-4x-to-50">Migrating from PHP-DI 4.x to 5.0</h1>
 <p>PHP-DI 5.0 is a new major version that comes with backward compatibility breaks.</p>
 <p>This guide will help you migrate from a 4.x version to 5.0. It will only explain backward compatibility breaks, it will not present the new features (read the release notes or the blog post for that).</p>
-<h2>Package name</h2>
+<h2 id="package-name">Package name</h2>
 <p>PHP-DI has moved:</p>
 <ul>
 <li>to the new <a href="https://github.com/PHP-DI">PHP-DI</a> organization on GitHub: <a href="https://github.com/PHP-DI/PHP-DI">github.com/PHP-DI/PHP-DI</a></li>
 <li>from <code>mnapoli/php-di</code> to <a href="https://packagist.org/packages/php-di/php-di"><code>php-di/php-di</code></a> on Packagist</li>
 </ul>
 <p>While upgrading, you should change your <code>composer.json</code> to require <code>php-di/php-di</code>. Rest assured that you can still install older versions with <code>mnapoli/php-di</code> (backward compatibility is kept).</p>
-<h2>PHP version requirement</h2>
+<h2 id="php-version-requirement">PHP version requirement</h2>
 <p>PHP-DI 5 requires a PHP version greater or equal than <strong>5.4</strong> (was previously 5.3).</p>
-<h2>Container</h2>
+<h2 id="container">Container</h2>
 <p><code>DI\ContainerInterface</code> was deprecated since v4.1 and has been removed. It was replaced by <a href="https://github.com/container-interop/container-interop/blob/master/src/Interop/Container/ContainerInterface.php">the standard <code>Interop\Container\ContainerInterface</code></a>.</p>
-<h2>Definitions</h2>
-<h3>Annotations</h3>
+<h2 id="definitions">Definitions</h2>
+<h3 id="annotations">Annotations</h3>
 <p>Annotations are now disabled by default. If you use annotations, simply enable them in your config:</p>
 <pre><code class="language-php">$builder = new ContainerBuilder();
 $builder-&gt;useAnnotations(true);
@@ -267,7 +267,7 @@ $builder-&gt;useAnnotations(true);
 $container = $builder-&gt;build();</code></pre>
 <p>And install the Composer dependency by running:</p>
 <pre><code>composer require doctrine/annotations</code></pre>
-<h3>DI\link()</h3>
+<h3 id="dilink">DI\link()</h3>
 <p>The <code>DI\link()</code> function helper has been deprecated (but still works). The reason for this is that when importing the function in PHP 5.6 with <code>use function DI\link</code>, it conflicts with <a href="http://php.net/link">PHP's native <code>link()</code> function</a>. This was a silly oversight when designing PHP-DI 4, sorry about that :)</p>
 <p><code>DI\get()</code> has been introduced as a replacement and is preferred over <code>DI\link()</code> (which still works). It has the advantage of being shorter and more explicit:</p>
 <pre><code class="language-php">return [
@@ -291,7 +291,7 @@ return [
     EntityManager::class =&gt; object()
         -&gt;constructor(get('SomeDependency')),
 ];</code></pre>
-<h3>Factories</h3>
+<h3 id="factories">Factories</h3>
 <p>Closures are now considered as factories automatically:</p>
 <pre><code class="language-php">return [
     'foo' =&gt; DI\factory(function () {
@@ -307,7 +307,7 @@ return [
     'foo' =&gt; DI\value(function () {
         return new Foo();
     }),</code></pre>
-<h3>Scopes</h3>
+<h3 id="scopes">Scopes</h3>
 <p>The internal implementation of scopes has been simplified: this results in one less Composer dependency and better performances. Backward compatibility is kept so you don't have to change anything, however if you want you can replace the use of static methods (which might be deprecated in the future) with the constants.</p>
 <p>Before:</p>
 <pre><code class="language-php">return [
@@ -320,16 +320,16 @@ return [
         -&gt;scope(Scope::PROTOTYPE), // constant
 ];</code></pre>
 <p>Again, this change is optional, the static methods still work.</p>
-<h2>Lazy injection</h2>
+<h2 id="lazy-injection">Lazy injection</h2>
 <p>The <a href="https://github.com/Ocramius/ProxyManager">ProxyManager</a> package comes with a lot of dependencies and is only useful only for lazy injection. This package is not installed by default in v5.0 in order to lighten PHP-DI's dependencies.</p>
 <p>If you want to use <strong>lazy injection</strong>, you now need to install it explicitly:</p>
 <pre><code>composer require "ocramius/proxy-manager:~1.0"</code></pre>
 <p>Read more in <a href="https://github.com/PHP-DI/PHP-DI/issues/198">#198</a> or in the <a href="../lazy-injection.html">Lazy Injection documentation</a>.</p>
-<h2>Caching</h2>
-<h3>Caching library</h3>
+<h2 id="caching">Caching</h2>
+<h3 id="caching-library">Caching library</h3>
 <p>The <code>doctrine/cache</code> library isn't required by PHP-DI by default anymore (in order to make the package lighter). If you set up a cache for PHP-DI, you need to require it:</p>
 <pre><code>composer require doctrine/cache</code></pre>
-<h3>Caching and dynamic definitions</h3>
+<h3 id="caching-and-dynamic-definitions">Caching and dynamic definitions</h3>
 <p><em>Note: this section might look complicated and confusing to you: it concerns a change for an edgy use case and you probably don't have to worry about this</em>.</p>
 <p>Caching works the same in PHP-DI 5, however it is no longer possible to add <em>definitions</em> to a container on the fly <strong>when using a cache</strong>:</p>
 <pre><code class="language-php">$builder = new ContainerBuilder();
@@ -359,7 +359,7 @@ $builder-&gt;addDefinitions([
 $container-&gt;set('foo', 'hello');
 $container-&gt;set('bar', new MyClass());
 $container-&gt;set('baz', DI\object('MyClass'));</code></pre>
-<h2>Internal changes</h2>
+<h2 id="internal-changes">Internal changes</h2>
 <p>If you were overriding or extending some internal classes of PHP-DI, be aware that they may have changed. For example definition sources have been refactored into a much simpler design.</p>
         </article>
 

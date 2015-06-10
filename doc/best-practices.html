@@ -244,21 +244,21 @@
         </div>
 
         <article>
-            <h1>Best practices</h1>
+            <h1 id="best-practices">Best practices</h1>
 <p>This is an opinionated guide on how to use PHP-DI and dependency injection for the best.</p>
 <p>While it may not cover every case, and satisfy everybody, it can serve as a canvas to help you
 getting started with dependency injection.</p>
 <p>If you disagree with anything explained in that guide, that's OK. It's opinionated, and you
 should make your own opinion on all these subjects ;). It shouldn't prevent you to use PHP-DI
 the way you want.</p>
-<h2>Rules for using a container and dependency injection</h2>
+<h2 id="rules-for-using-a-container-and-dependency-injection">Rules for using a container and dependency injection</h2>
 <p>Here are some basic rules to follow:</p>
 <ol>
 <li>never get an entry from the container directly (always use dependency injection)</li>
 <li>more generally, write code decoupled from the container</li>
 <li>type-hint against interfaces, configure which implementation to use in the container's configuration</li>
 </ol>
-<h2>Writing controllers</h2>
+<h2 id="writing-controllers">Writing controllers</h2>
 <p>Using dependency injection in controllers is usually where it is the most painful.</p>
 <p>If we take Symfony 2 as an example (but this generally applies to every framework), here are your options:</p>
 <ul>
@@ -308,7 +308,7 @@ will not contain business logic (only routing calls to the models and binding re
 </ul>
 <p>This solution offers many benefits for no major drawback, so
 <strong>we recommend using annotations in controllers</strong>.</p>
-<h2>Writing services</h2>
+<h2 id="writing-services">Writing services</h2>
 <p>Given a service is intended to be reused, tested and independent of your framework, <strong>we do not recommend
 using annotations for injecting dependencies</strong>.</p>
 <p>Instead, we recommend using <strong>constructor injection and autowiring</strong>:</p>
@@ -362,7 +362,7 @@ return [
     // ...
     OrderServiceInterface::class =&gt; DI\object(OrderService::class),
 ];</code></pre>
-<h2>Using libraries</h2>
+<h2 id="using-libraries">Using libraries</h2>
 <p>When using libraries, like loggers, ORMs, … you sometimes need to configure them.</p>
 <p>In that case, we advise you to define these dependencies in your configuration file.
 We also recommend using an anonymous function when the configuration gets a bit complex.</p>

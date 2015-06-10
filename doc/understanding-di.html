@@ -244,7 +244,7 @@
         </div>
 
         <article>
-            <h1>Understanding Dependency Injection</h1>
+            <h1 id="understanding-dependency-injection">Understanding Dependency Injection</h1>
 <p><em>Dependency injection</em> and <em>dependency injection containers</em> are different things:</p>
 <ul>
 <li><strong>dependency injection is a method</strong> for writing better code</li>
@@ -252,8 +252,8 @@
 </ul>
 <p>You don't <em>need</em> a container to do dependency injection. However a container can help you.</p>
 <p>PHP-DI is about this: making dependency injection more practical.</p>
-<h2>The theory</h2>
-<h3>Classic PHP code</h3>
+<h2 id="the-theory">The theory</h2>
+<h3 id="classic-php-code">Classic PHP code</h3>
 <p>Here is how a code <strong>not</strong> using DI will roughly work:</p>
 <ul>
 <li>Application needs Foo (e.g. a controller), so:</li>
@@ -270,7 +270,7 @@
 </ul></li>
 </ul></li>
 </ul>
-<h3>Using dependency injection</h3>
+<h3 id="using-dependency-injection">Using dependency injection</h3>
 <p>Here is how a code using DI will roughly work:</p>
 <ul>
 <li>Application needs Foo, which needs Bar, which needs Bim, so:</li>
@@ -288,7 +288,7 @@
 <p>This is the pattern of <strong>Inversion of Control</strong>. The control of the dependencies is <strong>inverted</strong> from one being called to the one calling.</p>
 <p>The main advantage: the one at the top of the caller chain is always <strong>you</strong>. You can control all dependencies and have complete control over how your application works. You can replace a dependency by another (one you made for example).</p>
 <p>For example what if Library X uses Logger Y and you want to make it use your logger Z? With dependency injection, you don't have to change the code of Library X.</p>
-<h3>Using a container</h3>
+<h3 id="using-a-container">Using a container</h3>
 <p>Now how does a code using PHP-DI works:</p>
 <ul>
 <li>Application needs Foo so:</li>
@@ -307,9 +307,9 @@
 </ul></li>
 </ul>
 <p>In short, <strong>the container takes away all the work of creating and injecting dependencies</strong>.</p>
-<h2>Understanding with an example</h2>
+<h2 id="understanding-with-an-example">Understanding with an example</h2>
 <p>This is a real life example comparing a classic implementation (using <code>new</code> or singletons) VS using dependency injection.</p>
-<h3>Without dependency injection</h3>
+<h3 id="without-dependency-injection">Without dependency injection</h3>
 <p>Say you have:</p>
 <pre><code class="language-php">class GoogleMaps
 {
@@ -336,7 +336,7 @@ class OpenStreetMap
 <p>Now we want to use the <code>OpenStreetMap</code> instead of <code>GoogleMaps</code>, how do we do?
 We have to change the code of <code>StoreService</code>, and all the other classes that use <code>GoogleMaps</code>.</p>
 <p><strong>Without dependency injection, your classes are tightly coupled to their dependencies.</strong></p>
-<h3>With dependency injection</h3>
+<h3 id="with-dependency-injection">With dependency injection</h3>
 <p>The <code>StoreService</code> now uses dependency injection:</p>
 <pre><code class="language-php">class StoreService {
     private $geolocationService;
@@ -360,7 +360,7 @@ class OpenStreetMap implements GeolocationService { ...</code></pre>
 <p>Now, it is for the user of the StoreService to decide which implementation to use. And it can be changed anytime, without
 having to rewrite the <code>StoreService</code>.</p>
 <p><strong>The <code>StoreService</code> is no longer tightly coupled to its dependency.</strong></p>
-<h2>With PHP-DI</h2>
+<h2 id="with-php-di">With PHP-DI</h2>
 <p>You may see that dependency injection will leave with one drawback: you now have to handle injecting dependencies.</p>
 <p>That's where a container, and specifically PHP-DI, can help you.</p>
 <p>Instead of writing:</p>

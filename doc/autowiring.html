@@ -244,7 +244,7 @@
         </div>
 
         <article>
-            <h1>Autowiring</h1>
+            <h1 id="autowiring">Autowiring</h1>
 <p><em>Autowiring</em> is an exotic word that represents something very simple: <strong>the ability of the container to automatically create and inject dependencies</strong>.</p>
 <p>In order to achieve that, PHP-DI uses <a href="http://fr.php.net/manual/fr/book.reflection.php">PHP's reflection</a> to detect what parameters a constructor needs.</p>
 <p>Let's take this example:</p>
@@ -265,10 +265,10 @@ class UserRegistrationService
 <pre><code class="language-php">$repository = new UserRepository();
 $service = new UserRegistrationService($repository);</code></pre>
 <p>As you can imagine, it's very simple, doesn't require any configuration, and it just works!</p>
-<h2>Configuration</h2>
+<h2 id="configuration">Configuration</h2>
 <p><strong>Autowiring is enabled by default.</strong> You can disable it using the container builder:</p>
 <pre><code class="language-php">$containerBuilder-&gt;useAutowiring(false);</code></pre>
-<h2>Limitations</h2>
+<h2 id="limitations">Limitations</h2>
 <p>PHP-DI won't be able to resolve cases like this:</p>
 <pre><code class="language-php">class Database
 {

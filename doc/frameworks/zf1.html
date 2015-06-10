@@ -244,8 +244,8 @@
         </div>
 
         <article>
-            <h1>PHP-DI in Zend Framework 1</h1>
-<h2>Set up</h2>
+            <h1 id="php-di-in-zend-framework-1">PHP-DI in Zend Framework 1</h1>
+<h2 id="set-up">Set up</h2>
 <p>If you are using ZF1, PHP-DI provides easy and clean integration so that you don't have
 to call the container (thus avoiding the Service Locator pattern).</p>
 <p>First, install the bridge to ZF1:</p>
@@ -264,7 +264,7 @@ to call the container (thus avoiding the Service Locator pattern).</p>
 <p>That's it!</p>
 <p><strong>Warning</strong>: if you use Zend's autoloader (and not Composer), you will need to configure it:</p>
 <pre><code class="language-php">$autoloader-&gt;suppressNotFoundWarnings(true);</code></pre>
-<h2>Usage</h2>
+<h2 id="usage">Usage</h2>
 <p>Now you can inject dependencies in your controllers!</p>
 <p>For example, here is the GuestbookController of the quickstart:</p>
 <pre><code class="language-php">class GuestbookController extends Zend_Controller_Action
@@ -281,7 +281,7 @@ to call the container (thus avoiding the Service Locator pattern).</p>
         $this-&gt;view-&gt;entries = $this-&gt;guestbookService-&gt;getAllEntries();
     }
 }</code></pre>
-<h2>Recommended layout</h2>
+<h2 id="recommended-layout">Recommended layout</h2>
 <p>Here is a recommended layout for your configuration:</p>
 <pre><code>application/
     configs/
@@ -320,7 +320,7 @@ to call the container (thus avoiding the Service Locator pattern).</p>
         Zend_Controller_Front::getInstance()-&gt;setDispatcher($dispatcher);
     }</code></pre>
 <p>You are not required to follow it of course.</p>
-<h2>Tests</h2>
+<h2 id="tests">Tests</h2>
 <p>Zend Framework 1 provides <a href="http://framework.zend.com/manual/1.12/en/zend.test.phpunit.html">a base class to test controllers</a>.
 If you are using this base class, and you want to have full control on the dependencies that will be injected
 inside the controller you are testing (for example to inject <strong>mocks</strong>), here is a recommended approach:</p>
@@ -361,7 +361,7 @@ inside the controller you are testing (for example to inject <strong>mocks</stro
 <p>How it works: a new container is created for each test, which ensures that whatever you do
 with the container in one test will not affect the others.</p>
 <p>Obviously, the <code>setUp()</code> and <code>appBootstrap()</code> methods could go in a base abstract class.</p>
-<h2>More</h2>
+<h2 id="more">More</h2>
 <p>Read more on the <a href="https://github.com/PHP-DI/ZF1-Bridge">ZF1-Bridge project on Github</a>.</p>
         </article>
 

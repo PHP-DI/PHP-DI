@@ -244,7 +244,7 @@
         </div>
 
         <article>
-            <h1>Inject on an existing instance</h1>
+            <h1 id="inject-on-an-existing-instance">Inject on an existing instance</h1>
 <p><em>Feature introduced in PHP-DI 3.3</em></p>
 <p>The standard way of using a container is to get an object from it, with all its dependencies injected:</p>
 <pre><code class="language-php">$object = $container-&gt;get('foo');</code></pre>
@@ -254,13 +254,13 @@
 
 $container-&gt;injectOn($object);</code></pre>
 <p>Now, <code>$object</code> has all its dependencies injected (through setter injections and property injections).</p>
-<h2>Constructor injection</h2>
+<h2 id="constructor-injection">Constructor injection</h2>
 <p>PHP-DI will not perform any constructor injection (because the instance is already created).</p>
 <p>If you create the object yourself, you'll have to do the constructor injection yourself:</p>
 <pre><code class="language-php">$object = new MyClass($someDependency, $someOtherDependency);
 $container-&gt;injectOn($object);</code></pre>
 <p>If you get the object from some library/framework, then just call <code>injectOn()</code></p>
-<h3>Why?</h3>
+<h3 id="why">Why?</h3>
 <p>Hopefully, that will help to integrate PHP-DI with other frameworks:</p>
 <ul>
 <li><strong>MVC frameworks</strong> (Symfony 2, Zend Framework 2, …): inject dependencies of the controller, in the controller itself.</li>

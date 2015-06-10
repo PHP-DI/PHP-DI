@@ -77,7 +77,7 @@
 
         <p>I am happy to announce that PHP-DI version 4.1 has been released.</p>
 <p>This version was focused on stability and documentation improvements, with full backward compatibility.</p>
-<h2>Container-Interop 1.0 compatibility</h2>
+<h2 id="container-interop-10-compatibility">Container-Interop 1.0 compatibility</h2>
 <p>If you haven't heard of <a href="https://github.com/container-interop/container-interop">container-interop</a>
 yet, it's a project that tries to improve interoperability between containers and frameworks.
 It is inspired by PSRs from the PHP-FIG (and hopefully will become a PSR some day).</p>
@@ -100,7 +100,7 @@ be coupled to PHP-DI</strong>. That is extremely good news: it will allow you (o
 the container and use another library anytime without impact on your codebase (except your container
 configuration of course).</p>
 <p>This is a very similar situation to PSR-3 and the <code>LoggerInterface</code> it you have ever used it.</p>
-<h2>Better exception messages</h2>
+<h2 id="better-exception-messages">Better exception messages</h2>
 <p>Errors when using a DI container are embarrassing: given you never (should) use the container directly,
 you never expect an exception from the container. It always comes out of nowhere with cryptic messages
 and it takes you several seconds to understand what's happening.</p>
@@ -122,11 +122,11 @@ Object (
 )</code></pre>
 <p>Now you can clearly see that the <code>$logger</code> parameter was correctly defined (or recognized)
 but the <code>$mailer</code> parameter wasn't.</p>
-<h2>Better Symfony 2 documentation</h2>
+<h2 id="better-symfony-2-documentation">Better Symfony 2 documentation</h2>
 <p>PHP-DI 4.0 works perfectly in Symfony 2 but the documentation about this integration was not really extensive.</p>
 <p>This has been worked upon so that you can feel much more confident trying PHP-DI in Symfony.</p>
 <p><a href="http://php-di.org/doc/frameworks/symfony2.html">Have a look at the documentation</a></p>
-<h2>HHVM support</h2>
+<h2 id="hhvm-support">HHVM support</h2>
 <p><a href="http://hhvm.com">HHVM</a> is the new cool kid in town: it runs PHP much faster than the classic
 PHP Zend Engine.</p>
 <p>Starting from version 4.1, PHP-DI's tests are all green on HHVM. That doesn't necessarily means that
@@ -136,7 +136,7 @@ in HHVM will be fixed.</p>
 <p>What about <a href="http://hacklang.org">Hack</a>? HHVM support doesn't mean Hack support.
 I honestly have no idea how PHP-DI behaves with Hack code but I guess it might not work.
 If you are interested in working on this, get in touch!</p>
-<h2>Change log</h2>
+<h2 id="change-log">Change log</h2>
 <p>You can also read the complete <a href="../change-log.html">change log</a>.</p>
     </article>
 
