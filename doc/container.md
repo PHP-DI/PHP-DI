@@ -1,6 +1,5 @@
 ---
 layout: documentation
-tab: container
 ---
 
 # Using the container

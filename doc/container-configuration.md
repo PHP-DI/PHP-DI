@@ -1,6 +1,5 @@
 ---
 layout: documentation
-tab: container-config
 ---
 
 # Configuring the container
