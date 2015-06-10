@@ -143,7 +143,7 @@ For those familiar with Symfony, the same result can be achieved using [tags](ht
 - tags require to write [compiler passes](http://symfony.com/doc/current/components/dependency_injection/tags.html#create-a-compilerpass) which are verbose and not trivial
 - tags don't work if the container isn't compiled
 
-In the end manipulating lists instead of tags is simpler and feels more natural to use. To be fair however tags offer an approach with more freedom, allowing to implement more advanced behaviors.
+While tags offer an approach with more freedom, manipulating lists instead of tags is simpler and feels more natural to use.
 
 ### Decorating a previous entry
 
