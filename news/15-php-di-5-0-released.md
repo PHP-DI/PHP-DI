@@ -2,10 +2,12 @@
 layout: blogpost
 title: PHP-DI 5.0 released
 author: Matthieu Napoli
-date: May 14th 2015
+date: June 10th 2015
 ---
 
 I am very excited to announce that, after 8 months of work, PHP-DI 5.0 is released.
+
+Note: **if you have never heard of PHP-DI before, I recommend you visit [the home page](../)** to get an overview of what PHP-DI can do for you.
 
 This is a new major version that comes with:
 
@@ -14,7 +16,8 @@ This is a new major version that comes with:
 - new major features for modular applications (aka bundles, modules, plugins, …)
 - performance improvements (thanks [Blackfire](https://blackfire.io/)) and a much lighter package (from 10 to 3 Composer dependencies, less files, …)
 - a new website, logo and rewritten documentation
-- Silex integration
+- a [Silex integration](../doc/frameworks/silex.md)
+- a [demo application](https://github.com/PHP-DI/demo)
 
 But the best news of all is that this new major version wasn't produced out of thin air: it has been used in [Piwik](https://piwik.org/) and developed as a rolling release (i.e. always stable and deployed) to test and evaluate new features hands on. Because of that, PHP-DI 5 has been in production since January 2015. **More that 100 000 Piwik installs in the wild are running PHP-DI 5 already!**
 
