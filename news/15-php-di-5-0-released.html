@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>
+<html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>
+<html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>
+<html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!-->
+<html class="no-js"> <!--<![endif]-->
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width">
+
+    <title>PHP-DI 5.0 released - The Dependency Injection Container for humans</title>
+    <meta name="description" content="PHP-DI is a Dependency Injection Container for PHP that intends to be practical and powerful">
+
+    <link rel="canonical" href="http://php-di.org" />
+
+    <meta name="application-name" content="PHP-DI"/>
+    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="http://php-di.org/img/apple-touch-icon-144x144.png" />
+    <link rel="apple-touch-icon-precomposed" sizes="152x152" href="http://php-di.org/img/apple-touch-icon-152x152.png" />
+    <link rel="icon" type="image/png" href="http://php-di.org/img/favicon-32x32.png" sizes="32x32" />
+    <link rel="icon" type="image/png" href="http://php-di.org/img/favicon-16x16.png" sizes="16x16" />
+    <meta name="msapplication-TileColor" content="#484949" />
+    <meta name="msapplication-TileImage" content="http://php-di.org/img/mstile-144x144.png" />
+
+            <link href="http://fonts.googleapis.com/css?family=Abel:400|Oswald:300,400,700" media="all" rel="stylesheet" type="text/css">
+        <link href="http://php-di.org/css/highlight.github.css" rel="stylesheet">
+        <link href="http://php-di.org/css/all.min.css" rel="stylesheet">
+    
+    <script>
+        if (window.location.href.indexOf('http://mnapoli.fr') === 0) {
+            window.location.href = 'http://php-di.org';
+        }
+    </script>
+</head>
+<body>
+
+    <header>
+        <div class="navbar navbar-default navbar-fixed-top">
+            <div class="container">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#top-navigation">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand" href="http://php-di.org/index.html">PHP-DI</a>
+                </div>
+                <div class="collapse navbar-collapse" id="top-navigation">
+                    <ul class="nav navbar-nav navbar-right">
+                        <li><a href="http://php-di.org/doc/getting-started.html">Getting started</a></li>
+                        <li><a href="http://php-di.org/doc/">Documentation</a></li>
+                        <li><a href="http://php-di.org/news/">News</a></li>
+                        <li><a href="http://php-di.org/change-log.html">Change log</a></li>
+                        <li><a class="github" href="https://github.com/PHP-DI/PHP-DI"><i class="fa fa-github"></i></a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    
+    <section class="container">
+        <div class="row">
+            <div class="col-md-9">
+
+                
+    <article>
+        <h1>PHP-DI 5.0 released</h1>
+
+        <p class="article-information">
+            Posted by Matthieu Napoli on June 10th 2015
+        </p>
+
+        <p>I am very excited to announce that, after 8 months of work, PHP-DI 5.0 is released.</p>
+<p>Note: <strong>if you have never heard of PHP-DI before, I recommend you visit <a href="../">the home page</a></strong> to get an overview of what PHP-DI can do for you.</p>
+<p>This is a new major version that comes with:</p>
+<ul>
+<li>minor backward compatibility breaks (nothing to get too alarmed about)</li>
+<li>API and syntax simplifications (aka syntactic sugar)</li>
+<li>new major features for modular applications (aka bundles, modules, plugins, …)</li>
+<li>performance improvements (thanks <a href="https://blackfire.io/">Blackfire</a>) and a much lighter package (from 10 to 3 Composer dependencies, less files, …)</li>
+<li>a new website, logo and rewritten documentation</li>
+<li>a <a href="../doc/frameworks/silex.html">Silex integration</a></li>
+<li>a <a href="https://github.com/PHP-DI/demo">demo application</a></li>
+</ul>
+<p>But the best news of all is that this new major version wasn't produced out of thin air: it has been used in <a href="https://piwik.org/">Piwik</a> and developed as a rolling release (i.e. always stable and deployed) to test and evaluate new features hands on. Because of that, PHP-DI 5 has been in production since January 2015. <strong>More that 100 000 Piwik installs in the wild are running PHP-DI 5 already!</strong></p>
+<p>So let's start and have a look at what's new.</p>
+<h2>A new organization</h2>
+<p>PHP-DI has been moved from my own GitHub account to a separate <a href="https://github.com/PHP-DI">PHP-DI</a> organization on GitHub. The project can now be found at <a href="https://github.com/PHP-DI/PHP-DI">github.com/PHP-DI/PHP-DI</a>. Thankfully GitHub sets up redirects from the old URL so nothing bad should happen here.</p>
+<p>The Composer package has also changed name: from <code>mnapoli/php-di</code> to <a href="https://packagist.org/packages/php-di/php-di"><code>php-di/php-di</code></a>.</p>
+<p>While upgrading, you should change your <code>composer.json</code> to require <code>php-di/php-di</code>. Rest assured that you can still install older versions with <code>mnapoli/php-di</code> (backward compatibility is kept).</p>
+<h2>BC breaks</h2>
+<p>PHP-DI 5 doesn't break major features so you will not have a lot of work to upgrade. Here are the main changes:</p>
+<ul>
+<li>PHP 5.3 is no longer supported (5.4 or above is required)</li>
+<li>annotations are now disabled by default</li>
+<li>some optional dependencies are not installed by default anymore (ProxyManager for lazy injection, doctrine/annotations, doctrine/cache) -&gt; 7 less Composer dependencies</li>
+<li><code>DI\link()</code> is deprecated in favor of a new <code>DI\get()</code> (but still works, so not really a BC break)</li>
+</ul>
+<p>The complete list of changes are detailed extensively in the <a href="../doc/migration/5.0.html">migration guide to 5.0</a>.</p>
+<h2>API simplifications, aka syntactic sugar</h2>
+<p>PHP-DI wants to be the DI container <em>for humans</em>, simplicity of use is one of its most important feature. To improve that even more, a few things have been added.</p>
+<p>Most of these changes have been explained in the previous blog article: <a href="14-php-di-5-syntaxic-sugar.html">Syntactic sugar in PHP-DI 5</a>. Here is a reminder of the most important improvements:</p>
+<pre><code class="language-php">&lt;?php
+
+use ...;
+use function ...; // PHP 5.6 example
+
+return [
+    'path.root' =&gt; __DIR__ . '/..',
+
+    // new DI\string() helper to write string expressions
+    'path.cache' =&gt; string('{path.root}/var/cache'),
+
+    // DI\factory() is now optional when using closures
+    PdfGenerator::class =&gt; function () {
+        return ...;
+    },
+
+    // array of services, yay!
+    'notification.handlers' =&gt; [
+        get(EmailHandler::class),
+        get(TextHandler::class),
+        get(PushHandler::class),
+    ],
+
+    // nest definitions in other definitions!
+    Cache::class =&gt; object(JsonFileCache::class)
+        -&gt;constructor(string('{path.cache}/cache.json')),
+];</code></pre>
+<h2>Features for modular applications</h2>
+<p>The main motivation behind PHP-DI 5 was to improve support for scenarios involving several configuration files. The best illustration for this are application built using modules/bundles/plugins, which is exactly what was needed for Piwik and its plugin system.</p>
+<h3>Lists</h3>
+<p>Playing with lists is one of the most important feature. It involves defining array of services as well as adding new items to an existing array.</p>
+<p>Let's illustrate that with an example: your application can support many &quot;authentication providers&quot;. By default, you can sign up to the application and create an account which will be stored in a database (using an email and a password):</p>
+<pre><code class="language-php">// application config file
+return [
+    'auth.providers' =&gt; [
+        get(DatabaseAuthProvider::class),
+    ],
+];</code></pre>
+<p>However you can have modules that can provide new authentication systems:</p>
+<pre><code class="language-php">// Facebook login module
+return [
+    'auth.providers' =&gt; DI\add([
+        get(FacebookAuthProvider::class),
+    ]),
+];</code></pre>
+<pre><code class="language-php">// Twitter login module
+return [
+    'auth.providers' =&gt; DI\add([
+        get(TwitterAuthProvider::class),
+    ]),
+];</code></pre>
+<p>Those modules can be registered by simply adding the configuration files:</p>
+<pre><code class="language-php">$builder = new ContainerBuilder();
+
+$builder-&gt;addDefinitions('app/config.php');
+$builder-&gt;addDefinitions('src/FacebookModule/config.php');
+$builder-&gt;addDefinitions('src/TwitterModule/config.php');</code></pre>
+<p>As a result getting the <code>auth.providers</code> list will return the 3 items merged:</p>
+<pre><code class="language-php">[
+    get(DatabaseAuthProvider::class),
+    get(FacebookAuthProvider::class),
+    get(TwitterAuthProvider::class),
+]</code></pre>
+<p>For those familiar with Symfony, the same result can be achieved using <a href="http://symfony.com/doc/current/components/dependency_injection/tags.html">tags</a>. The approach chosen for PHP-DI is a little different for multiple reasons:</p>
+<ul>
+<li>adding an item to an array is more similar to what we do in vanilla PHP</li>
+<li>tags require to write <a href="http://symfony.com/doc/current/components/dependency_injection/tags.html#create-a-compilerpass">compiler passes</a> which are verbose and not trivial</li>
+<li>tags don't work if the container isn't compiled</li>
+</ul>
+<p>In the end manipulating lists instead of tags is simpler and feels more natural to use. To be fair however tags offer an approach with more freedom, allowing to implement more advanced behaviors.</p>
+<h3>Decorating a previous entry</h3>
+<p>A new <code>DI\decorate()</code> helper was added, allowing to decorate a previous entry using a closure. A common scenario for using this is to override object using the <a href="http://en.wikipedia.org/wiki/Decorator_pattern">decorator pattern</a>.</p>
+<p>Here is an example where a module replaces the default &quot;Product DAO&quot; for by decorating it with a cache wrapper:</p>
+<pre><code class="language-php">// application config
+ProductDaoInterface::class =&gt; DI\object(ProductDaoMySQL::class)</code></pre>
+<pre><code class="language-php">// module config
+ProductDaoInterface::class =&gt; DI\decorate(function ($previous, ContainerInterface $c) {
+    return new ProductDaoCached($previous);
+})</code></pre>
+<p>The first argument of the closure is the previous object (the one we decorate), the second argument is the container.</p>
+<p>The example above is equivalent to:</p>
+<pre><code class="language-php">$dao = new ProductDaoCached(new ProductDaoMySQL());</code></pre>
+<h2>Silex integration</h2>
+<p>A new framework integration comes with this new version: the <a href="http://silex.sensiolabs.org/">Silex</a> micro-framework. If you are interested to learn about it, head over to <a href="../doc/frameworks/silex.html">the documentation</a>.</p>
+<h2>Wrapping it up</h2>
+<p>I hope you will like this new version, as well as the new website. If you want the complete list of changes, head over to <a href="../change-log.html">the change log</a>.</p>
+<p>If you are migrating from a 4.x version, have a look at the detailed <a href="../doc/migration/5.0.html">migration guide</a>.</p>
+<p>If something isn't right in the package or the documentation, please <a href="https://github.com/PHP-DI/PHP-DI/issues/new">open an issue</a>. You can also find support in the <a href="https://gitter.im/PHP-DI/PHP-DI">Gitter chatroom</a>.</p>
+    </article>
+
+    <h3>
+        Comments
+    </h3>
+    <div id="disqus_thread"></div>
+    <noscript>
+        Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+    </noscript>
+
+
+            </div>
+
+            <div class="col-md-3">
+                <h3>
+                    All posts
+                </h3>
+
+                <ul class="all-posts list-unstyled">
+                    <li>
+                        <a href="http://php-di.org/news/15-php-di-5-0-released.html">PHP-DI 5.0 released</a>
+                    </li>
+                    <li>
+                        <a href="http://php-di.org/news/14-php-di-5-syntaxic-sugar.html">Syntactic sugar in PHP-DI 5</a>
+                    </li>
+                    <li>
+                        <a href="http://php-di.org/news/13-php-di-4-4-released.html">PHP-DI 4.4 released</a>
+                    </li>
+                    <li>
+                        <a href="http://php-di.org/news/12-php-di-is-better-with-php-5-6.html">PHP 5.6 is out and PHP-DI just got better</a>
+                    </li>
+                    <li>
+                        <a href="http://php-di.org/news/11-php-di-4-3-released.html">PHP-DI 4.3 released</a>
+                    </li>
+                    <li>
+                        <a href="http://php-di.org/news/10-php-di-4-2-released.html">PHP-DI 4.2 released</a>
+                    </li>
+                    <li>
+                        <a href="http://php-di.org/news/09-php-di-4-1-released.html">PHP-DI 4.1 released</a>
+                    </li>
+                    <li>
+                        <a href="http://php-di.org/news/08-10000-installs.html">10.000 installs!</a>
+                    </li>
+                    <li>
+                        <a href="http://php-di.org/news/07-php-di-4-0-released.html">PHP-DI 4.0 released</a>
+                    </li>
+                    <li>
+                        <a href="http://php-di.org/news/06-php-di-4-0-new-definitions.html">What will change in PHP-DI 4: the new definition format</a>
+                    </li>
+                    <li>
+                        <a href="http://php-di.org/news/05-php-di-3-5.html">PHP-DI 3.5 released</a>
+                    </li>
+                    <li>
+                        <a href="http://php-di.org/news/04-php-di-3-4.html">PHP-DI 3.4 released</a>
+                    </li>
+                    <li>
+                        <a href="http://php-di.org/news/03-php-di-3-3.html">PHP-DI 3.3 released</a>
+                    </li>
+                    <li>
+                        <a href="http://php-di.org/news/02-php-di-3-2.html">PHP-DI 3.2 released</a>
+                    </li>
+                    <li>
+                        <a href="http://php-di.org/news/01-php-di-3-1.html">PHP-DI 3.1 released</a>
+                    </li>
+                </ul>
+            </div>
+
+        </div>
+    </section>
+
+
+            <footer>
+            <div class='container'>
+                                    <p>
+                        A question? Unsatisfied with the documentation?
+                        Please <a href="https://github.com/PHP-DI/PHP-DI/issues/new">create an issue</a>
+                        or chat on
+                        <a href="https://gitter.im/PHP-DI/PHP-DI">Gitter</a> or
+                        <a href="https://twitter.com/phpdi">Twitter</a>.
+                    </p>
+                                <p>
+                    By <a href="http://mnapoli.fr/">Matthieu Napoli</a>
+                    and <a href="https://github.com/PHP-DI/PHP-DI/graphs/contributors">contributors</a>
+                    |
+                    Website generated with
+                    <a href="http://mnapoli.fr/Couscous/" target="_blank">Couscous</a>.
+                </p>
+            </div>
+        </footer>
+    
+                <script src="http://php-di.org/bower_components/jquery/dist/jquery.min.js"></script>
+        <script src="http://php-di.org/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+        <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.5/highlight.min.js"></script>
+
+        <script>
+            $(function() {
+                hljs.initHighlightingOnLoad();
+            });
+        </script>
+    
+
+    <script>
+        // Disqus comments
+        var disqus_shortname = 'phpdi';
+
+        (function() {
+            var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+            dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+        })();
+    </script>
+
+    <script>
+        var _gaq = _gaq || [];
+        _gaq.push(['_setAccount', 'UA-15584647-13']);
+        _gaq.push(['_trackPageview']);
+        (function() {
+            var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+            ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+            var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+        })();
+    </script>
+
+    <!-- Piwik -->
+    <script type="text/javascript">
+        var _paq = _paq || [];
+        _paq.push(["setDocumentTitle", document.domain + "/" + document.title]);
+        _paq.push(["setCookieDomain", "*.php-di.org"]);
+        _paq.push(['trackPageView']);
+        _paq.push(['enableLinkTracking']);
+        (function() {
+            var u=(("https:" == document.location.protocol) ? "https" : "http") + "://piwik.mnapoli.fr/";
+            _paq.push(['setTrackerUrl', u+'piwik.php']);
+            _paq.push(['setSiteId', 2]);
+            var d=document, g=d.createElement('script'), s=d.getElementsByTagName('script')[0]; g.type='text/javascript';
+            g.defer=true; g.async=true; g.src=u+'piwik.js'; s.parentNode.insertBefore(g,s);
+        })();
+    </script>
+    <noscript><p><img src="http://piwik.mnapoli.fr/piwik.php?idsite=2" style="border:0;" alt="" /></p></noscript>
+    <!-- End Piwik Code -->
+
+</body>
+</html>

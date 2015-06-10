@@ -17,10 +17,17 @@
 
     <link rel="canonical" href="http://php-di.org" />
 
-            <link href="http://php-di.org/css/bootstrap-theme_venera.min.css" media="all" rel="stylesheet" type="text/css">
-        <link href="http://fonts.googleapis.com/css?family=Abel:400|Oswald:300,400,700" media="all" rel="stylesheet" type="text/css">
+    <meta name="application-name" content="PHP-DI"/>
+    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="http://php-di.org/img/apple-touch-icon-144x144.png" />
+    <link rel="apple-touch-icon-precomposed" sizes="152x152" href="http://php-di.org/img/apple-touch-icon-152x152.png" />
+    <link rel="icon" type="image/png" href="http://php-di.org/img/favicon-32x32.png" sizes="32x32" />
+    <link rel="icon" type="image/png" href="http://php-di.org/img/favicon-16x16.png" sizes="16x16" />
+    <meta name="msapplication-TileColor" content="#484949" />
+    <meta name="msapplication-TileImage" content="http://php-di.org/img/mstile-144x144.png" />
+
+            <link href="http://fonts.googleapis.com/css?family=Abel:400|Oswald:300,400,700" media="all" rel="stylesheet" type="text/css">
         <link href="http://php-di.org/css/highlight.github.css" rel="stylesheet">
-        <link href="http://php-di.org/css/custom.css" rel="stylesheet">
+        <link href="http://php-di.org/css/all.min.css" rel="stylesheet">
     
     <script>
         if (window.location.href.indexOf('http://mnapoli.fr') === 0) {
@@ -30,83 +37,220 @@
 </head>
 <body>
 
-    <header id='header'>
-        <div class='navbar navbar-fixed-top'>
-            <div class='navbar-inner'>
-                <div class='container'>
-                    <a class='btn btn-navbar' data-target='.nav-collapse' data-toggle='collapse'>
-                        <span class='icon-bar'></span>
-                        <span class='icon-bar'></span>
-                        <span class='icon-bar'></span>
-                    </a>
-                    <a href="http://php-di.org/index.html" class="brand">PHP-DI</a>
-
-                    <div class='nav-collapse subnav-collapse collapse pull-right' id='top-navigation'>
-                        <ul class='nav'>
-                            <li><a href="http://php-di.org/">Home</a></li>
-                            <li><a href="http://php-di.org/news/">News</a></li>
-                            <li><a href="http://php-di.org/doc/getting-started.html">Getting started</a></li>
-                            <li><a href="http://php-di.org/doc/">Documentation</a></li>
-                            <li><a href="http://php-di.org/change-log.html">Change log</a></li>
-                            <li><a href="http://php-di.org/support.html">Support</a></li>
-                            <li><a href="https://github.com/mnapoli/PHP-DI"><i class="icon-github"></i> Github</a></li>
-                        </ul>
-                    </div>
+    <header>
+        <div class="navbar navbar-default navbar-fixed-top">
+            <div class="container">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#top-navigation">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand" href="http://php-di.org/index.html">PHP-DI</a>
+                </div>
+                <div class="collapse navbar-collapse" id="top-navigation">
+                    <ul class="nav navbar-nav navbar-right">
+                        <li><a href="http://php-di.org/doc/getting-started.html">Getting started</a></li>
+                        <li><a href="http://php-di.org/doc/">Documentation</a></li>
+                        <li><a href="http://php-di.org/news/">News</a></li>
+                        <li><a href="http://php-di.org/change-log.html">Change log</a></li>
+                        <li><a class="github" href="https://github.com/PHP-DI/PHP-DI"><i class="fa fa-github"></i></a></li>
+                    </ul>
                 </div>
             </div>
         </div>
     </header>
 
     
-    <header class="jumbotron subhead" id="overview">
-        <div class="container">
-            <div class="docs-header-icon">
-                <h1>Documentation</h1>
-                <p class="lead">
-                    This is the documentation for PHP-DI 4. The documentation for v3 is
-                    <a href="https://github.com/mnapoli/PHP-DI/tree/3.x/doc">still available here</a>.
-                </p>
-            </div>
-        </div>
-    </header>
-    <div class='sub-jumbotron'>
-        <div class='container'>
-            <ul>
-                <li>
-                    <a href="/doc/" class="">Full documentation</a>
-                </li>
-                <li>
-                    <a href="/doc/getting-started.html" class="">Getting started</a>
-                </li>
-                <li>
-                    <a href="/doc/best-practices.html" class="">Best practices</a>
-                </li>
-                <li>
-                    <a href="/doc/container-configuration.html" class="">Configuring the container</a>
-                </li>
-                <li>
-                    <a href="/doc/container.html" class="">Using the container</a>
-                </li>
-                <li>
-                    <a href="/doc/definition.html" class="">Defining injections</a>
-                </li>
-            </ul>
-        </div>
-    </div>
+    <div class="container documentation">
 
-    <div class="container docs-w">
-        <h1>PHP-DI in Symfony 2</h1>
+        <div class="sidebar">
+            <ul>
+                                    <li>
+                        Introduction
+
+                        <ul>
+                                                            <li class="">
+                                    <a href="http://php-di.org/doc/getting-started.html">
+                                        Getting started
+                                    </a>
+                                </li>
+                                                            <li class="">
+                                    <a href="http://php-di.org/doc/understanding-di.html">
+                                        Understanding dependency injection
+                                    </a>
+                                </li>
+                                                            <li class="">
+                                    <a href="http://php-di.org/doc/best-practices.html">
+                                        "Best practices" guide
+                                    </a>
+                                </li>
+                                                    </ul>
+                    </li>
+                                    <li>
+                        Usage
+
+                        <ul>
+                                                            <li class="">
+                                    <a href="http://php-di.org/doc/container-configuration.html">
+                                        Configuring the container
+                                    </a>
+                                </li>
+                                                            <li class="">
+                                    <a href="http://php-di.org/doc/container.html">
+                                        Using the container
+                                    </a>
+                                </li>
+                                                    </ul>
+                    </li>
+                                    <li>
+                        Definitions
+
+                        <ul>
+                                                            <li class="">
+                                    <a href="http://php-di.org/doc/definition.html">
+                                        Introduction
+                                    </a>
+                                </li>
+                                                            <li class="">
+                                    <a href="http://php-di.org/doc/autowiring.html">
+                                        Autowiring
+                                    </a>
+                                </li>
+                                                            <li class="">
+                                    <a href="http://php-di.org/doc/php-definitions.html">
+                                        PHP definitions
+                                    </a>
+                                </li>
+                                                            <li class="">
+                                    <a href="http://php-di.org/doc/annotations.html">
+                                        Annotations
+                                    </a>
+                                </li>
+                                                            <li class="">
+                                    <a href="http://php-di.org/doc/definition-overriding.html">
+                                        Definition extensions and overriding
+                                    </a>
+                                </li>
+                                                    </ul>
+                    </li>
+                                    <li>
+                        Frameworks
+
+                        <ul>
+                                                            <li class="">
+                                    <a href="http://php-di.org/doc/frameworks/symfony2.html">
+                                        Symfony 2
+                                    </a>
+                                </li>
+                                                            <li class="">
+                                    <a href="http://php-di.org/doc/frameworks/silex.html">
+                                        Silex
+                                    </a>
+                                </li>
+                                                            <li class="">
+                                    <a href="http://php-di.org/doc/frameworks/zf1.html">
+                                        Zend Framework 1
+                                    </a>
+                                </li>
+                                                            <li class="">
+                                    <a href="http://php-di.org/doc/frameworks/silly.html">
+                                        Silly
+                                    </a>
+                                </li>
+                                                    </ul>
+                    </li>
+                                    <li>
+                        Advanced topics
+
+                        <ul>
+                                                            <li class="">
+                                    <a href="http://php-di.org/doc/performances.html">
+                                        Performances
+                                    </a>
+                                </li>
+                                                            <li class="">
+                                    <a href="http://php-di.org/doc/scopes.html">
+                                        Scopes
+                                    </a>
+                                </li>
+                                                            <li class="">
+                                    <a href="http://php-di.org/doc/lazy-injection.html">
+                                        Lazy injection
+                                    </a>
+                                </li>
+                                                            <li class="">
+                                    <a href="http://php-di.org/doc/inject-on-instance.html">
+                                        Inject on an existing instance
+                                    </a>
+                                </li>
+                                                            <li class="">
+                                    <a href="http://php-di.org/doc/environments.html">
+                                        Injections depending on the environment
+                                    </a>
+                                </li>
+                                                    </ul>
+                    </li>
+                                    <li>
+                        Migration guides
+
+                        <ul>
+                                                            <li class="">
+                                    <a href="http://php-di.org/doc/migration/4.0.html">
+                                        From PHP-DI 3.x to 4.0
+                                    </a>
+                                </li>
+                                                            <li class="">
+                                    <a href="http://php-di.org/doc/migration/5.0.html">
+                                        From PHP-DI 4.x to 5.0
+                                    </a>
+                                </li>
+                                                    </ul>
+                    </li>
+                                    <li>
+                        Internals
+
+                        <ul>
+                                                            <li class="">
+                                    <a href="http://php-di.org/contributing.html">
+                                        Contributing
+                                    </a>
+                                </li>
+                                                            <li class="">
+                                    <a href="http://php-di.org/doc/how-it-works.html">
+                                        How PHP-DI works
+                                    </a>
+                                </li>
+                                                    </ul>
+                    </li>
+                                    <li>
+                        Old documentation
+
+                        <ul>
+                                                            <li class="">
+                                    <a href="https://github.com/PHP-DI/PHP-DI/tree/3.x/doc">
+                                        PHP-DI 3.x
+                                    </a>
+                                </li>
+                                                            <li class="">
+                                    <a href="https://github.com/PHP-DI/PHP-DI/tree/4.x/doc">
+                                        PHP-DI 4.x
+                                    </a>
+                                </li>
+                                                    </ul>
+                    </li>
+                            </ul>
+        </div>
+
+        <article>
+            <h1>PHP-DI in Symfony 2</h1>
 <p>If you are using Symfony 2, PHP-DI provides easy and clean integration, without replacing the original container
 (so all bundles and existing code still work).</p>
 <p>Just to be clear: PHP-DI will work alongside Symfony's container. So you can use both at the same time.</p>
 <h2>Installation</h2>
 <p>First, install the bridge:</p>
-<pre><code class="language-json">{
-    "require": {
-        "mnapoli/php-di": "The version you want here",
-        "mnapoli/php-di-symfony2": "*"
-    }
-}</code></pre>
+<pre><code>composer require php-di/symfony2-bridge</code></pre>
 <p>Now you need to configure Symfony to use the alternative container in your <code>AppKernel</code>:</p>
 <pre><code class="language-php">class AppKernel extends Kernel
 {
@@ -173,6 +317,29 @@ The <code>:</code> notation means <code>service_id:method</code>, whereas the <c
         $this-&gt;productService-&gt;clearStock();
     }
 }</code></pre>
+<h3>Routing annotations</h3>
+<p>It is possible to use <a href="http://richardmiller.co.uk/2011/10/25/symfony2-routing-to-controller-as-service-with-annotations/">annotations for routing</a> and still have the controller created by PHP-DI.</p>
+<p>You achieve that by specifying the service ID in the <code>@Route</code> annotation (which is most probably the class name itself unless you have a custom setup):</p>
+<pre><code class="language-php">/**
+ * @Route(service="My\TestController")
+ */
+class TestController extends Controller
+{
+    private $dependency;
+
+    public function __construct(SomeDependency $dependency)
+    {
+        $this-&gt;dependency = $dependency;
+    }
+
+    /**
+     * @Route("test")
+     */
+    public function testAction()
+    {
+        return new Response('ok');
+    }
+}</code></pre>
 <h2>Using Symfony's services in PHP-DI</h2>
 <p>Let's say you want to inject the <code>EntityManager</code> in your controller: the entity manager is defined
 in Symfony's container, and the controller is resolved by PHP-DI.</p>
@@ -180,7 +347,7 @@ in Symfony's container, and the controller is resolved by PHP-DI.</p>
 That's because PHP-DI is designed to play nice with others:</p>
 <pre><code class="language-php">return [
     'Acme\MyBundle\Controller\ProductController' =&gt; DI\object()
-        -&gt;constructor(DI\link('doctrine.orm.entity_manager')),
+        -&gt;constructor(DI\get('doctrine.orm.entity_manager')),
 ];</code></pre>
 <p>However Symfony was not designed to play with his friends, so it has no idea that there is
 another container in the application. <strong>You can't inject PHP-DI's services in a Symfony service</strong>.
@@ -192,9 +359,9 @@ instead of <code>doctrine.orm.entity_manager</code>.</p>
 <p>If you want to enjoy autowiring or annotations, you can simplify your life and write simple aliases
 like these:</p>
 <pre><code class="language-php">return [
-    'Psr\Log\LoggerInterface' =&gt; DI\link('logger'),
+    'Psr\Log\LoggerInterface' =&gt; DI\get('logger'),
     // PHP 5.5 notation:
-    ObjectManager::class =&gt; DI\link('doctrine.orm.entity_manager'),
+    ObjectManager::class =&gt; DI\get('doctrine.orm.entity_manager'),
 ];</code></pre>
 <p>Keep in mind that it's always better to type-hint against interfaces instead of class names!
 So write your aliases with interfaces as much as possible.</p>
@@ -203,43 +370,37 @@ So write your aliases with interfaces as much as possible.</p>
 <p>This bug has been fixed and will be released in &gt;=1.3.2 (not released yet at the time of writing).</p>
 <p>Full details are here: <a href="https://github.com/FriendsOfSymfony/FOSRestBundle/pull/743">FOSRestBundle#743</a></p>
 <h2>More</h2>
-<p>Read more on the <a href="https://github.com/mnapoli/PHP-DI-Symfony2">PHP-DI-Symfony2 project on Github</a>.</p>
+<p>Read more on the <a href="https://github.com/PHP-DI/Symfony2-Bridge">Symfony2-Bridge project on Github</a>.</p>
+        </article>
+
     </div>
 
 
             <footer>
-            <div class='pre-footer'>
-                <div class='container'>
-                    <p>
-                        <strong>Unsatisfied with the documentation?</strong>
-                        Please let us know, <a href="https://github.com/mnapoli/PHP-DI/issues/new">create an issue</a>,
-                        we will greatly appreciate it.
-                        You can chat with us on
-                        <a href="https://twitter.com/phpdi">Twitter</a> or
-                        <a href="https://gitter.im/mnapoli/PHP-DI">Gitter chat</a> too.
+            <div class='container'>
+                                    <p>
+                        A question? Unsatisfied with the documentation?
+                        Please <a href="https://github.com/PHP-DI/PHP-DI/issues/new">create an issue</a>
+                        or chat on
+                        <a href="https://gitter.im/PHP-DI/PHP-DI">Gitter</a> or
+                        <a href="https://twitter.com/phpdi">Twitter</a>.
                     </p>
-                </div>
-            </div>
-            <div class='deep-footer'>
-                <div class='container'>
-                    <div class='copyright'>
-                        Copyright &copy; 2014 <a href="http://mnapoli.fr/">Matthieu Napoli</a>
-                        Website generated with
-                        <a href="http://mnapoli.fr/Couscous/" target="_blank">Couscous</a>.
-                    </div>
-                </div>
+                                <p>
+                    By <a href="http://mnapoli.fr/">Matthieu Napoli</a>
+                    and <a href="https://github.com/PHP-DI/PHP-DI/graphs/contributors">contributors</a>
+                    |
+                    Website generated with
+                    <a href="http://mnapoli.fr/Couscous/" target="_blank">Couscous</a>.
+                </p>
             </div>
         </footer>
     
-            <script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
-        <script src="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/js/bootstrap.min.js" type="text/javascript"></script>
-        <script src="http://yandex.st/highlightjs/7.5/highlight.min.js"></script>
-        <script src="http://php-di.org/js/template.js"></script>
+            <script src="http://php-di.org/bower_components/jquery/dist/jquery.min.js"></script>
+        <script src="http://php-di.org/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+        <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.5/highlight.min.js"></script>
 
         <script>
             $(function() {
-                $("section>h1").wrap('<div class="page-header" />');
-                $("section>p:first-child").addClass('lead');
                 hljs.initHighlightingOnLoad();
             });
         </script>
@@ -272,5 +433,6 @@ So write your aliases with interfaces as much as possible.</p>
     </script>
     <noscript><p><img src="http://piwik.mnapoli.fr/piwik.php?idsite=2" style="border:0;" alt="" /></p></noscript>
     <!-- End Piwik Code -->
+
 </body>
 </html>

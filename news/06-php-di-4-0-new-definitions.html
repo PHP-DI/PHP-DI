@@ -12,15 +12,22 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <meta name="viewport" content="width=device-width">
 
-    <title>PHP-DI - The Dependency Injection Container for humans</title>
+    <title>What will change in PHP-DI 4: the new definition format - The Dependency Injection Container for humans</title>
     <meta name="description" content="PHP-DI is a Dependency Injection Container for PHP that intends to be practical and powerful">
 
     <link rel="canonical" href="http://php-di.org" />
 
-            <link href="http://php-di.org/css/bootstrap-theme_venera.min.css" media="all" rel="stylesheet" type="text/css">
-        <link href="http://fonts.googleapis.com/css?family=Abel:400|Oswald:300,400,700" media="all" rel="stylesheet" type="text/css">
+    <meta name="application-name" content="PHP-DI"/>
+    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="http://php-di.org/img/apple-touch-icon-144x144.png" />
+    <link rel="apple-touch-icon-precomposed" sizes="152x152" href="http://php-di.org/img/apple-touch-icon-152x152.png" />
+    <link rel="icon" type="image/png" href="http://php-di.org/img/favicon-32x32.png" sizes="32x32" />
+    <link rel="icon" type="image/png" href="http://php-di.org/img/favicon-16x16.png" sizes="16x16" />
+    <meta name="msapplication-TileColor" content="#484949" />
+    <meta name="msapplication-TileImage" content="http://php-di.org/img/mstile-144x144.png" />
+
+            <link href="http://fonts.googleapis.com/css?family=Abel:400|Oswald:300,400,700" media="all" rel="stylesheet" type="text/css">
         <link href="http://php-di.org/css/highlight.github.css" rel="stylesheet">
-        <link href="http://php-di.org/css/custom.css" rel="stylesheet">
+        <link href="http://php-di.org/css/all.min.css" rel="stylesheet">
     
     <script>
         if (window.location.href.indexOf('http://mnapoli.fr') === 0) {
@@ -30,52 +37,45 @@
 </head>
 <body>
 
-    <header id='header'>
-        <div class='navbar navbar-fixed-top'>
-            <div class='navbar-inner'>
-                <div class='container'>
-                    <a class='btn btn-navbar' data-target='.nav-collapse' data-toggle='collapse'>
-                        <span class='icon-bar'></span>
-                        <span class='icon-bar'></span>
-                        <span class='icon-bar'></span>
-                    </a>
-                    <a href="http://php-di.org/index.html" class="brand">PHP-DI</a>
-
-                    <div class='nav-collapse subnav-collapse collapse pull-right' id='top-navigation'>
-                        <ul class='nav'>
-                            <li><a href="http://php-di.org/">Home</a></li>
-                            <li><a href="http://php-di.org/news/">News</a></li>
-                            <li><a href="http://php-di.org/doc/getting-started.html">Getting started</a></li>
-                            <li><a href="http://php-di.org/doc/">Documentation</a></li>
-                            <li><a href="http://php-di.org/change-log.html">Change log</a></li>
-                            <li><a href="http://php-di.org/support.html">Support</a></li>
-                            <li><a href="https://github.com/mnapoli/PHP-DI"><i class="icon-github"></i> Github</a></li>
-                        </ul>
-                    </div>
+    <header>
+        <div class="navbar navbar-default navbar-fixed-top">
+            <div class="container">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#top-navigation">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand" href="http://php-di.org/index.html">PHP-DI</a>
+                </div>
+                <div class="collapse navbar-collapse" id="top-navigation">
+                    <ul class="nav navbar-nav navbar-right">
+                        <li><a href="http://php-di.org/doc/getting-started.html">Getting started</a></li>
+                        <li><a href="http://php-di.org/doc/">Documentation</a></li>
+                        <li><a href="http://php-di.org/news/">News</a></li>
+                        <li><a href="http://php-di.org/change-log.html">Change log</a></li>
+                        <li><a class="github" href="https://github.com/PHP-DI/PHP-DI"><i class="fa fa-github"></i></a></li>
+                    </ul>
                 </div>
             </div>
         </div>
     </header>
 
     
-    <section class='section-wrapper post-w'>
-        <div class='container'>
-            <div class='row'>
+    <section class="container">
+        <div class="row">
+            <div class="col-md-9">
 
-                <div class='span8'>
+                
+    <article>
+        <h1>What will change in PHP-DI 4: the new definition format</h1>
 
-                    
-    <div class='single-post-w'>
-        <h1 class='post-title'>What will change in PHP-DI 4: the new definition format</h1>
-
-        <p class='post-info'>
-            <span class='info-item'>
-              Posted by Matthieu Napoli
-            </span>
-            <span class='info-item'>January 16th 2014</span>
+        <p class="article-information">
+            Posted by Matthieu Napoli on January 16th 2014
         </p>
-        <div class='post-content'>
-            <p>In PHP-DI 4, the definition format will change. Autowiring and Annotations are still there, but the YAML
+
+        <p>In PHP-DI 4, the definition format will change. Autowiring and Annotations are still there, but the YAML
 and PHP array definitions have disappeared. Let's see why.</p>
 <h2>Why was YAML a bad choice</h2>
 <p>The recommended definition format for PHP-DI 3.x was YAML. Everybody loves YAML. This is a clean, short and readable format.</p>
@@ -227,118 +227,104 @@ by the bridge/adapter/bundle? Or isn't documented?</p>
 <p>The first one works great in combination with autowiring and annotations for example, to bind interfaces to classes,
 or set a value for non-object parameters (which cannot be done using autowiring alone).</p>
 <p>The second one is for when the definition is a bit more complex.</p>
-<p><strong>PHP-DI 4 is not released yet</strong>. You can however try the <a href="https://github.com/mnapoli/PHP-DI/releases/tag/4.0.0-beta2">4.0.0-beta2 version</a>
-or follow the <a href="https://github.com/mnapoli/PHP-DI/pull/119">4.0 pull request</a>.</p>
-        </div>
-    </div>
+<p><strong>PHP-DI 4 is not released yet</strong>. You can however try the <a href="https://github.com/PHP-DI/PHP-DI/releases/tag/4.0.0-beta2">4.0.0-beta2 version</a>
+or follow the <a href="https://github.com/PHP-DI/PHP-DI/pull/119">4.0 pull request</a>.</p>
+    </article>
 
-    <div class='post-comments-w'>
-        <h3 class='section-header'>
-            Comments
-        </h3>
-        <div id="disqus_thread"></div>
-        <noscript>
-            Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a>
-        </noscript>
-    </div>
+    <h3>
+        Comments
+    </h3>
+    <div id="disqus_thread"></div>
+    <noscript>
+        Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+    </noscript>
 
 
-                </div>
-
-                <div class='span4'>
-                    <div class='blog-side-bar'>
-
-                        <div class='blog-categories widget-tp'>
-                            <h3>
-                                <i class='icon-th-list'></i>
-                                All posts
-                            </h3>
-                            <ul>
-                                <li>
-                                    <a href="http://php-di.org/news/14-php-di-5-syntaxic-sugar.html">Syntactic sugar in PHP-DI 5</a>
-                                </li>
-                                <li>
-                                    <a href="http://php-di.org/news/13-php-di-4-4-released.html">PHP-DI 4.4 released</a>
-                                </li>
-                                <li>
-                                    <a href="http://php-di.org/news/12-php-di-is-better-with-php-5-6.html">PHP 5.6 is out and PHP-DI just got better</a>
-                                </li>
-                                <li>
-                                    <a href="http://php-di.org/news/11-php-di-4-3-released.html">PHP-DI 4.3 released</a>
-                                </li>
-                                <li>
-                                    <a href="http://php-di.org/news/10-php-di-4-2-released.html">PHP-DI 4.2 released</a>
-                                </li>
-                                <li>
-                                    <a href="http://php-di.org/news/09-php-di-4-1-released.html">PHP-DI 4.1 released</a>
-                                </li>
-                                <li>
-                                    <a href="http://php-di.org/news/08-10000-installs.html">10.000 installs!</a>
-                                </li>
-                                <li>
-                                    <a href="http://php-di.org/news/07-php-di-4-0-released.html">PHP-DI 4.0 released</a>
-                                </li>
-                                <li>
-                                    <a href="http://php-di.org/news/06-php-di-4-0-new-definitions.html">What will change in PHP-DI 4: the new definition format</a>
-                                </li>
-                                <li>
-                                    <a href="http://php-di.org/news/05-php-di-3-5.html">PHP-DI 3.5 released</a>
-                                </li>
-                                <li>
-                                    <a href="http://php-di.org/news/04-php-di-3-4.html">PHP-DI 3.4 released</a>
-                                </li>
-                                <li>
-                                    <a href="http://php-di.org/news/03-php-di-3-3.html">PHP-DI 3.3 released</a>
-                                </li>
-                                <li>
-                                    <a href="http://php-di.org/news/02-php-di-3-2.html">PHP-DI 3.2 released</a>
-                                </li>
-                                <li>
-                                    <a href="http://php-di.org/news/01-php-di-3-1.html">PHP-DI 3.1 released</a>
-                                </li>
-                            </ul>
-                        </div>
-
-                    </div>
-                </div>
             </div>
+
+            <div class="col-md-3">
+                <h3>
+                    All posts
+                </h3>
+
+                <ul class="all-posts list-unstyled">
+                    <li>
+                        <a href="http://php-di.org/news/15-php-di-5-0-released.html">PHP-DI 5.0 released</a>
+                    </li>
+                    <li>
+                        <a href="http://php-di.org/news/14-php-di-5-syntaxic-sugar.html">Syntactic sugar in PHP-DI 5</a>
+                    </li>
+                    <li>
+                        <a href="http://php-di.org/news/13-php-di-4-4-released.html">PHP-DI 4.4 released</a>
+                    </li>
+                    <li>
+                        <a href="http://php-di.org/news/12-php-di-is-better-with-php-5-6.html">PHP 5.6 is out and PHP-DI just got better</a>
+                    </li>
+                    <li>
+                        <a href="http://php-di.org/news/11-php-di-4-3-released.html">PHP-DI 4.3 released</a>
+                    </li>
+                    <li>
+                        <a href="http://php-di.org/news/10-php-di-4-2-released.html">PHP-DI 4.2 released</a>
+                    </li>
+                    <li>
+                        <a href="http://php-di.org/news/09-php-di-4-1-released.html">PHP-DI 4.1 released</a>
+                    </li>
+                    <li>
+                        <a href="http://php-di.org/news/08-10000-installs.html">10.000 installs!</a>
+                    </li>
+                    <li>
+                        <a href="http://php-di.org/news/07-php-di-4-0-released.html">PHP-DI 4.0 released</a>
+                    </li>
+                    <li>
+                        <a href="http://php-di.org/news/06-php-di-4-0-new-definitions.html">What will change in PHP-DI 4: the new definition format</a>
+                    </li>
+                    <li>
+                        <a href="http://php-di.org/news/05-php-di-3-5.html">PHP-DI 3.5 released</a>
+                    </li>
+                    <li>
+                        <a href="http://php-di.org/news/04-php-di-3-4.html">PHP-DI 3.4 released</a>
+                    </li>
+                    <li>
+                        <a href="http://php-di.org/news/03-php-di-3-3.html">PHP-DI 3.3 released</a>
+                    </li>
+                    <li>
+                        <a href="http://php-di.org/news/02-php-di-3-2.html">PHP-DI 3.2 released</a>
+                    </li>
+                    <li>
+                        <a href="http://php-di.org/news/01-php-di-3-1.html">PHP-DI 3.1 released</a>
+                    </li>
+                </ul>
+            </div>
+
         </div>
     </section>
 
 
             <footer>
-            <div class='pre-footer'>
-                <div class='container'>
-                    <p>
-                        <strong>Unsatisfied with the documentation?</strong>
-                        Please let us know, <a href="https://github.com/mnapoli/PHP-DI/issues/new">create an issue</a>,
-                        we will greatly appreciate it.
-                        You can chat with us on
-                        <a href="https://twitter.com/phpdi">Twitter</a> or
-                        <a href="https://gitter.im/mnapoli/PHP-DI">Gitter chat</a> too.
+            <div class='container'>
+                                    <p>
+                        A question? Unsatisfied with the documentation?
+                        Please <a href="https://github.com/PHP-DI/PHP-DI/issues/new">create an issue</a>
+                        or chat on
+                        <a href="https://gitter.im/PHP-DI/PHP-DI">Gitter</a> or
+                        <a href="https://twitter.com/phpdi">Twitter</a>.
                     </p>
-                </div>
-            </div>
-            <div class='deep-footer'>
-                <div class='container'>
-                    <div class='copyright'>
-                        Copyright &copy; 2014 <a href="http://mnapoli.fr/">Matthieu Napoli</a>
-                        Website generated with
-                        <a href="http://mnapoli.fr/Couscous/" target="_blank">Couscous</a>.
-                    </div>
-                </div>
+                                <p>
+                    By <a href="http://mnapoli.fr/">Matthieu Napoli</a>
+                    and <a href="https://github.com/PHP-DI/PHP-DI/graphs/contributors">contributors</a>
+                    |
+                    Website generated with
+                    <a href="http://mnapoli.fr/Couscous/" target="_blank">Couscous</a>.
+                </p>
             </div>
         </footer>
     
-                <script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
-        <script src="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/js/bootstrap.min.js" type="text/javascript"></script>
-        <script src="http://yandex.st/highlightjs/7.5/highlight.min.js"></script>
-        <script src="http://php-di.org/js/template.js"></script>
+                <script src="http://php-di.org/bower_components/jquery/dist/jquery.min.js"></script>
+        <script src="http://php-di.org/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+        <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.5/highlight.min.js"></script>
 
         <script>
             $(function() {
-                $("section>h1").wrap('<div class="page-header" />');
-                $("section>p:first-child").addClass('lead');
                 hljs.initHighlightingOnLoad();
             });
         </script>
@@ -383,5 +369,6 @@ or follow the <a href="https://github.com/mnapoli/PHP-DI/pull/119">4.0 pull requ
     </script>
     <noscript><p><img src="http://piwik.mnapoli.fr/piwik.php?idsite=2" style="border:0;" alt="" /></p></noscript>
     <!-- End Piwik Code -->
+
 </body>
 </html>

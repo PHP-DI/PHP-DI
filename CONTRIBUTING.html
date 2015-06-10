@@ -17,10 +17,17 @@
 
     <link rel="canonical" href="http://php-di.org" />
 
-            <link href="http://php-di.org/css/bootstrap-theme_venera.min.css" media="all" rel="stylesheet" type="text/css">
-        <link href="http://fonts.googleapis.com/css?family=Abel:400|Oswald:300,400,700" media="all" rel="stylesheet" type="text/css">
+    <meta name="application-name" content="PHP-DI"/>
+    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="http://php-di.org/img/apple-touch-icon-144x144.png" />
+    <link rel="apple-touch-icon-precomposed" sizes="152x152" href="http://php-di.org/img/apple-touch-icon-152x152.png" />
+    <link rel="icon" type="image/png" href="http://php-di.org/img/favicon-32x32.png" sizes="32x32" />
+    <link rel="icon" type="image/png" href="http://php-di.org/img/favicon-16x16.png" sizes="16x16" />
+    <meta name="msapplication-TileColor" content="#484949" />
+    <meta name="msapplication-TileImage" content="http://php-di.org/img/mstile-144x144.png" />
+
+            <link href="http://fonts.googleapis.com/css?family=Abel:400|Oswald:300,400,700" media="all" rel="stylesheet" type="text/css">
         <link href="http://php-di.org/css/highlight.github.css" rel="stylesheet">
-        <link href="http://php-di.org/css/custom.css" rel="stylesheet">
+        <link href="http://php-di.org/css/all.min.css" rel="stylesheet">
     
     <script>
         if (window.location.href.indexOf('http://mnapoli.fr') === 0) {
@@ -30,44 +37,40 @@
 </head>
 <body>
 
-    <header id='header'>
-        <div class='navbar navbar-fixed-top'>
-            <div class='navbar-inner'>
-                <div class='container'>
-                    <a class='btn btn-navbar' data-target='.nav-collapse' data-toggle='collapse'>
-                        <span class='icon-bar'></span>
-                        <span class='icon-bar'></span>
-                        <span class='icon-bar'></span>
-                    </a>
-                    <a href="http://php-di.org/index.html" class="brand">PHP-DI</a>
-
-                    <div class='nav-collapse subnav-collapse collapse pull-right' id='top-navigation'>
-                        <ul class='nav'>
-                            <li><a href="http://php-di.org/">Home</a></li>
-                            <li><a href="http://php-di.org/news/">News</a></li>
-                            <li><a href="http://php-di.org/doc/getting-started.html">Getting started</a></li>
-                            <li><a href="http://php-di.org/doc/">Documentation</a></li>
-                            <li><a href="http://php-di.org/change-log.html">Change log</a></li>
-                            <li><a href="http://php-di.org/support.html">Support</a></li>
-                            <li><a href="https://github.com/mnapoli/PHP-DI"><i class="icon-github"></i> Github</a></li>
-                        </ul>
-                    </div>
+    <header>
+        <div class="navbar navbar-default navbar-fixed-top">
+            <div class="container">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#top-navigation">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand" href="http://php-di.org/index.html">PHP-DI</a>
+                </div>
+                <div class="collapse navbar-collapse" id="top-navigation">
+                    <ul class="nav navbar-nav navbar-right">
+                        <li><a href="http://php-di.org/doc/getting-started.html">Getting started</a></li>
+                        <li><a href="http://php-di.org/doc/">Documentation</a></li>
+                        <li><a href="http://php-di.org/news/">News</a></li>
+                        <li><a href="http://php-di.org/change-log.html">Change log</a></li>
+                        <li><a class="github" href="https://github.com/PHP-DI/PHP-DI"><i class="fa fa-github"></i></a></li>
+                    </ul>
                 </div>
             </div>
         </div>
     </header>
 
-            <section class='section-wrapper'>
-            <div class="container">
-                <section>
-                    <h1>Contributing</h1>
-<p><a href="https://travis-ci.org/mnapoli/PHP-DI"><img src="https://travis-ci.org/mnapoli/PHP-DI.png?branch=master" alt="Build Status" /></a> <a href="https://coveralls.io/r/mnapoli/PHP-DI?branch=master"><img src="https://coveralls.io/repos/mnapoli/PHP-DI/badge.png?branch=master" alt="Coverage Status" /></a></p>
+            <article class="container">
+            <h1>Contributing</h1>
+<p><a href="https://travis-ci.org/PHP-DI/PHP-DI"><img src="https://travis-ci.org/PHP-DI/PHP-DI.png?branch=master" alt="Build Status" /></a> <a href="https://coveralls.io/r/PHP-DI/PHP-DI?branch=master"><img src="https://coveralls.io/repos/PHP-DI/PHP-DI/badge.png?branch=master" alt="Coverage Status" /></a></p>
 <p>PHP-DI is license under the MIT License.</p>
 <h2>Set up</h2>
 <ul>
 <li>Check out the sources using git or download them</li>
 </ul>
-<pre><code class="language-bash">$ git clone https://github.com/mnapoli/PHP-DI.git</code></pre>
+<pre><code class="language-bash">$ git clone https://github.com/PHP-DI/PHP-DI.git</code></pre>
 <ul>
 <li>Install the libraries using composer:</li>
 </ul>
@@ -81,51 +84,41 @@ $ php composer.phar install</code></pre>
 <p>Read the <a href="doc/how-it-works.html">How it works</a> documentation.</p>
 <h2>What to do?</h2>
 <ul>
-<li>Add tests: pick up uncovered situations in the <a href="https://coveralls.io/r/mnapoli/PHP-DI">code coverage report</a></li>
-<li>Resolve issues: <a href="https://github.com/mnapoli/PHP-DI/issues">issue list</a></li>
+<li>Add tests: pick up uncovered situations in the <a href="https://coveralls.io/r/PHP-DI/PHP-DI">code coverage report</a></li>
+<li>Resolve issues: <a href="https://github.com/PHP-DI/PHP-DI/issues">issue list</a></li>
 <li>Improve the documentation</li>
 <li>…</li>
 </ul>
 <h2>Coding style</h2>
 <p>The code follows PSR0, PSR1 and <a href="https://github.com/php-fig/fig-standards/blob/master/accepted/PSR-2-coding-style-guide.html">PSR2</a>.</p>
 <p>Also, do not hesitate to add your name to the author list of a class in the docblock if you improve it.</p>
-                </section>
-            </div>
-        </section>
+        </article>
     
             <footer>
-            <div class='pre-footer'>
-                <div class='container'>
-                    <p>
-                        <strong>Unsatisfied with the documentation?</strong>
-                        Please let us know, <a href="https://github.com/mnapoli/PHP-DI/issues/new">create an issue</a>,
-                        we will greatly appreciate it.
-                        You can chat with us on
-                        <a href="https://twitter.com/phpdi">Twitter</a> or
-                        <a href="https://gitter.im/mnapoli/PHP-DI">Gitter chat</a> too.
+            <div class='container'>
+                                    <p>
+                        A question? Unsatisfied with the documentation?
+                        Please <a href="https://github.com/PHP-DI/PHP-DI/issues/new">create an issue</a>
+                        or chat on
+                        <a href="https://gitter.im/PHP-DI/PHP-DI">Gitter</a> or
+                        <a href="https://twitter.com/phpdi">Twitter</a>.
                     </p>
-                </div>
-            </div>
-            <div class='deep-footer'>
-                <div class='container'>
-                    <div class='copyright'>
-                        Copyright &copy; 2014 <a href="http://mnapoli.fr/">Matthieu Napoli</a>
-                        Website generated with
-                        <a href="http://mnapoli.fr/Couscous/" target="_blank">Couscous</a>.
-                    </div>
-                </div>
+                                <p>
+                    By <a href="http://mnapoli.fr/">Matthieu Napoli</a>
+                    and <a href="https://github.com/PHP-DI/PHP-DI/graphs/contributors">contributors</a>
+                    |
+                    Website generated with
+                    <a href="http://mnapoli.fr/Couscous/" target="_blank">Couscous</a>.
+                </p>
             </div>
         </footer>
     
-            <script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
-        <script src="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/js/bootstrap.min.js" type="text/javascript"></script>
-        <script src="http://yandex.st/highlightjs/7.5/highlight.min.js"></script>
-        <script src="http://php-di.org/js/template.js"></script>
+            <script src="http://php-di.org/bower_components/jquery/dist/jquery.min.js"></script>
+        <script src="http://php-di.org/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+        <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.5/highlight.min.js"></script>
 
         <script>
             $(function() {
-                $("section>h1").wrap('<div class="page-header" />');
-                $("section>p:first-child").addClass('lead');
                 hljs.initHighlightingOnLoad();
             });
         </script>
@@ -158,5 +151,6 @@ $ php composer.phar install</code></pre>
     </script>
     <noscript><p><img src="http://piwik.mnapoli.fr/piwik.php?idsite=2" style="border:0;" alt="" /></p></noscript>
     <!-- End Piwik Code -->
+
 </body>
 </html>

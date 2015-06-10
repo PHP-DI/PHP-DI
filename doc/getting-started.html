@@ -12,15 +12,22 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <meta name="viewport" content="width=device-width">
 
-    <title>PHP-DI - The Dependency Injection Container for humans</title>
+    <title>Getting started - The Dependency Injection Container for humans</title>
     <meta name="description" content="PHP-DI is a Dependency Injection Container for PHP that intends to be practical and powerful">
 
     <link rel="canonical" href="http://php-di.org" />
 
-            <link href="http://php-di.org/css/bootstrap-theme_venera.min.css" media="all" rel="stylesheet" type="text/css">
-        <link href="http://fonts.googleapis.com/css?family=Abel:400|Oswald:300,400,700" media="all" rel="stylesheet" type="text/css">
+    <meta name="application-name" content="PHP-DI"/>
+    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="http://php-di.org/img/apple-touch-icon-144x144.png" />
+    <link rel="apple-touch-icon-precomposed" sizes="152x152" href="http://php-di.org/img/apple-touch-icon-152x152.png" />
+    <link rel="icon" type="image/png" href="http://php-di.org/img/favicon-32x32.png" sizes="32x32" />
+    <link rel="icon" type="image/png" href="http://php-di.org/img/favicon-16x16.png" sizes="16x16" />
+    <meta name="msapplication-TileColor" content="#484949" />
+    <meta name="msapplication-TileImage" content="http://php-di.org/img/mstile-144x144.png" />
+
+            <link href="http://fonts.googleapis.com/css?family=Abel:400|Oswald:300,400,700" media="all" rel="stylesheet" type="text/css">
         <link href="http://php-di.org/css/highlight.github.css" rel="stylesheet">
-        <link href="http://php-di.org/css/custom.css" rel="stylesheet">
+        <link href="http://php-di.org/css/all.min.css" rel="stylesheet">
     
     <script>
         if (window.location.href.indexOf('http://mnapoli.fr') === 0) {
@@ -30,218 +37,342 @@
 </head>
 <body>
 
-    <header id='header'>
-        <div class='navbar navbar-fixed-top'>
-            <div class='navbar-inner'>
-                <div class='container'>
-                    <a class='btn btn-navbar' data-target='.nav-collapse' data-toggle='collapse'>
-                        <span class='icon-bar'></span>
-                        <span class='icon-bar'></span>
-                        <span class='icon-bar'></span>
-                    </a>
-                    <a href="http://php-di.org/index.html" class="brand">PHP-DI</a>
-
-                    <div class='nav-collapse subnav-collapse collapse pull-right' id='top-navigation'>
-                        <ul class='nav'>
-                            <li><a href="http://php-di.org/">Home</a></li>
-                            <li><a href="http://php-di.org/news/">News</a></li>
-                            <li><a href="http://php-di.org/doc/getting-started.html">Getting started</a></li>
-                            <li><a href="http://php-di.org/doc/">Documentation</a></li>
-                            <li><a href="http://php-di.org/change-log.html">Change log</a></li>
-                            <li><a href="http://php-di.org/support.html">Support</a></li>
-                            <li><a href="https://github.com/mnapoli/PHP-DI"><i class="icon-github"></i> Github</a></li>
-                        </ul>
-                    </div>
+    <header>
+        <div class="navbar navbar-default navbar-fixed-top">
+            <div class="container">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#top-navigation">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand" href="http://php-di.org/index.html">PHP-DI</a>
+                </div>
+                <div class="collapse navbar-collapse" id="top-navigation">
+                    <ul class="nav navbar-nav navbar-right">
+                        <li><a href="http://php-di.org/doc/getting-started.html">Getting started</a></li>
+                        <li><a href="http://php-di.org/doc/">Documentation</a></li>
+                        <li><a href="http://php-di.org/news/">News</a></li>
+                        <li><a href="http://php-di.org/change-log.html">Change log</a></li>
+                        <li><a class="github" href="https://github.com/PHP-DI/PHP-DI"><i class="fa fa-github"></i></a></li>
+                    </ul>
                 </div>
             </div>
         </div>
     </header>
 
     
-    <header class="jumbotron subhead" id="overview">
-        <div class="container">
-            <div class="docs-header-icon">
-                <h1>Documentation</h1>
-                <p class="lead">
-                    This is the documentation for PHP-DI 4. The documentation for v3 is
-                    <a href="https://github.com/mnapoli/PHP-DI/tree/3.x/doc">still available here</a>.
-                </p>
-            </div>
-        </div>
-    </header>
-    <div class='sub-jumbotron'>
-        <div class='container'>
+    <div class="container documentation">
+
+        <div class="sidebar">
             <ul>
-                <li>
-                    <a href="/doc/" class="">Full documentation</a>
-                </li>
-                <li>
-                    <a href="/doc/getting-started.html" class="active">Getting started</a>
-                </li>
-                <li>
-                    <a href="/doc/best-practices.html" class="">Best practices</a>
-                </li>
-                <li>
-                    <a href="/doc/container-configuration.html" class="">Configuring the container</a>
-                </li>
-                <li>
-                    <a href="/doc/container.html" class="">Using the container</a>
-                </li>
-                <li>
-                    <a href="/doc/definition.html" class="">Defining injections</a>
-                </li>
-            </ul>
+                                    <li>
+                        Introduction
+
+                        <ul>
+                                                            <li class="">
+                                    <a href="http://php-di.org/doc/getting-started.html">
+                                        Getting started
+                                    </a>
+                                </li>
+                                                            <li class="">
+                                    <a href="http://php-di.org/doc/understanding-di.html">
+                                        Understanding dependency injection
+                                    </a>
+                                </li>
+                                                            <li class="">
+                                    <a href="http://php-di.org/doc/best-practices.html">
+                                        "Best practices" guide
+                                    </a>
+                                </li>
+                                                    </ul>
+                    </li>
+                                    <li>
+                        Usage
+
+                        <ul>
+                                                            <li class="">
+                                    <a href="http://php-di.org/doc/container-configuration.html">
+                                        Configuring the container
+                                    </a>
+                                </li>
+                                                            <li class="">
+                                    <a href="http://php-di.org/doc/container.html">
+                                        Using the container
+                                    </a>
+                                </li>
+                                                    </ul>
+                    </li>
+                                    <li>
+                        Definitions
+
+                        <ul>
+                                                            <li class="">
+                                    <a href="http://php-di.org/doc/definition.html">
+                                        Introduction
+                                    </a>
+                                </li>
+                                                            <li class="">
+                                    <a href="http://php-di.org/doc/autowiring.html">
+                                        Autowiring
+                                    </a>
+                                </li>
+                                                            <li class="">
+                                    <a href="http://php-di.org/doc/php-definitions.html">
+                                        PHP definitions
+                                    </a>
+                                </li>
+                                                            <li class="">
+                                    <a href="http://php-di.org/doc/annotations.html">
+                                        Annotations
+                                    </a>
+                                </li>
+                                                            <li class="">
+                                    <a href="http://php-di.org/doc/definition-overriding.html">
+                                        Definition extensions and overriding
+                                    </a>
+                                </li>
+                                                    </ul>
+                    </li>
+                                    <li>
+                        Frameworks
+
+                        <ul>
+                                                            <li class="">
+                                    <a href="http://php-di.org/doc/frameworks/symfony2.html">
+                                        Symfony 2
+                                    </a>
+                                </li>
+                                                            <li class="">
+                                    <a href="http://php-di.org/doc/frameworks/silex.html">
+                                        Silex
+                                    </a>
+                                </li>
+                                                            <li class="">
+                                    <a href="http://php-di.org/doc/frameworks/zf1.html">
+                                        Zend Framework 1
+                                    </a>
+                                </li>
+                                                            <li class="">
+                                    <a href="http://php-di.org/doc/frameworks/silly.html">
+                                        Silly
+                                    </a>
+                                </li>
+                                                    </ul>
+                    </li>
+                                    <li>
+                        Advanced topics
+
+                        <ul>
+                                                            <li class="">
+                                    <a href="http://php-di.org/doc/performances.html">
+                                        Performances
+                                    </a>
+                                </li>
+                                                            <li class="">
+                                    <a href="http://php-di.org/doc/scopes.html">
+                                        Scopes
+                                    </a>
+                                </li>
+                                                            <li class="">
+                                    <a href="http://php-di.org/doc/lazy-injection.html">
+                                        Lazy injection
+                                    </a>
+                                </li>
+                                                            <li class="">
+                                    <a href="http://php-di.org/doc/inject-on-instance.html">
+                                        Inject on an existing instance
+                                    </a>
+                                </li>
+                                                            <li class="">
+                                    <a href="http://php-di.org/doc/environments.html">
+                                        Injections depending on the environment
+                                    </a>
+                                </li>
+                                                    </ul>
+                    </li>
+                                    <li>
+                        Migration guides
+
+                        <ul>
+                                                            <li class="">
+                                    <a href="http://php-di.org/doc/migration/4.0.html">
+                                        From PHP-DI 3.x to 4.0
+                                    </a>
+                                </li>
+                                                            <li class="">
+                                    <a href="http://php-di.org/doc/migration/5.0.html">
+                                        From PHP-DI 4.x to 5.0
+                                    </a>
+                                </li>
+                                                    </ul>
+                    </li>
+                                    <li>
+                        Internals
+
+                        <ul>
+                                                            <li class="">
+                                    <a href="http://php-di.org/contributing.html">
+                                        Contributing
+                                    </a>
+                                </li>
+                                                            <li class="">
+                                    <a href="http://php-di.org/doc/how-it-works.html">
+                                        How PHP-DI works
+                                    </a>
+                                </li>
+                                                    </ul>
+                    </li>
+                                    <li>
+                        Old documentation
+
+                        <ul>
+                                                            <li class="">
+                                    <a href="https://github.com/PHP-DI/PHP-DI/tree/3.x/doc">
+                                        PHP-DI 3.x
+                                    </a>
+                                </li>
+                                                            <li class="">
+                                    <a href="https://github.com/PHP-DI/PHP-DI/tree/4.x/doc">
+                                        PHP-DI 4.x
+                                    </a>
+                                </li>
+                                                    </ul>
+                    </li>
+                            </ul>
         </div>
-    </div>
 
-    <div class="container docs-w">
-        <h1>Getting started</h1>
+        <article>
+            <h1>Getting started with PHP-DI</h1>
+<p>Welcome! This guide will help you get started with using PHP-DI in your project.</p>
+<p>Before beginning, you need to know what dependency injection is. If you don't, there's a whole article dedicated to it: <a href="understanding-di.html">Understanding dependency injection</a>.</p>
 <h2>Installation</h2>
-<p>PHP-DI works with <strong>PHP 5.3</strong> or higher. But seriously, use 5.5 or even 5.6.</p>
-<p>The easiest way is to install PHP-DI with <a href="http://getcomposer.org/doc/00-intro.html">Composer</a>.
-Create a file named <code>composer.json</code> in your project root:</p>
-<pre><code class="language-json">{
-    "require": {
-        "mnapoli/php-di": "~4.0"
+<p>Install PHP-DI with <a href="http://getcomposer.org/doc/00-intro.html">Composer</a>:</p>
+<pre><code class="language-json">composer require php-di/php-di</code></pre>
+<h2>Basic usage</h2>
+<h3>1. Use dependency injection</h3>
+<p>First, let's write code using dependency injection without thinking about PHP-DI:</p>
+<pre><code class="language-php">class Mailer
+{
+    public function mail($recipient, $content)
+    {
+        // send an email to the recipient
     }
 }</code></pre>
-<p>Then, run the following commands:</p>
-<pre><code class="language-bash">$ curl -s http://getcomposer.org/installer | php
-$ php composer.phar install</code></pre>
-<p>If you don't use Composer, you can directly <a href="https://github.com/mnapoli/PHP-DI/releases">download</a> the sources and configure it with your autoloader.</p>
-<h2>Define dependencies</h2>
-<p>You have to define a dependency graph between your objects, which we can represent like so (nodes are objects, links are dependencies):</p>
-<p><img src="graph.png" alt="" /></p>
-<p>PHP-DI offers several ways to define dependencies, so use which ones you like.</p>
-<p>Below is a quick introduction to some options, but you can also read <a href="definition.html">the full documentation</a>.</p>
-<h3>Autowiring</h3>
-<p>PHP-DI can use <a href="http://fr.php.net/manual/fr/book.reflection.php">PHP Reflection</a> to understand what parameters a constructor needs:</p>
-<pre><code class="language-php">class Foo {
-    private $bar;
+<pre><code class="language-php">class UserManager
+{
+    private $mailer;
 
-    public function __construct(Bar $bar) {
-        return $this-&gt;bar = $bar;
+    public function __construct(Mailer $mailer)
+    {
+        $this-&gt;mailer = $mailer;
+    }
+
+    public function register($email, $password)
+    {
+        // The user just registered, we create his account
+        // ...
+
+        // We send him an email to say hello!
+        $this-&gt;mailer-&gt;mail($email, 'Hello and welcome!');
     }
 }</code></pre>
-<p>PHP-DI will know that it should inject an instance of the <code>Bar</code> interface or class.</p>
-<p><strong>No configuration needed!</strong></p>
-<p>Of course, this comes with limitations:</p>
-<ul>
-<li>only works with constructor injection</li>
-<li>only works if your parameters are classes, and are typed (else PHP-DI can't guess what you expect)</li>
-<li>if the type of the parameter is an interface, you will need to configure which implementation to use in the config file (see below)</li>
-</ul>
-<p>However, autowiring generally covers 80% of the cases.</p>
-<h3>Annotations</h3>
-<p>You can also use annotations to define injections, here is a short example:</p>
-<pre><code class="language-php">&lt;?php
-
-class Foo {
-    /**
-     * @Inject
-     * @var Bar
-     */
-    protected $bar;
-
-    /**
-     * @Inject
-     */
-    public function setBaz(Baz $bin) {
-    }
-
-    /**
-     * @Inject({"db.host", "db.port"})
-     */
-    public function setValues($param1, $param2) {
-    }
-}</code></pre>
-<p>See also the <a href="definition.html">complete documentation about annotations</a>.</p>
-<h3>PHP array</h3>
-<p>You can define injections with a PHP array too (this example uses PHP 5.4 and 5.5 features):</p>
-<pre><code class="language-php">&lt;?php
-return [
-
-    // Values
-    'db.host' =&gt; 'localhost',
-    'db.port' =&gt; 5000,
-
-    // Class
-    MyDbAdapter::class =&gt; DI\object()
-        -&gt;constructor(DI\link('db.host'), DI\link('db.port')),
-
-];</code></pre>
-<p>See also the <a href="definition.html">complete documentation about array configuration</a>.</p>
-<p>You need to configure the container to import this file:</p>
-<pre><code class="language-php">$builder = new ContainerBuilder();
-$builder-&gt;addDefinitions('config.php');
-
+<p>As we can see, the <code>UserManager</code> takes the <code>Mailer</code> as a constructor parameter: this is dependency injection!</p>
+<h3>2. Create the container</h3>
+<p>You can create a container instance preconfigured for development very easily:</p>
+<pre><code class="language-php">$container = DI\ContainerBuilder::buildDevContainer();</code></pre>
+<p>If you want to register definition files (explained below) or tweak some options, you can use the container builder:</p>
+<pre><code class="language-php">$builder = new DI\ContainerBuilder();
+$builder-&gt;...
 $container = $builder-&gt;build();</code></pre>
-<h2>Get objects from the container</h2>
-<pre><code class="language-php">$foo = $container-&gt;get('Foo');</code></pre>
-<p>But wait! Do not use this everywhere because this makes your code <strong>dependent on the container</strong>.
-This is an antipattern to dependency injection (it is like the service locator pattern: dependency <em>fetching</em> rather than <em>injection</em>).</p>
-<p>So PHP-DI container should be called at the root of your application (in your Front Controller for example).
-To quote the Symfony docs about Dependency Injection:</p>
+<h3>3. Create the objects</h3>
+<p>Without PHP-DI, we would have to &quot;wire&quot; the dependencies manually like this:</p>
+<pre><code class="language-php">$mailer = new Mailer();
+$userManager = new UserManager($mailer);</code></pre>
+<p>Instead, we can let PHP-DI figure out the dependencies:</p>
+<pre><code class="language-php">$userManager = $container-&gt;get('UserManager');</code></pre>
+<p>Behind the scenes, PHP-DI will create both a Mailer object and a UserManager object.</p>
+<blockquote>
+<p>How does it know what to inject?</p>
+</blockquote>
+<p>The container uses a technique called <strong>autowiring</strong>. This is not unique to PHP-DI, but this is still awesome. It will scan the code and see what are the parameters needed in the constructors.</p>
+<p>In our example, the <code>UserManager</code> constructor takes a <code>Mailer</code> object: PHP-DI knows that it needs to create one. Pretty basic, but very efficient.</p>
+<blockquote>
+<p>Wait, isn't that weird and risky to scan PHP code like that?</p>
+</blockquote>
+<p>Don't worry, PHP-DI uses <a href="http://php.net/manual/en/book.reflection.php">PHP's Reflection classes</a> which is pretty standard: Laravel, Zend Framework and many other containers do the same. Performance wise, such information is read once and then cached, it has no impact.</p>
+<h2>Defining injections</h2>
+<p>We have seen <strong>autowiring</strong>, which is when PHP-DI figures out automatically the dependencies a class needs. But we have 3 ways to define what to inject in a class:</p>
+<ul>
+<li>using <a href="autowiring.html">autowiring</a></li>
+<li>using <a href="annotations.html">annotations</a></li>
+<li>using <a href="php-definitions.html">PHP definitions</a></li>
+</ul>
+<p>Every one of them is different and optional. Here is an example of PHP definitions in a file:</p>
+<pre><code class="language-php">return [
+    'api.url'    =&gt; 'http://api.example.com',
+    'Webservice' =&gt; function (Container $c) {
+        return new Webservice($c-&gt;get('api.url'));
+    },
+    'Controller' =&gt; DI\object()
+        -&gt;constructor(DI\get('Webservice')),
+];</code></pre>
+<p>Please read the <a href="definition.html">Defining injections</a> documentation to learn about autowiring, annotations and PHP definitions.</p>
+<h2>Framework integration</h2>
+<p>We have seen in the example above that we can use the container to get objects:</p>
+<pre><code class="language-php">$userManager = $container-&gt;get('UserManager');</code></pre>
+<p>However we don't want to call the container everywhere in our application: it would <strong>couple our code to the container</strong>. This is known as the <em>service locator antipattern</em> - or dependency <em>fetching</em> rather than <em>injection</em>.</p>
+<p>To quote the Symfony documentation:</p>
 <blockquote>
 <p>You will need to get [an object] from the container at some point but this should be as few times as possible at the entry point to your application.</p>
 </blockquote>
-<p>For this reason, we are trying to provide integration with MVC frameworks (see below).</p>
-<p>To sum up:</p>
-<ul>
-<li>If you can, use <code>$container-&gt;get()</code> in you root application class or front controller</li>
-<li>Else, use <code>$container-&gt;get()</code> in your controllers (but avoid it in your services) but keep in mind that your controllers will be dependent on the container</li>
-</ul>
-<h4>Frameworks integration</h4>
+<p>For this reason, PHP-DI integrates with some frameworks so that you don't have to call the container (dependencies are injected in controllers):</p>
 <ul>
 <li><a href="frameworks/symfony2.html">Symfony 2</a></li>
+<li><a href="frameworks/silex.html">Silex</a></li>
 <li><a href="frameworks/zf1.html">Zend Framework 1</a></li>
-<li><a href="https://github.com/mnapoli/PHP-DI-ZF2">Zend Framework 2</a> (beta version)</li>
+<li><a href="https://github.com/PHP-DI/ZF2-Bridge">Zend Framework 2</a> (beta version)</li>
+<li><a href="frameworks/silly.html">Silly</a></li>
 </ul>
+<p>If you want to use PHP-DI with another framework or your own code, try to use <code>$container-&gt;get()</code> in you root application class or front controller. Have a look at this <a href="https://github.com/PHP-DI/demo"><strong>demo application</strong></a> built around PHP-DI for a practical example.</p>
 <h2>What's next</h2>
-<p>You can head over to <a href="README.html">the documentation index</a>.</p>
-<p>You can also read the <a href="best-practices.html">Best practices guide</a>, it's a good way to get a good view on
-when to use each of PHP-DI's features.</p>
+<p>You can head over to <a href="README.html">the documentation index</a>. You can also read the <a href="best-practices.html">Best practices guide</a>, it's a good way to get a good view on when to use each of PHP-DI's features.</p>
 <p>Here are some other topics that might interest you right now:</p>
 <ul>
 <li><a href="container-configuration.html">Configuring the container</a></li>
-<li><a href="definition.html">Define injections</a></li>
+<li><a href="definition.html">Defining injections</a></li>
 </ul>
+        </article>
+
     </div>
 
 
             <footer>
-            <div class='pre-footer'>
-                <div class='container'>
-                    <p>
-                        <strong>Unsatisfied with the documentation?</strong>
-                        Please let us know, <a href="https://github.com/mnapoli/PHP-DI/issues/new">create an issue</a>,
-                        we will greatly appreciate it.
-                        You can chat with us on
-                        <a href="https://twitter.com/phpdi">Twitter</a> or
-                        <a href="https://gitter.im/mnapoli/PHP-DI">Gitter chat</a> too.
+            <div class='container'>
+                                    <p>
+                        A question? Unsatisfied with the documentation?
+                        Please <a href="https://github.com/PHP-DI/PHP-DI/issues/new">create an issue</a>
+                        or chat on
+                        <a href="https://gitter.im/PHP-DI/PHP-DI">Gitter</a> or
+                        <a href="https://twitter.com/phpdi">Twitter</a>.
                     </p>
-                </div>
-            </div>
-            <div class='deep-footer'>
-                <div class='container'>
-                    <div class='copyright'>
-                        Copyright &copy; 2014 <a href="http://mnapoli.fr/">Matthieu Napoli</a>
-                        Website generated with
-                        <a href="http://mnapoli.fr/Couscous/" target="_blank">Couscous</a>.
-                    </div>
-                </div>
+                                <p>
+                    By <a href="http://mnapoli.fr/">Matthieu Napoli</a>
+                    and <a href="https://github.com/PHP-DI/PHP-DI/graphs/contributors">contributors</a>
+                    |
+                    Website generated with
+                    <a href="http://mnapoli.fr/Couscous/" target="_blank">Couscous</a>.
+                </p>
             </div>
         </footer>
     
-            <script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
-        <script src="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/js/bootstrap.min.js" type="text/javascript"></script>
-        <script src="http://yandex.st/highlightjs/7.5/highlight.min.js"></script>
-        <script src="http://php-di.org/js/template.js"></script>
+            <script src="http://php-di.org/bower_components/jquery/dist/jquery.min.js"></script>
+        <script src="http://php-di.org/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+        <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.5/highlight.min.js"></script>
 
         <script>
             $(function() {
-                $("section>h1").wrap('<div class="page-header" />');
-                $("section>p:first-child").addClass('lead');
                 hljs.initHighlightingOnLoad();
             });
         </script>
@@ -274,5 +405,6 @@ when to use each of PHP-DI's features.</p>
     </script>
     <noscript><p><img src="http://piwik.mnapoli.fr/piwik.php?idsite=2" style="border:0;" alt="" /></p></noscript>
     <!-- End Piwik Code -->
+
 </body>
 </html>

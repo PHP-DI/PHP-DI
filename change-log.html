@@ -17,10 +17,17 @@
 
     <link rel="canonical" href="http://php-di.org" />
 
-            <link href="http://php-di.org/css/bootstrap-theme_venera.min.css" media="all" rel="stylesheet" type="text/css">
-        <link href="http://fonts.googleapis.com/css?family=Abel:400|Oswald:300,400,700" media="all" rel="stylesheet" type="text/css">
+    <meta name="application-name" content="PHP-DI"/>
+    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="http://php-di.org/img/apple-touch-icon-144x144.png" />
+    <link rel="apple-touch-icon-precomposed" sizes="152x152" href="http://php-di.org/img/apple-touch-icon-152x152.png" />
+    <link rel="icon" type="image/png" href="http://php-di.org/img/favicon-32x32.png" sizes="32x32" />
+    <link rel="icon" type="image/png" href="http://php-di.org/img/favicon-16x16.png" sizes="16x16" />
+    <meta name="msapplication-TileColor" content="#484949" />
+    <meta name="msapplication-TileImage" content="http://php-di.org/img/mstile-144x144.png" />
+
+            <link href="http://fonts.googleapis.com/css?family=Abel:400|Oswald:300,400,700" media="all" rel="stylesheet" type="text/css">
         <link href="http://php-di.org/css/highlight.github.css" rel="stylesheet">
-        <link href="http://php-di.org/css/custom.css" rel="stylesheet">
+        <link href="http://php-di.org/css/all.min.css" rel="stylesheet">
     
     <script>
         if (window.location.href.indexOf('http://mnapoli.fr') === 0) {
@@ -30,54 +37,95 @@
 </head>
 <body>
 
-    <header id='header'>
-        <div class='navbar navbar-fixed-top'>
-            <div class='navbar-inner'>
-                <div class='container'>
-                    <a class='btn btn-navbar' data-target='.nav-collapse' data-toggle='collapse'>
-                        <span class='icon-bar'></span>
-                        <span class='icon-bar'></span>
-                        <span class='icon-bar'></span>
-                    </a>
-                    <a href="http://php-di.org/index.html" class="brand">PHP-DI</a>
-
-                    <div class='nav-collapse subnav-collapse collapse pull-right' id='top-navigation'>
-                        <ul class='nav'>
-                            <li><a href="http://php-di.org/">Home</a></li>
-                            <li><a href="http://php-di.org/news/">News</a></li>
-                            <li><a href="http://php-di.org/doc/getting-started.html">Getting started</a></li>
-                            <li><a href="http://php-di.org/doc/">Documentation</a></li>
-                            <li><a href="http://php-di.org/change-log.html">Change log</a></li>
-                            <li><a href="http://php-di.org/support.html">Support</a></li>
-                            <li><a href="https://github.com/mnapoli/PHP-DI"><i class="icon-github"></i> Github</a></li>
-                        </ul>
-                    </div>
+    <header>
+        <div class="navbar navbar-default navbar-fixed-top">
+            <div class="container">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#top-navigation">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand" href="http://php-di.org/index.html">PHP-DI</a>
+                </div>
+                <div class="collapse navbar-collapse" id="top-navigation">
+                    <ul class="nav navbar-nav navbar-right">
+                        <li><a href="http://php-di.org/doc/getting-started.html">Getting started</a></li>
+                        <li><a href="http://php-di.org/doc/">Documentation</a></li>
+                        <li><a href="http://php-di.org/news/">News</a></li>
+                        <li><a href="http://php-di.org/change-log.html">Change log</a></li>
+                        <li><a class="github" href="https://github.com/PHP-DI/PHP-DI"><i class="fa fa-github"></i></a></li>
+                    </ul>
                 </div>
             </div>
         </div>
     </header>
 
-            <section class='section-wrapper'>
-            <div class="container">
-                <section>
-                    <h1>Change log</h1>
+            <article class="container">
+            <h1>Change log</h1>
+<h2>5.0</h2>
+<p>This is the complete change log. You can also read the <a href="doc/migration/5.0.html">migration guide</a> for upgrading, or <a href="news/15-php-di-5-0-released.html">the news article</a> for a nicer introduction to this new version.</p>
+<p>Improvements:</p>
+<ul>
+<li>Moved to an organization on GitHub: <a href="https://github.com/PHP-DI/PHP-DI">github.com/PHP-DI/PHP-DI</a></li>
+<li>The package has been renamed to: from <code>mnapoli/php-di</code> to <a href="https://packagist.org/packages/php-di/php-di"><code>php-di/php-di</code></a></li>
+<li>New <a href="doc/frameworks/silex.html">Silex integration</a></li>
+<li>Lighter package: from 10 to 3 Composer dependencies!</li>
+<li><a href="https://github.com/PHP-DI/PHP-DI/issues/235">#235</a>: <code>DI\link()</code> is now deprecated in favor of <code>DI\get()</code>. There is no BC break as <code>DI\link()</code> still works.</li>
+<li><a href="https://github.com/PHP-DI/PHP-DI/issues/207">#207</a>: Support for <code>DI\link()</code> in arrays</li>
+<li><a href="https://github.com/PHP-DI/PHP-DI/issues/203">#203</a>: New <code>DI\string()</code> helper (<a href="doc/php-definitions.html">documentation</a>)</li>
+<li><a href="https://github.com/PHP-DI/PHP-DI/issues/208">#208</a>: Support for nested definitions</li>
+<li>
+<p><a href="https://github.com/PHP-DI/PHP-DI/pull/226">#226</a>: <code>DI\factory()</code> can now be omitted with closures:</p>
+<pre><code class="language-php">// before
+'My\Class' =&gt; DI\factory(function () { ... })
+// now (optional shortcut)
+'My\Class' =&gt; function () { ... }</code></pre>
+</li>
+<li><a href="https://github.com/PHP-DI/PHP-DI/issues/193">#193</a>: <code>DI\object()-&gt;method()</code> now supports calling the same method twice (or more).</li>
+<li><a href="https://github.com/PHP-DI/PHP-DI/issues/248">#248</a>: New <code>DI\decorate()</code> helper to decorate a previously defined entry (<a href="doc/definition-overriding.html">documentation</a>)</li>
+<li><a href="https://github.com/PHP-DI/PHP-DI/pull/215">#215</a>: New <code>DI\add()</code> helper to add entries to an existing array (<a href="doc/definition-overriding.html">documentation</a>)</li>
+<li><a href="https://github.com/PHP-DI/PHP-DI/issues/218">#218</a>: <code>ContainerBuilder::addDefinitions()</code> can now take an array of definitions</li>
+<li><a href="https://github.com/PHP-DI/PHP-DI/pull/211">#211</a>: <code>ContainerBuilder::addDefinitions()</code> is now fluent (return <code>$this</code>)</li>
+<li><a href="https://github.com/PHP-DI/PHP-DI/issues/250">#250</a>: <code>Container::call()</code> now also accepts parameters not indexed by name as well as embedded definitions (<a href="doc/container.html">documentation</a>)</li>
+<li>Various performance improvements, e.g. lower the number of files loaded, simpler architecture, …</li>
+</ul>
+<p>BC breaks:</p>
+<ul>
+<li>PHP-DI now requires a version of PHP &gt;= 5.4.0</li>
+<li>The package is lighter by default:
+<ul>
+<li><a href="https://github.com/PHP-DI/PHP-DI/issues/251">#251</a>: Annotations are disabled by default, if you use annotations enable them with <code>$containerBuilder-&gt;useAnnotations(true)</code>. Additionally the <code>doctrine/annotations</code> package isn't required by default anymore, so you also need to run <code>composer require doctrine/annotations</code>.</li>
+<li><code>doctrine/cache</code> is not installed by default anymore, you need to require it in <code>composer.json</code> (<code>~1.0</code>) if you want to configure a cache for PHP-DI</li>
+<li><a href="https://github.com/PHP-DI/PHP-DI/issues/198">#198</a>: <code>ocramius/proxy-manager</code> is not installed by default anymore, you need to require it in <code>composer.json</code> (<code>~1.0</code>) if you want to use <strong>lazy injection</strong></li>
+</ul></li>
+<li>Closures are now converted into factory definitions automatically. If you ever defined a closure as a value (e.g. to have the closure injected in a class), you need to wrap the closure with the new <code>DI\value()</code> helper.</li>
+<li><a href="https://github.com/PHP-DI/PHP-DI/issues/223">#223</a>: <code>DI\ContainerInterface</code> was deprecated since v4.1 and has been removed</li>
+</ul>
+<p>Internal changes in case you were replacing/extending some parts:</p>
+<ul>
+<li>the definition sources architecture has been refactored, if you defined custom definition sources you will need to update your code (it should be much easier now)</li>
+<li><a href="https://github.com/PHP-DI/PHP-DI/pull/252">#252</a>: <code>DI\Scope</code> internal implementation has changed. You are encouraged to use the constants (<code>DI\Scope::SINGLETON</code> and <code>DI\Scope::PROTOTYPE</code>) instead of the static methods, but backward compatibility is kept (static methods still work).</li>
+<li><a href="https://github.com/PHP-DI/PHP-DI/issues/241">#241</a>: <code>Container::call()</code> now uses the <em>Invoker</em> external library</li>
+</ul>
 <h2>4.4</h2>
 <p>Read the <a href="news/13-php-di-4-4-released.html">news entry</a>.</p>
 <ul>
-<li><a href="https://github.com/mnapoli/PHP-DI/issues/185">#185</a> Support for invokable objects in <code>Container::call()</code></li>
-<li><a href="https://github.com/mnapoli/PHP-DI/pull/192">#192</a> Support for invokable classes in <code>Container::call()</code> (will instantiate the class)</li>
-<li><a href="https://github.com/mnapoli/PHP-DI/pull/184">#184</a> Option to ignore phpdoc errors</li>
+<li><a href="https://github.com/PHP-DI/PHP-DI/issues/185">#185</a> Support for invokable objects in <code>Container::call()</code></li>
+<li><a href="https://github.com/PHP-DI/PHP-DI/pull/192">#192</a> Support for invokable classes in <code>Container::call()</code> (will instantiate the class)</li>
+<li><a href="https://github.com/PHP-DI/PHP-DI/pull/184">#184</a> Option to ignore phpdoc errors</li>
 </ul>
 <h2>4.3</h2>
 <p>Read the <a href="news/11-php-di-4-3-released.html">news entry</a>.</p>
 <ul>
-<li><a href="https://github.com/mnapoli/PHP-DI/pull/176">#176</a> New definition type for reading environment variables: <code>DI\env()</code></li>
-<li><a href="https://github.com/mnapoli/PHP-DI/pull/181">#181</a> <code>DI\FactoryInterface</code> and <code>DI\InvokerInterface</code> are now auto-registered inside the container so that you can inject them without any configuration needed</li>
-<li><a href="https://github.com/mnapoli/PHP-DI/pull/173">#173</a> <code>$container-&gt;call(['MyClass', 'method]);</code> will get <code>MyClass</code> from the container if <code>method()</code> is not a static method</li>
+<li><a href="https://github.com/PHP-DI/PHP-DI/pull/176">#176</a> New definition type for reading environment variables: <code>DI\env()</code></li>
+<li><a href="https://github.com/PHP-DI/PHP-DI/pull/181">#181</a> <code>DI\FactoryInterface</code> and <code>DI\InvokerInterface</code> are now auto-registered inside the container so that you can inject them without any configuration needed</li>
+<li><a href="https://github.com/PHP-DI/PHP-DI/pull/173">#173</a> <code>$container-&gt;call(['MyClass', 'method]);</code> will get <code>MyClass</code> from the container if <code>method()</code> is not a static method</li>
 </ul>
 <h2>4.2.2</h2>
 <ul>
-<li>Fixed <a href="https://github.com/mnapoli/PHP-DI/pull/180">#180</a>: <code>Container::call()</code> with object methods (<code>[$object, 'method']</code>) is now supported</li>
+<li>Fixed <a href="https://github.com/PHP-DI/PHP-DI/pull/180">#180</a>: <code>Container::call()</code> with object methods (<code>[$object, 'method']</code>) is now supported</li>
 </ul>
 <h2>4.2.1</h2>
 <ul>
@@ -96,20 +144,20 @@ Example:</p>
 <p>Of course, you can still explicitly define an injection for the optional parameters and that will work.</p>
 <p>All changes:</p>
 <ul>
-<li><a href="https://github.com/mnapoli/PHP-DI/pull/162">#162</a> Added <code>Container::call()</code> to call functions with dependency injection</li>
-<li><a href="https://github.com/mnapoli/PHP-DI/issues/156">#156</a> Wildcards (<code>*</code>) in definitions</li>
-<li><a href="https://github.com/mnapoli/PHP-DI/issues/164">#164</a> Prototype scope is now available for <code>factory()</code> definitions too</li>
-<li>FIXED <a href="https://github.com/mnapoli/PHP-DI/pull/168">#168</a> <code>Container::has()</code> now returns false for interfaces and abstract classes that are not mapped in the definitions</li>
-<li>FIXED <a href="https://github.com/mnapoli/PHP-DI/issues/171">#171</a> Optional parameters are now ignored (not injected) if not set in the definitions (see the BC-break warning above)</li>
+<li><a href="https://github.com/PHP-DI/PHP-DI/pull/162">#162</a> Added <code>Container::call()</code> to call functions with dependency injection</li>
+<li><a href="https://github.com/PHP-DI/PHP-DI/issues/156">#156</a> Wildcards (<code>*</code>) in definitions</li>
+<li><a href="https://github.com/PHP-DI/PHP-DI/issues/164">#164</a> Prototype scope is now available for <code>factory()</code> definitions too</li>
+<li>FIXED <a href="https://github.com/PHP-DI/PHP-DI/pull/168">#168</a> <code>Container::has()</code> now returns false for interfaces and abstract classes that are not mapped in the definitions</li>
+<li>FIXED <a href="https://github.com/PHP-DI/PHP-DI/issues/171">#171</a> Optional parameters are now ignored (not injected) if not set in the definitions (see the BC-break warning above)</li>
 </ul>
 <h2>4.1</h2>
 <p>Read the <a href="news/09-php-di-4-1-released.html">news entry</a>.</p>
 <p>BC-breaks: None.</p>
 <ul>
-<li><a href="https://github.com/mnapoli/PHP-DI/issues/138">#138</a> <a href="https://github.com/container-interop/container-interop">Container-interop</a> compliance</li>
-<li><a href="https://github.com/mnapoli/PHP-DI/issues/143">#143</a> Much more explicit exception messages</li>
-<li><a href="https://github.com/mnapoli/PHP-DI/issues/157">#157</a> HHVM support</li>
-<li><a href="https://github.com/mnapoli/PHP-DI/issues/158">#158</a> Improved the documentation for <a href="http://php-di.org/doc/frameworks/symfony2.html">Symfony 2 integration</a></li>
+<li><a href="https://github.com/PHP-DI/PHP-DI/issues/138">#138</a> <a href="https://github.com/container-interop/container-interop">Container-interop</a> compliance</li>
+<li><a href="https://github.com/PHP-DI/PHP-DI/issues/143">#143</a> Much more explicit exception messages</li>
+<li><a href="https://github.com/PHP-DI/PHP-DI/issues/157">#157</a> HHVM support</li>
+<li><a href="https://github.com/PHP-DI/PHP-DI/issues/158">#158</a> Improved the documentation for <a href="http://php-di.org/doc/frameworks/symfony2.html">Symfony 2 integration</a></li>
 </ul>
 <h2>4.0</h2>
 <p>Major changes:</p>
@@ -131,45 +179,45 @@ Example:</p>
 <p>Other changes:</p>
 <ul>
 <li>Added <code>ContainerInterface</code> and <code>FactoryInterface</code>, both implemented by the container.</li>
-<li><a href="https://github.com/mnapoli/PHP-DI/issues/115">#115</a> Added <code>Container::has()</code></li>
-<li><a href="https://github.com/mnapoli/PHP-DI/issues/142">#142</a> Added <code>Container::make()</code> to resolve an entry</li>
-<li><a href="https://github.com/mnapoli/PHP-DI/issues/127">#127</a> Added support for cases where PHP-DI is wrapped by another container (like Acclimate): PHP-DI can now use the wrapping container to perform injections</li>
-<li><a href="https://github.com/mnapoli/PHP-DI/issues/128">#128</a> Configure entry aliases</li>
-<li><a href="https://github.com/mnapoli/PHP-DI/issues/110">#110</a> XML definitions are not supported anymore</li>
-<li><a href="https://github.com/mnapoli/PHP-DI/issues/122">#122</a> JSON definitions are not supported anymore</li>
+<li><a href="https://github.com/PHP-DI/PHP-DI/issues/115">#115</a> Added <code>Container::has()</code></li>
+<li><a href="https://github.com/PHP-DI/PHP-DI/issues/142">#142</a> Added <code>Container::make()</code> to resolve an entry</li>
+<li><a href="https://github.com/PHP-DI/PHP-DI/issues/127">#127</a> Added support for cases where PHP-DI is wrapped by another container (like Acclimate): PHP-DI can now use the wrapping container to perform injections</li>
+<li><a href="https://github.com/PHP-DI/PHP-DI/issues/128">#128</a> Configure entry aliases</li>
+<li><a href="https://github.com/PHP-DI/PHP-DI/issues/110">#110</a> XML definitions are not supported anymore</li>
+<li><a href="https://github.com/PHP-DI/PHP-DI/issues/122">#122</a> JSON definitions are not supported anymore</li>
 <li><code>ContainerSingleton</code> has finally been removed</li>
 <li>Added <code>ContainerBuilder::buildDevContainer()</code> to get started with a default container very easily.</li>
-<li><a href="https://github.com/mnapoli/PHP-DI/issues/99">#99</a> Fixed &quot;<code>@param</code> with PHP internal type throws exception&quot;</li>
+<li><a href="https://github.com/PHP-DI/PHP-DI/issues/99">#99</a> Fixed &quot;<code>@param</code> with PHP internal type throws exception&quot;</li>
 </ul>
 <h2>3.5.1</h2>
 <ul>
-<li>FIXED <a href="https://github.com/mnapoli/PHP-DI/issues/126">#126</a>: <code>Container::set</code> without effect if a value has already been set and retrieved</li>
+<li>FIXED <a href="https://github.com/PHP-DI/PHP-DI/issues/126">#126</a>: <code>Container::set</code> without effect if a value has already been set and retrieved</li>
 </ul>
 <h2>3.5</h2>
 <p>Read the <a href="news/05-php-di-3-5.html">news entry</a>.</p>
 <ul>
 <li>Importing <code>@Inject</code> and <code>@Injectable</code> annotations is now optional! It means that you don't have to write <code>use DI\Annotation\Inject</code> anymore</li>
-<li>FIXED <a href="https://github.com/mnapoli/PHP-DI/issues/124">#124</a>: <code>@Injects</code> annotation conflicts with other annotations</li>
+<li>FIXED <a href="https://github.com/PHP-DI/PHP-DI/issues/124">#124</a>: <code>@Injects</code> annotation conflicts with other annotations</li>
 </ul>
 <h2>3.4</h2>
 <p>Read the <a href="news/04-php-di-3-4.html">news entry</a>.</p>
 <ul>
-<li><a href="https://github.com/mnapoli/PHP-DI/pull/106">#106</a> You can now define arrays of values (in YAML, PHP, …) thanks to <a href="https://github.com/unkind">@unkind</a></li>
-<li><a href="https://github.com/mnapoli/PHP-DI/issues/98">#98</a> <code>ContainerBuilder</code> is now fluent thanks to <a href="https://github.com/drdamour">@drdamour</a></li>
-<li><a href="https://github.com/mnapoli/PHP-DI/pull/101">#101</a> Optional parameters are now supported: if you don't define a value to inject, their default value will be used</li>
+<li><a href="https://github.com/PHP-DI/PHP-DI/pull/106">#106</a> You can now define arrays of values (in YAML, PHP, …) thanks to <a href="https://github.com/unkind">@unkind</a></li>
+<li><a href="https://github.com/PHP-DI/PHP-DI/issues/98">#98</a> <code>ContainerBuilder</code> is now fluent thanks to <a href="https://github.com/drdamour">@drdamour</a></li>
+<li><a href="https://github.com/PHP-DI/PHP-DI/pull/101">#101</a> Optional parameters are now supported: if you don't define a value to inject, their default value will be used</li>
 <li>XML definitions have been deprecated, there weren't even documented and were not maintained. They will be removed in 4.0.</li>
-<li>FIXED <a href="https://github.com/mnapoli/PHP-DI/issues/100">#100</a>: bug for lazy injection in constructors</li>
+<li>FIXED <a href="https://github.com/PHP-DI/PHP-DI/issues/100">#100</a>: bug for lazy injection in constructors</li>
 </ul>
 <h2>3.3</h2>
 <p>Read the <a href="news/03-php-di-3-3.html">news entry</a>.</p>
 <ul>
-<li>Inject dependencies on an existing instance with <code>Container::injectOn</code> (work from <a href="https://github.com/jflitton">Jeff Flitton</a>: <a href="https://github.com/mnapoli/PHP-DI/pull/89">#89</a>).</li>
-<li><a href="https://github.com/mnapoli/PHP-DI/issues/86">#86</a>: Optimized definition lookup (faster)</li>
-<li>FIXED <a href="https://github.com/mnapoli/PHP-DI/issues/87">#87</a>: Rare bug in the <code>PhpDocParser</code>, fixed by <a href="https://github.com/drdamour">drdamour</a></li>
+<li>Inject dependencies on an existing instance with <code>Container::injectOn</code> (work from <a href="https://github.com/jflitton">Jeff Flitton</a>: <a href="https://github.com/PHP-DI/PHP-DI/pull/89">#89</a>).</li>
+<li><a href="https://github.com/PHP-DI/PHP-DI/issues/86">#86</a>: Optimized definition lookup (faster)</li>
+<li>FIXED <a href="https://github.com/PHP-DI/PHP-DI/issues/87">#87</a>: Rare bug in the <code>PhpDocParser</code>, fixed by <a href="https://github.com/drdamour">drdamour</a></li>
 </ul>
 <h2>3.2</h2>
 <p>Read the <a href="news/02-php-di-3-2.html">news entry</a>.</p>
-<p>Small BC-break: PHP-DI 3.0 and 3.1 injected properties before calling the constructor. This was confusing and <a href="https://github.com/mnapoli/PHP-DI/issues/74">not supported for internal classes</a>.
+<p>Small BC-break: PHP-DI 3.0 and 3.1 injected properties before calling the constructor. This was confusing and <a href="https://github.com/PHP-DI/PHP-DI/issues/74">not supported for internal classes</a>.
 From 3.2 and on, properties are injected after calling the constructor.</p>
 <ul>
 <li><strong><a href="doc/lazy-injection.html">Lazy injection</a></strong>: it is now possible to use lazy injection on properties and methods (setters and constructors).</li>
@@ -187,27 +235,27 @@ From 3.2 and on, properties are injected after calling the constructor.</p>
 <h2>3.1.1</h2>
 <ul>
 <li>Value definitions (<code>$container-&gt;set('foo', 80)</code>) are not cached anymore</li>
-<li>FIXED <a href="https://github.com/mnapoli/PHP-DI/issues/82">#82</a>: Serialization error when using a cache</li>
+<li>FIXED <a href="https://github.com/PHP-DI/PHP-DI/issues/82">#82</a>: Serialization error when using a cache</li>
 </ul>
 <h2>3.1</h2>
 <p>Read the <a href="news/01-php-di-3-1.html">news entry</a>.</p>
 <ul>
-<li>Zend Framework 1 integration through the <a href="https://github.com/mnapoli/PHP-DI-ZF1">PHP-DI-ZF1 project</a></li>
+<li>Zend Framework 1 integration through the <a href="https://github.com/PHP-DI/PHP-DI-ZF1">PHP-DI-ZF1 project</a></li>
 <li>Fixed the order of priorities when you mix different definition sources (reflection, annotations, files, …). See <a href="doc/definition-overriding.html">Definition overriding</a></li>
-<li>Now possible to define null values with  <code>$container-&gt;set('foo', null)</code> (see <a href="https://github.com/mnapoli/PHP-DI/issues/79">#79</a>).</li>
+<li>Now possible to define null values with  <code>$container-&gt;set('foo', null)</code> (see <a href="https://github.com/PHP-DI/PHP-DI/issues/79">#79</a>).</li>
 <li>Deprecated usage of <code>ContainerSingleton</code>, will be removed in next major version (4.0)</li>
 </ul>
 <h2>3.0.6</h2>
 <ul>
-<li>FIXED <a href="https://github.com/mnapoli/PHP-DI/issues/76">#76</a>: Definition conflict when setting a closure for a class name</li>
+<li>FIXED <a href="https://github.com/PHP-DI/PHP-DI/issues/76">#76</a>: Definition conflict when setting a closure for a class name</li>
 </ul>
 <h2>3.0.5</h2>
 <ul>
-<li>FIXED <a href="https://github.com/mnapoli/PHP-DI/issues/70">#70</a>: Definition conflict when setting a value for a class name</li>
+<li>FIXED <a href="https://github.com/PHP-DI/PHP-DI/issues/70">#70</a>: Definition conflict when setting a value for a class name</li>
 </ul>
 <h2>3.0.4</h2>
 <ul>
-<li>FIXED <a href="https://github.com/mnapoli/PHP-DI/issues/69">#69</a>: YamlDefinitionFileLoader crashes if YAML file is empty</li>
+<li>FIXED <a href="https://github.com/PHP-DI/PHP-DI/issues/69">#69</a>: YamlDefinitionFileLoader crashes if YAML file is empty</li>
 </ul>
 <h2>3.0.3</h2>
 <ul>
@@ -215,11 +263,11 @@ From 3.2 and on, properties are injected after calling the constructor.</p>
 </ul>
 <h2>3.0.2</h2>
 <ul>
-<li><a href="https://github.com/mnapoli/PHP-DI/issues/64">#64</a>: Non PHP-DI exceptions are not captured-rethrown anymore when injecting dependencies (cleaner stack trace)</li>
+<li><a href="https://github.com/PHP-DI/PHP-DI/issues/64">#64</a>: Non PHP-DI exceptions are not captured-rethrown anymore when injecting dependencies (cleaner stack trace)</li>
 </ul>
 <h2>3.0.1</h2>
 <ul>
-<li><a href="https://github.com/mnapoli/PHP-DI/issues/62">#62</a>: When using aliases, definitions are now merged</li>
+<li><a href="https://github.com/PHP-DI/PHP-DI/issues/62">#62</a>: When using aliases, definitions are now merged</li>
 </ul>
 <h2>3.0</h2>
 <p>Major compatibility breaks with 2.x.</p>
@@ -242,7 +290,7 @@ From 3.2 and on, properties are injected after calling the constructor.</p>
 <li><code>Container</code> no longer implements ArrayAccess, use only <code>$container-&gt;get($key)</code> now</li>
 <li>ZF1 integration broken and removed (work in progress for next releases)</li>
 <li>Code now follows PSR1 and PSR2 coding styles</li>
-<li>FIXED: <a href="https://github.com/mnapoli/PHP-DI/issues/58">#58</a> Getting a proxy of an alias didn't work</li>
+<li>FIXED: <a href="https://github.com/PHP-DI/PHP-DI/issues/58">#58</a> Getting a proxy of an alias didn't work</li>
 </ul>
 <h2>2.1</h2>
 <ul>
@@ -275,43 +323,33 @@ From 3.2 and on, properties are injected after calling the constructor.</p>
 <li>Allow named injection <code>@Inject(name="")</code></li>
 <li>Zend Framework integration</li>
 </ul>
-                </section>
-            </div>
-        </section>
+        </article>
     
             <footer>
-            <div class='pre-footer'>
-                <div class='container'>
-                    <p>
-                        <strong>Unsatisfied with the documentation?</strong>
-                        Please let us know, <a href="https://github.com/mnapoli/PHP-DI/issues/new">create an issue</a>,
-                        we will greatly appreciate it.
-                        You can chat with us on
-                        <a href="https://twitter.com/phpdi">Twitter</a> or
-                        <a href="https://gitter.im/mnapoli/PHP-DI">Gitter chat</a> too.
+            <div class='container'>
+                                    <p>
+                        A question? Unsatisfied with the documentation?
+                        Please <a href="https://github.com/PHP-DI/PHP-DI/issues/new">create an issue</a>
+                        or chat on
+                        <a href="https://gitter.im/PHP-DI/PHP-DI">Gitter</a> or
+                        <a href="https://twitter.com/phpdi">Twitter</a>.
                     </p>
-                </div>
-            </div>
-            <div class='deep-footer'>
-                <div class='container'>
-                    <div class='copyright'>
-                        Copyright &copy; 2014 <a href="http://mnapoli.fr/">Matthieu Napoli</a>
-                        Website generated with
-                        <a href="http://mnapoli.fr/Couscous/" target="_blank">Couscous</a>.
-                    </div>
-                </div>
+                                <p>
+                    By <a href="http://mnapoli.fr/">Matthieu Napoli</a>
+                    and <a href="https://github.com/PHP-DI/PHP-DI/graphs/contributors">contributors</a>
+                    |
+                    Website generated with
+                    <a href="http://mnapoli.fr/Couscous/" target="_blank">Couscous</a>.
+                </p>
             </div>
         </footer>
     
-            <script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
-        <script src="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/js/bootstrap.min.js" type="text/javascript"></script>
-        <script src="http://yandex.st/highlightjs/7.5/highlight.min.js"></script>
-        <script src="http://php-di.org/js/template.js"></script>
+            <script src="http://php-di.org/bower_components/jquery/dist/jquery.min.js"></script>
+        <script src="http://php-di.org/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+        <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.5/highlight.min.js"></script>
 
         <script>
             $(function() {
-                $("section>h1").wrap('<div class="page-header" />');
-                $("section>p:first-child").addClass('lead');
                 hljs.initHighlightingOnLoad();
             });
         </script>
@@ -344,5 +382,6 @@ From 3.2 and on, properties are injected after calling the constructor.</p>
     </script>
     <noscript><p><img src="http://piwik.mnapoli.fr/piwik.php?idsite=2" style="border:0;" alt="" /></p></noscript>
     <!-- End Piwik Code -->
+
 </body>
 </html>

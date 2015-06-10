@@ -17,10 +17,17 @@
 
     <link rel="canonical" href="http://php-di.org" />
 
-            <link href="http://php-di.org/css/bootstrap-theme_venera.min.css" media="all" rel="stylesheet" type="text/css">
-        <link href="http://fonts.googleapis.com/css?family=Abel:400|Oswald:300,400,700" media="all" rel="stylesheet" type="text/css">
+    <meta name="application-name" content="PHP-DI"/>
+    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="http://php-di.org/img/apple-touch-icon-144x144.png" />
+    <link rel="apple-touch-icon-precomposed" sizes="152x152" href="http://php-di.org/img/apple-touch-icon-152x152.png" />
+    <link rel="icon" type="image/png" href="http://php-di.org/img/favicon-32x32.png" sizes="32x32" />
+    <link rel="icon" type="image/png" href="http://php-di.org/img/favicon-16x16.png" sizes="16x16" />
+    <meta name="msapplication-TileColor" content="#484949" />
+    <meta name="msapplication-TileImage" content="http://php-di.org/img/mstile-144x144.png" />
+
+            <link href="http://fonts.googleapis.com/css?family=Abel:400|Oswald:300,400,700" media="all" rel="stylesheet" type="text/css">
         <link href="http://php-di.org/css/highlight.github.css" rel="stylesheet">
-        <link href="http://php-di.org/css/custom.css" rel="stylesheet">
+        <link href="http://php-di.org/css/all.min.css" rel="stylesheet">
     
     <script>
         if (window.location.href.indexOf('http://mnapoli.fr') === 0) {
@@ -30,113 +37,64 @@
 </head>
 <body>
 
-    <header id='header'>
-        <div class='navbar navbar-fixed-top'>
-            <div class='navbar-inner'>
-                <div class='container'>
-                    <a class='btn btn-navbar' data-target='.nav-collapse' data-toggle='collapse'>
-                        <span class='icon-bar'></span>
-                        <span class='icon-bar'></span>
-                        <span class='icon-bar'></span>
-                    </a>
-                    <a href="http://php-di.org/index.html" class="brand">PHP-DI</a>
-
-                    <div class='nav-collapse subnav-collapse collapse pull-right' id='top-navigation'>
-                        <ul class='nav'>
-                            <li><a href="http://php-di.org/">Home</a></li>
-                            <li><a href="http://php-di.org/news/">News</a></li>
-                            <li><a href="http://php-di.org/doc/getting-started.html">Getting started</a></li>
-                            <li><a href="http://php-di.org/doc/">Documentation</a></li>
-                            <li><a href="http://php-di.org/change-log.html">Change log</a></li>
-                            <li><a href="http://php-di.org/support.html">Support</a></li>
-                            <li><a href="https://github.com/mnapoli/PHP-DI"><i class="icon-github"></i> Github</a></li>
-                        </ul>
-                    </div>
+    <header>
+        <div class="navbar navbar-default navbar-fixed-top">
+            <div class="container">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#top-navigation">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand" href="http://php-di.org/index.html">PHP-DI</a>
+                </div>
+                <div class="collapse navbar-collapse" id="top-navigation">
+                    <ul class="nav navbar-nav navbar-right">
+                        <li><a href="http://php-di.org/doc/getting-started.html">Getting started</a></li>
+                        <li><a href="http://php-di.org/doc/">Documentation</a></li>
+                        <li><a href="http://php-di.org/news/">News</a></li>
+                        <li><a href="http://php-di.org/change-log.html">Change log</a></li>
+                        <li><a class="github" href="https://github.com/PHP-DI/PHP-DI"><i class="fa fa-github"></i></a></li>
+                    </ul>
                 </div>
             </div>
         </div>
     </header>
 
-    <div class='carousel slide over-something'>
-    <div class='carousel-inner slider-w'>
-        <div class='active item'>
-            <div class='container'>
-                <h1 class='slider-header'>PHP-DI <strong>4</strong></h1>
+        <div class="home">
 
-                <h2 class='slider-sub-header'>
+        <section class="jumbotron">
+            <div class="container">
+                <h1>
+                    PHP-DI <strong>5</strong>
+                </h1>
+                <p>
                     The dependency injection container for humans
-                </h2>
-
-                <div class='cta'>
-                    <a href="http://php-di.org/doc/getting-started.html" class="btn btn-cta">
-                        Get started!
+                </p>
+                <p>
+                    <a href="http://php-di.org/doc/getting-started.html" class="btn btn-lg btn-primary">
+                        Get started
                     </a>
-                    <a href="http://php-di.org/doc/" class="btn btn-cta">
+                    <a href="http://php-di.org/doc/" class="btn btn-lg btn-default">
                         Documentation
                     </a>
-                </div>
+                </p>
             </div>
-        </div>
-    </div>
-</div>
+        </section>
 
-<div class='sub-slider-features'>
-    <div class='container'>
-        <div class='row'>
-            <div class='span4'>
-                <div class='info-bullet'>
-                    <img class="framework-logo" src="img/zf-logo.png" alt="Zend Framework 1 & 2">
-                    <h5>Zend Framework 1 & 2</h5>
+        <section class="odd">
+            <div class='container'>
 
-                    <p>
-                        Integrates in Zend Framework 1 & 2.
-                    </p>
-                </div>
-            </div>
-            <div class='span4'>
-                <div class='info-bullet'>
-                    <i class='icon-globe'></i>
-                    <h5>Open</h5>
+    <h2>Autowiring</h2>
 
-                    <p>
-                        Integrates easily to your project or any framework.
-                    </p>
-                    <p>
-                        Designed to work along with other containers.
-                    </p>
-                </div>
-            </div>
-            <div class='span4'>
-                <div class='info-bullet'>
-                    <img class="framework-logo" src="img/symfony-logo.png" alt="Symfony 2">
-                    <h5>Symfony 2</h5>
+    <div class="row">
 
-                    <p>
-                        Integrates in Symfony 2 and works along with Symfony's default container.
-                    </p>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-
-
-<section class='section-wrapper under-slider'>
-    <div class='container'>
-
-        <div class="white-card">
-            <strong>New blog post:</strong>
-            <a href="http://php-di.org/news/14-php-di-5-syntaxic-sugar.html">Syntactic sugar in PHP-DI 5</a>
-        </div>
-
-        <div class='row'>
-            <div class='span12'>
-                <h3 class='section-header'>Practical</h3>
-            </div>
-            <div class='span4'>
-                <div class='white-card'>
-                    <div class="img-w hover-fader">
-<pre><code class="php small">class Foo
+        <div class='col-md-6'>
+            <p>
+                Type-hint your constructor parameters and the container can guess which dependencies to inject.
+            </p>
+<pre><code class="php">class Foo
 {
     private $bar;
 
@@ -144,24 +102,17 @@
     {
         return $this->bar = $bar;
     }
-}
-</code></pre>
-                    </div>
-                    <h5>Autowiring</h5>
+}</code></pre>
+            <p>
+                Covers 80% of the use cases for 0 configuration.
+            </p>
+        </div>
 
-                    <p>
-                        Covers 80% of the use cases for 0 configuration!
-                    </p>
-                    <p>
-                        Type-hint your constructors, and the container can guess which dependencies
-                        to inject.
-                    </p>
-                </div>
-            </div>
-            <div class='span4'>
-                <div class='white-card'>
-                    <div class="img-w hover-fader">
-<pre><code class="php small">class Foo
+        <div class='col-md-6'>
+            <p>
+                Mark a property to be injected using a annotations. Particularly useful in controllers, CLI command, system tests…
+            </p>
+<pre><code class="php">class Foo
 {
     /**
     * @Inject
@@ -169,451 +120,305 @@
     */
     private $bar;
 
-}
-</code></pre>
-                    </div>
-                    <h5>Annotations</h5>
+}</code></pre>
+            <p>
+                Autowiring and annotations are optional and can be disabled.
+            </p>
+        </div>
 
-                    <p>
-                        Makes your life so easy in your controllers!
-                    </p>
-                    <p>
-                        Mark a property to be injected using an annotation.
-                        Particularly useful in controllers, read below.
-                    </p>
-                </div>
-            </div>
-            <div class='span4'>
-                <div class='white-card'>
-                    <div class="img-w hover-fader">
-<pre><code class="php small">&lt;?php // PHP 5.6 example
+    </div>
+
+</div>
+        </section>
+
+        <section class="">
+            <div class='container'>
+
+    <h2>Expressive configuration</h2>
+
+    <p class="text-center">
+        PHP-DI's configuration is written in PHP, allowing to benefit from auto-completion, static analysis and refactoring support with any IDE.
+    </p>
+
+    <div class='row'>
+        <div class='col-md-6'>
+            <h4>Object creation</h4>
+<pre><code class="php">return [
+    Foo::class => object()
+        ->constructor(
+            get(Bar::class)
+        )
+];</code></pre>
+        </div>
+        <div class='col-md-6'>
+            <h4>Inline factories</h4>
+<pre><code class="php">return [
+    Foo::class => function ($container) {
+        $dependency = $container->get(Bar::class);
+        return Foo::create($dependency);
+    }
+];</code></pre>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-6">
+            <h4>Interface-to-implementation binding</h4>
+<pre><code class="php">return [
+    NotifierInterface::class => get(EmailNotifier::class)
+];</code></pre>
+        </div>
+        <div class="col-md-6">
+            <h4>Environment variables</h4>
+<pre><code class="php">return [
+    'db.host' => env('DB_HOST', 'default value')
+];</code></pre>
+        </div>
+    </div>
+
+    <hr>
+
+    <p>
+        The configuration format <a href="http://php-di.org/news/06-php-di-4-0-new-definitions.html">has been imagined</a> as a successor of XML and YAML, taking advantages of all the latest features of PHP:
+    </p>
+
+    <div class="row">
+        <div class='col-md-4'>
+            <h4>PHP 5.4 short arrays</h4>
+<pre><code class="php">return [
+
+
+];</code></pre>
+        </div>
+        <div class='col-md-4'>
+            <h4>PHP 5.5 <code>::class</code> magic constant</h4>
+<pre><code class="php">return [
+    Foo::class => DI\object()
+      ->constructor(DI\get(Bar::class))
+];</code></pre>
+        </div>
+        <div class='col-md-4'>
+            <h4>PHP 5.6 <code>use function</code></h4>
+<pre><code class="php">return [
+    Foo::class => object()
+      ->constructor(get(Bar::class))
+];</code></pre>
+        </div>
+    </div>
+
+</div>
+        </section>
+
+        <section class="odd">
+            <div class='container'>
+
+    <h2>Scales with your application</h2>
+
+    <div class="row">
+
+        <div class='col-md-6'>
+
+            <h4>From simple applications</h4>
+
+            <p>
+                Just create the container and you are good to go thanks to autowiring.
+            </p>
+
+<pre><code class="php">$container = ContainerBuilder::buildDevContainer();
+
+$home = $container->get(HomeController::class);
+</code></pre>
+
+            <p>
+                You can also define services à la Pimple:
+            </p>
+
+<pre><code class="php">$container->set('db', new Database($options));
+
+$container->set('logger', function () {
+    $logger = new Monolog\Logger();
+    $logger->pushHandler(new StreamHandler('app.log'));
+    return $logger;
+});
+
+$db = $container->get('db');
+$logger = $container->get('logger');
+</code></pre>
+
+        </div>
+
+        <div class='col-md-6'>
+
+            <h4>To complex and modular systems</h4>
+
+            <p>
+                Register as many configuration files as you want.
+            </p>
+
+<pre><code class="php">// base config
 return [
-    Bar::class => factory(function () {
-        return new Bar();
-    }),
+    'notifiers' => [
+        get(EmailNotifier::class),
+    ]
+];</code></pre>
 
-    Foo::class => object()
-      ->constructor(link(Bar::class)),
-];
-</code></pre>
-                    </div>
-                    <h5>PHP configuration</h5>
+            <p>
+                Use definition overriding to extend lists, decorate or replace previous entries…
+            </p>
 
-                    <p>
-                        For full control!
-                    </p>
-                    <p>
-                        Enjoy the powerful configuration API, in PHP
-                        so that you don't have to learn a YAML or XML specific format.
-                    </p>
-                </div>
-            </div>
-            <div class="span12">
-                <p class="muted">
-                    Features are <em>à la carte</em>: mix them all, disable annotation support, do whatever you want…
-                </p>
-            </div>
+<pre><code class="php">// module (aka bundle) config
+return [
+    'notifiers' => add([
+        get(TextNotifier::class),
+        get(MobilePushNotifier::class),
+    ])
+];</code></pre>
+
         </div>
+
     </div>
-</section>
+</div>
+        </section>
 
+        <section class="">
+            <div class="container">
 
-<section class='section-wrapper'>
-    <div class='container'>
-        <div class='row'>
-            <div class='span12'>
-                <h3 class='section-header'>Powerful</h3>
+    <h2>Powerful container API</h2>
 
-                <p>
-                    Behind the simplicity, PHP-DI is meant to be extremely powerful.
-                </p>
-            </div>
-            <div class='span4'>
-                <div class='white-card'>
-                    <h5>Basic features</h5>
-                    <ul>
-                        <li>Constructor, method and property injection</li>
-                        <li>Injection of objects <em>and</em> scalar values</li>
-                        <li>Map interfaces to implementations</li>
-                        <li>Recursive dependency injection</li>
-                    </ul>
-                </div>
-            </div>
-            <div class='span4'>
-                <div class='white-card'>
-                    <h5>The power behind definitions</h5>
-                    <ul>
-                        <li>Definitions using the fluent API</li>
-                        <li>Definitions using closures</li>
-                        <li>Lazy injection</li>
-                        <li>Clear definition overriding</li>
-                    </ul>
-                </div>
-            </div>
-            <div class='span4'>
-                <div class='white-card'>
-                    <h5>Not just a container</h5>
-                    <ul>
-                        <li>Injection on an existing instance</li>
-                        <li>Can behave like a factory</li>
-                        <li>Integrates with other containers</li>
-                        <li>Offers extension points</li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-        <p>
-            Go and have a look in <a href="http://php-di.org/doc/">the complete documentation</a>.
-        </p>
-    </div>
-</section>
+    <p class="text-center">
+        PHP-DI provides the classic API of a container as well as advanced features useful to build or extend a framework.
+    </p>
 
+    <div class="row">
 
-<section class='section-wrapper'>
-    <div class='container'>
-        <div class='row'>
-            <div class='span12'>
-                <h3 class='section-header'>Modern</h3>
-
-                <p>
-                    PHP-DI reinvented itself for v4.0.
-                    Its configuration format has been thought through for the future: PHP 5.4, 5.5 and beyond!
-                </p>
-
-                <p>
-                    We dropped the YAML format
-                    <a href="http://php-di.org/news/06-php-di-4-0-new-definitions.html">because we do no longer believe it's the most appropriate</a>
-                    since:
-                </p>
-            </div>
-            <div class='span4'>
-                <div class='white-card'>
-                    <h5>PHP 5.4</h5>
-                    <p>
-                        Short arrays:
-                    </p>
-                    <div class="img-w hover-fader">
-<pre><code class="php small">return [
-
-
-];
-</code></pre>
-                    </div>
-                </div>
-            </div>
-            <div class='span4'>
-                <div class='white-card'>
-                    <h5>PHP 5.5</h5>
-                    <p>
-                        Class name resolution via <code>::class</code>:
-                    </p>
-                    <div class="img-w hover-fader">
-<pre><code class="php small">return [
-    Foo::class => DI\object(),
-
-];
-</code></pre>
-                    </div>
-                </div>
-            </div>
-            <div class='span4'>
-                <div class='white-card'>
-                    <h5>PHP 5.6</h5>
-                    <p>
-                        Import functions:
-                    </p>
-                    <div class="img-w hover-fader">
-<pre><code class="php small">return [
-    Foo::class => object()
-      ->constructor(link(Bar::class))
-];
-</code></pre>
-                    </div>
-                </div>
-            </div>
-            <div class="span12">
-                <p>
-                    Furthermore, using PHP instead of YAML comes with other advantages:
-                </p>
-
-                <ul>
-                    <li>
-                        Define services using callbacks (à la Pimple), because seriously, we are PHP developers,
-                        let's write some PHP
-                    </li>
-                    <li>
-                        IDE support (auto-completion, refactoring, …)
-                    </li>
-                    <li>
-                        You can actually use PHP code like constants, operations, …
-                        <span class="muted">
-                            (instead of writing <a href="https://github.com/symfony/expression-language">a custom language</a>
-                            that developers have to learn)
-                        </span>
-                    </li>
-                </ul>
-
-                <p class="muted">
-                    Yes, PHP-DI is still compatible with PHP 5.3 (but seriously, upgrade!)
-                </p>
-            </div>
-        </div>
-    </div>
-</section>
-
-
-<section class='section-wrapper'>
-    <div class='container'>
-        <div class='row'>
-            <div class='span12'>
-                <h3 class='section-header'>Fast</h3>
-            </div>
-            <div class='span4'>
-                <div class='white-card'>
-                    <h5>Lazy-loading</h5>
-                    <p>
-                        Are you injecting a service that is expensive to build?
-                    </p>
-                    <p>
-                        Just mark it as <code>lazy</code>. A lightweight proxy will be injected instead,
-                        and the service will be created only if it is really used.
-                    </p>
-                    <p class="text-right">
-                        <a href="http://php-di.org/doc/lazy-injection.html">Learn more »</a>
-                    </p>
-                </div>
-            </div>
-            <div class='span4'>
-                <div class='white-card'>
-                    <h5>Configuration caching</h5>
-                    <p>
-                        Autowiring (reflection), annotations or PHP configuration have the same
-                        impact.
-                    </p>
-                    <p>
-                        Every definition is cached so that is it not recomputed on each request.
-                    </p>
-                    <p class="text-right">
-                        <a href="http://php-di.org/doc/performances.html">Learn more »</a>
-                    </p>
-                </div>
-            </div>
-            <div class='span4'>
-                <div class='white-card'>
-                    <h5>Container compilation</h5>
-                    <p class="text-danger">
-                        Woops, that's not there yet! It's coming soon!
-                    </p>
-                    <p>
-                        Let's compile all those abstract "service" definitions to pure PHP code.
-                        It will be almost as fast as if there was no container.
-                    </p>
-                    <p class="text-right">
-                        <a href="http://php-di.org/doc/performances.html">Learn more »</a>
-                    </p>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
-
-
-<section class='section-wrapper'>
-    <div class='container'>
-        <div class='row'>
-            <div class='span12'>
-                <h3 class='section-header'>Friendly to framework developers</h3>
-
-                <p>
-                    PHP-DI not only provides the classic API of a container, but also advanced
-                    features that makes it really practical when building or extending a framework.
-                </p>
-            </div>
-            <div class='span4'>
-                <div class='white-card'>
-                    <h5>Get & Has</h5>
-                    <p>
-                        PHP-DI implements
-                        <a href="https://github.com/container-interop/container-interop/blob/master/src/Interop/Container/ContainerInterface.php">
-                            <code>ContainerInterface</code></a> from
-                        <a href="https://github.com/container-interop/container-interop">Container-Interop 1.0</a>.
-                        That means that you can use it in any Container-Interop compatible library
-                        or framework.
-                    </p>
-                    <p>
-                        That universal interface standardizes the <code>get</code> and <code>has</code> methods:
-                    </p>
-                    <pre><code class="php small">$container->get($name);
+        <div class="col-md-6">
+            <h4>Get & Has</h4>
+            <p>
+                PHP-DI is compliant with <a href="https://github.com/container-interop/container-interop">container-interop</a>:
+            </p>
+            <pre><code class="php">$container->get($name);
 $container->has($name);</code></pre>
-                </div>
-            </div>
-            <div class='span4'>
-                <div class='white-card'>
-                    <h5>Make</h5>
-                    <p>
-                        Sometimes, you want to create an object with specific parameters <em>and</em>
-                        parameters coming from the container.
-                    </p>
-                    <p>
-                        To do just this, PHP-DI offers the <code>make</code> method:
-                    </p>
-                    <pre><code class="php small">$container->make($name, $parameters);</code></pre>
-                    <p>
-                        Any constructor parameter that is not in the <code>$parameters</code> array will be
-                        resolved from the container.
-                    </p>
-                    <p>
-                        For this, the container implements a separate <code>DI\FactoryInterface</code> that
-                        makes it easy to inject and use without tying your code to the container itself.
-                    </p>
-                </div>
-            </div>
-            <div class='span4'>
-                <div class='white-card'>
-                    <h5>Inject on a instance</h5>
-                    <p>
-                        This is a very special feature but sometimes you have no choice: you have an
-                        object that is already created and you want to have all its dependencies injected.
-                        Of course, this excludes constructor injection, but the object might be a
-                        candidate for injection through setters or properties.
-                    </p>
-                    <p>
-                        PHP-DI's container provide a <code>injectOn</code> method to do that:
-                    </p>
-                    <pre><code class="php small">$container->injectOn($instance);</code></pre>
-                </div>
-            </div>
-            <div class='span12'>
-                <p>
-                    You can read more details on these features
-                    <a href="http://php-di.org/doc/container.html">in the "Container API" documentation</a>.
-                </p>
-            </div>
         </div>
-    </div>
-</section>
 
-        <footer>
-        <div class='pre-footer'>
-            <div class='container'>
-                <div class='row'>
-                    <div class='span6'>
-                        <h5 class='footer-header'>Developed with care</h5>
-                        <div class="row-fluid">
-                            <ul class="footer-list span6">
-                                <li>
-                                    PSR-0, PSR-1 and PSR-2 compliant
-                                </li>
-                                <li>
-                                    Compliant with <a href="https://github.com/container-interop/container-interop">Container Interop</a>
-                                </li>
-                                <li>
-                                    Follows <a href="http://semver.org/">Semantic Versioning</a>
-                                </li>
-                            </ul>
-                            <ul class="footer-list span6">
-                                <li>
-                                    Build status:
-                                    <a href='https://travis-ci.org/mnapoli/PHP-DI'>
-                                        <img src='https://travis-ci.org/mnapoli/PHP-DI.png?branch=master'></a>
-                                </li>
-                                <li>
-                                    Scrunitizer-CI:
-                                    <a href='https://scrutinizer-ci.com/g/mnapoli/PHP-DI/'>
-                                        <img src='https://scrutinizer-ci.com/g/mnapoli/PHP-DI/badges/quality-score.png?s=a2feff428ada6b64f1813b6ba11d943d86790acc'></a>
-                                </li>
-                                <li>
-                                    Code coverage:
-                                    <a href='https://coveralls.io/r/mnapoli/PHP-DI?branch=master'>
-                                        <img src='https://coveralls.io/repos/mnapoli/PHP-DI/badge.png?branch=master' alt='Coverage Status'></a>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                    <div class='span6'>
-                        <h5 class='footer-header'>Contributors</h5>
-                        <ul class='footer-img-list thumbnails contributors'>
-                            <li class='span1'>
-                                <a class='thumbnail'>
-                                    <img src="images/test-user.png"/>
-                                </a>
-                            </li>
-                            <li class='span1'>
-                                <a class='thumbnail'>
-                                    <img src="images/test-user.png"/>
-                                </a>
-                            </li>
-                            <li class='span1'>
-                                <a class='thumbnail'>
-                                    <img src="images/test-user.png"/>
-                                </a>
-                            </li>
-                            <li class='span1'>
-                                <a class='thumbnail'>
-                                    <img src="images/test-user.png"/>
-                                </a>
-                            </li>
-                            <li class='span1'>
-                                <a class='thumbnail'>
-                                    <img src="images/test-user.png"/>
-                                </a>
-                            </li>
-                            <li class='span1'>
-                                <a class='thumbnail'>
-                                    <img src="images/test-user.png"/>
-                                </a>
-                            </li>
-                        </ul>
-                        <p class="text-right">
-                            <a href="https://github.com/mnapoli/PHP-DI/graphs/contributors">All contributors »</a>
-                        </p>
-                    </div>
-                </div>
-            </div>
+        <div class="col-md-6">
+            <h4>Make</h4>
+            <p>
+                Use the container as a factory:
+            </p>
+            <pre><code class="php">$parameters = [ ... ];
+$container->make(Foo::class, $parameters);</code></pre>
+            <p>
+                Missing constructor parameters will be resolved from the container.
+            </p>
         </div>
-        <div class='deep-footer'>
+
+        <div class="col-md-12">
+            <h4>Invoke a callable</h4>
+            <p>
+                Dependency injection in callables, à la AngularJS:
+            </p>
+            <pre><code class="php">$container->call(function (Logger $logger, EntityManager $em) {
+    // ...
+});</code></pre>
+        </div>
+
+    </div>
+
+</div>
+        </section>
+
+        <section class="odd">
+            <div class="container framework-integrations">
+
+    <h2>Integrations</h2>
+
+    <p>
+        PHP-DI integrates easily in your application or in frameworks.
+    </p>
+
+    <div class="row">
+
+        <div class="col-sm-3">
+            <a href="http://php-di.org/doc/frameworks/zf1.html">
+                <img class="framework-logo" src="http://php-di.org/img/zf-logo.png" alt="Zend Framework 1">
+            </a>
+            <h4>
+                <a href="http://php-di.org/doc/frameworks/zf1.html">Zend Framework 1</a>
+            </h4>
+        </div>
+
+        <div class="col-sm-3">
+            <a href="http://php-di.org/doc/frameworks/symfony2.html">
+                <img class="framework-logo" src="http://php-di.org/img/symfony-logo.png" alt="Symfony 2">
+            </a>
+            <h4>
+                <a href="http://php-di.org/doc/frameworks/symfony2.html">Symfony 2</a>
+            </h4>
+        </div>
+
+        <div class="col-sm-3">
+            <a href="http://php-di.org/doc/frameworks/silex.html">
+                <img class="framework-logo" src="http://php-di.org/img/silex-logo.png" alt="Silex">
+            </a>
+            <h4>
+                <a href="http://php-di.org/doc/frameworks/silex.html">Silex</a>
+            </h4>
+        </div>
+
+        <div class="col-sm-3">
+            <a href="http://php-di.org/doc/frameworks/silly.html">
+                <span class="fa-stack fa-lg">
+                    <i class="fa fa-square-o fa-stack-2x"></i>
+                    <i class="fa fa-terminal fa-stack-1x fa-white"></i>
+                </span>
+            </a>
+            <h4>
+                <a href="http://php-di.org/doc/frameworks/silly.html">Silly</a>
+            </h4>
+        </div>
+
+    </div>
+
+    <p>
+        No framework? It works too, have a look at this <a href="https://github.com/PHP-DI/demo">demo application</a>.
+    </p>
+
+</div>        </section>
+
+    </div>
+
+
+            <footer>
             <div class='container'>
-                <div class='copyright'>
-                    Copyright &copy; 2014 <a href="http://mnapoli.fr">Matthieu Napoli</a>
+                    <p>
+        Developed with care -
+        <a href='https://travis-ci.org/PHP-DI/PHP-DI'>
+            <img src="https://img.shields.io/travis/PHP-DI/PHP-DI.svg?style=flat-square"></a>
+        <a href='https://scrutinizer-ci.com/g/PHP-DI/PHP-DI/'>
+            <img src="https://img.shields.io/scrutinizer/g/PHP-DI/PHP-DI.svg?style=flat-square"></a>
+        <a href='https://coveralls.io/r/PHP-DI/PHP-DI?branch=master'>
+            <img src="https://img.shields.io/coveralls/PHP-DI/PHP-DI/master.svg?style=flat-square" alt='Coverage Status'></a>
+    </p>
+                <p>
+                    By <a href="http://mnapoli.fr/">Matthieu Napoli</a>
+                    and <a href="https://github.com/PHP-DI/PHP-DI/graphs/contributors">contributors</a>
+                    |
                     Website generated with
                     <a href="http://mnapoli.fr/Couscous/" target="_blank">Couscous</a>.
-                </div>
+                </p>
             </div>
-        </div>
-    </footer>
-
-                <script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
-        <script src="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/js/bootstrap.min.js" type="text/javascript"></script>
-        <script src="http://yandex.st/highlightjs/7.5/highlight.min.js"></script>
-        <script src="http://php-di.org/js/template.js"></script>
+        </footer>
+    
+            <script src="http://php-di.org/bower_components/jquery/dist/jquery.min.js"></script>
+        <script src="http://php-di.org/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+        <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.5/highlight.min.js"></script>
 
         <script>
             $(function() {
-                $("section>h1").wrap('<div class="page-header" />');
-                $("section>p:first-child").addClass('lead');
                 hljs.initHighlightingOnLoad();
             });
         </script>
     
-
-    <script>
-        $(function() {
-            var url = "https://api.github.com/repos/mnapoli/php-di/contributors?callback=?";
-
-            $.getJSON(url, function (result) {
-                var elem = $('.contributors');
-                elem.empty();
-                for (var i = 0; i < Math.min(result.data.length, 6); ++i) {
-                    var img = result.data[i].avatar_url;
-                    var name = result.data[i].login;
-                    var url = result.data[i].html_url;
-                    elem.append($("<li class='span1'><a class='thumbnail' title='" + name + "' href='" + url + "'><img src='" + img + "'/></a></li>"));
-                }
-            });
-        });
-    </script>
-
-
     <script>
         var _gaq = _gaq || [];
         _gaq.push(['_setAccount', 'UA-15584647-13']);
@@ -642,5 +447,6 @@ $container->has($name);</code></pre>
     </script>
     <noscript><p><img src="http://piwik.mnapoli.fr/piwik.php?idsite=2" style="border:0;" alt="" /></p></noscript>
     <!-- End Piwik Code -->
+
 </body>
 </html>
