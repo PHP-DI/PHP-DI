@@ -101,10 +101,10 @@
 <li>some optional dependencies are not installed by default anymore (ProxyManager for lazy injection, doctrine/annotations, doctrine/cache) -&gt; 7 less Composer dependencies</li>
 <li><code>DI\link()</code> is deprecated in favor of a new <code>DI\get()</code> (but still works, so not really a BC break)</li>
 </ul>
-<p>The complete list of changes are detailed extensively in the <a href=".0.html">migration guide to 5.0</a>.</p>
+<p>The complete list of changes are detailed extensively in the <a href="../doc/migration/5.0.html">migration guide to 5.0</a>.</p>
 <h2 id="api-simplifications-aka-syntactic-sugar">API simplifications, aka syntactic sugar</h2>
 <p>PHP-DI wants to be the DI container <em>for humans</em>, simplicity of use is one of its most important feature. To improve that even more, a few things have been added.</p>
-<p>Most of these changes have been explained in the previous blog article: <a href="4-php-di-5-syntaxic-sugar.html">Syntactic sugar in PHP-DI 5</a>. Here is a reminder of the most important improvements:</p>
+<p>Most of these changes have been explained in the previous blog article: <a href="14-php-di-5-syntaxic-sugar.html">Syntactic sugar in PHP-DI 5</a>. Here is a reminder of the most important improvements:</p>
 <pre><code class="language-php">&lt;?php
 
 use ...;
@@ -191,7 +191,7 @@ ProductDaoInterface::class =&gt; DI\decorate(function ($previous, ContainerInter
 <p>A new framework integration comes with this new version: the <a href="http://silex.sensiolabs.org/">Silex</a> micro-framework. If you are interested to learn about it, head over to <a href="../doc/frameworks/silex.html">the documentation</a>.</p>
 <h2 id="wrapping-it-up">Wrapping it up</h2>
 <p>I hope you will like this new version, as well as the new website. If you want the complete list of changes, head over to <a href="../change-log.html">the change log</a>.</p>
-<p>If you are migrating from a 4.x version, have a look at the detailed <a href=".0.html">migration guide</a>.</p>
+<p>If you are migrating from a 4.x version, have a look at the detailed <a href="../doc/migration/5.0.html">migration guide</a>.</p>
 <p>If something isn't right in the package or the documentation, please <a href="https://github.com/PHP-DI/PHP-DI/issues/new">open an issue</a>. You can also find support in the <a href="https://gitter.im/PHP-DI/PHP-DI">Gitter chatroom</a>.</p>
     </article>
 

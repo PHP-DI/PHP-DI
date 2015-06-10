@@ -65,7 +65,7 @@
             <article class="container">
             <h1 id="change-log">Change log</h1>
 <h2 id="50">5.0</h2>
-<p>This is the complete change log. You can also read the <a href="5-php-di-5-0-released.html">migration guide</a> for a nicer introduction to this new version.</p>
+<p>This is the complete change log. You can also read the <a href="doc/migration/5.0.md">migration guide</a> for upgrading, or <a href="news/15-php-di-5-0-released.html">the news article</a> for a nicer introduction to this new version.</p>
 <p>Improvements:</p>
 <ul>
 <li>Moved to an organization on GitHub: <a href="https://github.com/PHP-DI/PHP-DI">github.com/PHP-DI/PHP-DI</a></li>
@@ -110,14 +110,14 @@
 <li><a href="https://github.com/PHP-DI/PHP-DI/issues/241">#241</a>: <code>Container::call()</code> now uses the <em>Invoker</em> external library</li>
 </ul>
 <h2 id="44">4.4</h2>
-<p>Read the <a href="3-php-di-4-4-released.html">news entry</a>.</p>
+<p>Read the <a href="news/13-php-di-4-4-released.html">news entry</a>.</p>
 <ul>
 <li><a href="https://github.com/PHP-DI/PHP-DI/issues/185">#185</a> Support for invokable objects in <code>Container::call()</code></li>
 <li><a href="https://github.com/PHP-DI/PHP-DI/pull/192">#192</a> Support for invokable classes in <code>Container::call()</code> (will instantiate the class)</li>
 <li><a href="https://github.com/PHP-DI/PHP-DI/pull/184">#184</a> Option to ignore phpdoc errors</li>
 </ul>
 <h2 id="43">4.3</h2>
-<p>Read the <a href="1-php-di-4-3-released.html">news entry</a>.</p>
+<p>Read the <a href="news/11-php-di-4-3-released.html">news entry</a>.</p>
 <ul>
 <li><a href="https://github.com/PHP-DI/PHP-DI/pull/176">#176</a> New definition type for reading environment variables: <code>DI\env()</code></li>
 <li><a href="https://github.com/PHP-DI/PHP-DI/pull/181">#181</a> <code>DI\FactoryInterface</code> and <code>DI\InvokerInterface</code> are now auto-registered inside the container so that you can inject them without any configuration needed</li>
@@ -133,7 +133,7 @@
 </ul>
 <p>But if you can, seriously avoid this (really old) PHP version and upgrade.</p>
 <h2 id="42">4.2</h2>
-<p>Read the <a href="0-php-di-4-2-released.html">news entry</a>.</p>
+<p>Read the <a href="news/10-php-di-4-2-released.html">news entry</a>.</p>
 <p><strong>Minor BC-break</strong>: Optional parameters (that were not configured) were injected, they are now ignored, which is what naturally makes sense since they are optional.
 Example:</p>
 <pre><code class="language-php">    public function __construct(Bar $bar = null)
@@ -151,7 +151,7 @@ Example:</p>
 <li>FIXED <a href="https://github.com/PHP-DI/PHP-DI/issues/171">#171</a> Optional parameters are now ignored (not injected) if not set in the definitions (see the BC-break warning above)</li>
 </ul>
 <h2 id="41">4.1</h2>
-<p>Read the <a href="9-php-di-4-1-released.html">news entry</a>.</p>
+<p>Read the <a href="news/09-php-di-4-1-released.html">news entry</a>.</p>
 <p>BC-breaks: None.</p>
 <ul>
 <li><a href="https://github.com/PHP-DI/PHP-DI/issues/138">#138</a> <a href="https://github.com/container-interop/container-interop">Container-interop</a> compliance</li>
@@ -162,9 +162,9 @@ Example:</p>
 <h2 id="40">4.0</h2>
 <p>Major changes:</p>
 <ul>
-<li>The configuration format has changed (<a href="6-php-di-4-0-new-definitions.html">read more here to understand why</a>)</li>
+<li>The configuration format has changed (<a href="news/06-php-di-4-0-new-definitions.html">read more here to understand why</a>)</li>
 </ul>
-<p>Read the migration guide if you are using 3.x: <a href=".0.html">Migration guide from 3.x to 4.0</a>.</p>
+<p>Read the migration guide if you are using 3.x: <a href="doc/migration/4.0.html">Migration guide from 3.x to 4.0</a>.</p>
 <p>BC-breaks:</p>
 <ul>
 <li>YAML, XML and JSON definitions have been removed, and the PHP definition format has changed (see above)</li>
@@ -194,13 +194,13 @@ Example:</p>
 <li>FIXED <a href="https://github.com/PHP-DI/PHP-DI/issues/126">#126</a>: <code>Container::set</code> without effect if a value has already been set and retrieved</li>
 </ul>
 <h2 id="35">3.5</h2>
-<p>Read the <a href="5-php-di-3-5.html">news entry</a>.</p>
+<p>Read the <a href="news/05-php-di-3-5.html">news entry</a>.</p>
 <ul>
 <li>Importing <code>@Inject</code> and <code>@Injectable</code> annotations is now optional! It means that you don't have to write <code>use DI\Annotation\Inject</code> anymore</li>
 <li>FIXED <a href="https://github.com/PHP-DI/PHP-DI/issues/124">#124</a>: <code>@Injects</code> annotation conflicts with other annotations</li>
 </ul>
 <h2 id="34">3.4</h2>
-<p>Read the <a href="4-php-di-3-4.html">news entry</a>.</p>
+<p>Read the <a href="news/04-php-di-3-4.html">news entry</a>.</p>
 <ul>
 <li><a href="https://github.com/PHP-DI/PHP-DI/pull/106">#106</a> You can now define arrays of values (in YAML, PHP, …) thanks to <a href="https://github.com/unkind">@unkind</a></li>
 <li><a href="https://github.com/PHP-DI/PHP-DI/issues/98">#98</a> <code>ContainerBuilder</code> is now fluent thanks to <a href="https://github.com/drdamour">@drdamour</a></li>
@@ -209,14 +209,14 @@ Example:</p>
 <li>FIXED <a href="https://github.com/PHP-DI/PHP-DI/issues/100">#100</a>: bug for lazy injection in constructors</li>
 </ul>
 <h2 id="33">3.3</h2>
-<p>Read the <a href="3-php-di-3-3.html">news entry</a>.</p>
+<p>Read the <a href="news/03-php-di-3-3.html">news entry</a>.</p>
 <ul>
 <li>Inject dependencies on an existing instance with <code>Container::injectOn</code> (work from <a href="https://github.com/jflitton">Jeff Flitton</a>: <a href="https://github.com/PHP-DI/PHP-DI/pull/89">#89</a>).</li>
 <li><a href="https://github.com/PHP-DI/PHP-DI/issues/86">#86</a>: Optimized definition lookup (faster)</li>
 <li>FIXED <a href="https://github.com/PHP-DI/PHP-DI/issues/87">#87</a>: Rare bug in the <code>PhpDocParser</code>, fixed by <a href="https://github.com/drdamour">drdamour</a></li>
 </ul>
 <h2 id="32">3.2</h2>
-<p>Read the <a href="2-php-di-3-2.html">news entry</a>.</p>
+<p>Read the <a href="news/02-php-di-3-2.html">news entry</a>.</p>
 <p>Small BC-break: PHP-DI 3.0 and 3.1 injected properties before calling the constructor. This was confusing and <a href="https://github.com/PHP-DI/PHP-DI/issues/74">not supported for internal classes</a>.
 From 3.2 and on, properties are injected after calling the constructor.</p>
 <ul>
@@ -238,7 +238,7 @@ From 3.2 and on, properties are injected after calling the constructor.</p>
 <li>FIXED <a href="https://github.com/PHP-DI/PHP-DI/issues/82">#82</a>: Serialization error when using a cache</li>
 </ul>
 <h2 id="31">3.1</h2>
-<p>Read the <a href="1-php-di-3-1.html">news entry</a>.</p>
+<p>Read the <a href="news/01-php-di-3-1.html">news entry</a>.</p>
 <ul>
 <li>Zend Framework 1 integration through the <a href="https://github.com/PHP-DI/PHP-DI-ZF1">PHP-DI-ZF1 project</a></li>
 <li>Fixed the order of priorities when you mix different definition sources (reflection, annotations, files, …). See <a href="doc/definition-overriding.html">Definition overriding</a></li>
