@@ -49,10 +49,10 @@ class ObjectDefinitionDumper implements DefinitionDumper
         $str = sprintf('    class = %s%s', $warning, $className);
 
         // Scope
-        $str .= "\n    scope = " . $definition->getScope();
+        $str .= PHP_EOL . "    scope = " . $definition->getScope();
 
         // Lazy
-        $str .= "\n    lazy = " . var_export($definition->isLazy(), true);
+        $str .= PHP_EOL . "    lazy = " . var_export($definition->isLazy(), true);
 
         if ($classExist) {
             // Constructor
@@ -65,7 +65,7 @@ class ObjectDefinitionDumper implements DefinitionDumper
             $str .= $this->dumpMethods($className, $definition);
         }
 
-        return sprintf("Object (\n%s\n)", $str);
+        return sprintf("Object (" . PHP_EOL . "%s" . PHP_EOL . ")", $str);
     }
 
     private function dumpConstructor($className, ObjectDefinition $definition)
@@ -77,7 +77,7 @@ class ObjectDefinitionDumper implements DefinitionDumper
         if ($constructorInjection !== null) {
             $parameters = $this->dumpMethodParameters($className, $constructorInjection);
 
-            $str .= sprintf("\n    __construct(\n        %s\n    )", $parameters);
+            $str .= sprintf(PHP_EOL . "    __construct(" . PHP_EOL . "        %s" . PHP_EOL . "    )", $parameters);
         }
 
         return $str;
@@ -95,7 +95,7 @@ class ObjectDefinitionDumper implements DefinitionDumper
                 $valueStr = var_export($value, true);
             }
 
-            $str .= sprintf("\n    $%s = %s", $propertyInjection->getPropertyName(), $valueStr);
+            $str .= sprintf(PHP_EOL . "    $%s = %s", $propertyInjection->getPropertyName(), $valueStr);
         }
 
         return $str;
@@ -108,7 +108,7 @@ class ObjectDefinitionDumper implements DefinitionDumper
         foreach ($definition->getMethodInjections() as $methodInjection) {
             $parameters = $this->dumpMethodParameters($className, $methodInjection);
 
-            $str .= sprintf("\n    %s(\n        %s\n    )", $methodInjection->getMethodName(), $parameters);
+            $str .= sprintf(PHP_EOL . "    %s(" . PHP_EOL . "        %s" . PHP_EOL . "    )", $methodInjection->getMethodName(), $parameters);
         }
 
         return $str;

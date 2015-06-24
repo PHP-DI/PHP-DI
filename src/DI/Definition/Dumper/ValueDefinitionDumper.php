@@ -37,7 +37,7 @@ class ValueDefinitionDumper implements DefinitionDumper
         var_dump($definition->getValue());
 
         return sprintf(
-            "Value (\n    %s\n)",
+            "Value (" . PHP_EOL . "    %s" . PHP_EOL . ")",
             trim(ob_get_clean())
         );
     }

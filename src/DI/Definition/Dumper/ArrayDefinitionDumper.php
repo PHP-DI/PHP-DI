@@ -60,6 +60,6 @@ class ArrayDefinitionDumper implements DefinitionDumper
 
     private function indent($str)
     {
-        return str_replace("\n", "\n    ", $str);
+        return str_replace(PHP_EOL, PHP_EOL . "    ", $str);
     }
 }
