@@ -35,7 +35,7 @@ class EnvironmentVariableDefinitionDumper implements DefinitionDumper
         }
 
         $str = "    variable = " . $definition->getVariableName();
-        $str .= "\n    optional = " . ($definition->isOptional() ? 'yes' : 'no');
+        $str .= PHP_EOL . "    optional = " . ($definition->isOptional() ? 'yes' : 'no');
 
         if ($definition->isOptional()) {
             $defaultValue = $definition->getDefaultValue();
@@ -47,17 +47,17 @@ class EnvironmentVariableDefinitionDumper implements DefinitionDumper
                 $defaultValueStr = var_export($defaultValue, true);
             }
 
-            $str .= "\n    default = " . $defaultValueStr;
+            $str .= PHP_EOL . "    default = " . $defaultValueStr;
         }
 
         return sprintf(
-            "Environment variable (\n%s\n)",
+            "Environment variable (" . PHP_EOL . "%s" . PHP_EOL . ")",
             $str
         );
     }
 
     private function indent($str)
     {
-        return str_replace("\n", "\n    ", $str);
+        return str_replace(PHP_EOL, PHP_EOL . "    ", $str);
     }
 }
