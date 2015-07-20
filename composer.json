@@ -32,6 +32,9 @@
         "doctrine/annotations": "~1.2",
         "ocramius/proxy-manager": "~1.0"
     },
+    "replace": {
+      "mnapoli/php-di": "*"
+    },
     "suggest": {
         "doctrine/cache": "Install it if you want to use the cache (version ~1.0)",
         "doctrine/annotations": "Install it if you want to use annotations (version ~1.2)",
