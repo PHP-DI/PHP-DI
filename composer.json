@@ -33,7 +33,7 @@
         "ocramius/proxy-manager": "~1.0"
     },
     "replace": {
-      "mnapoli/php-di": "*"
+        "mnapoli/php-di": "*"
     },
     "suggest": {
         "doctrine/cache": "Install it if you want to use the cache (version ~1.0)",
