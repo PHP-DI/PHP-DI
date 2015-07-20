@@ -23,7 +23,7 @@
         "php": ">=5.3.3",
         "doctrine/annotations": "~1.2",
         "doctrine/cache": "~1.0",
-        "php-di/phpdocreader": "~1.3",
+        "php-di/phpdoc-reader": "~1.3",
         "myclabs/php-enum": "~1.1",
         "ocramius/proxy-manager": "~0.5",
         "container-interop/container-interop": "~1.0"
