@@ -196,7 +196,7 @@ class ObjectDefinitionHelperTest extends \PHPUnit_Framework_TestCase
     {
         $helper = new ObjectDefinitionHelper();
         $helper->methodParameter('__construct', 'wrongName', 42);
-        $this->setExpectedExceptionRegExp(DefinitionException::class, "/^Parameter with name 'wrongName' could not be found./");
+        $this->setExpectedExceptionRegExp('DI\Definition\Exception\DefinitionException', "/^Parameter with name 'wrongName' could not be found./");
         $helper->getDefinition('DI\Test\UnitTest\Definition\Helper\Fixtures\Class1');
     }
 }
