@@ -12,6 +12,7 @@ namespace DI\Definition\Helper;
 use DI\Definition\ClassDefinition;
 use DI\Definition\ClassDefinition\MethodInjection;
 use DI\Definition\ClassDefinition\PropertyInjection;
+use DI\Definition\Exception\DefinitionException;
 use DI\Scope;
 
 /**
@@ -237,6 +238,7 @@ class ClassDefinitionHelper implements DefinitionHelper
      * @param ClassDefinition $definition
      * @param string          $method
      * @param array           $parameters
+     * @throws DefinitionException
      * @return array
      */
     private function fixParameters(ClassDefinition $definition, $method, $parameters)
@@ -247,7 +249,11 @@ class ClassDefinitionHelper implements DefinitionHelper
             // Parameter indexed by the parameter name, we reindex it with its position
             if (is_string($index)) {
                 $callable = array($definition->getClassName(), $method);
-                $reflectionParameter = new \ReflectionParameter($callable, $index);
+                try {
+                    $reflectionParameter = new \ReflectionParameter($callable, $index);
+                } catch (\ReflectionException $e) {
+                    throw DefinitionException::create($definition, "Parameter with name '$index' could not be found.");
+                }
 
                 $index = $reflectionParameter->getPosition();
             }

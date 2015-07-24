@@ -10,6 +10,7 @@
 namespace DI\Test\UnitTest\Definition\Helper;
 
 use DI\Definition\ClassDefinition\MethodInjection;
+use DI\Definition\Exception\DefinitionException;
 use DI\Definition\Helper\ClassDefinitionHelper;
 use DI\Scope;
 
@@ -144,5 +145,13 @@ class ClassDefinitionHelperTest extends \PHPUnit_Framework_TestCase
 
         // Check that injections are in the good order (matching the real parameters order)
         $this->assertEquals(array('val1', 'val2'), $methodInjection->getParameters());
+    }
+
+    public function testErrorMessageOnUnknownParameter()
+    {
+        $helper = new ClassDefinitionHelper();
+        $helper->methodParameter('__construct', 'wrongName', 42);
+        $this->setExpectedException('DI\Definition\Exception\DefinitionException', "Parameter with name 'wrongName' could not be found.");
+        $helper->getDefinition('DI\Test\UnitTest\Definition\Helper\Fixtures\Class1');
     }
 }
