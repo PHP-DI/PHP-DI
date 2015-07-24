@@ -265,7 +265,7 @@ class ObjectDefinitionHelper implements DefinitionHelper
                 try {
                     $reflectionParameter = new \ReflectionParameter($callable, $index);
                 } catch (\ReflectionException $e) {
-                    throw DefinitionException::create($definition, "Parameter with name '$index' could not be found.");
+                    throw DefinitionException::create($definition, "Parameter with name '$index' could not be found");
                 }
 
                 $index = $reflectionParameter->getPosition();
