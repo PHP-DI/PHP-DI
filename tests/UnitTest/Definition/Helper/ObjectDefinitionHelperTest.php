@@ -10,6 +10,7 @@
 namespace DI\Test\UnitTest\Definition\Helper;
 
 use DI\Definition\ObjectDefinition\MethodInjection;
+use DI\Definition\Exception\DefinitionException;
 use DI\Definition\Helper\ObjectDefinitionHelper;
 use DI\Scope;
 
@@ -189,5 +190,13 @@ class ObjectDefinitionHelperTest extends \PHPUnit_Framework_TestCase
         $this->assertNotNull($definition->getConstructorInjection());
 
         $this->assertEquals(42, $definition->getConstructorInjection()->getParameter(0));
+    }
+
+    public function testErrorMessageOnUnknownParameter()
+    {
+        $helper = new ObjectDefinitionHelper();
+        $helper->methodParameter('__construct', 'wrongName', 42);
+        $this->setExpectedExceptionRegExp(DefinitionException::class, "/^Parameter with name 'wrongName' could not be found./");
+        $helper->getDefinition('DI\Test\UnitTest\Definition\Helper\Fixtures\Class1');
     }
 }

@@ -12,6 +12,7 @@ namespace DI\Definition\Helper;
 use DI\Definition\ObjectDefinition;
 use DI\Definition\ObjectDefinition\MethodInjection;
 use DI\Definition\ObjectDefinition\PropertyInjection;
+use DI\Definition\Exception\DefinitionException;
 
 /**
  * Helps defining how to create an instance of a class.
@@ -250,6 +251,7 @@ class ObjectDefinitionHelper implements DefinitionHelper
      * @param ObjectDefinition $definition
      * @param string          $method
      * @param array           $parameters
+     * @throws DefinitionException
      * @return array
      */
     private function fixParameters(ObjectDefinition $definition, $method, $parameters)
@@ -260,7 +262,11 @@ class ObjectDefinitionHelper implements DefinitionHelper
             // Parameter indexed by the parameter name, we reindex it with its position
             if (is_string($index)) {
                 $callable = [$definition->getClassName(), $method];
-                $reflectionParameter = new \ReflectionParameter($callable, $index);
+                try {
+                    $reflectionParameter = new \ReflectionParameter($callable, $index);
+                } catch (\ReflectionException $e) {
+                    throw DefinitionException::create($definition, "Parameter with name '$index' could not be found.");
+                }
 
                 $index = $reflectionParameter->getPosition();
             }
