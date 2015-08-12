@@ -3,12 +3,23 @@
 namespace DI\Test\UnitTest\Definition\ObjectDefinition;
 
 use DI\Definition\ObjectDefinition\MethodInjection;
+use DI\Scope;
 
 /**
  * @covers \DI\Definition\ObjectDefinition\MethodInjection
  */
 class MethodInjectionTest extends \PHPUnit_Framework_TestCase
 {
+    public function testBasicMethods()
+    {
+        $definition = new MethodInjection('foo');
+
+        $this->assertEquals('foo', $definition->getMethodName());
+        $this->assertNull($definition->getName());
+        $this->assertEquals(Scope::PROTOTYPE, $definition->getScope());
+        $this->assertEmpty($definition->getParameters());
+    }
+
     public function testMergeParameters()
     {
         $definition1 = new MethodInjection('foo', [
@@ -40,5 +51,34 @@ class MethodInjectionTest extends \PHPUnit_Framework_TestCase
         $definition1->merge($definition2);
 
         $this->assertEquals([null], $definition1->getParameters());
+    }
+
+    public function testNotCacheable()
+    {
+        $definition = new MethodInjection('foo');
+
+        $this->assertNotInstanceOf('DI\Definition\CacheableDefinition', $definition);
+    }
+
+    public function testEmptyParameters()
+    {
+        $definition = new MethodInjection('foo');
+
+        $this->assertEmpty($definition->getParameters());
+    }
+
+    public function testGetParameters()
+    {
+        $definition = new MethodInjection('foo', ['bar']);
+
+        $this->assertEquals(['bar'], $definition->getParameters());
+    }
+
+    public function testReplaceParameters()
+    {
+        $definition = new MethodInjection('foo', ['bar']);
+        $definition->replaceParameters(['bim']);
+
+        $this->assertEquals(['bim'], $definition->getParameters());
     }
 }

@@ -94,7 +94,7 @@ class ObjectDefinitionHelperTest extends \PHPUnit_Framework_TestCase
 
         $constructorInjection = $definition->getConstructorInjection();
 
-        $this->assertEquals(42, $constructorInjection->getParameter(0));
+        $this->assertEquals([42], $constructorInjection->getParameters());
     }
 
     /**
@@ -157,7 +157,7 @@ class ObjectDefinitionHelperTest extends \PHPUnit_Framework_TestCase
         $methodInjection = current($definition->getMethodInjections());
 
         $this->assertEquals('method', $methodInjection->getMethodName());
-        $this->assertEquals(42, $methodInjection->getParameter(0));
+        $this->assertEquals([42], $methodInjection->getParameters());
     }
 
     /**
@@ -189,7 +189,7 @@ class ObjectDefinitionHelperTest extends \PHPUnit_Framework_TestCase
         $this->assertCount(0, $definition->getMethodInjections());
         $this->assertNotNull($definition->getConstructorInjection());
 
-        $this->assertEquals(42, $definition->getConstructorInjection()->getParameter(0));
+        $this->assertEquals([42], $definition->getConstructorInjection()->getParameters());
     }
 
     /**
