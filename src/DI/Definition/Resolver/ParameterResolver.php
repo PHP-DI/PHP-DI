@@ -54,13 +54,15 @@ class ParameterResolver
             return $args;
         }
 
+        $definitionParameters = $definition ? $definition->getParameters() : array();
+
         foreach ($functionReflection->getParameters() as $index => $parameter) {
             if (array_key_exists($parameter->getName(), $parameters)) {
                 // Look in the $parameters array
                 $value = $parameters[$parameter->getName()];
-            } elseif ($definition && $definition->hasParameter($index)) {
+            } elseif (array_key_exists($index, $definitionParameters)) {
                 // Look in the definition
-                $value = $definition->getParameter($index);
+                $value = $definitionParameters[$index];
             } else {
                 // If the parameter is optional and wasn't specified, we take its default value
                 if ($parameter->isOptional()) {
@@ -79,7 +81,7 @@ class ParameterResolver
                 $nestedDefinition = $value->getDefinition('');
 
                 // If the container cannot produce the entry, we can use the default parameter value
-                if (!$this->definitionResolver->isResolvable($nestedDefinition) && $parameter->isOptional()) {
+                if ($parameter->isOptional() && !$this->definitionResolver->isResolvable($nestedDefinition)) {
                     $value = $this->getParameterDefaultValue($parameter, $functionReflection);
                 } else {
                     $value = $this->definitionResolver->resolve($nestedDefinition);
