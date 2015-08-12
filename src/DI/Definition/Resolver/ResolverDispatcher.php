@@ -85,57 +85,54 @@ class ResolverDispatcher implements DefinitionResolver
      */
     private function getDefinitionResolver(Definition $definition)
     {
-        $definitionType = get_class($definition);
-
-        switch ($definitionType) {
-            case 'DI\Definition\ValueDefinition':
-                if (! $this->valueResolver) {
-                    $this->valueResolver = new ValueResolver();
-                }
-                return $this->valueResolver;
-            case 'DI\Definition\ArrayDefinition':
-            case 'DI\Definition\ArrayDefinitionExtension':
-                if (! $this->arrayResolver) {
-                    $this->arrayResolver = new ArrayResolver($this);
-                }
-                return $this->arrayResolver;
-            case 'DI\Definition\FactoryDefinition':
-                if (! $this->factoryResolver) {
-                    $this->factoryResolver = new FactoryResolver($this->container);
-                }
-                return $this->factoryResolver;
-            case 'DI\Definition\DecoratorDefinition':
-                if (! $this->decoratorResolver) {
-                    $this->decoratorResolver = new DecoratorResolver($this->container, $this);
-                }
-                return $this->decoratorResolver;
-            case 'DI\Definition\AliasDefinition':
-                if (! $this->aliasResolver) {
-                    $this->aliasResolver = new AliasResolver($this->container);
-                }
-                return $this->aliasResolver;
-            case 'DI\Definition\ObjectDefinition':
+        switch (true) {
+            case ($definition instanceof \DI\Definition\ObjectDefinition):
                 if (! $this->objectResolver) {
                     $this->objectResolver = new ObjectCreator($this, $this->proxyFactory);
                 }
                 return $this->objectResolver;
-            case 'DI\Definition\InstanceDefinition':
-                if (! $this->instanceResolver) {
-                    $this->instanceResolver = new InstanceInjector($this, $this->proxyFactory);
+            case ($definition instanceof \DI\Definition\ValueDefinition):
+                if (! $this->valueResolver) {
+                    $this->valueResolver = new ValueResolver();
                 }
-                return $this->instanceResolver;
-            case 'DI\Definition\EnvironmentVariableDefinition':
+                return $this->valueResolver;
+            case ($definition instanceof \DI\Definition\AliasDefinition):
+                if (! $this->aliasResolver) {
+                    $this->aliasResolver = new AliasResolver($this->container);
+                }
+                return $this->aliasResolver;
+            case ($definition instanceof \DI\Definition\DecoratorDefinition):
+                if (! $this->decoratorResolver) {
+                    $this->decoratorResolver = new DecoratorResolver($this->container, $this);
+                }
+                return $this->decoratorResolver;
+            case ($definition instanceof \DI\Definition\FactoryDefinition):
+                if (! $this->factoryResolver) {
+                    $this->factoryResolver = new FactoryResolver($this->container);
+                }
+                return $this->factoryResolver;
+            case ($definition instanceof \DI\Definition\ArrayDefinition):
+                if (! $this->arrayResolver) {
+                    $this->arrayResolver = new ArrayResolver($this);
+                }
+                return $this->arrayResolver;
+            case ($definition instanceof \DI\Definition\EnvironmentVariableDefinition):
                 if (! $this->envVariableResolver) {
                     $this->envVariableResolver = new EnvironmentVariableResolver($this);
                 }
                 return $this->envVariableResolver;
-            case 'DI\Definition\StringDefinition':
+            case ($definition instanceof \DI\Definition\StringDefinition):
                 if (! $this->stringResolver) {
                     $this->stringResolver = new StringResolver($this->container);
                 }
                 return $this->stringResolver;
+            case ($definition instanceof \DI\Definition\InstanceDefinition):
+                if (! $this->instanceResolver) {
+                    $this->instanceResolver = new InstanceInjector($this, $this->proxyFactory);
+                }
+                return $this->instanceResolver;
             default:
-                throw new \RuntimeException("No definition resolver was configured for definition of type $definitionType");
+                throw new \RuntimeException('No definition resolver was configured for definition of type ' . get_class($definition));
         }
     }
 }
