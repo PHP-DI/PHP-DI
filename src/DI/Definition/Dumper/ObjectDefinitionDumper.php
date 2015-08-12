@@ -120,9 +120,11 @@ class ObjectDefinitionDumper implements DefinitionDumper
 
         $args = [];
 
+        $definitionParameters = $methodInjection->getParameters();
+
         foreach ($methodReflection->getParameters() as $index => $parameter) {
-            if ($methodInjection->hasParameter($index)) {
-                $value = $methodInjection->getParameter($index);
+            if (array_key_exists($index, $definitionParameters)) {
+                $value = $definitionParameters[$index];
 
                 if ($value instanceof EntryReference) {
                     $args[] = sprintf('$%s = get(%s)', $parameter->getName(), $value->getName());

@@ -9,10 +9,10 @@
 
 namespace DI\Definition\Resolver;
 
-use DI\Definition\AbstractFunctionCallDefinition;
 use DI\Definition\ObjectDefinition;
 use DI\Definition\Exception\DefinitionException;
 use DI\Definition\Helper\DefinitionHelper;
+use DI\Definition\ObjectDefinition\MethodInjection;
 
 /**
  * Resolves parameters for a function call.
@@ -36,15 +36,15 @@ class ParameterResolver
     }
 
     /**
-     * @param AbstractFunctionCallDefinition $definition
-     * @param \ReflectionFunctionAbstract    $functionReflection
-     * @param array                          $parameters
+     * @param MethodInjection             $definition
+     * @param \ReflectionFunctionAbstract $functionReflection
+     * @param array                       $parameters
      *
      * @throws DefinitionException A parameter has no value defined or guessable.
      * @return array Parameters to use to call the function.
      */
     public function resolveParameters(
-        AbstractFunctionCallDefinition $definition = null,
+        MethodInjection $definition = null,
         \ReflectionFunctionAbstract $functionReflection = null,
         array $parameters = []
     ) {
