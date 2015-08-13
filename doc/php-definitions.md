@@ -131,16 +131,6 @@ return [
 ];
 ```
 
-It's usually better to lazy-load `FooFactory` and let the container create it as
-needed - assuming you have auto-wiring enabled, or have already registered a
-definition for `FooFactory`, you can use this definition:
-
-```php
-return [
-    Foo::class => DI\factory([DI\get(FooFactory::class), 'create']),
-];
-```
-
 Or, if `FooFactory::create()` were a static method, you could use this definition:
 
 ```php
@@ -148,6 +138,8 @@ return [
     Foo::class => DI\factory([FooFactory::class, 'create']),
 ];
 ```
+
+(Note that support for lazy creation of a factory instance is planned for a future release.)
 
 When using a system with multiple definition files, you can override a previous entry using a decorator:
 
