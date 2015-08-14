@@ -60,7 +60,12 @@ class ContainerBuilder
     /**
      * @var Cache
      */
-    private $cache;
+    private $definitionCache;
+
+    /**
+     * @var Cache
+     */
+    private $annotationCache;
 
     /**
      * If true, write the proxies to disk to improve performances.
@@ -113,15 +118,19 @@ class ContainerBuilder
     {
         $sources = array_reverse($this->definitionSources);
         if ($this->useAnnotations) {
-            $sources[] = new AnnotationReader($this->ignorePhpDocErrors);
+            $reader = new AnnotationReader($this->ignorePhpDocErrors);
+            if ($this->annotationCache) {
+                $reader->setAnnotationCache($this->annotationCache);
+            }
+            $sources[] = $reader;
         } elseif ($this->useAutowiring) {
             $sources[] = new Autowiring();
         }
 
         $chain = new SourceChain($sources);
 
-        if ($this->cache) {
-            $source = new CachedDefinitionSource($chain, $this->cache);
+        if ($this->definitionCache) {
+            $source = new CachedDefinitionSource($chain, $this->definitionCache);
             $chain->setRootDefinitionSource($source);
         } else {
             $source = $chain;
@@ -179,12 +188,36 @@ class ContainerBuilder
     /**
      * Enables the use of a cache for the definitions.
      *
+     * Note that caching definitions is more aggressive than caching annotations, and
+     * you should choose between either definition or annotation caching - it doesn't
+     * make sense to enable both.
+     *
+     * @see setAnnotationCache()
+     *
      * @param Cache $cache Cache backend to use
      * @return ContainerBuilder
      */
     public function setDefinitionCache(Cache $cache)
     {
-        $this->cache = $cache;
+        $this->definitionCache = $cache;
+        return $this;
+    }
+
+    /**
+     * Enable the use of a cache for annotations.
+     *
+     * Note that caching annotations is less aggressive than caching definitions, and
+     * you should choose between either annotation or definition caching - it doesn't
+     * make sense to enable both.
+     *
+     * @see setDefinitionCache()
+     *
+     * @param Cache $cache Cache backend to use
+     * @return ContainerBuilder
+     */
+    public function setAnnotationCache(Cache $cache)
+    {
+        $this->annotationCache = $cache;
         return $this;
     }
 
