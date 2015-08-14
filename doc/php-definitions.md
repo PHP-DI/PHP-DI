@@ -111,26 +111,35 @@ return [
 
 The only parameter of a factory is the container (which can be used to retrieve other entries). You are encouraged to type-hint against the interface `Interop\Container\ContainerInterface` instead of the implementation `DI\Container`: that can be necessary in scenarios where you are using multiple containers (for example if using the PHP-DI + Symfony integration).
 
-You can also use a factory class:
+You can also use a factory class - as an example, let's assume you have a simple factory class like this:
 
 ```php
 class FooFactory
 {
-    // the $container can be omitted if not used
-    public function create($container)
+    public function create($container) // (note: $container can be omitted if not needed)
     {
         return new Foo();
     }
 }
+```
 
+You can choose to eagerly load `FooFactory`, at definition time:
+
+```php
 return [
-    'Foo' => [new FooFactory(), 'create'],
-    // alternative syntaxes for the same result
-    // these syntaxes are preferred because of lazy loading
-    'Foo' => [DI\get('FooFactory'), 'create'],
-    'Foo' => ['FooFactory', 'create'],
+    Foo::class => DI\factory([new FooFactory(), 'create']),
 ];
 ```
+
+Or, if `FooFactory::create()` were a static method, you could use this definition:
+
+```php
+return [
+    Foo::class => DI\factory([FooFactory::class, 'create']),
+];
+```
+
+(Note that support for lazy creation of a factory instance is planned for a future release.)
 
 When using a system with multiple definition files, you can override a previous entry using a decorator:
 
