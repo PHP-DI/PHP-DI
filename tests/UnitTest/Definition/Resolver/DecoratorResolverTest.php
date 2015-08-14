@@ -39,12 +39,12 @@ class DecoratorResolverTest extends \PHPUnit_Framework_TestCase
      */
     public function should_resolve_decorators()
     {
-        $previousDefinition = new ValueDefinition('foo', 'bar');
+        $previousDefinition = new ValueDefinition('foo');
 
         $callable = function ($previous, ContainerInterface $container) {
-            return $previous . 'baz';
+            return $previous . 'bar';
         };
-        $definition = new DecoratorDefinition('foo', $callable);
+        $definition = new DecoratorDefinition('name', $callable);
         $definition->setSubDefinition($previousDefinition);
 
         $this->parentResolver->expects($this->once())
@@ -54,7 +54,7 @@ class DecoratorResolverTest extends \PHPUnit_Framework_TestCase
 
         $value = $this->resolver->resolve($definition);
 
-        $this->assertEquals('barbaz', $value);
+        $this->assertEquals('foobar', $value);
     }
 
     /**

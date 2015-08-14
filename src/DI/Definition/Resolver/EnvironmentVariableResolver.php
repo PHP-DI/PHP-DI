@@ -55,7 +55,9 @@ class EnvironmentVariableResolver implements DefinitionResolver
         $value = $definition->getDefaultValue();
 
         // Nested definition
-        if ($value instanceof DefinitionHelper) {
+        if ($value instanceof Definition) {
+            return $this->definitionResolver->resolve($value);
+        } elseif ($value instanceof DefinitionHelper) {
             return $this->definitionResolver->resolve($value->getDefinition(''));
         }
 

@@ -37,6 +37,14 @@ class InstanceDefinition implements Definition
     /**
      * {@inheritdoc}
      */
+    public function setName($name)
+    {
+        // Name are superfluous for instance definitions
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function getName()
     {
         // Name are superfluous for instance definitions

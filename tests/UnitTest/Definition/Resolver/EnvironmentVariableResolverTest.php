@@ -43,10 +43,10 @@ class EnvironmentVariableResolverTest extends \PHPUnit_Framework_TestCase
         };
 
         $this->resolver = new EnvironmentVariableResolver($this->parentResolver, $variableReader);
-        $this->definedDefinition = new EnvironmentVariableDefinition('foo', 'DEFINED');
-        $this->undefinedDefinition = new EnvironmentVariableDefinition('foo', 'UNDEFINED');
-        $this->optionalDefinition = new EnvironmentVariableDefinition('foo', 'UNDEFINED', true, '<default>');
-        $this->nestedDefinition = new EnvironmentVariableDefinition('foo', 'UNDEFINED', true, \DI\get('foo'));
+        $this->definedDefinition = new EnvironmentVariableDefinition('DEFINED');
+        $this->undefinedDefinition = new EnvironmentVariableDefinition('UNDEFINED');
+        $this->optionalDefinition = new EnvironmentVariableDefinition('UNDEFINED', true, '<default>');
+        $this->nestedDefinition = new EnvironmentVariableDefinition('UNDEFINED', true, \DI\get('foo'));
     }
 
     /**
@@ -76,7 +76,7 @@ class EnvironmentVariableResolverTest extends \PHPUnit_Framework_TestCase
     {
         $this->parentResolver->expects($this->once())
             ->method('resolve')
-            ->with(new AliasDefinition('', 'foo'))
+            ->with(new AliasDefinition('foo'))
             ->will($this->returnValue('bar'));
 
         $value = $this->resolver->resolve($this->nestedDefinition);

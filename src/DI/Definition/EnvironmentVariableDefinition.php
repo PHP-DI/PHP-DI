@@ -2,7 +2,6 @@
 
 namespace DI\Definition;
 
-use DI\Definition\Helper\DefinitionHelper;
 use DI\Scope;
 
 /**
@@ -47,21 +46,27 @@ class EnvironmentVariableDefinition implements CacheableDefinition
     private $scope;
 
     /**
-     * @param string $name Entry name
      * @param string $variableName The name of the environment variable
      * @param bool $isOptional Whether or not the environment variable definition is optional
      * @param mixed $defaultValue The default value to use if the environment variable is optional and not provided
      */
-    public function __construct($name, $variableName, $isOptional = false, $defaultValue = null)
+    public function __construct($variableName, $isOptional = false, $defaultValue = null)
     {
-        $this->name = $name;
         $this->variableName = $variableName;
         $this->isOptional = $isOptional;
         $this->defaultValue = $defaultValue;
     }
 
     /**
-     * @return string Entry name
+     * {@inheritdoc}
+     */
+    public function setName($name)
+    {
+        $this->name = $name;
+    }
+
+    /**
+     * {@inheritdoc}
      */
     public function getName()
     {
@@ -114,9 +119,8 @@ class EnvironmentVariableDefinition implements CacheableDefinition
             . '    optional = ' . ($this->isOptional ? 'yes' : 'no');
 
         if ($this->isOptional) {
-            if ($this->defaultValue instanceof DefinitionHelper) {
-                $nestedDefinition = (string) $this->defaultValue->getDefinition('');
-                $defaultValueStr = str_replace(PHP_EOL, PHP_EOL . '    ', $nestedDefinition);
+            if ($this->defaultValue instanceof Definition) {
+                $defaultValueStr = str_replace(PHP_EOL, PHP_EOL . '    ', $this->defaultValue);
             } else {
                 $defaultValueStr = var_export($this->defaultValue, true);
             }

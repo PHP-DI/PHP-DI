@@ -2,7 +2,6 @@
 
 namespace DI\Definition;
 
-use DI\Definition\Helper\DefinitionHelper;
 use DI\Scope;
 
 /**
@@ -25,17 +24,23 @@ class ArrayDefinition implements Definition
     private $values;
 
     /**
-     * @param string $name   Entry name
-     * @param array  $values
+     * @param array $values
      */
-    public function __construct($name, array $values)
+    public function __construct(array $values)
     {
-        $this->name = $name;
         $this->values = $values;
     }
 
     /**
-     * @return string Entry name
+     * {@inheritdoc}
+     */
+    public function setName($name)
+    {
+        $this->name = $name;
+    }
+
+    /**
+     * {@inheritdoc}
      */
     public function getName()
     {
@@ -69,8 +74,8 @@ class ArrayDefinition implements Definition
 
             $str .= '    ' . $key . ' => ';
 
-            if ($value instanceof DefinitionHelper) {
-                $str .= str_replace(PHP_EOL, PHP_EOL . '    ', $value->getDefinition(''));
+            if ($value instanceof Definition) {
+                $str .= str_replace(PHP_EOL, PHP_EOL . '    ', $value);
             } else {
                 $str .= var_export($value, true);
             }

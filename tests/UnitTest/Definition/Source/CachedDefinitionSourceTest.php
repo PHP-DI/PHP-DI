@@ -3,6 +3,7 @@
 namespace DI\Test\UnitTest\Definition\Source;
 
 use DI\Definition\ObjectDefinition;
+use DI\Definition\ValueDefinition;
 use DI\Definition\Source\CachedDefinitionSource;
 use DI\Definition\Source\DefinitionArray;
 use Doctrine\Common\Cache\Cache;
@@ -46,6 +47,7 @@ class CachedDefinitionSourceTest extends \PHPUnit_Framework_TestCase
         $source = new CachedDefinitionSource($cachedSource, $cache);
 
         $expectedDefinition = new ObjectDefinition('foo');
+        $expectedDefinition->setName('foo');
         $cache->expects($this->once())
             ->method('save')
             ->with($this->isType('string'), $expectedDefinition);

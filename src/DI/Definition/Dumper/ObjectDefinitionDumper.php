@@ -2,7 +2,7 @@
 
 namespace DI\Definition\Dumper;
 
-use DI\Definition\EntryReference;
+use DI\Definition\AliasDefinition;
 use DI\Definition\ObjectDefinition;
 use DI\Definition\ObjectDefinition\MethodInjection;
 use ReflectionException;
@@ -75,8 +75,8 @@ class ObjectDefinitionDumper
 
         foreach ($definition->getPropertyInjections() as $propertyInjection) {
             $value = $propertyInjection->getValue();
-            if ($value instanceof EntryReference) {
-                $valueStr = sprintf('get(%s)', $value->getName());
+            if ($value instanceof AliasDefinition) {
+                $valueStr = sprintf('get(%s)', $value->getTargetEntryName());
             } else {
                 $valueStr = var_export($value, true);
             }
@@ -112,8 +112,8 @@ class ObjectDefinitionDumper
             if (array_key_exists($index, $definitionParameters)) {
                 $value = $definitionParameters[$index];
 
-                if ($value instanceof EntryReference) {
-                    $args[] = sprintf('$%s = get(%s)', $parameter->getName(), $value->getName());
+                if ($value instanceof AliasDefinition) {
+                    $args[] = sprintf('$%s = get(%s)', $parameter->getName(), $value->getTargetEntryName());
                 } else {
                     $args[] = sprintf('$%s = %s', $parameter->getName(), var_export($value, true));
                 }

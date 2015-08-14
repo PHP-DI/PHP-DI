@@ -4,7 +4,7 @@ namespace DI\Definition\Source;
 
 use DI\Annotation\Inject;
 use DI\Annotation\Injectable;
-use DI\Definition\EntryReference;
+use DI\Definition\AliasDefinition;
 use DI\Definition\Exception\AnnotationException;
 use DI\Definition\Exception\DefinitionException;
 use DI\Definition\ObjectDefinition;
@@ -121,7 +121,7 @@ class AnnotationReader implements DefinitionSource
         }
 
         $definition->addPropertyInjection(
-            new PropertyInjection($property->getName(), new EntryReference($entryName), $classname)
+            new PropertyInjection($property->getName(), new AliasDefinition($entryName), $classname)
         );
     }
 
@@ -176,7 +176,7 @@ class AnnotationReader implements DefinitionSource
             $entryName = $this->getMethodParameter($index, $parameter, $annotationParameters);
 
             if ($entryName !== null) {
-                $parameters[$index] = new EntryReference($entryName);
+                $parameters[$index] = new AliasDefinition($entryName);
             }
         }
 

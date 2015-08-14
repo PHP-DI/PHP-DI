@@ -27,17 +27,23 @@ class StringDefinition implements Definition, SelfResolvingDefinition
     private $expression;
 
     /**
-     * @param string $name       Entry name
      * @param string $expression
      */
-    public function __construct($name, $expression)
+    public function __construct($expression)
     {
-        $this->name = $name;
         $this->expression = $expression;
     }
 
     /**
-     * @return string Entry name
+     * {@inheritdoc}
+     */
+    public function setName($name)
+    {
+        $this->name = $name;
+    }
+
+    /**
+     * {@inheritdoc}
      */
     public function getName()
     {
@@ -64,13 +70,13 @@ class StringDefinition implements Definition, SelfResolvingDefinition
     {
         $expression = $this->expression;
 
-        $result = preg_replace_callback('#\{([^\{\}]+)\}#', function (array $matches) use ($container) {
+        $result = preg_replace_callback('#\{([^\{\}]+)\}#', function (array $matches) use ($container, $expression) {
             try {
                 return $container->get($matches[1]);
             } catch (NotFoundException $e) {
                 throw new DependencyException(sprintf(
-                    "Error while parsing string expression for entry '%s': %s",
-                    $this->getName(),
+                    "Error while parsing string expression '%s': %s",
+                    $expression,
                     $e->getMessage()
                 ), 0, $e);
             }

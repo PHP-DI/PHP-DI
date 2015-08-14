@@ -132,7 +132,8 @@ class DefinitionArrayTest extends \PHPUnit_Framework_TestCase
     public function testAddDefinition()
     {
         $source = new DefinitionArray();
-        $definition = new ValueDefinition('foo', 'bar');
+        $definition = new ValueDefinition('value');
+        $definition->setName('foo');
 
         $source->addDefinition($definition);
         $this->assertSame($definition, $source->getDefinition('foo'));
@@ -141,7 +142,8 @@ class DefinitionArrayTest extends \PHPUnit_Framework_TestCase
     public function testAddDefinitions()
     {
         $source = new DefinitionArray();
-        $definition = new ValueDefinition('foo', 'bar');
+        $definition = new ValueDefinition('value');
+        $definition->setName('foo');
 
         $source->addDefinitions(['foo' => $definition]);
         $this->assertSame($definition, $source->getDefinition('foo'));
@@ -149,7 +151,8 @@ class DefinitionArrayTest extends \PHPUnit_Framework_TestCase
 
     public function testAddDefinitionsInConstructor()
     {
-        $definition = new ValueDefinition('foo', 'bar');
+        $definition = new ValueDefinition('value');
+        $definition->setName('foo');
 
         $source = new DefinitionArray(['foo' => $definition]);
         $this->assertSame($definition, $source->getDefinition('foo'));
@@ -158,8 +161,10 @@ class DefinitionArrayTest extends \PHPUnit_Framework_TestCase
     public function testAddDefinitionsOverrideExisting()
     {
         $source = new DefinitionArray();
-        $definition1 = new ValueDefinition('foo', 'bar');
-        $definition2 = new ValueDefinition('foo', 'bar');
+        $definition1 = new ValueDefinition('value');
+        $definition1->setName('foo');
+        $definition2 = new ValueDefinition('value');
+        $definition2->setName('foo');
 
         $source->addDefinitions(['foo' => $definition1]);
         $source->addDefinitions(['foo' => $definition2]);

@@ -18,21 +18,22 @@ class AliasDefinitionTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function should_have_a_name()
+    public function has_a_target_entry_name()
     {
-        $definition = new AliasDefinition('foo', 'bar');
+        $definition = new AliasDefinition('foo');
 
-        $this->assertEquals('foo', $definition->getName());
+        $this->assertEquals('foo', $definition->getTargetEntryName());
     }
 
     /**
      * @test
      */
-    public function should_have_a_target_entry_name()
+    public function has_a_name()
     {
-        $definition = new AliasDefinition('foo', 'bar');
+        $definition = new AliasDefinition('foo');
+        $definition->setName('bar');
 
-        $this->assertEquals('bar', $definition->getTargetEntryName());
+        $this->assertEquals('bar', $definition->getName());
     }
 
     /**
@@ -40,7 +41,7 @@ class AliasDefinitionTest extends \PHPUnit_Framework_TestCase
      */
     public function should_have_prototype_scope()
     {
-        $definition = new AliasDefinition('foo', 'bar');
+        $definition = new AliasDefinition('foo');
 
         $this->assertEquals(Scope::PROTOTYPE, $definition->getScope());
     }
@@ -86,6 +87,6 @@ class AliasDefinitionTest extends \PHPUnit_Framework_TestCase
      */
     public function should_cast_to_string()
     {
-        $this->assertEquals('get(bar)', (string) new AliasDefinition('', 'bar'));
+        $this->assertEquals('get(bar)', (string) new AliasDefinition('bar'));
     }
 }

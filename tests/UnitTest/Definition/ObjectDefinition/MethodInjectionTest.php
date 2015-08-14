@@ -16,8 +16,6 @@ class MethodInjectionTest extends \PHPUnit_Framework_TestCase
         $definition = new MethodInjection('foo');
 
         $this->assertEquals('foo', $definition->getMethodName());
-        $this->assertNull($definition->getName());
-        $this->assertEquals(Scope::PROTOTYPE, $definition->getScope());
         $this->assertEmpty($definition->getParameters());
     }
 

@@ -13,6 +13,9 @@ use DI\Scope;
  */
 class DecoratorDefinitionTest extends \PHPUnit_Framework_TestCase
 {
+    /**
+     * @test
+     */
     public function test_getters()
     {
         $callable = function () {
@@ -57,7 +60,7 @@ class DecoratorDefinitionTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf(HasSubDefinition::class, $definition);
         $this->assertEquals($definition->getName(), $definition->getSubDefinitionName());
 
-        $subDefinition = new ValueDefinition('foo', 'bar');
+        $subDefinition = new ValueDefinition('bar');
         $definition->setSubDefinition($subDefinition);
         $this->assertSame($subDefinition, $definition->getDecoratedDefinition());
     }

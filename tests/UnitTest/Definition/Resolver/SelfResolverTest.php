@@ -22,9 +22,9 @@ class SelfResolverTest extends \PHPUnit_Framework_TestCase
         $container = $this->easyMock(ContainerInterface::class);
         $resolver = new SelfResolver($container);
 
-        $definition = new ValueDefinition('foo', 'bar');
+        $definition = new ValueDefinition('foo');
 
         $this->assertTrue($resolver->isResolvable($definition));
-        $this->assertEquals('bar', $resolver->resolve($definition));
+        $this->assertEquals('foo', $resolver->resolve($definition));
     }
 }

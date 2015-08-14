@@ -16,20 +16,33 @@ class StringDefinitionTest extends \PHPUnit_Framework_TestCase
 {
     use EasyMock;
 
-    public function test_getters()
+    /**
+     * @test
+     */
+    public function has_expression()
     {
-        $definition = new StringDefinition('foo', 'bar');
+        $definition = new StringDefinition('foo');
 
-        $this->assertEquals('foo', $definition->getName());
-        $this->assertEquals('bar', $definition->getExpression());
+        $this->assertEquals('foo', $definition->getExpression());
     }
 
     /**
      * @test
      */
-    public function should_have_singleton_scope()
+    public function has_name()
     {
-        $definition = new StringDefinition('foo', 'bar');
+        $definition = new StringDefinition('aaa');
+        $definition->setName('foo');
+
+        $this->assertEquals('foo', $definition->getName());
+    }
+
+    /**
+     * @test
+     */
+    public function has_singleton_scope()
+    {
+        $definition = new StringDefinition('foo');
 
         $this->assertEquals(Scope::SINGLETON, $definition->getScope());
     }
@@ -37,7 +50,7 @@ class StringDefinitionTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function should_not_be_cacheable()
+    public function is_not_cacheable()
     {
         $this->assertNotInstanceOf(CacheableDefinition::class, new StringDefinition('foo', 'bar'));
     }
@@ -61,9 +74,9 @@ class StringDefinitionTest extends \PHPUnit_Framework_TestCase
     {
         $container = $this->easyMock(ContainerInterface::class);
 
-        $definition = new StringDefinition('foo', 'bar');
+        $definition = new StringDefinition('foo');
 
-        $this->assertEquals('bar', $definition->resolve($container));
+        $this->assertEquals('foo', $definition->resolve($container));
     }
 
     /**
@@ -75,7 +88,7 @@ class StringDefinitionTest extends \PHPUnit_Framework_TestCase
             'get' => 'bar',
         ]);
 
-        $definition = new StringDefinition('foo', '{test}');
+        $definition = new StringDefinition('{test}');
 
         $this->assertEquals('bar', $definition->resolve($container));
     }
@@ -91,7 +104,7 @@ class StringDefinitionTest extends \PHPUnit_Framework_TestCase
             ->withConsecutive(['tmp'], ['logs'])
             ->willReturnOnConsecutiveCalls('/private/tmp', 'myapp-logs');
 
-        $definition = new StringDefinition('foo', '{tmp}/{logs}/app.log');
+        $definition = new StringDefinition('{tmp}/{logs}/app.log');
 
         $value = $definition->resolve($container);
 
@@ -101,7 +114,7 @@ class StringDefinitionTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      * @expectedException \DI\DependencyException
-     * @expectedExceptionMessage Error while parsing string expression for entry 'foo': No entry or class found for 'test'
+     * @expectedExceptionMessage Error while parsing string expression '{test}': No entry or class found for 'test'
      */
     public function should_throw_on_unknown_entry_name()
     {
@@ -109,7 +122,7 @@ class StringDefinitionTest extends \PHPUnit_Framework_TestCase
             'get' => new NotFoundException("No entry or class found for 'test'"),
         ]);
 
-        $definition = new StringDefinition('foo', '{test}');
+        $definition = new StringDefinition('{test}');
         $definition->resolve($container);
     }
 
@@ -118,6 +131,6 @@ class StringDefinitionTest extends \PHPUnit_Framework_TestCase
      */
     public function should_cast_to_string()
     {
-        $this->assertEquals('foo/{bar}', (string) new StringDefinition('', 'foo/{bar}'));
+        $this->assertEquals('foo/{bar}', (string) new StringDefinition('foo/{bar}'));
     }
 }

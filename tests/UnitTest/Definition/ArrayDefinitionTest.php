@@ -14,20 +14,30 @@ class ArrayDefinitionTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function should_contain_values()
+    public function contains_values()
     {
-        $definition = new ArrayDefinition('foo', ['bar']);
+        $definition = new ArrayDefinition(['foo', 'bar']);
 
-        $this->assertEquals('foo', $definition->getName());
-        $this->assertEquals(['bar'], $definition->getValues());
+        $this->assertEquals(['foo', 'bar'], $definition->getValues());
     }
 
     /**
      * @test
      */
-    public function should_have_singleton_scope()
+    public function has_name()
     {
-        $definition = new ArrayDefinition('foo', []);
+        $definition = new ArrayDefinition([]);
+        $definition->setName('foo');
+
+        $this->assertEquals('foo', $definition->getName());
+    }
+
+    /**
+     * @test
+     */
+    public function has_singleton_scope()
+    {
+        $definition = new ArrayDefinition([]);
 
         $this->assertEquals(Scope::SINGLETON, $definition->getScope());
     }
@@ -35,9 +45,9 @@ class ArrayDefinitionTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function should_be_cacheable()
+    public function is_not_cacheable()
     {
-        $this->assertNotInstanceOf(CacheableDefinition::class, new ArrayDefinition('foo', []));
+        $this->assertNotInstanceOf(CacheableDefinition::class, new ArrayDefinition([]));
     }
 
     /**
@@ -45,7 +55,7 @@ class ArrayDefinitionTest extends \PHPUnit_Framework_TestCase
      */
     public function should_cast_to_string()
     {
-        $definition = new ArrayDefinition('foo', [
+        $definition = new ArrayDefinition([
             'hello',
             'world',
         ]);
@@ -64,7 +74,7 @@ class ArrayDefinitionTest extends \PHPUnit_Framework_TestCase
         $str = "[
     'test' => 'hello',
 ]";
-        $this->assertEquals($str, (string) new ArrayDefinition('foo', ['test' => 'hello']));
+        $this->assertEquals($str, (string) new ArrayDefinition(['test' => 'hello']));
     }
 
     /**
@@ -72,7 +82,7 @@ class ArrayDefinitionTest extends \PHPUnit_Framework_TestCase
      */
     public function should_cast_to_string_with_nested_definitions()
     {
-        $definition = new ArrayDefinition('foo', [
+        $definition = new ArrayDefinition([
             \DI\get('foo'),
             \DI\env('foo'),
         ]);

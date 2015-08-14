@@ -2,19 +2,17 @@
 
 namespace DI\Test\UnitTest;
 
+use DI\Definition\AliasDefinition;
 use DI\Definition\ArrayDefinition;
 use DI\Definition\ArrayDefinitionExtension;
 use DI\Definition\DecoratorDefinition;
-use DI\Definition\EntryReference;
 use DI\Definition\FactoryDefinition;
-use DI\Definition\Helper\ArrayDefinitionExtensionHelper;
-use DI\Definition\Helper\EnvironmentVariableDefinitionHelper;
 use DI\Definition\Helper\FactoryDefinitionHelper;
 use DI\Definition\Helper\ObjectDefinitionHelper;
-use DI\Definition\Helper\StringDefinitionHelper;
-use DI\Definition\Helper\ValueDefinitionHelper;
 use DI\Definition\ObjectDefinition;
 use DI\Definition\StringDefinition;
+use DI\Definition\EnvironmentVariableDefinition;
+use DI\Definition\ValueDefinition;
 
 /**
  * Tests the helper functions.
@@ -28,8 +26,8 @@ class FunctionsTest extends \PHPUnit_Framework_TestCase
     {
         $definition = \DI\value('foo');
 
-        $this->assertInstanceOf(ValueDefinitionHelper::class, $definition);
-        $this->assertEquals('foo', $definition->getDefinition('entry')->getValue());
+        $this->assertInstanceOf(ValueDefinition::class, $definition);
+        $this->assertEquals('foo', $definition->getValue());
     }
 
     /**
@@ -89,10 +87,10 @@ class FunctionsTest extends \PHPUnit_Framework_TestCase
      */
     public function test_get()
     {
-        $reference = \DI\get('foo');
+        $definition = \DI\get('foo');
 
-        $this->assertInstanceOf(EntryReference::class, $reference);
-        $this->assertEquals('foo', $reference->getName());
+        $this->assertInstanceOf(AliasDefinition::class, $definition);
+        $this->assertEquals('foo', $definition->getTargetEntryName());
     }
 
     /**
@@ -100,10 +98,10 @@ class FunctionsTest extends \PHPUnit_Framework_TestCase
      */
     public function test_link()
     {
-        $reference = \DI\link('foo');
+        $definition = \DI\link('foo');
 
-        $this->assertInstanceOf(EntryReference::class, $reference);
-        $this->assertEquals('foo', $reference->getName());
+        $this->assertInstanceOf(AliasDefinition::class, $definition);
+        $this->assertEquals('foo', $definition->getTargetEntryName());
     }
 
     /**
@@ -112,9 +110,10 @@ class FunctionsTest extends \PHPUnit_Framework_TestCase
     public function test_env()
     {
         $definition = \DI\env('foo');
+        $definition->setName('entry');
 
-        $this->assertTrue($definition instanceof EnvironmentVariableDefinitionHelper);
-        $definition = $definition->getDefinition('entry');
+        $this->assertTrue($definition instanceof EnvironmentVariableDefinition);
+        $this->assertEquals('entry', $definition->getName());
         $this->assertEquals('foo', $definition->getVariableName());
         $this->assertFalse($definition->isOptional());
     }
@@ -125,9 +124,10 @@ class FunctionsTest extends \PHPUnit_Framework_TestCase
     public function test_env_default_value()
     {
         $definition = \DI\env('foo', 'default');
+        $definition->setName('entry');
 
-        $this->assertTrue($definition instanceof EnvironmentVariableDefinitionHelper);
-        $definition = $definition->getDefinition('entry');
+        $this->assertTrue($definition instanceof EnvironmentVariableDefinition);
+        $this->assertEquals('entry', $definition->getName());
         $this->assertEquals('foo', $definition->getVariableName());
         $this->assertTrue($definition->isOptional());
         $this->assertEquals('default', $definition->getDefaultValue());
@@ -139,9 +139,10 @@ class FunctionsTest extends \PHPUnit_Framework_TestCase
     public function test_env_default_value_null()
     {
         $definition = \DI\env('foo', null);
+        $definition->setName('entry');
 
-        $this->assertTrue($definition instanceof EnvironmentVariableDefinitionHelper);
-        $definition = $definition->getDefinition('entry');
+        $this->assertTrue($definition instanceof EnvironmentVariableDefinition);
+        $this->assertEquals('entry', $definition->getName());
         $this->assertEquals('foo', $definition->getVariableName());
         $this->assertTrue($definition->isOptional());
         $this->assertSame(null, $definition->getDefaultValue());
@@ -152,17 +153,14 @@ class FunctionsTest extends \PHPUnit_Framework_TestCase
      */
     public function test_add_value()
     {
-        $helper = \DI\add('hello');
-
-        $this->assertTrue($helper instanceof ArrayDefinitionExtensionHelper);
-
-        $definition = $helper->getDefinition('foo');
+        $definition = \DI\add('hello');
+        $definition->setName('foo');
 
         $this->assertTrue($definition instanceof ArrayDefinitionExtension);
         $this->assertEquals('foo', $definition->getName());
         $this->assertEquals('foo', $definition->getSubDefinitionName());
-        $definition->setSubDefinition(new ArrayDefinition('foo', []));
-        $this->assertEquals(['hello'], $definition->getValues());
+        $definition->setSubDefinition(new ArrayDefinition(['tom']));
+        $this->assertEquals(['tom', 'hello'], $definition->getValues());
     }
 
     /**
@@ -170,17 +168,14 @@ class FunctionsTest extends \PHPUnit_Framework_TestCase
      */
     public function test_add_array()
     {
-        $helper = \DI\add(['hello', 'world']);
-
-        $this->assertTrue($helper instanceof ArrayDefinitionExtensionHelper);
-
-        $definition = $helper->getDefinition('foo');
+        $definition = \DI\add(['hello', 'world']);
+        $definition->setName('foo');
 
         $this->assertTrue($definition instanceof ArrayDefinitionExtension);
         $this->assertEquals('foo', $definition->getName());
         $this->assertEquals('foo', $definition->getSubDefinitionName());
-        $definition->setSubDefinition(new ArrayDefinition('foo', []));
-        $this->assertEquals(['hello', 'world'], $definition->getValues());
+        $definition->setSubDefinition(new ArrayDefinition(['tom']));
+        $this->assertEquals(['tom', 'hello', 'world'], $definition->getValues());
     }
 
     /**
@@ -188,11 +183,8 @@ class FunctionsTest extends \PHPUnit_Framework_TestCase
      */
     public function test_string()
     {
-        $helper = \DI\string('bar');
-
-        $this->assertInstanceOf(StringDefinitionHelper::class, $helper);
-
-        $definition = $helper->getDefinition('foo');
+        $definition = \DI\string('bar');
+        $definition->setName('foo');
 
         $this->assertInstanceOf(StringDefinition::class, $definition);
         $this->assertEquals('foo', $definition->getName());

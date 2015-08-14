@@ -23,18 +23,21 @@ class ValueDefinition implements Definition, SelfResolvingDefinition
      */
     private $value;
 
-    /**
-     * @param string $name Entry name
-     * @param mixed $value
-     */
-    public function __construct($name, $value)
+    public function __construct($value)
     {
-        $this->name = $name;
         $this->value = $value;
     }
 
     /**
-     * @return string Entry name
+     * {@inheritdoc}
+     */
+    public function setName($name)
+    {
+        $this->name = $name;
+    }
+
+    /**
+     * {@inheritdoc}
      */
     public function getName()
     {

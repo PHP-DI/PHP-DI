@@ -2,9 +2,9 @@
 
 namespace DI\Test\UnitTest\Definition\Source;
 
-use DI\Definition\EntryReference;
 use DI\Definition\ObjectDefinition;
 use DI\Definition\ObjectDefinition\MethodInjection;
+use DI\Definition\AliasDefinition;
 use DI\Definition\Source\Autowiring;
 use DI\Test\UnitTest\Definition\Source\Fixtures\AutowiringFixture;
 use DI\Test\UnitTest\Definition\Source\Fixtures\AutowiringFixtureChild;
@@ -32,7 +32,7 @@ class AutowiringTest extends \PHPUnit_Framework_TestCase
         $this->assertCount(1, $parameters);
 
         $param1 = $parameters[0];
-        $this->assertEquals(new EntryReference(AutowiringFixture::class), $param1);
+        $this->assertEquals(new AliasDefinition(AutowiringFixture::class), $param1);
     }
 
     public function testConstructorInParentClass()
@@ -47,7 +47,7 @@ class AutowiringTest extends \PHPUnit_Framework_TestCase
         $this->assertCount(1, $parameters);
 
         $param1 = $parameters[0];
-        $this->assertEquals(new EntryReference(AutowiringFixture::class), $param1);
+        $this->assertEquals(new AliasDefinition(AutowiringFixture::class), $param1);
     }
 }
 

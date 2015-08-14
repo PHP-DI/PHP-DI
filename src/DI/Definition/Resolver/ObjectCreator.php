@@ -202,11 +202,12 @@ class ObjectCreator implements DefinitionResolver
         $value = $propertyInjection->getValue();
 
         if ($value instanceof DefinitionHelper) {
-            /** @var Definition $nestedDefinition */
-            $nestedDefinition = $value->getDefinition('');
+            $value = $value->getDefinition('');
+        }
 
+        if ($value instanceof Definition) {
             try {
-                $value = $this->definitionResolver->resolve($nestedDefinition);
+                $value = $this->definitionResolver->resolve($value);
             } catch (DependencyException $e) {
                 throw $e;
             } catch (Exception $e) {
