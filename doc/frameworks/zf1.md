@@ -21,6 +21,7 @@ To use PHP-DI in your ZF1 application, you need to change the Dispatcher used by
     protected function _initContainer()
     {
         $builder = new \DI\ContainerBuilder();
+        $builder->useAnnotations(true);
         $container = $builder->build();
 
         $dispatcher = new \DI\Bridge\ZendFramework1\Dispatcher();
@@ -31,6 +32,8 @@ To use PHP-DI in your ZF1 application, you need to change the Dispatcher used by
 ```
 
 That's it!
+
+As you can see since PHP-DI 5 it's necessary to enable [annotations](../annotations.md) because they are disabled by default.
 
 **Warning**: if you use Zend's autoloader (and not Composer), you will need to configure it:
 
