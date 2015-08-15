@@ -49,9 +49,9 @@ class DefinitionArray implements DefinitionSource, MutableDefinitionSource
     /**
      * {@inheritdoc}
      */
-    public function addDefinition(Definition $definition)
+    public function addDefinition($entryName, Definition $definition)
     {
-        $this->definitions[$definition->getName()] = $definition;
+        $this->definitions[$entryName] = $definition;
     }
 
     /**

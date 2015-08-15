@@ -78,9 +78,8 @@ class SourceChainTest extends \PHPUnit_Framework_TestCase
         $chain->setMutableDefinitionSource($mutableSource);
 
         $definition = new ValueDefinition('bar');
-        $definition->setName('foo');
 
-        $chain->addDefinition($definition);
+        $chain->addDefinition('foo', $definition);
 
         $this->assertValueDefinition($chain->getDefinition('foo'), 'bar');
         $this->assertSame($mutableSource->getDefinition('foo'), $chain->getDefinition('foo'));

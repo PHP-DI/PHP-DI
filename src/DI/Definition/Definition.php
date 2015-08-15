@@ -21,6 +21,8 @@ interface Definition extends RequestedEntry
     /**
      * Returns the name of the entry in the container.
      *
+     * @deprecated Do not do anything anymore, will be removed.
+     *
      * @return string
      */
     public function getName();

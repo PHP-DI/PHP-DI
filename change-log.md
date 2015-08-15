@@ -1,5 +1,11 @@
 # Change log
 
+## next
+
+Internal BC break:
+
+- The `MutableDefinitionSource` interface has changed. This is an internal interface but if you were using it you need to update your implementation (minor change).
+
 ## 5.3
 
 Read the [news entry](news/19-php-di-5-3-released.md).

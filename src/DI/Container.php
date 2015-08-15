@@ -119,7 +119,7 @@ class Container implements ContainerInterface, FactoryInterface, \DI\InvokerInte
             throw new NotFoundException("No entry or class found for '$name'");
         }
 
-        $value = $this->resolveDefinition($definition);
+        $value = $this->resolveDefinition($name, $definition);
 
         // If the entry is singleton, we store it to always return it without recomputing it
         if ($definition->getScope() === Scope::SINGLETON) {
@@ -167,7 +167,7 @@ class Container implements ContainerInterface, FactoryInterface, \DI\InvokerInte
             throw new NotFoundException("No entry or class found for '$name'");
         }
 
-        return $this->resolveDefinition($definition, $parameters);
+        return $this->resolveDefinition($name, $definition, $parameters);
     }
 
     /**
@@ -253,7 +253,6 @@ class Container implements ContainerInterface, FactoryInterface, \DI\InvokerInte
         }
 
         if ($value instanceof Definition) {
-            $value->setName($name);
             $this->setDefinition($name, $value);
         } else {
             $this->singletonEntries[$name] = $value;
@@ -265,16 +264,15 @@ class Container implements ContainerInterface, FactoryInterface, \DI\InvokerInte
      *
      * Checks for circular dependencies while resolving the definition.
      *
+     * @param string     $entryName
      * @param Definition $definition
      * @param array      $parameters
      *
      * @throws DependencyException Error while resolving the entry.
      * @return mixed
      */
-    private function resolveDefinition(Definition $definition, array $parameters = [])
+    private function resolveDefinition($entryName, Definition $definition, array $parameters = [])
     {
-        $entryName = $definition->getName();
-
         // Check if we are already getting this entry -> circular dependency
         if (isset($this->entriesBeingResolved[$entryName])) {
             throw new DependencyException("Circular dependency detected while trying to resolve entry '$entryName'");
@@ -310,7 +308,7 @@ class Container implements ContainerInterface, FactoryInterface, \DI\InvokerInte
             unset($this->singletonEntries[$name]);
         }
 
-        $this->definitionSource->addDefinition($definition);
+        $this->definitionSource->addDefinition($name, $definition);
     }
 
     /**

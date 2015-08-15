@@ -11,5 +11,10 @@ use DI\Definition\Definition;
  */
 interface MutableDefinitionSource extends DefinitionSource
 {
-    public function addDefinition(Definition $definition);
+    /**
+     * @param string     $entryName
+     * @param Definition $definition
+     * @return mixed
+     */
+    public function addDefinition($entryName, Definition $definition);
 }
