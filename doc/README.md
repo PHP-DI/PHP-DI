@@ -27,7 +27,7 @@ title: Documentation index
 - [Symfony 2](frameworks/symfony2.md)
 - [Silex](frameworks/silex.md)
 - [Zend Framework 1](frameworks/zf1.md)
-- [Zend Framework 2](https://github.com/PHP-DI/ZF2-Bridge) (beta version)
+- [Zend Framework 2](https://github.com/PHP-DI/ZF2-Bridge)
 - [Silly](frameworks/silly.md)
 
 ### Advanced topics
