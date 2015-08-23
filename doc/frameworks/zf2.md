@@ -37,7 +37,7 @@ That's it!
 
 Now you dependencies are injected in your controllers!
 
-As you can see since PHP-DI 5 it's necessary to enable [annotations](../annotations.md) because they are disabled by default.
+Since PHP-DI 5 it's necessary to enable [annotations](#annotations) because they are disabled by default.
 
 ## Usage
 
@@ -71,7 +71,7 @@ return [
 ];
 ```
 
-Head over to [PHP-DI's documentation](http://php-di.org/doc/) if needed.
+Head over to [PHP-DI's documentation](http://php-di.org/doc/php-definitions.html) if needed.
 
 ## Fine tuning
 
@@ -96,7 +96,9 @@ return [
 ];
 ```
 
-### Enable or disable annotations
+### <a name="annotations"></a> Enable or disable annotations
+
+Annotations are disabled by default. To enable them, use the following config:
 
 ```php
 return [
