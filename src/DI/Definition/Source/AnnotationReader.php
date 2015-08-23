@@ -18,8 +18,10 @@ use DI\Definition\Exception\DefinitionException;
 use DI\Definition\ObjectDefinition\MethodInjection;
 use DI\Definition\ObjectDefinition\PropertyInjection;
 use Doctrine\Common\Annotations\AnnotationRegistry;
+use Doctrine\Common\Annotations\CachedReader;
 use Doctrine\Common\Annotations\Reader;
 use Doctrine\Common\Annotations\SimpleAnnotationReader;
+use Doctrine\Common\Cache\Cache;
 use InvalidArgumentException;
 use PhpDocReader\PhpDocReader;
 use ReflectionClass;
@@ -42,6 +44,11 @@ class AnnotationReader implements DefinitionSource
      * @var Reader
      */
     private $annotationReader;
+
+    /**
+     * @var Cache
+     */
+    private $annotationCache;
 
     /**
      * @var PhpDocReader
@@ -243,8 +250,16 @@ class AnnotationReader implements DefinitionSource
     {
         if ($this->annotationReader == null) {
             AnnotationRegistry::registerAutoloadNamespace('DI\Annotation', __DIR__ . '/../../../');
-            $this->annotationReader = new SimpleAnnotationReader();
-            $this->annotationReader->addNamespace('DI\Annotation');
+
+            $reader = new SimpleAnnotationReader();
+
+            $reader->addNamespace('DI\Annotation');
+
+            if ($this->annotationCache) {
+                $reader = new CachedReader($reader, $this->annotationCache);
+            }
+
+            $this->annotationReader = $reader;
         }
 
         return $this->annotationReader;
@@ -256,6 +271,14 @@ class AnnotationReader implements DefinitionSource
     public function setAnnotationReader(Reader $annotationReader)
     {
         $this->annotationReader = $annotationReader;
+    }
+
+    /**
+     * @param Cache $annotationCache The annotation cache
+     */
+    public function setAnnotationCache(Cache $annotationCache)
+    {
+        $this->annotationCache = $annotationCache;
     }
 
     /**
