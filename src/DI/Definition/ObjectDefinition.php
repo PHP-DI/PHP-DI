@@ -215,11 +215,7 @@ class ObjectDefinition implements Definition, CacheableDefinition, HasSubDefinit
     public function setSubDefinition(Definition $definition)
     {
         if (! $definition instanceof ObjectDefinition) {
-            throw new DefinitionException(sprintf(
-                "Container entry '%s' extends entry '%s' which is not an object",
-                $this->getName(),
-                $definition->getName()
-            ));
+            return;
         }
 
         // The current prevails
