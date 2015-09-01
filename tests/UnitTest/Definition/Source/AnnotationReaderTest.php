@@ -218,16 +218,6 @@ class AnnotationReaderTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    public function testSetAnnotationReader()
-    {
-        $reader = $this->getMockForAbstractClass('Doctrine\Common\Annotations\Reader');
-
-        $source = new AnnotationReader();
-        $source->setAnnotationReader($reader);
-
-        $this->assertSame($reader, $source->getAnnotationReader());
-    }
-
     /**
      * @see https://github.com/mnapoli/PHP-DI/issues/184
      * @expectedException \PhpDocReader\AnnotationException
@@ -256,6 +246,18 @@ class AnnotationReaderTest extends \PHPUnit_Framework_TestCase
         $this->assertNotNull($this->getMethodInjection($definition, 'methodChild'));
         $this->assertNotNull($definition->getPropertyInjection('propertyParent'));
         $this->assertNotNull($this->getMethodInjection($definition, 'methodParent'));
+    }
+
+    /**
+     * It should read the private properties of the parent classes.
+     *
+     * @see https://github.com/mnapoli/PHP-DI/issues/257
+     */
+    public function testReadParentPrivateProperties()
+    {
+        $source = new AnnotationReader();
+        $definition = $source->getDefinition('DI\Test\UnitTest\Definition\Source\Fixtures\AnnotationFixtureChild');
+        $this->assertNotNull($definition->getPropertyInjection('propertyParentPrivate'));
     }
 
     private function getMethodInjection(ObjectDefinition $definition, $name)
