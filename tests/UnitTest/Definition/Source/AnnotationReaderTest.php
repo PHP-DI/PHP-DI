@@ -218,16 +218,6 @@ class AnnotationReaderTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    public function testSetAnnotationReader()
-    {
-        $reader = $this->getMockForAbstractClass('Doctrine\Common\Annotations\Reader');
-
-        $source = new AnnotationReader();
-        $source->setAnnotationReader($reader);
-
-        $this->assertSame($reader, $source->getAnnotationReader());
-    }
-
     /**
      * @see https://github.com/mnapoli/PHP-DI/issues/184
      * @expectedException \PhpDocReader\AnnotationException

@@ -240,11 +240,6 @@ class AnnotationReader implements DefinitionSource
         return $this->annotationReader;
     }
 
-    public function setAnnotationReader(Reader $annotationReader)
-    {
-        $this->annotationReader = $annotationReader;
-    }
-
     /**
      * @return PhpDocReader
      */
