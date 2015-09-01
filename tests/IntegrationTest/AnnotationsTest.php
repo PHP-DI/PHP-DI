@@ -13,6 +13,7 @@ use DI\ContainerBuilder;
 use DI\Test\IntegrationTest\Fixtures\AnnotationsTest\A;
 use DI\Test\IntegrationTest\Fixtures\AnnotationsTest\B;
 use DI\Test\IntegrationTest\Fixtures\AnnotationsTest\C;
+use DI\Test\IntegrationTest\Fixtures\AnnotationsTest\D;
 
 /**
  * Test using annotations.
@@ -40,8 +41,15 @@ class AnnotationsTest extends \PHPUnit_Framework_TestCase
     public function inject_in_parent_properties()
     {
         $container = $this->createContainer();
+
         /** @var C $object */
         $object = $container->get('DI\Test\IntegrationTest\Fixtures\AnnotationsTest\C');
+        $this->assertTrue($object->public instanceof A);
+        $this->assertTrue($object->getProtected() instanceof A);
+        $this->assertTrue($object->getPrivate() instanceof A);
+
+        /** @var D $object */
+        $object = $container->get('DI\Test\IntegrationTest\Fixtures\AnnotationsTest\D');
         $this->assertTrue($object->public instanceof A);
         $this->assertTrue($object->getProtected() instanceof A);
         $this->assertTrue($object->getPrivate() instanceof A);

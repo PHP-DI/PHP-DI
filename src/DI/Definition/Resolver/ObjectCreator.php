@@ -202,7 +202,10 @@ class ObjectCreator implements DefinitionResolver
     private function injectProperty($object, PropertyInjection $propertyInjection)
     {
         $propertyName = $propertyInjection->getPropertyName();
-        $property = new ReflectionProperty(get_class($object), $propertyName);
+
+        $className = $propertyInjection->getClassName();
+        $className = $className ?: get_class($object);
+        $property = new ReflectionProperty($className, $propertyName);
 
         $value = $propertyInjection->getValue();
 
