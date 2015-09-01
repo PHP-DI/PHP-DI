@@ -22,6 +22,11 @@ class AnnotationFixtureParent
     protected $propertyParent;
 
     /**
+     * @Inject("foo")
+     */
+    private $propertyParentPrivate;
+
+    /**
      * @Inject
      */
     public function methodParent()
