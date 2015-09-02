@@ -326,9 +326,9 @@ class Container implements ContainerInterface, FactoryInterface, \DI\InvokerInte
     {
         if (! $this->invoker) {
             $parameterResolver = new ResolverChain([
+                new DefinitionParameterResolver($this->definitionResolver),
                 new NumericArrayResolver,
                 new AssociativeArrayResolver,
-                new DefinitionParameterResolver($this->definitionResolver),
                 new TypeHintContainerResolver($this->wrapperContainer),
             ]);
 
