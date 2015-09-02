@@ -92,7 +92,6 @@ class Container implements ContainerInterface, FactoryInterface, \DI\InvokerInte
 
         // Auto-register the container
         $this->singletonEntries['DI\Container'] = $this;
-        $this->singletonEntries['DI\ContainerInterface'] = $this;
         $this->singletonEntries['DI\FactoryInterface'] = $this;
         $this->singletonEntries['DI\InvokerInterface'] = $this;
     }

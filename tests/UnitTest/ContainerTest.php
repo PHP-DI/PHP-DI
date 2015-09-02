@@ -84,16 +84,6 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * The container auto-registers itself (with the interface)
-     */
-    public function testContainerInterfaceIsRegistered()
-    {
-        $container = ContainerBuilder::buildDevContainer();
-
-        $this->assertSame($container, $container->get('DI\ContainerInterface'));
-    }
-
-    /**
      * The container auto-registers itself (with the factory interface)
      */
     public function testFactoryInterfaceIsRegistered()
