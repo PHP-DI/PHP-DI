@@ -137,7 +137,8 @@ class ObjectCreator implements DefinitionResolver
     {
         $this->assertClassExists($definition);
 
-        $classReflection = new ReflectionClass($definition->getClassName());
+        $classname = $definition->getClassName();
+        $classReflection = new ReflectionClass($classname);
 
         $this->assertClassIsInstantiable($definition, $classReflection);
 
@@ -153,7 +154,7 @@ class ObjectCreator implements DefinitionResolver
             if (count($args) > 0) {
                 $object = $classReflection->newInstanceArgs($args);
             } else {
-                $object = $classReflection->newInstance();
+                $object = new $classname;
             }
 
             $this->injectMethodsAndProperties($object, $definition);
