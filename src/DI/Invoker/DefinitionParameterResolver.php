@@ -33,10 +33,31 @@ class DefinitionParameterResolver implements ParameterResolver
         array $providedParameters,
         array $resolvedParameters
     ) {
-        foreach ($resolvedParameters as &$parameter) {
-            if ($parameter instanceof DefinitionHelper) {
-                $definition = $parameter->getDefinition('');
-                $parameter = $this->definitionResolver->resolve($definition);
+        // Skip parameters already resolved
+        if (! empty($resolvedParameters)) {
+            $providedParameters = array_diff_key($providedParameters, $resolvedParameters);
+        }
+
+        foreach ($providedParameters as $key => $value) {
+            if (! $value instanceof DefinitionHelper) {
+                continue;
+            }
+
+            $definition = $value->getDefinition('');
+            $value = $this->definitionResolver->resolve($definition);
+
+            if (is_int($key)) {
+                // Indexed by position
+                $resolvedParameters[$key] = $value;
+            } else {
+                // Indexed by parameter name
+                // TODO optimize?
+                $reflectionParameters = $reflection->getParameters();
+                foreach ($reflectionParameters as $reflectionParameter) {
+                    if ($key === $reflectionParameter->name) {
+                        $resolvedParameters[$reflectionParameter->getPosition()] = $value;
+                    }
+                }
             }
         }
 
