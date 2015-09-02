@@ -151,9 +151,9 @@ class ObjectCreator implements DefinitionResolver
             );
 
             if (count($args) > 0) {
-                $object = $classReflection->newInstanceArgs($args);
+                $object = @$classReflection->newInstanceArgs($args);
             } else {
-                $object = $classReflection->newInstance();
+                $object = @$classReflection->newInstance();
             }
 
             $this->injectMethodsAndProperties($object, $definition);
@@ -168,6 +168,14 @@ class ObjectCreator implements DefinitionResolver
                 "Entry %s cannot be resolved: %s",
                 $definition->getName(),
                 $e->getMessage()
+            ));
+        }
+
+        if(is_object($object) === false) {
+            throw new DependencyException(sprintf(
+                "Entry %s cannot be resolved, %s could not be constructed",
+                $definition->getName(),
+                $classReflection->getName()
             ));
         }
 
