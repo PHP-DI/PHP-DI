@@ -59,10 +59,10 @@ class ParameterResolver
         foreach ($functionReflection->getParameters() as $index => $parameter) {
             if (array_key_exists($parameter->getName(), $parameters)) {
                 // Look in the $parameters array
-                $value = $parameters[$parameter->getName()];
+                $value = &$parameters[$parameter->getName()];
             } elseif (array_key_exists($index, $definitionParameters)) {
                 // Look in the definition
-                $value = $definitionParameters[$index];
+                $value = &$definitionParameters[$index];
             } else {
                 // If the parameter is optional and wasn't specified, we take its default value
                 if ($parameter->isOptional()) {
@@ -88,7 +88,7 @@ class ParameterResolver
                 }
             }
 
-            $args[] = $value;
+            $args[] = &$value;
         }
 
         return $args;

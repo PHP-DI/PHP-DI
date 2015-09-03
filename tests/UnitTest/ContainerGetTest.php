@@ -135,4 +135,14 @@ class ContainerGetTest extends \PHPUnit_Framework_TestCase
         $container = ContainerBuilder::buildDevContainer();
         $container->get(new stdClass());
     }
+
+    /**
+     * Tests a class can be initialized with a parameter passed by reference
+     */
+    public function testPassByReferenceParameter()
+    {
+        $container = ContainerBuilder::buildDevContainer();
+        $object = $container->get('DI\Test\UnitTest\Fixtures\PassByReferenceDependency');
+        $this->assertInstanceOf('DI\Test\UnitTest\Fixtures\PassByReferenceDependency', $object);
+    }
 }

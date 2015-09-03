@@ -123,4 +123,26 @@ class ContainerMakeTest extends \PHPUnit_Framework_TestCase
         $container = ContainerBuilder::buildDevContainer();
         $container->make(new stdClass());
     }
+
+    /**
+     * Tests a dependency can be made when a dependency is passed by reference
+     */
+    public function testPassByReferenceParameter()
+    {
+        $container = ContainerBuilder::buildDevContainer();
+        $container->make('DI\Test\UnitTest\Fixtures\PassByReferenceDependency');
+    }
+
+    /**
+     * Tests the parameter can be provided by reference
+     */
+    public function testProvidedPassByReferenceParameter()
+    {
+        $object = new stdClass();
+        $container = ContainerBuilder::buildDevContainer();
+        $fetched = $container->make('DI\Test\UnitTest\Fixtures\PassByReferenceDependency', [
+            'object' => &$object
+        ]);
+        $this->assertEquals('bar', $object->foo);
+    }
 }
