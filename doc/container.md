@@ -20,7 +20,7 @@ interface ContainerInterface
 }
 ```
 
-You are encouraged to type-hint against this interface instead instead of the implementation (`DI\Container`) whenever possible. Doing so means your code is decoupled from PHP-DI and you can switch to another container anytime.
+You are encouraged to type-hint against this interface instead of the implementation (`DI\Container`) whenever possible. Doing so means your code is decoupled from PHP-DI and you can switch to another container anytime.
 
 ## set()
 
