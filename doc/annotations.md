@@ -25,7 +25,7 @@ Annotations are written in PHP docblock comments. They are used by a lot of mode
 
 ## Inject
 
-`@Inject` let's you define where PHP-DI should inject something, and what should it inject. You can combine it with `@var` and `@param` phpdoc tags to define what should be injected.
+`@Inject` lets you define where PHP-DI should inject something, and what it should inject. You can combine it with `@var` and `@param` phpdoc tags to define what should be injected.
 
 It can be used on:
 
@@ -88,7 +88,7 @@ class Example
 
 ## Injectable
 
-The `@Injectable` annotation let's you set options on injectable classes:
+The `@Injectable` annotation lets you set options on injectable classes:
 
 ```php
 /**
