@@ -50,8 +50,6 @@ class InstanceInjector extends ObjectCreator
      */
     public function isResolvable(Definition $definition, array $parameters = [])
     {
-        $this->assertIsInstanceDefinition($definition);
-
         return true;
     }
 

@@ -90,8 +90,6 @@ class DecoratorResolver implements DefinitionResolver
      */
     public function isResolvable(Definition $definition, array $parameters = [])
     {
-        $this->assertIsDecoratorDefinition($definition);
-
         return true;
     }
 

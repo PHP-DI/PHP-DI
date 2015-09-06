@@ -68,8 +68,6 @@ class FactoryResolver implements DefinitionResolver
      */
     public function isResolvable(Definition $definition, array $parameters = [])
     {
-        $this->assertIsFactoryDefinition($definition);
-
         return true;
     }
 

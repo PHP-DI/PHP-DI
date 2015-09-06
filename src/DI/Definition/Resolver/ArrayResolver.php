@@ -61,8 +61,6 @@ class ArrayResolver implements DefinitionResolver
      */
     public function isResolvable(Definition $definition, array $parameters = [])
     {
-        $this->assertIsArrayDefinition($definition);
-
         return true;
     }
 

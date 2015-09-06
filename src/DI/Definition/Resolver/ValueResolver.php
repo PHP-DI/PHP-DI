@@ -41,8 +41,6 @@ class ValueResolver implements DefinitionResolver
      */
     public function isResolvable(Definition $definition, array $parameters = [])
     {
-        $this->assertIsValueDefinition($definition);
-
         return true;
     }
 
