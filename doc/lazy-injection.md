@@ -44,7 +44,7 @@ If you define an object as "lazy", PHP-DI will inject:
 - the object, if it has already been created
 - or else a **proxy** to the object, if it is not yet created
 
-The proxy is a special kind of object that **looks and behave exactly like the original object**, so you can't tell the difference. The proxy will instantiate the original object only when needed.
+The proxy is a special kind of object that **looks and behaves exactly like the original object**, so you can't tell the difference. The proxy will instantiate the original object only when needed.
 
 Creating a proxy is complex. For this, PHP-DI relies on [ProxyManager](https://github.com/Ocramius/ProxyManager), the (amazing) library used by Doctrine, Symfony and Zend.
 
@@ -60,7 +60,7 @@ class Foo
     }
 }
 
-$container->set('Foo', \DI\object()->lazy);
+$container->set('Foo', \DI\object()->lazy());
 
 // $proxy is a Proxy object, it is not initialized
 // It is very lightweight in memory

@@ -25,7 +25,7 @@ A container instance has the following sub-components:
 
 ### Definitions
 
-A definition defines what is an entry:
+A definition defines what an entry is:
 
 - **a simple value** (string, number, object instance…): `ValueDefinition`
 - **a factory/callable returning the value**: `FactoryDefinition`
@@ -33,4 +33,4 @@ A definition defines what is an entry:
 - **a definition of a class**: `ObjectDefinition`
 - **a definition of an environment variable**: `EnvironmentVariableDefinition`
 
-The last type (class definition) describes how the container should create a class instance (what parameters the constructor takes, …).
+The class definition describes how the container should create a class instance (what parameters the constructor takes, …).
