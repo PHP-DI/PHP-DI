@@ -164,7 +164,7 @@ class ObjectDefinition implements Definition, CacheableDefinition, HasSubDefinit
         $injections = [];
         array_walk_recursive($this->methodInjections, function ($injection) use (&$injections) {
             $injections[] = $injection;
-        });;
+        });
         return $injections;
     }
 

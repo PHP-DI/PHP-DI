@@ -47,7 +47,7 @@ class AnnotationReader implements DefinitionSource
      * @var PhpDocReader
      */
     private $phpDocReader;
-    
+
     /**
      * @var bool
      */
@@ -231,7 +231,7 @@ class AnnotationReader implements DefinitionSource
      */
     public function getAnnotationReader()
     {
-        if ($this->annotationReader == null) {
+        if ($this->annotationReader === null) {
             AnnotationRegistry::registerAutoloadNamespace('DI\Annotation', __DIR__ . '/../../../');
             $this->annotationReader = new SimpleAnnotationReader();
             $this->annotationReader->addNamespace('DI\Annotation');
