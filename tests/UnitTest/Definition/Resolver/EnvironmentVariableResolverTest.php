@@ -10,7 +10,6 @@
 namespace DI\Test\UnitTest\Definition\Resolver;
 
 use DI\Definition\AliasDefinition;
-use DI\Definition\FactoryDefinition;
 use DI\Definition\EnvironmentVariableDefinition;
 use DI\Definition\Resolver\DefinitionResolver;
 use DI\Definition\Resolver\EnvironmentVariableResolver;
@@ -35,7 +34,6 @@ class EnvironmentVariableResolverTest extends \PHPUnit_Framework_TestCase
     private $undefinedDefinition;
     private $optionalDefinition;
     private $nestedDefinition;
-    private $invalidDefinition;
 
     public function setUp()
     {
@@ -54,7 +52,6 @@ class EnvironmentVariableResolverTest extends \PHPUnit_Framework_TestCase
         $this->undefinedDefinition = new EnvironmentVariableDefinition('foo', 'UNDEFINED');
         $this->optionalDefinition = new EnvironmentVariableDefinition('foo', 'UNDEFINED', true, '<default>');
         $this->nestedDefinition = new EnvironmentVariableDefinition('foo', 'UNDEFINED', true, \DI\get('foo'));
-        $this->invalidDefinition = new FactoryDefinition('foo', function () {});
     }
 
     /**
@@ -131,15 +128,5 @@ class EnvironmentVariableResolverTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue(
             $this->resolver->isResolvable($this->optionalDefinition)
         );
-    }
-
-    /**
-     * @test
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage This definition resolver is only compatible with EnvironmentVariableDefinition objects, DI\Definition\FactoryDefinition given
-     */
-    public function should_only_resolve_env_variable_definitions()
-    {
-        $this->resolver->resolve($this->invalidDefinition);
     }
 }

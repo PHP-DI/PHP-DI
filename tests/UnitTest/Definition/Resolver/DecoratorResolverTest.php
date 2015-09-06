@@ -10,7 +10,6 @@
 namespace DI\Test\UnitTest\Definition\Resolver;
 
 use DI\Definition\DecoratorDefinition;
-use DI\Definition\FactoryDefinition;
 use DI\Definition\Resolver\DecoratorResolver;
 use DI\Definition\Resolver\DefinitionResolver;
 use DI\Definition\ValueDefinition;
@@ -81,18 +80,6 @@ class DecoratorResolverTest extends \PHPUnit_Framework_TestCase
     public function should_throw_if_the_factory_is_not_callable()
     {
         $definition = new DecoratorDefinition('foo', 'Hello world');
-
-        $this->resolver->resolve($definition);
-    }
-
-    /**
-     * @test
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage This definition resolver is only compatible with DecoratorDefinition objects, DI\Definition\ValueDefinition given
-     */
-    public function should_only_resolve_decorator_definitions()
-    {
-        $definition = new ValueDefinition('foo', 'bar');
 
         $this->resolver->resolve($definition);
     }

@@ -9,7 +9,6 @@
 
 namespace DI\Test\UnitTest\Definition\Resolver;
 
-use DI\Definition\FactoryDefinition;
 use DI\Definition\ObjectDefinition;
 use DI\Definition\ObjectDefinition\MethodInjection;
 use DI\Definition\ObjectDefinition\PropertyInjection;
@@ -234,18 +233,6 @@ MESSAGE;
         $this->setExpectedException('DI\Definition\Exception\DefinitionException', $message);
 
         $definition = new ObjectDefinition(self::FIXTURE_CLASS);
-
-        $this->resolver->resolve($definition);
-    }
-
-    /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage This definition resolver is only compatible with ObjectDefinition objects, DI\Definition\FactoryDefinition given
-     */
-    public function testInvalidDefinitionType()
-    {
-        $definition = new FactoryDefinition('foo', function () {
-        });
 
         $this->resolver->resolve($definition);
     }

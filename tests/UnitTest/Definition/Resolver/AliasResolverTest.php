@@ -11,7 +11,6 @@ namespace DI\Test\UnitTest\Definition\Resolver;
 
 use DI\Definition\AliasDefinition;
 use DI\Definition\Resolver\AliasResolver;
-use DI\Definition\ValueDefinition;
 use EasyMock\EasyMock;
 
 /**
@@ -32,18 +31,5 @@ class AliasResolverTest extends \PHPUnit_Framework_TestCase
         $value = $resolver->resolve(new AliasDefinition('foo', 'bar'));
 
         $this->assertEquals(42, $value);
-    }
-
-    /**
-     * @test
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage This definition resolver is only compatible with AliasDefinition objects, DI\Definition\ValueDefinition given
-     */
-    public function should_only_resolve_aliases()
-    {
-        $container = EasyMock::mock('Interop\Container\ContainerInterface');
-        $resolver = new AliasResolver($container);
-
-        $resolver->resolve(new ValueDefinition('foo', 'bar'));
     }
 }

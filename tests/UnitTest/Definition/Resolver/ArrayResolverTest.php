@@ -12,7 +12,6 @@ namespace DI\Test\UnitTest\Definition\Resolver;
 use DI\Definition\ArrayDefinition;
 use DI\Definition\Resolver\ArrayResolver;
 use DI\Definition\Resolver\DefinitionResolver;
-use DI\Definition\ValueDefinition;
 use EasyMock\EasyMock;
 use PHPUnit_Framework_MockObject_MockObject;
 
@@ -88,15 +87,6 @@ class ArrayResolverTest extends \PHPUnit_Framework_TestCase
         $value = $this->resolver->resolve($definition);
 
         $this->assertEquals(['hello' => 'world'], $value);
-    }
-
-    /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage This definition resolver is only compatible with ArrayDefinition objects, DI\Definition\ValueDefinition given
-     */
-    public function should_only_resolve_array_definitions()
-    {
-        $this->resolver->resolve(new ValueDefinition('foo', 'bar'));
     }
 
     /**

@@ -31,8 +31,6 @@ class InstanceInjector extends ObjectCreator
      */
     public function resolve(Definition $definition, array $parameters = [])
     {
-        $this->assertIsInstanceDefinition($definition);
-
         try {
             $this->injectMethodsAndProperties($definition->getInstance(), $definition->getObjectDefinition());
         } catch (NotFoundException $e) {
@@ -51,15 +49,5 @@ class InstanceInjector extends ObjectCreator
     public function isResolvable(Definition $definition, array $parameters = [])
     {
         return true;
-    }
-
-    private function assertIsInstanceDefinition(Definition $definition)
-    {
-        if (!$definition instanceof InstanceDefinition) {
-            throw new \InvalidArgumentException(sprintf(
-                'This definition resolver is only compatible with InstanceDefinition objects, %s given',
-                get_class($definition)
-            ));
-        }
     }
 }

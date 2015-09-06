@@ -9,7 +9,6 @@
 
 namespace DI\Test\UnitTest\Definition\Resolver;
 
-use DI\Definition\FactoryDefinition;
 use DI\Definition\ValueDefinition;
 use DI\Definition\Resolver\ValueResolver;
 
@@ -29,20 +28,5 @@ class ValueResolverTest extends \PHPUnit_Framework_TestCase
 
         $this->assertTrue($resolver->isResolvable($definition));
         $this->assertEquals('bar', $resolver->resolve($definition));
-    }
-
-    /**
-     * @test
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage This definition resolver is only compatible with ValueDefinition objects, DI\Definition\FactoryDefinition given
-     */
-    public function should_only_resolve_value_definitions()
-    {
-        $resolver = new ValueResolver();
-
-        $definition = new FactoryDefinition('foo', function () {
-        });
-
-        $resolver->resolve($definition);
     }
 }

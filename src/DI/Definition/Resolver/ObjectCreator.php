@@ -69,8 +69,6 @@ class ObjectCreator implements DefinitionResolver
      */
     public function resolve(Definition $definition, array $parameters = [])
     {
-        $this->assertIsObjectDefinition($definition);
-
         // Lazy?
         if ($definition->isLazy()) {
             return $this->createProxy($definition, $parameters);
@@ -89,8 +87,6 @@ class ObjectCreator implements DefinitionResolver
      */
     public function isResolvable(Definition $definition, array $parameters = [])
     {
-        $this->assertIsObjectDefinition($definition);
-
         return $definition->isInstantiable();
     }
 
@@ -234,16 +230,6 @@ class ObjectCreator implements DefinitionResolver
             $property->setAccessible(true);
         }
         $property->setValue($object, $value);
-    }
-
-    private function assertIsObjectDefinition(Definition $definition)
-    {
-        if (!$definition instanceof ObjectDefinition) {
-            throw new \InvalidArgumentException(sprintf(
-                'This definition resolver is only compatible with ObjectDefinition objects, %s given',
-                get_class($definition)
-            ));
-        }
     }
 
     private function assertClassExists(ObjectDefinition $definition)

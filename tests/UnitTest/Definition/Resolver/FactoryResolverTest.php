@@ -10,7 +10,6 @@
 namespace DI\Test\UnitTest\Definition\Resolver;
 
 use DI\Definition\FactoryDefinition;
-use DI\Definition\ValueDefinition;
 use DI\Definition\Resolver\FactoryResolver;
 use EasyMock\EasyMock;
 
@@ -61,18 +60,6 @@ class FactoryResolverTest extends \PHPUnit_Framework_TestCase
     public function should_throw_if_the_factory_is_not_callable()
     {
         $definition = new FactoryDefinition('foo', 'Hello world');
-
-        $this->resolver->resolve($definition);
-    }
-
-    /**
-     * @test
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage This definition resolver is only compatible with FactoryDefinition objects, DI\Definition\ValueDefinition given
-     */
-    public function should_only_resolve_factory_definitions()
-    {
-        $definition = new ValueDefinition('foo', 'bar');
 
         $this->resolver->resolve($definition);
     }

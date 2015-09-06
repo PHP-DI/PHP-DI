@@ -50,8 +50,6 @@ class StringResolver implements DefinitionResolver
      */
     public function resolve(Definition $definition, array $parameters = [])
     {
-        $this->assertIsStringDefinition($definition);
-
         $expression = $definition->getExpression();
 
         $result = preg_replace_callback('#\{([^\{\}]+)\}#', function (array $matches) use ($definition) {
@@ -79,15 +77,5 @@ class StringResolver implements DefinitionResolver
     public function isResolvable(Definition $definition, array $parameters = [])
     {
         return true;
-    }
-
-    private function assertIsStringDefinition(Definition $definition)
-    {
-        if (!$definition instanceof StringDefinition) {
-            throw new \InvalidArgumentException(sprintf(
-                'This definition resolver is only compatible with StringDefinition objects, %s given',
-                get_class($definition)
-            ));
-        }
     }
 }

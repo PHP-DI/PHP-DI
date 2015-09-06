@@ -46,8 +46,6 @@ class EnvironmentVariableResolver implements DefinitionResolver
      */
     public function resolve(Definition $definition, array $parameters = [])
     {
-        $this->assertIsEnvironmentVariableDefinition($definition);
-
         $value = call_user_func($this->variableReader, $definition->getVariableName());
 
         if (false !== $value) {
@@ -79,15 +77,5 @@ class EnvironmentVariableResolver implements DefinitionResolver
     public function isResolvable(Definition $definition, array $parameters = [])
     {
         return true;
-    }
-
-    private function assertIsEnvironmentVariableDefinition(Definition $definition)
-    {
-        if (!$definition instanceof EnvironmentVariableDefinition) {
-            throw new \InvalidArgumentException(sprintf(
-                'This definition resolver is only compatible with EnvironmentVariableDefinition objects, %s given',
-                get_class($definition)
-            ));
-        }
     }
 }

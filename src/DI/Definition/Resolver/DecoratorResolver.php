@@ -56,8 +56,6 @@ class DecoratorResolver implements DefinitionResolver
      */
     public function resolve(Definition $definition, array $parameters = [])
     {
-        $this->assertIsDecoratorDefinition($definition);
-
         $callable = $definition->getCallable();
 
         if (! is_callable($callable)) {
@@ -91,15 +89,5 @@ class DecoratorResolver implements DefinitionResolver
     public function isResolvable(Definition $definition, array $parameters = [])
     {
         return true;
-    }
-
-    private function assertIsDecoratorDefinition(Definition $definition)
-    {
-        if (!$definition instanceof DecoratorDefinition) {
-            throw new \InvalidArgumentException(sprintf(
-                'This definition resolver is only compatible with DecoratorDefinition objects, %s given',
-                get_class($definition)
-            ));
-        }
     }
 }

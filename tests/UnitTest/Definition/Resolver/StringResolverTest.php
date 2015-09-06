@@ -9,7 +9,6 @@
 
 namespace DI\Test\UnitTest\Definition\Resolver;
 
-use DI\Definition\FactoryDefinition;
 use DI\Definition\Resolver\StringResolver;
 use DI\Definition\StringDefinition;
 use DI\NotFoundException;
@@ -80,21 +79,5 @@ class StringResolverTest extends \PHPUnit_Framework_TestCase
         $resolver = new StringResolver($container);
 
         $resolver->resolve(new StringDefinition('foo', '{test}'));
-    }
-
-    /**
-     * @test
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage This definition resolver is only compatible with StringDefinition objects, DI\Definition\FactoryDefinition given
-     */
-    public function should_error_with_unsupported_definitions()
-    {
-        $container = EasyMock::mock('Interop\Container\ContainerInterface');
-        $resolver = new StringResolver($container);
-
-        $definition = new FactoryDefinition('foo', function () {
-        });
-
-        $resolver->resolve($definition);
     }
 }
