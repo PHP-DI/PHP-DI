@@ -11,8 +11,8 @@ namespace DI\Definition;
 
 use DI\Definition\ObjectDefinition\MethodInjection;
 use DI\Definition\ObjectDefinition\PropertyInjection;
-use DI\Definition\Exception\DefinitionException;
 use DI\Scope;
+use ReflectionClass;
 
 /**
  * Defines how an object can be instantiated.
@@ -62,13 +62,27 @@ class ObjectDefinition implements Definition, CacheableDefinition, HasSubDefinit
     private $lazy;
 
     /**
+     * Store if the class exists. Storing it (in cache) avoids recomputing this.
+     *
+     * @var bool
+     */
+    private $classExists;
+
+    /**
+     * Store if the class is instantiable. Storing it (in cache) avoids recomputing this.
+     *
+     * @var bool
+     */
+    private $isInstantiable;
+
+    /**
      * @param string $name Class name
      * @param string $className
      */
     public function __construct($name, $className = null)
     {
         $this->name = (string) $name;
-        $this->className = $className;
+        $this->setClassName($className);
     }
 
     /**
@@ -80,11 +94,13 @@ class ObjectDefinition implements Definition, CacheableDefinition, HasSubDefinit
     }
 
     /**
-     * @param string $className
+     * @param string|null $className
      */
     public function setClassName($className)
     {
         $this->className = $className;
+
+        $this->updateCache();
     }
 
     /**
@@ -202,6 +218,22 @@ class ObjectDefinition implements Definition, CacheableDefinition, HasSubDefinit
     }
 
     /**
+     * @return bool
+     */
+    public function classExists()
+    {
+        return $this->classExists;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isInstantiable()
+    {
+        return $this->isInstantiable;
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function getSubDefinitionName()
@@ -220,7 +252,7 @@ class ObjectDefinition implements Definition, CacheableDefinition, HasSubDefinit
 
         // The current prevails
         if ($this->className === null) {
-            $this->className = $definition->className;
+            $this->setClassName($definition->className);
         }
         if ($this->scope === null) {
             $this->scope = $definition->scope;
@@ -286,5 +318,20 @@ class ObjectDefinition implements Definition, CacheableDefinition, HasSubDefinit
                 $this->methodInjections[$methodName][$index] = $methodInjection;
             }
         }
+    }
+
+    private function updateCache()
+    {
+        $className = $this->getClassName();
+
+        $this->classExists = class_exists($className) || interface_exists($className);
+
+        if (! $this->classExists) {
+            $this->isInstantiable = false;
+            return;
+        }
+
+        $class = new ReflectionClass($className);
+        $this->isInstantiable = $class->isInstantiable();
     }
 }
