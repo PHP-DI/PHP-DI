@@ -78,10 +78,7 @@ class EnvironmentVariableResolver implements DefinitionResolver
      */
     public function isResolvable(Definition $definition, array $parameters = [])
     {
-        $this->assertIsEnvironmentVariableDefinition($definition);
-
-        return $definition->isOptional()
-            || false !== call_user_func($this->variableReader, $definition->getVariableName());
+        return true;
     }
 
     private function assertIsEnvironmentVariableDefinition(Definition $definition)

@@ -115,9 +115,10 @@ class EnvironmentVariableResolverTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function should_not_be_able_to_resolve_undefined_env_variables()
+    public function should_be_able_to_resolve_undefined_env_variables()
     {
-        $this->assertFalse(
+        // See this thread https://github.com/container-interop/container-interop/issues/37
+        $this->assertTrue(
             $this->resolver->isResolvable($this->undefinedDefinition)
         );
     }

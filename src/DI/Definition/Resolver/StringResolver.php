@@ -78,8 +78,6 @@ class StringResolver implements DefinitionResolver
      */
     public function isResolvable(Definition $definition, array $parameters = [])
     {
-        $this->assertIsStringDefinition($definition);
-
         return true;
     }
 
