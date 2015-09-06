@@ -127,7 +127,7 @@ class ObjectCreator implements DefinitionResolver
      * Creates an instance of the class and injects dependencies..
      *
      * @param ObjectDefinition $definition
-     * @param array           $parameters      Optional parameters to use to create the instance.
+     * @param array            $parameters      Optional parameters to use to create the instance.
      *
      * @throws DefinitionException
      * @throws DependencyException
@@ -172,7 +172,7 @@ class ObjectCreator implements DefinitionResolver
             ));
         }
 
-        if(is_object($object) === false) {
+        if (! $object) {
             throw new DependencyException(sprintf(
                 "Entry %s cannot be resolved: %s could not be constructed",
                 $definition->getName(),
