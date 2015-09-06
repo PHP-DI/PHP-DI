@@ -83,6 +83,29 @@ class CallFunctionTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('bam', $result);
     }
 
+    public function test_parameter_default_value()
+    {
+        $result = $this->container->call(function($foo = 'hello') {
+            return $foo;
+        });
+        $this->assertEquals('hello', $result);
+    }
+
+    public function test_parameter_explicit_value_overrides_default_value()
+    {
+        $result = $this->container->call(function($foo = 'hello') {
+            return $foo;
+        }, [
+            'foo' => 'test',
+        ]);
+        $this->assertEquals('test', $result);
+
+        $result = $this->container->call(function($foo = 'hello') {
+            return $foo;
+        }, ['test']);
+        $this->assertEquals('test', $result);
+    }
+
     public function test_parameter_from_type_hint()
     {
         $value = new \stdClass();

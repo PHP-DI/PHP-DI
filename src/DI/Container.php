@@ -27,6 +27,7 @@ use InvalidArgumentException;
 use Invoker\Invoker;
 use Invoker\ParameterResolver\AssociativeArrayResolver;
 use Invoker\ParameterResolver\Container\TypeHintContainerResolver;
+use Invoker\ParameterResolver\DefaultValueResolver;
 use Invoker\ParameterResolver\NumericArrayResolver;
 use Invoker\ParameterResolver\ResolverChain;
 
@@ -328,6 +329,7 @@ class Container implements ContainerInterface, FactoryInterface, \DI\InvokerInte
                 new DefinitionParameterResolver($this->definitionResolver),
                 new NumericArrayResolver,
                 new AssociativeArrayResolver,
+                new DefaultValueResolver,
                 new TypeHintContainerResolver($this->wrapperContainer),
             ]);
 
