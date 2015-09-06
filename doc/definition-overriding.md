@@ -6,7 +6,7 @@ layout: documentation
 
 A simple application usually takes advantage of one or two *definition sources*: autowiring (or annotations) + a definition file/array.
 
-However in more complex application or modular systems you might want to have multiple definition files (e.g. one per modules/bundles/plugins/…). In this case, PHP-DI provides a clear and powerful system to **override and/or extend definitions**.
+However in more complex applications or modular systems you might want to have multiple definition files (e.g. one per modules/bundles/plugins/…). In this case, PHP-DI provides a clear and powerful system to **override and/or extend definitions**.
 
 ## Priorities of definition sources
 
@@ -112,7 +112,7 @@ return [
 
 ```php
 return [
-    'array' => add([
+    'array' => DI\add([
         DI\get(NewEntry::class),
     ]),
 ];

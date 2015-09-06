@@ -2,7 +2,7 @@
 
 [![Build Status](https://travis-ci.org/PHP-DI/PHP-DI.png?branch=master)](https://travis-ci.org/PHP-DI/PHP-DI) [![Coverage Status](https://coveralls.io/repos/PHP-DI/PHP-DI/badge.png?branch=master)](https://coveralls.io/r/PHP-DI/PHP-DI?branch=master)
 
-PHP-DI is license under the MIT License.
+PHP-DI is licensed under the MIT License.
 
 
 ## Set up
