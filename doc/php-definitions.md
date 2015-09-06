@@ -116,22 +116,26 @@ You can also use a factory class - as an example, let's assume you have a simple
 ```php
 class FooFactory
 {
-    public function create($container) // (note: $container can be omitted if not needed)
+    // note: $container can be omitted if not needed
+    public function create($container)
     {
         return new Foo();
     }
 }
 ```
 
-You can choose to eagerly load `FooFactory`, at definition time:
+You can choose to eagerly load `FooFactory` at definition time:
 
 ```php
 return [
-    Foo::class => DI\factory([new FooFactory(), 'create']),
+    // not recommended!
+    Foo::class => DI\factory([new FooFactory, 'create']),
 ];
 ```
 
-Or, if `FooFactory::create()` were a static method, you could use this definition:
+But the factory will be created on every request (`new FooFactory`) even if not used. Additionally with this method it's harder to pass dependencies in the factory.
+
+The recommended solution is let the container create the factory:
 
 ```php
 return [
@@ -139,7 +143,16 @@ return [
 ];
 ```
 
-(Note that support for lazy creation of a factory instance is planned for a future release.)
+This configuration is equivalent to the following code:
+
+```php
+$factory = $container->get(FooFactory::class);
+return $factory->create();
+```
+
+Please note that `create()` can also be a static method. In that case PHP-DI will not try to instantiate the factory: it will instead simply call `FooFactory::create()` statically.
+
+#### Decoration
 
 When using a system with multiple definition files, you can override a previous entry using a decorator:
 
@@ -151,6 +164,8 @@ return [
     }),
 ];
 ```
+
+Please read the [definition overriding guide](definition-overriding.md) to learn more about this.
 
 ### Objects
 

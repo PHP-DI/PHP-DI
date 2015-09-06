@@ -1,5 +1,11 @@
 # Change log
 
+## 5.1
+
+Improvements:
+
+- [#308](https://github.com/PHP-DI/PHP-DI/pull/308): Instantiate factories using the container (`DI\factory(['FooFactory', 'create'])`)
+
 ## 5.0
 
 This is the complete change log. You can also read the [migration guide](doc/migration/5.0.md) for upgrading, or [the news article](news/15-php-di-5-0-released.md) for a nicer introduction to this new version.

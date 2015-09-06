@@ -13,6 +13,8 @@ use DI\Definition\Exception\DefinitionException;
 use DI\Definition\FactoryDefinition;
 use DI\Definition\Definition;
 use Interop\Container\ContainerInterface;
+use Invoker\Invoker;
+use Invoker\ParameterResolver\NumericArrayResolver;
 
 /**
  * Resolves a factory definition to a value.
@@ -26,6 +28,11 @@ class FactoryResolver implements DefinitionResolver
      * @var ContainerInterface
      */
     private $container;
+
+    /**
+     * @var Invoker|null
+     */
+    private $invoker;
 
     /**
      * The resolver needs a container. This container will be passed to the factory as a parameter
@@ -58,7 +65,11 @@ class FactoryResolver implements DefinitionResolver
             ));
         }
 
-        return call_user_func($callable, $this->container);
+        if (! $this->invoker) {
+            $this->invoker = new Invoker(new NumericArrayResolver, $this->container);
+        }
+
+        return $this->invoker->call($callable, [$this->container]);
     }
 
     /**
