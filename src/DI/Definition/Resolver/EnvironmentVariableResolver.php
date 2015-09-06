@@ -52,7 +52,9 @@ class EnvironmentVariableResolver implements DefinitionResolver
 
         if (false !== $value) {
             return $value;
-        } elseif (!$definition->isOptional()) {
+        }
+
+        if (!$definition->isOptional()) {
             throw new DefinitionException(sprintf(
                 "The environment variable '%s' has not been defined",
                 $definition->getVariableName()
