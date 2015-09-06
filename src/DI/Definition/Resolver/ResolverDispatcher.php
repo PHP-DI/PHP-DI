@@ -36,6 +36,7 @@ class ResolverDispatcher implements DefinitionResolver
     private $instanceResolver;
     private $envVariableResolver;
     private $stringResolver;
+    private $dotNotationResolver;
 
     public function __construct(ContainerInterface $container, ProxyFactory $proxyFactory)
     {
@@ -131,6 +132,11 @@ class ResolverDispatcher implements DefinitionResolver
                     $this->instanceResolver = new InstanceInjector($this, $this->proxyFactory);
                 }
                 return $this->instanceResolver;
+            case ($definition instanceof \DI\Definition\DotNotationDefinition):
+                if (! $this->dotNotationResolver) {
+                    $this->dotNotationResolver = new DotNotationResolver($this->container);
+                }
+                return $this->dotNotationResolver;
             default:
                 throw new \RuntimeException('No definition resolver was configured for definition of type ' . get_class($definition));
         }

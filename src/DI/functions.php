@@ -16,6 +16,7 @@ use DI\Definition\Helper\ObjectDefinitionHelper;
 use DI\Definition\Helper\EnvironmentVariableDefinitionHelper;
 use DI\Definition\Helper\ValueDefinitionHelper;
 use DI\Definition\Helper\StringDefinitionHelper;
+use DI\Definition\Helper\DotNotationDefinitionHelper;
 
 if (! function_exists('DI\value')) {
     /**
@@ -177,5 +178,25 @@ if (! function_exists('DI\string')) {
     function string($expression)
     {
         return new StringDefinitionHelper((string) $expression);
+    }
+}
+
+if (! function_exists('DI\dot')) {
+    /**
+     * Helper for array access using "dot" notation.
+     *
+     * Example:
+     *
+     *     'cache' => DI\dot('app.config.cache.driver')
+     *
+     * @param string $expression A string expression. Use a dot to reference a nested array.
+     *
+     * @return DotNotationDefinitionHelper
+     *
+     * @since 5.1
+     */
+    function dot($expression)
+    {
+        return new DotNotationDefinitionHelper((string) $expression);
     }
 }
