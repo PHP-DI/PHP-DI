@@ -4,7 +4,22 @@
 
 Improvements:
 
+- [Zend Framework 2 integration](https://github.com/PHP-DI/ZF2-Bridge) (by @Rastusik)
 - [#308](https://github.com/PHP-DI/PHP-DI/pull/308): Instantiate factories using the container (`DI\factory(['FooFactory', 'create'])`)
+- Many performances improvements - some benchmarks show up to 35% performance improvements, real results may vary of course
+- Many documentation improvements (@jdreesen, @mindplay-dk, @mnapoli, @holtkamp, @Rastusik)
+- [#296](https://github.com/PHP-DI/PHP-DI/issues/296): Provide a faster `ArrayCache` implementation, mostly useful in micro-benchmarks
+
+Bugfixes:
+
+- [#257](https://github.com/PHP-DI/PHP-DI/issues/257) & [#274](https://github.com/PHP-DI/PHP-DI/issues/274): Private properties of parent classes are not injected when using annotations
+- [#300](https://github.com/PHP-DI/PHP-DI/pull/300): Exception if object definition extends an incompatible definition
+- [#306](https://github.com/PHP-DI/PHP-DI/issues/306): Errors when using parameters passed by reference (fixed by @bradynpoulsen)
+- [#318](https://github.com/PHP-DI/PHP-DI/issues/318): `Container::call()` ignores parameter's default value
+
+Internal changes:
+
+- [#276](https://github.com/PHP-DI/PHP-DI/pull/276): Tests now pass on Windows (@bgaillard)
 
 ## 5.0
 
