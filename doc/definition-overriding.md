@@ -142,3 +142,5 @@ return [
 ```
 
 The first parameter of the callable is the instance returned by the previous definition (i.e. the one we wish to decorate), the second parameter is the container.
+
+You can use `DI\decorate()` over any kind of previous definition (factory but also object, value, environment variable, …).
