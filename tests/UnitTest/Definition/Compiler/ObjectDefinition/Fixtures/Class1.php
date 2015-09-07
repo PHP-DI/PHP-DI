@@ -1,6 +1,6 @@
 <?php
 
-namespace DI\Test\UnitTest\Definition\Compiler\Fixtures;
+namespace DI\Test\UnitTest\Definition\Compiler\ObjectDefinition\Fixtures;
 
 class Class1
 {

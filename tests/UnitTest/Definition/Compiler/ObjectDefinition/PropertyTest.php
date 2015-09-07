@@ -1,6 +1,6 @@
 <?php
 
-namespace DI\Test\UnitTest\Definition\Compiler;
+namespace DI\Test\UnitTest\Definition\Compiler\ObjectDefinition;
 
 use DI\Definition\Compiler\ObjectDefinitionCompiler;
 use DI\Scope;
@@ -8,11 +8,11 @@ use DI\Scope;
 /**
  * Tests only the generation of properties
  */
-class ClassDefinitionCompilerPropertyTest extends \PHPUnit_Framework_TestCase
+class PropertyTest extends \PHPUnit_Framework_TestCase
 {
     public function testPublicProperty()
     {
-        $entry = \DI\object('DI\Test\UnitTest\Definition\Compiler\Fixtures\Class3')
+        $entry = \DI\object('DI\Test\UnitTest\Definition\Compiler\ObjectDefinition\Fixtures\Class3')
             ->scope(Scope::PROTOTYPE())
             ->property('publicProperty', 'foo');
 
@@ -21,7 +21,7 @@ class ClassDefinitionCompilerPropertyTest extends \PHPUnit_Framework_TestCase
         $value = $resolver->compile($entry->getDefinition('class3'));
 
         $code = <<<'PHP'
-$object = new \DI\Test\UnitTest\Definition\Compiler\Fixtures\Class3();
+$object = new \DI\Test\UnitTest\Definition\Compiler\ObjectDefinition\Fixtures\Class3();
 $object->publicProperty = 'foo';
 return $object;
 PHP;
@@ -30,7 +30,7 @@ PHP;
 
     public function testPrivateProperty()
     {
-        $entry = \DI\object('DI\Test\UnitTest\Definition\Compiler\Fixtures\Class3')
+        $entry = \DI\object('DI\Test\UnitTest\Definition\Compiler\ObjectDefinition\Fixtures\Class3')
             ->scope(Scope::PROTOTYPE())
             ->property('privateProperty', 'foo');
 
@@ -39,8 +39,8 @@ PHP;
         $value = $resolver->compile($entry->getDefinition('class3'));
 
         $code = <<<'PHP'
-$object = new \DI\Test\UnitTest\Definition\Compiler\Fixtures\Class3();
-$property = new ReflectionProperty('DI\Test\UnitTest\Definition\Compiler\Fixtures\Class3', 'privateProperty');
+$object = new \DI\Test\UnitTest\Definition\Compiler\ObjectDefinition\Fixtures\Class3();
+$property = new ReflectionProperty('DI\Test\UnitTest\Definition\Compiler\ObjectDefinition\Fixtures\Class3', 'privateProperty');
 $property->setAccessible(true);
 $property->setValue($object, 'foo');
 return $object;

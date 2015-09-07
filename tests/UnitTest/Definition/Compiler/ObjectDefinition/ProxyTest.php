@@ -1,15 +1,15 @@
 <?php
 
-namespace DI\Test\UnitTest\Definition\Compiler;
+namespace DI\Test\UnitTest\Definition\Compiler\ObjectDefinition;
 
 /**
  * Tests the generation for classes marked as lazy
  */
-class ClassDefinitionCompilerProxyTest extends \PHPUnit_Framework_TestCase
+class ProxyTest extends \PHPUnit_Framework_TestCase
 {
     public function testSimpleProxy()
     {
-        $entry = \DI\object('DI\Test\UnitTest\Definition\Compiler\Fixtures\Class2')
+        $entry = \DI\object('DI\Test\UnitTest\Definition\Compiler\ObjectDefinition\Fixtures\Class2')
             ->lazy();
 
         $resolver = new \DI\Definition\Compiler\ObjectDefinitionCompiler();
@@ -18,12 +18,12 @@ class ClassDefinitionCompilerProxyTest extends \PHPUnit_Framework_TestCase
 
         $code = <<<'PHP'
 $resolver = function (& $wrappedObject, $proxy, $method, $parameters, & $initializer) {
-    $object = new \DI\Test\UnitTest\Definition\Compiler\Fixtures\Class2();
+    $object = new \DI\Test\UnitTest\Definition\Compiler\ObjectDefinition\Fixtures\Class2();
     $wrappedObject = $object;
     $initializer = null;
     return true;
 };
-return $this->createProxy('DI\Test\UnitTest\Definition\Compiler\Fixtures\Class2', $resolver);
+return $this->createProxy('DI\Test\UnitTest\Definition\Compiler\ObjectDefinition\Fixtures\Class2', $resolver);
 PHP;
         $this->assertEquals($code, $value);
     }
