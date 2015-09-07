@@ -65,9 +65,20 @@ PHP;
     public function testClosureWithUse()
     {
         $resolver = new FactoryDefinitionCompiler();
-
         $resolver->compile(new FactoryDefinition('entry', function (Container $c) use ($resolver) {
             return $c->get('bar');
+        }));
+    }
+
+    /**
+     * @expectedException \DI\Compiler\CompilationException
+     * @expectedExceptionMessage Unable to compile entry 'entry' because the closure uses $this (which is not allowed)
+     */
+    public function testClosureWithThis()
+    {
+        $resolver = new FactoryDefinitionCompiler();
+        $resolver->compile(new FactoryDefinition('entry', function () {
+            return $this->foo();
         }));
     }
 
