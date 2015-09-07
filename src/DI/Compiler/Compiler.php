@@ -9,73 +9,61 @@
 
 namespace DI\Compiler;
 
-use DI\Compiler\Backend\Backend;
 use DI\Definition\Compiler\DefinitionCompiler;
-use DI\Definition\Definition;
+use DI\Definition\Source\DefinitionSource;
 
+/**
+ * Creates compiled definitions for the compiled container.
+ *
+ * @author Matthieu Napoli <matthieu@mnapoli.fr>
+ */
 class Compiler
 {
     /**
-     * @var Backend
+     * @var DefinitionSource
      */
-    private $backend;
+    private $definitionSource;
 
     /**
-     * @var DefinitionCompiler[]
+     * @var DefinitionCompiler
      */
-    private $definitionCompilers;
+    private $definitionCompiler;
 
-    /**
-     * @param Backend              $backend             Backend that will store compiled definitions.
-     * @param DefinitionCompiler[] $definitionCompilers Array of compilers indexed by each type of definition.
-     */
-    public function __construct(Backend $backend, array $definitionCompilers)
+    public function __construct(DefinitionSource $definitionSource, DefinitionCompiler $definitionCompiler)
     {
-        $this->backend = $backend;
-        $this->definitionCompilers = $definitionCompilers;
+        $this->definitionSource = $definitionSource;
+        $this->definitionCompiler = $definitionCompiler;
     }
 
-    /**
-     * Compiles a set of definitions.
-     *
-     * @param Definition[] $definitions
-     */
-    public function compileDefinitions(array $definitions)
+    public function compile($file)
     {
+        $definitions = $this->definitionSource->getDefinitions();
+
+        $entries = [];
         foreach ($definitions as $definition) {
-            $this->compileDefinition($definition);
-        }
-    }
+            $code = $this->definitionCompiler->compile($definition);
 
-    /**
-     * Compiles a definition.
-     *
-     * @param Definition $definition
-     */
-    public function compileDefinition(Definition $definition)
-    {
-        $compiler = $this->getDefinitionCompiler($definition);
-
-        $code = $compiler->compile($definition);
-
-        $this->backend->writeCompiledEntry($definition->getName(), $code);
-    }
-
-    /**
-     * Returns a compiler capable of handling the given definition.
-     *
-     * @param Definition $definition
-     * @throws \RuntimeException No definition resolver was found for this type of definition.
-     * @return DefinitionCompiler
-     */
-    private function getDefinitionCompiler(Definition $definition)
-    {
-        $type = get_class($definition);
-
-        if (! isset($this->definitionCompilers[$type])) {
-            throw new \RuntimeException("No definition compiler was configured for definition of type $type");
+            $entries[$definition->getName()] = $code;
         }
 
-        return $this->definitionCompilers[$type];
+        $this->dump($entries, $file);
+    }
+
+    private function dump(array $entries, $file)
+    {
+        $dumpedEntries = '';
+        foreach ($entries as $name => $code) {
+            $dumpedEntries = "\t" . var_export($name, true) . ' => ' . $code . ',' . PHP_EOL;
+        }
+
+        $content = <<<PHP
+<?php
+
+return [
+$dumpedEntries
+];
+PHP;
+
+        file_put_contents($file, $content);
     }
 }
