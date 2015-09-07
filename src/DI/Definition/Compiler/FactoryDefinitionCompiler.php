@@ -7,33 +7,27 @@
  * @license   http://www.opensource.org/licenses/mit-license.php MIT (see the LICENSE file)
  */
 
-namespace DI\Compiler\DefinitionCompiler;
+namespace DI\Definition\Compiler;
 
 use DI\Compiler\CompilationException;
-use DI\Definition\CallableDefinition;
 use DI\Definition\Definition;
+use DI\Definition\FactoryDefinition;
 use Jeremeamia\SuperClosure\ClosureParser;
 
 /**
- * Compiles a CallableDefinition to PHP code.
+ * Compiles a FactoryDefinition to PHP code.
  *
- * @since 4.0
  * @author Matthieu Napoli <matthieu@mnapoli.fr>
  */
-class CallableDefinitionCompiler implements DefinitionCompiler
+class FactoryDefinitionCompiler implements DefinitionCompiler
 {
     /**
+     * @param FactoryDefinition $definition
+     *
      * {@inheritdoc}
      */
     public function compile(Definition $definition)
     {
-        if (! $definition instanceof CallableDefinition) {
-            throw new \InvalidArgumentException(sprintf(
-                'This definition compiler is only compatible with CallableDefinition objects, %s given',
-                get_class($definition)
-            ));
-        }
-
         $callable = $definition->getCallable();
 
         if (is_array($callable)) {
@@ -53,7 +47,7 @@ class CallableDefinitionCompiler implements DefinitionCompiler
         return $code;
     }
 
-    private function compileArrayCallable($callable, CallableDefinition $definition)
+    private function compileArrayCallable($callable, FactoryDefinition $definition)
     {
         list($class, $method) = $callable;
 
@@ -68,7 +62,7 @@ class CallableDefinitionCompiler implements DefinitionCompiler
         return sprintf('$factory = array(%s, %s);', var_export($class, true), var_export($method, true));
     }
 
-    private function compileClosure($closure, CallableDefinition $definition)
+    private function compileClosure($closure, FactoryDefinition $definition)
     {
         // Uses jeremeamia/super_closure
         $closureParser = ClosureParser::fromClosure($closure);

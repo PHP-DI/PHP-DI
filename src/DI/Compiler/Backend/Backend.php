@@ -9,8 +9,8 @@
 
 namespace DI\Compiler\Backend;
 
-use DI\ContainerInterface;
 use DI\NotFoundException;
+use Interop\Container\ContainerInterface;
 
 /**
  * Backend where a compiler can store compiled definitions.

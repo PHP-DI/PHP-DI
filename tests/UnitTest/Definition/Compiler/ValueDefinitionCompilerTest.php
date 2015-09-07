@@ -1,16 +1,8 @@
 <?php
-/**
- * PHP-DI
- *
- * @link      http://php-di.org/
- * @copyright Matthieu Napoli (http://mnapoli.fr/)
- * @license   http://www.opensource.org/licenses/mit-license.php MIT (see the LICENSE file)
- */
 
-namespace UnitTests\DI\Compiler\DefinitionCompiler;
+namespace DI\Test\UnitTest\Definition\Compiler;
 
-use DI\Compiler\DefinitionCompiler\ValueDefinitionCompiler;
-use DI\Definition\CallableDefinition;
+use DI\Definition\Compiler\ValueDefinitionCompiler;
 use DI\Definition\ValueDefinition;
 
 class ValueDefinitionCompilerTest extends \PHPUnit_Framework_TestCase
@@ -78,18 +70,5 @@ class ValueDefinitionCompilerTest extends \PHPUnit_Framework_TestCase
         $resolver = new ValueDefinitionCompiler();
 
         $resolver->compile(new ValueDefinition('foo', new \stdClass()));
-    }
-
-    /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage This definition compiler is only compatible with ValueDefinition objects, DI\Definition\CallableDefinition given
-     */
-    public function testInvalidDefinitionType()
-    {
-        $definition = new CallableDefinition('foo', function () {
-        });
-        $resolver = new ValueDefinitionCompiler();
-
-        $resolver->compile($definition);
     }
 }

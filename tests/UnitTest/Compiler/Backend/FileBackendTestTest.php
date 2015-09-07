@@ -1,16 +1,9 @@
 <?php
-/**
- * PHP-DI
- *
- * @link      http://php-di.org/
- * @copyright Matthieu Napoli (http://mnapoli.fr/)
- * @license   http://www.opensource.org/licenses/mit-license.php MIT (see the LICENSE file)
- */
 
-namespace UnitTests\DI\Compiler\Backend;
+namespace DI\Test\UnitTest\Compiler\Backend;
 
 use DI\Compiler\Backend\FileBackend;
-use DI\ContainerInterface;
+use Interop\Container\ContainerInterface;
 use ProxyManager\Factory\LazyLoadingValueHolderFactory;
 
 class FileBackendTest extends \PHPUnit_Framework_TestCase
@@ -57,7 +50,7 @@ PHP;
     public function testRead()
     {
         /** @var ContainerInterface $container */
-        $container = $this->getMockForAbstractClass('DI\ContainerInterface');
+        $container = $this->getMockForAbstractClass('Interop\Container\ContainerInterface');
 
         $backend = new FileBackend(__DIR__ . '/definitions', $this->getProxyFactory());
 
@@ -71,7 +64,7 @@ PHP;
      */
     public function testReadWithContainer()
     {
-        $container = $this->getMockForAbstractClass('DI\ContainerInterface');
+        $container = $this->getMockForAbstractClass('Interop\Container\ContainerInterface');
         $container->expects($this->once())
             ->method('has')
             ->with('bar')
@@ -112,7 +105,7 @@ PHP;
     public function testReadUnknownEntry()
     {
         /** @var ContainerInterface $container */
-        $container = $this->getMockForAbstractClass('DI\ContainerInterface');
+        $container = $this->getMockForAbstractClass('Interop\Container\ContainerInterface');
 
         $backend = new FileBackend(__DIR__ . '/definitions', $this->getProxyFactory());
 

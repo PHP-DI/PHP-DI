@@ -7,14 +7,13 @@
  * @license   http://www.opensource.org/licenses/mit-license.php MIT (see the LICENSE file)
  */
 
-namespace DI\Compiler\DefinitionCompiler;
+namespace DI\Definition\Compiler;
 
 use DI\Definition\Definition;
 
 /**
  * Object that compiles a definition to PHP code for best performances.
  *
- * @since 4.0
  * @author Matthieu Napoli <matthieu@mnapoli.fr>
  */
 interface DefinitionCompiler

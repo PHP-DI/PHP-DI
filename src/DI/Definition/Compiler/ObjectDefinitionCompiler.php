@@ -7,15 +7,14 @@
  * @license   http://www.opensource.org/licenses/mit-license.php MIT (see the LICENSE file)
  */
 
-namespace DI\Compiler\DefinitionCompiler;
+namespace DI\Definition\Compiler;
 
-use DI\Definition\ClassDefinition;
-use DI\Definition\ClassInjection\MethodInjection;
-use DI\Definition\ClassInjection\PropertyInjection;
-use DI\Definition\ClassInjection\UndefinedInjection;
 use DI\Definition\Definition;
 use DI\Definition\EntryReference;
 use DI\Definition\Exception\DefinitionException;
+use DI\Definition\ObjectDefinition;
+use DI\Definition\ObjectDefinition\MethodInjection;
+use DI\Definition\ObjectDefinition\PropertyInjection;
 use DI\DependencyException;
 use DI\Scope;
 use ReflectionClass;
@@ -24,25 +23,19 @@ use ReflectionMethod;
 use ReflectionParameter;
 
 /**
- * Compiles a ClassDefinition to PHP code.
+ * Compiles an ObjectDefinition to PHP code.
  *
- * @since 4.0
  * @author Matthieu Napoli <matthieu@mnapoli.fr>
  */
-class ClassDefinitionCompiler implements DefinitionCompiler
+class ObjectDefinitionCompiler implements DefinitionCompiler
 {
     /**
+     * @param ObjectDefinition $definition
+     *
      * {@inheritdoc}
      */
     public function compile(Definition $definition)
     {
-        if (! $definition instanceof ClassDefinition) {
-            throw new \InvalidArgumentException(sprintf(
-                'This definition compiler is only compatible with ClassDefinition objects, %s given',
-                get_class($definition)
-            ));
-        }
-
         $classReflection = new ReflectionClass($definition->getClassName());
 
         if (!$classReflection->isInstantiable()) {
@@ -216,12 +209,12 @@ PHP;
     /**
      * Compile a class definition in a proxy.
      *
-     * @param ClassDefinition $definition
-     * @param string          $code
+     * @param ObjectDefinition $definition
+     * @param string           $code
      *
      * @return string
      */
-    private function compileProxy(ClassDefinition $definition, $code)
+    private function compileProxy(ObjectDefinition $definition, $code)
     {
         $code = $this->indent($code);
         $className = $definition->getClassName();

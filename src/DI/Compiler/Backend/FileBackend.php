@@ -10,8 +10,8 @@
 namespace DI\Compiler\Backend;
 
 use Closure;
-use DI\ContainerInterface;
 use DI\NotFoundException;
+use Interop\Container\ContainerInterface;
 use ProxyManager\Factory\LazyLoadingValueHolderFactory;
 
 /**
