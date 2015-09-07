@@ -24,7 +24,7 @@
         "container-interop/container-interop": "~1.0",
         "php-di/invoker": "^1.1.1",
         "php-di/phpdoc-reader": "~2.0",
-        "jeremeamia/SuperClosure": "~1.0"
+        "jeremeamia/superclosure": "~2.0"
     },
     "require-dev": {
         "phpunit/phpunit": "~4.5",

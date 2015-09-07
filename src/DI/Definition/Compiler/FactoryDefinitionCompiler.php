@@ -12,7 +12,8 @@ namespace DI\Definition\Compiler;
 use DI\Compiler\CompilationException;
 use DI\Definition\Definition;
 use DI\Definition\FactoryDefinition;
-use Jeremeamia\SuperClosure\ClosureParser;
+use SuperClosure\Analyzer\AstAnalyzer;
+use SuperClosure\Serializer;
 
 /**
  * Compiles a FactoryDefinition to PHP code.
@@ -65,9 +66,11 @@ class FactoryDefinitionCompiler implements DefinitionCompiler
     private function compileClosure($closure, FactoryDefinition $definition)
     {
         // Uses jeremeamia/super_closure
-        $closureParser = ClosureParser::fromClosure($closure);
+        $parser = new Serializer(new AstAnalyzer());
 
-        if (count($closureParser->getUsedVariables()) > 0) {
+        $data = $parser->getData($closure);
+
+        if (count($data['context']) > 0) {
             throw new CompilationException(sprintf(
                 "Unable to compile entry '%s' because the closure has a 'use (\$var)' statement,"
                 . " you should rather use the container which is passed as the first parameter to the closure."
@@ -76,6 +79,13 @@ class FactoryDefinitionCompiler implements DefinitionCompiler
             ));
         }
 
-        return sprintf('$factory = %s', $closureParser->getCode());
+        if ($data['hasThis']) {
+            throw new CompilationException(sprintf(
+                "Unable to compile entry '%s' because the closure uses \$this (which is not allowed)",
+                $definition->getName()
+            ));
+        }
+
+        return sprintf('$factory = %s', $data['code']);
     }
 }
