@@ -233,4 +233,20 @@ class DefinitionArrayTest extends \PHPUnit_Framework_TestCase
         ]);
         $this->assertNull($source->getDefinition('My\Foo\BarInterface'));
     }
+
+    /**
+     * @test
+     */
+    public function returns_all_definition_names()
+    {
+        $definitions = [
+            'foo' => 'bar',
+            'baz' => 'bam',
+        ];
+
+        $source = new DefinitionArray($definitions);
+        $names = $source->getAllDefinitionNames();
+
+        $this->assertEquals(array_keys($definitions), $names);
+    }
 }

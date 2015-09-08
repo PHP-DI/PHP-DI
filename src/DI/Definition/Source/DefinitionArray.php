@@ -14,7 +14,7 @@ use DI\Definition\ValueDefinition;
  *
  * @author Matthieu Napoli <matthieu@mnapoli.fr>
  */
-class DefinitionArray implements DefinitionSource, MutableDefinitionSource
+class DefinitionArray implements DefinitionSource, MutableDefinitionSource, ExplorableDefinitionSource
 {
     const WILDCARD = '*';
     /**
@@ -90,6 +90,11 @@ class DefinitionArray implements DefinitionSource, MutableDefinitionSource
         }
 
         return null;
+    }
+
+    public function getAllDefinitionNames()
+    {
+        return array_keys($this->definitions);
     }
 
     /**

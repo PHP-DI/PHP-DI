@@ -11,6 +11,7 @@ namespace DI\Compiler;
 
 use DI\Definition\Compiler\DefinitionCompiler;
 use DI\Definition\Source\DefinitionSource;
+use DI\Definition\Source\ExplorableDefinitionSource;
 
 /**
  * Creates compiled definitions for the compiled container.
@@ -29,7 +30,7 @@ class Compiler
      */
     private $definitionCompiler;
 
-    public function __construct(DefinitionSource $definitionSource, DefinitionCompiler $definitionCompiler)
+    public function __construct(ExplorableDefinitionSource $definitionSource, DefinitionCompiler $definitionCompiler)
     {
         $this->definitionSource = $definitionSource;
         $this->definitionCompiler = $definitionCompiler;
@@ -37,13 +38,14 @@ class Compiler
 
     public function compile($file)
     {
-        $definitions = $this->definitionSource->getDefinitions();
+        $names = $this->definitionSource->getAllDefinitionNames();
 
         $entries = [];
-        foreach ($definitions as $definition) {
+        foreach ($names as $name) {
+            $definition = $this->definitionSource->getDefinition($name);
             $code = $this->definitionCompiler->compile($definition);
 
-            $entries[$definition->getName()] = $code;
+            $entries[$name] = $code;
         }
 
         $this->dump($entries, $file);

@@ -10,7 +10,7 @@ use DI\Definition\HasSubDefinition;
  *
  * @author Matthieu Napoli <matthieu@mnapoli.fr>
  */
-class SourceChain implements DefinitionSource, MutableDefinitionSource
+class SourceChain implements DefinitionSource, ExplorableDefinitionSource, MutableDefinitionSource
 {
     /**
      * @var DefinitionSource[]
@@ -60,6 +60,17 @@ class SourceChain implements DefinitionSource, MutableDefinitionSource
         }
 
         return null;
+    }
+
+    public function getAllDefinitionNames()
+    {
+        $definitions = [];
+        foreach ($this->sources as $source) {
+            if ($source instanceof ExplorableDefinitionSource) {
+                $definitions = array_merge($definitions, $source->getAllDefinitionNames());
+            }
+        }
+        return array_unique($definitions);
     }
 
     public function addDefinition(Definition $definition)

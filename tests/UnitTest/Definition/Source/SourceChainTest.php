@@ -141,6 +141,27 @@ class SourceChainTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($definition->isLazy());
     }
 
+    /**
+     * @test
+     */
+    public function returns_all_definition_names()
+    {
+        $source = new SourceChain([
+            new DefinitionArray([
+                'foo' => '',
+                'bar' => '',
+            ]),
+            new DefinitionArray([
+                'foo' => '',
+                'baz' => '',
+            ]),
+            new Autowiring(),
+        ]);
+
+        $expected = ['foo', 'bar', 'baz'];
+        $this->assertEquals($expected, array_values($source->getAllDefinitionNames()));
+    }
+
     private function assertValueDefinition(Definition $definition, $value)
     {
         $this->assertTrue($definition instanceof ValueDefinition);
