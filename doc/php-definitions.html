@@ -150,6 +150,11 @@
                                     </a>
                                 </li>
                                                             <li class="">
+                                    <a href="http://php-di.org/doc/frameworks/zf2.html">
+                                        Zend Framework 2
+                                    </a>
+                                </li>
+                                                            <li class="">
                                     <a href="http://php-di.org/doc/frameworks/zf1.html">
                                         Zend Framework 1
                                     </a>
@@ -319,23 +324,34 @@ return [
     },
 ];</code></pre>
 <p>The only parameter of a factory is the container (which can be used to retrieve other entries). You are encouraged to type-hint against the interface <code>Interop\Container\ContainerInterface</code> instead of the implementation <code>DI\Container</code>: that can be necessary in scenarios where you are using multiple containers (for example if using the PHP-DI + Symfony integration).</p>
-<p>You can also use a factory class:</p>
+<p>You can also use a factory class - as an example, let's assume you have a simple factory class like this:</p>
 <pre><code class="language-php">class FooFactory
 {
-    // the $container can be omitted if not used
+    // note: $container can be omitted if not needed
     public function create($container)
     {
         return new Foo();
     }
-}
-
-return [
-    'Foo' =&gt; [new FooFactory(), 'create'],
-    // alternative syntaxes for the same result
-    // these syntaxes are preferred because of lazy loading
-    'Foo' =&gt; [DI\get('FooFactory'), 'create'],
-    'Foo' =&gt; ['FooFactory', 'create'],
+}</code></pre>
+<p>You can choose to eagerly load <code>FooFactory</code> at definition time:</p>
+<pre><code class="language-php">return [
+    // not recommended!
+    Foo::class =&gt; DI\factory([new FooFactory, 'create']),
 ];</code></pre>
+<p>But the factory will be created on every request (<code>new FooFactory</code>) even if not used. Additionally with this method it's harder to pass dependencies in the factory.</p>
+<p>The recommended solution is let the container create the factory:</p>
+<pre><code class="language-php">return [
+    Foo::class =&gt; DI\factory([FooFactory::class, 'create']),
+];</code></pre>
+<p>This configuration is equivalent to the following code:</p>
+<pre><code class="language-php">$factory = $container-&gt;get(FooFactory::class);
+return $factory-&gt;create();</code></pre>
+<p>Please note:</p>
+<ul>
+<li>if <code>create()</code> is a <strong>static</strong> method then the object will not be created: <code>FooFactory::create()</code> will be called statically (as one would expect)</li>
+<li>you can set any container entry name in the array, e.g. <code>factory(['foo_bar_baz', 'create'])</code>, allowing you to configure <code>foo_bar_baz</code> and its dependencies like any other object</li>
+</ul>
+<h4 id="decoration">Decoration</h4>
 <p>When using a system with multiple definition files, you can override a previous entry using a decorator:</p>
 <pre><code class="language-php">return [
     // decorate an entry previously defined in another file
@@ -343,6 +359,7 @@ return [
         return new CachedApi($previous, $c-&gt;get('cache'));
     }),
 ];</code></pre>
+<p>Please read the <a href="definition-overriding.html">definition overriding guide</a> to learn more about this.</p>
 <h3 id="objects">Objects</h3>
 <p>Using factories to create object is very powerful (as we can do anything using PHP), but the <code>DI\object()</code> helper can sometimes be simpler.</p>
 <p>Simple examples:</p>
@@ -479,7 +496,7 @@ $container-&gt;set('foo', DI\object('MyClass'));</code></pre>
                     and <a href="https://github.com/PHP-DI/PHP-DI/graphs/contributors">contributors</a>
                     |
                     Website generated with
-                    <a href="http://mnapoli.fr/Couscous/" target="_blank">Couscous</a>.
+                    <a href="http://couscous.io" target="_blank">Couscous</a>.
                 </p>
             </div>
         </footer>

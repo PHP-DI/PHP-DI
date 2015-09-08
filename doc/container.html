@@ -150,6 +150,11 @@
                                     </a>
                                 </li>
                                                             <li class="">
+                                    <a href="http://php-di.org/doc/frameworks/zf2.html">
+                                        Zend Framework 2
+                                    </a>
+                                </li>
+                                                            <li class="">
                                     <a href="http://php-di.org/doc/frameworks/zf1.html">
                                         Zend Framework 1
                                     </a>
@@ -255,7 +260,7 @@ interface ContainerInterface
     public function get($id);
     public function has($id);
 }</code></pre>
-<p>You are encouraged to type-hint against this interface instead instead of the implementation (<code>DI\Container</code>) whenever possible. Doing so means your code is decoupled from PHP-DI and you can switch to another container anytime.</p>
+<p>You are encouraged to type-hint against this interface instead of the implementation (<code>DI\Container</code>) whenever possible. Doing so means your code is decoupled from PHP-DI and you can switch to another container anytime.</p>
 <h2 id="set">set()</h2>
 <p>You can set entries directly on the container:</p>
 <pre><code class="language-php">$container-&gt;set('foo', 'bar');
@@ -413,7 +418,7 @@ or whether you configured your object in a definition file.</p>
                     and <a href="https://github.com/PHP-DI/PHP-DI/graphs/contributors">contributors</a>
                     |
                     Website generated with
-                    <a href="http://mnapoli.fr/Couscous/" target="_blank">Couscous</a>.
+                    <a href="http://couscous.io" target="_blank">Couscous</a>.
                 </p>
             </div>
         </footer>

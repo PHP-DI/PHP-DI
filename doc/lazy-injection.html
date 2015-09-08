@@ -150,6 +150,11 @@
                                     </a>
                                 </li>
                                                             <li class="">
+                                    <a href="http://php-di.org/doc/frameworks/zf2.html">
+                                        Zend Framework 2
+                                    </a>
+                                </li>
+                                                            <li class="">
                                     <a href="http://php-di.org/doc/frameworks/zf1.html">
                                         Zend Framework 1
                                     </a>
@@ -277,7 +282,7 @@ class Foo
 <li>the object, if it has already been created</li>
 <li>or else a <strong>proxy</strong> to the object, if it is not yet created</li>
 </ul>
-<p>The proxy is a special kind of object that <strong>looks and behave exactly like the original object</strong>, so you can't tell the difference. The proxy will instantiate the original object only when needed.</p>
+<p>The proxy is a special kind of object that <strong>looks and behaves exactly like the original object</strong>, so you can't tell the difference. The proxy will instantiate the original object only when needed.</p>
 <p>Creating a proxy is complex. For this, PHP-DI relies on <a href="https://github.com/Ocramius/ProxyManager">ProxyManager</a>, the (amazing) library used by Doctrine, Symfony and Zend.</p>
 <h3 id="example">Example</h3>
 <p>For the simplicity of the example, we will not inject a lazy object, but we will ask the container to return one:</p>
@@ -288,7 +293,7 @@ class Foo
     }
 }
 
-$container-&gt;set('Foo', \DI\object()-&gt;lazy);
+$container-&gt;set('Foo', \DI\object()-&gt;lazy());
 
 // $proxy is a Proxy object, it is not initialized
 // It is very lightweight in memory
@@ -350,7 +355,7 @@ return [
                     and <a href="https://github.com/PHP-DI/PHP-DI/graphs/contributors">contributors</a>
                     |
                     Website generated with
-                    <a href="http://mnapoli.fr/Couscous/" target="_blank">Couscous</a>.
+                    <a href="http://couscous.io" target="_blank">Couscous</a>.
                 </p>
             </div>
         </footer>

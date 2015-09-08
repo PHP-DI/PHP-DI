@@ -150,6 +150,11 @@
                                     </a>
                                 </li>
                                                             <li class="">
+                                    <a href="http://php-di.org/doc/frameworks/zf2.html">
+                                        Zend Framework 2
+                                    </a>
+                                </li>
+                                                            <li class="">
                                     <a href="http://php-di.org/doc/frameworks/zf1.html">
                                         Zend Framework 1
                                     </a>
@@ -256,7 +261,7 @@
 <pre><code class="language-php">$containerBuilder-&gt;useAnnotations(true);</code></pre>
 <p>Annotations are written in PHP docblock comments. They are used by a lot of modern libraries and frameworks, like <a href="http://docs.doctrine-project.org/projects/doctrine-orm/en/latest/index.html">Doctrine</a>, <a href="http://symfony.com/">Symfony</a>, <a href="http://flow.typo3.org/">Flow</a>, <a href="http://www.phpunit.de/manual/3.7/en/">PHPUnit</a>…</p>
 <h2 id="inject">Inject</h2>
-<p><code>@Inject</code> let's you define where PHP-DI should inject something, and what should it inject. You can combine it with <code>@var</code> and <code>@param</code> phpdoc tags to define what should be injected.</p>
+<p><code>@Inject</code> lets you define where PHP-DI should inject something, and what it should inject. You can combine it with <code>@var</code> and <code>@param</code> phpdoc tags to define what should be injected.</p>
 <p>It can be used on:</p>
 <ul>
 <li>the constructor (constructor injection)</li>
@@ -312,7 +317,7 @@
 }</code></pre>
 <p><em>Note: importing annotations with <code>use DI\Annotation\Inject;</code> is optional.</em></p>
 <h2 id="injectable">Injectable</h2>
-<p>The <code>@Injectable</code> annotation let's you set options on injectable classes:</p>
+<p>The <code>@Injectable</code> annotation lets you set options on injectable classes:</p>
 <pre><code class="language-php">/**
  * @Injectable(scope="prototype", lazy=true)
  */
@@ -327,6 +332,11 @@ class Example {
 <li>defining entries with an anonymous function</li>
 </ul>
 <p>For that, you can combine annotations with <a href="php-definitions.html">definitions in PHP</a>.</p>
+<h2 id="troubleshooting">Troubleshooting</h2>
+<p>Since annotations are in PHP docblocks, the opcache option <code>opcache.load_comments</code> must be set to <code>1</code>. If it is set to <code>0</code>, comments will be stripped from the source code and annotations will not work.</p>
+<p>The default value for this option is <code>1</code> so everything should work by default. There is also no reason to set this option to <code>0</code> as it brings no performance benefit.</p>
+<p>To check the value of this option, you can run the following command:</p>
+<pre><code>$ php -i | grep "opcache.load_comments"</code></pre>
         </article>
 
     </div>
@@ -350,7 +360,7 @@ class Example {
                     and <a href="https://github.com/PHP-DI/PHP-DI/graphs/contributors">contributors</a>
                     |
                     Website generated with
-                    <a href="http://mnapoli.fr/Couscous/" target="_blank">Couscous</a>.
+                    <a href="http://couscous.io" target="_blank">Couscous</a>.
                 </p>
             </div>
         </footer>

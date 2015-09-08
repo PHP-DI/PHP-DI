@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>
+<html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>
+<html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>
+<html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!-->
+<html class="no-js"> <!--<![endif]-->
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>PHP-DI 5.1 released - The Dependency Injection Container for humans</title>
+    <meta name="description" content="PHP-DI is a Dependency Injection Container for PHP that intends to be practical and powerful">
+
+    <link rel="canonical" href="http://php-di.org" />
+
+    <meta name="application-name" content="PHP-DI"/>
+    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="http://php-di.org/img/apple-touch-icon-144x144.png" />
+    <link rel="apple-touch-icon-precomposed" sizes="152x152" href="http://php-di.org/img/apple-touch-icon-152x152.png" />
+    <link rel="icon" type="image/png" href="http://php-di.org/img/favicon-32x32.png" sizes="32x32" />
+    <link rel="icon" type="image/png" href="http://php-di.org/img/favicon-16x16.png" sizes="16x16" />
+    <meta name="msapplication-TileColor" content="#484949" />
+    <meta name="msapplication-TileImage" content="http://php-di.org/img/mstile-144x144.png" />
+
+            <link href="http://fonts.googleapis.com/css?family=Abel:400|Oswald:300,400,700" media="all" rel="stylesheet" type="text/css">
+        <link href="http://php-di.org/css/highlight.github.css" rel="stylesheet">
+        <link href="http://php-di.org/css/all.min.css" rel="stylesheet">
+    
+    <script>
+        if (window.location.href.indexOf('http://mnapoli.fr') === 0) {
+            window.location.href = 'http://php-di.org';
+        }
+    </script>
+</head>
+<body>
+
+    <header>
+        <div class="navbar navbar-default navbar-fixed-top">
+            <div class="container">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#top-navigation">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand" href="http://php-di.org/index.html">PHP-DI</a>
+                </div>
+                <div class="collapse navbar-collapse" id="top-navigation">
+                    <ul class="nav navbar-nav navbar-right">
+                        <li><a href="http://php-di.org/doc/getting-started.html">Getting started</a></li>
+                        <li><a href="http://php-di.org/doc/">Documentation</a></li>
+                        <li><a href="http://php-di.org/news/">News</a></li>
+                        <li><a href="http://php-di.org/change-log.html">Change log</a></li>
+                        <li><a class="github" href="https://github.com/PHP-DI/PHP-DI"><i class="fa fa-github"></i></a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    
+    <section class="container">
+        <div class="row">
+            <div class="col-md-9">
+
+                
+    <article>
+        <h1>PHP-DI 5.1 released</h1>
+
+        <p class="article-information">
+            Posted by Matthieu Napoli on September 8th 2015
+        </p>
+
+        <p>I am happy to announce that PHP-DI version 5.1 has been released. This new version comes with:</p>
+<ul>
+<li>many performances improvements - some benchmarks show up to 35% performance improvements, real results will vary of course</li>
+<li><a href="../doc/frameworks/zf2.html">Zend Framework 2 integration</a></li>
+<li>factory resolution by the container</li>
+<li>many documentation improvements</li>
+<li>several bugfixes</li>
+</ul>
+<h2 id="factory-resolution">Factory resolution</h2>
+<p><em>Note: examples below use the <a href="http://php.net/manual/en/migration56.new-features.php#migration56.new-features.use">PHP 5.6 shortcut</a> <code>factory()</code> instead of <code>DI\factory()</code>.</em></p>
+<p>You can define a service using a factory, the simplest example would be using a closure:</p>
+<pre><code class="language-php">return [
+    'db' =&gt; factory(function ($container) {
+        return ...;
+    }),
+];</code></pre>
+<p>It can be sometimes useful to put such code in its own class, for example:</p>
+<pre><code class="language-php">class DbFactory
+{
+    public function create($container)
+    {
+        return ...;
+    }
+}</code></pre>
+<p>You could configure this like so:</p>
+<pre><code class="language-php">return [
+    'db' =&gt; factory([new DbFactory(), 'create']),
+];</code></pre>
+<p>But it comes with its problems:</p>
+<ul>
+<li>the <code>DbFactory</code> object is created for every request, even if not used</li>
+<li>you can't pass dependencies to the factory (you only get the <code>$container</code> parameter)</li>
+</ul>
+<p>From v5.1 and up you can now ask PHP-DI to create the factory object on-demand (with the benefits of using dependency injection there too):</p>
+<pre><code class="language-php">return [
+    'db' =&gt; factory(['DbFactory', 'create']),
+    // or with PHP 5.5
+    'db' =&gt; factory([DbFactory::class, 'create']),
+];
+
+// You can use dependency injection in the factory now:
+class DbFactory
+{
+    private $dependency;
+
+    public function __construct(Foo $dependency)
+    {
+        $this-&gt;dependency = $dependency;
+    }
+
+    public function create()
+    {
+        return ...;
+    }
+}</code></pre>
+<p>As you can see above, it uses the notation of a <a href="http://php.net/manual/en/language.types.callable.php">PHP callable</a> except the first array item is a class name (or any container entry) instead of the actual instance: <code>['DbFactory', 'create']</code>.</p>
+<p>To give you an idea, <code>factory(['DbFactory', 'create'])</code> is equivalent to the following code:</p>
+<pre><code class="language-php">$factory = $container-&gt;get('DbFactory');
+$factory-&gt;create();</code></pre>
+<p>(technically the <code>$container</code> is passed in <code>create()</code> but you probably don't need it)</p>
+<p>Two things to note:</p>
+<ul>
+<li>if <code>DbFactory::create()</code> is a <strong>static</strong> method then the object will not be created: <code>DbFactory::create()</code> will be called statically (as you would expect)</li>
+<li>you can set any container entry name in the array, e.g. <code>factory(['foo_bar_baz', 'create'])</code>, allowing you to configure <code>foo_bar_baz</code> and its dependencies like any other object</li>
+</ul>
+<h2 id="change-log">Change log</h2>
+<p>If you want the complete list of changes in this new version, head over to <a href="../change-log.html">the change log</a>.</p>
+<p>Let's finish on a &quot;Thank you&quot; to all contributors involved in this release!</p>
+    </article>
+
+    <h3>
+        Comments
+    </h3>
+    <div id="disqus_thread"></div>
+    <noscript>
+        Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+    </noscript>
+
+
+            </div>
+
+            <div class="col-md-3">
+                <h3>
+                    All posts
+                </h3>
+
+                <ul class="all-posts list-unstyled">
+                    <li>
+                        <a href="http://php-di.org/news/16-php-di-5-1-released.html">PHP-DI 5.1 released</a>
+                    </li>
+                    <li>
+                        <a href="http://php-di.org/news/15-php-di-5-0-released.html">PHP-DI 5.0 released</a>
+                    </li>
+                    <li>
+                        <a href="http://php-di.org/news/14-php-di-5-syntaxic-sugar.html">Syntactic sugar in PHP-DI 5</a>
+                    </li>
+                    <li>
+                        <a href="http://php-di.org/news/13-php-di-4-4-released.html">PHP-DI 4.4 released</a>
+                    </li>
+                    <li>
+                        <a href="http://php-di.org/news/12-php-di-is-better-with-php-5-6.html">PHP 5.6 is out and PHP-DI just got better</a>
+                    </li>
+                    <li>
+                        <a href="http://php-di.org/news/11-php-di-4-3-released.html">PHP-DI 4.3 released</a>
+                    </li>
+                    <li>
+                        <a href="http://php-di.org/news/10-php-di-4-2-released.html">PHP-DI 4.2 released</a>
+                    </li>
+                    <li>
+                        <a href="http://php-di.org/news/09-php-di-4-1-released.html">PHP-DI 4.1 released</a>
+                    </li>
+                    <li>
+                        <a href="http://php-di.org/news/08-10000-installs.html">10.000 installs!</a>
+                    </li>
+                    <li>
+                        <a href="http://php-di.org/news/07-php-di-4-0-released.html">PHP-DI 4.0 released</a>
+                    </li>
+                    <li>
+                        <a href="http://php-di.org/news/06-php-di-4-0-new-definitions.html">What will change in PHP-DI 4: the new definition format</a>
+                    </li>
+                    <li>
+                        <a href="http://php-di.org/news/05-php-di-3-5.html">PHP-DI 3.5 released</a>
+                    </li>
+                    <li>
+                        <a href="http://php-di.org/news/04-php-di-3-4.html">PHP-DI 3.4 released</a>
+                    </li>
+                    <li>
+                        <a href="http://php-di.org/news/03-php-di-3-3.html">PHP-DI 3.3 released</a>
+                    </li>
+                    <li>
+                        <a href="http://php-di.org/news/02-php-di-3-2.html">PHP-DI 3.2 released</a>
+                    </li>
+                    <li>
+                        <a href="http://php-di.org/news/01-php-di-3-1.html">PHP-DI 3.1 released</a>
+                    </li>
+                </ul>
+            </div>
+
+        </div>
+    </section>
+
+
+            <footer>
+            <div class='container'>
+                                    <p>
+                        A question? Unsatisfied with the documentation?
+                        Please <a href="https://github.com/PHP-DI/PHP-DI/issues/new">create an issue</a>
+                        or chat on
+                        <a href="https://gitter.im/PHP-DI/PHP-DI">Gitter</a> or
+                        <a href="https://twitter.com/phpdi">Twitter</a>.
+                    </p>
+                                <p>
+                    <a href="https://twitter.com/share" class="twitter-share-button" data-related="PHPDI" data-dnt="true">Tweet</a>
+                    <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+                </p>
+                <p>
+                    By <a href="http://mnapoli.fr/">Matthieu Napoli</a>
+                    and <a href="https://github.com/PHP-DI/PHP-DI/graphs/contributors">contributors</a>
+                    |
+                    Website generated with
+                    <a href="http://couscous.io" target="_blank">Couscous</a>.
+                </p>
+            </div>
+        </footer>
+    
+                <script src="http://php-di.org/bower_components/jquery/dist/jquery.min.js"></script>
+        <script src="http://php-di.org/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+        <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.5/highlight.min.js"></script>
+
+        <script>
+            $(function() {
+                hljs.initHighlightingOnLoad();
+            });
+        </script>
+    
+
+    <script>
+        // Disqus comments
+        var disqus_shortname = 'phpdi';
+
+        (function() {
+            var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+            dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+        })();
+    </script>
+
+    <script>
+        var _gaq = _gaq || [];
+        _gaq.push(['_setAccount', 'UA-15584647-13']);
+        _gaq.push(['_trackPageview']);
+        (function() {
+            var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+            ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+            var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+        })();
+    </script>
+
+    <!-- Piwik -->
+    <script type="text/javascript">
+        var _paq = _paq || [];
+        _paq.push(["setDocumentTitle", document.domain + "/" + document.title]);
+        _paq.push(["setCookieDomain", "*.php-di.org"]);
+        _paq.push(['trackPageView']);
+        _paq.push(['enableLinkTracking']);
+        (function() {
+            var u=(("https:" == document.location.protocol) ? "https" : "http") + "://piwik.mnapoli.fr/";
+            _paq.push(['setTrackerUrl', u+'piwik.php']);
+            _paq.push(['setSiteId', 2]);
+            var d=document, g=d.createElement('script'), s=d.getElementsByTagName('script')[0]; g.type='text/javascript';
+            g.defer=true; g.async=true; g.src=u+'piwik.js'; s.parentNode.insertBefore(g,s);
+        })();
+    </script>
+    <noscript><p><img src="http://piwik.mnapoli.fr/piwik.php?idsite=2" style="border:0;" alt="" /></p></noscript>
+    <!-- End Piwik Code -->
+
+</body>
+</html>

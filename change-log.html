@@ -64,6 +64,27 @@
 
             <article class="container">
             <h1 id="change-log">Change log</h1>
+<h2 id="51">5.1</h2>
+<p>Read the <a href="news/16-php-di-5-1-released.html">news entry</a>.</p>
+<p>Improvements:</p>
+<ul>
+<li><a href="https://github.com/PHP-DI/ZF2-Bridge">Zend Framework 2 integration</a> (by @Rastusik)</li>
+<li><a href="https://github.com/PHP-DI/PHP-DI/pull/308">#308</a>: Instantiate factories using the container (<code>DI\factory(['FooFactory', 'create'])</code>)</li>
+<li>Many performances improvements - some benchmarks show up to 35% performance improvements, real results may vary of course</li>
+<li>Many documentation improvements (@jdreesen, @mindplay-dk, @mnapoli, @holtkamp, @Rastusik)</li>
+<li><a href="https://github.com/PHP-DI/PHP-DI/issues/296">#296</a>: Provide a faster <code>ArrayCache</code> implementation, mostly useful in micro-benchmarks</li>
+</ul>
+<p>Bugfixes:</p>
+<ul>
+<li><a href="https://github.com/PHP-DI/PHP-DI/issues/257">#257</a> &amp; <a href="https://github.com/PHP-DI/PHP-DI/issues/274">#274</a>: Private properties of parent classes are not injected when using annotations</li>
+<li><a href="https://github.com/PHP-DI/PHP-DI/pull/300">#300</a>: Exception if object definition extends an incompatible definition</li>
+<li><a href="https://github.com/PHP-DI/PHP-DI/issues/306">#306</a>: Errors when using parameters passed by reference (fixed by @bradynpoulsen)</li>
+<li><a href="https://github.com/PHP-DI/PHP-DI/issues/318">#318</a>: <code>Container::call()</code> ignores parameter's default value</li>
+</ul>
+<p>Internal changes:</p>
+<ul>
+<li><a href="https://github.com/PHP-DI/PHP-DI/pull/276">#276</a>: Tests now pass on Windows (@bgaillard)</li>
+</ul>
 <h2 id="50">5.0</h2>
 <p>This is the complete change log. You can also read the <a href="doc/migration/5.0.html">migration guide</a> for upgrading, or <a href="news/15-php-di-5-0-released.html">the news article</a> for a nicer introduction to this new version.</p>
 <p>Improvements:</p>
@@ -343,7 +364,7 @@ From 3.2 and on, properties are injected after calling the constructor.</p>
                     and <a href="https://github.com/PHP-DI/PHP-DI/graphs/contributors">contributors</a>
                     |
                     Website generated with
-                    <a href="http://mnapoli.fr/Couscous/" target="_blank">Couscous</a>.
+                    <a href="http://couscous.io" target="_blank">Couscous</a>.
                 </p>
             </div>
         </footer>

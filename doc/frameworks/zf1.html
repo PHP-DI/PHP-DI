@@ -150,6 +150,11 @@
                                     </a>
                                 </li>
                                                             <li class="">
+                                    <a href="http://php-di.org/doc/frameworks/zf2.html">
+                                        Zend Framework 2
+                                    </a>
+                                </li>
+                                                            <li class="">
                                     <a href="http://php-di.org/doc/frameworks/zf1.html">
                                         Zend Framework 1
                                     </a>
@@ -254,6 +259,7 @@ to call the container (thus avoiding the Service Locator pattern).</p>
 <pre><code class="language-php">    protected function _initContainer()
     {
         $builder = new \DI\ContainerBuilder();
+        $builder-&gt;useAnnotations(true);
         $container = $builder-&gt;build();
 
         $dispatcher = new \DI\Bridge\ZendFramework1\Dispatcher();
@@ -262,6 +268,7 @@ to call the container (thus avoiding the Service Locator pattern).</p>
         Zend_Controller_Front::getInstance()-&gt;setDispatcher($dispatcher);
     }</code></pre>
 <p>That's it!</p>
+<p>As you can see since PHP-DI 5 it's necessary to enable <a href="../annotations.html">annotations</a> because they are disabled by default.</p>
 <p><strong>Warning</strong>: if you use Zend's autoloader (and not Composer), you will need to configure it:</p>
 <pre><code class="language-php">$autoloader-&gt;suppressNotFoundWarnings(true);</code></pre>
 <h2 id="usage">Usage</h2>
@@ -386,7 +393,7 @@ with the container in one test will not affect the others.</p>
                     and <a href="https://github.com/PHP-DI/PHP-DI/graphs/contributors">contributors</a>
                     |
                     Website generated with
-                    <a href="http://mnapoli.fr/Couscous/" target="_blank">Couscous</a>.
+                    <a href="http://couscous.io" target="_blank">Couscous</a>.
                 </p>
             </div>
         </footer>

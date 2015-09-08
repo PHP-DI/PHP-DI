@@ -150,6 +150,11 @@
                                     </a>
                                 </li>
                                                             <li class="">
+                                    <a href="http://php-di.org/doc/frameworks/zf2.html">
+                                        Zend Framework 2
+                                    </a>
+                                </li>
+                                                            <li class="">
                                     <a href="http://php-di.org/doc/frameworks/zf1.html">
                                         Zend Framework 1
                                     </a>
@@ -246,7 +251,7 @@
         <article>
             <h1 id="definition-extensions-and-overriding">Definition extensions and overriding</h1>
 <p>A simple application usually takes advantage of one or two <em>definition sources</em>: autowiring (or annotations) + a definition file/array.</p>
-<p>However in more complex application or modular systems you might want to have multiple definition files (e.g. one per modules/bundles/plugins/…). In this case, PHP-DI provides a clear and powerful system to <strong>override and/or extend definitions</strong>.</p>
+<p>However in more complex applications or modular systems you might want to have multiple definition files (e.g. one per modules/bundles/plugins/…). In this case, PHP-DI provides a clear and powerful system to <strong>override and/or extend definitions</strong>.</p>
 <h2 id="priorities-of-definition-sources">Priorities of definition sources</h2>
 <p>From the lowest priority to the highest:</p>
 <ul>
@@ -315,7 +320,7 @@ return [
     ],
 ];</code></pre>
 <pre><code class="language-php">return [
-    'array' =&gt; add([
+    'array' =&gt; DI\add([
         DI\get(NewEntry::class),
     ]),
 ];</code></pre>
@@ -334,6 +339,7 @@ return [
     }),
 ];</code></pre>
 <p>The first parameter of the callable is the instance returned by the previous definition (i.e. the one we wish to decorate), the second parameter is the container.</p>
+<p>You can use <code>DI\decorate()</code> over any kind of previous definition (factory but also object, value, environment variable, …).</p>
         </article>
 
     </div>
@@ -357,7 +363,7 @@ return [
                     and <a href="https://github.com/PHP-DI/PHP-DI/graphs/contributors">contributors</a>
                     |
                     Website generated with
-                    <a href="http://mnapoli.fr/Couscous/" target="_blank">Couscous</a>.
+                    <a href="http://couscous.io" target="_blank">Couscous</a>.
                 </p>
             </div>
         </footer>
