@@ -150,7 +150,10 @@ $factory = $container->get(FooFactory::class);
 return $factory->create();
 ```
 
-Please note that `create()` can also be a static method. In that case PHP-DI will not try to instantiate the factory: it will instead simply call `FooFactory::create()` statically.
+Please note:
+
+- if `create()` is a **static** method then the object will not be created: `FooFactory::create()` will be called statically (as one would expect)
+- you can set any container entry name in the array, e.g. `factory(['foo_bar_baz', 'create'])`, allowing you to configure `foo_bar_baz` and its dependencies like any other object
 
 #### Decoration
 
