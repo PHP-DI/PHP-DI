@@ -19,5 +19,3 @@ It is meant to be practical, powerful, and framework-agnostic.
 Read more on the website: **[php-di.org](http://php-di.org)**
 
 Join us in the Gitter chat room: [![Gitter chat](https://badges.gitter.im/PHP-DI/PHP-DI.png)](https://gitter.im/PHP-DI/PHP-DI)
-
-Support is always appreciated: [![Gratipay](https://img.shields.io/gratipay/mnapoli.svg)](https://gratipay.com/mnapoli/)
