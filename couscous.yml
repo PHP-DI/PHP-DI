@@ -4,6 +4,13 @@ scripts:
     before:
         - lessc --clean-css website/less/main.less website/css/all.min.css
 
+exclude:
+    - vendor
+    - website
+    - src
+    - tests
+    - logo
+
 menu:
     items:
         introduction:
