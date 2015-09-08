@@ -2,6 +2,8 @@
 
 ## 5.1
 
+Read the [news entry](news/16-php-di-5-1-released.md).
+
 Improvements:
 
 - [Zend Framework 2 integration](https://github.com/PHP-DI/ZF2-Bridge) (by @Rastusik)
