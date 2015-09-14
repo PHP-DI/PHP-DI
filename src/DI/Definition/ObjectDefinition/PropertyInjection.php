@@ -57,7 +57,7 @@ class PropertyInjection
     }
 
     /**
-     * @return string Value that should be injected in the property
+     * @return mixed Value that should be injected in the property
      */
     public function getValue()
     {
