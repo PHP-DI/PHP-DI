@@ -13,6 +13,7 @@ use DI\Definition\Exception\DefinitionException;
 use DI\Definition\FactoryDefinition;
 use DI\Definition\Definition;
 use Interop\Container\ContainerInterface;
+use Invoker\Exception\NotCallableException;
 use Invoker\Invoker;
 use Invoker\ParameterResolver\NumericArrayResolver;
 
@@ -56,20 +57,19 @@ class FactoryResolver implements DefinitionResolver
      */
     public function resolve(Definition $definition, array $parameters = [])
     {
-        $callable = $definition->getCallable();
-
-        if (! is_callable($callable)) {
-            throw new DefinitionException(sprintf(
-                'The factory definition "%s" is not callable',
-                $definition->getName()
-            ));
-        }
-
         if (! $this->invoker) {
             $this->invoker = new Invoker(new NumericArrayResolver, $this->container);
         }
 
-        return $this->invoker->call($callable, [$this->container]);
+        try {
+            return $this->invoker->call($definition->getCallable(), [$this->container]);
+        } catch (NotCallableException $e) {
+            throw new DefinitionException(sprintf(
+                'The factory definition "%s" is not callable: %s',
+                $definition->getName(),
+                $e->getMessage()
+            ));
+        }
     }
 
     /**

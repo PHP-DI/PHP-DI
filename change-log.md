@@ -1,5 +1,15 @@
 # Change log
 
+## 5.2
+
+Improvements:
+
+- [#272](https://github.com/PHP-DI/PHP-DI/issues/272): Support 'Class::method' syntax for callables
+
+Bugfixes:
+
+- [#321](https://github.com/PHP-DI/PHP-DI/pull/321): Allow factory definitions to reference arbitrary container entries as callables
+
 ## 5.1
 
 Read the [news entry](news/16-php-di-5-1-released.md).

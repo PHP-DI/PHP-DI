@@ -22,7 +22,7 @@
     "require": {
         "php": ">=5.4.0",
         "container-interop/container-interop": "~1.0",
-        "php-di/invoker": "^1.0.1",
+        "php-di/invoker": "^1.1",
         "php-di/phpdoc-reader": "~2.0"
     },
     "require-dev": {
