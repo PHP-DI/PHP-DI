@@ -100,7 +100,7 @@ Factories are PHP callables that return the instance. It allows to define an obj
 Here is an example using a closure:
 
 ```php
-use \Interop\Container\ContainerInterface;
+use Interop\Container\ContainerInterface;
 
 return [
     'Foo' => function (ContainerInterface $c) {
@@ -143,6 +143,14 @@ return [
 ];
 ```
 
+Alternatively, you can write it as follows:
+
+```php
+return [
+    Foo::class => DI\factory('Namespace\To\FooFactory::create'),
+];
+```
+
 This configuration is equivalent to the following code:
 
 ```php
@@ -153,7 +161,8 @@ return $factory->create();
 Please note:
 
 - if `create()` is a **static** method then the object will not be created: `FooFactory::create()` will be called statically (as one would expect)
-- you can set any container entry name in the array, e.g. `factory(['foo_bar_baz', 'create'])`, allowing you to configure `foo_bar_baz` and its dependencies like any other object
+- you can set any container entry name in the array, e.g. `DI\factory(['foo_bar_baz', 'create'])` (or alternatively: `DI\factory('foo_bar_baz::create')`), allowing you to configure `foo_bar_baz` and its dependencies like any other object
+- as a factory can be any PHP callable, you can use invocable objects, too: `DI\factory(InvocableFooFactory::class)` (or alternatively: `DI\factory('invocable_foo_factory')`, if it's defined in the container)
 
 #### Decoration
 
