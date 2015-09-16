@@ -22,6 +22,20 @@ PHP;
         $this->assertEquals($code, $value);
     }
 
+    public function testStringCallable()
+    {
+        $resolver = new FactoryDefinitionCompiler();
+
+        $value = $resolver->compile(new FactoryDefinition('entry', 'foo'));
+
+        $code = <<<'PHP'
+$factory = 'foo';
+return $factory($this);
+PHP;
+
+        $this->assertEquals($code, $value);
+    }
+
     public function testSimpleClosure()
     {
         $resolver = new FactoryDefinitionCompiler();
@@ -84,7 +98,7 @@ PHP;
 
     /**
      * @expectedException \DI\Compiler\CompilationException
-     * @expectedExceptionMessage The callable definition for entry 'foo' must be a closure or an array of strings (no object in the array)
+     * @expectedExceptionMessage The callable definition for entry 'foo' cannot contain an object in the array
      */
     public function testArrayWithObject()
     {
@@ -95,18 +109,7 @@ PHP;
 
     /**
      * @expectedException \DI\Compiler\CompilationException
-     * @expectedExceptionMessage Unable to compile entry 'foo', a factory must be a callable (closure or array)
-     */
-    public function testString()
-    {
-        $resolver = new FactoryDefinitionCompiler();
-
-        $resolver->compile(new FactoryDefinition('foo', 'bar'));
-    }
-
-    /**
-     * @expectedException \DI\Compiler\CompilationException
-     * @expectedExceptionMessage Unable to compile entry 'foo', a factory must be a callable (closure or array)
+     * @expectedExceptionMessage Unable to compile entry 'foo', a factory must be a callable
      */
     public function testObject()
     {

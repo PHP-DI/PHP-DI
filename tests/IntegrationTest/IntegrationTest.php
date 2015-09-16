@@ -27,8 +27,8 @@ abstract class IntegrationTest extends \PHPUnit_Framework_TestCase
     public function provideBuilder()
     {
         return [
-            'normal' => [new ContainerBuilder],
             'compiled' => [(new ContainerBuilder)->compile(self::COMPILED_FILE)],
+            'normal' => [new ContainerBuilder],
         ];
     }
 }

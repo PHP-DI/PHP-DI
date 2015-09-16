@@ -33,11 +33,13 @@ class FactoryDefinitionCompiler implements DefinitionCompiler
 
         if (is_array($callable)) {
             $code = $this->compileArrayCallable($callable, $definition);
+        } elseif (is_string($callable)) {
+            $code = $this->compileStringCallable($callable);
         } elseif ($callable instanceof \Closure) {
             $code = $this->compileClosure($callable, $definition);
         } else {
             throw new CompilationException(sprintf(
-                "Unable to compile entry '%s', a factory must be a callable (closure or array)",
+                "Unable to compile entry '%s', a factory must be a callable",
                 $definition->getName()
             ));
         }
@@ -54,13 +56,17 @@ class FactoryDefinitionCompiler implements DefinitionCompiler
 
         if (! is_string($class)) {
             throw new CompilationException(sprintf(
-                "The callable definition for entry '%s' must be a closure or an array of strings "
-                . "(no object in the array)",
+                "The callable definition for entry '%s' cannot contain an object in the array",
                 $definition->getName()
             ));
         }
 
         return sprintf('$factory = array(%s, %s);', var_export($class, true), var_export($method, true));
+    }
+
+    private function compileStringCallable($callable)
+    {
+        return sprintf('$factory = %s;', var_export($callable, true));
     }
 
     private function compileClosure($closure, FactoryDefinition $definition)
