@@ -32,7 +32,7 @@ class ValueDefinitionCompiler implements DefinitionCompiler
         // We don't compile instances
         if (is_object($value)) {
             throw new CompilationException(
-                "Impossible to compile objects to PHP code, use a callback (factory) or a class definition instead"
+                "Impossible to compile objects to PHP code, use a factory or a class definition instead"
             );
         }
 

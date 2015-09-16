@@ -2,8 +2,8 @@
 
 namespace DI\Test\IntegrationTest\Definitions;
 
-use DI\Container;
 use DI\ContainerBuilder;
+use DI\Test\IntegrationTest\IntegrationTest;
 use stdClass;
 
 /**
@@ -11,35 +11,88 @@ use stdClass;
  *
  * @coversNothing
  */
-class ValueDefinitionTest extends \PHPUnit_Framework_TestCase
+class ValueDefinitionTest extends IntegrationTest
 {
     /**
-     * @var Container
+     * @dataProvider provideBuilder
      */
-    private $container;
-
-    public function setUp()
+    public function test_string(ContainerBuilder $builder)
     {
-        $builder = new ContainerBuilder();
         $builder->addDefinitions([
-            'string'  => 'foo',
-            'int'     => 123,
-            'object'  => new stdClass(),
-            'helper'  => \DI\value('foo'),
+            'string' => 'foo',
+        ]);
+
+        $container = $builder->build();
+        $this->assertEquals('foo', $container->get('string'));
+    }
+
+    /**
+     * @dataProvider provideBuilder
+     */
+    public function test_int(ContainerBuilder $builder)
+    {
+        $builder->addDefinitions([
+            'int' => 123,
+        ]);
+
+        $container = $builder->build();
+        $this->assertEquals(123, $container->get('int'));
+    }
+
+    /**
+     * @dataProvider provideBuilder
+     */
+    public function test_object(ContainerBuilder $builder)
+    {
+        if ($builder->isCompiled()) {
+            $this->setExpectedException(
+                'DI\Compiler\CompilationException',
+                'Impossible to compile objects to PHP code, use a factory or a class definition instead'
+            );
+        }
+
+        $builder->addDefinitions([
+            'object' => new stdClass(),
+        ]);
+
+        $container = $builder->build();
+        $this->assertEquals(new \stdClass(), $container->get('object'));
+    }
+
+    /**
+     * @dataProvider provideBuilder
+     */
+    public function test_function_helper(ContainerBuilder $builder)
+    {
+        $builder->addDefinitions([
+            'helper' => \DI\value('foo'),
+        ]);
+
+        $container = $builder->build();
+        $this->assertEquals('foo', $container->get('helper'));
+    }
+
+    /**
+     * @dataProvider provideBuilder
+     */
+    public function test_closure(ContainerBuilder $builder)
+    {
+        if ($builder->isCompiled()) {
+            $this->setExpectedException(
+                'DI\Compiler\CompilationException',
+                'Impossible to compile objects to PHP code, use a factory or a class definition instead'
+            );
+        }
+
+        $builder->addDefinitions([
             'closure' => \DI\value(function () {
                 return 'foo';
             }),
         ]);
 
-        $this->container = $builder->build();
-    }
-
-    public function test_value_definitions()
-    {
-        $this->assertEquals('foo', $this->container->get('string'));
-        $this->assertEquals(123, $this->container->get('int'));
-        $this->assertEquals(new \stdClass(), $this->container->get('object'));
-        $this->assertEquals('foo', $this->container->get('helper'));
-        $this->assertEquals('foo', call_user_func($this->container->get('closure')));
+        $container = $builder->build();
+        $closure = $container->get('closure');
+        $this->assertInstanceOf('Closure', $closure);
+        $this->assertEquals('foo', call_user_func($closure));
     }
 }
