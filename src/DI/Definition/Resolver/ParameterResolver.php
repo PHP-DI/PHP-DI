@@ -71,7 +71,7 @@ class ParameterResolver
                 }
 
                 throw new DefinitionException(sprintf(
-                    "The parameter '%s' of %s has no value defined or guessable",
+                    "The parameter $%s of %s has no value defined or guessable",
                     $parameter->getName(),
                     $this->getFunctionName($functionReflection)
                 ));
@@ -123,7 +123,7 @@ class ParameterResolver
     {
         if ($reflectionFunction instanceof \ReflectionMethod) {
             return sprintf(
-                '%s::%s',
+                '%s::%s()',
                 $reflectionFunction->getDeclaringClass()->getName(),
                 $reflectionFunction->getName()
             );

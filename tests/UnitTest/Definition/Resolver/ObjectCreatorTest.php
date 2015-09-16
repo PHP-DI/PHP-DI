@@ -221,8 +221,8 @@ MESSAGE;
 
     public function testUndefinedInjection()
     {
-        $message = <<<MESSAGE
-Entry DI\Test\UnitTest\Definition\Resolver\Fixture\FixtureClass cannot be resolved: The parameter 'param1' of DI\Test\UnitTest\Definition\Resolver\Fixture\FixtureClass::__construct has no value defined or guessable
+        $message = <<<'MESSAGE'
+Entry DI\Test\UnitTest\Definition\Resolver\Fixture\FixtureClass cannot be resolved: The parameter $param1 of DI\Test\UnitTest\Definition\Resolver\Fixture\FixtureClass::__construct() has no value defined or guessable
 Full definition:
 Object (
     class = DI\Test\UnitTest\Definition\Resolver\Fixture\FixtureClass
