@@ -63,7 +63,7 @@ class ValueDefinitionCompilerTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException \DI\Compiler\CompilationException
-     * @expectedExceptionMessage Impossible to compile objects to PHP code, use a callback (factory) or a class definition instead
+     * @expectedExceptionMessage Impossible to compile objects to PHP code, use a factory or a class definition instead
      */
     public function testCompileObject()
     {
