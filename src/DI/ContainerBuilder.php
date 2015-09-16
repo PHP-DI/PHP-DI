@@ -2,6 +2,9 @@
 
 namespace DI;
 
+use DI\Compiler\CompiledContainer;
+use DI\Compiler\Compiler;
+use DI\Definition\Compiler\CompilerDispatcher;
 use DI\Definition\Source\AnnotationReader;
 use DI\Definition\Source\Autowiring;
 use DI\Definition\Source\CachedDefinitionSource;
@@ -79,6 +82,11 @@ class ContainerBuilder
     private $definitionSources = [];
 
     /**
+     * @var string|null
+     */
+    private $compileTo = null;
+
+    /**
      * Build a container configured for the dev environment.
      *
      * @return Container
@@ -113,6 +121,10 @@ class ContainerBuilder
         }
 
         $chain = new SourceChain($sources);
+
+        if ($this->compileTo) {
+            return $this->compileContainer($chain);
+        }
 
         if ($this->cache) {
             $source = new CachedDefinitionSource($chain, $this->cache);
@@ -251,5 +263,33 @@ class ContainerBuilder
         $this->definitionSources[] = $definitions;
 
         return $this;
+    }
+
+    /**
+     * Enable compiling the container.
+     */
+    public function compile($file)
+    {
+        $this->compileTo = $file;
+
+        return $this;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isCompiled()
+    {
+        return $this->compileTo !== null;
+    }
+
+    private function compileContainer(SourceChain $source)
+    {
+        if (! file_exists($this->compileTo)) {
+            $compiler = new Compiler($source, new CompilerDispatcher);
+            $compiler->compile($this->compileTo);
+        }
+
+        return new CompiledContainer($this->compileTo, $this->wrapperContainer);
     }
 }
