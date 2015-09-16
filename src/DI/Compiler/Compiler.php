@@ -55,12 +55,13 @@ class Compiler
     {
         $dumpedEntries = '';
         foreach ($entries as $name => $code) {
-            $code = <<<CODE
-function () {
-    $code
-}
+            $name = var_export($name, true);
+            $code = $this->indent($code);
+            $dumpedEntries .= <<<CODE
+    $name => function () {
+        $code
+    },
 CODE;
-            $dumpedEntries = "\t" . var_export($name, true) . ' => ' . $code . ',' . PHP_EOL;
         }
 
         $content = <<<PHP
@@ -72,5 +73,15 @@ $dumpedEntries
 PHP;
 
         file_put_contents($file, $content);
+    }
+
+    private function indent($code)
+    {
+        $lines = explode("\n", $code);
+        $lines = array_map(function ($str) {
+            return '        ' . $str;
+        }, $lines);
+
+        return trim(implode(PHP_EOL, $lines));
     }
 }
