@@ -7,22 +7,17 @@
  * @license   http://www.opensource.org/licenses/mit-license.php MIT (see the LICENSE file)
  */
 
-namespace DI\Test\IntegrationTest\Fixtures\ConstructorInjectionTest;
+namespace DI\Test\IntegrationTest\ErrorMessages;
 
 use DI\Annotation\Inject;
 
-/**
- * Fixture class
- */
-class Buggy2
+class Buggy5
 {
-
     /**
-     * @Inject({"nonExistentEntry"})
-     * @param $dependency
+     * @Inject
      */
-    public function __construct($dependency)
+    public function setDependency($dependency)
     {
+        $this->dependency = $dependency;
     }
-
 }

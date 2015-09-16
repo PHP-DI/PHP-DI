@@ -1,0 +1,102 @@
+<?php
+namespace DI\Test\IntegrationTest\ErrorMessages;
+
+use DI\ContainerBuilder;
+
+/**
+ * @coversNothing
+ */
+class ErrorMessagesTest extends \PHPUnit_Framework_TestCase
+{
+    public function test_non_instantiable_class()
+    {
+        $message = <<<'MESSAGE'
+Entry DI\Test\IntegrationTest\ErrorMessages\InterfaceFixture cannot be resolved: class DI\Test\IntegrationTest\ErrorMessages\InterfaceFixture is not instantiable
+Full definition:
+Object (
+    class = #NOT INSTANTIABLE# DI\Test\IntegrationTest\ErrorMessages\InterfaceFixture
+    scope = singleton
+    lazy = false
+)
+MESSAGE;
+        $this->setExpectedException('DI\Definition\Exception\DefinitionException', $message);
+
+        $container = ContainerBuilder::buildDevContainer();
+        $container->get('DI\Test\IntegrationTest\ErrorMessages\InterfaceFixture');
+    }
+
+    public function test_undefined_constructor_parameter()
+    {
+        $message = <<<'MESSAGE'
+Entry DI\Test\IntegrationTest\ErrorMessages\Buggy1 cannot be resolved: The parameter 'bar' of DI\Test\IntegrationTest\ErrorMessages\Buggy1::__construct has no value defined or guessable
+Full definition:
+Object (
+    class = DI\Test\IntegrationTest\ErrorMessages\Buggy1
+    scope = singleton
+    lazy = false
+    __construct(
+        $foo = 'some value'
+        $bar = #UNDEFINED#
+        $default = (default value) 123
+    )
+)
+MESSAGE;
+        $this->setExpectedException('DI\Definition\Exception\DefinitionException', $message);
+
+        $container = ContainerBuilder::buildDevContainer();
+        $container->set(
+            'DI\Test\IntegrationTest\ErrorMessages\Buggy1',
+            \DI\object()->constructorParameter('foo', 'some value')
+        );
+
+        $container->get('DI\Test\IntegrationTest\ErrorMessages\Buggy1');
+    }
+
+    /**
+     * @expectedException \DI\DependencyException
+     * @expectedExceptionMessage Error while injecting dependencies into DI\Test\IntegrationTest\ErrorMessages\Buggy2: No entry or class found for 'nonExistentEntry'
+     */
+    public function test_constructor_injection_of_non_existent_container_entry()
+    {
+        $builder = new ContainerBuilder();
+        $builder->useAnnotations(true);
+        $container = $builder->build();
+        $container->get('DI\Test\IntegrationTest\ErrorMessages\Buggy2');
+    }
+
+    /**
+     * @expectedException \DI\DependencyException
+     * @expectedExceptionMessage Error while injecting in DI\Test\IntegrationTest\ErrorMessages\Buggy3::dependency. No entry or class found for 'namedDependency'
+     */
+    public function test_property_injection_of_non_existent_container_entry()
+    {
+        $builder = new ContainerBuilder();
+        $builder->useAnnotations(true);
+        $container = $builder->build();
+        $container->get('DI\Test\IntegrationTest\ErrorMessages\Buggy3');
+    }
+
+    /**
+     * @expectedException \DI\DependencyException
+     * @expectedExceptionMessage Error while injecting dependencies into DI\Test\IntegrationTest\ErrorMessages\Buggy4: No entry or class found for 'nonExistentBean'
+     */
+    public function test_setter_injection_of_non_existent_container_entry()
+    {
+        $builder = new ContainerBuilder();
+        $builder->useAnnotations(true);
+        $container = $builder->build();
+        $container->get('DI\Test\IntegrationTest\ErrorMessages\Buggy4');
+    }
+
+    /**
+     * @expectedException \DI\Definition\Exception\DefinitionException
+     * @expectedExceptionMessage The parameter 'dependency' of DI\Test\IntegrationTest\ErrorMessages\Buggy5::setDependency has no value defined or guessable
+     */
+    public function test_setter_injection_not_type_hinted()
+    {
+        $builder = new ContainerBuilder();
+        $builder->useAnnotations(true);
+        $container = $builder->build();
+        $container->get('DI\Test\IntegrationTest\ErrorMessages\Buggy5');
+    }
+}

@@ -7,15 +7,14 @@
  * @license   http://www.opensource.org/licenses/mit-license.php MIT (see the LICENSE file)
  */
 
-namespace DI\Test\IntegrationTest\Fixtures\ConstructorInjectionTest;
+namespace DI\Test\IntegrationTest\ErrorMessages;
 
-/**
- * Fixture class
- */
-class Buggy1
+use DI\Annotation\Inject;
+
+class Buggy3
 {
-    public function __construct($dependency)
-    {
-        $this->dependency = $dependency;
-    }
+    /**
+     * @Inject(name="namedDependency")
+     */
+    public $dependency;
 }
