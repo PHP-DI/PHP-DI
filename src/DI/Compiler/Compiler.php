@@ -55,6 +55,11 @@ class Compiler
     {
         $dumpedEntries = '';
         foreach ($entries as $name => $code) {
+            $code = <<<CODE
+function () {
+    $code
+}
+CODE;
             $dumpedEntries = "\t" . var_export($name, true) . ' => ' . $code . ',' . PHP_EOL;
         }
 
