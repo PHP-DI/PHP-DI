@@ -7,12 +7,8 @@
  * @license   http://www.opensource.org/licenses/mit-license.php MIT (see the LICENSE file)
  */
 
-namespace DI\Test\IntegrationTest\Fixtures\PropertyInjectionTest\Issue1;
+namespace DI\Test\IntegrationTest\Annotations;
 
-/**
- * Fixture class
- */
-class Dependency
+class A
 {
-
 }

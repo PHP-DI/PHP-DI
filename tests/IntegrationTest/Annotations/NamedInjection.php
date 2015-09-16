@@ -7,18 +7,14 @@
  * @license   http://www.opensource.org/licenses/mit-license.php MIT (see the LICENSE file)
  */
 
-namespace DI\Test\IntegrationTest\Fixtures\PropertyInjectionTest;
+namespace DI\Test\IntegrationTest\Annotations;
 
-use \DI\Annotation\Inject;
+use DI\Annotation\Inject;
 
-/**
- * Fixture class
- */
-class NotFoundVarAnnotation
+class NamedInjection
 {
     /**
-     * @Inject
-     * @var this_is_a_non_existent_class
+     * @Inject(name="namedDependency")
      */
-    public $class2;
+    public $dependency;
 }

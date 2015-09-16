@@ -11,7 +11,7 @@ namespace DI\Test\IntegrationTest\Definitions;
 
 use DI\Annotation\Inject;
 use DI\ContainerBuilder;
-use DI\Test\IntegrationTest\Fixtures\PropertyInjectionTest\Issue1;
+use DI\Test\IntegrationTest\Annotations\InjectWithUseStatements;
 
 /**
  * Test definitions using wildcards

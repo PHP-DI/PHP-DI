@@ -7,8 +7,15 @@
  * @license   http://www.opensource.org/licenses/mit-license.php MIT (see the LICENSE file)
  */
 
-namespace DI\Test\IntegrationTest\Fixtures\AnnotationsTest;
+namespace DI\Test\IntegrationTest\Annotations;
 
-class D extends C
+use \DI\Annotation\Inject;
+
+class NotFoundVarAnnotation
 {
+    /**
+     * @Inject
+     * @var this_is_a_non_existent_class
+     */
+    public $class2;
 }

@@ -7,37 +7,29 @@
  * @license   http://www.opensource.org/licenses/mit-license.php MIT (see the LICENSE file)
  */
 
-namespace DI\Test\IntegrationTest\Fixtures\AnnotationsTest;
+namespace DI\Test\IntegrationTest\Annotations;
 
 use DI\Annotation\Inject;
+use DI\Test\IntegrationTest\Annotations\A as Alias;
+use DI\Test\IntegrationTest\Annotations as NamespaceAlias;
 
-class B
+class InjectWithUseStatements
 {
     /**
      * @Inject
      * @var A
      */
-    public $public;
+    public $a;
 
     /**
      * @Inject
-     * @var A
+     * @var Alias
      */
-    protected $protected;
+    public $alias;
 
     /**
      * @Inject
-     * @var A
+     * @var NamespaceAlias\A
      */
-    private $private;
-
-    public function getProtected()
-    {
-        return $this->protected;
-    }
-
-    public function getPrivate()
-    {
-        return $this->private;
-    }
+    public $namespaceAlias;
 }

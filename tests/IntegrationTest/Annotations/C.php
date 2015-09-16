@@ -7,14 +7,8 @@
  * @license   http://www.opensource.org/licenses/mit-license.php MIT (see the LICENSE file)
  */
 
-namespace DI\Test\IntegrationTest\Fixtures\PropertyInjectionTest;
+namespace DI\Test\IntegrationTest\Annotations;
 
-/**
- * Fixture class
- */
-class NamedBean
+class C extends B
 {
-
-    public $nameForTest;
-
 }
