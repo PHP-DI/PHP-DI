@@ -122,7 +122,7 @@ class FactoryResolverTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      * @expectedException \DI\Definition\Exception\DefinitionException
-     * @expectedExceptionMessage The factory definition "foo" is not callable
+     * @expectedExceptionMessage Entry "foo" cannot be resolved: factory "Hello world" is neither a callable nor a valid container entry
      */
     public function should_throw_if_the_factory_is_not_callable()
     {
@@ -134,7 +134,7 @@ class FactoryResolverTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      * @expectedException \DI\Definition\Exception\DefinitionException
-     * @expectedExceptionMessage The factory definition "foo" is not callable
+     * @expectedExceptionMessage Entry "foo" cannot be resolved: factory 42 is not a callable
      */
     public function should_throw_if_the_factory_is_not_callable_container_entry()
     {

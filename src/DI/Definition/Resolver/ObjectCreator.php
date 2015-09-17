@@ -150,13 +150,13 @@ class ObjectCreator implements DefinitionResolver
             $this->injectMethodsAndProperties($object, $definition);
         } catch (NotFoundException $e) {
             throw new DependencyException(sprintf(
-                "Error while injecting dependencies into %s: %s",
+                'Error while injecting dependencies into %s: %s',
                 $classReflection->getName(),
                 $e->getMessage()
             ), 0, $e);
         } catch (DefinitionException $e) {
             throw DefinitionException::create($definition, sprintf(
-                "Entry %s cannot be resolved: %s",
+                'Entry "%s" cannot be resolved: %s',
                 $definition->getName(),
                 $e->getMessage()
             ));
@@ -164,7 +164,7 @@ class ObjectCreator implements DefinitionResolver
 
         if (! $object) {
             throw new DependencyException(sprintf(
-                "Entry %s cannot be resolved: %s could not be constructed",
+                'Entry "%s" cannot be resolved: %s could not be constructed',
                 $definition->getName(),
                 $classReflection->getName()
             ));
@@ -236,7 +236,7 @@ class ObjectCreator implements DefinitionResolver
     {
         if (! $definition->classExists()) {
             throw DefinitionException::create($definition, sprintf(
-                "Entry %s cannot be resolved: the class doesn't exist",
+                'Entry "%s" cannot be resolved: the class doesn\'t exist',
                 $definition->getName(),
                 $definition->getClassName()
             ));
@@ -247,7 +247,7 @@ class ObjectCreator implements DefinitionResolver
     {
         if (! $definition->isInstantiable()) {
             throw DefinitionException::create($definition, sprintf(
-                "Entry %s cannot be resolved: the class is not instantiable",
+                'Entry "%s" cannot be resolved: the class is not instantiable',
                 $definition->getName(),
                 $definition->getClassName()
             ));

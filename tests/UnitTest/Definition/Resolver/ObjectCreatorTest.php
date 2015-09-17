@@ -186,7 +186,7 @@ class ObjectCreatorTest extends \PHPUnit_Framework_TestCase
     public function testUnknownClass()
     {
         $message = <<<MESSAGE
-Entry foo cannot be resolved: the class doesn't exist
+Entry "foo" cannot be resolved: the class doesn't exist
 Full definition:
 Object (
     class = #UNKNOWN# bar
@@ -204,7 +204,7 @@ MESSAGE;
     public function testNotInstantiable()
     {
         $message = <<<MESSAGE
-Entry ArrayAccess cannot be resolved: the class is not instantiable
+Entry "ArrayAccess" cannot be resolved: the class is not instantiable
 Full definition:
 Object (
     class = #NOT INSTANTIABLE# ArrayAccess
@@ -222,7 +222,7 @@ MESSAGE;
     public function testUndefinedInjection()
     {
         $message = <<<'MESSAGE'
-Entry DI\Test\UnitTest\Definition\Resolver\Fixture\FixtureClass cannot be resolved: Parameter $param1 of __construct() has no value defined or guessable
+Entry "DI\Test\UnitTest\Definition\Resolver\Fixture\FixtureClass" cannot be resolved: Parameter $param1 of __construct() has no value defined or guessable
 Full definition:
 Object (
     class = DI\Test\UnitTest\Definition\Resolver\Fixture\FixtureClass

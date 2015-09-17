@@ -11,7 +11,7 @@ class ErrorMessagesTest extends \PHPUnit_Framework_TestCase
     public function test_non_instantiable_class()
     {
         $message = <<<'MESSAGE'
-Entry DI\Test\IntegrationTest\ErrorMessages\InterfaceFixture cannot be resolved: the class is not instantiable
+Entry "DI\Test\IntegrationTest\ErrorMessages\InterfaceFixture" cannot be resolved: the class is not instantiable
 Full definition:
 Object (
     class = #NOT INSTANTIABLE# DI\Test\IntegrationTest\ErrorMessages\InterfaceFixture
@@ -28,7 +28,7 @@ MESSAGE;
     public function test_non_existent_class()
     {
         $message = <<<'MESSAGE'
-Entry Acme\Foo\Bar\Bar cannot be resolved: the class doesn't exist
+Entry "Acme\Foo\Bar\Bar" cannot be resolved: the class doesn't exist
 Full definition:
 Object (
     class = #UNKNOWN# Acme\Foo\Bar\Bar
@@ -46,7 +46,7 @@ MESSAGE;
     public function test_undefined_constructor_parameter()
     {
         $message = <<<'MESSAGE'
-Entry DI\Test\IntegrationTest\ErrorMessages\Buggy1 cannot be resolved: Parameter $bar of __construct() has no value defined or guessable
+Entry "DI\Test\IntegrationTest\ErrorMessages\Buggy1" cannot be resolved: Parameter $bar of __construct() has no value defined or guessable
 Full definition:
 Object (
     class = DI\Test\IntegrationTest\ErrorMessages\Buggy1
@@ -109,7 +109,7 @@ MESSAGE;
     public function test_setter_injection_not_type_hinted()
     {
         $message = <<<'MESSAGE'
-Entry DI\Test\IntegrationTest\ErrorMessages\Buggy5 cannot be resolved: Parameter $dependency of setDependency() has no value defined or guessable
+Entry "DI\Test\IntegrationTest\ErrorMessages\Buggy5" cannot be resolved: Parameter $dependency of setDependency() has no value defined or guessable
 Full definition:
 Object (
     class = DI\Test\IntegrationTest\ErrorMessages\Buggy5
@@ -126,5 +126,16 @@ MESSAGE;
         $builder->useAnnotations(true);
         $container = $builder->build();
         $container->get('DI\Test\IntegrationTest\ErrorMessages\Buggy5');
+    }
+
+    /**
+     * @expectedException \DI\Definition\Exception\DefinitionException
+     * @expectedExceptionMessage Entry "foo" cannot be resolved: factory "bar" is neither a callable nor a valid container entry
+     */
+    public function test_factory_not_callable()
+    {
+        $container = ContainerBuilder::buildDevContainer();
+        $container->set('foo', \DI\factory('bar'));
+        $container->get('foo');
     }
 }
