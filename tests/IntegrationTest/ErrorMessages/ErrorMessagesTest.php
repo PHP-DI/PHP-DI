@@ -11,7 +11,7 @@ class ErrorMessagesTest extends \PHPUnit_Framework_TestCase
     public function test_non_instantiable_class()
     {
         $message = <<<'MESSAGE'
-Entry DI\Test\IntegrationTest\ErrorMessages\InterfaceFixture cannot be resolved: class DI\Test\IntegrationTest\ErrorMessages\InterfaceFixture is not instantiable
+Entry DI\Test\IntegrationTest\ErrorMessages\InterfaceFixture cannot be resolved: the class is not instantiable
 Full definition:
 Object (
     class = #NOT INSTANTIABLE# DI\Test\IntegrationTest\ErrorMessages\InterfaceFixture
@@ -23,6 +23,24 @@ MESSAGE;
 
         $container = ContainerBuilder::buildDevContainer();
         $container->get('DI\Test\IntegrationTest\ErrorMessages\InterfaceFixture');
+    }
+
+    public function test_non_existent_class()
+    {
+        $message = <<<'MESSAGE'
+Entry Acme\Foo\Bar\Bar cannot be resolved: the class doesn't exist
+Full definition:
+Object (
+    class = #UNKNOWN# Acme\Foo\Bar\Bar
+    scope = singleton
+    lazy = false
+)
+MESSAGE;
+        $this->setExpectedException('DI\Definition\Exception\DefinitionException', $message);
+
+        $container = ContainerBuilder::buildDevContainer();
+        $container->set('Acme\Foo\Bar\Bar', \DI\object());
+        $container->get('Acme\Foo\Bar\Bar');
     }
 
     public function test_undefined_constructor_parameter()
