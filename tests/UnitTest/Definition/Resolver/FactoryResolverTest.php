@@ -13,7 +13,6 @@ use DI\Definition\FactoryDefinition;
 use DI\Definition\Resolver\FactoryResolver;
 use EasyMock\EasyMock;
 use Interop\Container\ContainerInterface;
-use PHPUnit_Framework_MockObject_MockObject;
 
 /**
  * @covers \DI\Definition\Resolver\FactoryResolver
@@ -21,76 +20,25 @@ use PHPUnit_Framework_MockObject_MockObject;
 class FactoryResolverTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var ContainerInterface|PHPUnit_Framework_MockObject_MockObject
-     */
-    private $container;
-
-    /**
      * @var FactoryResolver
      */
     private $resolver;
 
     public function setUp()
     {
-        $this->container = EasyMock::mock('Interop\Container\ContainerInterface');
-        $this->resolver = new FactoryResolver($this->container);
-    }
-
-    public function provideCallables()
-    {
-        return [
-            'closure'               => [function () { return 'bar'; }],
-            'functionString'        => [__NAMESPACE__ . '\FactoryDefinitionResolver_test'],
-            'invokableObject'       => [new FactoryDefinitionResolverCallableClass],
-            '[object, method]'      => [[new FactoryDefinitionResolverTestClass, 'foo']],
-            '[Class, staticMethod]' => [[__NAMESPACE__ . '\FactoryDefinitionResolverTestClass', 'staticFoo']],
-            'Class::staticMethod'   => [__NAMESPACE__ . '\FactoryDefinitionResolverTestClass::staticFoo'],
-        ];
-    }
-
-    public function provideContainerCallables()
-    {
-        return [
-            'closureEntry' => [
-                'closure',
-                'closure',
-                function () { return 'bar'; },
-            ],
-            'invokableEntry' => [
-                'invokable',
-                'invokable',
-                new FactoryDefinitionResolverCallableClass,
-            ],
-            '[classEntry, method]' => [
-                [__NAMESPACE__ . '\FactoryDefinitionResolverTestClass', 'foo'],
-                __NAMESPACE__ . '\FactoryDefinitionResolverTestClass',
-                new FactoryDefinitionResolverTestClass,
-            ],
-            'classEntry::method' => [
-                __NAMESPACE__ . '\FactoryDefinitionResolverTestClass::foo',
-                __NAMESPACE__ . '\FactoryDefinitionResolverTestClass',
-                new FactoryDefinitionResolverTestClass,
-            ],
-            '[arbitraryClassEntry, method]' => [
-                ['some.class', 'foo'],
-                'some.class',
-                new FactoryDefinitionResolverTestClass,
-            ],
-            'arbitraryClassEntry::method' => [
-                'some.class::foo',
-                'some.class',
-                new FactoryDefinitionResolverTestClass,
-            ],
-        ];
+        /** @var ContainerInterface|\PHPUnit_Framework_MockObject_MockObject $container */
+        $container = EasyMock::mock('Interop\Container\ContainerInterface');
+        $this->resolver = new FactoryResolver($container);
     }
 
     /**
      * @test
-     * @dataProvider provideCallables
      */
-    public function should_resolve_callables($callable)
+    public function should_resolve_callables()
     {
-        $definition = new FactoryDefinition('foo', $callable);
+        $definition = new FactoryDefinition('foo', function () {
+            return 'bar';
+        });
 
         $value = $this->resolver->resolve($definition);
 
@@ -99,24 +47,16 @@ class FactoryResolverTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @test
-     * @dataProvider provideContainerCallables
      */
-    public function should_resolve_callables_from_container($callable, $containerName, $containerEntry)
+    public function should_inject_container()
     {
-        EasyMock::mock($this->container, [
-            'has' => function ($name) use ($containerName) {
-                return $name === $containerName;
-            },
-            'get' => function ($name) use ($containerName, $containerEntry) {
-                return $name === $containerName ? $containerEntry : false;
-            },
-        ]);
-
-        $definition = new FactoryDefinition('foo', $callable);
+        $definition = new FactoryDefinition('foo', function ($c) {
+            return $c;
+        });
 
         $value = $this->resolver->resolve($definition);
 
-        $this->assertEquals('bar', $value);
+        $this->assertInstanceOf('Interop\Container\ContainerInterface', $value);
     }
 
     /**
@@ -130,47 +70,4 @@ class FactoryResolverTest extends \PHPUnit_Framework_TestCase
 
         $this->resolver->resolve($definition);
     }
-
-    /**
-     * @test
-     * @expectedException \DI\Definition\Exception\DefinitionException
-     * @expectedExceptionMessage Entry "foo" cannot be resolved: factory 42 is not a callable
-     */
-    public function should_throw_if_the_factory_is_not_callable_container_entry()
-    {
-        EasyMock::mock($this->container, [
-            'has' => true,
-            'get' => 42,
-        ]);
-
-        $definition = new FactoryDefinition('foo', 'Hello world');
-
-        $this->resolver->resolve($definition);
-    }
-}
-
-class FactoryDefinitionResolverTestClass
-{
-    public static function staticFoo()
-    {
-        return 'bar';
-    }
-
-    public function foo()
-    {
-        return 'bar';
-    }
-}
-
-class FactoryDefinitionResolverCallableClass
-{
-    public function __invoke()
-    {
-        return 'bar';
-    }
-}
-
-function FactoryDefinitionResolver_test()
-{
-    return 'bar';
 }
