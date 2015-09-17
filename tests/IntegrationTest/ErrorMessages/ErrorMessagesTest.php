@@ -46,7 +46,7 @@ MESSAGE;
     public function test_undefined_constructor_parameter()
     {
         $message = <<<'MESSAGE'
-Entry DI\Test\IntegrationTest\ErrorMessages\Buggy1 cannot be resolved: The parameter $bar of DI\Test\IntegrationTest\ErrorMessages\Buggy1::__construct() has no value defined or guessable
+Entry DI\Test\IntegrationTest\ErrorMessages\Buggy1 cannot be resolved: Parameter $bar of __construct() has no value defined or guessable
 Full definition:
 Object (
     class = DI\Test\IntegrationTest\ErrorMessages\Buggy1
@@ -109,7 +109,7 @@ MESSAGE;
     public function test_setter_injection_not_type_hinted()
     {
         $message = <<<'MESSAGE'
-Entry DI\Test\IntegrationTest\ErrorMessages\Buggy5 cannot be resolved: The parameter $dependency of DI\Test\IntegrationTest\ErrorMessages\Buggy5::setDependency() has no value defined or guessable
+Entry DI\Test\IntegrationTest\ErrorMessages\Buggy5 cannot be resolved: Parameter $dependency of setDependency() has no value defined or guessable
 Full definition:
 Object (
     class = DI\Test\IntegrationTest\ErrorMessages\Buggy5
