@@ -11,7 +11,7 @@ class ErrorMessagesTest extends \PHPUnit_Framework_TestCase
     public function test_non_instantiable_class()
     {
         $message = <<<'MESSAGE'
-Entry DI\Test\IntegrationTest\ErrorMessages\InterfaceFixture cannot be resolved: class DI\Test\IntegrationTest\ErrorMessages\InterfaceFixture is not instantiable
+Entry "DI\Test\IntegrationTest\ErrorMessages\InterfaceFixture" cannot be resolved: the class is not instantiable
 Full definition:
 Object (
     class = #NOT INSTANTIABLE# DI\Test\IntegrationTest\ErrorMessages\InterfaceFixture
@@ -25,10 +25,28 @@ MESSAGE;
         $container->get('DI\Test\IntegrationTest\ErrorMessages\InterfaceFixture');
     }
 
+    public function test_non_existent_class()
+    {
+        $message = <<<'MESSAGE'
+Entry "Acme\Foo\Bar\Bar" cannot be resolved: the class doesn't exist
+Full definition:
+Object (
+    class = #UNKNOWN# Acme\Foo\Bar\Bar
+    scope = singleton
+    lazy = false
+)
+MESSAGE;
+        $this->setExpectedException('DI\Definition\Exception\DefinitionException', $message);
+
+        $container = ContainerBuilder::buildDevContainer();
+        $container->set('Acme\Foo\Bar\Bar', \DI\object());
+        $container->get('Acme\Foo\Bar\Bar');
+    }
+
     public function test_undefined_constructor_parameter()
     {
         $message = <<<'MESSAGE'
-Entry DI\Test\IntegrationTest\ErrorMessages\Buggy1 cannot be resolved: The parameter 'bar' of DI\Test\IntegrationTest\ErrorMessages\Buggy1::__construct has no value defined or guessable
+Entry "DI\Test\IntegrationTest\ErrorMessages\Buggy1" cannot be resolved: Parameter $bar of __construct() has no value defined or guessable
 Full definition:
 Object (
     class = DI\Test\IntegrationTest\ErrorMessages\Buggy1
@@ -88,15 +106,36 @@ MESSAGE;
         $container->get('DI\Test\IntegrationTest\ErrorMessages\Buggy4');
     }
 
-    /**
-     * @expectedException \DI\Definition\Exception\DefinitionException
-     * @expectedExceptionMessage The parameter 'dependency' of DI\Test\IntegrationTest\ErrorMessages\Buggy5::setDependency has no value defined or guessable
-     */
     public function test_setter_injection_not_type_hinted()
     {
+        $message = <<<'MESSAGE'
+Entry "DI\Test\IntegrationTest\ErrorMessages\Buggy5" cannot be resolved: Parameter $dependency of setDependency() has no value defined or guessable
+Full definition:
+Object (
+    class = DI\Test\IntegrationTest\ErrorMessages\Buggy5
+    scope = singleton
+    lazy = false
+    setDependency(
+        $dependency = #UNDEFINED#
+    )
+)
+MESSAGE;
+        $this->setExpectedException('DI\Definition\Exception\DefinitionException', $message);
+
         $builder = new ContainerBuilder();
         $builder->useAnnotations(true);
         $container = $builder->build();
         $container->get('DI\Test\IntegrationTest\ErrorMessages\Buggy5');
+    }
+
+    /**
+     * @expectedException \DI\Definition\Exception\DefinitionException
+     * @expectedExceptionMessage Entry "foo" cannot be resolved: factory "bar" is neither a callable nor a valid container entry
+     */
+    public function test_factory_not_callable()
+    {
+        $container = ContainerBuilder::buildDevContainer();
+        $container->set('foo', \DI\factory('bar'));
+        $container->get('foo');
     }
 }

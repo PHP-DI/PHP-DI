@@ -65,7 +65,7 @@ class FactoryResolver implements DefinitionResolver
             return $this->invoker->call($definition->getCallable(), [$this->container]);
         } catch (NotCallableException $e) {
             throw new DefinitionException(sprintf(
-                'The factory definition "%s" is not callable: %s',
+                'Entry "%s" cannot be resolved: factory %s',
                 $definition->getName(),
                 $e->getMessage()
             ));
