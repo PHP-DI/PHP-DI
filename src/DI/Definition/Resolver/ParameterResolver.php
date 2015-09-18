@@ -38,9 +38,9 @@ class ParameterResolver
     }
 
     /**
-     * @param MethodInjection             $definition
-     * @param \ReflectionFunctionAbstract $method
-     * @param array                       $parameters
+     * @param MethodInjection  $definition
+     * @param ReflectionMethod $method
+     * @param array            $parameters
      *
      * @throws DefinitionException A parameter has no value defined or guessable.
      * @return array Parameters to use to call the function.

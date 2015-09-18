@@ -237,8 +237,7 @@ class ObjectCreator implements DefinitionResolver
         if (! $definition->classExists()) {
             throw DefinitionException::create($definition, sprintf(
                 'Entry "%s" cannot be resolved: the class doesn\'t exist',
-                $definition->getName(),
-                $definition->getClassName()
+                $definition->getName()
             ));
         }
     }
@@ -248,8 +247,7 @@ class ObjectCreator implements DefinitionResolver
         if (! $definition->isInstantiable()) {
             throw DefinitionException::create($definition, sprintf(
                 'Entry "%s" cannot be resolved: the class is not instantiable',
-                $definition->getName(),
-                $definition->getClassName()
+                $definition->getName()
             ));
         }
     }
