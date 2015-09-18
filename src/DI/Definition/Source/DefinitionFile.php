@@ -9,7 +9,6 @@
 
 namespace DI\Definition\Source;
 
-use DI\Definition\Definition;
 use DI\Definition\Exception\DefinitionException;
 
 /**
