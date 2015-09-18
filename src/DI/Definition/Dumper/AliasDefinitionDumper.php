@@ -34,14 +34,14 @@ class AliasDefinitionDumper implements DefinitionDumper
 
         if ($definition->getName()) {
             return sprintf(
-                "get(%s => %s)",
+                'get(%s => %s)',
                 $definition->getName(),
                 $definition->getTargetEntryName()
             );
         }
 
         return sprintf(
-            "get(%s)",
+            'get(%s)',
             $definition->getTargetEntryName()
         );
     }

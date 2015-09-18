@@ -218,7 +218,7 @@ class ObjectCreator implements DefinitionResolver
                 throw $e;
             } catch (Exception $e) {
                 throw new DependencyException(sprintf(
-                    "Error while injecting in %s::%s. %s",
+                    'Error while injecting in %s::%s. %s',
                     get_class($object),
                     $propertyName,
                     $e->getMessage()

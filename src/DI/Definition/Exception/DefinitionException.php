@@ -22,7 +22,7 @@ class DefinitionException extends \Exception
     public static function create(Definition $definition, $message)
     {
         return new self(sprintf(
-            "%s" . PHP_EOL . "Full definition:" . PHP_EOL . "%s",
+            '%s' . PHP_EOL . 'Full definition:' . PHP_EOL . '%s',
             $message,
             Debug::dumpDefinition($definition)
         ));

@@ -81,7 +81,7 @@ class ArrayResolver implements DefinitionResolver
             throw $e;
         } catch (Exception $e) {
             throw new DependencyException(sprintf(
-                "Error while resolving %s[%s]. %s",
+                'Error while resolving %s[%s]. %s',
                 $definition->getName(),
                 $key,
                 $e->getMessage()
