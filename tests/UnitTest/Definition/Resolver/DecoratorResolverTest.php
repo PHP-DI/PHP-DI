@@ -39,16 +39,6 @@ class DecoratorResolverTest extends \PHPUnit_Framework_TestCase
         $this->resolver = new DecoratorResolver($container, $this->parentResolver);
     }
 
-    public function provideCallables()
-    {
-        return [
-            'closure'        => [function () { return 'bar'; }],
-            'string'         => [__NAMESPACE__ . '\FactoryDefinitionResolver_test'],
-            'array'          => [[new FactoryDefinitionResolverTestClass(), 'foo']],
-            'invokableClass' => [new FactoryDefinitionResolverCallableClass()],
-        ];
-    }
-
     /**
      * @test
      */
