@@ -166,7 +166,7 @@ class ContainerBuilder
 
     /**
      * Enable or disable ignoring phpdoc errors (non-existent classes in `@param` or `@var`)
-     * 
+     *
      * @param boolean $bool
      * @return ContainerBuilder
      */
@@ -206,7 +206,7 @@ class ContainerBuilder
 
         if ($writeToFile && $proxyDirectory === null) {
             throw new InvalidArgumentException(
-                "The proxy directory must be specified if you want to write proxies on disk"
+                'The proxy directory must be specified if you want to write proxies on disk'
             );
         }
         $this->proxyDirectory = $proxyDirectory;

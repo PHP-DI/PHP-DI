@@ -19,7 +19,7 @@ use DI\Definition\Helper\StringDefinitionHelper;
 
 if (! function_exists('DI\value')) {
     /**
-     * Helper for defining an object.
+     * Helper for defining a value.
      *
      * @param mixed $value
      *

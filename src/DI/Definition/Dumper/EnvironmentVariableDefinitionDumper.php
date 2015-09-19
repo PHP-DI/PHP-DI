@@ -11,7 +11,6 @@ namespace DI\Definition\Dumper;
 
 use DI\Debug;
 use DI\Definition\Definition;
-use DI\Definition\EntryReference;
 use DI\Definition\EnvironmentVariableDefinition;
 use DI\Definition\Helper\DefinitionHelper;
 
@@ -34,8 +33,8 @@ class EnvironmentVariableDefinitionDumper implements DefinitionDumper
             ));
         }
 
-        $str = "    variable = " . $definition->getVariableName();
-        $str .= PHP_EOL . "    optional = " . ($definition->isOptional() ? 'yes' : 'no');
+        $str = '    variable = ' . $definition->getVariableName();
+        $str .= PHP_EOL . '    optional = ' . ($definition->isOptional() ? 'yes' : 'no');
 
         if ($definition->isOptional()) {
             $defaultValue = $definition->getDefaultValue();
@@ -47,17 +46,17 @@ class EnvironmentVariableDefinitionDumper implements DefinitionDumper
                 $defaultValueStr = var_export($defaultValue, true);
             }
 
-            $str .= PHP_EOL . "    default = " . $defaultValueStr;
+            $str .= PHP_EOL . '    default = ' . $defaultValueStr;
         }
 
         return sprintf(
-            "Environment variable (" . PHP_EOL . "%s" . PHP_EOL . ")",
+            'Environment variable (' . PHP_EOL . '%s' . PHP_EOL . ')',
             $str
         );
     }
 
     private function indent($str)
     {
-        return str_replace(PHP_EOL, PHP_EOL . "    ", $str);
+        return str_replace(PHP_EOL, PHP_EOL . '    ', $str);
     }
 }

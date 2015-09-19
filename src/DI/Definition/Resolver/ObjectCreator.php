@@ -218,7 +218,7 @@ class ObjectCreator implements DefinitionResolver
                 throw $e;
             } catch (Exception $e) {
                 throw new DependencyException(sprintf(
-                    "Error while injecting in %s::%s. %s",
+                    'Error while injecting in %s::%s. %s',
                     get_class($object),
                     $propertyName,
                     $e->getMessage()
@@ -237,8 +237,7 @@ class ObjectCreator implements DefinitionResolver
         if (! $definition->classExists()) {
             throw DefinitionException::create($definition, sprintf(
                 'Entry "%s" cannot be resolved: the class doesn\'t exist',
-                $definition->getName(),
-                $definition->getClassName()
+                $definition->getName()
             ));
         }
     }
@@ -248,8 +247,7 @@ class ObjectCreator implements DefinitionResolver
         if (! $definition->isInstantiable()) {
             throw DefinitionException::create($definition, sprintf(
                 'Entry "%s" cannot be resolved: the class is not instantiable',
-                $definition->getName(),
-                $definition->getClassName()
+                $definition->getName()
             ));
         }
     }
