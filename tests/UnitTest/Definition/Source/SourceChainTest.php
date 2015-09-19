@@ -2,10 +2,10 @@
 
 namespace DI\Test\UnitTest\Definition\Source;
 
-use DI\Definition\ObjectDefinition;
 use DI\Definition\Definition;
-use DI\Definition\Source\DefinitionArray;
+use DI\Definition\ObjectDefinition;
 use DI\Definition\Source\Autowiring;
+use DI\Definition\Source\DefinitionArray;
 use DI\Definition\Source\SourceChain;
 use DI\Definition\ValueDefinition;
 

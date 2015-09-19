@@ -6,7 +6,7 @@ use DI\Debug;
 use DI\Definition\Definition;
 
 /**
- * Invalid DI definitions
+ * Invalid DI definitions.
  *
  * @author Matthieu Napoli <matthieu@mnapoli.fr>
  */

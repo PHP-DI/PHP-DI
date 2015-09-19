@@ -10,13 +10,13 @@ namespace DI\Definition\ObjectDefinition;
 class PropertyInjection
 {
     /**
-     * Property name
+     * Property name.
      * @var string
      */
     private $propertyName;
 
     /**
-     * Value that should be injected in the property
+     * Value that should be injected in the property.
      * @var mixed
      */
     private $value;

@@ -3,8 +3,8 @@
 namespace DI\Definition\Resolver;
 
 use DI\Definition\DecoratorDefinition;
-use DI\Definition\Exception\DefinitionException;
 use DI\Definition\Definition;
+use DI\Definition\Exception\DefinitionException;
 use Interop\Container\ContainerInterface;
 
 /**

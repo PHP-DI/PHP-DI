@@ -4,10 +4,9 @@ namespace DI\Test\IntegrationTest\Definitions;
 
 use DI\Annotation\Inject;
 use DI\ContainerBuilder;
-use DI\Test\IntegrationTest\Annotations\InjectWithUseStatements;
 
 /**
- * Test definitions using wildcards
+ * Test definitions using wildcards.
  *
  * @coversNothing
  */

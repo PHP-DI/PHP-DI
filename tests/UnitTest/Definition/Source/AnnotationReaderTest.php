@@ -261,6 +261,7 @@ class AnnotationReaderTest extends \PHPUnit_Framework_TestCase
                 return $methodInjection;
             }
         }
+
         return null;
     }
 }

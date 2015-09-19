@@ -2,7 +2,7 @@
 
 namespace DI\Test\IntegrationTest\Annotations;
 
-use \DI\Annotation\Inject;
+use DI\Annotation\Inject;
 
 class NotFoundVarAnnotation
 {

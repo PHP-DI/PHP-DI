@@ -5,7 +5,7 @@ namespace DI\Test\IntegrationTest\Definitions;
 use DI\ContainerBuilder;
 
 /**
- * Test object definitions
+ * Test object definitions.
  *
  * TODO add more tests
  *

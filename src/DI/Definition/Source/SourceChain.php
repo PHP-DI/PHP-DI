@@ -54,6 +54,7 @@ class SourceChain implements DefinitionSource, MutableDefinitionSource
                 if ($definition instanceof HasSubDefinition) {
                     $this->resolveSubDefinition($definition, $i);
                 }
+
                 return $definition;
             }
         }

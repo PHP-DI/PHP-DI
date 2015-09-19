@@ -9,7 +9,7 @@ use Doctrine\Common\Annotations\AnnotationReader as DoctrineAnnotationReader;
 use ReflectionClass;
 
 /**
- * Injectable annotation test class
+ * Injectable annotation test class.
  *
  * @covers \DI\Annotation\Injectable
  */

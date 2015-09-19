@@ -5,7 +5,7 @@ namespace DI\Test\IntegrationTest\Definitions;
 use DI\ContainerBuilder;
 
 /**
- * Test factory definitions
+ * Test factory definitions.
  *
  * @coversNothing
  */

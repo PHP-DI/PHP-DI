@@ -3,9 +3,8 @@
 namespace DI\Test\IntegrationTest\Fixtures;
 
 /**
- * Fixture class
+ * Fixture class.
  */
 class Implementation1 implements Interface1
 {
-
 }

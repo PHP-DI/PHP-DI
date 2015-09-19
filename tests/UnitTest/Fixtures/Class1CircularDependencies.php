@@ -3,8 +3,7 @@
 namespace DI\Test\UnitTest\Fixtures;
 
 /**
- * Fixture class for testing circular dependencies
- *
+ * Fixture class for testing circular dependencies.
  */
 class Class1CircularDependencies
 {

@@ -12,7 +12,7 @@ use DI\Scope;
 class ValueDefinition implements Definition
 {
     /**
-     * Entry name
+     * Entry name.
      * @var string
      */
     private $name;
