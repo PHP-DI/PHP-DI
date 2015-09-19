@@ -3,17 +3,15 @@
 namespace DI\Test\IntegrationTest\Fixtures\InheritanceTest;
 
 /**
- * Fixture class
+ * Fixture class.
  */
 class Dependency
 {
-
     /**
-     * @return boolean
+     * @return bool
      */
     public function getBoolean()
     {
         return true;
     }
-
 }

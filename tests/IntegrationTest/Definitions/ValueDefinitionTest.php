@@ -7,7 +7,7 @@ use DI\ContainerBuilder;
 use stdClass;
 
 /**
- * Test value definitions
+ * Test value definitions.
  *
  * @coversNothing
  */

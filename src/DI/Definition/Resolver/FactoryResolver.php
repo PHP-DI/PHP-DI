@@ -2,9 +2,9 @@
 
 namespace DI\Definition\Resolver;
 
+use DI\Definition\Definition;
 use DI\Definition\Exception\DefinitionException;
 use DI\Definition\FactoryDefinition;
-use DI\Definition\Definition;
 use Interop\Container\ContainerInterface;
 use Invoker\Exception\NotCallableException;
 use Invoker\Invoker;

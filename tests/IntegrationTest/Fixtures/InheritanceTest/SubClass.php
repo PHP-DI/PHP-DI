@@ -5,7 +5,7 @@ namespace DI\Test\IntegrationTest\Fixtures\InheritanceTest;
 use DI\Annotation\Inject;
 
 /**
- * Fixture class
+ * Fixture class.
  */
 class SubClass extends BaseClass
 {

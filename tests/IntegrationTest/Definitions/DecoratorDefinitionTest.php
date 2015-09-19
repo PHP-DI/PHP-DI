@@ -6,7 +6,7 @@ use DI\ContainerBuilder;
 use Interop\Container\ContainerInterface;
 
 /**
- * Test decorator definitions
+ * Test decorator definitions.
  *
  * @coversNothing
  */
@@ -55,6 +55,7 @@ class DecoratorDefinitionTest extends \PHPUnit_Framework_TestCase
         $builder->addDefinitions([
             'foo' => \DI\decorate(function ($previous) {
                 $previous->foo = 'bar';
+
                 return $previous;
             }),
         ]);

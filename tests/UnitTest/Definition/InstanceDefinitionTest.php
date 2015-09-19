@@ -2,7 +2,6 @@
 
 namespace DI\Test\UnitTest\Definition;
 
-use DI\Definition\ObjectDefinition;
 use DI\Definition\InstanceDefinition;
 use DI\Scope;
 use EasyMock\EasyMock;

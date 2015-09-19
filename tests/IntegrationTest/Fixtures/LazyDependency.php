@@ -5,13 +5,13 @@ namespace DI\Test\IntegrationTest\Fixtures;
 use DI\Annotation\Injectable;
 
 /**
- * Fixture class
+ * Fixture class.
  * @Injectable(lazy=true)
  */
 class LazyDependency
 {
     /**
-     * @return boolean
+     * @return bool
      */
     public function getValue()
     {

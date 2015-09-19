@@ -3,7 +3,7 @@
 namespace DI\Definition;
 
 /**
- * Cacheable definition
+ * Cacheable definition.
  *
  * @author Matthieu Napoli <matthieu@mnapoli.fr>
  */

@@ -2,8 +2,8 @@
 
 namespace DI\Test\UnitTest\Definition\Dumper;
 
-use DI\Definition\ObjectDefinition;
 use DI\Definition\Dumper\ObjectDefinitionDumper;
+use DI\Definition\ObjectDefinition;
 use DI\Definition\ValueDefinition;
 use DI\Scope;
 

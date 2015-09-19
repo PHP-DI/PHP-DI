@@ -24,7 +24,7 @@ use Doctrine\Common\Cache\FlushableCache;
 class ArrayCache implements Cache, FlushableCache, ClearableCache
 {
     /**
-     * @var array $data
+     * @var array
      */
     private $data = [];
 
@@ -60,7 +60,7 @@ class ArrayCache implements Cache, FlushableCache, ClearableCache
 
     public function flushAll()
     {
-        $this->data = array();
+        $this->data = [];
 
         return true;
     }

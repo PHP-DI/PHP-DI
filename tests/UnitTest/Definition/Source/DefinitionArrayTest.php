@@ -170,10 +170,10 @@ class DefinitionArrayTest extends \PHPUnit_Framework_TestCase
     public function testWildcards()
     {
         $source = new DefinitionArray([
-            'foo*' => 'bar',
-            'Namespaced\*Interface' => \DI\object('Namespaced\*'),
+            'foo*'                   => 'bar',
+            'Namespaced\*Interface'  => \DI\object('Namespaced\*'),
             'Namespaced2\*Interface' => \DI\object('Namespaced2\Foo'),
-            'Multiple\*\*\Matches' => \DI\object('Multiple\*\*\Implementation')
+            'Multiple\*\*\Matches'   => \DI\object('Multiple\*\*\Implementation'),
         ]);
 
         $definition = $source->getDefinition('foo1');
@@ -213,7 +213,7 @@ class DefinitionArrayTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * The wildcard should not match empty strings
+     * The wildcard should not match empty strings.
      */
     public function testWildcardShouldNotMatchEmptyString()
     {

@@ -31,17 +31,16 @@ abstract class CacheTest extends \PHPUnit_Framework_TestCase
         $this->assertFalse($cache->contains('key'));
     }
 
-
     public function provideCrudValues()
     {
-        return array(
-            'array' => array(array('one', 2, 3.0)),
-            'string' => array('value'),
-            'integer' => array(1),
-            'float' => array(1.5),
-            'object' => array(new ArrayObject()),
-            'null' => array(null),
-        );
+        return [
+            'array'   => [['one', 2, 3.0]],
+            'string'  => ['value'],
+            'integer' => [1],
+            'float'   => [1.5],
+            'object'  => [new ArrayObject()],
+            'null'    => [null],
+        ];
     }
 
     public function testDeleteAll()
@@ -100,15 +99,15 @@ abstract class CacheTest extends \PHPUnit_Framework_TestCase
      */
     public function falseCastedValuesProvider()
     {
-        return array(
-            array(false),
-            array(null),
-            array(array()),
-            array('0'),
-            array(0),
-            array(0.0),
-            array('')
-        );
+        return [
+            [false],
+            [null],
+            [[]],
+            ['0'],
+            [0],
+            [0.0],
+            [''],
+        ];
     }
 
     /**
@@ -120,20 +119,20 @@ abstract class CacheTest extends \PHPUnit_Framework_TestCase
         $cache = $this->getCacheDriver();
         $cache->deleteAll();
         $obj = new \stdClass();
-        $obj->foo = "bar";
+        $obj->foo = 'bar';
         $obj2 = new \stdClass();
-        $obj2->bar = "foo";
+        $obj2->bar = 'foo';
         $obj2->obj = $obj;
         $obj->obj2 = $obj2;
-        $cache->save("obj", $obj);
+        $cache->save('obj', $obj);
 
-        $fetched = $cache->fetch("obj");
+        $fetched = $cache->fetch('obj');
 
-        $this->assertInstanceOf("stdClass", $obj);
-        $this->assertInstanceOf("stdClass", $obj->obj2);
-        $this->assertInstanceOf("stdClass", $obj->obj2->obj);
-        $this->assertEquals("bar", $fetched->foo);
-        $this->assertEquals("foo", $fetched->obj2->bar);
+        $this->assertInstanceOf('stdClass', $obj);
+        $this->assertInstanceOf('stdClass', $obj->obj2);
+        $this->assertInstanceOf('stdClass', $obj->obj2->obj);
+        $this->assertEquals('bar', $fetched->foo);
+        $this->assertEquals('foo', $fetched->obj2->bar);
     }
 
     /**

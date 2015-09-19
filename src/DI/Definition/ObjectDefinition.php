@@ -15,31 +15,31 @@ use ReflectionClass;
 class ObjectDefinition implements Definition, CacheableDefinition, HasSubDefinition
 {
     /**
-     * Entry name (most of the time, same as $classname)
+     * Entry name (most of the time, same as $classname).
      * @var string
      */
     private $name;
 
     /**
-     * Class name (if null, then the class name is $name)
+     * Class name (if null, then the class name is $name).
      * @var string|null
      */
     private $className;
 
     /**
-     * Constructor parameter injection
+     * Constructor parameter injection.
      * @var MethodInjection|null
      */
     private $constructorInjection;
 
     /**
-     * Property injections
+     * Property injections.
      * @var PropertyInjection[]
      */
     private $propertyInjections = [];
 
     /**
-     * Method calls
+     * Method calls.
      * @var MethodInjection[][]
      */
     private $methodInjections = [];
@@ -50,7 +50,7 @@ class ObjectDefinition implements Definition, CacheableDefinition, HasSubDefinit
     private $scope;
 
     /**
-     * @var boolean|null
+     * @var bool|null
      */
     private $lazy;
 
@@ -104,6 +104,7 @@ class ObjectDefinition implements Definition, CacheableDefinition, HasSubDefinit
         if ($this->className !== null) {
             return $this->className;
         }
+
         return $this->name;
     }
 
@@ -158,6 +159,7 @@ class ObjectDefinition implements Definition, CacheableDefinition, HasSubDefinit
         array_walk_recursive($this->methodInjections, function ($injection) use (&$injections) {
             $injections[] = $injection;
         });
+
         return $injections;
     }
 
@@ -190,7 +192,7 @@ class ObjectDefinition implements Definition, CacheableDefinition, HasSubDefinit
     }
 
     /**
-     * @param boolean|null $lazy
+     * @param bool|null $lazy
      */
     public function setLazy($lazy)
     {
@@ -239,7 +241,7 @@ class ObjectDefinition implements Definition, CacheableDefinition, HasSubDefinit
      */
     public function setSubDefinition(Definition $definition)
     {
-        if (! $definition instanceof ObjectDefinition) {
+        if (! $definition instanceof self) {
             return;
         }
 
@@ -321,6 +323,7 @@ class ObjectDefinition implements Definition, CacheableDefinition, HasSubDefinit
 
         if (! $this->classExists) {
             $this->isInstantiable = false;
+
             return;
         }
 

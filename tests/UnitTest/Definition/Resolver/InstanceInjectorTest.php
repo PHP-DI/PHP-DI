@@ -2,10 +2,10 @@
 
 namespace DI\Test\UnitTest\Definition\Resolver;
 
+use DI\Definition\InstanceDefinition;
 use DI\Definition\ObjectDefinition;
 use DI\Definition\ObjectDefinition\MethodInjection;
 use DI\Definition\ObjectDefinition\PropertyInjection;
-use DI\Definition\InstanceDefinition;
 use DI\Definition\Resolver\InstanceInjector;
 use DI\Definition\Resolver\ResolverDispatcher;
 use DI\Proxy\ProxyFactory;

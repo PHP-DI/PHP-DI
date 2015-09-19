@@ -3,12 +3,12 @@
 namespace DI\Test\IntegrationTest\Fixtures;
 
 /**
- * Fixture class
+ * Fixture class.
  */
 class Class2
 {
     /**
-     * @return boolean
+     * @return bool
      */
     public function getBoolean()
     {

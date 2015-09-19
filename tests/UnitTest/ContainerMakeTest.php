@@ -6,7 +6,7 @@ use DI\ContainerBuilder;
 use stdClass;
 
 /**
- * Test class for Container
+ * Test class for Container.
  *
  * @covers \DI\Container
  */
@@ -118,7 +118,7 @@ class ContainerMakeTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Tests a dependency can be made when a dependency is passed by reference
+     * Tests a dependency can be made when a dependency is passed by reference.
      */
     public function testPassByReferenceParameter()
     {
@@ -127,14 +127,14 @@ class ContainerMakeTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Tests the parameter can be provided by reference
+     * Tests the parameter can be provided by reference.
      */
     public function testProvidedPassByReferenceParameter()
     {
         $object = new stdClass();
         $container = ContainerBuilder::buildDevContainer();
         $fetched = $container->make('DI\Test\UnitTest\Fixtures\PassByReferenceDependency', [
-            'object' => &$object
+            'object' => &$object,
         ]);
         $this->assertEquals('bar', $object->foo);
     }

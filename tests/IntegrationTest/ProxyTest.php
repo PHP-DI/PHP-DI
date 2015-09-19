@@ -70,6 +70,7 @@ class ProxyTest extends \PHPUnit_Framework_TestCase
         $builder = new ContainerBuilder;
         $builder->useAutowiring(false);
         $builder->addDefinitions($definitions);
+
         return $builder->build();
     }
 }

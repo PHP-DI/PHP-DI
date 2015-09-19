@@ -52,6 +52,7 @@ class DefinitionsTest extends \PHPUnit_Framework_TestCase
         if (! empty($definitions2)) {
             $builder->addDefinitions($definitions2);
         }
+
         return $builder->build();
     }
 }

@@ -14,7 +14,7 @@ use Doctrine\Common\Cache\Cache;
 class CachedDefinitionSource implements DefinitionSource
 {
     /**
-     * Prefix for cache key, to avoid conflicts with other systems using the same cache
+     * Prefix for cache key, to avoid conflicts with other systems using the same cache.
      * @var string
      */
     const CACHE_PREFIX = 'DI\\Definition\\';
@@ -64,10 +64,10 @@ class CachedDefinitionSource implements DefinitionSource
     }
 
     /**
-     * Fetches a definition from the cache
+     * Fetches a definition from the cache.
      *
      * @param string $name Entry name
-     * @return Definition|null|boolean The cached definition, null or false if the value is not already cached
+     * @return Definition|null|bool The cached definition, null or false if the value is not already cached
      */
     private function fetchFromCache($name)
     {
@@ -83,7 +83,7 @@ class CachedDefinitionSource implements DefinitionSource
     }
 
     /**
-     * Saves a definition to the cache
+     * Saves a definition to the cache.
      *
      * @param string          $name Entry name
      * @param Definition|null $definition

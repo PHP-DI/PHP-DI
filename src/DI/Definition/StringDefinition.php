@@ -13,7 +13,7 @@ use DI\Scope;
 class StringDefinition implements Definition
 {
     /**
-     * Entry name
+     * Entry name.
      * @var string
      */
     private $name;
