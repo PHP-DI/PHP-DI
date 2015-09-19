@@ -1,24 +1,17 @@
 <?php
-/**
- * PHP-DI
- *
- * @link      http://php-di.org/
- * @copyright Matthieu Napoli (http://mnapoli.fr/)
- * @license   http://www.opensource.org/licenses/mit-license.php MIT (see the LICENSE file)
- */
 
 namespace DI\Test\IntegrationTest;
 
+use DI\Container;
 use DI\ContainerBuilder;
 use DI\Scope;
-use DI\Container;
 use DI\Test\IntegrationTest\Fixtures\Class1;
 use DI\Test\IntegrationTest\Fixtures\Class2;
 use DI\Test\IntegrationTest\Fixtures\Implementation1;
 use DI\Test\IntegrationTest\Fixtures\LazyDependency;
 
 /**
- * Test class for injection
+ * Test class for injection.
  *
  * @coversNothing Because integration test
  */
@@ -31,7 +24,7 @@ class InjectionTest extends \PHPUnit_Framework_TestCase
 
     /**
      * PHPUnit data provider: generates container configurations for running the same tests
-     * for each configuration possible
+     * for each configuration possible.
      * @return array
      */
     public static function containerProvider()
@@ -233,8 +226,10 @@ class InjectionTest extends \PHPUnit_Framework_TestCase
             /** @var LazyDependency|\ProxyManager\Proxy\LazyLoadingInterface $proxy */
             $proxy = $class1->constructorParam3;
             $this->assertFalse($proxy->isProxyInitialized());
+
             return $proxy;
         }
+
         return null;
     }
 
@@ -250,6 +245,7 @@ class InjectionTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf('DI\Test\IntegrationTest\Fixtures\LazyDependency', $proxy);
         $this->assertInstanceOf('ProxyManager\Proxy\LazyLoadingInterface', $proxy);
         $this->assertFalse($proxy->isProxyInitialized());
+
         return $proxy;
     }
 

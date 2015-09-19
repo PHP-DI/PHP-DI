@@ -1,24 +1,17 @@
 <?php
-/**
- * PHP-DI
- *
- * @link      http://php-di.org/
- * @copyright Matthieu Napoli (http://mnapoli.fr/)
- * @license   http://www.opensource.org/licenses/mit-license.php MIT (see the LICENSE file)
- */
 
 namespace DI;
 
-use DI\Definition\ObjectDefinition;
 use DI\Definition\Definition;
 use DI\Definition\FactoryDefinition;
+use DI\Definition\Helper\DefinitionHelper;
 use DI\Definition\InstanceDefinition;
+use DI\Definition\ObjectDefinition;
+use DI\Definition\Resolver\DefinitionResolver;
 use DI\Definition\Resolver\ResolverDispatcher;
 use DI\Definition\Source\CachedDefinitionSource;
 use DI\Definition\Source\DefinitionSource;
 use DI\Definition\Source\MutableDefinitionSource;
-use DI\Definition\Helper\DefinitionHelper;
-use DI\Definition\Resolver\DefinitionResolver;
 use DI\Invoker\DefinitionParameterResolver;
 use DI\Proxy\ProxyFactory;
 use Exception;
@@ -207,7 +200,7 @@ class Container implements ContainerInterface, FactoryInterface, \DI\InvokerInte
     }
 
     /**
-     * Inject all dependencies on an existing instance
+     * Inject all dependencies on an existing instance.
      *
      * @param object $instance Object to perform injection upon
      * @throws InvalidArgumentException

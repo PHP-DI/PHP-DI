@@ -1,27 +1,20 @@
 <?php
-/**
- * PHP-DI
- *
- * @link      http://php-di.org/
- * @copyright Matthieu Napoli (http://mnapoli.fr/)
- * @license   http://www.opensource.org/licenses/mit-license.php MIT (see the LICENSE file)
- */
 
 namespace DI\Test\UnitTest\Definition\Dumper;
 
 use DI\Definition\AliasDefinition;
 use DI\Definition\DecoratorDefinition;
-use DI\Definition\Dumper\DecoratorDefinitionDumper;
-use DI\Definition\ObjectDefinition;
 use DI\Definition\Dumper\AliasDefinitionDumper;
-use DI\Definition\Dumper\ObjectDefinitionDumper;
+use DI\Definition\Dumper\DecoratorDefinitionDumper;
 use DI\Definition\Dumper\DefinitionDumperDispatcher;
-use DI\Definition\Dumper\FactoryDefinitionDumper;
-use DI\Definition\Dumper\ValueDefinitionDumper;
 use DI\Definition\Dumper\EnvironmentVariableDefinitionDumper;
-use DI\Definition\FactoryDefinition;
-use DI\Definition\ValueDefinition;
+use DI\Definition\Dumper\FactoryDefinitionDumper;
+use DI\Definition\Dumper\ObjectDefinitionDumper;
+use DI\Definition\Dumper\ValueDefinitionDumper;
 use DI\Definition\EnvironmentVariableDefinition;
+use DI\Definition\FactoryDefinition;
+use DI\Definition\ObjectDefinition;
+use DI\Definition\ValueDefinition;
 
 /**
  * @covers \DI\Definition\Dumper\DefinitionDumperDispatcher
@@ -43,7 +36,7 @@ class DefinitionDumperDispatcherTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue('foo'));
 
         $dumper = new DefinitionDumperDispatcher([
-            get_class($definition) => $subDumper
+            get_class($definition) => $subDumper,
         ]);
 
         $this->assertEquals('foo', $dumper->dump($definition));

@@ -1,19 +1,12 @@
 <?php
-/**
- * PHP-DI
- *
- * @link      http://mnapoli.github.com/PHP-DI/
- * @copyright Matthieu Napoli (http://mnapoli.fr/)
- * @license   http://www.opensource.org/licenses/mit-license.php MIT (see the LICENSE file)
- */
 
 namespace DI\Definition\Resolver;
 
-use DI\Definition\ObjectDefinition;
 use DI\Definition\Definition;
 use DI\Definition\Exception\DefinitionException;
-use DI\Definition\ObjectDefinition\PropertyInjection;
 use DI\Definition\Helper\DefinitionHelper;
+use DI\Definition\ObjectDefinition;
+use DI\Definition\ObjectDefinition\PropertyInjection;
 use DI\DependencyException;
 use DI\Proxy\ProxyFactory;
 use Exception;
@@ -91,7 +84,7 @@ class ObjectCreator implements DefinitionResolver
     }
 
     /**
-     * Returns a proxy instance
+     * Returns a proxy instance.
      *
      * @param ObjectDefinition $definition
      * @param array           $parameters

@@ -1,18 +1,11 @@
 <?php
-/**
- * PHP-DI
- *
- * @link      http://php-di.org/
- * @copyright Matthieu Napoli (http://mnapoli.fr/)
- * @license   http://www.opensource.org/licenses/mit-license.php MIT (see the LICENSE file)
- */
 
 namespace DI\Annotation;
 
 use DI\Definition\Exception\AnnotationException;
 
 /**
- * "Inject" annotation
+ * "Inject" annotation.
  *
  * Marks a property or method as an injection point
  *
@@ -24,13 +17,13 @@ use DI\Definition\Exception\AnnotationException;
 final class Inject
 {
     /**
-     * Entry name
+     * Entry name.
      * @var string
      */
     private $name;
 
     /**
-     * Parameters, indexed by the parameter number (index) or name
+     * Parameters, indexed by the parameter number (index) or name.
      *
      * Used if the annotation is set on a method
      * @var array
@@ -47,6 +40,7 @@ final class Inject
         // @Inject(name="foo")
         if (isset($values['name']) && is_string($values['name'])) {
             $this->name = $values['name'];
+
             return;
         }
 

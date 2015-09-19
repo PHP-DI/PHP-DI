@@ -1,18 +1,11 @@
 <?php
-/**
- * PHP-DI
- *
- * @link      http://php-di.org/
- * @copyright Matthieu Napoli (http://mnapoli.fr/)
- * @license   http://www.opensource.org/licenses/mit-license.php MIT (see the LICENSE file)
- */
 
 namespace DI\Definition\Helper;
 
+use DI\Definition\Exception\DefinitionException;
 use DI\Definition\ObjectDefinition;
 use DI\Definition\ObjectDefinition\MethodInjection;
 use DI\Definition\ObjectDefinition\PropertyInjection;
-use DI\Definition\Exception\DefinitionException;
 
 /**
  * Helps defining how to create an instance of a class.
@@ -27,7 +20,7 @@ class ObjectDefinitionHelper implements DefinitionHelper
     private $className;
 
     /**
-     * @var boolean|null
+     * @var bool|null
      */
     private $lazy;
 
@@ -75,6 +68,7 @@ class ObjectDefinitionHelper implements DefinitionHelper
     public function lazy()
     {
         $this->lazy = true;
+
         return $this;
     }
 
@@ -88,6 +82,7 @@ class ObjectDefinitionHelper implements DefinitionHelper
     public function scope($scope)
     {
         $this->scope = $scope;
+
         return $this;
     }
 
@@ -104,6 +99,7 @@ class ObjectDefinitionHelper implements DefinitionHelper
     public function constructor()
     {
         $this->constructor = func_get_args();
+
         return $this;
     }
 
@@ -123,6 +119,7 @@ class ObjectDefinitionHelper implements DefinitionHelper
     public function constructorParameter($parameter, $value)
     {
         $this->constructor[$parameter] = $value;
+
         return $this;
     }
 
@@ -137,6 +134,7 @@ class ObjectDefinitionHelper implements DefinitionHelper
     public function property($property, $value)
     {
         $this->properties[$property] = $value;
+
         return $this;
     }
 
@@ -190,6 +188,7 @@ class ObjectDefinitionHelper implements DefinitionHelper
         // Special case for the constructor
         if ($method === '__construct') {
             $this->constructor[$parameter] = $value;
+
             return $this;
         }
 

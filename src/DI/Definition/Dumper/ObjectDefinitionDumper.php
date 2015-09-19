@@ -1,20 +1,12 @@
 <?php
-/**
- * PHP-DI
- *
- * @link      http://php-di.org/
- * @copyright Matthieu Napoli (http://mnapoli.fr/)
- * @license   http://www.opensource.org/licenses/mit-license.php MIT (see the LICENSE file)
- */
 
 namespace DI\Definition\Dumper;
 
-use DI\Definition\ObjectDefinition;
-use DI\Definition\ObjectDefinition\MethodInjection;
 use DI\Definition\Definition;
 use DI\Definition\EntryReference;
+use DI\Definition\ObjectDefinition;
+use DI\Definition\ObjectDefinition\MethodInjection;
 use ReflectionException;
-use ReflectionMethod;
 
 /**
  * Dumps object definitions.
@@ -95,7 +87,7 @@ class ObjectDefinitionDumper implements DefinitionDumper
                 $valueStr = var_export($value, true);
             }
 
-            $str .= sprintf(PHP_EOL . "    $%s = %s", $propertyInjection->getPropertyName(), $valueStr);
+            $str .= sprintf(PHP_EOL . '    $%s = %s', $propertyInjection->getPropertyName(), $valueStr);
         }
 
         return $str;

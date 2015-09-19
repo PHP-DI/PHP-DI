@@ -1,4 +1,5 @@
 <?php
+
 namespace DI\Test\IntegrationTest\ErrorMessages;
 
 use DI\ContainerBuilder;
