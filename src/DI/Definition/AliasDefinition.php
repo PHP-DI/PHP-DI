@@ -12,13 +12,13 @@ use DI\Scope;
 class AliasDefinition implements CacheableDefinition
 {
     /**
-     * Entry name
+     * Entry name.
      * @var string
      */
     private $name;
 
     /**
-     * Name of the target entry
+     * Name of the target entry.
      * @var string
      */
     private $targetEntryName;

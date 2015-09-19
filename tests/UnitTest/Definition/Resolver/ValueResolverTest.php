@@ -2,8 +2,8 @@
 
 namespace DI\Test\UnitTest\Definition\Resolver;
 
-use DI\Definition\ValueDefinition;
 use DI\Definition\Resolver\ValueResolver;
+use DI\Definition\ValueDefinition;
 
 /**
  * @covers \DI\Definition\Resolver\ValueResolver

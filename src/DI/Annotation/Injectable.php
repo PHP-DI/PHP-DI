@@ -6,7 +6,7 @@ use DI\Scope;
 use UnexpectedValueException;
 
 /**
- * "Injectable" annotation
+ * "Injectable" annotation.
  *
  * Marks a class as injectable
  *
@@ -19,14 +19,14 @@ use UnexpectedValueException;
 final class Injectable
 {
     /**
-     * The scope of an class: prototype, singleton
+     * The scope of an class: prototype, singleton.
      * @var string|null
      */
     private $scope;
 
     /**
-     * Should the object be lazy-loaded
-     * @var boolean|null
+     * Should the object be lazy-loaded.
+     * @var bool|null
      */
     private $lazy;
 
@@ -58,7 +58,7 @@ final class Injectable
     }
 
     /**
-     * @return boolean|null
+     * @return bool|null
      */
     public function isLazy()
     {

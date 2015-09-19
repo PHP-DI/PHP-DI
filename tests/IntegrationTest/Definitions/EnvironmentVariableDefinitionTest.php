@@ -5,7 +5,7 @@ namespace DI\Test\IntegrationTest\Definitions;
 use DI\ContainerBuilder;
 
 /**
- * Test environment variable definitions
+ * Test environment variable definitions.
  *
  * @coversNothing
  */

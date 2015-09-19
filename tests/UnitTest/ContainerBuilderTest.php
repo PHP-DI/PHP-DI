@@ -3,8 +3,8 @@
 namespace DI\Test\UnitTest;
 
 use DI\ContainerBuilder;
-use DI\Definition\Source\DefinitionArray;
 use DI\Definition\Source\CachedDefinitionSource;
+use DI\Definition\Source\DefinitionArray;
 use DI\Definition\ValueDefinition;
 use DI\Test\UnitTest\Fixtures\FakeContainer;
 use EasyMock\EasyMock;

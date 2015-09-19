@@ -4,10 +4,10 @@ namespace DI\Test\UnitTest;
 
 use DI\Definition\ArrayDefinition;
 use DI\Definition\ArrayDefinitionExtension;
-use DI\Definition\ObjectDefinition;
 use DI\Definition\Helper\ArrayDefinitionExtensionHelper;
-use DI\Definition\Helper\ObjectDefinitionHelper;
 use DI\Definition\Helper\EnvironmentVariableDefinitionHelper;
+use DI\Definition\Helper\ObjectDefinitionHelper;
+use DI\Definition\ObjectDefinition;
 
 /**
  * Tests the helper functions.

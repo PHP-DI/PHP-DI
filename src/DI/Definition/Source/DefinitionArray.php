@@ -3,11 +3,11 @@
 namespace DI\Definition\Source;
 
 use DI\Definition\ArrayDefinition;
-use DI\Definition\ObjectDefinition;
 use DI\Definition\Definition;
 use DI\Definition\FactoryDefinition;
-use DI\Definition\ValueDefinition;
 use DI\Definition\Helper\DefinitionHelper;
+use DI\Definition\ObjectDefinition;
+use DI\Definition\ValueDefinition;
 
 /**
  * Reads DI definitions from a PHP array.
@@ -18,12 +18,12 @@ class DefinitionArray implements DefinitionSource, MutableDefinitionSource
 {
     const WILDCARD = '*';
     /**
-     * Matches anything except "\"
+     * Matches anything except "\".
      */
     const WILDCARD_PATTERN = '([^\\\\]+)';
 
     /**
-     * DI definitions in a PHP array
+     * DI definitions in a PHP array.
      * @var array
      */
     private $definitions = [];

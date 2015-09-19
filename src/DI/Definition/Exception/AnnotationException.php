@@ -3,7 +3,7 @@
 namespace DI\Definition\Exception;
 
 /**
- * Exception in the definitions using annotations
+ * Exception in the definitions using annotations.
  *
  * @author Matthieu Napoli <matthieu@mnapoli.fr>
  */

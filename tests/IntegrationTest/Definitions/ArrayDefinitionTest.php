@@ -6,7 +6,7 @@ use DI\ContainerBuilder;
 use DI\Scope;
 
 /**
- * Test array definitions
+ * Test array definitions.
  *
  * @coversNothing
  */
@@ -73,7 +73,7 @@ class ArrayDefinitionTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * An array entry is a singleton
+     * An array entry is a singleton.
      */
     public function test_array_with_prototype_entries()
     {

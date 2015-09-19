@@ -47,6 +47,7 @@ class FactoryDefinitionHelper implements DefinitionHelper
     public function scope($scope)
     {
         $this->scope = $scope;
+
         return $this;
     }
 

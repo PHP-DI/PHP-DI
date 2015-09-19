@@ -4,11 +4,11 @@ namespace DI;
 
 use DI\Definition\EntryReference;
 use DI\Definition\Helper\ArrayDefinitionExtensionHelper;
+use DI\Definition\Helper\EnvironmentVariableDefinitionHelper;
 use DI\Definition\Helper\FactoryDefinitionHelper;
 use DI\Definition\Helper\ObjectDefinitionHelper;
-use DI\Definition\Helper\EnvironmentVariableDefinitionHelper;
-use DI\Definition\Helper\ValueDefinitionHelper;
 use DI\Definition\Helper\StringDefinitionHelper;
+use DI\Definition\Helper\ValueDefinitionHelper;
 
 if (! function_exists('DI\value')) {
     /**

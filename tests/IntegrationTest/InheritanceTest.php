@@ -7,14 +7,14 @@ use DI\ContainerBuilder;
 use DI\Test\IntegrationTest\Fixtures\InheritanceTest\SubClass;
 
 /**
- * Test class for bean injection
+ * Test class for bean injection.
  *
  * @coversNothing
  */
 class InheritanceTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * Test a dependency is injected if the injection is defined on a parent class
+     * Test a dependency is injected if the injection is defined on a parent class.
      *
      * @dataProvider containerProvider
      */
@@ -30,7 +30,7 @@ class InheritanceTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Test a dependency is injected if the injection is defined on a child class
+     * Test a dependency is injected if the injection is defined on a child class.
      *
      * @dataProvider containerProvider
      */
@@ -45,10 +45,9 @@ class InheritanceTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf('DI\Test\IntegrationTest\Fixtures\InheritanceTest\Dependency', $instance->property4);
     }
 
-
     /**
      * PHPUnit data provider: generates container configurations for running the same tests
-     * for each configuration possible
+     * for each configuration possible.
      * @return array
      */
     public static function containerProvider()

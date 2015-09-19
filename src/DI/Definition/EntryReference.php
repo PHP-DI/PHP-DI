@@ -14,7 +14,7 @@ use DI\Definition\Helper\DefinitionHelper;
 class EntryReference implements DefinitionHelper
 {
     /**
-     * Entry name
+     * Entry name.
      * @var string
      */
     private $name;

@@ -20,7 +20,7 @@ class ProxyFactory
 {
     /**
      * If true, write the proxies to disk to improve performances.
-     * @var boolean
+     * @var bool
      */
     private $writeProxiesToFile;
 
@@ -43,7 +43,7 @@ class ProxyFactory
 
     /**
      * Creates a new lazy proxy instance of the given class with
-     * the given initializer
+     * the given initializer.
      *
      * @param string   $className   name of the class to be proxied
      * @param \Closure $initializer initializer to be passed to the proxy

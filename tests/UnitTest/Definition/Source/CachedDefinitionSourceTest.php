@@ -2,8 +2,8 @@
 
 namespace DI\Test\UnitTest\Definition\Source;
 
-use DI\Definition\Source\DefinitionArray;
 use DI\Definition\Source\CachedDefinitionSource;
+use DI\Definition\Source\DefinitionArray;
 use DI\Definition\ValueDefinition;
 use Doctrine\Common\Cache\Cache;
 use EasyMock\EasyMock;

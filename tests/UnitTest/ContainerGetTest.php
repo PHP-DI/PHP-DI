@@ -6,7 +6,7 @@ use DI\ContainerBuilder;
 use stdClass;
 
 /**
- * Test class for Container
+ * Test class for Container.
  *
  * @covers \DI\Container
  */
@@ -130,7 +130,7 @@ class ContainerGetTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Tests a class can be initialized with a parameter passed by reference
+     * Tests a class can be initialized with a parameter passed by reference.
      */
     public function testPassByReferenceParameter()
     {

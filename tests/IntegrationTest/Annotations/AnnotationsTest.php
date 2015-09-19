@@ -72,7 +72,7 @@ class AnnotationsTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Check that @ var annotation takes "use" statements into account
+     * Check that @ var annotation takes "use" statements into account.
      * @test
      * @link https://github.com/PHP-DI/PHP-DI/issues/1
      */
@@ -108,6 +108,7 @@ class AnnotationsTest extends \PHPUnit_Framework_TestCase
         if ($definitions) {
             $builder->addDefinitions($definitions);
         }
+
         return $builder->build();
     }
 }
