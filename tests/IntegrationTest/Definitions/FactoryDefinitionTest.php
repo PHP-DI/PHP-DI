@@ -3,6 +3,7 @@
 namespace DI\Test\IntegrationTest\Definitions;
 
 use DI\ContainerBuilder;
+use Interop\Container\ContainerInterface;
 
 /**
  * Test factory definitions.
@@ -86,6 +87,46 @@ class FactoryDefinitionTest extends \PHPUnit_Framework_TestCase
         $factory = $container->get('factory');
 
         $this->assertSame('bar', $factory);
+    }
+
+    public function test_container_gets_injected_as_first_argument_without_typehint()
+    {
+        $container = $this->createContainer([
+            'factory' => function ($c) {
+                return $c;
+            },
+        ]);
+
+        $factory = $container->get('factory');
+
+        $this->assertInstanceOf('Interop\Container\ContainerInterface', $factory);
+    }
+
+    public function test_arbitrary_object_gets_injected_via_typehint()
+    {
+        $container = $this->createContainer([
+            'factory' => function (\stdClass $stdClass) {
+                return $stdClass;
+            },
+        ]);
+
+        $factory = $container->get('factory');
+
+        $this->assertInstanceOf('stdClass', $factory);
+    }
+
+    public function test_container_gets_injected_in_arbitrary_position_via_typehint()
+    {
+        $container = $this->createContainer([
+            'factory' => function (\stdClass $stdClass, ContainerInterface $c) {
+                return [$stdClass, $c];
+            },
+        ]);
+
+        $factory = $container->get('factory');
+
+        $this->assertInstanceOf('stdClass', $factory[0]);
+        $this->assertInstanceOf('Interop\Container\ContainerInterface', $factory[1]);
     }
 
     /**

@@ -7,8 +7,11 @@ use DI\Definition\Exception\DefinitionException;
 use DI\Definition\FactoryDefinition;
 use Interop\Container\ContainerInterface;
 use Invoker\Exception\NotCallableException;
+use Invoker\Exception\NotEnoughParametersException;
 use Invoker\Invoker;
+use Invoker\ParameterResolver\Container\TypeHintContainerResolver;
 use Invoker\ParameterResolver\NumericArrayResolver;
+use Invoker\ParameterResolver\ResolverChain;
 
 /**
  * Resolves a factory definition to a value.
@@ -51,7 +54,12 @@ class FactoryResolver implements DefinitionResolver
     public function resolve(Definition $definition, array $parameters = [])
     {
         if (! $this->invoker) {
-            $this->invoker = new Invoker(new NumericArrayResolver, $this->container);
+            $parameterResolver = new ResolverChain([
+                new TypeHintContainerResolver($this->container),
+                new NumericArrayResolver,
+            ]);
+
+            $this->invoker = new Invoker($parameterResolver, $this->container);
         }
 
         try {
@@ -59,6 +67,12 @@ class FactoryResolver implements DefinitionResolver
         } catch (NotCallableException $e) {
             throw new DefinitionException(sprintf(
                 'Entry "%s" cannot be resolved: factory %s',
+                $definition->getName(),
+                $e->getMessage()
+            ));
+        } catch (NotEnoughParametersException $e) {
+            throw new DefinitionException(sprintf(
+                'Entry "%s" cannot be resolved: %s',
                 $definition->getName(),
                 $e->getMessage()
             ));
