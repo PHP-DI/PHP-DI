@@ -109,17 +109,18 @@ return [
 ];
 ```
 
-The only parameter of a factory is the container (which can be used to retrieve other entries). You are encouraged to type-hint against the interface `Interop\Container\ContainerInterface` instead of the implementation `DI\Container`: that can be necessary in scenarios where you are using multiple containers (for example if using the PHP-DI + Symfony integration).
+Instances of other classes can be injected through parameters via type-hinting (as long as they are registered within the container or autowiring is enabled).
+
+The container, as seen above, can be injected and then used to retrieve other entries, like values, that can't be automatically injected via type -hinting. You are encouraged to type-hint against the interface `Interop\Container\ContainerInterface` instead of the implementation `DI\Container` in this case: that can be necessary in scenarios where you are using multiple containers (for example if using the PHP-DI + Symfony integration).
 
 You can also use a factory class - as an example, let's assume you have a simple factory class like this:
 
 ```php
 class FooFactory
 {
-    // note: $container can be omitted if not needed
-    public function create($container)
+    public function create(Bar $bar)
     {
-        return new Foo();
+        return new Foo($bar);
     }
 }
 ```
@@ -135,7 +136,7 @@ return [
 
 But the factory will be created on every request (`new FooFactory`) even if not used. Additionally with this method it's harder to pass dependencies in the factory.
 
-The recommended solution is let the container create the factory:
+The recommended solution is to let the container create the factory:
 
 ```php
 return [
@@ -155,7 +156,8 @@ This configuration is equivalent to the following code:
 
 ```php
 $factory = $container->get(FooFactory::class);
-return $factory->create();
+$bar = $container->get(Bar::class);
+return $factory->create($bar);
 ```
 
 Please note:
