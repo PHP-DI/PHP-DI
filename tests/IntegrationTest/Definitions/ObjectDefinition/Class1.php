@@ -1,6 +1,6 @@
 <?php
 
-namespace DI\Test\IntegrationTest\Fixtures\DefinitionTest;
+namespace DI\Test\IntegrationTest\Definitions\ObjectDefinition;
 
 class Class1
 {
