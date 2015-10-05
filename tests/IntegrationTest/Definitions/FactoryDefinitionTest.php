@@ -26,7 +26,7 @@ class FactoryDefinitionTest extends \PHPUnit_Framework_TestCase
         ];
     }
 
-    public function provideArbitraryNamedContainerObjectCallables()
+    public function provideNamedContainerEntryCallables()
     {
         return [
             '[arbitraryClassEntry, method]' => [['bar_baz', 'foo']],
@@ -34,7 +34,7 @@ class FactoryDefinitionTest extends \PHPUnit_Framework_TestCase
         ];
     }
 
-    public function test_simple_closure_as_factory()
+    public function test_closure_shortcut()
     {
         $container = $this->createContainer([
             'factory' => function () {
@@ -42,50 +42,42 @@ class FactoryDefinitionTest extends \PHPUnit_Framework_TestCase
             },
         ]);
 
-        $factory = $container->get('factory');
-
-        $this->assertSame('bar', $factory);
+        $this->assertEquals('bar', $container->get('factory'));
     }
 
     /**
      * @dataProvider provideCallables
      */
-    public function test_factory_helper_function($callable)
+    public function test_factory($callable)
     {
         $container = $this->createContainer([
             'factory' => \DI\factory($callable),
         ]);
 
-        $factory = $container->get('factory');
-
-        $this->assertSame('bar', $factory);
+        $this->assertSame('bar', $container->get('factory'));
     }
 
     /**
-     * @dataProvider provideArbitraryNamedContainerObjectCallables
+     * @dataProvider provideNamedContainerEntryCallables
      */
-    public function test_arbitrary_named_container_object_as_factory($callable)
+    public function test_named_container_entry_as_factory($callable)
     {
         $container = $this->createContainer([
             'bar_baz' => \DI\object(__NAMESPACE__ . '\FactoryDefinitionTestClass'),
             'factory' => \DI\factory($callable),
         ]);
 
-        $factory = $container->get('factory');
-
-        $this->assertSame('bar', $factory);
+        $this->assertSame('bar', $container->get('factory'));
     }
 
-    public function test_arbitrary_named_invokable_container_object_as_factory()
+    public function test_named_invokable_container_entry_as_factory()
     {
         $container = $this->createContainer([
             'bar_baz' => \DI\object(__NAMESPACE__ . '\FactoryDefinitionInvokableTestClass'),
             'factory' => \DI\factory('bar_baz'),
         ]);
 
-        $factory = $container->get('factory');
-
-        $this->assertSame('bar', $factory);
+        $this->assertSame('bar', $container->get('factory'));
     }
 
     /**
@@ -97,7 +89,6 @@ class FactoryDefinitionTest extends \PHPUnit_Framework_TestCase
         $container = $this->createContainer([
             'foo' => \DI\factory('Hello World'),
         ]);
-
         $container->get('foo');
     }
 
