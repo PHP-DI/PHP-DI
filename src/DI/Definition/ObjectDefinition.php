@@ -149,7 +149,8 @@ class ObjectDefinition implements Definition, CacheableDefinition, HasSubDefinit
         $this->propertyInjections[$propertyInjection->getPropertyName()] = $propertyInjection;
     }
 
-    public function getMethodInjectionsForMethod($methodName){
+    public function getMethodInjectionsForMethod($methodName)
+    {
         return isset($this->methodInjections[$methodName]) ? $this->methodInjections[$methodName] : [];
     }
 
