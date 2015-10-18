@@ -17,6 +17,8 @@ use PHPUnit_Framework_MockObject_MockObject;
  */
 class ObjectCreatorTest extends \PHPUnit_Framework_TestCase
 {
+    use EasyMock;
+
     const FIXTURE_CLASS = 'DI\Test\UnitTest\Definition\Resolver\Fixture\FixtureClass';
     const FIXTURE_CLASS_NO_CONSTRUCTOR = 'DI\Test\UnitTest\Definition\Resolver\Fixture\NoConstructor';
     const FIXTURE_INTERFACE = 'DI\Test\UnitTest\Definition\Resolver\Fixture\FixtureInterface';
@@ -39,8 +41,8 @@ class ObjectCreatorTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->proxyFactory = EasyMock::mock('DI\Proxy\ProxyFactory');
-        $this->parentResolver = EasyMock::mock('DI\Definition\Resolver\DefinitionResolver');
+        $this->proxyFactory = $this->easyMock('DI\Proxy\ProxyFactory');
+        $this->parentResolver = $this->easyMock('DI\Definition\Resolver\DefinitionResolver');
 
         $this->resolver = new ObjectCreator($this->parentResolver, $this->proxyFactory);
     }

@@ -12,6 +12,8 @@ use Interop\Container\ContainerInterface;
  */
 class FactoryResolverTest extends \PHPUnit_Framework_TestCase
 {
+    use EasyMock;
+
     /**
      * @var FactoryResolver
      */
@@ -20,7 +22,7 @@ class FactoryResolverTest extends \PHPUnit_Framework_TestCase
     public function setUp()
     {
         /** @var ContainerInterface|\PHPUnit_Framework_MockObject_MockObject $container */
-        $container = EasyMock::mock('Interop\Container\ContainerInterface');
+        $container = $this->easyMock('Interop\Container\ContainerInterface');
         $this->resolver = new FactoryResolver($container);
     }
 
