@@ -106,6 +106,12 @@ menu:
                 how-it-works:
                     text: How PHP-DI works
                     url: doc/how-it-works.html
+        misc:
+            section: Misc
+            items:
+                ide-integration:
+                    text: IDE integration
+                    url: doc/ide-integration.html
         versions:
             section: Old documentation
             items:
