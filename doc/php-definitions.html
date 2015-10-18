@@ -195,6 +195,11 @@
                                         Injections depending on the environment
                                     </a>
                                 </li>
+                                                            <li class="">
+                                    <a href="http://php-di.org/doc/ide-integration.html">
+                                        IDE integration
+                                    </a>
+                                </li>
                                                     </ul>
                     </li>
                                     <li>
@@ -249,6 +254,12 @@
         </div>
 
         <article>
+            <div class="pull-right">
+                <a href="https://github.com/PHP-DI/PHP-DI/edit/master/doc/php-definitions.md" class="btn btn-default btn-sm">
+                    Edit this page on GitHub
+                </a>
+            </div>
+
             <h1 id="php-definitions">PHP definitions</h1>
 <p>On top of <a href="autowiring.html">Autowiring</a> and <a href="annotations.html">annotations</a>, you can use <strong>a PHP configuration format</strong> to define injections.</p>
 <h2 id="configuration">Configuration</h2>
@@ -316,7 +327,7 @@ return [
 <h3 id="factories">Factories</h3>
 <p>Factories are PHP callables that return the instance. It allows to define an object <em>lazily</em>, i.e. it will be created only when actually used.</p>
 <p>Here is an example using a closure:</p>
-<pre><code class="language-php">use \Interop\Container\ContainerInterface;
+<pre><code class="language-php">use Interop\Container\ContainerInterface;
 
 return [
     'Foo' =&gt; function (ContainerInterface $c) {
@@ -343,13 +354,18 @@ return [
 <pre><code class="language-php">return [
     Foo::class =&gt; DI\factory([FooFactory::class, 'create']),
 ];</code></pre>
+<p>Alternatively, you can write it as follows:</p>
+<pre><code class="language-php">return [
+    Foo::class =&gt; DI\factory('Namespace\To\FooFactory::create'),
+];</code></pre>
 <p>This configuration is equivalent to the following code:</p>
 <pre><code class="language-php">$factory = $container-&gt;get(FooFactory::class);
 return $factory-&gt;create();</code></pre>
 <p>Please note:</p>
 <ul>
 <li>if <code>create()</code> is a <strong>static</strong> method then the object will not be created: <code>FooFactory::create()</code> will be called statically (as one would expect)</li>
-<li>you can set any container entry name in the array, e.g. <code>factory(['foo_bar_baz', 'create'])</code>, allowing you to configure <code>foo_bar_baz</code> and its dependencies like any other object</li>
+<li>you can set any container entry name in the array, e.g. <code>DI\factory(['foo_bar_baz', 'create'])</code> (or alternatively: <code>DI\factory('foo_bar_baz::create')</code>), allowing you to configure <code>foo_bar_baz</code> and its dependencies like any other object</li>
+<li>as a factory can be any PHP callable, you can use invocable objects, too: <code>DI\factory(InvocableFooFactory::class)</code> (or alternatively: <code>DI\factory('invocable_foo_factory')</code>, if it's defined in the container)</li>
 </ul>
 <h4 id="decoration">Decoration</h4>
 <p>When using a system with multiple definition files, you can override a previous entry using a decorator:</p>

@@ -195,6 +195,11 @@
                                         Injections depending on the environment
                                     </a>
                                 </li>
+                                                            <li class="">
+                                    <a href="http://php-di.org/doc/ide-integration.html">
+                                        IDE integration
+                                    </a>
+                                </li>
                                                     </ul>
                     </li>
                                     <li>
@@ -249,6 +254,12 @@
         </div>
 
         <article>
+            <div class="pull-right">
+                <a href="https://github.com/PHP-DI/PHP-DI/edit/master/doc/container.md" class="btn btn-default btn-sm">
+                    Edit this page on GitHub
+                </a>
+            </div>
+
             <h1 id="using-the-container">Using the container</h1>
 <p>This documentation describes the API of the container object itself.</p>
 <h2 id="get-amp-has">get() &amp; has()</h2>
@@ -293,8 +304,8 @@ recommended that you type-hint against <code>FactoryInterface</code>. That avoid
 <pre><code class="language-php">$container-&gt;call(function ($foo, $bar) {
     // ...
 }, [
-    'param1' =&gt; 'Hello',
-    'param2' =&gt; 'World',
+    'foo' =&gt; 'Hello',
+    'bar' =&gt; 'World',
 ]);
 
 // Can also be useful in a micro-framework for example

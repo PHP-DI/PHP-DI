@@ -255,96 +255,49 @@
 
         <article>
             <div class="pull-right">
-                <a href="https://github.com/PHP-DI/PHP-DI/edit/master/doc/frameworks/zf2.md" class="btn btn-default btn-sm">
+                <a href="https://github.com/PHP-DI/PHP-DI/edit/master/doc/ide-integration.md" class="btn btn-default btn-sm">
                     Edit this page on GitHub
                 </a>
             </div>
 
-            <h1 id="php-di-in-zend-framework-2">PHP-DI in Zend Framework 2</h1>
-<p>If you are using Zend Framework 2, PHP-DI provides an easy and clean integration with the existing framework's container.</p>
-<h2 id="set-up">Set up</h2>
-<p>First, install the bridge:</p>
-<pre><code>composer require php-di/zf2-bridge</code></pre>
-<p>Register it in <code>application_root/config/module.config.php</code>:</p>
-<pre><code class="language-php">    // ...
-    'modules' =&gt; [
-        ...
-        'DI\ZendFramework2',
-        ...
-    ],
+            <h1 id="ide-integration">IDE integration</h1>
+<p>Ideally, application code <a href="best-practices.html">should not use a DI container directly</a>: dependency injection should be preferred. However there are situations where calling the container directly might happen:</p>
+<ul>
+<li>when writing root application classes (front controllers, …) or more generally frameworks</li>
+<li>when writing factories</li>
+<li>when maintaining or migrating legacy application</li>
+<li>when writing functional tests</li>
+<li>...</li>
+</ul>
+<p>In those situations, being able to benefit from full IDE features like autocompletion, refactoring support, etc. is very valuable.</p>
+<h2 id="inline-phpdoc">Inline PhpDoc</h2>
+<p>A basic approach to IDE support is using <code>@var</code> tags in docblocks:</p>
+<pre><code class="language-php">/** @var $repository UserRepository */
+$repository = $this-&gt;container-&gt;get(UserRepository::class);
 
-    'service_manager' =&gt; [
-        // ...
-        'factories' =&gt; [
-            'DI\Container' =&gt; 'DI\ZendFramework2\Service\DIContainerFactory',
-        ],
-    ],</code></pre>
-<p>That's it!</p>
-<p>If you want to use annotations, please read the &quot;Configuration&quot; section below.</p>
-<h2 id="usage">Usage</h2>
-<p>Now you can inject dependencies in your controllers.</p>
-<p>Here is an example of the GuestbookController of the quickstart (using annotations):</p>
-<pre><code class="language-php">class GuestbookController extends AbstractActionController
+// the IDE can now autocomplete this statement
+$repository-&gt;</code></pre>
+<p>This solution is simple and works great when your container is used rarely.</p>
+<h2 id="phpstorm-integration">PhpStorm integration</h2>
+<h3 id="metadata-file">Metadata file</h3>
+<p><a href="https://confluence.jetbrains.com/display/PhpStorm/PhpStorm+Advanced+Metadata">PhpStorm will load metadata from a <code>.phpstorm.meta.php</code> file</a> if it exists at the root of your project. Here is an example that adds support for PHP-DI as well as <a href="https://github.com/container-interop/container-interop#compatible-projects">any container-interop container</a>:</p>
+<pre><code class="language-php">&lt;?php
+namespace PHPSTORM_META
 {
-    /**
-     * This dependency will be injected by PHP-DI
-     * @Inject
-     * @var \Application\Service\GuestbookService
-     */
-    private $guestbookService;
-
-    public function indexAction()
-    {
-        $this-&gt;view-&gt;entries = $this-&gt;guestbookService-&gt;getAllEntries();
-    }
+    $STATIC_METHOD_TYPES = [
+        \Interop\Container\ContainerInterface::get('') =&gt; [
+            "" == "@",
+        ],
+        \DI\Container::get('') =&gt; [
+            "" == "@",
+        ],
+    ];
 }</code></pre>
-<p>If you'd like to define injections using a configuration file, put them in <code>application_root/config/php-di.config.php</code>:</p>
-<pre><code>&lt;?php
-return [
-    'Application\Service\GreetingServiceInterface' =&gt; DI\object('Application\Service\GreetingService'),
-];</code></pre>
-<p>Head over to <a href="../php-definitions.html">the definitions documentation</a> if needed.</p>
-<h2 id="configuration">Configuration</h2>
-<p>To configure PHP-DI itself, you have to override the module config in <code>config/autoload/global.php</code> or <code>config/autoload/local.php</code>:</p>
-<pre><code class="language-php">return [
-    'phpdi-zf2' =&gt; [
-        ...
-    ]
-];</code></pre>
-<h3 id="enable-or-disable-annotations">Enable or disable annotations</h3>
-<p>Annotations are disabled by default since PHP-DI 5. To enable them, use the following config:</p>
-<pre><code class="language-php">return [
-    'phpdi-zf2' =&gt; [
-        'useAnntotations' =&gt; true,
-    ]
-];</code></pre>
-<h3 id="override-definitions-file-location">Override definitions file location</h3>
-<pre><code class="language-php">return [
-    'phpdi-zf2' =&gt; [
-        'definitionsFile' =&gt; __DIR__ . '/../my-custom-config-file.php',
-    ]
-];</code></pre>
-<h3 id="enable-file-cache">Enable file cache</h3>
-<pre><code class="language-php">return [
-    'phpdi-zf2' =&gt; [
-        'cache' =&gt; [
-            'adapter' =&gt; 'filesystem',
-            'namespace' =&gt; 'your_di_cache_key',
-            'directory' =&gt; 'your_cache_directory', // default value is data/php-di/cache
-        ],
-    ]
-];</code></pre>
-<h3 id="enable-redis-cache">Enable redis cache</h3>
-<pre><code class="language-php">return [
-    'phpdi-zf2' =&gt; [
-        'cache' =&gt; [
-            'namespace' =&gt; 'your_di_cache_key',
-            'adapter' =&gt; 'redis',
-            'host' =&gt; 'localhost', // default is localhost
-            'port' =&gt; 6379, // default is 6379
-        ],
-    ]
-];</code></pre>
+<p>That configuration will make PhpStorm assume that anything returned by <code>-&gt;get('...')</code> is an instance of the first argument. For example <code>-&gt;get('DateTime')</code> (or <code>-&gt;get(DateTime::class)</code>) will be recognized to return a <code>DateTime</code> object.</p>
+<p>This however will not work if your service name is not a class or interface, for example <code>-&gt;get('foo.bar')</code> will not be understood by PhpStorm.</p>
+<h3 id="phpstorm-plugin">PhpStorm plugin</h3>
+<p>If you don't fancy writing a <code>.phpstorm.meta.php</code> file in each of your projects, you can install the <a href="https://github.com/pulyaevskiy/phpstorm-phpdi">PHP-DI plugin for PhpStorm</a> created by <a href="https://github.com/pulyaevskiy">Anatoly Pulyaevskiy</a>. The plugin can be installed in PhpStorm by searching for <em>PHP-DI</em> in the 3rd party plugin list.</p>
+<p>This plugin offers the same benefits as <code>.phpstorm.meta.php</code>, and has the same limitations.</p>
         </article>
 
     </div>
