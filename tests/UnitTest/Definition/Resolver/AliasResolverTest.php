@@ -11,12 +11,14 @@ use EasyMock\EasyMock;
  */
 class AliasResolverTest extends \PHPUnit_Framework_TestCase
 {
+    use EasyMock;
+
     /**
      * @test
      */
     public function should_resolve_aliases()
     {
-        $container = EasyMock::mock('Interop\Container\ContainerInterface', [
+        $container = $this->easyMock('Interop\Container\ContainerInterface', [
             'get' => 42,
         ]);
         $resolver = new AliasResolver($container);

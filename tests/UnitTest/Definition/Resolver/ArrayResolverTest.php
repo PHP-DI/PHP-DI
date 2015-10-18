@@ -13,6 +13,8 @@ use PHPUnit_Framework_MockObject_MockObject;
  */
 class ArrayResolverTest extends \PHPUnit_Framework_TestCase
 {
+    use EasyMock;
+
     /**
      * @var DefinitionResolver|PHPUnit_Framework_MockObject_MockObject
      */
@@ -25,7 +27,7 @@ class ArrayResolverTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->parentResolver = EasyMock::mock('DI\Definition\Resolver\DefinitionResolver');
+        $this->parentResolver = $this->easyMock('DI\Definition\Resolver\DefinitionResolver');
         $this->resolver = new ArrayResolver($this->parentResolver);
     }
 

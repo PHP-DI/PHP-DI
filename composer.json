@@ -27,7 +27,7 @@
     },
     "require-dev": {
         "phpunit/phpunit": "~4.5",
-        "mnapoli/phpunit-easymock": "~0.1.4",
+        "mnapoli/phpunit-easymock": "~0.2.0",
         "doctrine/cache": "~1.4",
         "doctrine/annotations": "~1.2",
         "ocramius/proxy-manager": "~1.0"
