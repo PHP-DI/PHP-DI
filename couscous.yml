@@ -70,6 +70,9 @@ menu:
                 silly:
                     text: Silly
                     url: doc/frameworks/silly.html
+                demo:
+                    text: Demo application
+                    absoluteUrl: https://github.com/PHP-DI/demo
         advanced:
             section: Advanced topics
             items:
