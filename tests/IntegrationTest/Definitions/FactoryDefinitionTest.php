@@ -3,8 +3,8 @@
 namespace DI\Test\IntegrationTest\Definitions;
 
 use DI\ContainerBuilder;
-use Interop\Container\ContainerInterface;
 use DI\Definition\Definition;
+use Interop\Container\ContainerInterface;
 
 /**
  * Test factory definitions.

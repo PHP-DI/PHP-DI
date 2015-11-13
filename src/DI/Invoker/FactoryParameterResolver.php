@@ -2,13 +2,13 @@
 
 namespace DI\Invoker;
 
-use Invoker\ParameterResolver\ParameterResolver;
-use Interop\Container\ContainerInterface;
 use DI\Definition\Definition;
+use Interop\Container\ContainerInterface;
+use Invoker\ParameterResolver\ParameterResolver;
 use ReflectionFunctionAbstract;
 
 /**
- * Inject container and definition entries if closure typehinted them
+ * Inject container and definition entries if closure typehinted them.
  *
  * @author Quim Calpe <quim@kalpe.com>
  */
@@ -25,10 +25,10 @@ class FactoryParameterResolver implements ParameterResolver
             $parameterClass = $parameter->getClass();
 
             if ($parameterClass) {
-                if (ContainerInterface::class == $parameterClass->name && isset($providedParameters[0]) && $providedParameters[0] instanceof ContainerInterface) {
+                if ('Interop\Container\ContainerInterface' == $parameterClass->name && isset($providedParameters[0]) && $providedParameters[0] instanceof ContainerInterface) {
                     $resolvedParameters[$index] = $providedParameters[0];
                 }
-                if (Definition::class == $parameterClass->name && isset($providedParameters[1]) && $providedParameters[1] instanceof Definition) {
+                if ('DI\Definition\Definition' == $parameterClass->name && isset($providedParameters[1]) && $providedParameters[1] instanceof Definition) {
                     $resolvedParameters[$index] = $providedParameters[1];
                 }
             }
