@@ -101,9 +101,11 @@ Here is an example using a closure:
 
 ```php
 use Interop\Container\ContainerInterface;
+use DI\Definition\Definition;
 
 return [
-    'Foo' => function (ContainerInterface $c) {
+    'Foo' => function (ContainerInterface $c, Definition $d) {
+        // $d->getName() contains the actual requested name
         return new Foo($c->get('db.host'));
     },
 ];
@@ -112,6 +114,8 @@ return [
 Instances of other classes can be injected through parameters via type-hinting (as long as they are registered within the container or autowiring is enabled).
 
 The container, as seen above, can be injected and then used to retrieve other entries, like values, that can't be automatically injected via type -hinting. You are encouraged to type-hint against the interface `Interop\Container\ContainerInterface` instead of the implementation `DI\Container` in this case: that can be necessary in scenarios where you are using multiple containers (for example if using the PHP-DI + Symfony integration).
+
+The current Definition instance can also be injected type-hinting the `DI\Definition\Definition` class.
 
 You can also use a factory class - as an example, let's assume you have a simple factory class like this:
 

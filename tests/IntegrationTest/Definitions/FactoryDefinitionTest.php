@@ -4,6 +4,7 @@ namespace DI\Test\IntegrationTest\Definitions;
 
 use DI\ContainerBuilder;
 use Interop\Container\ContainerInterface;
+use DI\Definition\Definition;
 
 /**
  * Test factory definitions.
@@ -102,6 +103,32 @@ class FactoryDefinitionTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf('Interop\Container\ContainerInterface', $factory);
     }
 
+    public function test_definition_gets_injected_as_second_argument_without_typehint()
+    {
+        $container = $this->createContainer([
+            'factory' => function ($c, $d) {
+                return $d;
+            },
+        ]);
+
+        $factory = $container->get('factory');
+
+        $this->assertInstanceOf('DI\Definition\Definition', $factory);
+    }
+
+    public function test_definition_gets_injected_with_typehint()
+    {
+        $container = $this->createContainer([
+            'factory' => function (Definition $d) {
+                return $d;
+            },
+        ]);
+
+        $factory = $container->get('factory');
+
+        $this->assertInstanceOf('DI\Definition\Definition', $factory);
+    }
+
     public function test_arbitrary_object_gets_injected_via_typehint()
     {
         $container = $this->createContainer([
@@ -115,18 +142,19 @@ class FactoryDefinitionTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf('stdClass', $factory);
     }
 
-    public function test_container_gets_injected_in_arbitrary_position_via_typehint()
+    public function test_container_and_definition_gets_injected_in_arbitrary_position_via_typehint()
     {
         $container = $this->createContainer([
-            'factory' => function (\stdClass $stdClass, ContainerInterface $c) {
-                return [$stdClass, $c];
+            'factory' => function (\stdClass $stdClass, Definition $d, ContainerInterface $c) {
+                return [$stdClass, $d, $c];
             },
         ]);
 
         $factory = $container->get('factory');
 
         $this->assertInstanceOf('stdClass', $factory[0]);
-        $this->assertInstanceOf('Interop\Container\ContainerInterface', $factory[1]);
+        $this->assertInstanceOf('DI\Definition\Definition', $factory[1]);
+        $this->assertInstanceOf('Interop\Container\ContainerInterface', $factory[2]);
     }
 
     /**

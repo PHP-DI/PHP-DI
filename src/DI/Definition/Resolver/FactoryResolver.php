@@ -5,6 +5,7 @@ namespace DI\Definition\Resolver;
 use DI\Definition\Definition;
 use DI\Definition\Exception\DefinitionException;
 use DI\Definition\FactoryDefinition;
+use DI\Invoker\FactoryParameterResolver;
 use Interop\Container\ContainerInterface;
 use Invoker\Exception\NotCallableException;
 use Invoker\Exception\NotEnoughParametersException;
@@ -55,15 +56,16 @@ class FactoryResolver implements DefinitionResolver
     {
         if (! $this->invoker) {
             $parameterResolver = new ResolverChain([
-                new TypeHintContainerResolver($this->container),
-                new NumericArrayResolver,
+               new FactoryParameterResolver,
+               new TypeHintContainerResolver($this->container),
+               new NumericArrayResolver,
             ]);
 
             $this->invoker = new Invoker($parameterResolver, $this->container);
         }
 
         try {
-            return $this->invoker->call($definition->getCallable(), [$this->container]);
+            return $this->invoker->call($definition->getCallable(), [$this->container, $definition]);
         } catch (NotCallableException $e) {
             throw new DefinitionException(sprintf(
                 'Entry "%s" cannot be resolved: factory %s',

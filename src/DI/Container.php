@@ -88,7 +88,6 @@ class Container implements ContainerInterface, FactoryInterface, \DI\InvokerInte
         $this->singletonEntries['DI\Container'] = $this;
         $this->singletonEntries['DI\FactoryInterface'] = $this;
         $this->singletonEntries['DI\InvokerInterface'] = $this;
-        $this->singletonEntries['Interop\Container\ContainerInterface'] = $this->wrapperContainer;
     }
 
     /**
