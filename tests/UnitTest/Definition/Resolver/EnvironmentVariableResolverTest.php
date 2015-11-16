@@ -14,6 +14,8 @@ use PHPUnit_Framework_MockObject_MockObject;
  */
 class EnvironmentVariableResolverTest extends \PHPUnit_Framework_TestCase
 {
+    use EasyMock;
+
     /**
      * @var EnvironmentVariableResolver
      */
@@ -30,7 +32,7 @@ class EnvironmentVariableResolverTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->parentResolver = EasyMock::mock('DI\Definition\Resolver\DefinitionResolver');
+        $this->parentResolver = $this->easyMock('DI\Definition\Resolver\DefinitionResolver');
 
         $variableReader = function ($variableName) {
             if ('DEFINED' === $variableName) {

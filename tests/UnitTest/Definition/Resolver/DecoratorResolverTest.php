@@ -15,6 +15,8 @@ use PHPUnit_Framework_MockObject_MockObject;
  */
 class DecoratorResolverTest extends \PHPUnit_Framework_TestCase
 {
+    use EasyMock;
+
     /**
      * @var DecoratorResolver
      */
@@ -27,8 +29,8 @@ class DecoratorResolverTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $container = EasyMock::mock('Interop\Container\ContainerInterface');
-        $this->parentResolver = EasyMock::mock('DI\Definition\Resolver\DefinitionResolver');
+        $container = $this->easyMock('Interop\Container\ContainerInterface');
+        $this->parentResolver = $this->easyMock('DI\Definition\Resolver\DefinitionResolver');
         $this->resolver = new DecoratorResolver($container, $this->parentResolver);
     }
 

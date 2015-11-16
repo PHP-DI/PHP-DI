@@ -17,6 +17,8 @@ use EasyMock\EasyMock;
  */
 class InstanceInjectorTest extends \PHPUnit_Framework_TestCase
 {
+    use EasyMock;
+
     /**
      * @test
      */
@@ -52,9 +54,9 @@ class InstanceInjectorTest extends \PHPUnit_Framework_TestCase
     private function buildResolver()
     {
         /** @var ResolverDispatcher $resolverDispatcher */
-        $resolverDispatcher = EasyMock::mock('DI\Definition\Resolver\ResolverDispatcher');
+        $resolverDispatcher = $this->easyMock('DI\Definition\Resolver\ResolverDispatcher');
         /** @var ProxyFactory $factory */
-        $factory = EasyMock::mock('DI\Proxy\ProxyFactory');
+        $factory = $this->easyMock('DI\Proxy\ProxyFactory');
 
         return new InstanceInjector($resolverDispatcher, $factory);
     }
