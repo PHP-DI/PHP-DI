@@ -32,7 +32,7 @@ return [
 
 PHP-DI's definitions are written using a *DSL* (Domain Specific Language) written in PHP and based on helper functions.
 
-All the examples shown in this page are using a PHP 5.4 compatible syntax, but if you are using PHP 5.5 or 5.6, you are encouraged to use the following features:
+All the examples shown in this page are using a PHP 5.5 compatible syntax. If you are using PHP 5.5 or 5.6, you are encouraged to use the following features:
 
 - PHP 5.5 `::class` magic constant:
 
