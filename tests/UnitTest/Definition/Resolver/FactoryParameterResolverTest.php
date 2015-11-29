@@ -31,8 +31,8 @@ class FactoryParameterResolverTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->resolver = new FactoryParameterResolver;
         $this->container = $this->easyMock('Interop\Container\ContainerInterface');
+        $this->resolver = new FactoryParameterResolver($this->container);
         $this->definition = $this->easyMock('DI\Definition\Definition');
     }
 

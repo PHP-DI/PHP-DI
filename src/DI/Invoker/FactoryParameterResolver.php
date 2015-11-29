@@ -2,35 +2,47 @@
 
 namespace DI\Invoker;
 
-use DI\Definition\Definition;
 use Interop\Container\ContainerInterface;
 use Invoker\ParameterResolver\ParameterResolver;
 use ReflectionFunctionAbstract;
 
 /**
- * Inject container and definition entries if closure typehinted them.
+ * Inject the container, the definition or any other service using type-hints.
  *
  * @author Quim Calpe <quim@kalpe.com>
+ * @author Matthieu Napoli <matthieu@mnapoli.fr>
  */
 class FactoryParameterResolver implements ParameterResolver
 {
+    /**
+     * @var ContainerInterface
+     */
+    private $container;
+
+    public function __construct(ContainerInterface $container)
+    {
+        $this->container = $container;
+    }
+
     public function getParameters(
         ReflectionFunctionAbstract $reflection,
         array $providedParameters,
         array $resolvedParameters
     ) {
-        $parameters = $reflection->getParameters();
-
-        foreach ($parameters as $index => $parameter) {
+        foreach ($reflection->getParameters() as $index => $parameter) {
             $parameterClass = $parameter->getClass();
 
-            if ($parameterClass) {
-                if ('Interop\Container\ContainerInterface' == $parameterClass->name && isset($providedParameters[0]) && $providedParameters[0] instanceof ContainerInterface) {
-                    $resolvedParameters[$index] = $providedParameters[0];
-                }
-                if ('DI\Definition\Definition' == $parameterClass->name && isset($providedParameters[1]) && $providedParameters[1] instanceof Definition) {
-                    $resolvedParameters[$index] = $providedParameters[1];
-                }
+            if (!$parameterClass) {
+                continue;
+            }
+
+            if ($parameterClass->name === 'Interop\Container\ContainerInterface') {
+                $resolvedParameters[$index] = $this->container;
+            } elseif ($parameterClass->name === 'DI\Definition\Definition') {
+                // By convention the second parameter is the definition
+                $resolvedParameters[$index] = $providedParameters[1];
+            } elseif ($this->container->has($parameterClass->name)) {
+                $resolvedParameters[$index] = $this->container->get($parameterClass->name);
             }
         }
 
