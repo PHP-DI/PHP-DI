@@ -95,29 +95,35 @@ However **this is not recommended** as that object will be created *for every PH
 
 ### Factories
 
-Factories are PHP callables that return the instance. It allows to define an object *lazily*, i.e. it will be created only when actually used.
+Factories are **PHP callables** that return the instance. They allow to define objects *lazily*, i.e. they will be created only when actually used.
 
 Here is an example using a closure:
 
 ```php
 use Interop\Container\ContainerInterface;
-use DI\Definition\Definition;
 
 return [
-    'Foo' => function (ContainerInterface $c, Definition $d) {
-        // $d->getName() contains the actual requested name
+    'Foo' => function (ContainerInterface $c) {
         return new Foo($c->get('db.host'));
     },
 ];
 ```
 
-Instances of other classes can be injected through parameters via type-hinting (as long as they are registered within the container or autowiring is enabled).
+Other services can be injected via type-hinting (as long as they are registered in the container or autowiring is enabled):
 
-The container, as seen above, can be injected and then used to retrieve other entries, like values, that can't be automatically injected via type -hinting. You are encouraged to type-hint against the interface `Interop\Container\ContainerInterface` instead of the implementation `DI\Container` in this case: that can be necessary in scenarios where you are using multiple containers (for example if using the PHP-DI + Symfony integration).
+```php
+return [
+    'LoggerInterface' => DI\object('MyLogger'),
 
-The current Definition instance can also be injected type-hinting the `DI\Definition\Definition` class.
+    'Foo' => function (LoggerInterface $logger) {
+        return new Foo($logger);
+    },
+];
+```
 
-You can also use a factory class - as an example, let's assume you have a simple factory class like this:
+The container can also be injected (as seen in the first example) and used to retrieve entries, like values, that can't be automatically injected via type -hinting. If you inject the container, you should type-hint against the interface `Interop\Container\ContainerInterface` instead of the implementation `DI\Container`.
+
+Factories can be any PHP callable, so they can also be class methods:
 
 ```php
 class FooFactory
@@ -138,37 +144,65 @@ return [
 ];
 ```
 
-But the factory will be created on every request (`new FooFactory`) even if not used. Additionally with this method it's harder to pass dependencies in the factory.
+but the factory will be created on every request (`new FooFactory`) even if not used. Additionally with this method it's harder to pass dependencies in the factory.
 
 The recommended solution is to let the container create the factory:
 
 ```php
 return [
     Foo::class => DI\factory([FooFactory::class, 'create']),
-];
-```
-
-Alternatively, you can write it as follows:
-
-```php
-return [
+    // alternative syntax:
     Foo::class => DI\factory('Namespace\To\FooFactory::create'),
 ];
 ```
 
-This configuration is equivalent to the following code:
+The configuration above is equivalent to the following code:
 
 ```php
 $factory = $container->get(FooFactory::class);
-$bar = $container->get(Bar::class);
-return $factory->create($bar);
+return $factory->create(...);
+```
+
+If the factory is a static method, it's just as simple:
+
+
+```php
+class FooFactory
+{
+    public static function create()
+    {
+        return ...
+    }
+}
+
+return [
+    Foo::class => DI\factory([FooFactory::class, 'create']),
+];
 ```
 
 Please note:
 
-- if `create()` is a **static** method then the object will not be created: `FooFactory::create()` will be called statically (as one would expect)
+- `factory([FooFactory::class, 'create'])`: if `create()` is a **static** method then the object will not be created: `FooFactory::create()` will be called statically (as one would expect)
 - you can set any container entry name in the array, e.g. `DI\factory(['foo_bar_baz', 'create'])` (or alternatively: `DI\factory('foo_bar_baz::create')`), allowing you to configure `foo_bar_baz` and its dependencies like any other object
 - as a factory can be any PHP callable, you can use invocable objects, too: `DI\factory(InvocableFooFactory::class)` (or alternatively: `DI\factory('invocable_foo_factory')`, if it's defined in the container)
+
+#### Retrieving the name of the requested entry
+
+If you want to reuse the same factory for creating different entries, you might want to retrieve the name of the entry that is currently being resolved. You can do this by injecting the `DI\Factory\RequestedEntry` object using a type-hint:
+
+```php
+use DI\Factory\RequestedEntry;
+
+return [
+    'Foo' => function (RequestedEntry $entry) {
+        // $entry->getName() contains the requested name
+        $class = $entry->getName();
+        return new $class();
+    },
+];
+```
+
+Since `RequestedEntry` is injected using the type-hint, you can combine it with injecting the container or any other service. The order of factory arguments doesn't matter.
 
 #### Decoration
 
