@@ -2,7 +2,7 @@
 
 namespace DI\Test\UnitTest\Definition\Resolver;
 
-use DI\Definition\Definition;
+use DI\Factory\RequestedEntry;
 use DI\Invoker\FactoryParameterResolver;
 use EasyMock\EasyMock;
 use Interop\Container\ContainerInterface;
@@ -25,30 +25,30 @@ class FactoryParameterResolverTest extends \PHPUnit_Framework_TestCase
     private $container;
 
     /**
-     * @var Definition|\PHPUnit_Framework_MockObject_MockObject
+     * @var RequestedEntry|\PHPUnit_Framework_MockObject_MockObject
      */
-    private $definition;
+    private $requestedEntry;
 
     public function setUp()
     {
         $this->container = $this->easyMock('Interop\Container\ContainerInterface');
         $this->resolver = new FactoryParameterResolver($this->container);
-        $this->definition = $this->easyMock('DI\Definition\Definition');
+        $this->requestedEntry = $this->easyMock('DI\Factory\RequestedEntry');
     }
 
     /**
      * @test
      */
-    public function should_resolve_container_and_definition()
+    public function should_resolve_container_and_requested_entry()
     {
-        $callable = function (ContainerInterface $c, Definition $d) {};
+        $callable = function (ContainerInterface $c, RequestedEntry $entry) {};
         $reflection = new \ReflectionFunction($callable);
 
-        $parameters = $this->resolver->getParameters($reflection, [$this->container, $this->definition], []);
+        $parameters = $this->resolver->getParameters($reflection, [$this->container, $this->requestedEntry], []);
 
         $this->assertCount(2, $parameters);
         $this->assertSame($this->container, $parameters[0]);
-        $this->assertSame($this->definition, $parameters[1]);
+        $this->assertSame($this->requestedEntry, $parameters[1]);
     }
 
     /**
@@ -59,7 +59,7 @@ class FactoryParameterResolverTest extends \PHPUnit_Framework_TestCase
         $callable = function (ContainerInterface $c) {};
         $reflection = new \ReflectionFunction($callable);
 
-        $parameters = $this->resolver->getParameters($reflection, [$this->container, $this->definition], []);
+        $parameters = $this->resolver->getParameters($reflection, [$this->container, $this->requestedEntry], []);
 
         $this->assertCount(1, $parameters);
         $this->assertSame($this->container, $parameters[0]);
@@ -68,15 +68,15 @@ class FactoryParameterResolverTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function should_resolve_only_definition()
+    public function should_resolve_only_requested_entry()
     {
-        $callable = function (Definition $d) {};
+        $callable = function (RequestedEntry $entry) {};
         $reflection = new \ReflectionFunction($callable);
 
-        $parameters = $this->resolver->getParameters($reflection, [$this->container, $this->definition], []);
+        $parameters = $this->resolver->getParameters($reflection, [$this->container, $this->requestedEntry], []);
 
         $this->assertCount(1, $parameters);
-        $this->assertSame($this->definition, $parameters[0]);
+        $this->assertSame($this->requestedEntry, $parameters[0]);
     }
 
     /**
@@ -87,7 +87,7 @@ class FactoryParameterResolverTest extends \PHPUnit_Framework_TestCase
         $callable = function () {};
         $reflection = new \ReflectionFunction($callable);
 
-        $parameters = $this->resolver->getParameters($reflection, [$this->container, $this->definition], []);
+        $parameters = $this->resolver->getParameters($reflection, [$this->container, $this->requestedEntry], []);
 
         $this->assertCount(0, $parameters);
     }

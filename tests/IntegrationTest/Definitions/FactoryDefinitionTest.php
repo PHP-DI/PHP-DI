@@ -3,7 +3,7 @@
 namespace DI\Test\IntegrationTest\Definitions;
 
 use DI\ContainerBuilder;
-use DI\Definition\Definition;
+use DI\Factory\RequestedEntry;
 use Interop\Container\ContainerInterface;
 
 /**
@@ -95,30 +95,30 @@ class FactoryDefinitionTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf('Interop\Container\ContainerInterface', $factory);
     }
 
-    public function test_definition_gets_injected_as_second_argument_without_typehint()
+    public function test_requested_entry_gets_injected_as_second_argument_without_typehint()
     {
         $container = $this->createContainer([
-            'factory' => function ($c, $d) {
-                return $d;
+            'foobar' => function ($c, $entry) {
+                return $entry->getName();
             },
         ]);
 
-        $factory = $container->get('factory');
+        $factory = $container->get('foobar');
 
-        $this->assertInstanceOf('DI\Definition\Definition', $factory);
+        $this->assertSame('foobar', $factory);
     }
 
-    public function test_definition_gets_injected_with_typehint()
+    public function test_requested_entry_gets_injected_with_typehint()
     {
         $container = $this->createContainer([
-            'factory' => function (Definition $d) {
-                return $d;
+            'foobar' => function (RequestedEntry $entry) {
+                return $entry->getName();
             },
         ]);
 
-        $factory = $container->get('factory');
+        $factory = $container->get('foobar');
 
-        $this->assertInstanceOf('DI\Definition\Definition', $factory);
+        $this->assertSame('foobar', $factory);
     }
 
     public function test_arbitrary_object_gets_injected_via_typehint()
@@ -134,18 +134,18 @@ class FactoryDefinitionTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf('stdClass', $factory);
     }
 
-    public function test_container_and_definition_gets_injected_in_arbitrary_position_via_typehint()
+    public function test_container_and_requested_entry_get_injected_in_arbitrary_position_via_typehint()
     {
         $container = $this->createContainer([
-            'factory' => function (\stdClass $stdClass, Definition $d, ContainerInterface $c) {
-                return [$stdClass, $d, $c];
+            'factory' => function (\stdClass $stdClass, RequestedEntry $e, ContainerInterface $c) {
+                return [$stdClass, $e, $c];
             },
         ]);
 
         $factory = $container->get('factory');
 
         $this->assertInstanceOf('stdClass', $factory[0]);
-        $this->assertInstanceOf('DI\Definition\Definition', $factory[1]);
+        $this->assertInstanceOf('DI\Factory\RequestedEntry', $factory[1]);
         $this->assertInstanceOf('Interop\Container\ContainerInterface', $factory[2]);
     }
 

@@ -38,7 +38,7 @@ class FactoryParameterResolver implements ParameterResolver
 
             if ($parameterClass->name === 'Interop\Container\ContainerInterface') {
                 $resolvedParameters[$index] = $this->container;
-            } elseif ($parameterClass->name === 'DI\Definition\Definition') {
+            } elseif ($parameterClass->name === 'DI\Factory\RequestedEntry') {
                 // By convention the second parameter is the definition
                 $resolvedParameters[$index] = $providedParameters[1];
             } elseif ($this->container->has($parameterClass->name)) {
