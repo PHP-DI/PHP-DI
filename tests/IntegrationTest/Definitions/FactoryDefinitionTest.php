@@ -3,6 +3,8 @@
 namespace DI\Test\IntegrationTest\Definitions;
 
 use DI\ContainerBuilder;
+use DI\Factory\RequestedEntry;
+use Interop\Container\ContainerInterface;
 
 /**
  * Test factory definitions.
@@ -78,6 +80,73 @@ class FactoryDefinitionTest extends \PHPUnit_Framework_TestCase
         ]);
 
         $this->assertSame('bar', $container->get('factory'));
+    }
+
+    public function test_container_gets_injected_as_first_argument_without_typehint()
+    {
+        $container = $this->createContainer([
+            'factory' => function ($c) {
+                return $c;
+            },
+        ]);
+
+        $factory = $container->get('factory');
+
+        $this->assertInstanceOf('Interop\Container\ContainerInterface', $factory);
+    }
+
+    public function test_requested_entry_gets_injected_as_second_argument_without_typehint()
+    {
+        $container = $this->createContainer([
+            'foobar' => function ($c, $entry) {
+                return $entry->getName();
+            },
+        ]);
+
+        $factory = $container->get('foobar');
+
+        $this->assertSame('foobar', $factory);
+    }
+
+    public function test_requested_entry_gets_injected_with_typehint()
+    {
+        $container = $this->createContainer([
+            'foobar' => function (RequestedEntry $entry) {
+                return $entry->getName();
+            },
+        ]);
+
+        $factory = $container->get('foobar');
+
+        $this->assertSame('foobar', $factory);
+    }
+
+    public function test_arbitrary_object_gets_injected_via_typehint()
+    {
+        $container = $this->createContainer([
+            'factory' => function (\stdClass $stdClass) {
+                return $stdClass;
+            },
+        ]);
+
+        $factory = $container->get('factory');
+
+        $this->assertInstanceOf('stdClass', $factory);
+    }
+
+    public function test_container_and_requested_entry_get_injected_in_arbitrary_position_via_typehint()
+    {
+        $container = $this->createContainer([
+            'factory' => function (\stdClass $stdClass, RequestedEntry $e, ContainerInterface $c) {
+                return [$stdClass, $e, $c];
+            },
+        ]);
+
+        $factory = $container->get('factory');
+
+        $this->assertInstanceOf('stdClass', $factory[0]);
+        $this->assertInstanceOf('DI\Factory\RequestedEntry', $factory[1]);
+        $this->assertInstanceOf('Interop\Container\ContainerInterface', $factory[2]);
     }
 
     /**

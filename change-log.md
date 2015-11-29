@@ -5,6 +5,7 @@
 Improvements:
 
 - [#272](https://github.com/PHP-DI/PHP-DI/issues/272): Support 'Class::method' syntax for callables
+- [#347](https://github.com/PHP-DI/PHP-DI/pull/347) (includes [#333](https://github.com/PHP-DI/PHP-DI/pull/333) and [#345](https://github.com/PHP-DI/PHP-DI/pull/345)): Allow injection of any container object as factory parameter via type hinting, and allow injection of a `DI\Factory\RequestedEntry` object to get the requested entry name.
 
 Bugfixes:
 
