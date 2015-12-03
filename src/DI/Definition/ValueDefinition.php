@@ -3,13 +3,14 @@
 namespace DI\Definition;
 
 use DI\Scope;
+use Interop\Container\Definition\ParameterDefinitionInterface;
 
 /**
  * Definition of a value for dependency injection.
  *
  * @author Matthieu Napoli <matthieu@mnapoli.fr>
  */
-class ValueDefinition implements Definition
+class ValueDefinition implements Definition, ParameterDefinitionInterface
 {
     /**
      * Entry name.
@@ -51,7 +52,7 @@ class ValueDefinition implements Definition
     }
 
     /**
-     * @return mixed
+     * {@inheritdoc}
      */
     public function getValue()
     {

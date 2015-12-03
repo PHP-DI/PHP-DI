@@ -30,6 +30,6 @@ class EntryReferenceTest extends \PHPUnit_Framework_TestCase
 
         $this->assertTrue($definition instanceof AliasDefinition);
         $this->assertSame('foo', $definition->getName());
-        $this->assertSame('bar', $definition->getTargetEntryName());
+        $this->assertSame('bar', $definition->getTarget());
     }
 }

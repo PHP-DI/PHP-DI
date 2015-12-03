@@ -2,10 +2,13 @@
 
 namespace DI\Definition\Resolver;
 
-use DI\Definition\Definition;
-use DI\Definition\Exception\DefinitionException;
 use DI\Proxy\ProxyFactory;
 use Interop\Container\ContainerInterface;
+use Interop\Container\Definition\DefinitionInterface;
+use Interop\Container\Definition\FactoryCallDefinitionInterface;
+use Interop\Container\Definition\ObjectDefinitionInterface;
+use Interop\Container\Definition\ParameterDefinitionInterface;
+use Interop\Container\Definition\ReferenceDefinitionInterface;
 
 /**
  * Dispatches to more specific resolvers.
@@ -36,6 +39,7 @@ class ResolverDispatcher implements DefinitionResolver
     private $instanceResolver;
     private $envVariableResolver;
     private $stringResolver;
+    private $definitionInteropResolver;
 
     public function __construct(ContainerInterface $container, ProxyFactory $proxyFactory)
     {
@@ -44,16 +48,9 @@ class ResolverDispatcher implements DefinitionResolver
     }
 
     /**
-     * Resolve a definition to a value.
-     *
-     * @param Definition $definition Object that defines how the value should be obtained.
-     * @param array      $parameters Optional parameters to use to build the entry.
-     *
-     * @throws DefinitionException If the definition cannot be resolved.
-     *
-     * @return mixed Value obtained from the definition.
+     * {@inheritdoc}
      */
-    public function resolve(Definition $definition, array $parameters = [])
+    public function resolve(DefinitionInterface $definition, array $parameters = [])
     {
         $definitionResolver = $this->getDefinitionResolver($definition);
 
@@ -61,14 +58,9 @@ class ResolverDispatcher implements DefinitionResolver
     }
 
     /**
-     * Check if a definition can be resolved.
-     *
-     * @param Definition $definition Object that defines how the value should be obtained.
-     * @param array      $parameters Optional parameters to use to build the entry.
-     *
-     * @return bool
+     * {@inheritdoc}
      */
-    public function isResolvable(Definition $definition, array $parameters = [])
+    public function isResolvable(DefinitionInterface $definition, array $parameters = [])
     {
         $definitionResolver = $this->getDefinitionResolver($definition);
 
@@ -78,12 +70,12 @@ class ResolverDispatcher implements DefinitionResolver
     /**
      * Returns a resolver capable of handling the given definition.
      *
-     * @param Definition $definition
+     * @param DefinitionInterface $definition
      *
      * @throws \RuntimeException No definition resolver was found for this type of definition.
      * @return DefinitionResolver
      */
-    private function getDefinitionResolver(Definition $definition)
+    private function getDefinitionResolver(DefinitionInterface $definition)
     {
         switch (true) {
             case ($definition instanceof \DI\Definition\ObjectDefinition):
@@ -92,13 +84,13 @@ class ResolverDispatcher implements DefinitionResolver
                 }
 
                 return $this->objectResolver;
-            case ($definition instanceof \DI\Definition\ValueDefinition):
+            case ($definition instanceof ParameterDefinitionInterface):
                 if (! $this->valueResolver) {
                     $this->valueResolver = new ValueResolver();
                 }
 
                 return $this->valueResolver;
-            case ($definition instanceof \DI\Definition\AliasDefinition):
+            case ($definition instanceof ReferenceDefinitionInterface):
                 if (! $this->aliasResolver) {
                     $this->aliasResolver = new AliasResolver($this->container);
                 }
@@ -140,6 +132,18 @@ class ResolverDispatcher implements DefinitionResolver
                 }
 
                 return $this->instanceResolver;
+            case ($definition instanceof ObjectDefinitionInterface):
+                if (! $this->definitionInteropResolver) {
+                    $this->definitionInteropResolver = new \Assembly\Container\DefinitionResolver($this->container);
+                }
+
+                return $this->definitionInteropResolver;
+            case ($definition instanceof FactoryCallDefinitionInterface):
+                if (! $this->definitionInteropResolver) {
+                    $this->definitionInteropResolver = new \Assembly\Container\DefinitionResolver($this->container);
+                }
+
+                return $this->definitionInteropResolver;
             default:
                 throw new \RuntimeException('No definition resolver was configured for definition of type ' . get_class($definition));
         }

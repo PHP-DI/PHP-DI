@@ -29,13 +29,13 @@ class AliasDefinitionDumper implements DefinitionDumper
             return sprintf(
                 'get(%s => %s)',
                 $definition->getName(),
-                $definition->getTargetEntryName()
+                $definition->getTarget()
             );
         }
 
         return sprintf(
             'get(%s)',
-            $definition->getTargetEntryName()
+            $definition->getTarget()
         );
     }
 }

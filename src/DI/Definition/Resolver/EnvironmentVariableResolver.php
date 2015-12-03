@@ -2,10 +2,10 @@
 
 namespace DI\Definition\Resolver;
 
-use DI\Definition\Definition;
 use DI\Definition\EnvironmentVariableDefinition;
 use DI\Definition\Exception\DefinitionException;
 use DI\Definition\Helper\DefinitionHelper;
+use Interop\Container\Definition\DefinitionInterface;
 
 /**
  * Resolves a environment variable definition to a value.
@@ -37,7 +37,7 @@ class EnvironmentVariableResolver implements DefinitionResolver
      *
      * {@inheritdoc}
      */
-    public function resolve(Definition $definition, array $parameters = [])
+    public function resolve(DefinitionInterface $definition, array $parameters = [])
     {
         $value = call_user_func($this->variableReader, $definition->getVariableName());
 
@@ -67,7 +67,7 @@ class EnvironmentVariableResolver implements DefinitionResolver
      *
      * {@inheritdoc}
      */
-    public function isResolvable(Definition $definition, array $parameters = [])
+    public function isResolvable(DefinitionInterface $definition, array $parameters = [])
     {
         return true;
     }

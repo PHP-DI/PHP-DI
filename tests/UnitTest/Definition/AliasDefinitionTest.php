@@ -27,7 +27,7 @@ class AliasDefinitionTest extends \PHPUnit_Framework_TestCase
     {
         $definition = new AliasDefinition('foo', 'bar');
 
-        $this->assertEquals('bar', $definition->getTargetEntryName());
+        $this->assertEquals('bar', $definition->getTarget());
     }
 
     /**

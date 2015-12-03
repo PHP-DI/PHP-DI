@@ -3,9 +3,9 @@
 namespace DI\Definition\Resolver;
 
 use DI\Definition\DecoratorDefinition;
-use DI\Definition\Definition;
 use DI\Definition\Exception\DefinitionException;
 use Interop\Container\ContainerInterface;
+use Interop\Container\Definition\DefinitionInterface;
 
 /**
  * Resolves a decorator definition to a value.
@@ -47,7 +47,7 @@ class DecoratorResolver implements DefinitionResolver
      *
      * {@inheritdoc}
      */
-    public function resolve(Definition $definition, array $parameters = [])
+    public function resolve(DefinitionInterface $definition, array $parameters = [])
     {
         $callable = $definition->getCallable();
 
@@ -60,7 +60,7 @@ class DecoratorResolver implements DefinitionResolver
 
         $decoratedDefinition = $definition->getDecoratedDefinition();
 
-        if (! $decoratedDefinition instanceof Definition) {
+        if (! $decoratedDefinition instanceof DefinitionInterface) {
             if (! $definition->getSubDefinitionName()) {
                 throw new DefinitionException('Decorators cannot be nested in another definition');
             }
@@ -79,7 +79,7 @@ class DecoratorResolver implements DefinitionResolver
     /**
      * {@inheritdoc}
      */
-    public function isResolvable(Definition $definition, array $parameters = [])
+    public function isResolvable(DefinitionInterface $definition, array $parameters = [])
     {
         return true;
     }

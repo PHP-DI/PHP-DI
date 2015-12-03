@@ -2,11 +2,11 @@
 
 namespace DI\Definition\Resolver;
 
-use DI\Definition\Definition;
 use DI\Definition\Exception\DefinitionException;
 use DI\Definition\FactoryDefinition;
 use DI\Invoker\FactoryParameterResolver;
 use Interop\Container\ContainerInterface;
+use Interop\Container\Definition\DefinitionInterface;
 use Invoker\Exception\NotCallableException;
 use Invoker\Exception\NotEnoughParametersException;
 use Invoker\Invoker;
@@ -51,7 +51,7 @@ class FactoryResolver implements DefinitionResolver
      *
      * {@inheritdoc}
      */
-    public function resolve(Definition $definition, array $parameters = [])
+    public function resolve(DefinitionInterface $definition, array $parameters = [])
     {
         if (! $this->invoker) {
             $parameterResolver = new ResolverChain([
@@ -82,7 +82,7 @@ class FactoryResolver implements DefinitionResolver
     /**
      * {@inheritdoc}
      */
-    public function isResolvable(Definition $definition, array $parameters = [])
+    public function isResolvable(DefinitionInterface $definition, array $parameters = [])
     {
         return true;
     }

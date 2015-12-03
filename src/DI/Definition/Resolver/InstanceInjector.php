@@ -2,9 +2,9 @@
 
 namespace DI\Definition\Resolver;
 
-use DI\Definition\Definition;
 use DI\Definition\InstanceDefinition;
 use DI\DependencyException;
+use Interop\Container\Definition\DefinitionInterface;
 use Interop\Container\Exception\NotFoundException;
 
 /**
@@ -22,7 +22,7 @@ class InstanceInjector extends ObjectCreator
      *
      * {@inheritdoc}
      */
-    public function resolve(Definition $definition, array $parameters = [])
+    public function resolve(DefinitionInterface $definition, array $parameters = [])
     {
         try {
             $this->injectMethodsAndProperties($definition->getInstance(), $definition->getObjectDefinition());
@@ -39,7 +39,7 @@ class InstanceInjector extends ObjectCreator
     /**
      * {@inheritdoc}
      */
-    public function isResolvable(Definition $definition, array $parameters = [])
+    public function isResolvable(DefinitionInterface $definition, array $parameters = [])
     {
         return true;
     }

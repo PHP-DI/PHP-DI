@@ -2,9 +2,9 @@
 
 namespace DI\Definition\Resolver;
 
-use DI\Definition\AliasDefinition;
-use DI\Definition\Definition;
 use Interop\Container\ContainerInterface;
+use Interop\Container\Definition\DefinitionInterface;
+use Interop\Container\Definition\ReferenceDefinitionInterface;
 
 /**
  * Resolves an alias definition to a value.
@@ -22,8 +22,6 @@ class AliasResolver implements DefinitionResolver
     /**
      * The resolver needs a container.
      * This container will be used to get the entry to which the alias points to.
-     *
-     * @param ContainerInterface $container
      */
     public function __construct(ContainerInterface $container)
     {
@@ -35,22 +33,22 @@ class AliasResolver implements DefinitionResolver
      *
      * This will return the entry the alias points to.
      *
-     * @param AliasDefinition $definition
+     * @param ReferenceDefinitionInterface $definition
      *
      * {@inheritdoc}
      */
-    public function resolve(Definition $definition, array $parameters = [])
+    public function resolve(DefinitionInterface $definition, array $parameters = [])
     {
-        return $this->container->get($definition->getTargetEntryName());
+        return $this->container->get($definition->getTarget());
     }
 
     /**
-     * @param AliasDefinition $definition
+     * @param ReferenceDefinitionInterface $definition
      *
      * {@inheritdoc}
      */
-    public function isResolvable(Definition $definition, array $parameters = [])
+    public function isResolvable(DefinitionInterface $definition, array $parameters = [])
     {
-        return $this->container->has($definition->getTargetEntryName());
+        return $this->container->has($definition->getTarget());
     }
 }

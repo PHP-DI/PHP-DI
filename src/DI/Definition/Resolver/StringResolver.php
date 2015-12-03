@@ -2,11 +2,11 @@
 
 namespace DI\Definition\Resolver;
 
-use DI\Definition\Definition;
 use DI\Definition\StringDefinition;
 use DI\DependencyException;
 use DI\NotFoundException;
 use Interop\Container\ContainerInterface;
+use Interop\Container\Definition\DefinitionInterface;
 
 /**
  * Resolves a string expression.
@@ -41,7 +41,7 @@ class StringResolver implements DefinitionResolver
      *
      * {@inheritdoc}
      */
-    public function resolve(Definition $definition, array $parameters = [])
+    public function resolve(DefinitionInterface $definition, array $parameters = [])
     {
         $expression = $definition->getExpression();
 
@@ -67,7 +67,7 @@ class StringResolver implements DefinitionResolver
     /**
      * {@inheritdoc}
      */
-    public function isResolvable(Definition $definition, array $parameters = [])
+    public function isResolvable(DefinitionInterface $definition, array $parameters = [])
     {
         return true;
     }

@@ -3,13 +3,14 @@
 namespace DI\Definition;
 
 use DI\Scope;
+use Interop\Container\Definition\ReferenceDefinitionInterface;
 
 /**
  * Defines an alias from an entry to another.
  *
  * @author Matthieu Napoli <matthieu@mnapoli.fr>
  */
-class AliasDefinition implements CacheableDefinition
+class AliasDefinition implements CacheableDefinition, ReferenceDefinitionInterface
 {
     /**
      * Entry name.
@@ -21,7 +22,7 @@ class AliasDefinition implements CacheableDefinition
      * Name of the target entry.
      * @var string
      */
-    private $targetEntryName;
+    private $target;
 
     /**
      * @param string $name            Entry name
@@ -30,11 +31,11 @@ class AliasDefinition implements CacheableDefinition
     public function __construct($name, $targetEntryName)
     {
         $this->name = $name;
-        $this->targetEntryName = $targetEntryName;
+        $this->target = $targetEntryName;
     }
 
     /**
-     * @return string Entry name
+     * {@inheritdoc}
      */
     public function getName()
     {
@@ -50,10 +51,10 @@ class AliasDefinition implements CacheableDefinition
     }
 
     /**
-     * @return string
+     * {@inheritdoc}
      */
-    public function getTargetEntryName()
+    public function getTarget()
     {
-        return $this->targetEntryName;
+        return $this->target;
     }
 }

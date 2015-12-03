@@ -3,10 +3,10 @@
 namespace DI\Definition\Resolver;
 
 use DI\Definition\ArrayDefinition;
-use DI\Definition\Definition;
 use DI\Definition\Helper\DefinitionHelper;
 use DI\DependencyException;
 use Exception;
+use Interop\Container\Definition\DefinitionInterface;
 
 /**
  * Resolves an array definition to a value.
@@ -38,7 +38,7 @@ class ArrayResolver implements DefinitionResolver
      *
      * {@inheritdoc}
      */
-    public function resolve(Definition $definition, array $parameters = [])
+    public function resolve(DefinitionInterface $definition, array $parameters = [])
     {
         $values = $definition->getValues();
 
@@ -50,7 +50,7 @@ class ArrayResolver implements DefinitionResolver
     /**
      * {@inheritdoc}
      */
-    public function isResolvable(Definition $definition, array $parameters = [])
+    public function isResolvable(DefinitionInterface $definition, array $parameters = [])
     {
         return true;
     }

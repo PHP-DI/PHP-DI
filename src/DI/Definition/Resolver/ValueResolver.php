@@ -2,8 +2,8 @@
 
 namespace DI\Definition\Resolver;
 
-use DI\Definition\Definition;
 use DI\Definition\ValueDefinition;
+use Interop\Container\Definition\DefinitionInterface;
 
 /**
  * Resolves a value definition to a value.
@@ -22,7 +22,7 @@ class ValueResolver implements DefinitionResolver
      *
      * {@inheritdoc}
      */
-    public function resolve(Definition $definition, array $parameters = [])
+    public function resolve(DefinitionInterface $definition, array $parameters = [])
     {
         return $definition->getValue();
     }
@@ -30,7 +30,7 @@ class ValueResolver implements DefinitionResolver
     /**
      * {@inheritdoc}
      */
-    public function isResolvable(Definition $definition, array $parameters = [])
+    public function isResolvable(DefinitionInterface $definition, array $parameters = [])
     {
         return true;
     }
