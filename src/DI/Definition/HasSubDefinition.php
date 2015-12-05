@@ -2,6 +2,8 @@
 
 namespace DI\Definition;
 
+use Interop\Container\Definition\DefinitionInterface;
+
 /**
  * A definition that has a sub-definition.
  *
@@ -14,8 +16,5 @@ interface HasSubDefinition extends Definition
      */
     public function getSubDefinitionName();
 
-    /**
-     * @param Definition $definition
-     */
-    public function setSubDefinition(Definition $definition);
+    public function setSubDefinition(DefinitionInterface $definition);
 }

@@ -2,8 +2,8 @@
 
 namespace DI\Definition\Source;
 
-use DI\Definition\Definition;
 use DI\Definition\Exception\DefinitionException;
+use Interop\Container\Definition\DefinitionInterface;
 
 /**
  * Source of definitions for entries of the container.
@@ -18,7 +18,7 @@ interface DefinitionSource
      * @param string $name
      *
      * @throws DefinitionException An invalid definition was found.
-     * @return Definition|null
+     * @return DefinitionInterface|null
      */
     public function getDefinition($name);
 }

@@ -8,10 +8,12 @@ use DI\Definition\Source\CachedDefinitionSource;
 use DI\Definition\Source\DefinitionArray;
 use DI\Definition\Source\DefinitionFile;
 use DI\Definition\Source\DefinitionSource;
+use DI\Definition\Source\InteropDefinitionProvider;
 use DI\Definition\Source\SourceChain;
 use DI\Proxy\ProxyFactory;
 use Doctrine\Common\Cache\Cache;
 use Interop\Container\ContainerInterface;
+use Interop\Container\Definition\DefinitionProviderInterface;
 use InvalidArgumentException;
 
 /**
@@ -228,9 +230,10 @@ class ContainerBuilder
     /**
      * Add definitions to the container.
      *
-     * @param string|array|DefinitionSource $definitions Can be an array of definitions, the
-     *                                                   name of a file containing definitions
-     *                                                   or a DefinitionSource object.
+     * @param string|array|DefinitionSource|DefinitionProviderInterface $definitions Can be an array of definitions,
+     * the name of a file containing definitions, a DefinitionSource object or a DefinitionProviderInterface object
+     * that provides standard definitions.
+     *
      * @return $this
      */
     public function addDefinitions($definitions)
@@ -240,6 +243,8 @@ class ContainerBuilder
             $definitions = new DefinitionFile($definitions);
         } elseif (is_array($definitions)) {
             $definitions = new DefinitionArray($definitions);
+        } elseif ($definitions instanceof DefinitionProviderInterface) {
+            $definitions = new InteropDefinitionProvider($definitions);
         } elseif (! $definitions instanceof DefinitionSource) {
             throw new InvalidArgumentException(sprintf(
                 '%s parameter must be a string, an array or a DefinitionSource object, %s given',

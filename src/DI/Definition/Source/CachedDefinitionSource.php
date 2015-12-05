@@ -3,7 +3,6 @@
 namespace DI\Definition\Source;
 
 use DI\Definition\CacheableDefinition;
-use DI\Definition\Definition;
 use Doctrine\Common\Cache\Cache;
 
 /**
@@ -67,7 +66,7 @@ class CachedDefinitionSource implements DefinitionSource
      * Fetches a definition from the cache.
      *
      * @param string $name Entry name
-     * @return Definition|null|bool The cached definition, null or false if the value is not already cached
+     * @return CacheableDefinition|null|bool The cached definition, null or false if the value is not already cached
      */
     private function fetchFromCache($name)
     {
@@ -85,10 +84,9 @@ class CachedDefinitionSource implements DefinitionSource
     /**
      * Saves a definition to the cache.
      *
-     * @param string          $name Entry name
-     * @param Definition|null $definition
+     * @param string $name Entry name
      */
-    private function saveToCache($name, Definition $definition = null)
+    private function saveToCache($name, CacheableDefinition $definition = null)
     {
         $cacheKey = self::CACHE_PREFIX . $name;
 

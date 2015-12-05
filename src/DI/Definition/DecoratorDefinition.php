@@ -2,6 +2,8 @@
 
 namespace DI\Definition;
 
+use Interop\Container\Definition\DefinitionInterface;
+
 /**
  * Factory that decorates a sub-definition.
  *
@@ -23,10 +25,7 @@ class DecoratorDefinition extends FactoryDefinition implements Definition, HasSu
         return $this->getName();
     }
 
-    /**
-     * @param Definition $definition
-     */
-    public function setSubDefinition(Definition $definition)
+    public function setSubDefinition(DefinitionInterface $definition)
     {
         $this->decorated = $definition;
     }

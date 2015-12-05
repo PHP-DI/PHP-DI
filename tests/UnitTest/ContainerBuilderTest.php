@@ -2,12 +2,14 @@
 
 namespace DI\Test\UnitTest;
 
+use Assembly\ArrayDefinitionProvider;
 use DI\ContainerBuilder;
 use DI\Definition\Source\CachedDefinitionSource;
 use DI\Definition\Source\DefinitionArray;
 use DI\Definition\ValueDefinition;
 use DI\Test\UnitTest\Fixtures\FakeContainer;
 use EasyMock\EasyMock;
+use Interop\Container\Definition\ParameterDefinitionInterface;
 
 /**
  * @covers \DI\ContainerBuilder
@@ -96,6 +98,31 @@ class ContainerBuilderTest extends \PHPUnit_Framework_TestCase
         $definition = $container->definitionSource->getDefinition('foo');
         $this->assertInstanceOf('DI\Definition\ValueDefinition', $definition);
         $this->assertSame('bar', $definition->getValue());
+        $definition = $container->definitionSource->getDefinition('foofoo');
+        $this->assertInstanceOf('DI\Definition\ValueDefinition', $definition);
+        $this->assertSame('barbar', $definition->getValue());
+    }
+
+    /**
+     * @test
+     */
+    public function should_allow_to_add_definition_providers()
+    {
+        $builder = new ContainerBuilder('DI\Test\UnitTest\Fixtures\FakeContainer');
+
+        // Custom definition sources should be chained correctly
+        $builder->addDefinitions(new ArrayDefinitionProvider(['foo' => 'bar']));
+        $builder->addDefinitions(new DefinitionArray(['foofoo' => 'barbar']));
+
+        /** @var FakeContainer $container */
+        $container = $builder->build();
+
+        // We should be able to get entries from our custom definition sources
+        /** @var ParameterDefinitionInterface $definition */
+        $definition = $container->definitionSource->getDefinition('foo');
+        $this->assertInstanceOf('Interop\Container\Definition\ParameterDefinitionInterface', $definition);
+        $this->assertSame('bar', $definition->getValue());
+        /** @var ValueDefinition $definition */
         $definition = $container->definitionSource->getDefinition('foofoo');
         $this->assertInstanceOf('DI\Definition\ValueDefinition', $definition);
         $this->assertSame('barbar', $definition->getValue());

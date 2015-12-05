@@ -3,6 +3,7 @@
 namespace DI\Definition;
 
 use DI\Definition\Exception\DefinitionException;
+use Interop\Container\Definition\DefinitionInterface;
 
 /**
  * Extends an array definition by adding new elements into it.
@@ -40,7 +41,7 @@ class ArrayDefinitionExtension extends ArrayDefinition implements HasSubDefiniti
     /**
      * {@inheritdoc}
      */
-    public function setSubDefinition(Definition $definition)
+    public function setSubDefinition(DefinitionInterface $definition)
     {
         if (! $definition instanceof ArrayDefinition) {
             throw new DefinitionException(sprintf(

@@ -5,6 +5,7 @@ namespace DI\Definition;
 use DI\Definition\ObjectDefinition\MethodInjection;
 use DI\Definition\ObjectDefinition\PropertyInjection;
 use DI\Scope;
+use Interop\Container\Definition\DefinitionInterface;
 use ReflectionClass;
 
 /**
@@ -239,7 +240,7 @@ class ObjectDefinition implements Definition, CacheableDefinition, HasSubDefinit
     /**
      * {@inheritdoc}
      */
-    public function setSubDefinition(Definition $definition)
+    public function setSubDefinition(DefinitionInterface $definition)
     {
         if (! $definition instanceof self) {
             return;
