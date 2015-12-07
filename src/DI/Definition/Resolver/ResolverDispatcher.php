@@ -86,55 +86,55 @@ class ResolverDispatcher implements DefinitionResolver
     private function getDefinitionResolver(Definition $definition)
     {
         switch (true) {
-            case ($definition instanceof \DI\Definition\ObjectDefinition):
+            case $definition instanceof \DI\Definition\ObjectDefinition:
                 if (! $this->objectResolver) {
                     $this->objectResolver = new ObjectCreator($this, $this->proxyFactory);
                 }
 
                 return $this->objectResolver;
-            case ($definition instanceof \DI\Definition\ValueDefinition):
+            case $definition instanceof \DI\Definition\ValueDefinition:
                 if (! $this->valueResolver) {
                     $this->valueResolver = new ValueResolver();
                 }
 
                 return $this->valueResolver;
-            case ($definition instanceof \DI\Definition\AliasDefinition):
+            case $definition instanceof \DI\Definition\AliasDefinition:
                 if (! $this->aliasResolver) {
                     $this->aliasResolver = new AliasResolver($this->container);
                 }
 
                 return $this->aliasResolver;
-            case ($definition instanceof \DI\Definition\DecoratorDefinition):
+            case $definition instanceof \DI\Definition\DecoratorDefinition:
                 if (! $this->decoratorResolver) {
                     $this->decoratorResolver = new DecoratorResolver($this->container, $this);
                 }
 
                 return $this->decoratorResolver;
-            case ($definition instanceof \DI\Definition\FactoryDefinition):
+            case $definition instanceof \DI\Definition\FactoryDefinition:
                 if (! $this->factoryResolver) {
                     $this->factoryResolver = new FactoryResolver($this->container);
                 }
 
                 return $this->factoryResolver;
-            case ($definition instanceof \DI\Definition\ArrayDefinition):
+            case $definition instanceof \DI\Definition\ArrayDefinition:
                 if (! $this->arrayResolver) {
                     $this->arrayResolver = new ArrayResolver($this);
                 }
 
                 return $this->arrayResolver;
-            case ($definition instanceof \DI\Definition\EnvironmentVariableDefinition):
+            case $definition instanceof \DI\Definition\EnvironmentVariableDefinition:
                 if (! $this->envVariableResolver) {
                     $this->envVariableResolver = new EnvironmentVariableResolver($this);
                 }
 
                 return $this->envVariableResolver;
-            case ($definition instanceof \DI\Definition\StringDefinition):
+            case $definition instanceof \DI\Definition\StringDefinition:
                 if (! $this->stringResolver) {
                     $this->stringResolver = new StringResolver($this->container);
                 }
 
                 return $this->stringResolver;
-            case ($definition instanceof \DI\Definition\InstanceDefinition):
+            case $definition instanceof \DI\Definition\InstanceDefinition:
                 if (! $this->instanceResolver) {
                     $this->instanceResolver = new InstanceInjector($this, $this->proxyFactory);
                 }
