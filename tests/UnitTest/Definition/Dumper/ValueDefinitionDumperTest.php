@@ -16,9 +16,7 @@ class ValueDefinitionDumperTest extends \PHPUnit_Framework_TestCase
         $definition = new ValueDefinition('foo', 'bar');
         $dumper = new ValueDefinitionDumper();
 
-        $str = 'Value (
-    string(3) "bar"
-)';
+        $str = "Value ('bar')";
 
         $this->assertEquals($str, $dumper->dump($definition));
     }
@@ -28,9 +26,7 @@ class ValueDefinitionDumperTest extends \PHPUnit_Framework_TestCase
         $definition = new ValueDefinition('foo', 3306);
         $dumper = new ValueDefinitionDumper();
 
-        $str = 'Value (
-    int(3306)
-)';
+        $str = 'Value (3306)';
 
         $this->assertEquals($str, $dumper->dump($definition));
     }

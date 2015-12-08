@@ -25,13 +25,9 @@ class ValueDefinitionDumper implements DefinitionDumper
             ));
         }
 
-        ob_start();
-
-        var_dump($definition->getValue());
-
         return sprintf(
-            'Value (' . PHP_EOL . '    %s' . PHP_EOL . ')',
-            trim(ob_get_clean())
+            'Value (%s)',
+            var_export($definition->getValue(), true)
         );
     }
 }
