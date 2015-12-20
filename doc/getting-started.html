@@ -270,7 +270,7 @@
 <p>Before beginning, you need to know what dependency injection is. If you don't, there's a whole article dedicated to it: <a href="understanding-di.html">Understanding dependency injection</a>.</p>
 <h2 id="installation">Installation</h2>
 <p>Install PHP-DI with <a href="http://getcomposer.org/doc/00-intro.html">Composer</a>:</p>
-<pre><code class="language-json">composer require php-di/php-di</code></pre>
+<pre><code>composer require php-di/php-di</code></pre>
 <h2 id="basic-usage">Basic usage</h2>
 <h3 id="1-use-dependency-injection">1. Use dependency injection</h3>
 <p>First, let's write code using dependency injection without thinking about PHP-DI:</p>
@@ -399,6 +399,12 @@ $userManager = new UserManager($mailer);</code></pre>
         <script>
             $(function() {
                 hljs.initHighlightingOnLoad();
+
+                // Add anchors to headers
+                $('article h2, article h3, article h4, article h5').each(function () {
+                    var url = document.URL.replace(/#.*$/, "") + '#' + $(this).attr('id');
+                    $(this).append(' <a class="anchor" href="' + url + '">#</a>');
+                });
             });
         </script>
     

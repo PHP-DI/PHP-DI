@@ -67,11 +67,20 @@
 <h2 id="52">5.2</h2>
 <p>Improvements:</p>
 <ul>
-<li><a href="https://github.com/PHP-DI/PHP-DI/issues/272">#272</a>: Support 'Class::method' syntax for callables</li>
+<li><a href="https://github.com/PHP-DI/PHP-DI/pull/347">#347</a> (includes <a href="https://github.com/PHP-DI/PHP-DI/pull/333">#333</a> and <a href="https://github.com/PHP-DI/PHP-DI/pull/345">#345</a>): by <a href="https://github.com/jdreesen">@jdreesen</a>, <a href="https://github.com/quimcalpe">@quimcalpe</a> and <a href="https://github.com/mnapoli">@mnapoli</a>
+<ul>
+<li>Allow injection of any container object as factory parameter via type hinting</li>
+<li>Allow injection of a <code>DI\Factory\RequestedEntry</code> object to get the requested entry name</li>
+</ul></li>
+<li><a href="https://github.com/PHP-DI/PHP-DI/issues/272">#272</a>: Support <code>"Class::method""</code> syntax for callables (by <a href="https://github.com/jdreesen">@jdreesen</a>)</li>
+<li><a href="https://github.com/PHP-DI/PHP-DI/issues/332">#332</a>: IDE support (plugin and documentation) (by <a href="https://github.com/pulyaevskiy">@pulyaevskiy</a>, <a href="https://github.com/avant1">@avant1</a> and <a href="https://github.com/mnapoli">@mnapoli</a>)</li>
+<li><a href="https://github.com/PHP-DI/PHP-DI/pull/326">#326</a>: Exception messages are simpler and more consistent (by <a href="https://github.com/mnapoli">@mnapoli</a>)</li>
+<li><a href="https://github.com/PHP-DI/PHP-DI/pull/325">#325</a>: Add a &quot;Edit this page&quot; button in the website to encourage users to improve the documentation (by <a href="https://github.com/jdreesen">@jdreesen</a>)</li>
 </ul>
 <p>Bugfixes:</p>
 <ul>
-<li><a href="https://github.com/PHP-DI/PHP-DI/pull/321">#321</a>: Allow factory definitions to reference arbitrary container entries as callables</li>
+<li><a href="https://github.com/PHP-DI/PHP-DI/pull/321">#321</a>: Allow factory definitions to reference arbitrary container entries as callables (by <a href="https://github.com/jdreesen">@jdreesen</a>)</li>
+<li><a href="https://github.com/PHP-DI/PHP-DI/issues/335">#335</a>: Class imports in traits are now considered when parsing annotations (by <a href="https://github.com/thebigb">@thebigb</a>)</li>
 </ul>
 <h2 id="51">5.1</h2>
 <p>Read the <a href="news/16-php-di-5-1-released.html">news entry</a>.</p>
@@ -385,6 +394,12 @@ From 3.2 and on, properties are injected after calling the constructor.</p>
         <script>
             $(function() {
                 hljs.initHighlightingOnLoad();
+
+                // Add anchors to headers
+                $('article h2, article h3, article h4, article h5').each(function () {
+                    var url = document.URL.replace(/#.*$/, "") + '#' + $(this).attr('id');
+                    $(this).append(' <a class="anchor" href="' + url + '">#</a>');
+                });
             });
         </script>
     

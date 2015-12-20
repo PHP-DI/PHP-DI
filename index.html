@@ -104,7 +104,7 @@
     }
 }</code></pre>
             <p>
-                Covers 80% of the use cases for 0 configuration.
+                Covers 80% of the use cases with 0 configuration.
             </p>
         </div>
 
@@ -420,6 +420,12 @@ $container->make(Foo::class, $parameters);</code></pre>
         <script>
             $(function() {
                 hljs.initHighlightingOnLoad();
+
+                // Add anchors to headers
+                $('article h2, article h3, article h4, article h5').each(function () {
+                    var url = document.URL.replace(/#.*$/, "") + '#' + $(this).attr('id');
+                    $(this).append(' <a class="anchor" href="' + url + '">#</a>');
+                });
             });
         </script>
     

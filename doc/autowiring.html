@@ -267,7 +267,7 @@
 
             <h1 id="autowiring">Autowiring</h1>
 <p><em>Autowiring</em> is an exotic word that represents something very simple: <strong>the ability of the container to automatically create and inject dependencies</strong>.</p>
-<p>In order to achieve that, PHP-DI uses <a href="http://fr.php.net/manual/fr/book.reflection.php">PHP's reflection</a> to detect what parameters a constructor needs.</p>
+<p>In order to achieve that, PHP-DI uses <a href="http://php.net/manual/book.reflection.php">PHP's reflection</a> to detect what parameters a constructor needs.</p>
 <p>Let's take this example:</p>
 <pre><code class="language-php">class UserRepository
 {
@@ -343,6 +343,12 @@ $service = new UserRegistrationService($repository);</code></pre>
         <script>
             $(function() {
                 hljs.initHighlightingOnLoad();
+
+                // Add anchors to headers
+                $('article h2, article h3, article h4, article h5').each(function () {
+                    var url = document.URL.replace(/#.*$/, "") + '#' + $(this).attr('id');
+                    $(this).append(' <a class="anchor" href="' + url + '">#</a>');
+                });
             });
         </script>
     

@@ -101,11 +101,28 @@ pre code {
 }
 
 article {
+    position: relative;
     padding: 30px 0 50px 0;
     h1 {
         margin: 0 0 32px;
         padding-bottom: 32px;
         border-bottom: solid 1px @border-color;
+    }
+    // Offset so that the title is not hidden behind the nav bar
+    *[id]:before {
+        display: block;
+        content: " ";
+        margin-top: -75px;
+        height: 75px;
+        visibility: hidden;
+    }
+    .anchor {
+        position: absolute;
+        margin-left: -25px;
+        left: 0;
+    }
+    a.anchor:hover {
+        text-decoration: none;
     }
     img {
         max-width: 100%;

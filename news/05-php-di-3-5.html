@@ -132,6 +132,9 @@ no conflict with other annotations anymore</strong>.</p>
 
                 <ul class="all-posts list-unstyled">
                     <li>
+                        <a href="http://php-di.org/news/17-php-di-5-2-released.html">PHP-DI 5.2 released</a>
+                    </li>
+                    <li>
                         <a href="http://php-di.org/news/16-php-di-5-1-released.html">PHP-DI 5.1 released</a>
                     </li>
                     <li>
@@ -176,9 +179,6 @@ no conflict with other annotations anymore</strong>.</p>
                     <li>
                         <a href="http://php-di.org/news/02-php-di-3-2.html">PHP-DI 3.2 released</a>
                     </li>
-                    <li>
-                        <a href="http://php-di.org/news/01-php-di-3-1.html">PHP-DI 3.1 released</a>
-                    </li>
                 </ul>
             </div>
 
@@ -216,6 +216,12 @@ no conflict with other annotations anymore</strong>.</p>
         <script>
             $(function() {
                 hljs.initHighlightingOnLoad();
+
+                // Add anchors to headers
+                $('article h2, article h3, article h4, article h5').each(function () {
+                    var url = document.URL.replace(/#.*$/, "") + '#' + $(this).attr('id');
+                    $(this).append(' <a class="anchor" href="' + url + '">#</a>');
+                });
             });
         </script>
     

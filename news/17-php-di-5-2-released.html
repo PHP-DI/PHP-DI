@@ -12,7 +12,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>PHP-DI 4.2 released - The Dependency Injection Container for humans</title>
+    <title>PHP-DI 5.2 released - The Dependency Injection Container for humans</title>
     <meta name="description" content="PHP-DI is a Dependency Injection Container for PHP that intends to be practical and powerful">
 
     <link rel="canonical" href="http://php-di.org" />
@@ -69,126 +69,67 @@
 
                 
     <article>
-        <h1>PHP-DI 4.2 released</h1>
+        <h1>PHP-DI 5.2 released</h1>
 
         <p class="article-information">
-            Posted by Matthieu Napoli on July 29th 2014
+            Posted by Matthieu Napoli on December 20, 2015
         </p>
 
-        <p>I am happy to announce that PHP-DI version 4.2 has been released.</p>
-<p>It comes with very interesting new features, but first you need to know that it also comes with
-a small BC break! This BC break was a necessary evil to fix an buggy and inconsistent behavior:</p>
-<pre><code class="language-php">    public function __construct(Bar $bar = null)
-    {
-        $this-&gt;bar = $bar ?: $this-&gt;createDefaultBar();
-    }</code></pre>
-<p>In 4.1, by default PHP-DI would inject a <code>Bar</code> instance in the <em>optional</em> parameter.
-This is not what one would expect, and this was causing unexpected bugs because it turned optional dependencies into required dependencies.</p>
-<p>Optional parameters are now ignored (i.e. their default value is injected unless configured otherwise).
-You can of course configure explicitly an injection in optional parameters (through PHP config or annotation).</p>
-<h2 id="containercall">Container::call()</h2>
-<p>The container <a href="../doc/container.html">already provided <code>get()</code>, <code>has()</code> and <code>make()</code></a>.
-Now it can also <code>call</code> functions using dependency injection.</p>
-<p>Example:</p>
-<pre><code class="language-php">$container-&gt;call(function (LoggerInterface $logger) {
-    $logger-&gt;info('Hello world!');
-});</code></pre>
-<p><code>Container::call()</code> will call the given function and resolve the parameters automatically.
-Those familiar with AngularJS (for example) will not be lost.</p>
-<p>But what's even more interesting is that you can also explicitly set parameters if some are not supposed to be given
-by the container:</p>
-<pre><code class="language-php">$parameters = [
-    'data' =&gt; /* some variable */
-];
-
-$container-&gt;call(function (LoggerInterface $logger, $data) {
-    // ...
-}, $parameters);</code></pre>
-<p><strong>Any real life example please?</strong></p>
-<p>There are many ways <code>call()</code> can become useful, a simple example would be a controller.
-In its raw definition, a controller is a simple callable.</p>
-<p>For example if you use Silex, a controller is just a closure:</p>
-<pre><code class="language-php">$app-&gt;get('/', function(Request $request) use ($app) {
-    $twig = $app['twig'];
-
-    return $twig-&gt;render('home.twig');
-});</code></pre>
-<p>What the framework does to call the controller is simple:</p>
-<pre><code class="language-php">$request = new Request(/* ... */);
-$controller = /* get from the router */;
-
-// Call the controller
-$controller($request);</code></pre>
-<p>What if the MVC framework used <code>Container::call()</code>?</p>
-<pre><code class="language-php">$request = new Request(/* ... */);
-$controller = /* get from the router */;
-
-// Call the controller
-$container-&gt;call($controller, [
-    'request' =&gt; $request
-]);</code></pre>
-<p>That allows to use dependency injection instead of the Service Locator antipattern:</p>
-<pre><code class="language-php">$app-&gt;get('/', function(Twig_Environment $twig, Request $request) use ($app) {
-    return $twig-&gt;render('home.twig');
-});</code></pre>
-<p>And that becomes even more interesting if you controller are classes!
-You can have PHP-DI instantiate your controller (using DI) <strong>and</strong> call the method:</p>
-<pre><code class="language-php">class HomeController {
-    public function helloAction($name) {
-        echo 'Hello ' . $name;
-    }
-}
-
-$controller = $container-&gt;make('HomeController');
-$container-&gt;call(
-    array($controller, 'helloAction'), // this is the callable
-    $_GET                              // parameters that can be injected
-);</code></pre>
-<p>What's great using <code>make()</code> and <code>call()</code>:</p>
+        <p>I am happy to announce that PHP-DI version 5.2 has been released. The main changes in this new versions are:</p>
 <ul>
-<li>you have dependency injection in your controller class (constructor, property, etc.)</li>
-<li>you can inject services in your actions</li>
-<li>you can also inject request parameters in your actions (here <code>$_GET</code> is used for the dirty example)</li>
+<li>new features for factories</li>
+<li>improved documentation (including finally adding anchors to headers!)</li>
+<li>simpler and clearer exception messages</li>
+<li>bugfixes</li>
 </ul>
-<p>You can see a more complete (and working) example here: <a href="https://github.com/mnapoli/minimal-app">mnapoli/minimal-app</a>.</p>
-<p>Of course, this is just an example, you are not supposed to re-write an MVC framework.
-But hopefully it helps to see the potential behind <code>call()</code>.</p>
-<p><a href="../doc/container.html">Read more in the documentation of the container's API</a></p>
-<h2 id="wildcards-in-definitions">Wildcards in definitions</h2>
-<p>You can use wildcards to define a batch of entries. It can be very useful to bind interfaces to implementations:</p>
+<h2 id="factories">Factories</h2>
+<h3 id="injection-in-closures">Injection in closures</h3>
+<p>Currently the only way to write factories is to write a callable <strong>that takes the container as the only parameter</strong>:</p>
 <pre><code class="language-php">return [
-    'Blog\Domain\*RepositoryInterface' =&gt; DI\object('Blog\Architecture\*DoctrineRepository'),
+    'foo' =&gt; function(ContainerInterface $c) {
+        $bar = $c-&gt;get('bar');
+        return new Foo($bar);
+    },
 ];</code></pre>
-<p>In our example, the wildcard will match <code>Blog\Domain\UserRepositoryInterface</code>, and it will map it to
-<code>Blog\Architecture\UserDoctrineRepository</code>.</p>
-<p>Good to know:</p>
-<ul>
-<li>the wildcard does not match across namespaces</li>
-<li>an exact match (i.e. without <code>*</code>) will always be chosen over a match with a wildcard
-(first PHP-DI looks for an exact match, then it searches in the wildcards)</li>
-<li>in case of &quot;conflicts&quot; (i.e. 2 different matches with wildcards), the first match will prevail</li>
-</ul>
-<h2 id="prototype-scope-for-factories">Prototype scope for factories</h2>
-<p>Up till 4.1, factories where only in the Singleton scope: they were only called once.</p>
-<p>Now you can use the Prototype scope:</p>
+<p>To get dependencies in your factory, you could either call <code>$container-&gt;get()</code> (as shown above) or create a full factory class that can use dependency injection in its constructor.</p>
+<p>From 5.2 and above, there is a simpler solution: <strong>you can inject services by type-hint into your closures:</strong></p>
 <pre><code class="language-php">return [
-    'foo' =&gt; DI\factory(function () {
-        return new Foo();
-    })-&gt;scope(Scope::PROTOTYPE()),
+    'foo' =&gt; function(Bar $bar) {
+        return new Foo($bar);
+    },
 ];</code></pre>
-<p>With this scope, the factory will be called each time <code>foo</code> is retrieved.</p>
-<h2 id="41">4.1</h2>
-<p>Are you still on v4.0? Here is a reminder of the cool things included in 4.1:</p>
-<ul>
-<li>HHVM support</li>
-<li>better exception messages</li>
-<li><a href="https://github.com/container-interop/container-interop">container-interop</a> compatibility, which means better
-integration in other frameworks</li>
-<li>better Symfony 2 documentation</li>
-</ul>
+<p>Of course autowiring is limited to container entries you can type-hint (so it will not work with, for example, scalar values), but it will help you write simpler factories most of the time.</p>
+<p>Of course this is completely <strong>optional and backward compatible</strong>: you can still inject the container as before. Some work has also been done to ensure this new feature comes with no performance penalty (thanks <a href="https://blackfire.io/">Blackfire</a>).</p>
+<h3 id="get-the-requested-name">Get the requested name</h3>
+<p>Sometimes the same factory will be used to create several services, for example for a <code>RepositoryFactory</code>, or when using <a href="http://php-di.org/doc/php-definitions.html#wildcards">wildcards in definitions</a>.</p>
+<p>In those cases, you can now inject an argument type-hinted as <code>DI\Factory\RequestedEntry</code> to get the name of the entry that is being constructed:</p>
+<pre><code class="language-php">return [
+    'Acme\Repository\*Repository' =&gt; function(EntityManager $entityManager, RequestedEntry $e) {
+        $class = $e-&gt;getName();
+        return new $class($entityManager);
+    },
+];</code></pre>
+<p>The <code>RequestedEntry</code> object has a very simple API:</p>
+<pre><code class="language-php">interface RequestedEntry
+{
+    public function getName();
+}</code></pre>
 <h2 id="change-log">Change log</h2>
-<p>Some other minor bugfixes where included in the release.</p>
-<p>You can read the complete <a href="../change-log.html">change log</a>.</p>
+<p>Here is the complete <a href="../change-log.html">change log</a>:</p>
+<ul>
+<li><a href="https://github.com/PHP-DI/PHP-DI/pull/347">#347</a> (includes <a href="https://github.com/PHP-DI/PHP-DI/pull/333">#333</a> and <a href="https://github.com/PHP-DI/PHP-DI/pull/345">#345</a>): by <a href="https://github.com/jdreesen">@jdreesen</a>, <a href="https://github.com/quimcalpe">@quimcalpe</a> and <a href="https://github.com/mnapoli">@mnapoli</a>
+<ul>
+<li>Allow injection of any container object as factory parameter via type hinting</li>
+<li>Allow injection of a <code>DI\Factory\RequestedEntry</code> object to get the requested entry name</li>
+</ul></li>
+<li><a href="https://github.com/PHP-DI/PHP-DI/issues/272">#272</a>: Support <code>"Class::method""</code> syntax for callables (by <a href="https://github.com/jdreesen">@jdreesen</a>)</li>
+<li><a href="https://github.com/PHP-DI/PHP-DI/issues/332">#332</a>: IDE support (plugin and documentation) (by <a href="https://github.com/pulyaevskiy">@pulyaevskiy</a>, <a href="https://github.com/avant1">@avant1</a> and <a href="https://github.com/mnapoli">@mnapoli</a>)</li>
+<li><a href="https://github.com/PHP-DI/PHP-DI/pull/326">#326</a>: Exception messages are simpler and more consistent (by <a href="https://github.com/mnapoli">@mnapoli</a>)</li>
+<li><a href="https://github.com/PHP-DI/PHP-DI/pull/325">#325</a>: Add a &quot;Edit this page&quot; button in the website to encourage users to improve the documentation (by <a href="https://github.com/jdreesen">@jdreesen</a>)</li>
+<li><a href="https://github.com/PHP-DI/PHP-DI/pull/321">#321</a>: Allow factory definitions to reference arbitrary container entries as callables (by <a href="https://github.com/jdreesen">@jdreesen</a>)</li>
+<li><a href="https://github.com/PHP-DI/PHP-DI/issues/335">#335</a>: Class imports in traits are now considered when parsing annotations (by <a href="https://github.com/thebigb">@thebigb</a>)</li>
+</ul>
+<p>Let's finish on a &quot;Thank you&quot; to all contributors involved in this release, especially <a href="https://github.com/jdreesen">@jdreesen</a> for his awesome work on several longstanding issues and <a href="https://github.com/quimcalpe">@quimcalpe</a> for his patience and great contribution to <a href="https://github.com/PHP-DI/PHP-DI/pull/347">#347</a>.</p>
     </article>
 
     <h3>
