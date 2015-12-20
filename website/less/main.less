@@ -107,6 +107,14 @@ article {
         padding-bottom: 32px;
         border-bottom: solid 1px @border-color;
     }
+    // Offset so that the title is not hidden behind the nav bar
+    *[id]:before {
+        display: block;
+        content: " ";
+        margin-top: -75px;
+        height: 75px;
+        visibility: hidden;
+    }
     img {
         max-width: 100%;
     }
