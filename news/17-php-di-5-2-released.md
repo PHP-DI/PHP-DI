@@ -8,7 +8,7 @@ date: December 20, 2015
 I am happy to announce that PHP-DI version 5.2 has been released. The main changes in this new versions are:
 
 - new features for factories
-- improved documentation
+- improved documentation (including finally adding anchors to headers!)
 - simpler and clearer exception messages
 - bugfixes
 
