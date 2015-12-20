@@ -4,7 +4,9 @@
 
 Improvements:
 
-- [#347](https://github.com/PHP-DI/PHP-DI/pull/347) (includes [#333](https://github.com/PHP-DI/PHP-DI/pull/333) and [#345](https://github.com/PHP-DI/PHP-DI/pull/345)): Allow injection of any container object as factory parameter via type hinting, and allow injection of a `DI\Factory\RequestedEntry` object to get the requested entry name. (by [@jdreesen](https://github.com/jdreesen), [@quimcalpe](https://github.com/quimcalpe) and [@mnapoli](https://github.com/mnapoli))
+- [#347](https://github.com/PHP-DI/PHP-DI/pull/347) (includes [#333](https://github.com/PHP-DI/PHP-DI/pull/333) and [#345](https://github.com/PHP-DI/PHP-DI/pull/345)): by [@jdreesen](https://github.com/jdreesen), [@quimcalpe](https://github.com/quimcalpe) and [@mnapoli](https://github.com/mnapoli)
+    - Allow injection of any container object as factory parameter via type hinting
+    - Allow injection of a `DI\Factory\RequestedEntry` object to get the requested entry name
 - [#272](https://github.com/PHP-DI/PHP-DI/issues/272): Support `Class::method` syntax for callables (by [@jdreesen](https://github.com/jdreesen))
 - [#332](https://github.com/PHP-DI/PHP-DI/issues/332): IDE support (plugin and documentation) (by [@pulyaevskiy](https://github.com/pulyaevskiy), [@avant1](https://github.com/avant1) and [@mnapoli](https://github.com/mnapoli))
 - [#326](https://github.com/PHP-DI/PHP-DI/pull/326): Exception messages are simpler and more consistent (by [@mnapoli](https://github.com/mnapoli))
