@@ -98,12 +98,6 @@ class ResolverDispatcher implements DefinitionResolver
                 }
 
                 return $this->objectResolver;
-            case $definition instanceof \DI\Definition\AliasDefinition:
-                if (! $this->aliasResolver) {
-                    $this->aliasResolver = new AliasResolver($this->container);
-                }
-
-                return $this->aliasResolver;
             case $definition instanceof \DI\Definition\DecoratorDefinition:
                 if (! $this->decoratorResolver) {
                     $this->decoratorResolver = new DecoratorResolver($this->container, $this);

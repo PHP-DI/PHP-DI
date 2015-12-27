@@ -5,7 +5,6 @@ namespace DI\Test\UnitTest\Definition;
 use DI\Definition\ValueDefinition;
 use DI\Scope;
 use EasyMock\EasyMock;
-use Interop\Container\ContainerInterface;
 
 /**
  * @covers \DI\Definition\ValueDefinition
@@ -46,7 +45,8 @@ class ValueDefinitionTest extends \PHPUnit_Framework_TestCase
     public function should_be_resolvable()
     {
         $definition = new ValueDefinition('foo', 'bar');
-        $this->assertTrue($definition->isResolvable());
+        $container = $this->easyMock('Interop\Container\ContainerInterface');
+        $this->assertTrue($definition->isResolvable($container));
     }
 
     /**
@@ -55,7 +55,7 @@ class ValueDefinitionTest extends \PHPUnit_Framework_TestCase
     public function should_resolve()
     {
         $definition = new ValueDefinition('foo', 'bar');
-        $container = $this->easyMock(ContainerInterface::class);
+        $container = $this->easyMock('Interop\Container\ContainerInterface');
         $this->assertEquals('bar', $definition->resolve($container));
     }
 }

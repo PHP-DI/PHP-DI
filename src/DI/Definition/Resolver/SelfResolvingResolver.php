@@ -41,6 +41,6 @@ class SelfResolvingResolver implements DefinitionResolver
      */
     public function isResolvable(Definition $definition, array $parameters = [])
     {
-        return $definition->isResolvable();
+        return $definition->isResolvable($this->container);
     }
 }

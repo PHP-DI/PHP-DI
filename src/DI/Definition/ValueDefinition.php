@@ -64,7 +64,7 @@ class ValueDefinition implements Definition, SelfResolvingDefinition
         return $this->getValue();
     }
 
-    public function isResolvable()
+    public function isResolvable(ContainerInterface $container)
     {
         return true;
     }

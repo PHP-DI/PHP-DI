@@ -23,5 +23,5 @@ interface SelfResolvingDefinition extends Definition
      *
      * @return bool
      */
-    public function isResolvable();
+    public function isResolvable(ContainerInterface $container);
 }
