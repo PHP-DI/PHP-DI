@@ -7,12 +7,12 @@ use DI\Definition\SelfResolvingDefinition;
 use Interop\Container\ContainerInterface;
 
 /**
- * Resolves a self-resolvable definition.
+ * Resolves self-resolving definitions.
  *
  * @since 5.3
  * @author Matthieu Napoli <matthieu@mnapoli.fr>
  */
-class SelfResolvingResolver implements DefinitionResolver
+class SelfResolver implements DefinitionResolver
 {
     /**
      * @var ContainerInterface

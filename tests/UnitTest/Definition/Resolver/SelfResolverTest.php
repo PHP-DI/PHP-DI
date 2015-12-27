@@ -2,15 +2,14 @@
 
 namespace DI\Test\UnitTest\Definition\Resolver;
 
-use DI\Definition\Resolver\SelfResolvingResolver;
+use DI\Definition\Resolver\SelfResolver;
 use DI\Definition\ValueDefinition;
 use EasyMock\EasyMock;
-use Interop\Container\ContainerInterface;
 
 /**
- * @covers \DI\Definition\Resolver\SelfResolvingResolver
+ * @covers \DI\Definition\Resolver\SelfResolver
  */
-class SelfResolvingResolverTest extends \PHPUnit_Framework_TestCase
+class SelfResolverTest extends \PHPUnit_Framework_TestCase
 {
     use EasyMock;
 
@@ -19,8 +18,8 @@ class SelfResolvingResolverTest extends \PHPUnit_Framework_TestCase
      */
     public function should_resolve_definitions()
     {
-        $container = $this->easyMock(ContainerInterface::class);
-        $resolver = new SelfResolvingResolver($container);
+        $container = $this->easyMock('Interop\Container\ContainerInterface');
+        $resolver = new SelfResolver($container);
 
         $definition = new ValueDefinition('foo', 'bar');
 

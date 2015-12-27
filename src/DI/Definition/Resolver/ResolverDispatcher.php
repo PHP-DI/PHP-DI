@@ -88,7 +88,7 @@ class ResolverDispatcher implements DefinitionResolver
         switch (true) {
             case $definition instanceof \DI\Definition\SelfResolvingDefinition:
                 if (! $this->selfResolvingResolver) {
-                    $this->selfResolvingResolver = new SelfResolvingResolver($this->container);
+                    $this->selfResolvingResolver = new SelfResolver($this->container);
                 }
 
                 return $this->selfResolvingResolver;
@@ -122,12 +122,6 @@ class ResolverDispatcher implements DefinitionResolver
                 }
 
                 return $this->envVariableResolver;
-            case $definition instanceof \DI\Definition\StringDefinition:
-                if (! $this->stringResolver) {
-                    $this->stringResolver = new StringResolver($this->container);
-                }
-
-                return $this->stringResolver;
             case $definition instanceof \DI\Definition\InstanceDefinition:
                 if (! $this->instanceResolver) {
                     $this->instanceResolver = new InstanceInjector($this, $this->proxyFactory);
