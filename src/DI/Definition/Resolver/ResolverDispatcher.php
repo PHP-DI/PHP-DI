@@ -27,7 +27,7 @@ class ResolverDispatcher implements DefinitionResolver
      */
     private $proxyFactory;
 
-    private $valueResolver;
+    private $selfResolvingResolver;
     private $arrayResolver;
     private $factoryResolver;
     private $decoratorResolver;
@@ -86,18 +86,18 @@ class ResolverDispatcher implements DefinitionResolver
     private function getDefinitionResolver(Definition $definition)
     {
         switch (true) {
+            case $definition instanceof \DI\Definition\SelfResolvingDefinition:
+                if (! $this->selfResolvingResolver) {
+                    $this->selfResolvingResolver = new SelfResolvingResolver($this->container);
+                }
+
+                return $this->selfResolvingResolver;
             case $definition instanceof \DI\Definition\ObjectDefinition:
                 if (! $this->objectResolver) {
                     $this->objectResolver = new ObjectCreator($this, $this->proxyFactory);
                 }
 
                 return $this->objectResolver;
-            case $definition instanceof \DI\Definition\ValueDefinition:
-                if (! $this->valueResolver) {
-                    $this->valueResolver = new ValueResolver();
-                }
-
-                return $this->valueResolver;
             case $definition instanceof \DI\Definition\AliasDefinition:
                 if (! $this->aliasResolver) {
                     $this->aliasResolver = new AliasResolver($this->container);
