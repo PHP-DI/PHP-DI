@@ -18,7 +18,7 @@ The Doctrine Cache library is not installed by default with PHP-DI, you need to 
 {
     "require": {
         ...
-        "doctrine/cache": "~1.0"
+        "doctrine/cache": "~1.4"
     }
 }
 ```
