@@ -154,8 +154,8 @@
             <h4>Inline factories</h4>
 <pre><code class="php">return [
     Foo::class => function ($container) {
-        $dependency = $container->get(Bar::class);
-        return Foo::create($dependency);
+        $bar = $container->get(Bar::class);
+        return new Foo($bar);
     }
 ];</code></pre>
         </div>
