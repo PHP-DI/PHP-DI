@@ -33,7 +33,9 @@
         "mnapoli/phpunit-easymock": "~0.2.0",
         "doctrine/cache": "~1.4",
         "doctrine/annotations": "~1.2",
-        "ocramius/proxy-manager": "~1.0"
+        "ocramius/proxy-manager": "~1.0",
+        "puli/repository": "1.0.0-beta8@beta",
+        "puli/discovery": "1.0.0-beta8@beta"
     },
     "replace": {
         "mnapoli/php-di": "*"
