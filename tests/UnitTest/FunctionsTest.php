@@ -1,20 +1,13 @@
 <?php
-/**
- * PHP-DI
- *
- * @link      http://php-di.org/
- * @copyright Matthieu Napoli (http://mnapoli.fr/)
- * @license   http://www.opensource.org/licenses/mit-license.php MIT (see the LICENSE file)
- */
 
 namespace DI\Test\UnitTest;
 
 use DI\Definition\ArrayDefinition;
 use DI\Definition\ArrayDefinitionExtension;
-use DI\Definition\ObjectDefinition;
 use DI\Definition\Helper\ArrayDefinitionExtensionHelper;
-use DI\Definition\Helper\ObjectDefinitionHelper;
 use DI\Definition\Helper\EnvironmentVariableDefinitionHelper;
+use DI\Definition\Helper\ObjectDefinitionHelper;
+use DI\Definition\ObjectDefinition;
 
 /**
  * Tests the helper functions.

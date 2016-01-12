@@ -1,11 +1,4 @@
 <?php
-/**
- * PHP-DI
- *
- * @link      http://php-di.org/
- * @copyright Matthieu Napoli (http://mnapoli.fr/)
- * @license   http://www.opensource.org/licenses/mit-license.php MIT (see the LICENSE file)
- */
 
 namespace DI\Test\IntegrationTest\Definitions;
 
@@ -13,7 +6,7 @@ use DI\ContainerBuilder;
 use Interop\Container\ContainerInterface;
 
 /**
- * Test decorator definitions
+ * Test decorator definitions.
  *
  * @coversNothing
  */
@@ -62,6 +55,7 @@ class DecoratorDefinitionTest extends \PHPUnit_Framework_TestCase
         $builder->addDefinitions([
             'foo' => \DI\decorate(function ($previous) {
                 $previous->foo = 'bar';
+
                 return $previous;
             }),
         ]);

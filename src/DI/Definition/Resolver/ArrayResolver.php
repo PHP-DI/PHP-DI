@@ -1,11 +1,4 @@
 <?php
-/**
- * PHP-DI
- *
- * @link      http://mnapoli.github.com/PHP-DI/
- * @copyright Matthieu Napoli (http://mnapoli.fr/)
- * @license   http://www.opensource.org/licenses/mit-license.php MIT (see the LICENSE file)
- */
 
 namespace DI\Definition\Resolver;
 
@@ -81,7 +74,7 @@ class ArrayResolver implements DefinitionResolver
             throw $e;
         } catch (Exception $e) {
             throw new DependencyException(sprintf(
-                "Error while resolving %s[%s]. %s",
+                'Error while resolving %s[%s]. %s',
                 $definition->getName(),
                 $key,
                 $e->getMessage()

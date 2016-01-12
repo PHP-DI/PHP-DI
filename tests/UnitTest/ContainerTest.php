@@ -1,11 +1,4 @@
 <?php
-/**
- * PHP-DI
- *
- * @link      http://php-di.org/
- * @copyright Matthieu Napoli (http://mnapoli.fr/)
- * @license   http://www.opensource.org/licenses/mit-license.php MIT (see the LICENSE file)
- */
 
 namespace DI\Test\UnitTest;
 
@@ -13,7 +6,7 @@ use DI\ContainerBuilder;
 use stdClass;
 
 /**
- * Test class for Container
+ * Test class for Container.
  *
  * @covers \DI\Container
  */
@@ -39,7 +32,7 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Test that injecting an existing object returns the same reference to that object
+     * Test that injecting an existing object returns the same reference to that object.
      */
     public function testInjectOnMaintainsReferentialEquality()
     {
@@ -51,7 +44,7 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Test that injection on null yields null
+     * Test that injection on null yields null.
      */
     public function testInjectNull()
     {
@@ -62,7 +55,7 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * We should be able to set a null value
+     * We should be able to set a null value.
      * @see https://github.com/mnapoli/PHP-DI/issues/79
      */
     public function testSetNullValue()
@@ -74,7 +67,7 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * The container auto-registers itself
+     * The container auto-registers itself.
      */
     public function testContainerIsRegistered()
     {
@@ -84,7 +77,7 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * The container auto-registers itself (with the factory interface)
+     * The container auto-registers itself (with the factory interface).
      */
     public function testFactoryInterfaceIsRegistered()
     {
@@ -94,7 +87,7 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * The container auto-registers itself (with the invoker interface)
+     * The container auto-registers itself (with the invoker interface).
      */
     public function testInvokerInterfaceIsRegistered()
     {

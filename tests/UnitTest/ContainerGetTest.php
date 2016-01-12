@@ -1,11 +1,4 @@
 <?php
-/**
- * PHP-DI
- *
- * @link      http://php-di.org/
- * @copyright Matthieu Napoli (http://mnapoli.fr/)
- * @license   http://www.opensource.org/licenses/mit-license.php MIT (see the LICENSE file)
- */
 
 namespace DI\Test\UnitTest;
 
@@ -13,7 +6,7 @@ use DI\ContainerBuilder;
 use stdClass;
 
 /**
- * Test class for Container
+ * Test class for Container.
  *
  * @covers \DI\Container
  */
@@ -137,7 +130,7 @@ class ContainerGetTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Tests a class can be initialized with a parameter passed by reference
+     * Tests a class can be initialized with a parameter passed by reference.
      */
     public function testPassByReferenceParameter()
     {

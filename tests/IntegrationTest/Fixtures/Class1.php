@@ -1,11 +1,4 @@
 <?php
-/**
- * PHP-DI
- *
- * @link      http://php-di.org/
- * @copyright Matthieu Napoli (http://mnapoli.fr/)
- * @license   http://www.opensource.org/licenses/mit-license.php MIT (see the LICENSE file)
- */
 
 namespace DI\Test\IntegrationTest\Fixtures;
 
@@ -13,7 +6,7 @@ use DI\Annotation\Inject;
 use DI\Annotation\Injectable;
 
 /**
- * Fixture class
+ * Fixture class.
  * @Injectable(scope="prototype")
  */
 class Class1
@@ -75,7 +68,7 @@ class Class1
         $this->constructorParam3 = $param3;
 
         if ($optional !== true) {
-            throw new \Exception("Expected optional parameter to not be defined");
+            throw new \Exception('Expected optional parameter to not be defined');
         }
     }
 
@@ -91,7 +84,7 @@ class Class1
         $this->method1Param1 = $param1;
 
         if ($optional !== true) {
-            throw new \Exception("Expected optional parameter to not be defined");
+            throw new \Exception('Expected optional parameter to not be defined');
         }
     }
 

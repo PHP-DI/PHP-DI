@@ -1,18 +1,11 @@
 <?php
-/**
- * PHP-DI
- *
- * @link      http://php-di.org/
- * @copyright Matthieu Napoli (http://mnapoli.fr/)
- * @license   http://www.opensource.org/licenses/mit-license.php MIT (see the LICENSE file)
- */
 
 namespace DI\Test\UnitTest\Definition\Source;
 
-use DI\Definition\ObjectDefinition;
 use DI\Definition\Definition;
-use DI\Definition\Source\DefinitionArray;
+use DI\Definition\ObjectDefinition;
 use DI\Definition\Source\Autowiring;
+use DI\Definition\Source\DefinitionArray;
 use DI\Definition\Source\SourceChain;
 use DI\Definition\ValueDefinition;
 

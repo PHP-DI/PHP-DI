@@ -1,11 +1,4 @@
 <?php
-/**
- * PHP-DI
- *
- * @link      http://php-di.org/
- * @copyright Matthieu Napoli (http://mnapoli.fr/)
- * @license   http://www.opensource.org/licenses/mit-license.php MIT (see the LICENSE file)
- */
 
 namespace DI\Cache;
 
@@ -31,7 +24,7 @@ use Doctrine\Common\Cache\FlushableCache;
 class ArrayCache implements Cache, FlushableCache, ClearableCache
 {
     /**
-     * @var array $data
+     * @var array
      */
     private $data = [];
 
@@ -67,7 +60,7 @@ class ArrayCache implements Cache, FlushableCache, ClearableCache
 
     public function flushAll()
     {
-        $this->data = array();
+        $this->data = [];
 
         return true;
     }

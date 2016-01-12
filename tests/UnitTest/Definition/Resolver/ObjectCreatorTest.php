@@ -1,19 +1,12 @@
 <?php
-/**
- * PHP-DI
- *
- * @link      http://php-di.org/
- * @copyright Matthieu Napoli (http://mnapoli.fr/)
- * @license   http://www.opensource.org/licenses/mit-license.php MIT (see the LICENSE file)
- */
 
 namespace DI\Test\UnitTest\Definition\Resolver;
 
 use DI\Definition\ObjectDefinition;
 use DI\Definition\ObjectDefinition\MethodInjection;
 use DI\Definition\ObjectDefinition\PropertyInjection;
-use DI\Definition\Resolver\ObjectCreator;
 use DI\Definition\Resolver\DefinitionResolver;
+use DI\Definition\Resolver\ObjectCreator;
 use DI\Proxy\ProxyFactory;
 use EasyMock\EasyMock;
 use PHPUnit_Framework_MockObject_MockObject;
@@ -24,6 +17,8 @@ use PHPUnit_Framework_MockObject_MockObject;
  */
 class ObjectCreatorTest extends \PHPUnit_Framework_TestCase
 {
+    use EasyMock;
+
     const FIXTURE_CLASS = 'DI\Test\UnitTest\Definition\Resolver\Fixture\FixtureClass';
     const FIXTURE_CLASS_NO_CONSTRUCTOR = 'DI\Test\UnitTest\Definition\Resolver\Fixture\NoConstructor';
     const FIXTURE_INTERFACE = 'DI\Test\UnitTest\Definition\Resolver\Fixture\FixtureInterface';
@@ -46,8 +41,8 @@ class ObjectCreatorTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->proxyFactory = EasyMock::mock('DI\Proxy\ProxyFactory');
-        $this->parentResolver = EasyMock::mock('DI\Definition\Resolver\DefinitionResolver');
+        $this->proxyFactory = $this->easyMock('DI\Proxy\ProxyFactory');
+        $this->parentResolver = $this->easyMock('DI\Definition\Resolver\DefinitionResolver');
 
         $this->resolver = new ObjectCreator($this->parentResolver, $this->proxyFactory);
     }
@@ -86,7 +81,7 @@ class ObjectCreatorTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Check that given parameters override the definition
+     * Check that given parameters override the definition.
      */
     public function testResolveWithParametersAndDefinition()
     {
@@ -100,7 +95,7 @@ class ObjectCreatorTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Check that useless parameters are ignored (no error)
+     * Check that useless parameters are ignored (no error).
      */
     public function testResolveWithUselessParameters()
     {
@@ -113,7 +108,7 @@ class ObjectCreatorTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Check that nested definitions are resolved in parameters
+     * Check that nested definitions are resolved in parameters.
      */
     public function testResolveWithNestedDefinitionInParameters()
     {
@@ -135,7 +130,7 @@ class ObjectCreatorTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Check that nested definitions are resolved in properties
+     * Check that nested definitions are resolved in properties.
      */
     public function testResolveWithNestedDefinitionInProperties()
     {
@@ -156,7 +151,7 @@ class ObjectCreatorTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Check that we can inject "null" into parameters and properties
+     * Check that we can inject "null" into parameters and properties.
      */
     public function testResolveNullInjections()
     {
@@ -186,7 +181,7 @@ class ObjectCreatorTest extends \PHPUnit_Framework_TestCase
     public function testUnknownClass()
     {
         $message = <<<MESSAGE
-Entry foo cannot be resolved: class bar doesn't exist
+Entry "foo" cannot be resolved: the class doesn't exist
 Full definition:
 Object (
     class = #UNKNOWN# bar
@@ -204,7 +199,7 @@ MESSAGE;
     public function testNotInstantiable()
     {
         $message = <<<MESSAGE
-Entry ArrayAccess cannot be resolved: class ArrayAccess is not instantiable
+Entry "ArrayAccess" cannot be resolved: the class is not instantiable
 Full definition:
 Object (
     class = #NOT INSTANTIABLE# ArrayAccess
@@ -221,8 +216,8 @@ MESSAGE;
 
     public function testUndefinedInjection()
     {
-        $message = <<<MESSAGE
-Entry DI\Test\UnitTest\Definition\Resolver\Fixture\FixtureClass cannot be resolved: The parameter 'param1' of DI\Test\UnitTest\Definition\Resolver\Fixture\FixtureClass::__construct has no value defined or guessable
+        $message = <<<'MESSAGE'
+Entry "DI\Test\UnitTest\Definition\Resolver\Fixture\FixtureClass" cannot be resolved: Parameter $param1 of __construct() has no value defined or guessable
 Full definition:
 Object (
     class = DI\Test\UnitTest\Definition\Resolver\Fixture\FixtureClass

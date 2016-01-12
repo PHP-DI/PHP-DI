@@ -1,11 +1,4 @@
 <?php
-/**
- * PHP-DI
- *
- * @link      http://php-di.org/
- * @copyright Matthieu Napoli (http://mnapoli.fr/)
- * @license   http://www.opensource.org/licenses/mit-license.php MIT (see the LICENSE file)
- */
 
 namespace DI\Definition\Dumper;
 
@@ -34,14 +27,14 @@ class AliasDefinitionDumper implements DefinitionDumper
 
         if ($definition->getName()) {
             return sprintf(
-                "get(%s => %s)",
+                'get(%s => %s)',
                 $definition->getName(),
                 $definition->getTargetEntryName()
             );
         }
 
         return sprintf(
-            "get(%s)",
+            'get(%s)',
             $definition->getTargetEntryName()
         );
     }

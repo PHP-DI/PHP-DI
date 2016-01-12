@@ -1,20 +1,17 @@
 <?php
-/**
- * PHP-DI
- *
- * @link      http://mnapoli.github.com/PHP-DI/
- * @copyright Matthieu Napoli (http://mnapoli.fr/)
- * @license   http://www.opensource.org/licenses/mit-license.php MIT (see the LICENSE file)
- */
 
 namespace DI\Definition\Resolver;
 
+use DI\Definition\Definition;
 use DI\Definition\Exception\DefinitionException;
 use DI\Definition\FactoryDefinition;
-use DI\Definition\Definition;
+use DI\Invoker\FactoryParameterResolver;
 use Interop\Container\ContainerInterface;
+use Invoker\Exception\NotCallableException;
+use Invoker\Exception\NotEnoughParametersException;
 use Invoker\Invoker;
 use Invoker\ParameterResolver\NumericArrayResolver;
+use Invoker\ParameterResolver\ResolverChain;
 
 /**
  * Resolves a factory definition to a value.
@@ -56,20 +53,30 @@ class FactoryResolver implements DefinitionResolver
      */
     public function resolve(Definition $definition, array $parameters = [])
     {
-        $callable = $definition->getCallable();
+        if (! $this->invoker) {
+            $parameterResolver = new ResolverChain([
+               new FactoryParameterResolver($this->container),
+               new NumericArrayResolver,
+            ]);
 
-        if (! is_callable($callable)) {
+            $this->invoker = new Invoker($parameterResolver, $this->container);
+        }
+
+        try {
+            return $this->invoker->call($definition->getCallable(), [$this->container, $definition]);
+        } catch (NotCallableException $e) {
             throw new DefinitionException(sprintf(
-                'The factory definition "%s" is not callable',
-                $definition->getName()
+                'Entry "%s" cannot be resolved: factory %s',
+                $definition->getName(),
+                $e->getMessage()
+            ));
+        } catch (NotEnoughParametersException $e) {
+            throw new DefinitionException(sprintf(
+                'Entry "%s" cannot be resolved: %s',
+                $definition->getName(),
+                $e->getMessage()
             ));
         }
-
-        if (! $this->invoker) {
-            $this->invoker = new Invoker(new NumericArrayResolver, $this->container);
-        }
-
-        return $this->invoker->call($callable, [$this->container]);
     }
 
     /**

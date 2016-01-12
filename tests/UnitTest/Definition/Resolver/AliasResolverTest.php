@@ -1,11 +1,4 @@
 <?php
-/**
- * PHP-DI
- *
- * @link      http://php-di.org/
- * @copyright Matthieu Napoli (http://mnapoli.fr/)
- * @license   http://www.opensource.org/licenses/mit-license.php MIT (see the LICENSE file)
- */
 
 namespace DI\Test\UnitTest\Definition\Resolver;
 
@@ -18,12 +11,14 @@ use EasyMock\EasyMock;
  */
 class AliasResolverTest extends \PHPUnit_Framework_TestCase
 {
+    use EasyMock;
+
     /**
      * @test
      */
     public function should_resolve_aliases()
     {
-        $container = EasyMock::mock('Interop\Container\ContainerInterface', [
+        $container = $this->easyMock('Interop\Container\ContainerInterface', [
             'get' => 42,
         ]);
         $resolver = new AliasResolver($container);

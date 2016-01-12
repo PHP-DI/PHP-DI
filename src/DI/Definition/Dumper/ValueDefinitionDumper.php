@@ -1,11 +1,4 @@
 <?php
-/**
- * PHP-DI
- *
- * @link      http://php-di.org/
- * @copyright Matthieu Napoli (http://mnapoli.fr/)
- * @license   http://www.opensource.org/licenses/mit-license.php MIT (see the LICENSE file)
- */
 
 namespace DI\Definition\Dumper;
 
@@ -32,13 +25,9 @@ class ValueDefinitionDumper implements DefinitionDumper
             ));
         }
 
-        ob_start();
-
-        var_dump($definition->getValue());
-
         return sprintf(
-            "Value (" . PHP_EOL . "    %s" . PHP_EOL . ")",
-            trim(ob_get_clean())
+            'Value (%s)',
+            var_export($definition->getValue(), true)
         );
     }
 }

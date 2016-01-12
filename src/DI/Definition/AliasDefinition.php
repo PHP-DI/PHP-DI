@@ -1,11 +1,4 @@
 <?php
-/**
- * PHP-DI
- *
- * @link      http://php-di.org/
- * @copyright Matthieu Napoli (http://mnapoli.fr/)
- * @license   http://www.opensource.org/licenses/mit-license.php MIT (see the LICENSE file)
- */
 
 namespace DI\Definition;
 
@@ -19,13 +12,13 @@ use DI\Scope;
 class AliasDefinition implements CacheableDefinition
 {
     /**
-     * Entry name
+     * Entry name.
      * @var string
      */
     private $name;
 
     /**
-     * Name of the target entry
+     * Name of the target entry.
      * @var string
      */
     private $targetEntryName;

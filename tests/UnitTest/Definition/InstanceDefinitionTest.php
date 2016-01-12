@@ -1,15 +1,7 @@
 <?php
-/**
- * PHP-DI
- *
- * @link      http://php-di.org/
- * @copyright Matthieu Napoli (http://mnapoli.fr/)
- * @license   http://www.opensource.org/licenses/mit-license.php MIT (see the LICENSE file)
- */
 
 namespace DI\Test\UnitTest\Definition;
 
-use DI\Definition\ObjectDefinition;
 use DI\Definition\InstanceDefinition;
 use DI\Scope;
 use EasyMock\EasyMock;
@@ -19,6 +11,8 @@ use EasyMock\EasyMock;
  */
 class InstanceDefinitionTest extends \PHPUnit_Framework_TestCase
 {
+    use EasyMock;
+
     /**
      * @test
      */
@@ -26,7 +20,7 @@ class InstanceDefinitionTest extends \PHPUnit_Framework_TestCase
     {
         $instance = new \stdClass();
 
-        $definition = new InstanceDefinition($instance, EasyMock::mock('DI\Definition\ObjectDefinition'));
+        $definition = new InstanceDefinition($instance, $this->easyMock('DI\Definition\ObjectDefinition'));
 
         $this->assertSame($instance, $definition->getInstance());
     }
@@ -36,7 +30,7 @@ class InstanceDefinitionTest extends \PHPUnit_Framework_TestCase
      */
     public function should_contain_an_object_definition()
     {
-        $objectDefinition = EasyMock::mock('DI\Definition\ObjectDefinition');
+        $objectDefinition = $this->easyMock('DI\Definition\ObjectDefinition');
 
         $definition = new InstanceDefinition(new \stdClass(), $objectDefinition);
 
@@ -49,7 +43,7 @@ class InstanceDefinitionTest extends \PHPUnit_Framework_TestCase
     public function should_have_the_prototype_scope()
     {
         $instance = new \stdClass();
-        $definition = new InstanceDefinition($instance, EasyMock::mock('DI\Definition\ObjectDefinition'));
+        $definition = new InstanceDefinition($instance, $this->easyMock('DI\Definition\ObjectDefinition'));
 
         $this->assertEquals(Scope::PROTOTYPE, $definition->getScope());
     }

@@ -4,6 +4,13 @@ scripts:
     before:
         - lessc --clean-css website/less/main.less website/css/all.min.css
 
+exclude:
+    - vendor
+    - website
+    - src
+    - tests
+    - logo
+
 menu:
     items:
         introduction:
@@ -63,6 +70,9 @@ menu:
                 silly:
                     text: Silly
                     url: doc/frameworks/silly.html
+                demo:
+                    text: Demo application
+                    absoluteUrl: https://github.com/PHP-DI/demo
         advanced:
             section: Advanced topics
             items:
@@ -81,6 +91,9 @@ menu:
                 environments:
                     text: Injections depending on the environment
                     url: doc/environments.html
+                ide-integration:
+                    text: IDE integration
+                    url: doc/ide-integration.html
         migration:
             section: Migration guides
             items:

@@ -6,7 +6,7 @@ layout: documentation
 
 *Autowiring* is an exotic word that represents something very simple: **the ability of the container to automatically create and inject dependencies**.
 
-In order to achieve that, PHP-DI uses [PHP's reflection](http://fr.php.net/manual/fr/book.reflection.php) to detect what parameters a constructor needs.
+In order to achieve that, PHP-DI uses [PHP's reflection](http://php.net/manual/book.reflection.php) to detect what parameters a constructor needs.
 
 Let's take this example:
 

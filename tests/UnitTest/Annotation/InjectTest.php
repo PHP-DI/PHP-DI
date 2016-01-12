@@ -1,11 +1,4 @@
 <?php
-/**
- * PHP-DI
- *
- * @link      http://php-di.org/
- * @copyright Matthieu Napoli (http://mnapoli.fr/)
- * @license   http://www.opensource.org/licenses/mit-license.php MIT (see the LICENSE file)
- */
 
 namespace DI\Test\UnitTest\Annotation;
 
@@ -15,7 +8,7 @@ use Doctrine\Common\Annotations\AnnotationReader as DoctrineAnnotationReader;
 use ReflectionClass;
 
 /**
- * Inject annotation test class
+ * Inject annotation test class.
  *
  * @covers \DI\Annotation\Inject
  */
@@ -116,7 +109,7 @@ class InjectTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Inject annotation should work even if not imported
+     * Inject annotation should work even if not imported.
      */
     public function testNonImportedAnnotation()
     {
@@ -129,7 +122,7 @@ class InjectTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Inject annotation should work even if there are other weird annotations in the file
+     * Inject annotation should work even if there are other weird annotations in the file.
      */
     public function testMixedAnnotations()
     {

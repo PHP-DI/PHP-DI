@@ -1,18 +1,11 @@
 <?php
-/**
- * PHP-DI
- *
- * @link      http://php-di.org/
- * @copyright Matthieu Napoli (http://mnapoli.fr/)
- * @license   http://www.opensource.org/licenses/mit-license.php MIT (see the LICENSE file)
- */
 
 namespace DI\Test\IntegrationTest\Definitions;
 
 use DI\ContainerBuilder;
 
 /**
- * Test object definitions
+ * Test object definitions.
  *
  * TODO add more tests
  *
@@ -24,15 +17,14 @@ class ObjectDefinitionTest extends \PHPUnit_Framework_TestCase
     {
         $builder = new ContainerBuilder();
         $builder->useAutowiring(false);
-        $builder->useAnnotations(false);
         $builder->addDefinitions([
             // with the same name
-            'stdClass' => \DI\object('stdClass'),
+            'stdClass'    => \DI\object('stdClass'),
             // with name inferred
             'ArrayObject' => \DI\object()
                 ->constructor([]),
             // with a different name
-            'object' => \DI\object('ArrayObject')
+            'object'      => \DI\object('ArrayObject')
                 ->constructor([]),
         ]);
         $container = $builder->build();
@@ -40,5 +32,41 @@ class ObjectDefinitionTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf('stdClass', $container->get('stdClass'));
         $this->assertInstanceOf('ArrayObject', $container->get('object'));
         $this->assertInstanceOf('ArrayObject', $container->get('ArrayObject'));
+    }
+
+    public function test_multiple_method_call()
+    {
+        $builder = new ContainerBuilder();
+        $builder->useAutowiring(false);
+        $builder->addDefinitions([
+            __NAMESPACE__ . '\ObjectDefinition\Class1' => \DI\object()
+                ->method('increment')
+                ->method('increment'),
+        ]);
+        $container = $builder->build();
+
+        $class = $container->get(__NAMESPACE__ . '\ObjectDefinition\Class1');
+        $this->assertEquals(2, $class->count);
+    }
+
+    public function test_override_parameter_with_multiple_method_call()
+    {
+        $builder = new ContainerBuilder();
+        $builder->useAutowiring(false);
+        $builder->addDefinitions([
+            __NAMESPACE__ . '\ObjectDefinition\Class1' => \DI\object()
+                ->method('add', 'foo')
+                ->method('add', 'foo'),
+        ]);
+        $builder->addDefinitions([
+            // Override a method parameter
+            __NAMESPACE__ . '\ObjectDefinition\Class1' => \DI\object()
+                ->methodParameter('add', 0, 'bar'),
+        ]);
+        $container = $builder->build();
+
+        // Should override only the first method call
+        $class = $container->get(__NAMESPACE__ . '\ObjectDefinition\Class1');
+        $this->assertEquals(['bar', 'foo'], $class->items);
     }
 }

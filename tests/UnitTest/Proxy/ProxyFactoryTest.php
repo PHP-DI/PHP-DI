@@ -29,6 +29,7 @@ class ProxyFactoryTest extends \PHPUnit_Framework_TestCase
             $wrappedObject = $instance;
             $initializer = null; // turning off further lazy initialization
             $initialized = true;
+
             return true;
         };
         /** @var ClassToProxy $proxy */
