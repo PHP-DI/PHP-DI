@@ -4,6 +4,7 @@ namespace DI\Test\IntegrationTest;
 
 use DI\Container;
 use DI\ContainerBuilder;
+use DI\Test\IntegrationTest\Fixtures\InheritanceTest\BaseClass;
 use DI\Test\IntegrationTest\Fixtures\InheritanceTest\SubClass;
 
 /**
@@ -36,7 +37,7 @@ class InheritanceTest extends \PHPUnit_Framework_TestCase
      */
     public function testInjectionBaseClass(Container $container)
     {
-        /** @var $instance SubClass */
+        /** @var $instance BaseClass */
         $instance = $container->get('DI\Test\IntegrationTest\Fixtures\InheritanceTest\BaseClass');
 
         $this->assertInstanceOf('DI\Test\IntegrationTest\Fixtures\InheritanceTest\Dependency', $instance->property1);
