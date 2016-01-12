@@ -1,11 +1,4 @@
 <?php
-/**
- * PHP-DI
- *
- * @link      http://php-di.org/
- * @copyright Matthieu Napoli (http://mnapoli.fr/)
- * @license   http://www.opensource.org/licenses/mit-license.php MIT (see the LICENSE file)
- */
 
 namespace DI\Definition\ObjectDefinition;
 
@@ -17,13 +10,13 @@ namespace DI\Definition\ObjectDefinition;
 class PropertyInjection
 {
     /**
-     * Property name
+     * Property name.
      * @var string
      */
     private $propertyName;
 
     /**
-     * Value that should be injected in the property
+     * Value that should be injected in the property.
      * @var mixed
      */
     private $value;
@@ -57,7 +50,7 @@ class PropertyInjection
     }
 
     /**
-     * @return string Value that should be injected in the property
+     * @return mixed Value that should be injected in the property
      */
     public function getValue()
     {

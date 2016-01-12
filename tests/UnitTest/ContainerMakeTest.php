@@ -1,11 +1,4 @@
 <?php
-/**
- * PHP-DI
- *
- * @link      http://php-di.org/
- * @copyright Matthieu Napoli (http://mnapoli.fr/)
- * @license   http://www.opensource.org/licenses/mit-license.php MIT (see the LICENSE file)
- */
 
 namespace DI\Test\UnitTest;
 
@@ -13,7 +6,7 @@ use DI\ContainerBuilder;
 use stdClass;
 
 /**
- * Test class for Container
+ * Test class for Container.
  *
  * @covers \DI\Container
  */
@@ -125,7 +118,7 @@ class ContainerMakeTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Tests a dependency can be made when a dependency is passed by reference
+     * Tests a dependency can be made when a dependency is passed by reference.
      */
     public function testPassByReferenceParameter()
     {
@@ -134,14 +127,14 @@ class ContainerMakeTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Tests the parameter can be provided by reference
+     * Tests the parameter can be provided by reference.
      */
     public function testProvidedPassByReferenceParameter()
     {
         $object = new stdClass();
         $container = ContainerBuilder::buildDevContainer();
         $fetched = $container->make('DI\Test\UnitTest\Fixtures\PassByReferenceDependency', [
-            'object' => &$object
+            'object' => &$object,
         ]);
         $this->assertEquals('bar', $object->foo);
     }

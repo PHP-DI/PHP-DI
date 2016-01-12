@@ -1,11 +1,4 @@
 <?php
-/**
- * PHP-DI
- *
- * @link      http://php-di.org/
- * @copyright Matthieu Napoli (http://mnapoli.fr/)
- * @license   http://www.opensource.org/licenses/mit-license.php MIT (see the LICENSE file)
- */
 
 namespace DI\Test\UnitTest\Definition\Resolver;
 
@@ -19,12 +12,14 @@ use EasyMock\EasyMock;
  */
 class StringResolverTest extends \PHPUnit_Framework_TestCase
 {
+    use EasyMock;
+
     /**
      * @test
      */
     public function should_resolve_bare_strings()
     {
-        $container = EasyMock::mock('Interop\Container\ContainerInterface');
+        $container = $this->easyMock('Interop\Container\ContainerInterface');
         $resolver = new StringResolver($container);
 
         $definition = new StringDefinition('foo', 'bar');
@@ -37,7 +32,7 @@ class StringResolverTest extends \PHPUnit_Framework_TestCase
      */
     public function should_resolve_references()
     {
-        $container = EasyMock::mock('Interop\Container\ContainerInterface', [
+        $container = $this->easyMock('Interop\Container\ContainerInterface', [
             'get' => 'bar',
         ]);
         $resolver = new StringResolver($container);
@@ -52,7 +47,7 @@ class StringResolverTest extends \PHPUnit_Framework_TestCase
      */
     public function should_resolve_multiple_references()
     {
-        $container = EasyMock::mock('Interop\Container\ContainerInterface');
+        $container = $this->easyMock('Interop\Container\ContainerInterface');
         $container->expects($this->exactly(2))
             ->method('get')
             ->withConsecutive(['tmp'], ['logs'])
@@ -73,7 +68,7 @@ class StringResolverTest extends \PHPUnit_Framework_TestCase
      */
     public function should_throw_on_unknown_entry_name()
     {
-        $container = EasyMock::mock('Interop\Container\ContainerInterface', [
+        $container = $this->easyMock('Interop\Container\ContainerInterface', [
             'get' => new NotFoundException("No entry or class found for 'test'"),
         ]);
         $resolver = new StringResolver($container);

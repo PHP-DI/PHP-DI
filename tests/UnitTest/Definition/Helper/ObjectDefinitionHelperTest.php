@@ -1,17 +1,9 @@
 <?php
-/**
- * PHP-DI
- *
- * @link      http://php-di.org/
- * @copyright Matthieu Napoli (http://mnapoli.fr/)
- * @license   http://www.opensource.org/licenses/mit-license.php MIT (see the LICENSE file)
- */
 
 namespace DI\Test\UnitTest\Definition\Helper;
 
-use DI\Definition\ObjectDefinition\MethodInjection;
-use DI\Definition\Exception\DefinitionException;
 use DI\Definition\Helper\ObjectDefinitionHelper;
+use DI\Definition\ObjectDefinition\MethodInjection;
 use DI\Scope;
 
 /**
@@ -161,7 +153,7 @@ class ObjectDefinitionHelperTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Check using the parameter name, not its index
+     * Check using the parameter name, not its index.
      */
     public function allows_to_override_a_parameter_injection_by_name()
     {
@@ -178,7 +170,7 @@ class ObjectDefinitionHelperTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * If using methodParameter() for "__construct", then the constructor definition should be updated
+     * If using methodParameter() for "__construct", then the constructor definition should be updated.
      */
     public function should_update_constructor_definition_if_overriding_parameter_for_constructor()
     {

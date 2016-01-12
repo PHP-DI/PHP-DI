@@ -1,11 +1,4 @@
 <?php
-/**
- * PHP-DI
- *
- * @link      http://php-di.org/
- * @copyright Matthieu Napoli (http://mnapoli.fr/)
- * @license   http://www.opensource.org/licenses/mit-license.php MIT (see the LICENSE file)
- */
 
 namespace DI\Test\UnitTest\Definition\Resolver;
 
@@ -22,6 +15,8 @@ use PHPUnit_Framework_MockObject_MockObject;
  */
 class DecoratorResolverTest extends \PHPUnit_Framework_TestCase
 {
+    use EasyMock;
+
     /**
      * @var DecoratorResolver
      */
@@ -34,19 +29,9 @@ class DecoratorResolverTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $container = EasyMock::mock('Interop\Container\ContainerInterface');
-        $this->parentResolver = EasyMock::mock('DI\Definition\Resolver\DefinitionResolver');
+        $container = $this->easyMock('Interop\Container\ContainerInterface');
+        $this->parentResolver = $this->easyMock('DI\Definition\Resolver\DefinitionResolver');
         $this->resolver = new DecoratorResolver($container, $this->parentResolver);
-    }
-
-    public function provideCallables()
-    {
-        return [
-            'closure'        => [function () { return 'bar'; }],
-            'string'         => [__NAMESPACE__ . '\FactoryDefinitionResolver_test'],
-            'array'          => [[new FactoryDefinitionResolverTestClass(), 'foo']],
-            'invokableClass' => [new FactoryDefinitionResolverCallableClass()],
-        ];
     }
 
     /**

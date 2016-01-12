@@ -1,18 +1,11 @@
 <?php
-/**
- * PHP-DI
- *
- * @link      http://php-di.org/
- * @copyright Matthieu Napoli (http://mnapoli.fr/)
- * @license   http://www.opensource.org/licenses/mit-license.php MIT (see the LICENSE file)
- */
 
 namespace DI\Test\UnitTest\Definition\Resolver;
 
+use DI\Definition\InstanceDefinition;
 use DI\Definition\ObjectDefinition;
 use DI\Definition\ObjectDefinition\MethodInjection;
 use DI\Definition\ObjectDefinition\PropertyInjection;
-use DI\Definition\InstanceDefinition;
 use DI\Definition\Resolver\InstanceInjector;
 use DI\Definition\Resolver\ResolverDispatcher;
 use DI\Proxy\ProxyFactory;
@@ -24,6 +17,8 @@ use EasyMock\EasyMock;
  */
 class InstanceInjectorTest extends \PHPUnit_Framework_TestCase
 {
+    use EasyMock;
+
     /**
      * @test
      */
@@ -59,9 +54,9 @@ class InstanceInjectorTest extends \PHPUnit_Framework_TestCase
     private function buildResolver()
     {
         /** @var ResolverDispatcher $resolverDispatcher */
-        $resolverDispatcher = EasyMock::mock('DI\Definition\Resolver\ResolverDispatcher');
+        $resolverDispatcher = $this->easyMock('DI\Definition\Resolver\ResolverDispatcher');
         /** @var ProxyFactory $factory */
-        $factory = EasyMock::mock('DI\Proxy\ProxyFactory');
+        $factory = $this->easyMock('DI\Proxy\ProxyFactory');
 
         return new InstanceInjector($resolverDispatcher, $factory);
     }

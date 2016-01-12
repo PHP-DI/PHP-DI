@@ -1,19 +1,12 @@
 <?php
-/**
- * PHP-DI
- *
- * @link      http://mnapoli.github.com/PHP-DI/
- * @copyright Matthieu Napoli (http://mnapoli.fr/)
- * @license   http://www.opensource.org/licenses/mit-license.php MIT (see the LICENSE file)
- */
 
 namespace DI\Definition\Resolver;
 
-use DI\Definition\ObjectDefinition;
 use DI\Definition\Definition;
 use DI\Definition\Exception\DefinitionException;
-use DI\Definition\ObjectDefinition\PropertyInjection;
 use DI\Definition\Helper\DefinitionHelper;
+use DI\Definition\ObjectDefinition;
+use DI\Definition\ObjectDefinition\PropertyInjection;
 use DI\DependencyException;
 use DI\Proxy\ProxyFactory;
 use Exception;
@@ -91,7 +84,7 @@ class ObjectCreator implements DefinitionResolver
     }
 
     /**
-     * Returns a proxy instance
+     * Returns a proxy instance.
      *
      * @param ObjectDefinition $definition
      * @param array           $parameters
@@ -150,13 +143,13 @@ class ObjectCreator implements DefinitionResolver
             $this->injectMethodsAndProperties($object, $definition);
         } catch (NotFoundException $e) {
             throw new DependencyException(sprintf(
-                "Error while injecting dependencies into %s: %s",
+                'Error while injecting dependencies into %s: %s',
                 $classReflection->getName(),
                 $e->getMessage()
             ), 0, $e);
         } catch (DefinitionException $e) {
             throw DefinitionException::create($definition, sprintf(
-                "Entry %s cannot be resolved: %s",
+                'Entry "%s" cannot be resolved: %s',
                 $definition->getName(),
                 $e->getMessage()
             ));
@@ -164,7 +157,7 @@ class ObjectCreator implements DefinitionResolver
 
         if (! $object) {
             throw new DependencyException(sprintf(
-                "Entry %s cannot be resolved: %s could not be constructed",
+                'Entry "%s" cannot be resolved: %s could not be constructed',
                 $definition->getName(),
                 $classReflection->getName()
             ));
@@ -218,7 +211,7 @@ class ObjectCreator implements DefinitionResolver
                 throw $e;
             } catch (Exception $e) {
                 throw new DependencyException(sprintf(
-                    "Error while injecting in %s::%s. %s",
+                    'Error while injecting in %s::%s. %s',
                     get_class($object),
                     $propertyName,
                     $e->getMessage()
@@ -235,11 +228,9 @@ class ObjectCreator implements DefinitionResolver
     private function assertClassExists(ObjectDefinition $definition)
     {
         if (! $definition->classExists()) {
-            throw DefinitionException::create($definition,
-            sprintf(
-                "Entry %s cannot be resolved: class %s doesn't exist",
-                $definition->getName(),
-                $definition->getClassName()
+            throw DefinitionException::create($definition, sprintf(
+                'Entry "%s" cannot be resolved: the class doesn\'t exist',
+                $definition->getName()
             ));
         }
     }
@@ -247,11 +238,9 @@ class ObjectCreator implements DefinitionResolver
     private function assertClassIsInstantiable(ObjectDefinition $definition)
     {
         if (! $definition->isInstantiable()) {
-            throw DefinitionException::create($definition,
-            sprintf(
-                "Entry %s cannot be resolved: class %s is not instantiable",
-                $definition->getName(),
-                $definition->getClassName()
+            throw DefinitionException::create($definition, sprintf(
+                'Entry "%s" cannot be resolved: the class is not instantiable',
+                $definition->getName()
             ));
         }
     }

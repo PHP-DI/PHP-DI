@@ -105,6 +105,12 @@
         <script>
             $(function() {
                 hljs.initHighlightingOnLoad();
+
+                // Add anchors to headers
+                $('article h2, article h3, article h4, article h5').each(function () {
+                    var url = document.URL.replace(/#.*$/, "") + '#' + $(this).attr('id');
+                    $(this).append(' <a class="anchor" href="' + url + '">#</a>');
+                });
             });
         </script>
     {% endblock %}
@@ -137,6 +143,14 @@
     </script>
     <noscript><p><img src="http://piwik.mnapoli.fr/piwik.php?idsite=2" style="border:0;" alt="" /></p></noscript>
     <!-- End Piwik Code -->
+
+    <!-- Gitter -->
+    <script>
+        ((window.gitter = {}).chat = {}).options = {
+            room: 'PHP-DI/PHP-DI'
+        };
+    </script>
+    <script src="https://sidecar.gitter.im/dist/sidecar.v1.js" async defer></script>
 
 </body>
 </html>

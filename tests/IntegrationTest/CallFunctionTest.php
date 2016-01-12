@@ -1,11 +1,4 @@
 <?php
-/**
- * PHP-DI
- *
- * @link      http://php-di.org/
- * @copyright Matthieu Napoli (http://mnapoli.fr/)
- * @license   http://www.opensource.org/licenses/mit-license.php MIT (see the LICENSE file)
- */
 
 namespace DI\Test\IntegrationTest;
 
@@ -31,7 +24,7 @@ class CallFunctionTest extends \PHPUnit_Framework_TestCase
 
     public function test_no_parameters()
     {
-        $result = $this->container->call(function() {
+        $result = $this->container->call(function () {
             return 42;
         });
         $this->assertEquals(42, $result);
@@ -39,15 +32,15 @@ class CallFunctionTest extends \PHPUnit_Framework_TestCase
 
     public function test_parameters_ordered()
     {
-        $result = $this->container->call(function($foo, $bar) {
+        $result = $this->container->call(function ($foo, $bar) {
             return $foo . $bar;
-        }, ['foo', 'bar',]);
+        }, ['foo', 'bar']);
         $this->assertEquals('foobar', $result);
     }
 
     public function test_parameters_indexed_by_name()
     {
-        $result = $this->container->call(function($foo, $bar) {
+        $result = $this->container->call(function ($foo, $bar) {
             return $foo . $bar;
         }, [
             'bar' => 'buzz',
@@ -61,8 +54,9 @@ class CallFunctionTest extends \PHPUnit_Framework_TestCase
         $this->container->set('bar', 'bam');
 
         $self = $this;
-        $result = $this->container->call(function($foo, $bar) use ($self) {
+        $result = $this->container->call(function ($foo, $bar) use ($self) {
             $self->assertInstanceOf('stdClass', $bar);
+
             return $foo;
         }, [
             'bar' => \DI\object('stdClass'),
@@ -76,16 +70,17 @@ class CallFunctionTest extends \PHPUnit_Framework_TestCase
         $this->container->set('bar', 'bam');
 
         $self = $this;
-        $result = $this->container->call(function($foo, $bar) use ($self) {
+        $result = $this->container->call(function ($foo, $bar) use ($self) {
             $self->assertInstanceOf('stdClass', $bar);
+
             return $foo;
-        }, [\DI\get('bar'),\DI\object('stdClass')]);
+        }, [\DI\get('bar'), \DI\object('stdClass')]);
         $this->assertEquals('bam', $result);
     }
 
     public function test_parameter_default_value()
     {
-        $result = $this->container->call(function($foo = 'hello') {
+        $result = $this->container->call(function ($foo = 'hello') {
             return $foo;
         });
         $this->assertEquals('hello', $result);
@@ -93,14 +88,14 @@ class CallFunctionTest extends \PHPUnit_Framework_TestCase
 
     public function test_parameter_explicit_value_overrides_default_value()
     {
-        $result = $this->container->call(function($foo = 'hello') {
+        $result = $this->container->call(function ($foo = 'hello') {
             return $foo;
         }, [
             'foo' => 'test',
         ]);
         $this->assertEquals('test', $result);
 
-        $result = $this->container->call(function($foo = 'hello') {
+        $result = $this->container->call(function ($foo = 'hello') {
             return $foo;
         }, ['test']);
         $this->assertEquals('test', $result);
@@ -111,7 +106,7 @@ class CallFunctionTest extends \PHPUnit_Framework_TestCase
         $value = new \stdClass();
         $this->container->set('stdClass', $value);
 
-        $result = $this->container->call(function(\stdClass $foo) {
+        $result = $this->container->call(function (\stdClass $foo) {
             return $foo;
         });
         $this->assertEquals($value, $result);
@@ -127,7 +122,7 @@ class CallFunctionTest extends \PHPUnit_Framework_TestCase
         $subContainerBuilder->wrapContainer($rootContainer);
         $subContainer = $subContainerBuilder->build();
 
-        $result = $subContainer->call(function(\stdClass $foo) {
+        $result = $subContainer->call(function (\stdClass $foo) {
             return $foo;
         });
         $this->assertSame($value, $result, 'The root container was not used for the type-hint');
@@ -200,12 +195,12 @@ class CallFunctionTest extends \PHPUnit_Framework_TestCase
      */
     public function test_not_enough_parameters()
     {
-        $this->container->call(function($foo) {});
+        $this->container->call(function ($foo) {});
     }
 
     /**
      * @expectedException \Invoker\Exception\NotCallableException
-     * @expectedExceptionMessage foo is neither a callable or a valid container entry
+     * @expectedExceptionMessage "foo" is neither a callable nor a valid container entry
      */
     public function test_not_callable()
     {
@@ -234,6 +229,7 @@ class CallableTestClass
     }
 }
 
-function CallFunctionTest_function($str) {
+function CallFunctionTest_function($str)
+{
     return strlen($str);
 }

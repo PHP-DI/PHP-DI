@@ -37,7 +37,7 @@ class MethodInjectionTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Check that a merge will preserve "null" injections
+     * Check that a merge will preserve "null" injections.
      */
     public function testMergeParametersPreservesNull()
     {

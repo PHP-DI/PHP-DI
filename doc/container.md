@@ -72,8 +72,8 @@ It offers the following additional features over using `call_user_func()`:
     $container->call(function ($foo, $bar) {
         // ...
     }, [
-        'param1' => 'Hello',
-        'param2' => 'World',
+        'foo' => 'Hello',
+        'bar' => 'World',
     ]);
 
     // Can also be useful in a micro-framework for example

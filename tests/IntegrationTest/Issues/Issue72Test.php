@@ -1,11 +1,4 @@
 <?php
-/**
- * PHP-DI
- *
- * @link      http://php-di.org/
- * @copyright Matthieu Napoli (http://mnapoli.fr/)
- * @license   http://www.opensource.org/licenses/mit-license.php MIT (see the LICENSE file)
- */
 
 namespace DI\Test\IntegrationTest\Issues;
 
@@ -13,7 +6,7 @@ use DI\ContainerBuilder;
 use DI\Test\IntegrationTest\Issues\Issue72\Class1;
 
 /**
- * Test that the manager prioritize correctly the different sources
+ * Test that the manager prioritize correctly the different sources.
  *
  * @see https://github.com/mnapoli/PHP-DI/issues/72
  *

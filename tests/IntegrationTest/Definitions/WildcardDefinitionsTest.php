@@ -1,20 +1,12 @@
 <?php
-/**
- * PHP-DI
- *
- * @link      http://php-di.org/
- * @copyright Matthieu Napoli (http://mnapoli.fr/)
- * @license   http://www.opensource.org/licenses/mit-license.php MIT (see the LICENSE file)
- */
 
 namespace DI\Test\IntegrationTest\Definitions;
 
 use DI\Annotation\Inject;
 use DI\ContainerBuilder;
-use DI\Test\IntegrationTest\Fixtures\PropertyInjectionTest\Issue1;
 
 /**
- * Test definitions using wildcards
+ * Test definitions using wildcards.
  *
  * @coversNothing
  */

@@ -1,11 +1,4 @@
 <?php
-/**
- * PHP-DI
- *
- * @link      http://php-di.org/
- * @copyright Matthieu Napoli (http://mnapoli.fr/)
- * @license   http://www.opensource.org/licenses/mit-license.php MIT (see the LICENSE file)
- */
 
 namespace DI\Test\UnitTest\Definition\Resolver;
 
@@ -19,6 +12,8 @@ use EasyMock\EasyMock;
  */
 class ResolverDispatcherTest extends \PHPUnit_Framework_TestCase
 {
+    use EasyMock;
+
     private $container;
     private $proxyFactory;
     /**
@@ -28,8 +23,8 @@ class ResolverDispatcherTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->container = EasyMock::mock('Interop\Container\ContainerInterface');
-        $this->proxyFactory = EasyMock::mock('DI\Proxy\ProxyFactory');
+        $this->container = $this->easyMock('Interop\Container\ContainerInterface');
+        $this->proxyFactory = $this->easyMock('DI\Proxy\ProxyFactory');
         $this->resolver = new ResolverDispatcher($this->container, $this->proxyFactory);
     }
 
@@ -58,6 +53,6 @@ class ResolverDispatcherTest extends \PHPUnit_Framework_TestCase
      */
     public function should_throw_if_non_handled_definition()
     {
-        $this->resolver->resolve(EasyMock::mock('DI\Definition\Definition'));
+        $this->resolver->resolve($this->easyMock('DI\Definition\Definition'));
     }
 }

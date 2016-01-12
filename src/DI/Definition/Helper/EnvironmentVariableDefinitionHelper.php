@@ -1,11 +1,4 @@
 <?php
-/**
- * PHP-DI
- *
- * @link      http://php-di.org/
- * @copyright Matthieu Napoli (http://mnapoli.fr/)
- * @license   http://www.opensource.org/licenses/mit-license.php MIT (see the LICENSE file)
- */
 
 namespace DI\Definition\Helper;
 
@@ -19,30 +12,30 @@ use DI\Definition\EnvironmentVariableDefinition;
 class EnvironmentVariableDefinitionHelper implements DefinitionHelper
 {
     /**
-     * The name of the environment variable
+     * The name of the environment variable.
      * @var string
      */
     private $variableName;
 
     /**
-     * Whether or not the environment variable definition is optional
+     * Whether or not the environment variable definition is optional.
      *
      * If true and the environment variable given by $variableName has not been
      * defined, $defaultValue is used.
      *
-     * @var boolean
+     * @var bool
      */
     private $isOptional;
 
     /**
-     * The default value to use if the environment variable is optional and not provided
+     * The default value to use if the environment variable is optional and not provided.
      * @var mixed
      */
     private $defaultValue;
 
     /**
      * @param string  $variableName The name of the environment variable
-     * @param boolean $isOptional   Whether or not the environment variable definition is optional
+     * @param bool $isOptional   Whether or not the environment variable definition is optional
      * @param mixed   $defaultValue The default value to use if the environment variable is optional and not provided
      */
     public function __construct($variableName, $isOptional, $defaultValue = null)

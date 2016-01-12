@@ -1,23 +1,17 @@
 <?php
-/**
- * PHP-DI
- *
- * @link      http://mnapoli.github.com/PHP-DI/
- * @copyright Matthieu Napoli (http://mnapoli.fr/)
- * @license   http://www.opensource.org/licenses/mit-license.php MIT (see the LICENSE file)
- */
 
 namespace DI\Definition\Resolver;
 
-use DI\Definition\ObjectDefinition;
 use DI\Definition\Exception\DefinitionException;
 use DI\Definition\Helper\DefinitionHelper;
 use DI\Definition\ObjectDefinition\MethodInjection;
+use ReflectionMethod;
+use ReflectionParameter;
 
 /**
  * Resolves parameters for a function call.
  *
- * @since 4.2
+ * @since  4.2
  * @author Matthieu Napoli <matthieu@mnapoli.fr>
  */
 class ParameterResolver
@@ -36,27 +30,27 @@ class ParameterResolver
     }
 
     /**
-     * @param MethodInjection             $definition
-     * @param \ReflectionFunctionAbstract $functionReflection
-     * @param array                       $parameters
+     * @param MethodInjection  $definition
+     * @param ReflectionMethod $method
+     * @param array            $parameters
      *
      * @throws DefinitionException A parameter has no value defined or guessable.
      * @return array Parameters to use to call the function.
      */
     public function resolveParameters(
         MethodInjection $definition = null,
-        \ReflectionFunctionAbstract $functionReflection = null,
+        ReflectionMethod $method = null,
         array $parameters = []
     ) {
         $args = [];
 
-        if (! $functionReflection) {
+        if (! $method) {
             return $args;
         }
 
-        $definitionParameters = $definition ? $definition->getParameters() : array();
+        $definitionParameters = $definition ? $definition->getParameters() : [];
 
-        foreach ($functionReflection->getParameters() as $index => $parameter) {
+        foreach ($method->getParameters() as $index => $parameter) {
             if (array_key_exists($parameter->getName(), $parameters)) {
                 // Look in the $parameters array
                 $value = &$parameters[$parameter->getName()];
@@ -66,14 +60,14 @@ class ParameterResolver
             } else {
                 // If the parameter is optional and wasn't specified, we take its default value
                 if ($parameter->isOptional()) {
-                    $args[] = $this->getParameterDefaultValue($parameter, $functionReflection);
+                    $args[] = $this->getParameterDefaultValue($parameter, $method);
                     continue;
                 }
 
                 throw new DefinitionException(sprintf(
-                    "The parameter '%s' of %s has no value defined or guessable",
+                    'Parameter $%s of %s has no value defined or guessable',
                     $parameter->getName(),
-                    $this->getFunctionName($functionReflection)
+                    $this->getFunctionName($method)
                 ));
             }
 
@@ -81,8 +75,8 @@ class ParameterResolver
                 $nestedDefinition = $value->getDefinition('');
 
                 // If the container cannot produce the entry, we can use the default parameter value
-                if ($parameter->isOptional() && !$this->definitionResolver->isResolvable($nestedDefinition)) {
-                    $value = $this->getParameterDefaultValue($parameter, $functionReflection);
+                if ($parameter->isOptional() && ! $this->definitionResolver->isResolvable($nestedDefinition)) {
+                    $value = $this->getParameterDefaultValue($parameter, $method);
                 } else {
                     $value = $this->definitionResolver->resolve($nestedDefinition);
                 }
@@ -97,44 +91,30 @@ class ParameterResolver
     /**
      * Returns the default value of a function parameter.
      *
-     * @param \ReflectionParameter        $parameter
-     * @param \ReflectionFunctionAbstract $function
+     * @param ReflectionParameter $parameter
+     * @param ReflectionMethod    $function
      *
      * @throws DefinitionException Can't get default values from PHP internal classes and functions
      * @return mixed
      */
     private function getParameterDefaultValue(
-        \ReflectionParameter $parameter,
-        \ReflectionFunctionAbstract $function
+        ReflectionParameter $parameter,
+        ReflectionMethod $function
     ) {
         try {
             return $parameter->getDefaultValue();
         } catch (\ReflectionException $e) {
             throw new DefinitionException(sprintf(
-                "The parameter '%s' of %s has no type defined or guessable. It has a default value, "
-                . "but the default value can't be read through Reflection because it is a PHP internal class.",
+                'The parameter "%s" of %s has no type defined or guessable. It has a default value, '
+                . 'but the default value can\'t be read through Reflection because it is a PHP internal class.',
                 $parameter->getName(),
                 $this->getFunctionName($function)
             ));
         }
     }
 
-    private function getFunctionName(\ReflectionFunctionAbstract $reflectionFunction)
+    private function getFunctionName(ReflectionMethod $method)
     {
-        if ($reflectionFunction instanceof \ReflectionMethod) {
-            return sprintf(
-                '%s::%s',
-                $reflectionFunction->getDeclaringClass()->getName(),
-                $reflectionFunction->getName()
-            );
-        } elseif ($reflectionFunction->isClosure()) {
-            return sprintf(
-                'closure defined in %s at line %d',
-                $reflectionFunction->getFileName(),
-                $reflectionFunction->getStartLine()
-            );
-        }
-
-        return $reflectionFunction->getName();
+        return $method->getName() . '()';
     }
 }
