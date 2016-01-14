@@ -132,21 +132,18 @@ class ObjectDefinition implements Definition, CacheableDefinition, HasSubDefinit
         return $this->propertyInjections;
     }
 
-    /**
-     * @param string $propertyName
-     * @return PropertyInjection
-     */
-    public function getPropertyInjection($propertyName)
-    {
-        return isset($this->propertyInjections[$propertyName]) ? $this->propertyInjections[$propertyName] : null;
-    }
-
-    /**
-     * @param PropertyInjection $propertyInjection
-     */
     public function addPropertyInjection(PropertyInjection $propertyInjection)
     {
-        $this->propertyInjections[$propertyInjection->getPropertyName()] = $propertyInjection;
+        $className = $propertyInjection->getClassName();
+        if ($className) {
+            // Index with the class name to avoid collisions between parent and
+            // child private properties with the same name
+            $key = $className . '::' . $propertyInjection->getPropertyName();
+        } else {
+            $key = $propertyInjection->getPropertyName();
+        }
+
+        $this->propertyInjections[$key] = $propertyInjection;
     }
 
     /**
@@ -281,8 +278,8 @@ class ObjectDefinition implements Definition, CacheableDefinition, HasSubDefinit
 
     private function mergePropertyInjections(ObjectDefinition $definition)
     {
-        foreach ($definition->getPropertyInjections() as $propertyName => $propertyInjection) {
-            if (! array_key_exists($propertyName, $this->propertyInjections)) {
+        foreach ($definition->propertyInjections as $propertyName => $propertyInjection) {
+            if (! isset($this->propertyInjections[$propertyName])) {
                 // Add
                 $this->propertyInjections[$propertyName] = $propertyInjection;
             }
