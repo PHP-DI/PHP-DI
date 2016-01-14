@@ -26,6 +26,8 @@ class AnnotationsTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * Inject in parent properties (public, protected and private).
+     *
      * @test
      */
     public function inject_in_parent_properties()
@@ -43,6 +45,23 @@ class AnnotationsTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($object->public instanceof A);
         $this->assertTrue($object->getProtected() instanceof A);
         $this->assertTrue($object->getPrivate() instanceof A);
+    }
+
+    /**
+     * Inject in private parent properties even if they have the same name of child properties.
+     *
+     * @test
+     */
+    public function inject_in_private_parent_properties_with_same_name()
+    {
+        $container = $this->createContainer();
+
+        /** @var Child $object */
+        $object = $container->get('DI\Test\IntegrationTest\Annotations\Child');
+        $this->assertTrue($object->public instanceof A);
+        $this->assertTrue($object->getProtected() instanceof A);
+        $this->assertTrue($object->getPrivate() instanceof A);
+        $this->assertTrue($object->getChildPrivate() instanceof A);
     }
 
     /**
