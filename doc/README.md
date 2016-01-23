@@ -37,6 +37,7 @@ title: Documentation index
 * [Lazy injection](lazy-injection.md)
 * [Inject on an existing instance](inject-on-instance.md)
 * [Injections depending on the environment](environments.md)
+* [IDE integration](ide-integration.md)
 
 ### Migration guides
 
