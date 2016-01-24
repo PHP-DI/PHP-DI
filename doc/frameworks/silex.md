@@ -111,4 +111,4 @@ $app->post('/', function (Twig_Environment $twig) {
 
 ## More
 
-Read more on the [Silex-Bridge project on Github](https://github.com/PHP-DI/Silex-Bridge).
+Read more on the [Silex-Bridge project on GitHub](https://github.com/PHP-DI/Silex-Bridge).

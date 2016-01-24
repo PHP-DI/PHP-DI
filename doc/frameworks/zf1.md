@@ -163,4 +163,4 @@ Obviously, the `setUp()` and `appBootstrap()` methods could go in a base abstrac
 
 ## More
 
-Read more on the [ZF1-Bridge project on Github](https://github.com/PHP-DI/ZF1-Bridge).
+Read more on the [ZF1-Bridge project on GitHub](https://github.com/PHP-DI/ZF1-Bridge).
