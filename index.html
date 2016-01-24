@@ -90,43 +90,33 @@
 
     <div class="row">
 
-        <div class='col-md-6'>
+        <div class="col-md-8 col-md-offset-2">
+
             <p>
                 Type-hint your constructor parameters and the container can guess which dependencies to inject.
             </p>
+
 <pre><code class="php">class Foo
 {
     private $bar;
 
     public function __construct(Bar $bar)
     {
-        return $this->bar = $bar;
+        $this->bar = $bar;
     }
 }</code></pre>
+
             <p>
                 Covers 80% of the use cases with 0 configuration.
             </p>
-        </div>
 
-        <div class='col-md-6'>
-            <p>
-                Mark a property to be injected using a annotations. Particularly useful in controllers, CLI command, system tests…
-            </p>
-<pre><code class="php">class Foo
-{
-    /**
-    * @Inject
-    * @var Bar
-    */
-    private $bar;
-
-}</code></pre>
-            <p>
-                Autowiring and annotations are optional and can be disabled.
-            </p>
         </div>
 
     </div>
+
+    <p class="text-center">
+        <a href="doc/autowiring.html" class="btn btn-default">Learn more</a>
+    </p>
 
 </div>
         </section>
@@ -205,6 +195,10 @@
 ];</code></pre>
         </div>
     </div>
+
+    <p class="text-center">
+        <a href="doc/php-definitions.html" class="btn btn-default">Learn more</a>
+    </p>
 
 </div>
         </section>
@@ -324,6 +318,10 @@ $container->make(Foo::class, $parameters);</code></pre>
 
     </div>
 
+    <p class="text-center">
+        <a href="doc/container.html" class="btn btn-default">Learn more</a>
+    </p>
+
 </div>
         </section>
 
@@ -390,6 +388,10 @@ $container->make(Foo::class, $parameters);</code></pre>
 
     <p>
         No framework? It works too, have a look at this <a href="https://github.com/PHP-DI/demo">demo application</a>.
+    </p>
+
+    <p class="text-center">
+        <a href="doc/#frameworks-integration" class="btn btn-default">Learn more</a>
     </p>
 
 </div>
