@@ -4,28 +4,27 @@ layout: documentation
 
 # PHP definitions
 
-On top of [Autowiring](autowiring.md) and [annotations](annotations.md), you can use **a PHP configuration format** to define injections.
+On top of [autowiring](autowiring.md) and [annotations](annotations.md), you can use **a PHP configuration format** to define injections.
 
-## Configuration
-
-You can register such configuration either directly as an array, or by putting it into a file:
+You can register that configuration as an array:
 
 ```php
-// array
 $containerBuilder->addDefinitions([
     // place your definitions here
 ]);
-// file returning an array
-$containerBuilder->addDefinitions('config.php');
 ```
 
-If you put your definitions into a separate file, this file must return an array:
+Or by putting it into a file returning an array:
 
 ```php
 <?php
 return [
     // place your definitions here
 ];
+```
+
+```php
+$containerBuilder->addDefinitions('config.php');
 ```
 
 ## Syntax
