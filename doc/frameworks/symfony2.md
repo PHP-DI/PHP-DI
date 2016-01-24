@@ -184,4 +184,4 @@ Full details are here: [FOSRestBundle#743](https://github.com/FriendsOfSymfony/F
 
 ## More
 
-Read more on the [Symfony2-Bridge project on Github](https://github.com/PHP-DI/Symfony2-Bridge).
+Read more on the [Symfony2-Bridge project on GitHub](https://github.com/PHP-DI/Symfony2-Bridge).

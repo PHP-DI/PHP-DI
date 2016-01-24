@@ -135,4 +135,4 @@ return [
 
 ## More
 
-Read more on the [ZF2-Bridge project on Github](https://github.com/PHP-DI/ZF2-Bridge).
+Read more on the [ZF2-Bridge project on GitHub](https://github.com/PHP-DI/ZF2-Bridge).
