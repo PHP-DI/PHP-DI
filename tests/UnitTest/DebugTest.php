@@ -15,7 +15,7 @@ class DebugTest extends \PHPUnit_Framework_TestCase
     public function should_dump_definitions()
     {
         $definition = \DI\object()->getDefinition('foo');
-        $str = <<<END
+        $str = <<<'END'
 Object (
     class = #UNKNOWN# foo
     scope = singleton
