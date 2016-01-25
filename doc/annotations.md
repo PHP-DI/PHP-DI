@@ -94,9 +94,12 @@ class Example
 
 *Note: importing annotations with `use DI\Annotation\Inject;` is optional.*
 
-**Troubleshooting:**
+### Troubleshooting @Inject
 
 - you must use double quotes (`"`) instead of single quotes(`'`), for example: `@Inject("foo")`
+- what's inside `@Inject()` must be in quotes, even if it's a class name: `@Inject("Acme\Blog\ArticleRepository")`
+- when using `@Inject` in combination with `@var` or `@param`, make sure the class name is correctly imported if using namespaces (a good IDE will show warnings if not)
+- `@Inject` is not meant to be used on the method to call with [`Container::call()`](container.md#call) (it will be ignored)
 
 ## Injectable
 
@@ -106,7 +109,8 @@ The `@Injectable` annotation lets you set options on injectable classes:
 /**
  * @Injectable(scope="prototype", lazy=true)
  */
-class Example {
+class Example
+{
 }
 ```
 
