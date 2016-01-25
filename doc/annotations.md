@@ -94,6 +94,10 @@ class Example
 
 *Note: importing annotations with `use DI\Annotation\Inject;` is optional.*
 
+**Troubleshooting:**
+
+- you must use double quotes (`"`) instead of single quotes(`'`), for example: `@Inject("foo")`
+
 ## Injectable
 
 The `@Injectable` annotation lets you set options on injectable classes:
