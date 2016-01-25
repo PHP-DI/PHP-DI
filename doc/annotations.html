@@ -266,18 +266,15 @@
             </div>
 
             <h1 id="annotations">Annotations</h1>
+<p>On top of <a href="autowiring.html">autowiring</a> and <a href="php-definitions.html">PHP configuration files</a>, you can define injections using annotations.</p>
+<h2 id="installation">Installation</h2>
 <p>Annotations <strong>are disabled by default</strong>. To be able to use them, you first need to install the <a href="http://doctrine-common.readthedocs.org/en/latest/reference/annotations.html">Doctrine Annotations</a> library using Composer:</p>
-<pre><code class="language-json">{
-    "require": {
-        ...
-        "doctrine/annotations": "~1.2"
-    }
-}</code></pre>
+<pre><code>composer require doctrine/annotations</code></pre>
 <p>Then you need to <a href="container-configuration.html">configure the <code>ContainerBuilder</code></a> to use them:</p>
 <pre><code class="language-php">$containerBuilder-&gt;useAnnotations(true);</code></pre>
-<p>Annotations are written in PHP docblock comments. They are used by a lot of modern libraries and frameworks, like <a href="http://docs.doctrine-project.org/projects/doctrine-orm/en/latest/index.html">Doctrine</a>, <a href="http://symfony.com/">Symfony</a>, <a href="http://flow.typo3.org/">Flow</a>, <a href="http://www.phpunit.de/manual/3.7/en/">PHPUnit</a>…</p>
-<h2 id="inject">Inject</h2>
-<p><code>@Inject</code> lets you define where PHP-DI should inject something, and what it should inject. You can combine it with <code>@var</code> and <code>@param</code> phpdoc tags to define what should be injected.</p>
+<p>Annotations are written in PHP docblock comments. They are used by a lot of modern libraries and frameworks, like <a href="http://docs.doctrine-project.org/projects/doctrine-orm/en/latest/index.html">Doctrine</a>, <a href="http://symfony.com/">Symfony</a>, <a href="http://www.phpunit.de/">PHPUnit</a>…</p>
+<h2 id="inject">@Inject</h2>
+<p><code>@Inject</code> lets you define where PHP-DI should inject something, and what it should inject. You can optionally combine it with <code>@var</code> and <code>@param</code> phpdoc tags to define what should be injected.</p>
 <p>It can be used on:</p>
 <ul>
 <li>the constructor (constructor injection)</li>
@@ -330,14 +327,31 @@
     public function method2($param1, $param2)
     {
     }
+
+    /**
+     * Explicit definition of parameters by their name:
+     *
+     * @Inject({"param2" = "db.host"})
+     */
+    public function method3(Foo $param1, $param2)
+    {
+    }
 }</code></pre>
 <p><em>Note: importing annotations with <code>use DI\Annotation\Inject;</code> is optional.</em></p>
+<h3 id="troubleshooting-inject">Troubleshooting @Inject</h3>
+<ul>
+<li>you must use double quotes (<code>"</code>) instead of single quotes(<code>'</code>), for example: <code>@Inject("foo")</code></li>
+<li>what's inside <code>@Inject()</code> must be in quotes, even if it's a class name: <code>@Inject("Acme\Blog\ArticleRepository")</code></li>
+<li>when using <code>@Inject</code> in combination with <code>@var</code> or <code>@param</code>, make sure the class name is correctly imported if using namespaces (a good IDE will show warnings if not)</li>
+<li><code>@Inject</code> is not meant to be used on the method to call with <a href="container.html#call"><code>Container::call()</code></a> (it will be ignored)</li>
+</ul>
 <h2 id="injectable">Injectable</h2>
 <p>The <code>@Injectable</code> annotation lets you set options on injectable classes:</p>
 <pre><code class="language-php">/**
  * @Injectable(scope="prototype", lazy=true)
  */
-class Example {
+class Example
+{
 }</code></pre>
 <p><strong>The <code>@Injectable</code> annotation is optional: by default, all classes are injectable.</strong></p>
 <h2 id="limitations">Limitations</h2>
