@@ -80,6 +80,15 @@ class Example
     public function method2($param1, $param2)
     {
     }
+
+    /**
+     * Explicit definition of parameters by their name:
+     *
+     * @Inject({"param2" = "db.host"})
+     */
+    public function method3(Foo $param1, $param2)
+    {
+    }
 }
 ```
 
