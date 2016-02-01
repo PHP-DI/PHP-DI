@@ -45,7 +45,7 @@ final class Injectable
             }
         }
         if (isset($values['lazy'])) {
-            $this->lazy = (boolean) $values['lazy'];
+            $this->lazy = (bool) $values['lazy'];
         }
     }
 
