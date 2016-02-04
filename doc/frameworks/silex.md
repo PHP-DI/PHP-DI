@@ -55,6 +55,67 @@ Dependency injection in controllers works using type-hinting:
 - the order of parameters doesn't matter, they are resolved by type-hint (for dependency injection) and by name (for request parameters)
 - it only works with objects that you can type-hint: you can't inject string/int values for example, and you can't inject container entries whose name is not a class/interface name (e.g. `twig` or `doctrine.entity_manager`)
 
+### Controllers as services
+
+With Silex and Pimple, you can define [controllers as services](http://silex.sensiolabs.org/doc/providers/service_controller.html) by installing the `ServiceControllerServiceProvider` and using a specific notation.
+
+With the PHP-DI bridge, you can natively define any type of callable based on services:
+
+- object method:
+
+```php
+class HelloController
+{
+    public function helloAction($name)
+    {
+        // ...
+    }
+}
+
+$app->get('/{name}', [HelloController::class, 'helloAction']);
+```
+
+You will notice above that we give the class name and not an object: PHP-DI will instantiate the instance (and inject dependencies inside it) only if it is used.
+
+- [invokable class](http://php.net/manual/en/language.types.callable.php)
+
+```php
+class HelloController
+{
+    public function __invoke($name)
+    {
+        // ...
+    }
+}
+
+$app->get('/{name}', HelloController::class);
+```
+
+Again you will notice that we pass the class name and not an instance. PHP-DI will correctly detect that this is an invokable class and will instantiate it.
+
+### Middlewares, route variable converters, error handlers and view handlers
+
+The callable resolution described above (for "controllers as services") applies for registering other Silex objects:
+
+- [middlewares](http://silex.sensiolabs.org/doc/middlewares.html)
+- [route variable converters](http://silex.sensiolabs.org/doc/usage.html#route-variable-converters)
+- [error handlers](http://silex.sensiolabs.org/doc/usage.html#error-handlers)
+- [view handlers](http://silex.sensiolabs.org/doc/usage.html#view-handlers)
+
+For example you can define a middleware like so and let PHP-DI instantiate it:
+
+```php
+class AuthMiddleware
+{
+    public function beforeRoute(Request $request, Application $app)
+    {
+        // ...
+    }
+}
+
+$app->before([AuthMiddleware::class, 'beforeRoute']);
+```
+
 ## Configuring the container
 
 You can configure PHP-DI's container by creating your own `ContainerBuilder` and passing it to the application:
