@@ -4,6 +4,7 @@ namespace DI\Definition\Resolver;
 
 use DI\Definition\Definition;
 use DI\Definition\Exception\DefinitionException;
+use DI\Definition\Source\ServiceProvider;
 use DI\Proxy\ProxyFactory;
 use Interop\Container\ContainerInterface;
 
@@ -36,6 +37,7 @@ class ResolverDispatcher implements DefinitionResolver
     private $instanceResolver;
     private $envVariableResolver;
     private $stringResolver;
+    private $interopResolver;
 
     public function __construct(ContainerInterface $container, ProxyFactory $proxyFactory)
     {
@@ -140,6 +142,12 @@ class ResolverDispatcher implements DefinitionResolver
                 }
 
                 return $this->instanceResolver;
+            case $definition instanceof \DI\Definition\InteropDefinition:
+                if (! $this->interopResolver) {
+                    $this->interopResolver = new InteropResolver($this->container, $this);
+                }
+
+                return $this->interopResolver;
             default:
                 throw new \RuntimeException('No definition resolver was configured for definition of type ' . get_class($definition));
         }
