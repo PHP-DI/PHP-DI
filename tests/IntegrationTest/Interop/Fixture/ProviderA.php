@@ -14,6 +14,7 @@ class ProviderA implements ServiceProvider
             'ab' => 'getAb',
             'overridden' => 'getOverridden',
             'extended' => 'getExtended',
+            'native' => 'getNative',
         ];
     }
 
@@ -35,5 +36,10 @@ class ProviderA implements ServiceProvider
     public static function getExtended()
     {
         return 'hello';
+    }
+
+    public static function getNative(ContainerInterface $container, $previous = null)
+    {
+        return $previous . ' is';
     }
 }

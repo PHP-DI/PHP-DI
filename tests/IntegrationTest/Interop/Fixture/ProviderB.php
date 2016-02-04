@@ -14,6 +14,8 @@ class ProviderB implements ServiceProvider
             'ba' => 'getBa',
             'overridden' => 'getOverridden',
             'extended' => 'getExtended',
+            'no_previous' => 'getNoPrevious',
+            'native' => 'getNative',
         ];
     }
 
@@ -35,5 +37,15 @@ class ProviderB implements ServiceProvider
     public static function getExtended(ContainerInterface $container, $previous = null)
     {
         return $previous . ' world';
+    }
+
+    public static function getNoPrevious(ContainerInterface $container, $previous = null)
+    {
+        return $previous . ' world';
+    }
+
+    public static function getNative(ContainerInterface $container, $previous = null)
+    {
+        return $previous . ' awesome';
     }
 }

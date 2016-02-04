@@ -235,11 +235,13 @@ class ContainerBuilder
      */
     public function addDefinitions($definitions)
     {
-        if (class_exists($definitions) && is_subclass_of($definitions, 'DI\ServiceProvider')) {
-            $definitions = new \DI\Definition\Source\ServiceProvider($definitions);
-        } elseif (is_string($definitions)) {
-            // File
-            $definitions = new DefinitionFile($definitions);
+        if (is_string($definitions)) {
+            if (class_exists($definitions) && is_subclass_of($definitions, 'DI\ServiceProvider')) {
+                $definitions = new \DI\Definition\Source\ServiceProvider($definitions);
+            } else {
+                // File
+                $definitions = new DefinitionFile($definitions);
+            }
         } elseif (is_array($definitions)) {
             $definitions = new DefinitionArray($definitions);
         } elseif (! $definitions instanceof DefinitionSource) {
