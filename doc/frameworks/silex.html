@@ -301,6 +301,53 @@ $app-&gt;post('/register/{name}', function ($name, Mailer $mailer) {
 <li>the order of parameters doesn't matter, they are resolved by type-hint (for dependency injection) and by name (for request parameters)</li>
 <li>it only works with objects that you can type-hint: you can't inject string/int values for example, and you can't inject container entries whose name is not a class/interface name (e.g. <code>twig</code> or <code>doctrine.entity_manager</code>)</li>
 </ul>
+<h3 id="controllers-as-services">Controllers as services</h3>
+<p>With Silex and Pimple, you can define <a href="http://silex.sensiolabs.org/doc/providers/service_controller.html">controllers as services</a> by installing the <code>ServiceControllerServiceProvider</code> and using a specific notation.</p>
+<p>With the PHP-DI bridge, you can natively define any type of callable based on services:</p>
+<ul>
+<li>object method:</li>
+</ul>
+<pre><code class="language-php">class HelloController
+{
+    public function helloAction($name)
+    {
+        // ...
+    }
+}
+
+$app-&gt;get('/{name}', [HelloController::class, 'helloAction']);</code></pre>
+<p>You will notice above that we give the class name and not an object: PHP-DI will instantiate the instance (and inject dependencies inside it) only if it is used.</p>
+<ul>
+<li><a href="http://php.net/manual/en/language.types.callable.php">invokable class</a></li>
+</ul>
+<pre><code class="language-php">class HelloController
+{
+    public function __invoke($name)
+    {
+        // ...
+    }
+}
+
+$app-&gt;get('/{name}', HelloController::class);</code></pre>
+<p>Again you will notice that we pass the class name and not an instance. PHP-DI will correctly detect that this is an invokable class and will instantiate it.</p>
+<h3 id="middlewares-route-variable-converters-error-handlers-and-view-handlers">Middlewares, route variable converters, error handlers and view handlers</h3>
+<p>The callable resolution described above (for &quot;controllers as services&quot;) applies for registering other Silex objects:</p>
+<ul>
+<li><a href="http://silex.sensiolabs.org/doc/middlewares.html">middlewares</a></li>
+<li><a href="http://silex.sensiolabs.org/doc/usage.html#route-variable-converters">route variable converters</a></li>
+<li><a href="http://silex.sensiolabs.org/doc/usage.html#error-handlers">error handlers</a></li>
+<li><a href="http://silex.sensiolabs.org/doc/usage.html#view-handlers">view handlers</a></li>
+</ul>
+<p>For example you can define a middleware like so and let PHP-DI instantiate it:</p>
+<pre><code class="language-php">class AuthMiddleware
+{
+    public function beforeRoute(Request $request, Application $app)
+    {
+        // ...
+    }
+}
+
+$app-&gt;before([AuthMiddleware::class, 'beforeRoute']);</code></pre>
 <h2 id="configuring-the-container">Configuring the container</h2>
 <p>You can configure PHP-DI's container by creating your own <code>ContainerBuilder</code> and passing it to the application:</p>
 <pre><code class="language-php">$containerBuilder = new DI\ContainerBuilder();
