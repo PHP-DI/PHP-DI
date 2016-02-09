@@ -233,4 +233,16 @@ class DefinitionArrayTest extends \PHPUnit_Framework_TestCase
         ]);
         $this->assertNull($source->getDefinition('My\Foo\BarInterface'));
     }
+
+    /**
+     * @see https://github.com/PHP-DI/PHP-DI/issues/379
+     */
+    public function testWildcardStringsAreEscaped()
+    {
+        $source = new DefinitionArray([
+            'foo.*' => 'bar',
+        ]);
+        $this->assertNotNull($source->getDefinition('foo.test'));
+        $this->assertNull($source->getDefinition('footest'));
+    }
 }
