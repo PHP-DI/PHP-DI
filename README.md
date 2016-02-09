@@ -2,7 +2,7 @@
 layout: home
 ---
 
-PHP-DI is a Dependency Injection Container made for humans.
+[![](doc/img.png)](http://php-di.org/)
 
 [![Build Status](https://img.shields.io/travis/PHP-DI/PHP-DI.svg?style=flat-square)](https://travis-ci.org/PHP-DI/PHP-DI)
 [![HHVM Status](https://img.shields.io/hhvm/php-di/php-di.svg?style=flat-square)](http://hhvm.h4cc.de/package/php-di/php-di)
