@@ -13,7 +13,7 @@ layout: home
 [![Average time to resolve an issue](http://isitmaintained.com/badge/resolution/PHP-DI/PHP-DI.svg)](http://isitmaintained.com/project/PHP-DI/PHP-DI "Average time to resolve an issue")
 [![Percentage of issues still open](http://isitmaintained.com/badge/open/PHP-DI/PHP-DI.svg)](http://isitmaintained.com/project/PHP-DI/PHP-DI "Percentage of issues still open")
 
-It is meant to be practical, powerful, and framework-agnostic.
+PHP-DI is a dependency injection container meant to be practical, powerful, and framework-agnostic.
 
 Read more on the website: **[php-di.org](http://php-di.org)**
 
