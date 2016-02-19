@@ -37,7 +37,7 @@ class AnnotationReaderTest extends \PHPUnit_Framework_TestCase
         $source = new AnnotationReader();
         $definition = $source->getDefinition('DI\Test\UnitTest\Definition\Source\Fixtures\AnnotationFixture');
 
-        $this->assertNull($definition->getPropertyInjection('unannotatedProperty'));
+        $this->assertNotHasPropertyInjection($definition, 'unannotatedProperty');
     }
 
     public function testStaticProperty()
@@ -45,7 +45,7 @@ class AnnotationReaderTest extends \PHPUnit_Framework_TestCase
         $source = new AnnotationReader();
         $definition = $source->getDefinition('DI\Test\UnitTest\Definition\Source\Fixtures\AnnotationFixture');
 
-        $this->assertNull($definition->getPropertyInjection('staticProperty'));
+        $this->assertNotHasPropertyInjection($definition, 'staticProperty');
     }
 
     /**
@@ -235,9 +235,9 @@ class AnnotationReaderTest extends \PHPUnit_Framework_TestCase
         $source = new AnnotationReader();
         $definition = $source->getDefinition('DI\Test\UnitTest\Definition\Source\Fixtures\AnnotationFixtureChild');
 
-        $this->assertNotNull($definition->getPropertyInjection('propertyChild'));
+        $this->assertHasPropertyInjection($definition, 'propertyChild');
         $this->assertNotNull($this->getMethodInjection($definition, 'methodChild'));
-        $this->assertNotNull($definition->getPropertyInjection('propertyParent'));
+        $this->assertHasPropertyInjection($definition, 'propertyParent');
         $this->assertNotNull($this->getMethodInjection($definition, 'methodParent'));
     }
 
@@ -250,7 +250,7 @@ class AnnotationReaderTest extends \PHPUnit_Framework_TestCase
     {
         $source = new AnnotationReader();
         $definition = $source->getDefinition('DI\Test\UnitTest\Definition\Source\Fixtures\AnnotationFixtureChild');
-        $this->assertNotNull($definition->getPropertyInjection('propertyParentPrivate'));
+        $this->assertHasPropertyInjection($definition, 'propertyParentPrivate');
     }
 
     private function getMethodInjection(ObjectDefinition $definition, $name)
@@ -263,5 +263,26 @@ class AnnotationReaderTest extends \PHPUnit_Framework_TestCase
         }
 
         return null;
+    }
+
+    private function assertHasPropertyInjection(ObjectDefinition $definition, $propertyName)
+    {
+        $propertyInjections = $definition->getPropertyInjections();
+        foreach ($propertyInjections as $propertyInjection) {
+            if ($propertyInjection->getPropertyName() === $propertyName) {
+                return;
+            }
+        }
+        $this->fail('No property injection found for ' . $propertyName);
+    }
+
+    private function assertNotHasPropertyInjection(ObjectDefinition $definition, $propertyName)
+    {
+        $propertyInjections = $definition->getPropertyInjections();
+        foreach ($propertyInjections as $propertyInjection) {
+            if ($propertyInjection->getPropertyName() === $propertyName) {
+                $this->fail('No property injection found for ' . $propertyName);
+            }
+        }
     }
 }

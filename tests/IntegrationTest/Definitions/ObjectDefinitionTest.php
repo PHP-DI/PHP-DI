@@ -19,19 +19,17 @@ class ObjectDefinitionTest extends \PHPUnit_Framework_TestCase
         $builder->useAutowiring(false);
         $builder->addDefinitions([
             // with the same name
-            'stdClass'    => \DI\object('stdClass'),
+            'stdClass' => \DI\object('stdClass'),
             // with name inferred
-            'ArrayObject' => \DI\object()
-                ->constructor([]),
+            __NAMESPACE__ . '\ObjectDefinition\Class1' => \DI\object(),
             // with a different name
-            'object'      => \DI\object('ArrayObject')
-                ->constructor([]),
+            'object' => \DI\object(__NAMESPACE__ . '\ObjectDefinition\Class1'),
         ]);
         $container = $builder->build();
 
         $this->assertInstanceOf('stdClass', $container->get('stdClass'));
-        $this->assertInstanceOf('ArrayObject', $container->get('object'));
-        $this->assertInstanceOf('ArrayObject', $container->get('ArrayObject'));
+        $this->assertInstanceOf(__NAMESPACE__ . '\ObjectDefinition\Class1', $container->get(__NAMESPACE__ . '\ObjectDefinition\Class1'));
+        $this->assertInstanceOf(__NAMESPACE__ . '\ObjectDefinition\Class1', $container->get('object'));
     }
 
     public function test_multiple_method_call()

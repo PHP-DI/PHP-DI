@@ -180,7 +180,7 @@ class ObjectCreatorTest extends \PHPUnit_Framework_TestCase
 
     public function testUnknownClass()
     {
-        $message = <<<MESSAGE
+        $message = <<<'MESSAGE'
 Entry "foo" cannot be resolved: the class doesn't exist
 Full definition:
 Object (
@@ -198,7 +198,7 @@ MESSAGE;
 
     public function testNotInstantiable()
     {
-        $message = <<<MESSAGE
+        $message = <<<'MESSAGE'
 Entry "ArrayAccess" cannot be resolved: the class is not instantiable
 Full definition:
 Object (

@@ -4,15 +4,14 @@ layout: documentation
 
 # Annotations
 
+On top of [autowiring](autowiring.md) and [PHP configuration files](php-definitions.md), you can define injections using annotations.
+
+## Installation
+
 Annotations **are disabled by default**. To be able to use them, you first need to install the [Doctrine Annotations](http://doctrine-common.readthedocs.org/en/latest/reference/annotations.html) library using Composer:
 
-```json
-{
-    "require": {
-        ...
-        "doctrine/annotations": "~1.2"
-    }
-}
+```
+composer require doctrine/annotations
 ```
 
 Then you need to [configure the `ContainerBuilder`](container-configuration.md) to use them:
@@ -21,11 +20,11 @@ Then you need to [configure the `ContainerBuilder`](container-configuration.md) 
 $containerBuilder->useAnnotations(true);
 ```
 
-Annotations are written in PHP docblock comments. They are used by a lot of modern libraries and frameworks, like [Doctrine](http://docs.doctrine-project.org/projects/doctrine-orm/en/latest/index.html), [Symfony](http://symfony.com/), [Flow](http://flow.typo3.org/), [PHPUnit](http://www.phpunit.de/manual/3.7/en/)…
+Annotations are written in PHP docblock comments. They are used by a lot of modern libraries and frameworks, like [Doctrine](http://docs.doctrine-project.org/projects/doctrine-orm/en/latest/index.html), [Symfony](http://symfony.com/), [PHPUnit](http://www.phpunit.de/)…
 
-## Inject
+## @Inject
 
-`@Inject` lets you define where PHP-DI should inject something, and what it should inject. You can combine it with `@var` and `@param` phpdoc tags to define what should be injected.
+`@Inject` lets you define where PHP-DI should inject something, and what it should inject. You can optionally combine it with `@var` and `@param` phpdoc tags to define what should be injected.
 
 It can be used on:
 
@@ -81,10 +80,26 @@ class Example
     public function method2($param1, $param2)
     {
     }
+
+    /**
+     * Explicit definition of parameters by their name:
+     *
+     * @Inject({"param2" = "db.host"})
+     */
+    public function method3(Foo $param1, $param2)
+    {
+    }
 }
 ```
 
 *Note: importing annotations with `use DI\Annotation\Inject;` is optional.*
+
+### Troubleshooting @Inject
+
+- you must use double quotes (`"`) instead of single quotes(`'`), for example: `@Inject("foo")`
+- what's inside `@Inject()` must be in quotes, even if it's a class name: `@Inject("Acme\Blog\ArticleRepository")`
+- when using `@Inject` in combination with `@var` or `@param`, make sure the class name is correctly imported if using namespaces (a good IDE will show warnings if not)
+- `@Inject` is not meant to be used on the method to call with [`Container::call()`](container.md#call) (it will be ignored)
 
 ## Injectable
 
@@ -94,7 +109,8 @@ The `@Injectable` annotation lets you set options on injectable classes:
 /**
  * @Injectable(scope="prototype", lazy=true)
  */
-class Example {
+class Example
+{
 }
 ```
 
