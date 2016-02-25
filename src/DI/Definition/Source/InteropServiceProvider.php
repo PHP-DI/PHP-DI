@@ -2,23 +2,16 @@
 
 namespace DI\Definition\Source;
 
-use DI\Definition\ArrayDefinition;
-use DI\Definition\DecoratorDefinition;
-use DI\Definition\Definition;
-use DI\Definition\Exception\DefinitionException;
-use DI\Definition\FactoryDefinition;
-use DI\Definition\Helper\DefinitionHelper;
 use DI\Definition\InteropDefinition;
 use DI\Definition\ObjectDefinition;
-use DI\Definition\ValueDefinition;
-use Interop\Container\ContainerInterface;
 
 /**
- * Reads definitions from a standard service provider.
+ * Reads definitions from a Interop\Container\ServiceProvider class.
  *
+ * @see Interop\Container\ServiceProvider
  * @author Matthieu Napoli <matthieu@mnapoli.fr>
  */
-class ServiceProvider implements DefinitionSource
+class InteropServiceProvider implements DefinitionSource
 {
     /**
      * @var string
@@ -31,7 +24,7 @@ class ServiceProvider implements DefinitionSource
     private $entries;
 
     /**
-     * @param string $serviceProvider Class name.
+     * @param string $serviceProvider Name of a class implementing Interop\Container\ServiceProvider.
      */
     public function __construct($serviceProvider)
     {

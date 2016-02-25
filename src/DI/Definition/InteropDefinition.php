@@ -5,6 +5,8 @@ namespace DI\Definition;
 use DI\Scope;
 
 /**
+ * Container entry returned by a container-interop service provider.
+ *
  * @author Matthieu Napoli <matthieu@mnapoli.fr>
  */
 class InteropDefinition implements Definition, HasSubDefinition

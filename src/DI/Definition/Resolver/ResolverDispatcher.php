@@ -4,7 +4,6 @@ namespace DI\Definition\Resolver;
 
 use DI\Definition\Definition;
 use DI\Definition\Exception\DefinitionException;
-use DI\Definition\Source\ServiceProvider;
 use DI\Proxy\ProxyFactory;
 use Interop\Container\ContainerInterface;
 

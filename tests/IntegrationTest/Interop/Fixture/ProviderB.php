@@ -2,8 +2,8 @@
 
 namespace DI\Test\IntegrationTest\Interop\Fixture;
 
-use DI\ServiceProvider;
 use Interop\Container\ContainerInterface;
+use Interop\Container\ServiceProvider;
 
 class ProviderB implements ServiceProvider
 {

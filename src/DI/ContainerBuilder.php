@@ -236,8 +236,8 @@ class ContainerBuilder
     public function addDefinitions($definitions)
     {
         if (is_string($definitions)) {
-            if (class_exists($definitions) && is_subclass_of($definitions, 'DI\ServiceProvider')) {
-                $definitions = new \DI\Definition\Source\ServiceProvider($definitions);
+            if (class_exists($definitions) && is_subclass_of($definitions, 'Interop\Container\ServiceProvider')) {
+                $definitions = new \DI\Definition\Source\InteropServiceProvider($definitions);
             } else {
                 // File
                 $definitions = new DefinitionFile($definitions);
