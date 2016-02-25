@@ -3,6 +3,7 @@
 namespace DI\Definition\Resolver;
 
 use DI\Definition\Definition;
+use DI\Definition\Exception\DefinitionException;
 use DI\Definition\InteropDefinition;
 use Interop\Container\ContainerInterface;
 
@@ -42,7 +43,11 @@ class InteropResolver implements DefinitionResolver
         $previousDefinition = $definition->getPreviousDefinition();
 
         if ($previousDefinition instanceof Definition) {
-            $previous = $this->definitionResolver->resolve($previousDefinition);
+            try {
+                $previous = $this->definitionResolver->resolve($previousDefinition);
+            } catch (DefinitionException $e) {
+                $previous = null;
+            }
         } else {
             $previous = null;
         }

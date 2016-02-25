@@ -15,6 +15,7 @@ class ProviderA implements ServiceProvider
             'overridden' => 'getOverridden',
             'extended' => 'getExtended',
             'native' => 'getNative',
+            'DI\Test\IntegrationTest\Interop\Fixture\Object1' => 'getObject',
         ];
     }
 
@@ -41,5 +42,10 @@ class ProviderA implements ServiceProvider
     public static function getNative(ContainerInterface $container, $previous = null)
     {
         return $previous . ' is';
+    }
+
+    public static function getObject(ContainerInterface $container, $previous = null)
+    {
+        return $previous;
     }
 }

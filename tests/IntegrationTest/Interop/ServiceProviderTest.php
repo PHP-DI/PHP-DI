@@ -36,4 +36,16 @@ class ServiceProviderTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(' world', $container->get('no_previous'));
         $this->assertEquals('this is awesome!', $container->get('native'));
     }
+
+    /**
+     * Test a bug that happened when overriding an incomplete autowiring definition.
+     *
+     * @test
+     */
+    public function test_override_incomplete_autowiring_definition()
+    {
+        $builder = new ContainerBuilder();
+        $builder->addDefinitions('DI\Test\IntegrationTest\Interop\Fixture\ProviderA');
+        $this->assertNull($builder->build()->get('DI\Test\IntegrationTest\Interop\Fixture\Object1'));
+    }
 }
