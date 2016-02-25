@@ -7,12 +7,12 @@ use DI\ContainerBuilder;
 /**
  * @coversNothing
  */
-class InteropTest extends \PHPUnit_Framework_TestCase
+class ServiceProviderTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @test
      */
-    public function test_interop_definitions()
+    public function test_service_provider()
     {
         $builder = new ContainerBuilder();
         $builder->addDefinitions([
