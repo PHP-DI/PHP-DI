@@ -27,7 +27,7 @@ class UserRegistrationService
 
 When PHP-DI needs to create the `UserRegistrationService`, it detects that the constructor takes a `UserRepository` object (using the [type hinting](http://www.php.net/manual/en/language.oop5.typehinting.php)).
 
-**Without any configuration**, PHP-DI will create a `UserRepository` instance (if it wasn't already created) and pass it as a constructor prameter. The equivalent raw PHP code would be:
+**Without any configuration**, PHP-DI will create a `UserRepository` instance (if it wasn't already created) and pass it as a constructor parameter. The equivalent raw PHP code would be:
 
 ```php
 $repository = new UserRepository();
