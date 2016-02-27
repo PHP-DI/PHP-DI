@@ -3,6 +3,7 @@
 namespace DI\Test\IntegrationTest;
 
 use DI\ContainerBuilder;
+use DI\Test\IntegrationTest\Interop\Fixture\Object1;
 
 /**
  * @coversNothing
@@ -33,7 +34,7 @@ class ServiceProviderTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('ba', $container->get('ba'));
         $this->assertEquals('bye', $container->get('overridden'));
         $this->assertEquals('hello world', $container->get('extended'));
-        $this->assertEquals(' world', $container->get('no_previous'));
+        $this->assertNull($container->get('no_previous'));
         $this->assertEquals('this is awesome!', $container->get('native'));
     }
 
@@ -42,10 +43,11 @@ class ServiceProviderTest extends \PHPUnit_Framework_TestCase
      *
      * @test
      */
-    public function test_override_incomplete_autowiring_definition()
+    public function test_no_error_when_overriding_incomplete_autowiring_definition()
     {
         $builder = new ContainerBuilder();
         $builder->addDefinitions('DI\Test\IntegrationTest\Interop\Fixture\ProviderA');
-        $this->assertNull($builder->build()->get('DI\Test\IntegrationTest\Interop\Fixture\Object1'));
+        $object = $builder->build()->get('DI\Test\IntegrationTest\Interop\Fixture\Object1');
+        $this->assertEquals(new Object1('foo'), $object);
     }
 }

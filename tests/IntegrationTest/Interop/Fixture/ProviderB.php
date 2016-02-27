@@ -34,18 +34,18 @@ class ProviderB implements ServiceProvider
         return 'bye';
     }
 
-    public static function getExtended(ContainerInterface $container, $previous = null)
+    public static function getExtended(ContainerInterface $container, callable $getPrevious = null)
     {
-        return $previous . ' world';
+        return $getPrevious() . ' world';
     }
 
-    public static function getNoPrevious(ContainerInterface $container, $previous = null)
+    public static function getNoPrevious(ContainerInterface $container, callable $getPrevious = null)
     {
-        return $previous . ' world';
+        return $getPrevious;
     }
 
-    public static function getNative(ContainerInterface $container, $previous = null)
+    public static function getNative(ContainerInterface $container, callable $getPrevious = null)
     {
-        return $previous . ' awesome';
+        return $getPrevious() . ' awesome';
     }
 }

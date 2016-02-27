@@ -42,17 +42,14 @@ class InteropResolver implements DefinitionResolver
         $method = $definition->getMethod();
         $previousDefinition = $definition->getPreviousDefinition();
 
+        $getPrevious = null;
         if ($previousDefinition instanceof Definition) {
-            try {
-                $previous = $this->definitionResolver->resolve($previousDefinition);
-            } catch (DefinitionException $e) {
-                $previous = null;
-            }
-        } else {
-            $previous = null;
+            $getPrevious = function () use ($previousDefinition) {
+                return $this->definitionResolver->resolve($previousDefinition);
+            };
         }
 
-        return call_user_func([$class, $method], $this->container, $previous);
+        return call_user_func([$class, $method], $this->container, $getPrevious);
     }
 
     public function isResolvable(Definition $definition, array $parameters = [])

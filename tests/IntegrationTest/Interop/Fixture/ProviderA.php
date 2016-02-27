@@ -39,13 +39,13 @@ class ProviderA implements ServiceProvider
         return 'hello';
     }
 
-    public static function getNative(ContainerInterface $container, $previous = null)
+    public static function getNative(ContainerInterface $container, callable $getPrevious = null)
     {
-        return $previous . ' is';
+        return $getPrevious() . ' is';
     }
 
-    public static function getObject(ContainerInterface $container, $previous = null)
+    public static function getObject(ContainerInterface $container, callable $getPrevious = null)
     {
-        return $previous;
+        return new Object1('foo');
     }
 }
