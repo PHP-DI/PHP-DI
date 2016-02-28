@@ -25,7 +25,7 @@
     "require": {
         "php": ">=5.4.0",
         "container-interop/container-interop": "~1.0",
-        "container-interop/service-provider": "~0.1.0",
+        "container-interop/service-provider": "~0.2.0",
         "php-di/invoker": "^1.1.1",
         "php-di/phpdoc-reader": "^2.0.1"
     },
