@@ -13,7 +13,7 @@ Replacing Slim's default container with PHP-DI is thus easy. However this bridge
 
 ### Controllers as services
 
-While you controllers can be simple closures, you can also **write them as classes and have PHP-DI instantiate them only when they are called**:
+While your controllers can be simple closures, you can also **write them as classes and have PHP-DI instantiate them only when they are called**:
 
 ```php
 class UserController

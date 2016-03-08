@@ -19,7 +19,7 @@ You can also read **[the full documentation for PHP-DI in Slim](../doc/framework
 
 ### Controllers as services
 
-While you controllers can be simple closures, you can also **write them as classes and have PHP-DI instantiate them only when they are called**:
+While your controllers can be simple closures, you can also **write them as classes and have PHP-DI instantiate them only when they are called**:
 
 ```php
 class UserController
