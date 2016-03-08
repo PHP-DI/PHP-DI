@@ -28,6 +28,7 @@ title: Documentation index
 - [Silex](frameworks/silex.md)
 - [Zend Framework 1](frameworks/zf1.md)
 - [Zend Framework 2](frameworks/zf2.md)
+- [Slim](frameworks/slim.md)
 - [Silly](frameworks/silly.md)
 
 ### Advanced topics
