@@ -121,3 +121,10 @@ menu:
                 v4:
                     text: PHP-DI 4.x
                     absoluteUrl: https://github.com/PHP-DI/PHP-DI/tree/4.x/doc
+
+frameworks:
+    zf1: Zend Framework 1
+    zf2: Zend Framework 2
+    symfony2: Symfony
+    silex: Silex
+    silly: Silly

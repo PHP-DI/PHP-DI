@@ -8,53 +8,20 @@
 
     <div class="row">
 
-        <div class="col-sm-2 col-sm-offset-1">
-            <a href="{{ baseUrl }}/doc/frameworks/zf1.html">
-                <img class="framework-logo" src="{{ baseUrl }}/img/zf-logo.png" alt="Zend Framework 1">
-            </a>
-            <h4>
-                <a href="{{ baseUrl }}/doc/frameworks/zf1.html">Zend Framework 1</a>
-            </h4>
-        </div>
-
-        <div class="col-sm-2">
-            <a href="{{ baseUrl }}/doc/frameworks/zf2.html">
-                <img class="framework-logo" src="{{ baseUrl }}/img/zf2-logo.png" alt="Zend Framework 2">
-            </a>
-            <h4>
-                <a href="{{ baseUrl }}/doc/frameworks/zf2.html">Zend Framework 2</a>
-            </h4>
-        </div>
-
-        <div class="col-sm-2">
-            <a href="{{ baseUrl }}/doc/frameworks/symfony2.html">
-                <img class="framework-logo" src="{{ baseUrl }}/img/symfony-logo.png" alt="Symfony 2">
-            </a>
-            <h4>
-                <a href="{{ baseUrl }}/doc/frameworks/symfony2.html">Symfony 2</a>
-            </h4>
-        </div>
-
-        <div class="col-sm-2">
-            <a href="{{ baseUrl }}/doc/frameworks/silex.html">
-                <img class="framework-logo" src="{{ baseUrl }}/img/silex-logo.png" alt="Silex">
-            </a>
-            <h4>
-                <a href="{{ baseUrl }}/doc/frameworks/silex.html">Silex</a>
-            </h4>
-        </div>
-
-        <div class="col-sm-2">
-            <a href="{{ baseUrl }}/doc/frameworks/silly.html">
-                <span class="fa-stack fa-lg">
-                    <i class="fa fa-square-o fa-stack-2x"></i>
-                    <i class="fa fa-terminal fa-stack-1x fa-white"></i>
-                </span>
-            </a>
-            <h4>
-                <a href="{{ baseUrl }}/doc/frameworks/silly.html">Silly</a>
-            </h4>
-        </div>
+        {% for id, name in frameworks %}
+            <div class="col-sm-3 col-md-2">
+                <div class="thumbnail">
+                    <a href="{{ baseUrl }}/doc/frameworks/{{ id }}.html" title="{{ name }}">
+                        <img class="framework-logo" src="{{ baseUrl }}/img/frameworks/{{ id }}.png" alt="{{ name }}">
+                    </a>
+                    <div class="caption">
+                        <h4>
+                            <a href="{{ baseUrl }}/doc/frameworks/{{ id }}.html" title="{{ name }} integration guide">{{ name }}</a>
+                        </h4>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
 
     </div>
 
