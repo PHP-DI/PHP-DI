@@ -130,5 +130,5 @@ frameworks:
     zf2: Zend Framework 2
     symfony2: Symfony
     silex: Silex
-    Slim: Slim
+    slim: Slim
     silly: Silly
