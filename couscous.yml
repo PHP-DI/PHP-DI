@@ -67,6 +67,9 @@ menu:
                 zf1:
                     text: Zend Framework 1
                     url: doc/frameworks/zf1.html
+                slim:
+                    text: Slim
+                    url: doc/frameworks/slim.html
                 silly:
                     text: Silly
                     url: doc/frameworks/silly.html
@@ -121,3 +124,11 @@ menu:
                 v4:
                     text: PHP-DI 4.x
                     absoluteUrl: https://github.com/PHP-DI/PHP-DI/tree/4.x/doc
+
+frameworks:
+    zf1: Zend Framework 1
+    zf2: Zend Framework 2
+    symfony2: Symfony
+    silex: Silex
+    Slim: Slim
+    silly: Silly
