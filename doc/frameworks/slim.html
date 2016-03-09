@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>
+<html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>
+<html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>
+<html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!-->
+<html class="no-js"> <!--<![endif]-->
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>PHP-DI - The Dependency Injection Container for humans</title>
+    <meta name="description" content="PHP-DI is a Dependency Injection Container for PHP that intends to be practical and powerful">
+
+    <link rel="canonical" href="http://php-di.org" />
+
+    <meta name="application-name" content="PHP-DI"/>
+    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="http://php-di.org/img/apple-touch-icon-144x144.png" />
+    <link rel="apple-touch-icon-precomposed" sizes="152x152" href="http://php-di.org/img/apple-touch-icon-152x152.png" />
+    <link rel="icon" type="image/png" href="http://php-di.org/img/favicon-32x32.png" sizes="32x32" />
+    <link rel="icon" type="image/png" href="http://php-di.org/img/favicon-16x16.png" sizes="16x16" />
+    <meta name="msapplication-TileColor" content="#484949" />
+    <meta name="msapplication-TileImage" content="http://php-di.org/img/mstile-144x144.png" />
+
+            <link href="http://fonts.googleapis.com/css?family=Abel:400|Oswald:300,400,700" media="all" rel="stylesheet" type="text/css">
+        <link href="http://php-di.org/css/highlight.github.css" rel="stylesheet">
+        <link href="http://php-di.org/css/all.min.css" rel="stylesheet">
+    
+    <script>
+        if (window.location.href.indexOf('http://mnapoli.fr') === 0) {
+            window.location.href = 'http://php-di.org';
+        }
+    </script>
+</head>
+<body>
+
+    <header>
+        <div class="navbar navbar-default navbar-fixed-top">
+            <div class="container">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#top-navigation">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand" href="http://php-di.org/">PHP-DI</a>
+                </div>
+                <div class="collapse navbar-collapse" id="top-navigation">
+                    <ul class="nav navbar-nav navbar-right">
+                        <li><a href="http://php-di.org/doc/getting-started.html">Getting started</a></li>
+                        <li><a href="http://php-di.org/doc/">Documentation</a></li>
+                        <li><a href="http://php-di.org/news/">News</a></li>
+                        <li><a href="http://php-di.org/change-log.html">Change log</a></li>
+                        <li><a class="github" href="https://github.com/PHP-DI/PHP-DI"><i class="fa fa-github"></i></a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    
+    <div class="container documentation">
+
+        <div class="sidebar">
+            <ul>
+                                    <li>
+                        Introduction
+
+                        <ul>
+                                                            <li class="">
+                                    <a href="http://php-di.org/doc/getting-started.html">
+                                        Getting started
+                                    </a>
+                                </li>
+                                                            <li class="">
+                                    <a href="http://php-di.org/doc/understanding-di.html">
+                                        Understanding dependency injection
+                                    </a>
+                                </li>
+                                                            <li class="">
+                                    <a href="http://php-di.org/doc/best-practices.html">
+                                        "Best practices" guide
+                                    </a>
+                                </li>
+                                                    </ul>
+                    </li>
+                                    <li>
+                        Usage
+
+                        <ul>
+                                                            <li class="">
+                                    <a href="http://php-di.org/doc/container-configuration.html">
+                                        Configuring the container
+                                    </a>
+                                </li>
+                                                            <li class="">
+                                    <a href="http://php-di.org/doc/container.html">
+                                        Using the container
+                                    </a>
+                                </li>
+                                                    </ul>
+                    </li>
+                                    <li>
+                        Definitions
+
+                        <ul>
+                                                            <li class="">
+                                    <a href="http://php-di.org/doc/definition.html">
+                                        Introduction
+                                    </a>
+                                </li>
+                                                            <li class="">
+                                    <a href="http://php-di.org/doc/autowiring.html">
+                                        Autowiring
+                                    </a>
+                                </li>
+                                                            <li class="">
+                                    <a href="http://php-di.org/doc/php-definitions.html">
+                                        PHP definitions
+                                    </a>
+                                </li>
+                                                            <li class="">
+                                    <a href="http://php-di.org/doc/annotations.html">
+                                        Annotations
+                                    </a>
+                                </li>
+                                                            <li class="">
+                                    <a href="http://php-di.org/doc/definition-overriding.html">
+                                        Definition extensions and overriding
+                                    </a>
+                                </li>
+                                                    </ul>
+                    </li>
+                                    <li>
+                        Frameworks
+
+                        <ul>
+                                                            <li class="">
+                                    <a href="http://php-di.org/doc/frameworks/symfony2.html">
+                                        Symfony 2
+                                    </a>
+                                </li>
+                                                            <li class="">
+                                    <a href="http://php-di.org/doc/frameworks/silex.html">
+                                        Silex
+                                    </a>
+                                </li>
+                                                            <li class="">
+                                    <a href="http://php-di.org/doc/frameworks/zf2.html">
+                                        Zend Framework 2
+                                    </a>
+                                </li>
+                                                            <li class="">
+                                    <a href="http://php-di.org/doc/frameworks/zf1.html">
+                                        Zend Framework 1
+                                    </a>
+                                </li>
+                                                            <li class="">
+                                    <a href="http://php-di.org/doc/frameworks/slim.html">
+                                        Slim
+                                    </a>
+                                </li>
+                                                            <li class="">
+                                    <a href="http://php-di.org/doc/frameworks/silly.html">
+                                        Silly
+                                    </a>
+                                </li>
+                                                            <li class="">
+                                    <a href="https://github.com/PHP-DI/demo">
+                                        Demo application
+                                    </a>
+                                </li>
+                                                    </ul>
+                    </li>
+                                    <li>
+                        Advanced topics
+
+                        <ul>
+                                                            <li class="">
+                                    <a href="http://php-di.org/doc/performances.html">
+                                        Performances
+                                    </a>
+                                </li>
+                                                            <li class="">
+                                    <a href="http://php-di.org/doc/scopes.html">
+                                        Scopes
+                                    </a>
+                                </li>
+                                                            <li class="">
+                                    <a href="http://php-di.org/doc/lazy-injection.html">
+                                        Lazy injection
+                                    </a>
+                                </li>
+                                                            <li class="">
+                                    <a href="http://php-di.org/doc/inject-on-instance.html">
+                                        Inject on an existing instance
+                                    </a>
+                                </li>
+                                                            <li class="">
+                                    <a href="http://php-di.org/doc/environments.html">
+                                        Injections depending on the environment
+                                    </a>
+                                </li>
+                                                            <li class="">
+                                    <a href="http://php-di.org/doc/ide-integration.html">
+                                        IDE integration
+                                    </a>
+                                </li>
+                                                    </ul>
+                    </li>
+                                    <li>
+                        Migration guides
+
+                        <ul>
+                                                            <li class="">
+                                    <a href="http://php-di.org/doc/migration/4.0.html">
+                                        From PHP-DI 3.x to 4.0
+                                    </a>
+                                </li>
+                                                            <li class="">
+                                    <a href="http://php-di.org/doc/migration/5.0.html">
+                                        From PHP-DI 4.x to 5.0
+                                    </a>
+                                </li>
+                                                    </ul>
+                    </li>
+                                    <li>
+                        Internals
+
+                        <ul>
+                                                            <li class="">
+                                    <a href="http://php-di.org/contributing.html">
+                                        Contributing
+                                    </a>
+                                </li>
+                                                            <li class="">
+                                    <a href="http://php-di.org/doc/how-it-works.html">
+                                        How PHP-DI works
+                                    </a>
+                                </li>
+                                                    </ul>
+                    </li>
+                                    <li>
+                        Old documentation
+
+                        <ul>
+                                                            <li class="">
+                                    <a href="https://github.com/PHP-DI/PHP-DI/tree/3.x/doc">
+                                        PHP-DI 3.x
+                                    </a>
+                                </li>
+                                                            <li class="">
+                                    <a href="https://github.com/PHP-DI/PHP-DI/tree/4.x/doc">
+                                        PHP-DI 4.x
+                                    </a>
+                                </li>
+                                                    </ul>
+                    </li>
+                            </ul>
+        </div>
+
+        <article>
+            <div class="pull-right">
+                <a href="https://github.com/PHP-DI/PHP-DI/blob/master/doc/frameworks/slim.md" class="btn btn-default btn-sm">
+                    Edit this page on GitHub
+                </a>
+            </div>
+
+            <h1 id="php-di-in-slim-3">PHP-DI in Slim 3</h1>
+<p><a href="http://www.slimframework.com/">Slim 3</a> is a micro-framework for web applications and APIs. This framework has been one of the first to integrate <a href="https://github.com/container-interop/container-interop">container-interop</a> in its core. That means that <em>Slim can work with any container</em> out of the box.</p>
+<p>Replacing Slim's default container with PHP-DI is thus easy. However this bridge provides several additional features <em>on top of that</em>:</p>
+<ul>
+<li>controllers as services, allowing dependency injection in controllers</li>
+<li>intelligent parameter injections in controller</li>
+</ul>
+<h3 id="controllers-as-services">Controllers as services</h3>
+<p>While your controllers can be simple closures, you can also <strong>write them as classes and have PHP-DI instantiate them only when they are called</strong>:</p>
+<pre><code class="language-php">class UserController
+{
+    private $userRepository;
+
+    public function __construct(UserRepository $userRepository)
+    {
+        $this-&gt;userRepository = $userRepository;
+    }
+
+    public function delete($request, $response)
+    {
+        $this-&gt;userRepository-&gt;remove($request-&gt;getAttribute('id'));
+
+        $response-&gt;getBody()-&gt;write('User deleted');
+        return $response;
+    }
+}
+
+$app-&gt;delete('/user/{id}', ['UserController', 'delete']);</code></pre>
+<p>Dependencies can then be injected in your controller using <a href="../definition.html">autowiring, PHP-DI config files or even annotations</a>.</p>
+<h3 id="controller-parameters">Controller parameters</h3>
+<p>By default, Slim controllers have a strict signature: <code>$request, $response, $args</code>. The PHP-DI bridge offers a more flexible and developer friendly alternative.</p>
+<p>Controller parameters can be any of these things:</p>
+<ul>
+<li>request or response injection (parameters must be named <code>$request</code> or <code>$response</code>)</li>
+<li>request attribute injection</li>
+<li>service injection (by type-hint)</li>
+</ul>
+<p>You can mix all these types of parameters together too. They will be matched by priority in the order of the list above.</p>
+<h4 id="request-or-response-injection">Request or response injection</h4>
+<p>You can inject the request or response in the controller parameters by name:</p>
+<pre><code class="language-php">$app-&gt;get('/', function (ResponseInterface $response, ServerRequestInterface $request) {
+    // ...
+});</code></pre>
+<p>As you can see, the order of the parameters doesn't matter. That allows to skip injecting the <code>$request</code> if it's not needed for example.</p>
+<h4 id="request-attribute-injection">Request attribute injection</h4>
+<pre><code class="language-php">$app-&gt;get('/hello/{name}', function ($name, ResponseInterface $response) {
+    $response-&gt;getBody()-&gt;write('Hello ' . $name);
+    return $response;
+});</code></pre>
+<p>As you can see above, the route's URL contains a <code>name</code> placeholder. By simply adding a parameter <strong>with the same name</strong> to the controller, PHP-DI will directly inject it.</p>
+<h4 id="service-injection">Service injection</h4>
+<p>To inject services into your controllers, you can write them as classes. But if you want to write a micro-application using closures, you don't have to give up dependency injection either.</p>
+<p>You can inject services by type-hinting them:</p>
+<pre><code class="language-php">$app-&gt;get('/', function (ResponseInterface $response, Twig $twig) {
+    return $twig-&gt;render($response, 'home.twig');
+});</code></pre>
+<blockquote>
+<p>Note: you can only inject services that you can type-hint and that PHP-DI can provide. Type-hint injection is simple, it simply injects the result of <code>$container-&gt;get(/* the type-hinted class */)</code>.</p>
+</blockquote>
+<h2 id="installation">Installation</h2>
+<pre><code>composer require php-di/slim-bridge</code></pre>
+<h2 id="usage">Usage</h2>
+<p>Instead of using <code>Slim\App</code>, simply use <code>DI\Bridge\Slim\App</code>:</p>
+<pre><code class="language-php">&lt;?php
+require 'vendor/autoload.php';
+
+$app = new \DI\Bridge\Slim\App;</code></pre>
+<p>You can then use the application <a href="http://www.slimframework.com/">just like a classic Slim application</a>:</p>
+<pre><code class="language-php">use Psr\Http\Message\ServerRequestInterface as Request;
+use Psr\Http\Message\ResponseInterface as Response;
+
+$app-&gt;get('/hello/{name}', function (Request $request, Response $response) {
+    $response-&gt;getBody()-&gt;write('Hello!');
+    return $response;
+});
+
+$app-&gt;run();</code></pre>
+<p>You may notice the <code>DI\Bridge\Slim\App</code> class is very simple. You can very well create the container yourself and pass it to the constructor of <code>Slim\App</code>. Just don't forget to register the <a href="https://github.com/PHP-DI/Slim-Bridge/blob/master/src/config.php"><code>src/config.php</code></a> file in the container.</p>
+<h3 id="configuring-php-di">Configuring PHP-DI</h3>
+<p>If you want to configure PHP-DI, simply extend the <code>DI\Bridge\Slim\App</code> class and override the <code>configureContainer()</code> method:</p>
+<pre><code class="language-php">class MyApp extends \DI\Bridge\Slim\App
+{
+    protected function configureContainer(ContainerBuilder $builder)
+    {
+        $builder-&gt;addDefinitions(__DIR__ . 'my-config-file.php');
+    }
+}
+
+$app = new MyApp;</code></pre>
+<p>Or if you are using PHP 7 you can use anonymous classes:</p>
+<pre><code class="language-php">$app = new class() extends \DI\Bridge\Slim\App {
+    protected function configureContainer(ContainerBuilder $builder)
+    {
+        $builder-&gt;addDefinitions(__DIR__ . 'my-config-file.php');
+    }
+};</code></pre>
+<p>Have a look at <a href="../container-configuration.html">configuring PHP-DI</a> for more details.</p>
+<h3 id="twig">Twig</h3>
+<p>In order to get you started easily, here is how you can install the Twig extension for Slim:</p>
+<ul>
+<li>
+<p>install the <a href="https://github.com/slimphp/Twig-View">Twig-View</a> package:</p>
+<pre><code>composer require slim/twig-view</code></pre>
+</li>
+<li>
+<p>configure the <code>Twig</code> class in PHP-DI (taken from <a href="https://github.com/slimphp/Twig-View#usage">the package's documentation</a>):</p>
+<pre><code class="language-php">class MyApp extends \DI\Bridge\Slim\App
+{
+    protected function configureContainer(ContainerBuilder $builder)
+    {
+        $definitions = [
+
+            \Slim\Views\Twig::class =&gt; function (ContainerInterface $c) {
+                $twig = new \Slim\Views\Twig('path/to/templates', [
+                    'cache' =&gt; 'path/to/cache'
+                ]);
+
+                $twig-&gt;addExtension(new \Slim\Views\TwigExtension(
+                    $c-&gt;get('router'),
+                    $c-&gt;get('request')-&gt;getUri()
+                ));
+
+                return $twig;
+            },
+
+        ];
+
+        $builder-&gt;addDefinitions($definitions);
+    }
+}</code></pre>
+</li>
+</ul>
+<p>You can now inject the service in your controllers and render templates:</p>
+<pre><code class="language-php">$app-&gt;get('/', function ($response, Twig $twig) {
+    return $twig-&gt;render($response, 'home.twig');
+});</code></pre>
+<h2 id="more">More</h2>
+<p>Read more on the <a href="https://github.com/PHP-DI/Slim-Bridge">Slim-Bridge project on GitHub</a>.</p>
+        </article>
+
+    </div>
+
+
+            <footer>
+            <div class='container'>
+                                    <p>
+                        A question? Unsatisfied with the documentation?
+                        Please <a href="https://github.com/PHP-DI/PHP-DI/issues/new">create an issue</a>
+                        or chat on
+                        <a href="https://gitter.im/PHP-DI/PHP-DI">Gitter</a> or
+                        <a href="https://twitter.com/phpdi">Twitter</a>.
+                    </p>
+                                <p>
+                    <a href="https://twitter.com/share" class="twitter-share-button" data-related="PHPDI" data-dnt="true">Tweet</a>
+                    <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+                </p>
+                <p>
+                    By <a href="http://mnapoli.fr/">Matthieu Napoli</a>
+                    and <a href="https://github.com/PHP-DI/PHP-DI/graphs/contributors">contributors</a>
+                    |
+                    Website generated with
+                    <a href="http://couscous.io" target="_blank">Couscous</a>.
+                </p>
+            </div>
+        </footer>
+    
+            <script src="http://php-di.org/bower_components/jquery/dist/jquery.min.js"></script>
+        <script src="http://php-di.org/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+        <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.5/highlight.min.js"></script>
+
+        <script>
+            $(function() {
+                hljs.initHighlightingOnLoad();
+
+                // Add anchors to headers
+                $('article h2, article h3, article h4, article h5').each(function () {
+                    var url = document.URL.replace(/#.*$/, "") + '#' + $(this).attr('id');
+                    $(this).append(' <a class="anchor" href="' + url + '">#</a>');
+                });
+            });
+        </script>
+    
+    <script>
+        var _gaq = _gaq || [];
+        _gaq.push(['_setAccount', 'UA-15584647-13']);
+        _gaq.push(['_trackPageview']);
+        (function() {
+            var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+            ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+            var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+        })();
+    </script>
+
+    <!-- Piwik -->
+    <script type="text/javascript">
+        var _paq = _paq || [];
+        _paq.push(["setDocumentTitle", document.domain + "/" + document.title]);
+        _paq.push(["setCookieDomain", "*.php-di.org"]);
+        _paq.push(['trackPageView']);
+        _paq.push(['enableLinkTracking']);
+        (function() {
+            var u=(("https:" == document.location.protocol) ? "https" : "http") + "://piwik.mnapoli.fr/";
+            _paq.push(['setTrackerUrl', u+'piwik.php']);
+            _paq.push(['setSiteId', 2]);
+            var d=document, g=d.createElement('script'), s=d.getElementsByTagName('script')[0]; g.type='text/javascript';
+            g.defer=true; g.async=true; g.src=u+'piwik.js'; s.parentNode.insertBefore(g,s);
+        })();
+    </script>
+    <noscript><p><img src="http://piwik.mnapoli.fr/piwik.php?idsite=2" style="border:0;" alt="" /></p></noscript>
+    <!-- End Piwik Code -->
+
+    <!-- Gitter -->
+    <script>
+        ((window.gitter = {}).chat = {}).options = {
+            room: 'PHP-DI/PHP-DI'
+        };
+    </script>
+    <script src="https://sidecar.gitter.im/dist/sidecar.v1.js" async defer></script>
+
+</body>
+</html>

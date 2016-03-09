@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>
+<html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>
+<html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>
+<html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!-->
+<html class="no-js"> <!--<![endif]-->
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>Introducing the PHP-DI bridge for Slim - The Dependency Injection Container for humans</title>
+    <meta name="description" content="PHP-DI is a Dependency Injection Container for PHP that intends to be practical and powerful">
+
+    <link rel="canonical" href="http://php-di.org" />
+
+    <meta name="application-name" content="PHP-DI"/>
+    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="http://php-di.org/img/apple-touch-icon-144x144.png" />
+    <link rel="apple-touch-icon-precomposed" sizes="152x152" href="http://php-di.org/img/apple-touch-icon-152x152.png" />
+    <link rel="icon" type="image/png" href="http://php-di.org/img/favicon-32x32.png" sizes="32x32" />
+    <link rel="icon" type="image/png" href="http://php-di.org/img/favicon-16x16.png" sizes="16x16" />
+    <meta name="msapplication-TileColor" content="#484949" />
+    <meta name="msapplication-TileImage" content="http://php-di.org/img/mstile-144x144.png" />
+
+            <link href="http://fonts.googleapis.com/css?family=Abel:400|Oswald:300,400,700" media="all" rel="stylesheet" type="text/css">
+        <link href="http://php-di.org/css/highlight.github.css" rel="stylesheet">
+        <link href="http://php-di.org/css/all.min.css" rel="stylesheet">
+    
+    <script>
+        if (window.location.href.indexOf('http://mnapoli.fr') === 0) {
+            window.location.href = 'http://php-di.org';
+        }
+    </script>
+</head>
+<body>
+
+    <header>
+        <div class="navbar navbar-default navbar-fixed-top">
+            <div class="container">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#top-navigation">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand" href="http://php-di.org/">PHP-DI</a>
+                </div>
+                <div class="collapse navbar-collapse" id="top-navigation">
+                    <ul class="nav navbar-nav navbar-right">
+                        <li><a href="http://php-di.org/doc/getting-started.html">Getting started</a></li>
+                        <li><a href="http://php-di.org/doc/">Documentation</a></li>
+                        <li><a href="http://php-di.org/news/">News</a></li>
+                        <li><a href="http://php-di.org/change-log.html">Change log</a></li>
+                        <li><a class="github" href="https://github.com/PHP-DI/PHP-DI"><i class="fa fa-github"></i></a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    
+    <section class="container">
+        <div class="row">
+            <div class="col-md-9">
+
+                
+    <article>
+        <h1>Introducing the PHP-DI bridge for Slim</h1>
+
+        <p class="article-information">
+            Posted by Matthieu Napoli on March 8, 2016
+        </p>
+
+        <hr />
+<p><a href="http://www.slimframework.com/">Slim 3</a> was released 3 months ago and it was significant. It is one of the first frameworks to integrate the latest standards and concepts in its core:</p>
+<ul>
+<li><a href="http://www.php-fig.org/psr/psr-7/">PSR-7</a>, a standard for HTTP messages like requests and responses</li>
+<li><a href="https://mwop.net/blog/2015-01-08-on-http-middleware-and-psr-7.html">PSR-7 based middlewares</a>, allowing framework-agnostic HTTP layers or even applications</li>
+<li><a href="https://github.com/container-interop/container-interop">container-interop</a>, a standard for decoupling frameworks from dependency injection containers</li>
+</ul>
+<p>While PSR-7 and middlewares are very interesting, what's more useful for us is the use of <strong>container-interop</strong>. That means Slim 3 can work with any dependency injection container.</p>
+<p>It is very easy to replace the default container (Pimple) with PHP-DI, but today we are releasing a &quot;PHP-DI - Slim&quot; bridge that goes a little further. <strong>Read below for an introduction of what's possible with the PHP-DI bridge</strong>.</p>
+<p>You can also read <strong><a href="../doc/frameworks/slim.html">the full documentation for PHP-DI in Slim</a></strong>.</p>
+<h3 id="controllers-as-services">Controllers as services</h3>
+<p>While your controllers can be simple closures, you can also <strong>write them as classes and have PHP-DI instantiate them only when they are called</strong>:</p>
+<pre><code class="language-php">class UserController
+{
+    private $userRepository;
+
+    public function __construct(UserRepository $userRepository)
+    {
+        $this-&gt;userRepository = $userRepository;
+    }
+
+    public function delete($request, $response)
+    {
+        $this-&gt;userRepository-&gt;remove($request-&gt;getAttribute('id'));
+
+        $response-&gt;getBody()-&gt;write('User deleted');
+        return $response;
+    }
+}
+
+$app-&gt;delete('/user/{id}', ['UserController', 'delete']);</code></pre>
+<p>Dependencies can then be injected in your controller using <a href="../doc/definition.html">autowiring, PHP-DI config files or even annotations</a>.</p>
+<h3 id="controller-parameters">Controller parameters</h3>
+<p>By default, Slim controllers have a strict signature: <code>$request, $response, $args</code>. The PHP-DI bridge offers a more flexible and developer friendly alternative.</p>
+<p>Controller parameters can be any of these things:</p>
+<ul>
+<li>request or response injection (parameters must be named <code>$request</code> or <code>$response</code>)</li>
+<li>request attribute injection</li>
+<li>service injection (by type-hint)</li>
+</ul>
+<p>You can mix all these types of parameters together too. They will be matched by priority in the order of the list above.</p>
+<h4 id="request-or-response-injection">Request or response injection</h4>
+<p>You can inject the request or response in the controller parameters by name:</p>
+<pre><code class="language-php">$app-&gt;get('/', function (ResponseInterface $response, ServerRequestInterface $request) {
+    // ...
+});</code></pre>
+<p>As you can see, the order of the parameters doesn't matter. That allows to skip injecting the <code>$request</code> if it's not needed for example.</p>
+<h4 id="request-attribute-injection">Request attribute injection</h4>
+<pre><code class="language-php">$app-&gt;get('/hello/{name}', function ($name, ResponseInterface $response) {
+    $response-&gt;getBody()-&gt;write('Hello ' . $name);
+    return $response;
+});</code></pre>
+<p>As you can see above, the route's URL contains a <code>name</code> placeholder. By simply adding a parameter <strong>with the same name</strong> to the controller, PHP-DI will directly inject it.</p>
+<h4 id="service-injection">Service injection</h4>
+<p>To inject services into your controllers, you can write them as classes. But if you want to write a micro-application using closures, you don't have to give up dependency injection either.</p>
+<p>You can inject services by type-hinting them:</p>
+<pre><code class="language-php">$app-&gt;get('/', function (ResponseInterface $response, Twig $twig) {
+    return $twig-&gt;render($response, 'home.twig');
+});</code></pre>
+<blockquote>
+<p>Note: you can only inject services that you can type-hint and that PHP-DI can provide. Type-hint injection is simple, it simply injects the result of <code>$container-&gt;get(/* the type-hinted class */)</code>.</p>
+</blockquote>
+<h2 id="installation">Installation</h2>
+<pre><code>composer require php-di/slim-bridge</code></pre>
+<h2 id="usage">Usage</h2>
+<p>Instead of using <code>Slim\App</code>, simply use <code>DI\Bridge\Slim\App</code>:</p>
+<pre><code class="language-php">&lt;?php
+require 'vendor/autoload.php';
+
+$app = new \DI\Bridge\Slim\App;</code></pre>
+<p>You can then use the application <a href="http://www.slimframework.com/">just like a classic Slim application</a>:</p>
+<pre><code class="language-php">use Psr\Http\Message\ServerRequestInterface as Request;
+use Psr\Http\Message\ResponseInterface as Response;
+
+$app-&gt;get('/hello/{name}', function (Request $request, Response $response) {
+    $response-&gt;getBody()-&gt;write('Hello!');
+    return $response;
+});
+
+$app-&gt;run();</code></pre>
+<h2 id="learn-more">Learn more</h2>
+<p>You can read <strong><a href="../doc/frameworks/slim.html">the full documentation for PHP-DI in Slim</a></strong>.</p>
+    </article>
+
+    <h3>
+        Comments
+    </h3>
+    <div id="disqus_thread"></div>
+    <noscript>
+        Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+    </noscript>
+
+
+            </div>
+
+            <div class="col-md-3">
+                <h3>
+                    All posts
+                </h3>
+
+                <ul class="all-posts list-unstyled">
+                    <li>
+                        <a href="http://php-di.org/news/18-slim-bridge-released.html">Introducing the PHP-DI bridge for Slim</a>
+                    </li>
+                    <li>
+                        <a href="http://php-di.org/news/17-php-di-5-2-released.html">PHP-DI 5.2 released</a>
+                    </li>
+                    <li>
+                        <a href="http://php-di.org/news/16-php-di-5-1-released.html">PHP-DI 5.1 released</a>
+                    </li>
+                    <li>
+                        <a href="http://php-di.org/news/15-php-di-5-0-released.html">PHP-DI 5.0 released</a>
+                    </li>
+                    <li>
+                        <a href="http://php-di.org/news/14-php-di-5-syntaxic-sugar.html">Syntactic sugar in PHP-DI 5</a>
+                    </li>
+                    <li>
+                        <a href="http://php-di.org/news/13-php-di-4-4-released.html">PHP-DI 4.4 released</a>
+                    </li>
+                    <li>
+                        <a href="http://php-di.org/news/12-php-di-is-better-with-php-5-6.html">PHP 5.6 is out and PHP-DI just got better</a>
+                    </li>
+                    <li>
+                        <a href="http://php-di.org/news/11-php-di-4-3-released.html">PHP-DI 4.3 released</a>
+                    </li>
+                    <li>
+                        <a href="http://php-di.org/news/10-php-di-4-2-released.html">PHP-DI 4.2 released</a>
+                    </li>
+                    <li>
+                        <a href="http://php-di.org/news/09-php-di-4-1-released.html">PHP-DI 4.1 released</a>
+                    </li>
+                    <li>
+                        <a href="http://php-di.org/news/08-10000-installs.html">10.000 installs!</a>
+                    </li>
+                    <li>
+                        <a href="http://php-di.org/news/07-php-di-4-0-released.html">PHP-DI 4.0 released</a>
+                    </li>
+                    <li>
+                        <a href="http://php-di.org/news/06-php-di-4-0-new-definitions.html">What will change in PHP-DI 4: the new definition format</a>
+                    </li>
+                    <li>
+                        <a href="http://php-di.org/news/05-php-di-3-5.html">PHP-DI 3.5 released</a>
+                    </li>
+                    <li>
+                        <a href="http://php-di.org/news/04-php-di-3-4.html">PHP-DI 3.4 released</a>
+                    </li>
+                    <li>
+                        <a href="http://php-di.org/news/03-php-di-3-3.html">PHP-DI 3.3 released</a>
+                    </li>
+                    <li>
+                        <a href="http://php-di.org/news/02-php-di-3-2.html">PHP-DI 3.2 released</a>
+                    </li>
+                </ul>
+            </div>
+
+        </div>
+    </section>
+
+
+            <footer>
+            <div class='container'>
+                                    <p>
+                        A question? Unsatisfied with the documentation?
+                        Please <a href="https://github.com/PHP-DI/PHP-DI/issues/new">create an issue</a>
+                        or chat on
+                        <a href="https://gitter.im/PHP-DI/PHP-DI">Gitter</a> or
+                        <a href="https://twitter.com/phpdi">Twitter</a>.
+                    </p>
+                                <p>
+                    <a href="https://twitter.com/share" class="twitter-share-button" data-related="PHPDI" data-dnt="true">Tweet</a>
+                    <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+                </p>
+                <p>
+                    By <a href="http://mnapoli.fr/">Matthieu Napoli</a>
+                    and <a href="https://github.com/PHP-DI/PHP-DI/graphs/contributors">contributors</a>
+                    |
+                    Website generated with
+                    <a href="http://couscous.io" target="_blank">Couscous</a>.
+                </p>
+            </div>
+        </footer>
+    
+                <script src="http://php-di.org/bower_components/jquery/dist/jquery.min.js"></script>
+        <script src="http://php-di.org/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+        <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.5/highlight.min.js"></script>
+
+        <script>
+            $(function() {
+                hljs.initHighlightingOnLoad();
+
+                // Add anchors to headers
+                $('article h2, article h3, article h4, article h5').each(function () {
+                    var url = document.URL.replace(/#.*$/, "") + '#' + $(this).attr('id');
+                    $(this).append(' <a class="anchor" href="' + url + '">#</a>');
+                });
+            });
+        </script>
+    
+
+    <script>
+        // Disqus comments
+        var disqus_shortname = 'phpdi';
+
+        (function() {
+            var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+            dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+        })();
+    </script>
+
+    <script>
+        var _gaq = _gaq || [];
+        _gaq.push(['_setAccount', 'UA-15584647-13']);
+        _gaq.push(['_trackPageview']);
+        (function() {
+            var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+            ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+            var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+        })();
+    </script>
+
+    <!-- Piwik -->
+    <script type="text/javascript">
+        var _paq = _paq || [];
+        _paq.push(["setDocumentTitle", document.domain + "/" + document.title]);
+        _paq.push(["setCookieDomain", "*.php-di.org"]);
+        _paq.push(['trackPageView']);
+        _paq.push(['enableLinkTracking']);
+        (function() {
+            var u=(("https:" == document.location.protocol) ? "https" : "http") + "://piwik.mnapoli.fr/";
+            _paq.push(['setTrackerUrl', u+'piwik.php']);
+            _paq.push(['setSiteId', 2]);
+            var d=document, g=d.createElement('script'), s=d.getElementsByTagName('script')[0]; g.type='text/javascript';
+            g.defer=true; g.async=true; g.src=u+'piwik.js'; s.parentNode.insertBefore(g,s);
+        })();
+    </script>
+    <noscript><p><img src="http://piwik.mnapoli.fr/piwik.php?idsite=2" style="border:0;" alt="" /></p></noscript>
+    <!-- End Piwik Code -->
+
+    <!-- Gitter -->
+    <script>
+        ((window.gitter = {}).chat = {}).options = {
+            room: 'PHP-DI/PHP-DI'
+        };
+    </script>
+    <script src="https://sidecar.gitter.im/dist/sidecar.v1.js" async defer></script>
+
+</body>
+</html>

@@ -1,17 +1,18 @@
-define( [
+define([
 	"../core"
 ], function( jQuery ) {
 
 // Cross-browser xml parsing
 jQuery.parseXML = function( data ) {
-	var xml;
+	var xml, tmp;
 	if ( !data || typeof data !== "string" ) {
 		return null;
 	}
 
 	// Support: IE9
 	try {
-		xml = ( new window.DOMParser() ).parseFromString( data, "text/xml" );
+		tmp = new DOMParser();
+		xml = tmp.parseFromString( data, "text/xml" );
 	} catch ( e ) {
 		xml = undefined;
 	}
@@ -24,4 +25,4 @@ jQuery.parseXML = function( data ) {
 
 return jQuery.parseXML;
 
-} );
+});
