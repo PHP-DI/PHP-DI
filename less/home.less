@@ -1,7 +1,16 @@
 .home {
 
     section {
-        padding: 90px 0 80px;;
+        padding: 90px 0 80px;
+
+        // Offset so that the title is not hidden behind the nav bar
+        >[id]:before {
+            display: block;
+            content: " ";
+            margin-top: -75px;
+            height: 75px;
+            visibility: hidden;
+        }
 
         pre {
             background-color: white;
@@ -27,6 +36,9 @@
         margin-top: 0;
         margin-bottom: 40px;
         color: @brand-primary;
+        a:hover, a:active {
+            text-decoration: none;
+        }
     }
     h4 {
         text-transform: uppercase;
@@ -53,10 +65,12 @@
         text-align: center;
         .thumbnail {
             padding-top: 20px;
-            height: 165px;
         }
         img {
             height: 70px;
+        }
+        h4 {
+            font-size: 15px;
         }
     }
 
