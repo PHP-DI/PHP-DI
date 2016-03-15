@@ -137,3 +137,5 @@ To check the value of this option, you can run the following command:
 ```
 $ php -i | grep "opcache.load_comments"
 ```
+
+Furthermore, you should mind the case-sensitivity of annotations: for example writing `@inject` or `@injectable` (effectively anything else than `@Inject` and `@Injectable`) can lead to strange bugs on certain systems.
