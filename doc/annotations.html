@@ -372,6 +372,7 @@ class Example
 <p>The default value for this option is <code>1</code> so everything should work by default. There is also no reason to set this option to <code>0</code> as it brings no performance benefit.</p>
 <p>To check the value of this option, you can run the following command:</p>
 <pre><code>$ php -i | grep "opcache.load_comments"</code></pre>
+<p>Furthermore, please mind that annotations are case-sensitive. You should write <code>@Inject</code> and <code>@Injectable</code> instead of <code>@inject</code> and <code>@injectable</code> to avoid bugs on certain systems.</p>
         </article>
 
     </div>
