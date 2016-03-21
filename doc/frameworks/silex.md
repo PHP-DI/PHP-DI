@@ -34,7 +34,7 @@ $app->run();
 
 Using PHP-DI in Silex allows you to use all the awesome features of PHP-DI to wire your dependencies (using the definition files, autowiring, annotations, …).
 
-Another big benefit of the PHP-DI integration is the ability to use dependency injection inside controllers:
+Another big benefit of the PHP-DI integration is the ability to use dependency injection inside controllers, middlewares and param converters:
 
 ```php
 class Mailer
@@ -47,9 +47,21 @@ $app->post('/register/{name}', function ($name, Mailer $mailer) {
 
     return 'You have received a new email';
 });
+
+// Injection works for middleware too
+$app->before(function (Request $request, Mailer $mailer) {
+    // ...
+});
+
+// And param converters
+$app->get('/users/{user}', function (User $user) {
+    return new JsonResponse($user);
+})->convert('user', function ($user, UserManager $userManager) {
+    return $userManager->findById($user);
+});
 ```
 
-Dependency injection in controllers works using type-hinting:
+Dependency injection works using type-hinting:
 
 - it can be mixed with request parameters (`$name` in the example above)
 - the order of parameters doesn't matter, they are resolved by type-hint (for dependency injection) and by name (for request parameters)
