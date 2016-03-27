@@ -14,7 +14,7 @@ First, install the bridge:
 composer require php-di/zf2-bridge
 ```
 
-Register it in `application_root/config/module.config.php`:
+Register it in `application_root/config/application.config.php`:
 
 ```php
     // ...
