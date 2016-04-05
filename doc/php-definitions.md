@@ -51,7 +51,7 @@ All the examples shown in this page are using a PHP 5.5 compatible syntax. If yo
 
     return [
         'Foo' => object()
-            ->constructor(get('Bar'));
+            ->constructor(get('Bar')),
     ];
     ```
 
