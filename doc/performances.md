@@ -33,7 +33,7 @@ Heads up: do not use a cache in a development environment, else changes you make
 
 ### Cache types
 
-The cache implementation is provided by Doctrine (because it works very well) and contains:
+The cache implementation is provided by Doctrine (because it works very well) and supports the following adapters:
 
 - `ArrayCache` (in memory, lifetime of the request)
 - `ApcCache` (requires the APC or APCu extension)
@@ -41,7 +41,7 @@ The cache implementation is provided by Doctrine (because it works very well) an
 - `MemcachedCache` (requires the memcached extension)
 - `RedisCache` (requires the phpredis extension)
 - `FilesystemCache` (not optimal for high concurrency)
-- `PhpFileCache` (not optimal for high concurrency)
+- `PhpFileCache`: incompatible with data stored by PHP-DI
 - `WinCacheCache` (requires the wincache extension)
 - `XcacheCache` (requires the xcache extension)
 - `ZendDataCache` (requires Zend Server Platform)
