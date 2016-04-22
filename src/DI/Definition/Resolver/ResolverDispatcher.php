@@ -6,6 +6,7 @@ use DI\Definition\Definition;
 use DI\Definition\Exception\DefinitionException;
 use DI\Proxy\ProxyFactory;
 use Interop\Container\ContainerInterface;
+use TheCodingMachine\ServiceProvider\Registry;
 
 /**
  * Dispatches to more specific resolvers.
@@ -27,6 +28,11 @@ class ResolverDispatcher implements DefinitionResolver
      */
     private $proxyFactory;
 
+    /**
+     * @var Registry
+     */
+    private $registry;
+
     private $valueResolver;
     private $arrayResolver;
     private $factoryResolver;
@@ -36,12 +42,14 @@ class ResolverDispatcher implements DefinitionResolver
     private $instanceResolver;
     private $envVariableResolver;
     private $stringResolver;
+    private $staticInteropResolver;
     private $interopResolver;
 
-    public function __construct(ContainerInterface $container, ProxyFactory $proxyFactory)
+    public function __construct(ContainerInterface $container, ProxyFactory $proxyFactory, Registry $registry = null)
     {
         $this->container = $container;
         $this->proxyFactory = $proxyFactory;
+        $this->registry = $registry;
     }
 
     /**
@@ -141,9 +149,15 @@ class ResolverDispatcher implements DefinitionResolver
                 }
 
                 return $this->instanceResolver;
+            case $definition instanceof \DI\Definition\StaticInteropDefinition:
+                if (! $this->staticInteropResolver) {
+                    $this->staticInteropResolver = new StaticInteropResolver($this->container, $this);
+                }
+
+                return $this->staticInteropResolver;
             case $definition instanceof \DI\Definition\InteropDefinition:
                 if (! $this->interopResolver) {
-                    $this->interopResolver = new InteropResolver($this->container, $this);
+                    $this->interopResolver = new InteropResolver($this->container, $this, $this->registry);
                 }
 
                 return $this->interopResolver;

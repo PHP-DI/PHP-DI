@@ -25,7 +25,8 @@
     "require": {
         "php": ">=5.4.0",
         "container-interop/container-interop": "~1.0",
-        "container-interop/service-provider": "~0.2.0",
+        "container-interop/service-provider": "dev-callables as 0.3.0",
+        "thecodingmachine/service-provider-registry": "~1.0",
         "php-di/invoker": "^1.1.1",
         "php-di/phpdoc-reader": "^2.0.1"
     },
@@ -43,5 +44,7 @@
         "doctrine/cache": "Install it if you want to use the cache (version ~1.4)",
         "doctrine/annotations": "Install it if you want to use annotations (version ~1.2)",
         "ocramius/proxy-manager": "Install it if you want to use lazy injection (version ~1.0)"
-    }
+    },
+    "prefer-stable": true,
+    "minimum-stability": "dev"
 }

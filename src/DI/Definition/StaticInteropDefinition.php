@@ -9,7 +9,7 @@ use DI\Scope;
  *
  * @author Matthieu Napoli <matthieu@mnapoli.fr>
  */
-class InteropDefinition implements Definition, HasSubDefinition
+class StaticInteropDefinition implements Definition, HasSubDefinition
 {
     /**
      * Entry name.
@@ -20,17 +20,23 @@ class InteropDefinition implements Definition, HasSubDefinition
     /**
      * @var string
      */
-    private $registryKey;
+    private $class;
+
+    /**
+     * @var string
+     */
+    private $method;
 
     /**
      * @var Definition|null
      */
     private $previousDefinition;
 
-    public function __construct($name, $registryKey)
+    public function __construct($name, $class, $method)
     {
         $this->name = $name;
-        $this->registryKey = $registryKey;
+        $this->class = $class;
+        $this->method = $method;
     }
 
     public function getName()
@@ -39,11 +45,19 @@ class InteropDefinition implements Definition, HasSubDefinition
     }
 
     /**
-     * @return int
+     * @return string
      */
-    public function getRegistryKey()
+    public function getClass()
     {
-        return $this->registryKey;
+        return $this->class;
+    }
+
+    /**
+     * @return string
+     */
+    public function getMethod()
+    {
+        return $this->method;
     }
 
     public function getScope()

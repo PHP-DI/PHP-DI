@@ -2,8 +2,12 @@
 
 namespace DI\Definition\Source;
 
+use DI\Definition\Exception\DefinitionException;
 use DI\Definition\InteropDefinition;
 use DI\Definition\ObjectDefinition;
+use DI\Definition\StaticInteropDefinition;
+use Interop\Container\ServiceProvider;
+use Invoker\Reflection\CallableReflection;
 
 /**
  * Reads definitions from a Interop\Container\ServiceProvider class.
@@ -14,7 +18,12 @@ use DI\Definition\ObjectDefinition;
 class InteropServiceProvider implements DefinitionSource
 {
     /**
-     * @var string
+     * @var int
+     */
+    private $serviceProviderKey;
+
+    /**
+     * @var ServiceProvider
      */
     private $serviceProvider;
 
@@ -24,25 +33,38 @@ class InteropServiceProvider implements DefinitionSource
     private $entries;
 
     /**
-     * @param string $serviceProvider Name of a class implementing Interop\Container\ServiceProvider.
+     * @param ServiceProvider $serviceProvider
      */
-    public function __construct($serviceProvider)
+    public function __construct($serviceProviderKey, ServiceProvider $serviceProvider)
     {
+        $this->serviceProviderKey = $serviceProviderKey;
         $this->serviceProvider = $serviceProvider;
     }
 
     public function getDefinition($name)
     {
-        $class = $this->serviceProvider;
-
         if ($this->entries === null) {
-            $this->entries = call_user_func([$class, 'getServices']);
+            $this->entries = $this->serviceProvider->getServices();
         }
 
         if (!isset($this->entries[$name])) {
             return null;
         }
 
-        return new InteropDefinition($name, $class, $this->entries[$name]);
+        if (!is_callable($this->entries[$name])) {
+            // TODO: create a special exception.
+            throw new \Exception(sprintf('Entry %s should be a callable.', $name));
+        }
+
+        $reflection = CallableReflection::create($this->entries[$name]);
+
+        // Let's optimize for public static function calls
+        if ($reflection instanceof \ReflectionMethod && $reflection->isPublic() && $reflection->isStatic()) {
+            return new StaticInteropDefinition($name, $reflection->getDeclaringClass()->getName(), $reflection->getName());
+        } else {
+            return new InteropDefinition($name, $this->serviceProviderKey);
+        }
+
+
     }
 }

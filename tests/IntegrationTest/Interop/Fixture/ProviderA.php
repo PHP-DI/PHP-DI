@@ -7,15 +7,17 @@ use Interop\Container\ServiceProvider;
 
 class ProviderA implements ServiceProvider
 {
-    public static function getServices()
+    public function getServices()
     {
         return [
-            'a' => 'getA',
-            'ab' => 'getAb',
-            'overridden' => 'getOverridden',
-            'extended' => 'getExtended',
-            'native' => 'getNative',
-            'DI\Test\IntegrationTest\Interop\Fixture\Object1' => 'getObject',
+            'a' => [ self::class, 'getA' ],
+            'ab' => [ self::class, 'getAb' ],
+            'overridden' => [ self::class, 'getOverridden' ],
+            'extended' => function() {
+                return 'hello';
+            },
+            'native' => [ $this, 'getNative' ],
+            'DI\Test\IntegrationTest\Interop\Fixture\Object1' => [ self::class, 'getObject' ],
         ];
     }
 
@@ -39,7 +41,7 @@ class ProviderA implements ServiceProvider
         return 'hello';
     }
 
-    public static function getNative(ContainerInterface $container, callable $getPrevious = null)
+    public function getNative(ContainerInterface $container, callable $getPrevious = null)
     {
         return $getPrevious() . ' is';
     }
