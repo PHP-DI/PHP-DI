@@ -367,6 +367,16 @@ $app = new MyApp;</code></pre>
     }
 };</code></pre>
 <p>Have a look at <a href="../container-configuration.html">configuring PHP-DI</a> for more details.</p>
+<h3 id="configuring-slim">Configuring Slim</h3>
+<pre><code class="language-php">// my-config-file.php
+
+return [
+    'settings.responseChunkSize' =&gt; 4096,
+    'settings.outputBuffering' =&gt; 'append',
+    'settings.determineRouteBeforeAppMiddleware' =&gt; false,
+    'settings.displayErrorDetails' =&gt; false,
+    // ...
+];</code></pre>
 <h3 id="twig">Twig</h3>
 <p>In order to get you started easily, here is how you can install the Twig extension for Slim:</p>
 <ul>
@@ -462,24 +472,6 @@ $app = new MyApp;</code></pre>
             var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
         })();
     </script>
-
-    <!-- Piwik -->
-    <script type="text/javascript">
-        var _paq = _paq || [];
-        _paq.push(["setDocumentTitle", document.domain + "/" + document.title]);
-        _paq.push(["setCookieDomain", "*.php-di.org"]);
-        _paq.push(['trackPageView']);
-        _paq.push(['enableLinkTracking']);
-        (function() {
-            var u=(("https:" == document.location.protocol) ? "https" : "http") + "://piwik.mnapoli.fr/";
-            _paq.push(['setTrackerUrl', u+'piwik.php']);
-            _paq.push(['setSiteId', 2]);
-            var d=document, g=d.createElement('script'), s=d.getElementsByTagName('script')[0]; g.type='text/javascript';
-            g.defer=true; g.async=true; g.src=u+'piwik.js'; s.parentNode.insertBefore(g,s);
-        })();
-    </script>
-    <noscript><p><img src="http://piwik.mnapoli.fr/piwik.php?idsite=2" style="border:0;" alt="" /></p></noscript>
-    <!-- End Piwik Code -->
 
     <!-- Gitter -->
     <script>

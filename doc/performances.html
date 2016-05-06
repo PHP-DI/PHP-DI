@@ -286,7 +286,7 @@
 <pre><code class="language-php">$containerBuilder-&gt;setDefinitionCache(new Doctrine\Common\Cache\ApcCache());</code></pre>
 <p>Heads up: do not use a cache in a development environment, else changes you make to the definitions (annotations, configuration files, etc.) may not be taken into account. The only cache you might use in development is the <code>ArrayCache</code> because it doesn't persist data between requests.</p>
 <h3 id="cache-types">Cache types</h3>
-<p>The cache implementation is provided by Doctrine (because it works very well) and contains:</p>
+<p>The cache implementation is provided by Doctrine (because it works very well) and supports the following adapters:</p>
 <ul>
 <li><code>ArrayCache</code> (in memory, lifetime of the request)</li>
 <li><code>ApcCache</code> (requires the APC or APCu extension)</li>
@@ -294,7 +294,7 @@
 <li><code>MemcachedCache</code> (requires the memcached extension)</li>
 <li><code>RedisCache</code> (requires the phpredis extension)</li>
 <li><code>FilesystemCache</code> (not optimal for high concurrency)</li>
-<li><code>PhpFileCache</code> (not optimal for high concurrency)</li>
+<li><code>PhpFileCache</code>: incompatible with data stored by PHP-DI</li>
 <li><code>WinCacheCache</code> (requires the wincache extension)</li>
 <li><code>XcacheCache</code> (requires the xcache extension)</li>
 <li><code>ZendDataCache</code> (requires Zend Server Platform)</li>
@@ -363,24 +363,6 @@ $containerBuilder-&gt;setDefinitionCache($cache);</code></pre>
             var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
         })();
     </script>
-
-    <!-- Piwik -->
-    <script type="text/javascript">
-        var _paq = _paq || [];
-        _paq.push(["setDocumentTitle", document.domain + "/" + document.title]);
-        _paq.push(["setCookieDomain", "*.php-di.org"]);
-        _paq.push(['trackPageView']);
-        _paq.push(['enableLinkTracking']);
-        (function() {
-            var u=(("https:" == document.location.protocol) ? "https" : "http") + "://piwik.mnapoli.fr/";
-            _paq.push(['setTrackerUrl', u+'piwik.php']);
-            _paq.push(['setSiteId', 2]);
-            var d=document, g=d.createElement('script'), s=d.getElementsByTagName('script')[0]; g.type='text/javascript';
-            g.defer=true; g.async=true; g.src=u+'piwik.js'; s.parentNode.insertBefore(g,s);
-        })();
-    </script>
-    <noscript><p><img src="http://piwik.mnapoli.fr/piwik.php?idsite=2" style="border:0;" alt="" /></p></noscript>
-    <!-- End Piwik Code -->
 
     <!-- Gitter -->
     <script>
