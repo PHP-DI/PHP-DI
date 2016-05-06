@@ -1,5 +1,6 @@
 ---
 layout: documentation
+current_menu: lazy-injection
 ---
 
 # Lazy injection

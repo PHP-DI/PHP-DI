@@ -1,5 +1,6 @@
 ---
 layout: documentation
+current_menu: silex
 ---
 
 # PHP-DI in Silex

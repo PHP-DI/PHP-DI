@@ -1,5 +1,6 @@
 ---
 layout: documentation
+current_menu: inject-on-instance
 ---
 
 # Inject on an existing instance

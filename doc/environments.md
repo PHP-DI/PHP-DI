@@ -1,5 +1,6 @@
 ---
 layout: documentation
+current_menu: environments
 ---
 
 # Injections depending on the environment

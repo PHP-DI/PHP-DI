@@ -37,13 +37,13 @@ menu:
         definition:
             section: Definitions
             items:
-                introduction:
+                definition-introduction:
                     text: Introduction
                     url: doc/definition.html
                 autowiring:
                     text: Autowiring
                     url: doc/autowiring.html
-                php:
+                php-definitions:
                     text: PHP definitions
                     url: doc/php-definitions.html
                 annotations:
@@ -55,7 +55,7 @@ menu:
         frameworks:
             section: Frameworks
             items:
-                symfony2:
+                symfony:
                     text: Symfony 2
                     url: doc/frameworks/symfony2.html
                 silex:
@@ -100,10 +100,10 @@ menu:
         migration:
             section: Migration guides
             items:
-                4:
+                v4:
                     text: From PHP-DI 3.x to 4.0
                     url: doc/migration/4.0.html
-                5:
+                v5:
                     text: From PHP-DI 4.x to 5.0
                     url: doc/migration/5.0.html
         internals:

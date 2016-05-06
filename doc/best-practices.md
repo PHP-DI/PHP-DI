@@ -1,6 +1,7 @@
 ---
 layout: documentation
 tab: best-practices
+current_menu: best-practices
 ---
 
 # Best practices

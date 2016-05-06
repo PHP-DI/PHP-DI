@@ -1,6 +1,7 @@
 ---
 layout: documentation
 title: Getting started
+current_menu: getting-started
 ---
 
 # Getting started with PHP-DI

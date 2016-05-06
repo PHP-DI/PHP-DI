@@ -1,5 +1,6 @@
 ---
 layout: documentation
+current_menu: zf2
 ---
 
 # PHP-DI in Zend Framework 2
