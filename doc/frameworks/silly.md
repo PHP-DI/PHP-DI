@@ -1,5 +1,6 @@
 ---
 layout: documentation
+current_menu: silly
 ---
 
 # PHP-DI in Silly

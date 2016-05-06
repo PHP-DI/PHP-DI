@@ -1,5 +1,6 @@
 ---
 layout: documentation
+current_menu: slim
 ---
 
 # PHP-DI in Slim 3

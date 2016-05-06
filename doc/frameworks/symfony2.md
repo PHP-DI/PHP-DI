@@ -1,5 +1,6 @@
 ---
 layout: documentation
+current_menu: symfony
 ---
 
 # PHP-DI in Symfony 2

@@ -1,5 +1,6 @@
 ---
 layout: documentation
+current_menu: understanding-di
 ---
 
 # Understanding Dependency Injection

@@ -1,5 +1,6 @@
 ---
 layout: documentation
+current_menu: how-it-works
 ---
 
 # How PHP-DI works

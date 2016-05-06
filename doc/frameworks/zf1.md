@@ -1,5 +1,6 @@
 ---
 layout: documentation
+current_menu: zf1
 ---
 
 # PHP-DI in Zend Framework 1
