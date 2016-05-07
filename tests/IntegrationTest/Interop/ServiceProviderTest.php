@@ -4,9 +4,12 @@ namespace DI\Test\IntegrationTest;
 
 use DI\ContainerBuilder;
 use DI\Test\IntegrationTest\Interop\Fixture\Object1;
+use TheCodingMachine\ServiceProvider\Registry;
 
 /**
- * @coversNothing
+ * @covers DI\ContainerBuilder::addDefinitions
+ * @covers DI\Definition\Source\InteropServiceProvider
+ * @covers DI\Definition\Resolver\ResolverDispatcher
  */
 class ServiceProviderTest extends \PHPUnit_Framework_TestCase
 {

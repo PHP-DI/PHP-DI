@@ -12,7 +12,9 @@ use DI\Definition\Source\SourceChain;
 use DI\Proxy\ProxyFactory;
 use Doctrine\Common\Cache\Cache;
 use Interop\Container\ContainerInterface;
+use Interop\Container\ServiceProvider;
 use InvalidArgumentException;
+use TheCodingMachine\ServiceProvider\Registry;
 
 /**
  * Helper to create and configure a Container.
@@ -79,6 +81,13 @@ class ContainerBuilder
     private $definitionSources = [];
 
     /**
+     * The registry containing all service providers.
+     *
+     * @var Registry
+     */
+    private $registry;
+
+    /**
      * Build a container configured for the dev environment.
      *
      * @return Container
@@ -127,7 +136,7 @@ class ContainerBuilder
 
         $containerClass = $this->containerClass;
 
-        return new $containerClass($source, $proxyFactory, $this->wrapperContainer);
+        return new $containerClass($source, $proxyFactory, $this->wrapperContainer, $this->registry);
     }
 
     /**
@@ -235,24 +244,28 @@ class ContainerBuilder
      */
     public function addDefinitions($definitions)
     {
-        if (is_string($definitions)) {
-            if (class_exists($definitions) && is_subclass_of($definitions, 'Interop\Container\ServiceProvider')) {
-                $definitions = new \DI\Definition\Source\InteropServiceProvider($definitions);
+        if (is_string($definitions) || $definitions instanceof ServiceProvider) {
+            if ($definitions instanceof ServiceProvider || (class_exists($definitions) && is_subclass_of($definitions, 'Interop\\Container\\ServiceProvider'))) {
+                if ($this->registry === null) {
+                    $this->registry = new Registry();
+                }
+                $key = $this->registry->push($definitions);
+                $this->definitionSources[] = new \DI\Definition\Source\InteropServiceProvider($key, $definitions);
             } else {
                 // File
-                $definitions = new DefinitionFile($definitions);
+                $this->definitionSources[] = new DefinitionFile($definitions);
             }
         } elseif (is_array($definitions)) {
-            $definitions = new DefinitionArray($definitions);
+            $this->definitionSources[] = new DefinitionArray($definitions);
         } elseif (! $definitions instanceof DefinitionSource) {
             throw new InvalidArgumentException(sprintf(
-                '%s parameter must be a string, an array or a DefinitionSource object, %s given',
+                '%s parameter must be a string, an array, a ServiceProvider object or a DefinitionSource object, %s given',
                 'ContainerBuilder::addDefinitions()',
                 is_object($definitions) ? get_class($definitions) : gettype($definitions)
             ));
+        } else {
+            $this->definitionSources[] = $definitions;
         }
-
-        $this->definitionSources[] = $definitions;
 
         return $this;
     }

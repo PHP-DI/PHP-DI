@@ -23,6 +23,7 @@ use Invoker\ParameterResolver\Container\TypeHintContainerResolver;
 use Invoker\ParameterResolver\DefaultValueResolver;
 use Invoker\ParameterResolver\NumericArrayResolver;
 use Invoker\ParameterResolver\ResolverChain;
+use TheCodingMachine\ServiceProvider\Registry;
 
 /**
  * Dependency Injection Container.
@@ -66,6 +67,13 @@ class Container implements ContainerInterface, FactoryInterface, \DI\InvokerInte
     private $wrapperContainer;
 
     /**
+     * The registry containing all service providers.
+     *
+     * @var Registry
+     */
+    private $registry;
+
+    /**
      * Use the ContainerBuilder to ease constructing the Container.
      *
      * @see ContainerBuilder
@@ -77,12 +85,13 @@ class Container implements ContainerInterface, FactoryInterface, \DI\InvokerInte
     public function __construct(
         DefinitionSource $definitionSource,
         ProxyFactory $proxyFactory,
-        ContainerInterface $wrapperContainer = null
+        ContainerInterface $wrapperContainer = null,
+        Registry $registry = null
     ) {
         $this->wrapperContainer = $wrapperContainer ?: $this;
 
         $this->definitionSource = $definitionSource;
-        $this->definitionResolver = new ResolverDispatcher($this->wrapperContainer, $proxyFactory);
+        $this->definitionResolver = new ResolverDispatcher($this->wrapperContainer, $proxyFactory, $registry);
 
         // Auto-register the container
         $this->singletonEntries['DI\Container'] = $this;

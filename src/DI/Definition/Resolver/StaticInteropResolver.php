@@ -6,12 +6,11 @@ use DI\Definition\Definition;
 use DI\Definition\Exception\DefinitionException;
 use DI\Definition\InteropDefinition;
 use Interop\Container\ContainerInterface;
-use TheCodingMachine\ServiceProvider\Registry;
 
 /**
  * @author Matthieu Napoli <matthieu@mnapoli.fr>
  */
-class InteropResolver implements DefinitionResolver
+class StaticInteropResolver implements DefinitionResolver
 {
     /**
      * @var ContainerInterface
@@ -24,18 +23,12 @@ class InteropResolver implements DefinitionResolver
     private $definitionResolver;
 
     /**
-     * @var Registry
-     */
-    private $registry;
-
-    /**
      * @param DefinitionResolver $definitionResolver Used to resolve previous definitions.
      */
-    public function __construct(ContainerInterface $container, DefinitionResolver $definitionResolver, Registry $registry)
+    public function __construct(ContainerInterface $container, DefinitionResolver $definitionResolver)
     {
         $this->container = $container;
         $this->definitionResolver = $definitionResolver;
-        $this->registry = $registry;
     }
 
     /**
@@ -45,8 +38,8 @@ class InteropResolver implements DefinitionResolver
      */
     public function resolve(Definition $definition, array $parameters = [])
     {
-        $registryKey = $definition->getRegistryKey();
-        $name = $definition->getName();
+        $class = $definition->getClass();
+        $method = $definition->getMethod();
         $previousDefinition = $definition->getPreviousDefinition();
 
         $getPrevious = null;
@@ -56,7 +49,7 @@ class InteropResolver implements DefinitionResolver
             };
         }
 
-        return $this->registry->createService($registryKey,  $name, $this->container, $getPrevious);
+        return call_user_func([$class, $method], $this->container, $getPrevious);
     }
 
     public function isResolvable(Definition $definition, array $parameters = [])
