@@ -23,7 +23,7 @@ class InteropServiceProvider implements DefinitionSource
     private $serviceProviderKey;
 
     /**
-     * @var ServiceProvider
+     * @var ServiceProvider|string
      */
     private $serviceProvider;
 
@@ -33,9 +33,10 @@ class InteropServiceProvider implements DefinitionSource
     private $entries;
 
     /**
-     * @param ServiceProvider $serviceProvider
+     * @param int $serviceProviderKey
+     * @param ServiceProvider|string $serviceProvider An instance of a service provider or the fully qualified class name of a service provider that has a constructor that can be called with no arguments.
      */
-    public function __construct($serviceProviderKey, ServiceProvider $serviceProvider)
+    public function __construct($serviceProviderKey, $serviceProvider)
     {
         $this->serviceProviderKey = $serviceProviderKey;
         $this->serviceProvider = $serviceProvider;
@@ -44,6 +45,10 @@ class InteropServiceProvider implements DefinitionSource
     public function getDefinition($name)
     {
         if ($this->entries === null) {
+            if (is_string($this->serviceProvider)) {
+                $className = $this->serviceProvider;
+                $this->serviceProvider = new $className();
+            }
             $this->entries = $this->serviceProvider->getServices();
         }
 

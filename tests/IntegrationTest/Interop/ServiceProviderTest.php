@@ -20,11 +20,8 @@ class ServiceProviderTest extends \PHPUnit_Framework_TestCase
         $builder->addDefinitions([
             'native' => 'this',
         ]);
-        $registry = new Registry([
-            'DI\Test\IntegrationTest\Interop\Fixture\ProviderA',
-            'DI\Test\IntegrationTest\Interop\Fixture\ProviderB'
-        ]);
-        $builder->addDefinitions($registry);
+        $builder->addDefinitions('DI\Test\IntegrationTest\Interop\Fixture\ProviderA');
+        $builder->addDefinitions('DI\Test\IntegrationTest\Interop\Fixture\ProviderB');
         $builder->addDefinitions([
             'native' => \DI\decorate(function ($previous) {
                 return $previous . '!';
@@ -50,10 +47,7 @@ class ServiceProviderTest extends \PHPUnit_Framework_TestCase
     public function test_no_error_when_overriding_incomplete_autowiring_definition()
     {
         $builder = new ContainerBuilder();
-        $registry = new Registry([
-            'DI\Test\IntegrationTest\Interop\Fixture\ProviderA',
-        ]);
-        $builder->addDefinitions($registry);
+        $builder->addDefinitions('DI\Test\IntegrationTest\Interop\Fixture\ProviderA');
         $object = $builder->build()->get('DI\Test\IntegrationTest\Interop\Fixture\Object1');
         $this->assertEquals(new Object1('foo'), $object);
     }
