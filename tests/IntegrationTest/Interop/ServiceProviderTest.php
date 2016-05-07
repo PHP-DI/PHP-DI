@@ -9,6 +9,7 @@ use TheCodingMachine\ServiceProvider\Registry;
 /**
  * @covers DI\ContainerBuilder::addDefinitions
  * @covers DI\Definition\Source\InteropServiceProvider
+ * @covers DI\Definition\Resolver\ResolverDispatcher
  */
 class ServiceProviderTest extends \PHPUnit_Framework_TestCase
 {
