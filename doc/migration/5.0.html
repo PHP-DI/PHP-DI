@@ -26,15 +26,10 @@
     <meta name="msapplication-TileImage" content="http://php-di.org/img/mstile-144x144.png" />
 
             <link href="http://fonts.googleapis.com/css?family=Abel:400|Oswald:300,400,700" media="all" rel="stylesheet" type="text/css">
+        <link href="https://cdn.jsdelivr.net/docsearch.js/1/docsearch.min.css" rel="stylesheet">
         <link href="http://php-di.org/css/highlight.github.css" rel="stylesheet">
         <link href="http://php-di.org/css/all.min.css" rel="stylesheet">
-    
-    <script>
-        if (window.location.href.indexOf('http://mnapoli.fr') === 0) {
-            window.location.href = 'http://php-di.org';
-        }
-    </script>
-</head>
+    </head>
 <body>
 
     <header>
@@ -48,6 +43,9 @@
                         <span class="icon-bar"></span>
                     </button>
                     <a class="navbar-brand" href="http://php-di.org/">PHP-DI</a>
+                </div>
+                <div class="navbar-form navbar-left hidden-xs hidden-sm">
+                    <input id="search-input" type="text" class="form-control" placeholder="Search...">
                 </div>
                 <div class="collapse navbar-collapse" id="top-navigation">
                     <ul class="nav navbar-nav navbar-right">
@@ -449,6 +447,33 @@ $container-&gt;set('baz', DI\object('MyClass'));</code></pre>
         };
     </script>
     <script src="https://sidecar.gitter.im/dist/sidecar.v1.js" async defer></script>
+
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/docsearch.js/1/docsearch.min.js"></script>
+    <script type="text/javascript">
+        $(function () {
+            var search = docsearch({
+                apiKey: 'ef6af24cbacae1f85d3c44741df49167',
+                indexName: 'php-di',
+                inputSelector: '#search-input'
+            });
+            var delay = (function () {
+                var timer = 0;
+                return function (callback, ms) {
+                    clearTimeout(timer);
+                    timer = setTimeout(callback, ms);
+                };
+            })();
+            search.autocomplete.on('autocomplete:selected', function (e, suggestion) {
+                _gaq.push(['_trackEvent', 'search', 'click', suggestion.subcategory]);
+            });
+            $('#search-input').bind('input', function () {
+                var search = $(this).val();
+                delay(function () {
+                    _gaq.push(['_trackPageview', '/search?q=' + search]);
+                }, 500);
+            });
+        });
+    </script>
 
 </body>
 </html>

@@ -1,0 +1,54 @@
+// Box
+.aa-dropdown-menu {
+    background-color: white;
+    border-color: #ccc;
+    border-radius: 0;
+}
+// Each suggestion
+.algolia-docsearch-suggestion {
+    background-color: transparent;
+    color: @text-color;
+    border-color: #e7e7e7;
+}
+// Main category headers
+.algolia-docsearch-suggestion--category-header {
+    background-color: @grey-background-light;
+    color: @text-color;
+    border-bottom: solid 1px #e7e7e7;
+    font-weight: normal;
+    padding: 10px;
+}
+.algolia-docsearch-suggestion--subcategory-column {
+    background-color: transparent;
+    border-color: #e7e7e7;
+    font-weight: bold;
+    width: 200px;
+    max-width: 200px;
+}
+.algolia-docsearch-suggestion--title {
+    font-weight: normal;
+}
+.algolia-docsearch-suggestion--content {
+    border-top: none;
+    width: 70%;
+}
+/* Highlighted search terms */
+.algolia-docsearch-suggestion--highlight {
+    color: @link-color;
+}
+/* Highligted search terms in the main category headers */
+.algolia-docsearch-suggestion--category-header .algolia-docsearch-suggestion--highlight  {
+    background-color: transparent;
+}
+/* Currently selected suggestion */
+.aa-cursor .algolia-docsearch-suggestion--content {
+    color: @link-hover-color;
+}
+.aa-cursor .algolia-docsearch-suggestion {
+    background-color: transparent;
+}
+
+.algolia-docsearch-footer {
+    border-top: solid 1px #e7e7e7;
+    color: #616161;
+}
