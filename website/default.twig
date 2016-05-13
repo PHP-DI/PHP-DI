@@ -157,9 +157,12 @@
             });
             $('#search-input').bind('input', function () {
                 var search = $(this).val();
+                if (search.length < 3) {
+                    return;
+                }
                 delay(function () {
                     _gaq.push(['_trackPageview', '/search?q=' + search]);
-                }, 500);
+                }, 600);
             });
         });
     </script>
