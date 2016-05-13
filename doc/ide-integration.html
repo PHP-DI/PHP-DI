@@ -385,13 +385,21 @@ namespace PHPSTORM_META
                 };
             })();
             search.autocomplete.on('autocomplete:selected', function (e, suggestion) {
-                _gaq.push(['_trackEvent', 'search', 'click', suggestion.subcategory]);
+                var articleTitle = suggestion.subcategory;
+                // Strip HTML tags
+                var div = document.createElement("div");
+                div.innerHTML = articleTitle;
+                articleTitle = div.textContent || div.innerText || "";
+                _gaq.push(['_trackEvent', 'search', 'click', articleTitle]);
             });
             $('#search-input').bind('input', function () {
                 var search = $(this).val();
+                if (search.length < 3) {
+                    return;
+                }
                 delay(function () {
                     _gaq.push(['_trackPageview', '/search?q=' + search]);
-                }, 500);
+                }, 600);
             });
         });
     </script>
