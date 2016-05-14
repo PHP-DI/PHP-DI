@@ -9,7 +9,7 @@ use Interop\Container\ContainerInterface;
  *
  * @author Matthieu Napoli <matthieu@mnapoli.fr>
  */
-interface SelfResolvingDefinition extends Definition
+interface SelfResolvingDefinition
 {
     /**
      * Resolve the definition and return the resulting value.
