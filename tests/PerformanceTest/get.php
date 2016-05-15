@@ -1,7 +1,6 @@
 <?php
 
 use DI\ContainerBuilder;
-use Doctrine\Common\Cache\ArrayCache;
 
 require_once __DIR__ . '/vendor/autoload.php';
 require_once __DIR__ . '/get/GetFixture.php';
