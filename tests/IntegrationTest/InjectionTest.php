@@ -8,7 +8,9 @@ use DI\Scope;
 use DI\Test\IntegrationTest\Fixtures\Class1;
 use DI\Test\IntegrationTest\Fixtures\Class2;
 use DI\Test\IntegrationTest\Fixtures\Implementation1;
+use DI\Test\IntegrationTest\Fixtures\Interface1;
 use DI\Test\IntegrationTest\Fixtures\LazyDependency;
+use ProxyManager\Proxy\LazyLoadingInterface;
 
 /**
  * Test class for injection.
@@ -37,11 +39,11 @@ class InjectionTest extends \PHPUnit_Framework_TestCase
         // We have to define some entries for the test because reflection on itself doesn't make it possible
         $containerReflection->set('foo', 'bar');
         $containerReflection->set(
-            'DI\Test\IntegrationTest\Fixtures\Interface1',
-            \DI\object('DI\Test\IntegrationTest\Fixtures\Implementation1')
+            Interface1::class,
+            \DI\object(Implementation1::class)
         );
-        $containerReflection->set('namedDependency', \DI\object('DI\Test\IntegrationTest\Fixtures\Class2'));
-        $containerReflection->set('DI\Test\IntegrationTest\Fixtures\LazyDependency', \DI\object()->lazy());
+        $containerReflection->set('namedDependency', \DI\object(Class2::class));
+        $containerReflection->set(LazyDependency::class, \DI\object()->lazy());
         $containerReflection->set('alias', \DI\get('namedDependency'));
 
         // Test with a container using annotations and reflection
@@ -52,10 +54,10 @@ class InjectionTest extends \PHPUnit_Framework_TestCase
         // We have to define some entries for the test because annotations on itself doesn't make it possible
         $containerAnnotations->set('foo', 'bar');
         $containerAnnotations->set(
-            'DI\Test\IntegrationTest\Fixtures\Interface1',
-            \DI\object('DI\Test\IntegrationTest\Fixtures\Implementation1')
+            Interface1::class,
+            \DI\object(Implementation1::class)
         );
-        $containerAnnotations->set('namedDependency', \DI\object('DI\Test\IntegrationTest\Fixtures\Class2'));
+        $containerAnnotations->set('namedDependency', \DI\object(Class2::class));
         $containerAnnotations->set('alias', \DI\get('namedDependency'));
 
         // Test with a container using array configuration
@@ -72,35 +74,35 @@ class InjectionTest extends \PHPUnit_Framework_TestCase
         $containerPHP = $builder->build();
         $containerPHP->set('foo', 'bar');
         $containerPHP->set(
-            'DI\Test\IntegrationTest\Fixtures\Class1',
+            Class1::class,
             \DI\object()
                 ->scope(Scope::PROTOTYPE)
-                ->property('property1', \DI\get('DI\Test\IntegrationTest\Fixtures\Class2'))
-                ->property('property2', \DI\get('DI\Test\IntegrationTest\Fixtures\Interface1'))
+                ->property('property1', \DI\get(Class2::class))
+                ->property('property2', \DI\get(Interface1::class))
                 ->property('property3', \DI\get('namedDependency'))
                 ->property('property4', \DI\get('foo'))
-                ->property('property5', \DI\get('DI\Test\IntegrationTest\Fixtures\LazyDependency'))
+                ->property('property5', \DI\get(LazyDependency::class))
                 ->constructor(
-                    \DI\get('DI\Test\IntegrationTest\Fixtures\Class2'),
-                    \DI\get('DI\Test\IntegrationTest\Fixtures\Interface1'),
-                    \DI\get('DI\Test\IntegrationTest\Fixtures\LazyDependency')
+                    \DI\get(Class2::class),
+                    \DI\get(Interface1::class),
+                    \DI\get(LazyDependency::class)
                 )
-                ->method('method1', \DI\get('DI\Test\IntegrationTest\Fixtures\Class2'))
-                ->method('method2', \DI\get('DI\Test\IntegrationTest\Fixtures\Interface1'))
+                ->method('method1', \DI\get(Class2::class))
+                ->method('method2', \DI\get(Interface1::class))
                 ->method('method3', \DI\get('namedDependency'), \DI\get('foo'))
-                ->method('method4', \DI\get('DI\Test\IntegrationTest\Fixtures\LazyDependency'))
-                ->methodParameter('method5', 'param1', \DI\get('DI\Test\IntegrationTest\Fixtures\Interface1'))
+                ->method('method4', \DI\get(LazyDependency::class))
+                ->methodParameter('method5', 'param1', \DI\get(Interface1::class))
                 ->methodParameter('method5', 'param2', \DI\get('foo'))
         );
-        $containerPHP->set('DI\Test\IntegrationTest\Fixtures\Class2', \DI\object());
-        $containerPHP->set('DI\Test\IntegrationTest\Fixtures\Implementation1', \DI\object());
+        $containerPHP->set(Class2::class, \DI\object());
+        $containerPHP->set(Implementation1::class, \DI\object());
         $containerPHP->set(
-            'DI\Test\IntegrationTest\Fixtures\Interface1',
-            \DI\object('DI\Test\IntegrationTest\Fixtures\Implementation1')
+            Interface1::class,
+            \DI\object(Implementation1::class)
                 ->scope(Scope::SINGLETON)
         );
-        $containerPHP->set('namedDependency', \DI\object('DI\Test\IntegrationTest\Fixtures\Class2'));
-        $containerPHP->set('DI\Test\IntegrationTest\Fixtures\LazyDependency', \DI\object()->lazy());
+        $containerPHP->set('namedDependency', \DI\object(Class2::class));
+        $containerPHP->set(LazyDependency::class, \DI\object()->lazy());
         $containerPHP->set('alias', \DI\get('namedDependency'));
 
         return [
@@ -116,11 +118,11 @@ class InjectionTest extends \PHPUnit_Framework_TestCase
      */
     public function testContainerHas($type, Container $container)
     {
-        $this->assertTrue($container->has('DI\Test\IntegrationTest\Fixtures\Class1'));
-        $this->assertTrue($container->has('DI\Test\IntegrationTest\Fixtures\Class2'));
-        $this->assertTrue($container->has('DI\Test\IntegrationTest\Fixtures\Interface1'));
+        $this->assertTrue($container->has(Class1::class));
+        $this->assertTrue($container->has(Class2::class));
+        $this->assertTrue($container->has(Interface1::class));
         $this->assertTrue($container->has('namedDependency'));
-        $this->assertTrue($container->has('DI\Test\IntegrationTest\Fixtures\LazyDependency'));
+        $this->assertTrue($container->has(LazyDependency::class));
         $this->assertFalse($container->has('unknown'));
     }
 
@@ -129,7 +131,7 @@ class InjectionTest extends \PHPUnit_Framework_TestCase
      */
     public function testGet($type, Container $container)
     {
-        $obj = $container->get('DI\Test\IntegrationTest\Fixtures\Class1');
+        $obj = $container->get(Class1::class);
 
         $proxies = [];
 
@@ -150,7 +152,7 @@ class InjectionTest extends \PHPUnit_Framework_TestCase
      */
     public function testMake($type, Container $container)
     {
-        $obj = $container->make('DI\Test\IntegrationTest\Fixtures\Class1');
+        $obj = $container->make(Class1::class);
 
         $proxies = [];
 
@@ -195,14 +197,14 @@ class InjectionTest extends \PHPUnit_Framework_TestCase
         if ($type == self::DEFINITION_REFLECTION) {
             return;
         }
-        $class1_1 = $container->get('DI\Test\IntegrationTest\Fixtures\Class1');
-        $class1_2 = $container->get('DI\Test\IntegrationTest\Fixtures\Class1');
+        $class1_1 = $container->get(Class1::class);
+        $class1_2 = $container->get(Class1::class);
         $this->assertNotSame($class1_1, $class1_2);
-        $class2_1 = $container->get('DI\Test\IntegrationTest\Fixtures\Class2');
-        $class2_2 = $container->get('DI\Test\IntegrationTest\Fixtures\Class2');
+        $class2_1 = $container->get(Class2::class);
+        $class2_2 = $container->get(Class2::class);
         $this->assertSame($class2_1, $class2_2);
-        $class3_1 = $container->get('DI\Test\IntegrationTest\Fixtures\Interface1');
-        $class3_2 = $container->get('DI\Test\IntegrationTest\Fixtures\Interface1');
+        $class3_1 = $container->get(Interface1::class);
+        $class3_2 = $container->get(Interface1::class);
         $this->assertSame($class3_1, $class3_2);
     }
 
@@ -211,19 +213,19 @@ class InjectionTest extends \PHPUnit_Framework_TestCase
      */
     public function testAlias($type, Container $container)
     {
-        $this->assertInstanceOf('DI\Test\IntegrationTest\Fixtures\Class2', $container->get('alias'));
+        $this->assertInstanceOf(Class2::class, $container->get('alias'));
     }
 
     private function validateConstructorInjection(Class1 $class1, $type)
     {
-        $this->assertInstanceOf('DI\Test\IntegrationTest\Fixtures\Class2', $class1->constructorParam1);
-        $this->assertInstanceOf('DI\Test\IntegrationTest\Fixtures\Implementation1', $class1->constructorParam2);
+        $this->assertInstanceOf(Class2::class, $class1->constructorParam1);
+        $this->assertInstanceOf(Implementation1::class, $class1->constructorParam2);
 
         // Test lazy injection (not possible using autowiring only)
         if ($type != self::DEFINITION_REFLECTION) {
-            $this->assertInstanceOf('DI\Test\IntegrationTest\Fixtures\LazyDependency', $class1->constructorParam3);
-            $this->assertInstanceOf('ProxyManager\Proxy\LazyLoadingInterface', $class1->constructorParam3);
-            /** @var LazyDependency|\ProxyManager\Proxy\LazyLoadingInterface $proxy */
+            $this->assertInstanceOf(LazyDependency::class, $class1->constructorParam3);
+            $this->assertInstanceOf(LazyLoadingInterface::class, $class1->constructorParam3);
+            /** @var LazyDependency|LazyLoadingInterface $proxy */
             $proxy = $class1->constructorParam3;
             $this->assertFalse($proxy->isProxyInitialized());
 
@@ -235,15 +237,15 @@ class InjectionTest extends \PHPUnit_Framework_TestCase
 
     private function validatePropertyInjection(Class1 $class1)
     {
-        $this->assertInstanceOf('DI\Test\IntegrationTest\Fixtures\Class2', $class1->property1);
-        $this->assertInstanceOf('DI\Test\IntegrationTest\Fixtures\Implementation1', $class1->property2);
-        $this->assertInstanceOf('DI\Test\IntegrationTest\Fixtures\Class2', $class1->property3);
+        $this->assertInstanceOf(Class2::class, $class1->property1);
+        $this->assertInstanceOf(Implementation1::class, $class1->property2);
+        $this->assertInstanceOf(Class2::class, $class1->property3);
         $this->assertEquals('bar', $class1->property4);
         // Lazy injection
-        /** @var LazyDependency|\ProxyManager\Proxy\LazyLoadingInterface $proxy */
+        /** @var LazyDependency|LazyLoadingInterface $proxy */
         $proxy = $class1->property5;
-        $this->assertInstanceOf('DI\Test\IntegrationTest\Fixtures\LazyDependency', $proxy);
-        $this->assertInstanceOf('ProxyManager\Proxy\LazyLoadingInterface', $proxy);
+        $this->assertInstanceOf(LazyDependency::class, $proxy);
+        $this->assertInstanceOf(LazyLoadingInterface::class, $proxy);
         $this->assertFalse($proxy->isProxyInitialized());
 
         return $proxy;
@@ -252,25 +254,25 @@ class InjectionTest extends \PHPUnit_Framework_TestCase
     private function validateMethodInjection(Class1 $class1)
     {
         // Method 1 (automatic resolution with type hinting, optional parameter not overridden)
-        $this->assertInstanceOf('DI\Test\IntegrationTest\Fixtures\Class2', $class1->method1Param1);
+        $this->assertInstanceOf(Class2::class, $class1->method1Param1);
 
         // Method 2 (automatic resolution with type hinting)
-        $this->assertInstanceOf('DI\Test\IntegrationTest\Fixtures\Implementation1', $class1->method2Param1);
+        $this->assertInstanceOf(Implementation1::class, $class1->method2Param1);
 
         // Method 3 (defining parameters with the annotation)
-        $this->assertInstanceOf('DI\Test\IntegrationTest\Fixtures\Class2', $class1->method3Param1);
+        $this->assertInstanceOf(Class2::class, $class1->method3Param1);
         $this->assertEquals('bar', $class1->method3Param2);
 
         // Method 4 (lazy)
-        $this->assertInstanceOf('DI\Test\IntegrationTest\Fixtures\LazyDependency', $class1->method4Param1);
-        $this->assertInstanceOf('ProxyManager\Proxy\LazyLoadingInterface', $class1->method4Param1);
+        $this->assertInstanceOf(LazyDependency::class, $class1->method4Param1);
+        $this->assertInstanceOf(LazyLoadingInterface::class, $class1->method4Param1);
         // Lazy injection
-        /** @var LazyDependency|\ProxyManager\Proxy\LazyLoadingInterface $proxy */
+        /** @var LazyDependency|LazyLoadingInterface $proxy */
         $proxy = $class1->method4Param1;
         $this->assertFalse($proxy->isProxyInitialized());
 
         // Method 5 (defining a parameter by its name)
-        $this->assertInstanceOf('DI\Test\IntegrationTest\Fixtures\Implementation1', $class1->method5Param1);
+        $this->assertInstanceOf(Implementation1::class, $class1->method5Param1);
         $this->assertEquals('bar', $class1->method5Param2);
 
         return $proxy;
@@ -278,7 +280,7 @@ class InjectionTest extends \PHPUnit_Framework_TestCase
 
     /**
      * Validate that the proxy resolves correctly.
-     * @param LazyDependency[]|\ProxyManager\Proxy\LazyLoadingInterface[] $proxies
+     * @param LazyDependency[]|LazyLoadingInterface[] $proxies
      */
     private function validateProxyResolution($proxies)
     {

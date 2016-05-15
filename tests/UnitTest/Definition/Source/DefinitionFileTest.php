@@ -20,13 +20,13 @@ class DefinitionFileTest extends \PHPUnit_Framework_TestCase
 
         /** @var ValueDefinition $definition */
         $definition = $source->getDefinition('foo');
-        $this->assertInstanceOf('DI\Definition\ValueDefinition', $definition);
+        $this->assertInstanceOf(ValueDefinition::class, $definition);
         $this->assertEquals('bar', $definition->getValue());
         $this->assertInternalType('string', $definition->getValue());
 
         /** @var ObjectDefinition $definition */
         $definition = $source->getDefinition('bim');
-        $this->assertInstanceOf('DI\Definition\ObjectDefinition', $definition);
+        $this->assertInstanceOf(ObjectDefinition::class, $definition);
         $this->assertEquals('bim', $definition->getName());
         $this->assertEquals('bim', $definition->getClassName());
     }

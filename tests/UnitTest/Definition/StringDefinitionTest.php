@@ -2,10 +2,12 @@
 
 namespace DI\Test\UnitTest\Definition;
 
+use DI\Definition\CacheableDefinition;
 use DI\Definition\StringDefinition;
 use DI\NotFoundException;
 use DI\Scope;
 use EasyMock\EasyMock;
+use Interop\Container\ContainerInterface;
 
 /**
  * @covers \DI\Definition\StringDefinition
@@ -37,7 +39,7 @@ class StringDefinitionTest extends \PHPUnit_Framework_TestCase
      */
     public function should_not_be_cacheable()
     {
-        $this->assertNotInstanceOf('DI\Definition\CacheableDefinition', new StringDefinition('foo', 'bar'));
+        $this->assertNotInstanceOf(CacheableDefinition::class, new StringDefinition('foo', 'bar'));
     }
 
     /**
@@ -45,7 +47,7 @@ class StringDefinitionTest extends \PHPUnit_Framework_TestCase
      */
     public function should_be_resolvable()
     {
-        $container = $this->easyMock('Interop\Container\ContainerInterface');
+        $container = $this->easyMock(ContainerInterface::class);
 
         $definition = new StringDefinition('foo', 'bar');
 
@@ -57,7 +59,7 @@ class StringDefinitionTest extends \PHPUnit_Framework_TestCase
      */
     public function should_resolve_bare_strings()
     {
-        $container = $this->easyMock('Interop\Container\ContainerInterface');
+        $container = $this->easyMock(ContainerInterface::class);
 
         $definition = new StringDefinition('foo', 'bar');
 
@@ -69,7 +71,7 @@ class StringDefinitionTest extends \PHPUnit_Framework_TestCase
      */
     public function should_resolve_references()
     {
-        $container = $this->easyMock('Interop\Container\ContainerInterface', [
+        $container = $this->easyMock(ContainerInterface::class, [
             'get' => 'bar',
         ]);
 
@@ -83,7 +85,7 @@ class StringDefinitionTest extends \PHPUnit_Framework_TestCase
      */
     public function should_resolve_multiple_references()
     {
-        $container = $this->easySpy('Interop\Container\ContainerInterface');
+        $container = $this->easySpy(ContainerInterface::class);
         $container->expects($this->exactly(2))
             ->method('get')
             ->withConsecutive(['tmp'], ['logs'])
@@ -103,7 +105,7 @@ class StringDefinitionTest extends \PHPUnit_Framework_TestCase
      */
     public function should_throw_on_unknown_entry_name()
     {
-        $container = $this->easyMock('Interop\Container\ContainerInterface', [
+        $container = $this->easyMock(ContainerInterface::class, [
             'get' => new NotFoundException("No entry or class found for 'test'"),
         ]);
 

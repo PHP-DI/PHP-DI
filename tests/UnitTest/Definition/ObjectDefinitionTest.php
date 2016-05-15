@@ -2,6 +2,7 @@
 
 namespace DI\Test\UnitTest\Definition;
 
+use DI\Definition\CacheableDefinition;
 use DI\Definition\ObjectDefinition;
 use DI\Definition\ObjectDefinition\MethodInjection;
 use DI\Definition\ObjectDefinition\PropertyInjection;
@@ -43,7 +44,7 @@ class ObjectDefinitionTest extends \PHPUnit_Framework_TestCase
 
     public function should_be_cacheable()
     {
-        $this->assertInstanceOf('DI\Definition\CacheableDefinition', new ObjectDefinition('foo'));
+        $this->assertInstanceOf(CacheableDefinition::class, new ObjectDefinition('foo'));
     }
 
     /**

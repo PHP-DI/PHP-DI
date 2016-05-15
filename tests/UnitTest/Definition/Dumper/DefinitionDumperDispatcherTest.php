@@ -6,6 +6,7 @@ use DI\Definition\AliasDefinition;
 use DI\Definition\DecoratorDefinition;
 use DI\Definition\Dumper\AliasDefinitionDumper;
 use DI\Definition\Dumper\DecoratorDefinitionDumper;
+use DI\Definition\Dumper\DefinitionDumper;
 use DI\Definition\Dumper\DefinitionDumperDispatcher;
 use DI\Definition\Dumper\EnvironmentVariableDefinitionDumper;
 use DI\Definition\Dumper\FactoryDefinitionDumper;
@@ -28,7 +29,7 @@ class DefinitionDumperDispatcherTest extends \PHPUnit_Framework_TestCase
     {
         $definition = new ValueDefinition('foo', 'bar');
 
-        $subDumper = $this->getMockForAbstractClass('DI\Definition\Dumper\DefinitionDumper');
+        $subDumper = $this->getMockForAbstractClass(DefinitionDumper::class);
         // Check that the sub-dumper is really called
         $subDumper->expects($this->once())
             ->method('dump')

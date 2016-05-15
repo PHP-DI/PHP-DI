@@ -2,6 +2,7 @@
 
 namespace DI\Test\UnitTest\Definition\ObjectDefinition;
 
+use DI\Definition\CacheableDefinition;
 use DI\Definition\ObjectDefinition\MethodInjection;
 use DI\Scope;
 
@@ -55,16 +56,12 @@ class MethodInjectionTest extends \PHPUnit_Framework_TestCase
 
     public function testNotCacheable()
     {
-        $definition = new MethodInjection('foo');
-
-        $this->assertNotInstanceOf('DI\Definition\CacheableDefinition', $definition);
+        $this->assertNotInstanceOf(CacheableDefinition::class, new MethodInjection('foo'));
     }
 
     public function testEmptyParameters()
     {
-        $definition = new MethodInjection('foo');
-
-        $this->assertEmpty($definition->getParameters());
+        $this->assertEmpty((new MethodInjection('foo'))->getParameters());
     }
 
     public function testGetParameters()

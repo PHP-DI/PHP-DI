@@ -1,5 +1,9 @@
 # Change log
 
+## 5.3
+
+- PHP-DI now requires a version of PHP >= 5.5.0
+
 ## 5.2
 
 Improvements:

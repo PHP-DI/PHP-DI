@@ -17,8 +17,8 @@ class Issue168Test extends \PHPUnit_Framework_TestCase
     public function testInterfaceOptionalParameter()
     {
         $container = ContainerBuilder::buildDevContainer();
-        $object = $container->get('DI\Test\IntegrationTest\Issues\TestClass');
-        $this->assertInstanceOf('DI\Test\IntegrationTest\Issues\TestClass', $object);
+        $object = $container->get(TestClass::class);
+        $this->assertInstanceOf(TestClass::class, $object);
     }
 }
 

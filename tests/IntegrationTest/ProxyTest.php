@@ -5,6 +5,8 @@ namespace DI\Test\IntegrationTest;
 use DI\ContainerBuilder;
 use DI\Test\IntegrationTest\Fixtures\LazyDependency;
 use DI\Test\IntegrationTest\Fixtures\ProxyTest\A;
+use DI\Test\IntegrationTest\Fixtures\ProxyTest\B;
+use ProxyManager\Proxy\LazyLoadingInterface;
 
 /**
  * Test lazy injections with proxies.
@@ -19,13 +21,13 @@ class ProxyTest extends \PHPUnit_Framework_TestCase
     public function container_can_create_lazy_objects()
     {
         $container = $this->createContainer([
-            'foo' => \DI\object('DI\Test\IntegrationTest\Fixtures\LazyDependency')
+            'foo' => \DI\object(LazyDependency::class)
                 ->lazy(),
         ]);
 
         $proxy = $container->get('foo');
-        $this->assertInstanceOf('ProxyManager\Proxy\LazyLoadingInterface', $proxy);
-        $this->assertInstanceOf('DI\Test\IntegrationTest\Fixtures\LazyDependency', $proxy);
+        $this->assertInstanceOf(LazyLoadingInterface::class, $proxy);
+        $this->assertInstanceOf(LazyDependency::class, $proxy);
     }
 
     /**
@@ -34,7 +36,7 @@ class ProxyTest extends \PHPUnit_Framework_TestCase
     public function lazy_singletons_resolve_to_the_same_instance()
     {
         $container = $this->createContainer([
-            'foo' => \DI\object('DI\Test\IntegrationTest\Fixtures\LazyDependency')
+            'foo' => \DI\object(LazyDependency::class)
                 ->lazy(),
         ]);
 
@@ -52,10 +54,10 @@ class ProxyTest extends \PHPUnit_Framework_TestCase
     public function singleton_dependencies_of_proxies_are_resolved_once()
     {
         $container = $this->createContainer([
-            'A' => \DI\object('DI\Test\IntegrationTest\Fixtures\ProxyTest\A')
+            'A' => \DI\object(A::class)
                 ->constructor(\DI\get('B'))
                 ->lazy(),
-            'B' => \DI\object('DI\Test\IntegrationTest\Fixtures\ProxyTest\B'),
+            'B' => \DI\object(B::class),
         ]);
 
         /** @var A $a1 */

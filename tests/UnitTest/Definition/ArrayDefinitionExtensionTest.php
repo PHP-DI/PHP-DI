@@ -4,6 +4,7 @@ namespace DI\Test\UnitTest\Definition;
 
 use DI\Definition\ArrayDefinition;
 use DI\Definition\ArrayDefinitionExtension;
+use DI\Definition\CacheableDefinition;
 use DI\Definition\ValueDefinition;
 use DI\Scope;
 
@@ -41,7 +42,7 @@ class ArrayDefinitionExtensionTest extends \PHPUnit_Framework_TestCase
     {
         $definition = new ArrayDefinitionExtension('foo', []);
 
-        $this->assertNotInstanceOf('DI\Definition\CacheableDefinition', $definition);
+        $this->assertNotInstanceOf(CacheableDefinition::class, $definition);
     }
 
     /**

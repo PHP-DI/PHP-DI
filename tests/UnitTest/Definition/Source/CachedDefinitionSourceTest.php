@@ -21,7 +21,7 @@ class CachedDefinitionSourceTest extends \PHPUnit_Framework_TestCase
     public function should_get_from_cache()
     {
         /** @var Cache $cache */
-        $cache = $this->easySpy('Doctrine\Common\Cache\Cache', [
+        $cache = $this->easySpy(Cache::class, [
             'fetch' => 'foo',
         ]);
 
@@ -35,7 +35,7 @@ class CachedDefinitionSourceTest extends \PHPUnit_Framework_TestCase
      */
     public function should_save_to_cache_and_return()
     {
-        $cache = $this->easySpy('Doctrine\Common\Cache\Cache', [
+        $cache = $this->easySpy(Cache::class, [
             'fetch' => false,
         ]);
 
@@ -58,7 +58,7 @@ class CachedDefinitionSourceTest extends \PHPUnit_Framework_TestCase
      */
     public function should_save_null_to_cache_and_return_null()
     {
-        $cache = $this->easySpy('Doctrine\Common\Cache\Cache', [
+        $cache = $this->easySpy(Cache::class, [
             'fetch' => false,
         ]);
 

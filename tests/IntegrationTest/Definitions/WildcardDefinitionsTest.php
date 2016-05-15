@@ -4,6 +4,8 @@ namespace DI\Test\IntegrationTest\Definitions;
 
 use DI\Annotation\Inject;
 use DI\ContainerBuilder;
+use DI\Test\IntegrationTest\Fixtures\Implementation1;
+use DI\Test\IntegrationTest\Fixtures\Interface1;
 
 /**
  * Test definitions using wildcards.
@@ -23,8 +25,8 @@ class WildcardDefinitionsTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals('bar', $container->get('foo1'));
 
-        $object = $container->get('DI\Test\IntegrationTest\Fixtures\Interface1');
-        $this->assertInstanceOf('DI\Test\IntegrationTest\Fixtures\Implementation1', $object);
+        $object = $container->get(Interface1::class);
+        $this->assertInstanceOf(Implementation1::class, $object);
     }
 
     public function test_wildcards_as_dependency()
@@ -37,8 +39,8 @@ class WildcardDefinitionsTest extends \PHPUnit_Framework_TestCase
         $container = $builder->build();
 
         /** @var WildcardDefinitionsTestFixture $object */
-        $object = $container->get(__NAMESPACE__ . '\WildcardDefinitionsTestFixture');
-        $this->assertInstanceOf('DI\Test\IntegrationTest\Fixtures\Implementation1', $object->dependency);
+        $object = $container->get(WildcardDefinitionsTestFixture::class);
+        $this->assertInstanceOf(Implementation1::class, $object->dependency);
     }
 }
 
@@ -46,7 +48,7 @@ class WildcardDefinitionsTestFixture
 {
     /**
      * @Inject
-     * @var \DI\Test\IntegrationTest\Fixtures\Interface1
+     * @var Interface1
      */
     public $dependency;
 }

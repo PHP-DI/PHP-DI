@@ -23,7 +23,7 @@
         "test": "phpunit"
     },
     "require": {
-        "php": ">=5.4.0",
+        "php": ">=5.5.0",
         "container-interop/container-interop": "~1.0",
         "php-di/invoker": "^1.1.1",
         "php-di/phpdoc-reader": "^2.0.1"
