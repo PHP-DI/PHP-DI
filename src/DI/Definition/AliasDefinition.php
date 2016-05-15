@@ -3,13 +3,14 @@
 namespace DI\Definition;
 
 use DI\Scope;
+use Interop\Container\ContainerInterface;
 
 /**
  * Defines an alias from an entry to another.
  *
  * @author Matthieu Napoli <matthieu@mnapoli.fr>
  */
-class AliasDefinition implements CacheableDefinition
+class AliasDefinition implements CacheableDefinition, SelfResolvingDefinition
 {
     /**
      * Entry name.
@@ -55,5 +56,15 @@ class AliasDefinition implements CacheableDefinition
     public function getTargetEntryName()
     {
         return $this->targetEntryName;
+    }
+
+    public function resolve(ContainerInterface $container)
+    {
+        return $container->get($this->getTargetEntryName());
+    }
+
+    public function isResolvable(ContainerInterface $container)
+    {
+        return $container->has($this->getTargetEntryName());
     }
 }
