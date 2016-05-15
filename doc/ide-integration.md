@@ -54,6 +54,8 @@ That configuration will make PhpStorm assume that anything returned by `->get('.
 
 This however will not work if your service name is not a class or interface, for example `->get('foo.bar')` will not be understood by PhpStorm.
 
+**Note:** you may need to restart your IDE after adding this file to make sure PhpStorm takes it into account.
+
 ### PhpStorm plugin
 
 If you don't fancy writing a `.phpstorm.meta.php` file in each of your projects, you can install the [PHP-DI plugin for PhpStorm](https://github.com/pulyaevskiy/phpstorm-phpdi) created by [Anatoly Pulyaevskiy](https://github.com/pulyaevskiy). The plugin can be installed in PhpStorm by searching for *PHP-DI* in the 3rd party plugin list.
