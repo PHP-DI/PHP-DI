@@ -29,8 +29,8 @@ class DecoratorResolverTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $container = $this->easyMock('Interop\Container\ContainerInterface');
-        $this->parentResolver = $this->easyMock('DI\Definition\Resolver\DefinitionResolver');
+        $container = $this->easyMock(ContainerInterface::class);
+        $this->parentResolver = $this->easyMock(DefinitionResolver::class);
         $this->resolver = new DecoratorResolver($container, $this->parentResolver);
     }
 

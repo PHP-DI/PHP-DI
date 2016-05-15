@@ -4,10 +4,17 @@ namespace DI\Test\UnitTest;
 
 use DI\Definition\ArrayDefinition;
 use DI\Definition\ArrayDefinitionExtension;
+use DI\Definition\DecoratorDefinition;
+use DI\Definition\EntryReference;
+use DI\Definition\FactoryDefinition;
 use DI\Definition\Helper\ArrayDefinitionExtensionHelper;
 use DI\Definition\Helper\EnvironmentVariableDefinitionHelper;
+use DI\Definition\Helper\FactoryDefinitionHelper;
 use DI\Definition\Helper\ObjectDefinitionHelper;
+use DI\Definition\Helper\StringDefinitionHelper;
+use DI\Definition\Helper\ValueDefinitionHelper;
 use DI\Definition\ObjectDefinition;
+use DI\Definition\StringDefinition;
 
 /**
  * Tests the helper functions.
@@ -21,7 +28,7 @@ class FunctionsTest extends \PHPUnit_Framework_TestCase
     {
         $definition = \DI\value('foo');
 
-        $this->assertInstanceOf('DI\Definition\Helper\ValueDefinitionHelper', $definition);
+        $this->assertInstanceOf(ValueDefinitionHelper::class, $definition);
         $this->assertEquals('foo', $definition->getDefinition('entry')->getValue());
     }
 
@@ -54,9 +61,9 @@ class FunctionsTest extends \PHPUnit_Framework_TestCase
             return 42;
         });
 
-        $this->assertInstanceOf('DI\Definition\Helper\FactoryDefinitionHelper', $helper);
+        $this->assertInstanceOf(FactoryDefinitionHelper::class, $helper);
         $definition = $helper->getDefinition('entry');
-        $this->assertInstanceOf('DI\Definition\FactoryDefinition', $definition);
+        $this->assertInstanceOf(FactoryDefinition::class, $definition);
         $callable = $definition->getCallable();
         $this->assertEquals(42, $callable());
     }
@@ -70,9 +77,9 @@ class FunctionsTest extends \PHPUnit_Framework_TestCase
             return 42;
         });
 
-        $this->assertInstanceOf('DI\Definition\Helper\FactoryDefinitionHelper', $helper);
+        $this->assertInstanceOf(FactoryDefinitionHelper::class, $helper);
         $definition = $helper->getDefinition('entry');
-        $this->assertInstanceOf('DI\Definition\DecoratorDefinition', $definition);
+        $this->assertInstanceOf(DecoratorDefinition::class, $definition);
         $callable = $definition->getCallable();
         $this->assertEquals(42, $callable());
     }
@@ -84,7 +91,7 @@ class FunctionsTest extends \PHPUnit_Framework_TestCase
     {
         $reference = \DI\get('foo');
 
-        $this->assertInstanceOf('DI\Definition\EntryReference', $reference);
+        $this->assertInstanceOf(EntryReference::class, $reference);
         $this->assertEquals('foo', $reference->getName());
     }
 
@@ -95,7 +102,7 @@ class FunctionsTest extends \PHPUnit_Framework_TestCase
     {
         $reference = \DI\link('foo');
 
-        $this->assertInstanceOf('DI\Definition\EntryReference', $reference);
+        $this->assertInstanceOf(EntryReference::class, $reference);
         $this->assertEquals('foo', $reference->getName());
     }
 
@@ -183,11 +190,11 @@ class FunctionsTest extends \PHPUnit_Framework_TestCase
     {
         $helper = \DI\string('bar');
 
-        $this->assertInstanceOf('DI\Definition\Helper\StringDefinitionHelper', $helper);
+        $this->assertInstanceOf(StringDefinitionHelper::class, $helper);
 
         $definition = $helper->getDefinition('foo');
 
-        $this->assertInstanceOf('DI\Definition\StringDefinition', $definition);
+        $this->assertInstanceOf(StringDefinition::class, $definition);
         $this->assertEquals('foo', $definition->getName());
         $this->assertEquals('bar', $definition->getExpression());
     }

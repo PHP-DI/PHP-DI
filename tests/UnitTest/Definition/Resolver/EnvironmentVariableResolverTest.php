@@ -32,7 +32,7 @@ class EnvironmentVariableResolverTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->parentResolver = $this->easyMock('DI\Definition\Resolver\DefinitionResolver');
+        $this->parentResolver = $this->easyMock(DefinitionResolver::class);
 
         $variableReader = function ($variableName) {
             if ('DEFINED' === $variableName) {
@@ -99,9 +99,7 @@ class EnvironmentVariableResolverTest extends \PHPUnit_Framework_TestCase
      */
     public function should_be_able_to_resolve_defined_env_variables()
     {
-        $this->assertTrue(
-            $this->resolver->isResolvable($this->definedDefinition)
-        );
+        $this->assertTrue($this->resolver->isResolvable($this->definedDefinition));
     }
 
     /**
@@ -109,10 +107,8 @@ class EnvironmentVariableResolverTest extends \PHPUnit_Framework_TestCase
      */
     public function should_be_able_to_resolve_undefined_env_variables()
     {
-        // See this thread https://github.com/container-interop/container-interop/issues/37
-        $this->assertTrue(
-            $this->resolver->isResolvable($this->undefinedDefinition)
-        );
+        // See https://github.com/container-interop/container-interop/issues/37
+        $this->assertTrue($this->resolver->isResolvable($this->undefinedDefinition));
     }
 
     /**
@@ -120,8 +116,6 @@ class EnvironmentVariableResolverTest extends \PHPUnit_Framework_TestCase
      */
     public function should_be_able_to_resolve_undefined_env_variables_with_default_values()
     {
-        $this->assertTrue(
-            $this->resolver->isResolvable($this->optionalDefinition)
-        );
+        $this->assertTrue($this->resolver->isResolvable($this->optionalDefinition));
     }
 }

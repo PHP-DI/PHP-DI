@@ -10,8 +10,6 @@ use DI\Test\UnitTest\Proxy\Fixtures\ClassToProxy;
  */
 class ProxyFactoryTest extends \PHPUnit_Framework_TestCase
 {
-    const FIXTURE = 'DI\Test\UnitTest\Proxy\Fixtures\ClassToProxy';
-
     /**
      * @test
      */
@@ -33,10 +31,10 @@ class ProxyFactoryTest extends \PHPUnit_Framework_TestCase
             return true;
         };
         /** @var ClassToProxy $proxy */
-        $proxy = $factory->createProxy(self::FIXTURE, $initializer);
+        $proxy = $factory->createProxy(ClassToProxy::class, $initializer);
 
         $this->assertFalse($initialized);
-        $this->assertInstanceOf(self::FIXTURE, $proxy);
+        $this->assertInstanceOf(ClassToProxy::class, $proxy);
 
         $proxy->foo();
 

@@ -3,8 +3,10 @@
 namespace DI\Test\UnitTest\Definition;
 
 use DI\Definition\AliasDefinition;
+use DI\Definition\CacheableDefinition;
 use DI\Scope;
 use EasyMock\EasyMock;
+use Interop\Container\ContainerInterface;
 
 /**
  * @covers \DI\Definition\AliasDefinition
@@ -48,7 +50,7 @@ class AliasDefinitionTest extends \PHPUnit_Framework_TestCase
      */
     public function should_be_cacheable()
     {
-        $this->assertInstanceOf('DI\Definition\CacheableDefinition', new AliasDefinition('foo', 'bar'));
+        $this->assertInstanceOf(CacheableDefinition::class, new AliasDefinition('foo', 'bar'));
     }
 
     /**
@@ -56,7 +58,7 @@ class AliasDefinitionTest extends \PHPUnit_Framework_TestCase
      */
     public function should_resolve()
     {
-        $container = $this->easySpy('Interop\Container\ContainerInterface', [
+        $container = $this->easySpy(ContainerInterface::class, [
             'get' => 42,
         ]);
 
@@ -70,7 +72,7 @@ class AliasDefinitionTest extends \PHPUnit_Framework_TestCase
      */
     public function should_be_resolvable()
     {
-        $container = $this->easySpy('Interop\Container\ContainerInterface', [
+        $container = $this->easySpy(ContainerInterface::class, [
             'has' => true,
         ]);
 

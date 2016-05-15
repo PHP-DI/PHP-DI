@@ -85,9 +85,9 @@ class Container implements ContainerInterface, FactoryInterface, \DI\InvokerInte
         $this->definitionResolver = new ResolverDispatcher($this->wrapperContainer, $proxyFactory);
 
         // Auto-register the container
-        $this->singletonEntries['DI\Container'] = $this;
-        $this->singletonEntries['DI\FactoryInterface'] = $this;
-        $this->singletonEntries['DI\InvokerInterface'] = $this;
+        $this->singletonEntries[self::class] = $this;
+        $this->singletonEntries[FactoryInterface::class] = $this;
+        $this->singletonEntries[InvokerInterface::class] = $this;
     }
 
     /**

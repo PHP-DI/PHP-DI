@@ -63,8 +63,8 @@ class ProxyFactory
             return;
         }
 
-        if (! class_exists('ProxyManager\Configuration')) {
-            throw new \RuntimeException('The ocramius/proxy-manager library is not installed. Lazy injection requires that library to be installed with Composer in order to work. Run "composer require ocramius/proxy-manager:~0.3".');
+        if (! class_exists(Configuration::class)) {
+            throw new \RuntimeException('The ocramius/proxy-manager library is not installed. Lazy injection requires that library to be installed with Composer in order to work. Run "composer require ocramius/proxy-manager:~1.0".');
         }
 
         $config = new Configuration();

@@ -2,9 +2,11 @@
 
 namespace DI\Test\UnitTest\Definition\Helper;
 
+use DI\Definition\Exception\DefinitionException;
 use DI\Definition\Helper\ObjectDefinitionHelper;
 use DI\Definition\ObjectDefinition\MethodInjection;
 use DI\Scope;
+use DI\Test\UnitTest\Definition\Helper\Fixtures\Class1;
 
 /**
  * @covers \DI\Definition\Helper\ObjectDefinitionHelper
@@ -160,7 +162,7 @@ class ObjectDefinitionHelperTest extends \PHPUnit_Framework_TestCase
         $helper = new ObjectDefinitionHelper();
         $helper->methodParameter('method', 'param2', 'val2');
         $helper->methodParameter('method', 'param1', 'val1');
-        $definition = $helper->getDefinition('DI\Test\UnitTest\Definition\Helper\Fixtures\Class1');
+        $definition = $helper->getDefinition(Class1::class);
 
         $this->assertCount(1, $definition->getMethodInjections());
         $methodInjection = current($definition->getMethodInjections());
@@ -191,7 +193,7 @@ class ObjectDefinitionHelperTest extends \PHPUnit_Framework_TestCase
         }
         $helper = new ObjectDefinitionHelper();
         $helper->methodParameter('__construct', 'wrongName', 42);
-        $this->setExpectedException('DI\Definition\Exception\DefinitionException', "Parameter with name 'wrongName' could not be found");
-        $helper->getDefinition('DI\Test\UnitTest\Definition\Helper\Fixtures\Class1');
+        $this->setExpectedException(DefinitionException::class, "Parameter with name 'wrongName' could not be found");
+        $helper->getDefinition(Class1::class);
     }
 }

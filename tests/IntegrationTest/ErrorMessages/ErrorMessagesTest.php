@@ -3,6 +3,7 @@
 namespace DI\Test\IntegrationTest\ErrorMessages;
 
 use DI\ContainerBuilder;
+use DI\Definition\Exception\DefinitionException;
 
 /**
  * @coversNothing
@@ -20,7 +21,7 @@ Object (
     lazy = false
 )
 MESSAGE;
-        $this->setExpectedException('DI\Definition\Exception\DefinitionException', $message);
+        $this->setExpectedException(DefinitionException::class, $message);
 
         $container = ContainerBuilder::buildDevContainer();
         $container->get('DI\Test\IntegrationTest\ErrorMessages\InterfaceFixture');
@@ -37,7 +38,7 @@ Object (
     lazy = false
 )
 MESSAGE;
-        $this->setExpectedException('DI\Definition\Exception\DefinitionException', $message);
+        $this->setExpectedException(DefinitionException::class, $message);
 
         $container = ContainerBuilder::buildDevContainer();
         $container->set('Acme\Foo\Bar\Bar', \DI\object());
@@ -60,15 +61,12 @@ Object (
     )
 )
 MESSAGE;
-        $this->setExpectedException('DI\Definition\Exception\DefinitionException', $message);
+        $this->setExpectedException(DefinitionException::class, $message);
 
         $container = ContainerBuilder::buildDevContainer();
-        $container->set(
-            'DI\Test\IntegrationTest\ErrorMessages\Buggy1',
-            \DI\object()->constructorParameter('foo', 'some value')
-        );
+        $container->set(Buggy1::class, \DI\object()->constructorParameter('foo', 'some value'));
 
-        $container->get('DI\Test\IntegrationTest\ErrorMessages\Buggy1');
+        $container->get(Buggy1::class);
     }
 
     /**
@@ -79,8 +77,7 @@ MESSAGE;
     {
         $builder = new ContainerBuilder();
         $builder->useAnnotations(true);
-        $container = $builder->build();
-        $container->get('DI\Test\IntegrationTest\ErrorMessages\Buggy2');
+        $builder->build()->get(Buggy2::class);
     }
 
     /**
@@ -91,8 +88,7 @@ MESSAGE;
     {
         $builder = new ContainerBuilder();
         $builder->useAnnotations(true);
-        $container = $builder->build();
-        $container->get('DI\Test\IntegrationTest\ErrorMessages\Buggy3');
+        $builder->build()->get(Buggy3::class);
     }
 
     /**
@@ -103,8 +99,7 @@ MESSAGE;
     {
         $builder = new ContainerBuilder();
         $builder->useAnnotations(true);
-        $container = $builder->build();
-        $container->get('DI\Test\IntegrationTest\ErrorMessages\Buggy4');
+        $builder->build()->get(Buggy4::class);
     }
 
     public function test_setter_injection_not_type_hinted()
@@ -121,12 +116,11 @@ Object (
     )
 )
 MESSAGE;
-        $this->setExpectedException('DI\Definition\Exception\DefinitionException', $message);
+        $this->setExpectedException(DefinitionException::class, $message);
 
         $builder = new ContainerBuilder();
         $builder->useAnnotations(true);
-        $container = $builder->build();
-        $container->get('DI\Test\IntegrationTest\ErrorMessages\Buggy5');
+        $builder->build()->get(Buggy5::class);
     }
 
     /**

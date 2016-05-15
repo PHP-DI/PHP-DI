@@ -4,6 +4,8 @@ namespace DI\Test\IntegrationTest;
 
 use DI\Container;
 use DI\ContainerBuilder;
+use DI\Test\IntegrationTest\Fixtures\InheritanceTest\BaseClass;
+use DI\Test\IntegrationTest\Fixtures\InheritanceTest\Dependency;
 use DI\Test\IntegrationTest\Fixtures\InheritanceTest\SubClass;
 
 /**
@@ -21,12 +23,12 @@ class InheritanceTest extends \PHPUnit_Framework_TestCase
     public function testInjectionSubClass(Container $container)
     {
         /** @var $instance SubClass */
-        $instance = $container->get('DI\Test\IntegrationTest\Fixtures\InheritanceTest\SubClass');
+        $instance = $container->get(SubClass::class);
 
-        $this->assertInstanceOf('DI\Test\IntegrationTest\Fixtures\InheritanceTest\Dependency', $instance->property1);
-        $this->assertInstanceOf('DI\Test\IntegrationTest\Fixtures\InheritanceTest\Dependency', $instance->property2);
-        $this->assertInstanceOf('DI\Test\IntegrationTest\Fixtures\InheritanceTest\Dependency', $instance->property3);
-        $this->assertInstanceOf('DI\Test\IntegrationTest\Fixtures\InheritanceTest\Dependency', $instance->property4);
+        $this->assertInstanceOf(Dependency::class, $instance->property1);
+        $this->assertInstanceOf(Dependency::class, $instance->property2);
+        $this->assertInstanceOf(Dependency::class, $instance->property3);
+        $this->assertInstanceOf(Dependency::class, $instance->property4);
     }
 
     /**
@@ -37,12 +39,12 @@ class InheritanceTest extends \PHPUnit_Framework_TestCase
     public function testInjectionBaseClass(Container $container)
     {
         /** @var $instance SubClass */
-        $instance = $container->get('DI\Test\IntegrationTest\Fixtures\InheritanceTest\BaseClass');
+        $instance = $container->get(BaseClass::class);
 
-        $this->assertInstanceOf('DI\Test\IntegrationTest\Fixtures\InheritanceTest\Dependency', $instance->property1);
-        $this->assertInstanceOf('DI\Test\IntegrationTest\Fixtures\InheritanceTest\Dependency', $instance->property2);
-        $this->assertInstanceOf('DI\Test\IntegrationTest\Fixtures\InheritanceTest\Dependency', $instance->property3);
-        $this->assertInstanceOf('DI\Test\IntegrationTest\Fixtures\InheritanceTest\Dependency', $instance->property4);
+        $this->assertInstanceOf(Dependency::class, $instance->property1);
+        $this->assertInstanceOf(Dependency::class, $instance->property2);
+        $this->assertInstanceOf(Dependency::class, $instance->property3);
+        $this->assertInstanceOf(Dependency::class, $instance->property4);
     }
 
     /**
@@ -58,8 +60,8 @@ class InheritanceTest extends \PHPUnit_Framework_TestCase
         $builder->useAnnotations(true);
         $containerAnnotations = $builder->build();
         $containerAnnotations->set(
-            'DI\Test\IntegrationTest\Fixtures\InheritanceTest\BaseClass',
-            \DI\object('DI\Test\IntegrationTest\Fixtures\InheritanceTest\SubClass')
+            BaseClass::class,
+            \DI\object(SubClass::class)
         );
 
         // Test with a container using PHP configuration -> entries are different,
@@ -68,22 +70,22 @@ class InheritanceTest extends \PHPUnit_Framework_TestCase
         $builder->useAutowiring(false);
         $builder->useAnnotations(false);
         $containerPHPDefinitions = $builder->build();
-        $containerPHPDefinitions->set('DI\Test\IntegrationTest\Fixtures\InheritanceTest\Dependency', \DI\object());
+        $containerPHPDefinitions->set(Dependency::class, \DI\object());
         $containerPHPDefinitions->set(
-            'DI\Test\IntegrationTest\Fixtures\InheritanceTest\BaseClass',
-            \DI\object('DI\Test\IntegrationTest\Fixtures\InheritanceTest\SubClass')
-                ->property('property1', \DI\get('DI\Test\IntegrationTest\Fixtures\InheritanceTest\Dependency'))
-                ->property('property4', \DI\get('DI\Test\IntegrationTest\Fixtures\InheritanceTest\Dependency'))
-                ->constructor(\DI\get('DI\Test\IntegrationTest\Fixtures\InheritanceTest\Dependency'))
-                ->method('setProperty2', \DI\get('DI\Test\IntegrationTest\Fixtures\InheritanceTest\Dependency'))
+            BaseClass::class,
+            \DI\object(SubClass::class)
+                ->property('property1', \DI\get(Dependency::class))
+                ->property('property4', \DI\get(Dependency::class))
+                ->constructor(\DI\get(Dependency::class))
+                ->method('setProperty2', \DI\get(Dependency::class))
         );
         $containerPHPDefinitions->set(
-            'DI\Test\IntegrationTest\Fixtures\InheritanceTest\SubClass',
+            SubClass::class,
             \DI\object()
-                ->property('property1', \DI\get('DI\Test\IntegrationTest\Fixtures\InheritanceTest\Dependency'))
-                ->property('property4', \DI\get('DI\Test\IntegrationTest\Fixtures\InheritanceTest\Dependency'))
-                ->constructor(\DI\get('DI\Test\IntegrationTest\Fixtures\InheritanceTest\Dependency'))
-                ->method('setProperty2', \DI\get('DI\Test\IntegrationTest\Fixtures\InheritanceTest\Dependency'))
+                ->property('property1', \DI\get(Dependency::class))
+                ->property('property4', \DI\get(Dependency::class))
+                ->constructor(\DI\get(Dependency::class))
+                ->method('setProperty2', \DI\get(Dependency::class))
         );
 
         return [

@@ -29,7 +29,7 @@ class Issue72Test extends \PHPUnit_Framework_TestCase
         $container->set('service1', $value);
 
         /** @var Class1 $class1 */
-        $class1 = $container->get('DI\Test\IntegrationTest\Issues\Issue72\Class1');
+        $class1 = $container->get(Class1::class);
 
         $this->assertEquals('bar', $class1->arg1->foo);
     }
@@ -49,7 +49,7 @@ class Issue72Test extends \PHPUnit_Framework_TestCase
         $container = $builder->build();
 
         /** @var Class1 $class1 */
-        $class1 = $container->get('DI\Test\IntegrationTest\Issues\Issue72\Class1');
+        $class1 = $container->get(Class1::class);
 
         $this->assertEquals('bar', $class1->arg1->foo);
     }
@@ -69,7 +69,7 @@ class Issue72Test extends \PHPUnit_Framework_TestCase
         $container = $builder->build();
 
         /** @var Class1 $class1 */
-        $class1 = $container->get('DI\Test\IntegrationTest\Issues\Issue72\Class1');
+        $class1 = $container->get(Class1::class);
 
         $this->assertEquals('bar', $class1->arg1->foo);
     }
@@ -91,7 +91,7 @@ class Issue72Test extends \PHPUnit_Framework_TestCase
         $container = $builder->build();
 
         /** @var Class1 $class1 */
-        $class1 = $container->get('DI\Test\IntegrationTest\Issues\Issue72\Class1');
+        $class1 = $container->get(Class1::class);
 
         $this->assertEquals('baz', $class1->arg1->foo);
     }
@@ -109,13 +109,13 @@ class Issue72Test extends \PHPUnit_Framework_TestCase
 
         // Override 'service1' to 'service2'
         $container->set(
-            'DI\Test\IntegrationTest\Issues\Issue72\Class1',
+            Class1::class,
             \DI\object()
                 ->constructor(\DI\get('service2'))
         );
 
         /** @var Class1 $class1 */
-        $class1 = $container->get('DI\Test\IntegrationTest\Issues\Issue72\Class1');
+        $class1 = $container->get(Class1::class);
 
         $this->assertEquals('bar', $class1->arg1->foo);
     }
