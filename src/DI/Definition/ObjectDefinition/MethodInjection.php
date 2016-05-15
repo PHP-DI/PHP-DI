@@ -3,7 +3,6 @@
 namespace DI\Definition\ObjectDefinition;
 
 use DI\Definition\Definition;
-use DI\Scope;
 
 /**
  * Describe an injection in an object method.
@@ -60,11 +59,6 @@ class MethodInjection implements Definition
     public function getName() : string
     {
         return '';
-    }
-
-    public function getScope() : string
-    {
-        return Scope::PROTOTYPE;
     }
 
     /**

@@ -5,7 +5,6 @@ namespace DI\Definition;
 use DI\Definition\Dumper\ObjectDefinitionDumper;
 use DI\Definition\ObjectDefinition\MethodInjection;
 use DI\Definition\ObjectDefinition\PropertyInjection;
-use DI\Scope;
 use ReflectionClass;
 
 /**
@@ -44,11 +43,6 @@ class ObjectDefinition implements Definition, CacheableDefinition
      * @var MethodInjection[][]
      */
     protected $methodInjections = [];
-
-    /**
-     * @var string|null
-     */
-    protected $scope;
 
     /**
      * @var bool|null
@@ -155,16 +149,6 @@ class ObjectDefinition implements Definition, CacheableDefinition
             $this->methodInjections[$method] = [];
         }
         $this->methodInjections[$method][] = $methodInjection;
-    }
-
-    public function setScope(string $scope)
-    {
-        $this->scope = $scope;
-    }
-
-    public function getScope() : string
-    {
-        return $this->scope ?: Scope::SINGLETON;
     }
 
     public function setLazy(bool $lazy = null)

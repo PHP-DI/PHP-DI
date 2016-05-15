@@ -34,7 +34,6 @@ title: Documentation index
 ### Advanced topics
 
 * [Performances](performances.md)
-* [Scopes](scopes.md)
 * [Lazy injection](lazy-injection.md)
 * [Inject on an existing instance](inject-on-instance.md)
 * [Injections depending on the environment](environments.md)

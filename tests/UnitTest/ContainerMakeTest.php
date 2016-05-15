@@ -4,9 +4,7 @@ namespace DI\Test\UnitTest;
 
 use DI\ContainerBuilder;
 use DI\Test\UnitTest\Fixtures\Class1CircularDependencies;
-use DI\Test\UnitTest\Fixtures\InvalidScope;
 use DI\Test\UnitTest\Fixtures\PassByReferenceDependency;
-use DI\Test\UnitTest\Fixtures\Prototype;
 use DI\Test\UnitTest\Fixtures\Singleton;
 use stdClass;
 
@@ -40,42 +38,10 @@ class ContainerMakeTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf('stdClass', $container->make('stdClass'));
     }
 
-    /**
-     * Checks that the singleton scope is ignored.
-     */
-    public function testGetWithSingletonScope()
+    public function testMakeAlwaysReturnsNewInstance()
     {
         $container = ContainerBuilder::buildDevContainer();
-        // Without @Injectable annotation => default is Singleton
-        $instance1 = $container->make('stdClass');
-        $instance2 = $container->make('stdClass');
-        $this->assertNotSame($instance1, $instance2);
-        // With @Injectable(scope="singleton") annotation
-        $instance3 = $container->make(Singleton::class);
-        $instance4 = $container->make(Singleton::class);
-        $this->assertNotSame($instance3, $instance4);
-    }
-
-    public function testMakeWithPrototypeScope()
-    {
-        $container = ContainerBuilder::buildDevContainer();
-        // With @Injectable(scope="prototype") annotation
-        $instance1 = $container->make(Prototype::class);
-        $instance2 = $container->make(Prototype::class);
-        $this->assertNotSame($instance1, $instance2);
-    }
-
-    /**
-     * @expectedException \DI\Definition\Exception\InvalidDefinition
-     * @expectedExceptionMessage Error while reading @Injectable on DI\Test\UnitTest\Fixtures\InvalidScope: Value 'foobar' is not a valid scope
-     * @coversNothing
-     */
-    public function testMakeWithInvalidScope()
-    {
-        $builder = new ContainerBuilder();
-        $builder->useAnnotations(true);
-        $container = $builder->build();
-        $container->make(InvalidScope::class);
+        $this->assertNotSame($container->make('stdClass'), $container->make('stdClass'));
     }
 
     /**
@@ -84,8 +50,8 @@ class ContainerMakeTest extends \PHPUnit_Framework_TestCase
     public function testCircularDependencies()
     {
         $container = ContainerBuilder::buildDevContainer();
-        $container->make(Prototype::class);
-        $container->make(Prototype::class);
+        $container->make(Singleton::class);
+        $container->make(Singleton::class);
     }
 
     /**

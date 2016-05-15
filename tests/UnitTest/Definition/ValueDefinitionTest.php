@@ -4,7 +4,6 @@ namespace DI\Test\UnitTest\Definition;
 
 use DI\Definition\CacheableDefinition;
 use DI\Definition\ValueDefinition;
-use DI\Scope;
 use EasyMock\EasyMock;
 use Psr\Container\ContainerInterface;
 
@@ -21,16 +20,6 @@ class ValueDefinitionTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals('foo', $definition->getName());
         $this->assertEquals(1, $definition->getValue());
-    }
-
-    /**
-     * @test
-     */
-    public function should_have_singleton_scope()
-    {
-        $definition = new ValueDefinition('foo', 1);
-
-        $this->assertEquals(Scope::SINGLETON, $definition->getScope());
     }
 
     /**

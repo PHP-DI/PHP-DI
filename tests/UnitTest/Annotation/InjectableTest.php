@@ -4,10 +4,8 @@ namespace DI\Test\UnitTest\Annotation;
 
 use DI\Annotation\Injectable;
 use DI\Definition\Source\AnnotationBasedAutowiring;
-use DI\Scope;
 use DI\Test\UnitTest\Annotation\Fixtures\Injectable1;
 use DI\Test\UnitTest\Annotation\Fixtures\Injectable2;
-use DI\Test\UnitTest\Annotation\Fixtures\Injectable3;
 use Doctrine\Common\Annotations\AnnotationReader as DoctrineAnnotationReader;
 use ReflectionClass;
 
@@ -36,7 +34,6 @@ class InjectableTest extends \PHPUnit_Framework_TestCase
         $annotation = $this->annotationReader->getClassAnnotation($class, Injectable::class);
 
         $this->assertInstanceOf(Injectable::class, $annotation);
-        $this->assertNull($annotation->getScope());
         $this->assertNull($annotation->isLazy());
     }
 
@@ -47,18 +44,6 @@ class InjectableTest extends \PHPUnit_Framework_TestCase
         $annotation = $this->annotationReader->getClassAnnotation($class, Injectable::class);
 
         $this->assertInstanceOf(Injectable::class, $annotation);
-        $this->assertNull($annotation->getScope());
         $this->assertTrue($annotation->isLazy());
-    }
-
-    public function testScope()
-    {
-        $class = new ReflectionClass(Injectable3::class);
-        /** @var $annotation Injectable */
-        $annotation = $this->annotationReader->getClassAnnotation($class, Injectable::class);
-
-        $this->assertInstanceOf(Injectable::class, $annotation);
-        $this->assertEquals(Scope::SINGLETON, $annotation->getScope());
-        $this->assertNull($annotation->isLazy());
     }
 }

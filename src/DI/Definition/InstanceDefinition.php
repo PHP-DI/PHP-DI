@@ -2,8 +2,6 @@
 
 namespace DI\Definition;
 
-use DI\Scope;
-
 /**
  * Defines injections on an existing class instance.
  *
@@ -37,11 +35,6 @@ class InstanceDefinition implements Definition
     {
         // Name are superfluous for instance definitions
         return '';
-    }
-
-    public function getScope() : string
-    {
-        return Scope::PROTOTYPE;
     }
 
     /**

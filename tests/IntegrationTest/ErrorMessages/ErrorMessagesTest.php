@@ -17,7 +17,6 @@ Entry "DI\Test\IntegrationTest\ErrorMessages\InterfaceFixture" cannot be resolve
 Full definition:
 Object (
     class = #NOT INSTANTIABLE# DI\Test\IntegrationTest\ErrorMessages\InterfaceFixture
-    scope = singleton
     lazy = false
 )
 MESSAGE;
@@ -34,7 +33,6 @@ Entry "Acme\Foo\Bar\Bar" cannot be resolved: the class doesn't exist
 Full definition:
 Object (
     class = #UNKNOWN# Acme\Foo\Bar\Bar
-    scope = singleton
     lazy = false
 )
 MESSAGE;
@@ -52,7 +50,6 @@ Entry "DI\Test\IntegrationTest\ErrorMessages\Buggy1" cannot be resolved: Paramet
 Full definition:
 Object (
     class = DI\Test\IntegrationTest\ErrorMessages\Buggy1
-    scope = singleton
     lazy = false
     __construct(
         $foo = 'some value'
@@ -109,7 +106,6 @@ Entry "DI\Test\IntegrationTest\ErrorMessages\Buggy5" cannot be resolved: Paramet
 Full definition:
 Object (
     class = DI\Test\IntegrationTest\ErrorMessages\Buggy5
-    scope = singleton
     lazy = false
     setDependency(
         $dependency = #UNDEFINED#

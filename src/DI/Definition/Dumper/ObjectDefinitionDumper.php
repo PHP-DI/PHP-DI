@@ -32,9 +32,6 @@ class ObjectDefinitionDumper
         }
         $str = sprintf('    class = %s%s', $warning, $className);
 
-        // Scope
-        $str .= PHP_EOL . '    scope = ' . $definition->getScope();
-
         // Lazy
         $str .= PHP_EOL . '    lazy = ' . var_export($definition->isLazy(), true);
 
