@@ -5,6 +5,7 @@ namespace DI\Proxy;
 use ProxyManager\Configuration;
 use ProxyManager\Factory\LazyLoadingValueHolderFactory;
 use ProxyManager\FileLocator\FileLocator;
+use ProxyManager\GeneratorStrategy\EvaluatingGeneratorStrategy;
 use ProxyManager\GeneratorStrategy\FileWriterGeneratorStrategy;
 
 /**
@@ -74,6 +75,8 @@ class ProxyFactory
             $config->setProxiesTargetDir($this->proxyDirectory);
             $config->setGeneratorStrategy(new FileWriterGeneratorStrategy(new FileLocator($this->proxyDirectory)));
             spl_autoload_register($config->getProxyAutoloader());
+        } else {
+            $config->setGeneratorStrategy(new EvaluatingGeneratorStrategy());
         }
 
         $this->proxyManager = new LazyLoadingValueHolderFactory($config);
