@@ -55,4 +55,12 @@ class FactoryDefinitionTest extends \PHPUnit_Framework_TestCase
         });
         $this->assertNotInstanceOf(CacheableDefinition::class, $definition);
     }
+
+    /**
+     * @test
+     */
+    public function should_cast_to_string()
+    {
+        $this->assertEquals('Factory', new FactoryDefinition('', 'bar'));
+    }
 }

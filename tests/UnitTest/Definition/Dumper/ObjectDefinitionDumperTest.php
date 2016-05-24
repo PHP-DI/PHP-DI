@@ -37,6 +37,7 @@ class ObjectDefinitionDumperTest extends \PHPUnit_Framework_TestCase
 )';
 
         $this->assertEquals($str, $dumper->dump($definition));
+        $this->assertEquals($str, (string) $definition);
     }
 
     public function testClass()
@@ -52,6 +53,7 @@ class ObjectDefinitionDumperTest extends \PHPUnit_Framework_TestCase
 )';
 
         $this->assertEquals($str, $dumper->dump($definition));
+        $this->assertEquals($str, (string) $definition);
     }
 
     public function testNonExistentClass()
@@ -68,6 +70,7 @@ class ObjectDefinitionDumperTest extends \PHPUnit_Framework_TestCase
 )';
 
         $this->assertEquals($str, $resolver->dump($definition));
+        $this->assertEquals($str, (string) $definition);
     }
 
     public function testNonInstantiableClass()
@@ -83,6 +86,7 @@ class ObjectDefinitionDumperTest extends \PHPUnit_Framework_TestCase
 )';
 
         $this->assertEquals($str, $resolver->dump($definition));
+        $this->assertEquals($str, (string) $definition);
     }
 
     public function testScopePrototype()
@@ -99,6 +103,7 @@ class ObjectDefinitionDumperTest extends \PHPUnit_Framework_TestCase
 )';
 
         $this->assertEquals($str, $resolver->dump($definition));
+        $this->assertEquals($str, (string) $definition);
     }
 
     public function testLazy()
@@ -115,6 +120,7 @@ class ObjectDefinitionDumperTest extends \PHPUnit_Framework_TestCase
 )';
 
         $this->assertEquals($str, $resolver->dump($definition));
+        $this->assertEquals($str, (string) $definition);
     }
 
     public function testConstructorParameters()
@@ -135,6 +141,7 @@ class ObjectDefinitionDumperTest extends \PHPUnit_Framework_TestCase
 )';
 
         $this->assertEquals($str, $resolver->dump($definition));
+        $this->assertEquals($str, (string) $definition);
     }
 
     public function testUndefinedConstructorParameter()
@@ -155,6 +162,7 @@ class ObjectDefinitionDumperTest extends \PHPUnit_Framework_TestCase
 )';
 
         $this->assertEquals($str, $resolver->dump($definition));
+        $this->assertEquals($str, (string) $definition);
     }
 
     public function testPropertyValue()
@@ -172,6 +180,7 @@ class ObjectDefinitionDumperTest extends \PHPUnit_Framework_TestCase
 )';
 
         $this->assertEquals($str, $resolver->dump($definition));
+        $this->assertEquals($str, (string) $definition);
     }
 
     public function testPropertyget()
@@ -189,6 +198,7 @@ class ObjectDefinitionDumperTest extends \PHPUnit_Framework_TestCase
 )';
 
         $this->assertEquals($str, $resolver->dump($definition));
+        $this->assertEquals($str, (string) $definition);
     }
 
     public function testMethodLinkParameter()
@@ -208,6 +218,7 @@ class ObjectDefinitionDumperTest extends \PHPUnit_Framework_TestCase
 )';
 
         $this->assertEquals($str, $resolver->dump($definition));
+        $this->assertEquals($str, (string) $definition);
     }
 
     public function testMethodValueParameter()
@@ -227,6 +238,7 @@ class ObjectDefinitionDumperTest extends \PHPUnit_Framework_TestCase
 )';
 
         $this->assertEquals($str, $resolver->dump($definition));
+        $this->assertEquals($str, (string) $definition);
     }
 
     public function testMethodDefaultParameterValue()
@@ -246,6 +258,7 @@ class ObjectDefinitionDumperTest extends \PHPUnit_Framework_TestCase
 )';
 
         $this->assertEquals($str, $resolver->dump($definition));
+        $this->assertEquals($str, (string) $definition);
     }
 
     /**

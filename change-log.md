@@ -3,6 +3,7 @@
 ## 5.3
 
 - PHP-DI now requires a version of PHP >= 5.5.0
+- Dumping definitions was refactored into a more lightweight and simple solution: definition "dumpers" have been removed (internal classes), definitions can now be casted to string directly.
 
 ## 5.2
 
