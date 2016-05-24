@@ -3,8 +3,6 @@
 namespace DI\Test\UnitTest\Definition\Dumper;
 
 use DI\Definition\Dumper\ObjectDefinitionDumper;
-use DI\Definition\ObjectDefinition;
-use DI\Definition\ValueDefinition;
 use DI\Scope;
 
 /**
@@ -37,6 +35,7 @@ class ObjectDefinitionDumperTest extends \PHPUnit_Framework_TestCase
 )';
 
         $this->assertEquals($str, $dumper->dump($definition));
+        $this->assertEquals($str, (string) $definition);
     }
 
     public function testClass()
@@ -52,6 +51,7 @@ class ObjectDefinitionDumperTest extends \PHPUnit_Framework_TestCase
 )';
 
         $this->assertEquals($str, $dumper->dump($definition));
+        $this->assertEquals($str, (string) $definition);
     }
 
     public function testNonExistentClass()
@@ -68,6 +68,7 @@ class ObjectDefinitionDumperTest extends \PHPUnit_Framework_TestCase
 )';
 
         $this->assertEquals($str, $resolver->dump($definition));
+        $this->assertEquals($str, (string) $definition);
     }
 
     public function testNonInstantiableClass()
@@ -83,6 +84,7 @@ class ObjectDefinitionDumperTest extends \PHPUnit_Framework_TestCase
 )';
 
         $this->assertEquals($str, $resolver->dump($definition));
+        $this->assertEquals($str, (string) $definition);
     }
 
     public function testScopePrototype()
@@ -99,6 +101,7 @@ class ObjectDefinitionDumperTest extends \PHPUnit_Framework_TestCase
 )';
 
         $this->assertEquals($str, $resolver->dump($definition));
+        $this->assertEquals($str, (string) $definition);
     }
 
     public function testLazy()
@@ -115,6 +118,7 @@ class ObjectDefinitionDumperTest extends \PHPUnit_Framework_TestCase
 )';
 
         $this->assertEquals($str, $resolver->dump($definition));
+        $this->assertEquals($str, (string) $definition);
     }
 
     public function testConstructorParameters()
@@ -135,6 +139,7 @@ class ObjectDefinitionDumperTest extends \PHPUnit_Framework_TestCase
 )';
 
         $this->assertEquals($str, $resolver->dump($definition));
+        $this->assertEquals($str, (string) $definition);
     }
 
     public function testUndefinedConstructorParameter()
@@ -155,6 +160,7 @@ class ObjectDefinitionDumperTest extends \PHPUnit_Framework_TestCase
 )';
 
         $this->assertEquals($str, $resolver->dump($definition));
+        $this->assertEquals($str, (string) $definition);
     }
 
     public function testPropertyValue()
@@ -172,6 +178,7 @@ class ObjectDefinitionDumperTest extends \PHPUnit_Framework_TestCase
 )';
 
         $this->assertEquals($str, $resolver->dump($definition));
+        $this->assertEquals($str, (string) $definition);
     }
 
     public function testPropertyget()
@@ -189,6 +196,7 @@ class ObjectDefinitionDumperTest extends \PHPUnit_Framework_TestCase
 )';
 
         $this->assertEquals($str, $resolver->dump($definition));
+        $this->assertEquals($str, (string) $definition);
     }
 
     public function testMethodLinkParameter()
@@ -208,6 +216,7 @@ class ObjectDefinitionDumperTest extends \PHPUnit_Framework_TestCase
 )';
 
         $this->assertEquals($str, $resolver->dump($definition));
+        $this->assertEquals($str, (string) $definition);
     }
 
     public function testMethodValueParameter()
@@ -227,6 +236,7 @@ class ObjectDefinitionDumperTest extends \PHPUnit_Framework_TestCase
 )';
 
         $this->assertEquals($str, $resolver->dump($definition));
+        $this->assertEquals($str, (string) $definition);
     }
 
     public function testMethodDefaultParameterValue()
@@ -246,18 +256,7 @@ class ObjectDefinitionDumperTest extends \PHPUnit_Framework_TestCase
 )';
 
         $this->assertEquals($str, $resolver->dump($definition));
-    }
-
-    /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage This definition dumper is only compatible with ObjectDefinition objects, DI\Definition\ValueDefinition given
-     */
-    public function testInvalidDefinitionType()
-    {
-        $definition = new ValueDefinition('foo', 'bar');
-        $resolver = new ObjectDefinitionDumper();
-
-        $resolver->dump($definition);
+        $this->assertEquals($str, (string) $definition);
     }
 }
 

@@ -61,4 +61,12 @@ class DecoratorDefinitionTest extends \PHPUnit_Framework_TestCase
         $definition->setSubDefinition($subDefinition);
         $this->assertSame($subDefinition, $definition->getDecoratedDefinition());
     }
+
+    /**
+     * @test
+     */
+    public function should_cast_to_string()
+    {
+        $this->assertEquals('Decorate(foo)', (string) new DecoratorDefinition('foo', 'bar'));
+    }
 }

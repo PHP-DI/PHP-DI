@@ -67,4 +67,12 @@ class AliasDefinition implements CacheableDefinition, SelfResolvingDefinition
     {
         return $container->has($this->getTargetEntryName());
     }
+
+    public function __toString()
+    {
+        return sprintf(
+            'get(%s)',
+            $this->targetEntryName
+        );
+    }
 }

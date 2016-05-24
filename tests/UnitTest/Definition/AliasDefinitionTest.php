@@ -80,4 +80,12 @@ class AliasDefinitionTest extends \PHPUnit_Framework_TestCase
 
         $this->assertTrue($definition->isResolvable($container));
     }
+
+    /**
+     * @test
+     */
+    public function should_cast_to_string()
+    {
+        $this->assertEquals('get(bar)', (string) new AliasDefinition('', 'bar'));
+    }
 }

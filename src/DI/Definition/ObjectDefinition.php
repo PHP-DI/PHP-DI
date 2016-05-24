@@ -2,6 +2,7 @@
 
 namespace DI\Definition;
 
+use DI\Definition\Dumper\ObjectDefinitionDumper;
 use DI\Definition\ObjectDefinition\MethodInjection;
 use DI\Definition\ObjectDefinition\PropertyInjection;
 use DI\Scope;
@@ -261,6 +262,11 @@ class ObjectDefinition implements Definition, CacheableDefinition, HasSubDefinit
 
         // Merge method injections
         $this->mergeMethodInjections($definition);
+    }
+
+    public function __toString()
+    {
+        return (new ObjectDefinitionDumper)->dump($this);
     }
 
     private function mergeConstructorInjection(ObjectDefinition $definition)

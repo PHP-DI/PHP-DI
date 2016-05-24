@@ -112,4 +112,12 @@ class StringDefinitionTest extends \PHPUnit_Framework_TestCase
         $definition = new StringDefinition('foo', '{test}');
         $definition->resolve($container);
     }
+
+    /**
+     * @test
+     */
+    public function should_cast_to_string()
+    {
+        $this->assertEquals('foo/{bar}', (string) new StringDefinition('', 'foo/{bar}'));
+    }
 }

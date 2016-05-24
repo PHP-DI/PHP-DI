@@ -12,6 +12,7 @@ I am happy to announce that PHP-DI version 5.3 has been released. The changes in
 - a lot of documentation improvements by 9 different contributors
 - [#389](https://github.com/PHP-DI/PHP-DI/pull/389): exception message improvement by [@mopahle](https://github.com/mopahle)
 - compatibility with ProxyManager 1.x and 2.x by [@holtkamp](https://github.com/holtkamp) and [@mnapoli](https://github.com/mnapoli) (issues and pull requests: [#359](https://github.com/PHP-DI/PHP-DI/issues/359), [#411](https://github.com/PHP-DI/PHP-DI/issues/411), [#414](https://github.com/PHP-DI/PHP-DI/pull/414), [#412](https://github.com/PHP-DI/PHP-DI/pull/412))
+- [#416](https://github.com/PHP-DI/PHP-DI/pull/416): dumping definitions was refactored into a more lightweight and simple solution; definitions can now be cast to string directly (9 classes were removed)
 
 ## Symfony bridge 2.0
 

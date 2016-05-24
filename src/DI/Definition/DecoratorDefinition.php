@@ -38,4 +38,9 @@ class DecoratorDefinition extends FactoryDefinition implements Definition, HasSu
     {
         return $this->decorated;
     }
+
+    public function __toString()
+    {
+        return 'Decorate(' . $this->getSubDefinitionName() . ')';
+    }
 }
