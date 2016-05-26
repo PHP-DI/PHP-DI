@@ -27,7 +27,7 @@ interface Definition extends RequestedEntry
 
     /**
      * Definitions can be cast to string for debugging information.
-     * 
+     *
      * This method is not enforced by the interface yet for backward
      * compatibility.
      */

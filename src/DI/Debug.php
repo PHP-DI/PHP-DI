@@ -15,7 +15,7 @@ class Debug
      * Dump the definition to a string.
      *
      * @return string
-     * 
+     *
      * @deprecated You should cast the definition to string instead.
      * This feature was simplified: definitions can be cast to string directly.
      */

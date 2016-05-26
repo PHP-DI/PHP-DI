@@ -2,7 +2,6 @@
 
 namespace DI\Definition\Exception;
 
-use DI\Debug;
 use DI\Definition\Definition;
 
 /**

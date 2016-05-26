@@ -60,7 +60,7 @@ class ValueDefinitionTest extends \PHPUnit_Framework_TestCase
         $container = $this->easyMock(ContainerInterface::class);
         $this->assertEquals('bar', $definition->resolve($container));
     }
-    
+
     public function should_cast_to_string()
     {
         $this->assertEquals("Value ('bar')", (string) new ValueDefinition('', 'bar'));
