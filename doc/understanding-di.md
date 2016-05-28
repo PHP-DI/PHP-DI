@@ -168,3 +168,5 @@ $container->set('GeolocationService', \DI\object('GoogleMaps'));
 ```
 
 If you change your mind, there's just one line of configuration to change now.
+
+Interested? Go ahead and read the [Getting started](getting-started.md) guide!
