@@ -107,7 +107,8 @@ class EnvironmentVariableDefinitionDumperTest extends \PHPUnit_Framework_TestCas
     public function should_only_accept_env_variable_definitions()
     {
         $this->dumper->dump(
-            new FactoryDefinition('foo', function () {})
+            new FactoryDefinition('foo', function () {
+            })
         );
     }
 }

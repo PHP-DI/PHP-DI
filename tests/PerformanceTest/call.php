@@ -15,25 +15,29 @@ $builder->addDefinitions([
 $container = $builder->build();
 
 for ($i = 0; $i < 100; $i++) {
-    $container->call(function ($foo, $bar) {}, [
+    $container->call(function ($foo, $bar) {
+    }, [
         'foo',
         'bar',
     ]);
 }
 
 for ($i = 0; $i < 100; $i++) {
-    $container->call(function ($foo, $bar) {}, [
+    $container->call(function ($foo, $bar) {
+    }, [
         'foo' => 'foo',
         'bar' => 'bar',
     ]);
 }
 
 for ($i = 0; $i < 100; $i++) {
-    $container->call(function (stdClass $foo) {});
+    $container->call(function (stdClass $foo) {
+    });
 }
 
 for ($i = 0; $i < 100; $i++) {
-    $container->call(function ($foo, $bar) {}, [
+    $container->call(function ($foo, $bar) {
+    }, [
         'foo' => \DI\get('link'),
         'bar' => \DI\get('link'),
     ]);

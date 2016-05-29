@@ -16,7 +16,9 @@ class FactoryDefinitionTest extends \PHPUnit_Framework_TestCase
     public function provideCallables()
     {
         return [
-            'closure'               => [function () { return 'bar'; }],
+            'closure'               => [function () {
+                return 'bar';
+            }],
             'function'              => [__NAMESPACE__ . '\FactoryDefinition_test'],
             'invokableObject'       => [new FactoryDefinitionInvokableTestClass],
             'invokableClass'        => [FactoryDefinitionInvokableTestClass::class],
