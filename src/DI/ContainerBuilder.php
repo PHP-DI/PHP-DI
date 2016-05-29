@@ -8,10 +8,12 @@ use DI\Definition\Source\CachedDefinitionSource;
 use DI\Definition\Source\DefinitionArray;
 use DI\Definition\Source\DefinitionFile;
 use DI\Definition\Source\DefinitionSource;
+use DI\Definition\Source\InteropServiceProvider;
 use DI\Definition\Source\SourceChain;
 use DI\Proxy\ProxyFactory;
 use Doctrine\Common\Cache\Cache;
 use Interop\Container\ContainerInterface;
+use Interop\Container\ServiceProvider;
 use InvalidArgumentException;
 
 /**
@@ -228,25 +230,22 @@ class ContainerBuilder
     /**
      * Add definitions to the container.
      *
-     * @param string|array|DefinitionSource $definitions Can be an array of definitions, the
-     *                                                   name of a file containing definitions
-     *                                                   or a DefinitionSource object.
+     * @param string|array|DefinitionSource|ServiceProvider $definitions Can be an array of definitions, the
+     *        name of a file containing definitions, a DefinitionSource instance or a ServiceProvider instance.
      * @return $this
      */
     public function addDefinitions($definitions)
     {
         if (is_string($definitions)) {
-            if (class_exists($definitions) && is_subclass_of($definitions, 'Interop\Container\ServiceProvider')) {
-                $definitions = new \DI\Definition\Source\InteropServiceProvider($definitions);
-            } else {
-                // File
-                $definitions = new DefinitionFile($definitions);
-            }
+            // File
+            $definitions = new DefinitionFile($definitions);
         } elseif (is_array($definitions)) {
             $definitions = new DefinitionArray($definitions);
+        } elseif ($definitions instanceof ServiceProvider) {
+            $definitions = new InteropServiceProvider($definitions);
         } elseif (! $definitions instanceof DefinitionSource) {
             throw new InvalidArgumentException(sprintf(
-                '%s parameter must be a string, an array or a DefinitionSource object, %s given',
+                '%s parameter must be a string, an array, a DefinitionSource object or a ServiceProvider object, %s given',
                 'ContainerBuilder::addDefinitions()',
                 is_object($definitions) ? get_class($definitions) : gettype($definitions)
             ));

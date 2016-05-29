@@ -4,6 +4,8 @@ namespace DI\Test\IntegrationTest;
 
 use DI\ContainerBuilder;
 use DI\Test\IntegrationTest\Interop\Fixture\Object1;
+use DI\Test\IntegrationTest\Interop\Fixture\ProviderA;
+use DI\Test\IntegrationTest\Interop\Fixture\ProviderB;
 
 /**
  * @coversNothing
@@ -19,8 +21,8 @@ class ServiceProviderTest extends \PHPUnit_Framework_TestCase
         $builder->addDefinitions([
             'native' => 'this',
         ]);
-        $builder->addDefinitions('DI\Test\IntegrationTest\Interop\Fixture\ProviderA');
-        $builder->addDefinitions('DI\Test\IntegrationTest\Interop\Fixture\ProviderB');
+        $builder->addDefinitions(new ProviderA);
+        $builder->addDefinitions(new ProviderB);
         $builder->addDefinitions([
             'native' => \DI\decorate(function ($previous) {
                 return $previous . '!';
@@ -46,7 +48,7 @@ class ServiceProviderTest extends \PHPUnit_Framework_TestCase
     public function test_no_error_when_overriding_incomplete_autowiring_definition()
     {
         $builder = new ContainerBuilder();
-        $builder->addDefinitions('DI\Test\IntegrationTest\Interop\Fixture\ProviderA');
+        $builder->addDefinitions(new ProviderA);
         $object = $builder->build()->get('DI\Test\IntegrationTest\Interop\Fixture\Object1');
         $this->assertEquals(new Object1('foo'), $object);
     }

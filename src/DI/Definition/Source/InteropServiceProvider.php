@@ -4,6 +4,7 @@ namespace DI\Definition\Source;
 
 use DI\Definition\InteropDefinition;
 use DI\Definition\ObjectDefinition;
+use Interop\Container\ServiceProvider;
 
 /**
  * Reads definitions from a Interop\Container\ServiceProvider class.
@@ -14,7 +15,7 @@ use DI\Definition\ObjectDefinition;
 class InteropServiceProvider implements DefinitionSource
 {
     /**
-     * @var string
+     * @var ServiceProvider
      */
     private $serviceProvider;
 
@@ -23,26 +24,21 @@ class InteropServiceProvider implements DefinitionSource
      */
     private $entries;
 
-    /**
-     * @param string $serviceProvider Name of a class implementing Interop\Container\ServiceProvider.
-     */
-    public function __construct($serviceProvider)
+    public function __construct(ServiceProvider $serviceProvider)
     {
         $this->serviceProvider = $serviceProvider;
     }
 
     public function getDefinition($name)
     {
-        $class = $this->serviceProvider;
-
         if ($this->entries === null) {
-            $this->entries = call_user_func([$class, 'getServices']);
+            $this->entries = $this->serviceProvider->getServices();
         }
 
         if (!isset($this->entries[$name])) {
             return null;
         }
 
-        return new InteropDefinition($name, $class, $this->entries[$name]);
+        return new InteropDefinition($name, $this->entries[$name]);
     }
 }

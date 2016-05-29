@@ -20,23 +20,17 @@ class InteropDefinition implements Definition, HasSubDefinition
     /**
      * @var string
      */
-    private $class;
-
-    /**
-     * @var string
-     */
-    private $method;
+    private $callable;
 
     /**
      * @var Definition|null
      */
     private $previousDefinition;
 
-    public function __construct($name, $class, $method)
+    public function __construct($name, $callable)
     {
         $this->name = $name;
-        $this->class = $class;
-        $this->method = $method;
+        $this->callable = $callable;
     }
 
     public function getName()
@@ -45,19 +39,11 @@ class InteropDefinition implements Definition, HasSubDefinition
     }
 
     /**
-     * @return string
+     * @return callable
      */
-    public function getClass()
+    public function getCallable()
     {
-        return $this->class;
-    }
-
-    /**
-     * @return string
-     */
-    public function getMethod()
-    {
-        return $this->method;
+        return $this->callable;
     }
 
     public function getScope()

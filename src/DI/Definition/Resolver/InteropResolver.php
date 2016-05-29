@@ -3,7 +3,6 @@
 namespace DI\Definition\Resolver;
 
 use DI\Definition\Definition;
-use DI\Definition\Exception\DefinitionException;
 use DI\Definition\InteropDefinition;
 use Interop\Container\ContainerInterface;
 
@@ -38,8 +37,6 @@ class InteropResolver implements DefinitionResolver
      */
     public function resolve(Definition $definition, array $parameters = [])
     {
-        $class = $definition->getClass();
-        $method = $definition->getMethod();
         $previousDefinition = $definition->getPreviousDefinition();
 
         $getPrevious = null;
@@ -49,7 +46,7 @@ class InteropResolver implements DefinitionResolver
             };
         }
 
-        return call_user_func([$class, $method], $this->container, $getPrevious);
+        return call_user_func($definition->getCallable(), $this->container, $getPrevious);
     }
 
     public function isResolvable(Definition $definition, array $parameters = [])

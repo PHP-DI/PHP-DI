@@ -7,15 +7,15 @@ use Interop\Container\ServiceProvider;
 
 class ProviderB implements ServiceProvider
 {
-    public static function getServices()
+    public function getServices()
     {
         return [
-            'b' => 'getB',
-            'ba' => 'getBa',
-            'overridden' => 'getOverridden',
-            'extended' => 'getExtended',
-            'no_previous' => 'getNoPrevious',
-            'native' => 'getNative',
+            'b' => [__CLASS__, 'getB'],
+            'ba' => [__CLASS__, 'getBa'],
+            'overridden' => [__CLASS__, 'getOverridden'],
+            'extended' => [__CLASS__, 'getExtended'],
+            'no_previous' => [__CLASS__, 'getNoPrevious'],
+            'native' => [__CLASS__, 'getNative'],
         ];
     }
 
