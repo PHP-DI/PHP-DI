@@ -4,7 +4,6 @@ namespace DI\Test\UnitTest\Definition\ObjectDefinition;
 
 use DI\Definition\CacheableDefinition;
 use DI\Definition\ObjectDefinition\MethodInjection;
-use DI\Scope;
 
 /**
  * @covers \DI\Definition\ObjectDefinition\MethodInjection

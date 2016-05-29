@@ -2,9 +2,9 @@
 
 namespace DI\Test\UnitTest\Definition\Source;
 
+use DI\Definition\AliasDefinition;
 use DI\Definition\ObjectDefinition;
 use DI\Definition\ObjectDefinition\MethodInjection;
-use DI\Definition\AliasDefinition;
 use DI\Definition\Source\Autowiring;
 use DI\Test\UnitTest\Definition\Source\Fixtures\AutowiringFixture;
 use DI\Test\UnitTest\Definition\Source\Fixtures\AutowiringFixtureChild;

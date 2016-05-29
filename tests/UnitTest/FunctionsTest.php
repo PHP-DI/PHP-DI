@@ -6,12 +6,12 @@ use DI\Definition\AliasDefinition;
 use DI\Definition\ArrayDefinition;
 use DI\Definition\ArrayDefinitionExtension;
 use DI\Definition\DecoratorDefinition;
+use DI\Definition\EnvironmentVariableDefinition;
 use DI\Definition\FactoryDefinition;
 use DI\Definition\Helper\FactoryDefinitionHelper;
 use DI\Definition\Helper\ObjectDefinitionHelper;
 use DI\Definition\ObjectDefinition;
 use DI\Definition\StringDefinition;
-use DI\Definition\EnvironmentVariableDefinition;
 use DI\Definition\ValueDefinition;
 
 /**
