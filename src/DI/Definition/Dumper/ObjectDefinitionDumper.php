@@ -2,32 +2,26 @@
 
 namespace DI\Definition\Dumper;
 
-use DI\Definition\Definition;
 use DI\Definition\EntryReference;
 use DI\Definition\ObjectDefinition;
 use DI\Definition\ObjectDefinition\MethodInjection;
 use ReflectionException;
 
 /**
- * Dumps object definitions.
+ * Dumps object definitions to string for debugging purposes.
  *
  * @since 4.1
  * @author Matthieu Napoli <matthieu@mnapoli.fr>
  */
-class ObjectDefinitionDumper implements DefinitionDumper
+class ObjectDefinitionDumper
 {
     /**
-     * {@inheritdoc}
+     * Returns the definition as string representation.
+     *
+     * @return string
      */
-    public function dump(Definition $definition)
+    public function dump(ObjectDefinition $definition)
     {
-        if (! $definition instanceof ObjectDefinition) {
-            throw new \InvalidArgumentException(sprintf(
-                'This definition dumper is only compatible with ObjectDefinition objects, %s given',
-                get_class($definition)
-            ));
-        }
-
         $className = $definition->getClassName();
         $classExist = class_exists($className) || interface_exists($className);
 

@@ -2,7 +2,6 @@
 
 namespace DI\Definition\Exception;
 
-use DI\Debug;
 use DI\Definition\Definition;
 
 /**
@@ -17,7 +16,7 @@ class DefinitionException extends \Exception
         return new self(sprintf(
             '%s' . PHP_EOL . 'Full definition:' . PHP_EOL . '%s',
             $message,
-            Debug::dumpDefinition($definition)
+            (string) $definition
         ));
     }
 }

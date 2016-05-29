@@ -38,4 +38,58 @@ class EnvironmentVariableDefinitionTest extends \PHPUnit_Framework_TestCase
     {
         $this->assertInstanceOf(CacheableDefinition::class, new EnvironmentVariableDefinition('foo', 'bar'));
     }
+
+    /**
+     * @test
+     */
+    public function should_cast_to_string()
+    {
+        $str = 'Environment variable (
+    variable = bar
+    optional = no
+)';
+        $this->assertEquals($str, (string) new EnvironmentVariableDefinition('', 'bar'));
+    }
+
+    /**
+     * @test
+     */
+    public function should_cast_to_string_with_default_value()
+    {
+        $str = 'Environment variable (
+    variable = bar
+    optional = yes
+    default = \'<default>\'
+)';
+        $this->assertEquals($str, (string) new EnvironmentVariableDefinition('', 'bar', true, '<default>'));
+    }
+
+    /**
+     * @test
+     */
+    public function should_cast_to_string_with_reference_as_default_value()
+    {
+        $str = 'Environment variable (
+    variable = bar
+    optional = yes
+    default = get(foo)
+)';
+        $this->assertEquals($str, (string) new EnvironmentVariableDefinition('', 'bar', true, \DI\get('foo')));
+    }
+
+    /**
+     * @test
+     */
+    public function should_cast_to_string_with_nested_definition_as_default_value()
+    {
+        $str = 'Environment variable (
+    variable = bar
+    optional = yes
+    default = Environment variable (
+        variable = foo
+        optional = no
+    )
+)';
+        $this->assertEquals($str, (string) new EnvironmentVariableDefinition('', 'bar', true, \DI\env('foo')));
+    }
 }
