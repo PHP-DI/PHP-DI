@@ -56,7 +56,7 @@ menu:
             section: Frameworks
             items:
                 symfony:
-                    text: Symfony 2
+                    text: Symfony
                     url: doc/frameworks/symfony2.html
                 silex:
                     text: Silex
