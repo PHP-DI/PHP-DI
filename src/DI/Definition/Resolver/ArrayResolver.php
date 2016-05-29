@@ -42,7 +42,12 @@ class ArrayResolver implements DefinitionResolver
     {
         $values = $definition->getValues();
 
-        $values = $this->resolveNestedDefinitions($definition, $values);
+        // Resolve nested definitions
+        foreach ($values as $key => $value) {
+            if ($value instanceof DefinitionHelper) {
+                $values[$key] = $this->resolveDefinition($value, $definition, $key);
+            }
+        }
 
         return $values;
     }
@@ -53,17 +58,6 @@ class ArrayResolver implements DefinitionResolver
     public function isResolvable(Definition $definition, array $parameters = [])
     {
         return true;
-    }
-
-    private function resolveNestedDefinitions(ArrayDefinition $definition, array $values)
-    {
-        foreach ($values as $key => $value) {
-            if ($value instanceof DefinitionHelper) {
-                $values[$key] = $this->resolveDefinition($value, $definition, $key);
-            }
-        }
-
-        return $values;
     }
 
     private function resolveDefinition(DefinitionHelper $value, ArrayDefinition $definition, $key)

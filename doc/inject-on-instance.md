@@ -1,5 +1,6 @@
 ---
 layout: documentation
+current_menu: inject-on-instance
 ---
 
 # Inject on an existing instance
@@ -43,7 +44,7 @@ If you get the object from some library/framework, then just call `injectOn()`
 
 Hopefully, that will help to integrate PHP-DI with other frameworks:
 
-- **MVC frameworks** (Symfony 2, Zend Framework 2, …): inject dependencies of the controller, in the controller itself.
+- **MVC frameworks** (Symfony, Zend Framework, …): inject dependencies of the controller, in the controller itself.
 - **Tests** (PHPUnit, …): inject tools in your test class, for example a logger, a timer (for performance test), **the entity manager** (for integration tests), …
 
 Example:

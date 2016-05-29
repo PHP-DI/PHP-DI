@@ -22,7 +22,7 @@ class FactoryResolverTest extends \PHPUnit_Framework_TestCase
     public function setUp()
     {
         /** @var ContainerInterface|\PHPUnit_Framework_MockObject_MockObject $container */
-        $container = $this->easyMock('Interop\Container\ContainerInterface');
+        $container = $this->easyMock(ContainerInterface::class);
         $this->resolver = new FactoryResolver($container);
     }
 
@@ -51,7 +51,7 @@ class FactoryResolverTest extends \PHPUnit_Framework_TestCase
 
         $value = $this->resolver->resolve($definition);
 
-        $this->assertInstanceOf('Interop\Container\ContainerInterface', $value);
+        $this->assertInstanceOf(ContainerInterface::class, $value);
     }
 
     /**

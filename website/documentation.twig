@@ -8,7 +8,7 @@
             <ul>
                 {% for itemId, item in menu.items %}
                     <li>
-                        {{ item.section }}
+                        <span class="section-title">{{ item.section }}</span>
 
                         <ul>
                             {% for itemId, item in item.items %}

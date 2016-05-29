@@ -2,6 +2,7 @@
 
 namespace DI\Test\UnitTest\Definition;
 
+use DI\Definition\CacheableDefinition;
 use DI\Definition\FactoryDefinition;
 use DI\Scope;
 
@@ -52,6 +53,14 @@ class FactoryDefinitionTest extends \PHPUnit_Framework_TestCase
     {
         $definition = new FactoryDefinition('foo', function () {
         });
-        $this->assertNotInstanceOf('DI\Definition\CacheableDefinition', $definition);
+        $this->assertNotInstanceOf(CacheableDefinition::class, $definition);
+    }
+
+    /**
+     * @test
+     */
+    public function should_cast_to_string()
+    {
+        $this->assertEquals('Factory', new FactoryDefinition('', 'bar'));
     }
 }

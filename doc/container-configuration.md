@@ -1,5 +1,6 @@
 ---
 layout: documentation
+current_menu: container-configuration
 ---
 
 # Configuring the container

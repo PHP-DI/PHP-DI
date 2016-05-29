@@ -62,8 +62,7 @@ class StringDefinitionTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException \DI\DependencyException
-     * @expectedExceptionMessage Error while parsing string expression for entry 'test-string': No entry or class found
-     *                           for 'foo'
+     * @expectedExceptionMessage Error while parsing string expression for entry 'test-string': No entry or class found for 'foo'
      */
     public function test_string_with_nonexistent_placeholder()
     {

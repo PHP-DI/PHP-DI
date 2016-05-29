@@ -23,7 +23,7 @@
         "test": "phpunit"
     },
     "require": {
-        "php": ">=5.4.0",
+        "php": ">=5.5.0",
         "container-interop/container-interop": "~1.0",
         "container-interop/service-provider": "~0.2.0",
         "php-di/invoker": "^1.1.1",
@@ -34,7 +34,7 @@
         "mnapoli/phpunit-easymock": "~0.2.0",
         "doctrine/cache": "~1.4",
         "doctrine/annotations": "~1.2",
-        "ocramius/proxy-manager": "~1.0"
+        "ocramius/proxy-manager": "~1.0|~2.0"
     },
     "replace": {
         "mnapoli/php-di": "*"
@@ -42,6 +42,6 @@
     "suggest": {
         "doctrine/cache": "Install it if you want to use the cache (version ~1.4)",
         "doctrine/annotations": "Install it if you want to use annotations (version ~1.2)",
-        "ocramius/proxy-manager": "Install it if you want to use lazy injection (version ~1.0)"
+        "ocramius/proxy-manager": "Install it if you want to use lazy injection (version ~1.0 or ~2.0)"
     }
 }

@@ -16,15 +16,17 @@ class FactoryDefinitionTest extends \PHPUnit_Framework_TestCase
     public function provideCallables()
     {
         return [
-            'closure'               => [function () { return 'bar'; }],
+            'closure'               => [function () {
+                return 'bar';
+            }],
             'function'              => [__NAMESPACE__ . '\FactoryDefinition_test'],
             'invokableObject'       => [new FactoryDefinitionInvokableTestClass],
-            'invokableClass'        => [__NAMESPACE__ . '\FactoryDefinitionInvokableTestClass'],
-            '[Class, staticMethod]' => [[__NAMESPACE__ . '\FactoryDefinitionTestClass', 'staticFoo']],
-            'Class::staticMethod'   => [__NAMESPACE__ . '\FactoryDefinitionTestClass::staticFoo'],
+            'invokableClass'        => [FactoryDefinitionInvokableTestClass::class],
+            '[Class, staticMethod]' => [[FactoryDefinitionTestClass::class, 'staticFoo']],
+            'Class::staticMethod'   => [FactoryDefinitionTestClass::class . '::staticFoo'],
             '[object, method]'      => [[new FactoryDefinitionTestClass, 'foo']],
-            '[class, method]'       => [[__NAMESPACE__ . '\FactoryDefinitionTestClass', 'foo']],
-            'class::method'         => [__NAMESPACE__ . '\FactoryDefinitionTestClass::foo'],
+            '[class, method]'       => [[FactoryDefinitionTestClass::class, 'foo']],
+            'class::method'         => [FactoryDefinitionTestClass::class . '::foo'],
         ];
     }
 
@@ -65,7 +67,7 @@ class FactoryDefinitionTest extends \PHPUnit_Framework_TestCase
     public function test_named_container_entry_as_factory($callable)
     {
         $container = $this->createContainer([
-            'bar_baz' => \DI\object(__NAMESPACE__ . '\FactoryDefinitionTestClass'),
+            'bar_baz' => \DI\object(FactoryDefinitionTestClass::class),
             'factory' => \DI\factory($callable),
         ]);
 
@@ -75,7 +77,7 @@ class FactoryDefinitionTest extends \PHPUnit_Framework_TestCase
     public function test_named_invokable_container_entry_as_factory()
     {
         $container = $this->createContainer([
-            'bar_baz' => \DI\object(__NAMESPACE__ . '\FactoryDefinitionInvokableTestClass'),
+            'bar_baz' => \DI\object(FactoryDefinitionInvokableTestClass::class),
             'factory' => \DI\factory('bar_baz'),
         ]);
 
@@ -92,7 +94,7 @@ class FactoryDefinitionTest extends \PHPUnit_Framework_TestCase
 
         $factory = $container->get('factory');
 
-        $this->assertInstanceOf('Interop\Container\ContainerInterface', $factory);
+        $this->assertInstanceOf(ContainerInterface::class, $factory);
     }
 
     public function test_requested_entry_gets_injected_as_second_argument_without_typehint()
@@ -145,8 +147,8 @@ class FactoryDefinitionTest extends \PHPUnit_Framework_TestCase
         $factory = $container->get('factory');
 
         $this->assertInstanceOf('stdClass', $factory[0]);
-        $this->assertInstanceOf('DI\Factory\RequestedEntry', $factory[1]);
-        $this->assertInstanceOf('Interop\Container\ContainerInterface', $factory[2]);
+        $this->assertInstanceOf(RequestedEntry::class, $factory[1]);
+        $this->assertInstanceOf(ContainerInterface::class, $factory[2]);
     }
 
     /**

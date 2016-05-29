@@ -3,7 +3,11 @@
 namespace DI\Test\UnitTest\Definition\Source;
 
 use DI\Definition\EntryReference;
+use DI\Definition\ObjectDefinition;
+use DI\Definition\ObjectDefinition\MethodInjection;
 use DI\Definition\Source\Autowiring;
+use DI\Test\UnitTest\Definition\Source\Fixtures\AutowiringFixture;
+use DI\Test\UnitTest\Definition\Source\Fixtures\AutowiringFixtureChild;
 
 /**
  * @covers \DI\Definition\Source\Autowiring
@@ -18,34 +22,32 @@ class AutowiringTest extends \PHPUnit_Framework_TestCase
 
     public function testConstructor()
     {
-        $source = new Autowiring();
-        $definition = $source->getDefinition('DI\Test\UnitTest\Definition\Source\Fixtures\AutowiringFixture');
-        $this->assertInstanceOf('DI\Definition\ObjectDefinition', $definition);
+        $definition = (new Autowiring)->getDefinition(AutowiringFixture::class);
+        $this->assertInstanceOf(ObjectDefinition::class, $definition);
 
         $constructorInjection = $definition->getConstructorInjection();
-        $this->assertInstanceOf('DI\Definition\ObjectDefinition\MethodInjection', $constructorInjection);
+        $this->assertInstanceOf(MethodInjection::class, $constructorInjection);
 
         $parameters = $constructorInjection->getParameters();
         $this->assertCount(1, $parameters);
 
         $param1 = $parameters[0];
-        $this->assertEquals(new EntryReference('DI\Test\UnitTest\Definition\Source\Fixtures\AutowiringFixture'), $param1);
+        $this->assertEquals(new EntryReference(AutowiringFixture::class), $param1);
     }
 
     public function testConstructorInParentClass()
     {
-        $source = new Autowiring();
-        $definition = $source->getDefinition('DI\Test\UnitTest\Definition\Source\Fixtures\AutowiringFixtureChild');
-        $this->assertInstanceOf('DI\Definition\ObjectDefinition', $definition);
+        $definition = (new Autowiring)->getDefinition(AutowiringFixtureChild::class);
+        $this->assertInstanceOf(ObjectDefinition::class, $definition);
 
         $constructorInjection = $definition->getConstructorInjection();
-        $this->assertInstanceOf('DI\Definition\ObjectDefinition\MethodInjection', $constructorInjection);
+        $this->assertInstanceOf(MethodInjection::class, $constructorInjection);
 
         $parameters = $constructorInjection->getParameters();
         $this->assertCount(1, $parameters);
 
         $param1 = $parameters[0];
-        $this->assertEquals(new EntryReference('DI\Test\UnitTest\Definition\Source\Fixtures\AutowiringFixture'), $param1);
+        $this->assertEquals(new EntryReference(AutowiringFixture::class), $param1);
     }
 }
 

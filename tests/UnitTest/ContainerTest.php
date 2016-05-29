@@ -2,7 +2,10 @@
 
 namespace DI\Test\UnitTest;
 
+use DI\Container;
 use DI\ContainerBuilder;
+use DI\FactoryInterface;
+use DI\InvokerInterface;
 use stdClass;
 
 /**
@@ -73,7 +76,7 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
     {
         $container = ContainerBuilder::buildDevContainer();
 
-        $this->assertSame($container, $container->get('DI\Container'));
+        $this->assertSame($container, $container->get(Container::class));
     }
 
     /**
@@ -83,7 +86,7 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
     {
         $container = ContainerBuilder::buildDevContainer();
 
-        $this->assertSame($container, $container->get('DI\FactoryInterface'));
+        $this->assertSame($container, $container->get(FactoryInterface::class));
     }
 
     /**
@@ -93,7 +96,7 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
     {
         $container = ContainerBuilder::buildDevContainer();
 
-        $this->assertSame($container, $container->get('DI\InvokerInterface'));
+        $this->assertSame($container, $container->get(InvokerInterface::class));
     }
 
     /**

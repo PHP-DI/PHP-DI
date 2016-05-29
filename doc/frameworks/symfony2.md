@@ -1,59 +1,47 @@
 ---
 layout: documentation
+current_menu: symfony
 ---
 
-# PHP-DI in Symfony 2
+# PHP-DI in Symfony
 
-If you are using Symfony 2, PHP-DI provides easy and clean integration, without replacing the original container
-(so all bundles and existing code still work).
+PHP-DI provides an easy and clean integration with Symfony that does not replace the original container:
+all bundles and existing code still work the same.
 
 Just to be clear: PHP-DI will work alongside Symfony's container. So you can use both at the same time.
 
 ## Installation
 
-First, install the bridge:
+First install the bridge:
 
 ```
-composer require php-di/symfony2-bridge
+composer require php-di/symfony-bridge
 ```
 
-Now you need to configure Symfony to use the alternative container in your `AppKernel`:
+Now you need to make your `AppKernel` extend `DI\Bridge\Symfony\Kernel` instead of Symfony's Kernel class:
 
 ```php
-class AppKernel extends Kernel
+class AppKernel extends \DI\Bridge\Symfony\Kernel
 {
-    /**
-     * Gets the container's base class.
-     *
-     * @return string
-     */
-    protected function getContainerBaseClass()
-    {
-        return 'DI\Bridge\Symfony\SymfonyContainerBridge';
-    }
+    // ...
 
-    /**
-     * Initializes the DI container.
-     */
-    protected function initializeContainer()
+    protected function buildPHPDIContainer(ContainerBuilder $builder)
     {
-        parent::initializeContainer();
-
         // Configure your container here
-        // http://php-di.org/doc/container-configuration
-        $builder = new \DI\ContainerBuilder();
-        $builder->wrapContainer($this->getContainer());
+        // http://php-di.org/doc/container-configuration.html
+        $builder->addDefinitions(__DIR__ . '/config/config.php');
 
-        $this->getContainer()->setFallbackContainer($builder->build());
+        return $builder->build();
     }
 }
 ```
 
+You will need to implement the `buildPHPDIContainer()` method. That method allows you to configure PHP-DI.
 
 ## Usage
 
 You can now define [controllers as services](http://symfony.com/doc/current/cookbook/controller/service.html),
-without any configuration, using PHP-DI's power!
+without any configuration, using PHP-DI's power.
 
 Example for the routing configuration:
 
@@ -138,19 +126,26 @@ class TestController extends Controller
 Let's say you want to inject the `EntityManager` in your controller: the entity manager is defined
 in Symfony's container, and the controller is resolved by PHP-DI.
 
-**You can reference services that are in Symfony's container in PHP-DI's configuration**.
-That's because PHP-DI is designed to play nice with others:
+**You can reference services that are in Symfony's container in PHP-DI's configuration**:
 
 ```php
 return [
-    'Acme\MyBundle\Controller\ProductController' => DI\object()
+    'AppBundle\Controller\ProductController' => DI\object()
         ->constructor(DI\get('doctrine.orm.entity_manager')),
 ];
 ```
 
-However Symfony was not designed to play with his friends, so it has no idea that there is
-another container in the application. **You can't inject PHP-DI's services in a Symfony service**.
-That's however rarely a problem.
+**You can also inject PHP-DI services in a Symfony service**:
+
+```yaml
+services:
+    # app.user_service is a Symfony service
+    app.user_service:
+        class: 'AppBundle\\Service\\UserService'
+        arguments:
+            # UserRepository is created by PHP-DI
+            - 'AppBundle\\Service\\UserRepository'
+```
 
 ### Service name aliases
 
@@ -184,4 +179,4 @@ Full details are here: [FOSRestBundle#743](https://github.com/FriendsOfSymfony/F
 
 ## More
 
-Read more on the [Symfony2-Bridge project on GitHub](https://github.com/PHP-DI/Symfony2-Bridge).
+Read more on the [Symfony-Bridge project on GitHub](https://github.com/PHP-DI/Symfony-Bridge).

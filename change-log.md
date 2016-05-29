@@ -1,6 +1,19 @@
 # Change log
 
+## 5.3
+
+Read the [news entry](news/19-php-di-5-3-released.md).
+
+- release of the [2.0 version](https://github.com/PHP-DI/Symfony-Bridge/releases/tag/2.0.0) of the Symfony bridge (by [@mnapoli](https://github.com/mnapoli))
+- PHP 5.5 or above is now required
+- a lot of documentation improvements by 9 different contributors
+- [#389](https://github.com/PHP-DI/PHP-DI/pull/389): exception message improvement by [@mopahle](https://github.com/mopahle)
+- [#359](https://github.com/PHP-DI/PHP-DI/issues/359), [#411](https://github.com/PHP-DI/PHP-DI/issues/411), [#414](https://github.com/PHP-DI/PHP-DI/pull/414), [#412](https://github.com/PHP-DI/PHP-DI/pull/412): compatibility with ProxyManager 1.* and 2.* (by [@holtkamp](https://github.com/holtkamp) and [@mnapoli](https://github.com/mnapoli))
+- [#416](https://github.com/PHP-DI/PHP-DI/pull/416): dumping definitions was refactored into a more lightweight and simple solution; definition "dumpers" have been removed (internal classes), definitions can now be cast to string directly (by [@mnapoli](https://github.com/mnapoli))
+
 ## 5.2
+
+Read the [news entry](news/17-php-di-5-2-released.md).
 
 Improvements:
 

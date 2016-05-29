@@ -2,7 +2,9 @@
 
 namespace DI\Test\UnitTest\Definition\Resolver;
 
+use DI\Definition\AliasDefinition;
 use DI\Definition\ArrayDefinition;
+use DI\Definition\ObjectDefinition;
 use DI\Definition\Resolver\ArrayResolver;
 use DI\Definition\Resolver\DefinitionResolver;
 use EasyMock\EasyMock;
@@ -27,7 +29,7 @@ class ArrayResolverTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->parentResolver = $this->easyMock('DI\Definition\Resolver\DefinitionResolver');
+        $this->parentResolver = $this->easyMock(DefinitionResolver::class);
         $this->resolver = new ArrayResolver($this->parentResolver);
     }
 
@@ -54,8 +56,8 @@ class ArrayResolverTest extends \PHPUnit_Framework_TestCase
         $this->parentResolver->expects($this->exactly(2))
             ->method('resolve')
             ->withConsecutive(
-                $this->isInstanceOf('DI\Definition\AliasDefinition'),
-                $this->isInstanceOf('DI\Definition\ObjectDefinition')
+                $this->isInstanceOf(AliasDefinition::class),
+                $this->isInstanceOf(ObjectDefinition::class)
             )
             ->willReturnOnConsecutiveCalls(42, new \stdClass());
 

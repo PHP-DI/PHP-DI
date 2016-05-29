@@ -65,4 +65,9 @@ class FactoryDefinition implements Definition
     {
         return $this->factory;
     }
+
+    public function __toString()
+    {
+        return 'Factory';
+    }
 }

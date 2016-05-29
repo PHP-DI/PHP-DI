@@ -19,7 +19,7 @@ class AnnotationsTest extends \PHPUnit_Framework_TestCase
     {
         $container = $this->createContainer();
         /** @var B $object */
-        $object = $container->get('DI\Test\IntegrationTest\Annotations\B');
+        $object = $container->get(B::class);
         $this->assertTrue($object->public instanceof A);
         $this->assertTrue($object->getProtected() instanceof A);
         $this->assertTrue($object->getPrivate() instanceof A);
@@ -35,13 +35,13 @@ class AnnotationsTest extends \PHPUnit_Framework_TestCase
         $container = $this->createContainer();
 
         /** @var C $object */
-        $object = $container->get('DI\Test\IntegrationTest\Annotations\C');
+        $object = $container->get(C::class);
         $this->assertTrue($object->public instanceof A);
         $this->assertTrue($object->getProtected() instanceof A);
         $this->assertTrue($object->getPrivate() instanceof A);
 
         /** @var D $object */
-        $object = $container->get('DI\Test\IntegrationTest\Annotations\D');
+        $object = $container->get(D::class);
         $this->assertTrue($object->public instanceof A);
         $this->assertTrue($object->getProtected() instanceof A);
         $this->assertTrue($object->getPrivate() instanceof A);
@@ -57,7 +57,7 @@ class AnnotationsTest extends \PHPUnit_Framework_TestCase
         $container = $this->createContainer();
 
         /** @var Child $object */
-        $object = $container->get('DI\Test\IntegrationTest\Annotations\Child');
+        $object = $container->get(Child::class);
         $this->assertTrue($object->public instanceof A);
         $this->assertTrue($object->getProtected() instanceof A);
         $this->assertTrue($object->getPrivate() instanceof A);
@@ -76,7 +76,7 @@ class AnnotationsTest extends \PHPUnit_Framework_TestCase
         ]);
 
         /** @var NamedInjection $object */
-        $object = $container->get('DI\Test\IntegrationTest\Annotations\NamedInjection');
+        $object = $container->get(NamedInjection::class);
         $this->assertSame($dependency, $object->dependency);
     }
 
@@ -87,7 +87,7 @@ class AnnotationsTest extends \PHPUnit_Framework_TestCase
     public function errors_if_dependency_by_name_not_found()
     {
         $container = $this->createContainer();
-        $container->get('DI\Test\IntegrationTest\Annotations\NamedInjection');
+        $container->get(NamedInjection::class);
     }
 
     /**
@@ -100,13 +100,13 @@ class AnnotationsTest extends \PHPUnit_Framework_TestCase
         $container = $this->createContainer();
 
         /** @var $object InjectWithUseStatements */
-        $object = $container->get('DI\Test\IntegrationTest\Annotations\InjectWithUseStatements');
+        $object = $container->get(InjectWithUseStatements::class);
         $this->assertTrue($object->a instanceof A);
         $this->assertTrue($object->alias instanceof A);
         $this->assertTrue($object->namespaceAlias instanceof A);
 
         /** @var $object InjectWithUseStatements2 */
-        $object = $container->get('DI\Test\IntegrationTest\Annotations\InjectWithUseStatements\InjectWithUseStatements2');
+        $object = $container->get(InjectWithUseStatements2::class);
         $this->assertTrue($object->dependency instanceof InjectWithUseStatements);
     }
 
@@ -117,7 +117,7 @@ class AnnotationsTest extends \PHPUnit_Framework_TestCase
     public function testNotFoundVarAnnotation()
     {
         $container = $this->createContainer();
-        $container->get('DI\Test\IntegrationTest\Annotations\NotFoundVarAnnotation');
+        $container->get(NotFoundVarAnnotation::class);
     }
 
     private function createContainer(array $definitions = [])

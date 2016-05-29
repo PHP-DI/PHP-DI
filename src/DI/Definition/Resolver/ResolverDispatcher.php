@@ -27,15 +27,13 @@ class ResolverDispatcher implements DefinitionResolver
      */
     private $proxyFactory;
 
-    private $valueResolver;
+    private $selfResolvingResolver;
     private $arrayResolver;
     private $factoryResolver;
     private $decoratorResolver;
-    private $aliasResolver;
     private $objectResolver;
     private $instanceResolver;
     private $envVariableResolver;
-    private $stringResolver;
     private $interopResolver;
 
     public function __construct(ContainerInterface $container, ProxyFactory $proxyFactory)
@@ -87,24 +85,18 @@ class ResolverDispatcher implements DefinitionResolver
     private function getDefinitionResolver(Definition $definition)
     {
         switch (true) {
+            case $definition instanceof \DI\Definition\SelfResolvingDefinition:
+                if (! $this->selfResolvingResolver) {
+                    $this->selfResolvingResolver = new SelfResolver($this->container);
+                }
+
+                return $this->selfResolvingResolver;
             case $definition instanceof \DI\Definition\ObjectDefinition:
                 if (! $this->objectResolver) {
                     $this->objectResolver = new ObjectCreator($this, $this->proxyFactory);
                 }
 
                 return $this->objectResolver;
-            case $definition instanceof \DI\Definition\ValueDefinition:
-                if (! $this->valueResolver) {
-                    $this->valueResolver = new ValueResolver();
-                }
-
-                return $this->valueResolver;
-            case $definition instanceof \DI\Definition\AliasDefinition:
-                if (! $this->aliasResolver) {
-                    $this->aliasResolver = new AliasResolver($this->container);
-                }
-
-                return $this->aliasResolver;
             case $definition instanceof \DI\Definition\DecoratorDefinition:
                 if (! $this->decoratorResolver) {
                     $this->decoratorResolver = new DecoratorResolver($this->container, $this);
@@ -129,12 +121,6 @@ class ResolverDispatcher implements DefinitionResolver
                 }
 
                 return $this->envVariableResolver;
-            case $definition instanceof \DI\Definition\StringDefinition:
-                if (! $this->stringResolver) {
-                    $this->stringResolver = new StringResolver($this->container);
-                }
-
-                return $this->stringResolver;
             case $definition instanceof \DI\Definition\InstanceDefinition:
                 if (! $this->instanceResolver) {
                     $this->instanceResolver = new InstanceInjector($this, $this->proxyFactory);

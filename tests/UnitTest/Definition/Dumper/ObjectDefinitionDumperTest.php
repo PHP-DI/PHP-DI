@@ -3,8 +3,6 @@
 namespace DI\Test\UnitTest\Definition\Dumper;
 
 use DI\Definition\Dumper\ObjectDefinitionDumper;
-use DI\Definition\ObjectDefinition;
-use DI\Definition\ValueDefinition;
 use DI\Scope;
 
 /**
@@ -14,7 +12,7 @@ class ObjectDefinitionDumperTest extends \PHPUnit_Framework_TestCase
 {
     public function testAll()
     {
-        $definition = \DI\object('DI\Test\UnitTest\Definition\Dumper\FixtureClass')
+        $definition = \DI\object(FixtureClass::class)
             ->lazy()
             ->constructor(\DI\get('Mailer'), 'email@example.com')
             ->method('setFoo', \DI\get('SomeDependency'))
@@ -37,11 +35,12 @@ class ObjectDefinitionDumperTest extends \PHPUnit_Framework_TestCase
 )';
 
         $this->assertEquals($str, $dumper->dump($definition));
+        $this->assertEquals($str, (string) $definition);
     }
 
     public function testClass()
     {
-        $definition = \DI\object('DI\Test\UnitTest\Definition\Dumper\FixtureClass')
+        $definition = \DI\object(FixtureClass::class)
             ->getDefinition('foo');
         $dumper = new ObjectDefinitionDumper();
 
@@ -52,6 +51,7 @@ class ObjectDefinitionDumperTest extends \PHPUnit_Framework_TestCase
 )';
 
         $this->assertEquals($str, $dumper->dump($definition));
+        $this->assertEquals($str, (string) $definition);
     }
 
     public function testNonExistentClass()
@@ -68,6 +68,7 @@ class ObjectDefinitionDumperTest extends \PHPUnit_Framework_TestCase
 )';
 
         $this->assertEquals($str, $resolver->dump($definition));
+        $this->assertEquals($str, (string) $definition);
     }
 
     public function testNonInstantiableClass()
@@ -83,6 +84,7 @@ class ObjectDefinitionDumperTest extends \PHPUnit_Framework_TestCase
 )';
 
         $this->assertEquals($str, $resolver->dump($definition));
+        $this->assertEquals($str, (string) $definition);
     }
 
     public function testScopePrototype()
@@ -99,6 +101,7 @@ class ObjectDefinitionDumperTest extends \PHPUnit_Framework_TestCase
 )';
 
         $this->assertEquals($str, $resolver->dump($definition));
+        $this->assertEquals($str, (string) $definition);
     }
 
     public function testLazy()
@@ -115,11 +118,12 @@ class ObjectDefinitionDumperTest extends \PHPUnit_Framework_TestCase
 )';
 
         $this->assertEquals($str, $resolver->dump($definition));
+        $this->assertEquals($str, (string) $definition);
     }
 
     public function testConstructorParameters()
     {
-        $definition = \DI\object('DI\Test\UnitTest\Definition\Dumper\FixtureClass')
+        $definition = \DI\object(FixtureClass::class)
             ->constructor(\DI\get('Mailer'), 'email@example.com')
             ->getDefinition('foo');
         $resolver = new ObjectDefinitionDumper();
@@ -135,11 +139,12 @@ class ObjectDefinitionDumperTest extends \PHPUnit_Framework_TestCase
 )';
 
         $this->assertEquals($str, $resolver->dump($definition));
+        $this->assertEquals($str, (string) $definition);
     }
 
     public function testUndefinedConstructorParameter()
     {
-        $definition = \DI\object('DI\Test\UnitTest\Definition\Dumper\FixtureClass')
+        $definition = \DI\object(FixtureClass::class)
             ->constructor(\DI\get('Mailer'))
             ->getDefinition('foo');
         $resolver = new ObjectDefinitionDumper();
@@ -155,11 +160,12 @@ class ObjectDefinitionDumperTest extends \PHPUnit_Framework_TestCase
 )';
 
         $this->assertEquals($str, $resolver->dump($definition));
+        $this->assertEquals($str, (string) $definition);
     }
 
     public function testPropertyValue()
     {
-        $definition = \DI\object('DI\Test\UnitTest\Definition\Dumper\FixtureClass')
+        $definition = \DI\object(FixtureClass::class)
             ->property('prop', 'Some value')
             ->getDefinition('foo');
         $resolver = new ObjectDefinitionDumper();
@@ -172,11 +178,12 @@ class ObjectDefinitionDumperTest extends \PHPUnit_Framework_TestCase
 )';
 
         $this->assertEquals($str, $resolver->dump($definition));
+        $this->assertEquals($str, (string) $definition);
     }
 
     public function testPropertyget()
     {
-        $definition = \DI\object('DI\Test\UnitTest\Definition\Dumper\FixtureClass')
+        $definition = \DI\object(FixtureClass::class)
             ->property('prop', \DI\get('foo'))
             ->getDefinition('foo');
         $resolver = new ObjectDefinitionDumper();
@@ -189,11 +196,12 @@ class ObjectDefinitionDumperTest extends \PHPUnit_Framework_TestCase
 )';
 
         $this->assertEquals($str, $resolver->dump($definition));
+        $this->assertEquals($str, (string) $definition);
     }
 
     public function testMethodLinkParameter()
     {
-        $definition = \DI\object('DI\Test\UnitTest\Definition\Dumper\FixtureClass')
+        $definition = \DI\object(FixtureClass::class)
             ->method('setFoo', \DI\get('Mailer'))
             ->getDefinition('foo');
         $resolver = new ObjectDefinitionDumper();
@@ -208,11 +216,12 @@ class ObjectDefinitionDumperTest extends \PHPUnit_Framework_TestCase
 )';
 
         $this->assertEquals($str, $resolver->dump($definition));
+        $this->assertEquals($str, (string) $definition);
     }
 
     public function testMethodValueParameter()
     {
-        $definition = \DI\object('DI\Test\UnitTest\Definition\Dumper\FixtureClass')
+        $definition = \DI\object(FixtureClass::class)
             ->method('setFoo', 'foo')
             ->getDefinition('foo');
         $resolver = new ObjectDefinitionDumper();
@@ -227,11 +236,12 @@ class ObjectDefinitionDumperTest extends \PHPUnit_Framework_TestCase
 )';
 
         $this->assertEquals($str, $resolver->dump($definition));
+        $this->assertEquals($str, (string) $definition);
     }
 
     public function testMethodDefaultParameterValue()
     {
-        $definition = \DI\object('DI\Test\UnitTest\Definition\Dumper\FixtureClass')
+        $definition = \DI\object(FixtureClass::class)
             ->method('defaultValue')
             ->getDefinition('foo');
         $resolver = new ObjectDefinitionDumper();
@@ -246,18 +256,7 @@ class ObjectDefinitionDumperTest extends \PHPUnit_Framework_TestCase
 )';
 
         $this->assertEquals($str, $resolver->dump($definition));
-    }
-
-    /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage This definition dumper is only compatible with ObjectDefinition objects, DI\Definition\ValueDefinition given
-     */
-    public function testInvalidDefinitionType()
-    {
-        $definition = new ValueDefinition('foo', 'bar');
-        $resolver = new ObjectDefinitionDumper();
-
-        $resolver->dump($definition);
+        $this->assertEquals($str, (string) $definition);
     }
 }
 

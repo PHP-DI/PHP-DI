@@ -54,9 +54,9 @@ class InstanceInjectorTest extends \PHPUnit_Framework_TestCase
     private function buildResolver()
     {
         /** @var ResolverDispatcher $resolverDispatcher */
-        $resolverDispatcher = $this->easyMock('DI\Definition\Resolver\ResolverDispatcher');
+        $resolverDispatcher = $this->easyMock(ResolverDispatcher::class);
         /** @var ProxyFactory $factory */
-        $factory = $this->easyMock('DI\Proxy\ProxyFactory');
+        $factory = $this->easyMock(ProxyFactory::class);
 
         return new InstanceInjector($resolverDispatcher, $factory);
     }

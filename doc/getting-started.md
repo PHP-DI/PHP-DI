@@ -1,6 +1,7 @@
 ---
 layout: documentation
 title: Getting started
+current_menu: getting-started
 ---
 
 # Getting started with PHP-DI
@@ -16,6 +17,8 @@ Install PHP-DI with [Composer](http://getcomposer.org/doc/00-intro.md):
 ```
 composer require php-di/php-di
 ```
+
+PHP-DI requires PHP 5.5 or above.
 
 ## Basic usage
 
@@ -138,7 +141,7 @@ To quote the Symfony documentation:
 
 For this reason, PHP-DI integrates with some frameworks so that you don't have to call the container (dependencies are injected in controllers):
 
-- [Symfony 2](frameworks/symfony2.md)
+- [Symfony](frameworks/symfony2.md)
 - [Silex](frameworks/silex.md)
 - [Zend Framework 1](frameworks/zf1.md)
 - [Zend Framework 2](frameworks/zf2.md)

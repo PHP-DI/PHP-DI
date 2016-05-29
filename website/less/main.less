@@ -4,6 +4,7 @@
 @import "variables.less";
 @import "home.less";
 @import "blog.less";
+@import "algolia.less";
 
 body {
     font-family: 'Source Sans Pro', sans-serif;
@@ -98,6 +99,12 @@ pre code {
             }
         }
     }
+    #search-input {
+        width: 300px;
+        margin-left: 30px;
+        background-color: #FBFBFB;
+        border: 1px solid #E4E4E4;
+    }
 }
 
 article {
@@ -167,6 +174,10 @@ article {
                         font-size: 12px;
                         @media (min-width: @screen-md-min) {
                             font-size: 14px;
+                        }
+                        &.active a {
+                            color: @link-hover-color;
+                            text-decoration: underline;
                         }
                     }
                 }

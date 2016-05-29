@@ -4,7 +4,9 @@ namespace DI\Proxy;
 
 use ProxyManager\Configuration;
 use ProxyManager\Factory\LazyLoadingValueHolderFactory;
+use ProxyManager\FileLocator\FileLocator;
 use ProxyManager\GeneratorStrategy\EvaluatingGeneratorStrategy;
+use ProxyManager\GeneratorStrategy\FileWriterGeneratorStrategy;
 
 /**
  * Creates proxy classes.
@@ -63,14 +65,15 @@ class ProxyFactory
             return;
         }
 
-        if (! class_exists('ProxyManager\Configuration')) {
-            throw new \RuntimeException('The ocramius/proxy-manager library is not installed. Lazy injection requires that library to be installed with Composer in order to work. Run "composer require ocramius/proxy-manager:~0.3".');
+        if (! class_exists(Configuration::class)) {
+            throw new \RuntimeException('The ocramius/proxy-manager library is not installed. Lazy injection requires that library to be installed with Composer in order to work. Run "composer require ocramius/proxy-manager:~1.0".');
         }
 
         $config = new Configuration();
 
         if ($this->writeProxiesToFile) {
             $config->setProxiesTargetDir($this->proxyDirectory);
+            $config->setGeneratorStrategy(new FileWriterGeneratorStrategy(new FileLocator($this->proxyDirectory)));
             spl_autoload_register($config->getProxyAutoloader());
         } else {
             $config->setGeneratorStrategy(new EvaluatingGeneratorStrategy());

@@ -2,7 +2,9 @@
 
 namespace DI\Test\UnitTest\Definition;
 
+use DI\Definition\CacheableDefinition;
 use DI\Definition\DecoratorDefinition;
+use DI\Definition\HasSubDefinition;
 use DI\Definition\ValueDefinition;
 use DI\Scope;
 
@@ -42,7 +44,7 @@ class DecoratorDefinitionTest extends \PHPUnit_Framework_TestCase
     {
         $definition = new DecoratorDefinition('foo', function () {
         });
-        $this->assertNotInstanceOf('DI\Definition\CacheableDefinition', $definition);
+        $this->assertNotInstanceOf(CacheableDefinition::class, $definition);
     }
 
     /**
@@ -52,11 +54,19 @@ class DecoratorDefinitionTest extends \PHPUnit_Framework_TestCase
     {
         $definition = new DecoratorDefinition('foo', function () {
         });
-        $this->assertInstanceOf('DI\Definition\HasSubDefinition', $definition);
+        $this->assertInstanceOf(HasSubDefinition::class, $definition);
         $this->assertEquals($definition->getName(), $definition->getSubDefinitionName());
 
         $subDefinition = new ValueDefinition('foo', 'bar');
         $definition->setSubDefinition($subDefinition);
         $this->assertSame($subDefinition, $definition->getDecoratedDefinition());
+    }
+
+    /**
+     * @test
+     */
+    public function should_cast_to_string()
+    {
+        $this->assertEquals('Decorate(foo)', (string) new DecoratorDefinition('foo', 'bar'));
     }
 }

@@ -71,8 +71,8 @@ class DefinitionArray implements DefinitionSource, MutableDefinitionSource
             }
 
             // Turn the pattern into a regex
-            $key = addslashes($key);
-            $key = '#' . str_replace(self::WILDCARD, self::WILDCARD_PATTERN, $key) . '#';
+            $key = preg_quote($key);
+            $key = '#' . str_replace('\\' . self::WILDCARD, self::WILDCARD_PATTERN, $key) . '#';
             if (preg_match($key, $name, $matches) === 1) {
                 $definition = $this->castDefinition($definition, $name);
 
@@ -101,14 +101,11 @@ class DefinitionArray implements DefinitionSource, MutableDefinitionSource
     {
         if ($definition instanceof DefinitionHelper) {
             $definition = $definition->getDefinition($name);
-        }
-        if (! $definition instanceof Definition && is_array($definition)) {
+        } elseif (is_array($definition)) {
             $definition = new ArrayDefinition($name, $definition);
-        }
-        if ($definition instanceof \Closure) {
+        } elseif ($definition instanceof \Closure) {
             $definition = new FactoryDefinition($name, $definition);
-        }
-        if (! $definition instanceof Definition) {
+        } elseif (! $definition instanceof Definition) {
             $definition = new ValueDefinition($name, $definition);
         }
 

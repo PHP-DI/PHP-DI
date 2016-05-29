@@ -27,7 +27,7 @@ class DefinitionArrayTest extends \PHPUnit_Framework_TestCase
 
         /** @var ValueDefinition $definition */
         $definition = $source->getDefinition('foo');
-        $this->assertInstanceOf('DI\Definition\ValueDefinition', $definition);
+        $this->assertInstanceOf(ValueDefinition::class, $definition);
         $this->assertEquals('foo', $definition->getName());
         $this->assertEquals('bar', $definition->getValue());
     }
@@ -92,7 +92,7 @@ class DefinitionArrayTest extends \PHPUnit_Framework_TestCase
         ]);
         /** @var $definition ObjectDefinition */
         $definition = $source->getDefinition('foo');
-        $this->assertInstanceOf('DI\Definition\ObjectDefinition', $definition);
+        $this->assertInstanceOf(ObjectDefinition::class, $definition);
         $this->assertEquals('foo', $definition->getName());
         $this->assertEquals('foo', $definition->getClassName());
     }
@@ -108,7 +108,7 @@ class DefinitionArrayTest extends \PHPUnit_Framework_TestCase
         ]);
         /** @var FactoryDefinition $definition */
         $definition = $source->getDefinition('foo');
-        $this->assertInstanceOf('DI\Definition\FactoryDefinition', $definition);
+        $this->assertInstanceOf(FactoryDefinition::class, $definition);
         $this->assertEquals('foo', $definition->getName());
         $this->assertEquals($callable, $definition->getCallable());
     }
@@ -124,7 +124,7 @@ class DefinitionArrayTest extends \PHPUnit_Framework_TestCase
         ]);
         /** @var FactoryDefinition $definition */
         $definition = $source->getDefinition('foo');
-        $this->assertInstanceOf('DI\Definition\FactoryDefinition', $definition);
+        $this->assertInstanceOf(FactoryDefinition::class, $definition);
         $this->assertEquals('foo', $definition->getName());
         $this->assertEquals($callable, $definition->getCallable());
     }
@@ -177,22 +177,22 @@ class DefinitionArrayTest extends \PHPUnit_Framework_TestCase
         ]);
 
         $definition = $source->getDefinition('foo1');
-        $this->assertInstanceOf('DI\Definition\ValueDefinition', $definition);
+        $this->assertInstanceOf(ValueDefinition::class, $definition);
         $this->assertEquals('foo1', $definition->getName());
         $this->assertEquals('bar', $definition->getValue());
 
         $definition = $source->getDefinition('Namespaced\FooInterface');
-        $this->assertInstanceOf('DI\Definition\ObjectDefinition', $definition);
+        $this->assertInstanceOf(ObjectDefinition::class, $definition);
         $this->assertEquals('Namespaced\FooInterface', $definition->getName());
         $this->assertEquals('Namespaced\Foo', $definition->getClassName());
 
         $definition = $source->getDefinition('Namespaced2\FooInterface');
-        $this->assertInstanceOf('DI\Definition\ObjectDefinition', $definition);
+        $this->assertInstanceOf(ObjectDefinition::class, $definition);
         $this->assertEquals('Namespaced2\FooInterface', $definition->getName());
         $this->assertEquals('Namespaced2\Foo', $definition->getClassName());
 
         $definition = $source->getDefinition('Multiple\Foo\Bar\Matches');
-        $this->assertInstanceOf('DI\Definition\ObjectDefinition', $definition);
+        $this->assertInstanceOf(ObjectDefinition::class, $definition);
         $this->assertEquals('Multiple\Foo\Bar\Matches', $definition->getName());
         $this->assertEquals('Multiple\Foo\Bar\Implementation', $definition->getClassName());
     }
@@ -207,7 +207,7 @@ class DefinitionArrayTest extends \PHPUnit_Framework_TestCase
             'foo' => 'bim',
         ]);
         $definition = $source->getDefinition('foo');
-        $this->assertInstanceOf('DI\Definition\ValueDefinition', $definition);
+        $this->assertInstanceOf(ValueDefinition::class, $definition);
         $this->assertEquals('foo', $definition->getName());
         $this->assertEquals('bim', $definition->getValue());
     }
@@ -232,5 +232,17 @@ class DefinitionArrayTest extends \PHPUnit_Framework_TestCase
             'My\*Interface' => \DI\object('My\*'),
         ]);
         $this->assertNull($source->getDefinition('My\Foo\BarInterface'));
+    }
+
+    /**
+     * @see https://github.com/PHP-DI/PHP-DI/issues/379
+     */
+    public function testWildcardStringsAreEscaped()
+    {
+        $source = new DefinitionArray([
+            'foo.*' => 'bar',
+        ]);
+        $this->assertNotNull($source->getDefinition('foo.test'));
+        $this->assertNull($source->getDefinition('footest'));
     }
 }

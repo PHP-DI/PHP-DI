@@ -37,13 +37,13 @@ menu:
         definition:
             section: Definitions
             items:
-                introduction:
+                definition-introduction:
                     text: Introduction
                     url: doc/definition.html
                 autowiring:
                     text: Autowiring
                     url: doc/autowiring.html
-                php:
+                php-definitions:
                     text: PHP definitions
                     url: doc/php-definitions.html
                 annotations:
@@ -55,8 +55,8 @@ menu:
         frameworks:
             section: Frameworks
             items:
-                symfony2:
-                    text: Symfony 2
+                symfony:
+                    text: Symfony
                     url: doc/frameworks/symfony2.html
                 silex:
                     text: Silex
@@ -67,6 +67,9 @@ menu:
                 zf1:
                     text: Zend Framework 1
                     url: doc/frameworks/zf1.html
+                slim:
+                    text: Slim
+                    url: doc/frameworks/slim.html
                 silly:
                     text: Silly
                     url: doc/frameworks/silly.html
@@ -97,10 +100,10 @@ menu:
         migration:
             section: Migration guides
             items:
-                4:
+                v4:
                     text: From PHP-DI 3.x to 4.0
                     url: doc/migration/4.0.html
-                5:
+                v5:
                     text: From PHP-DI 4.x to 5.0
                     url: doc/migration/5.0.html
         internals:
@@ -121,3 +124,11 @@ menu:
                 v4:
                     text: PHP-DI 4.x
                     absoluteUrl: https://github.com/PHP-DI/PHP-DI/tree/4.x/doc
+
+frameworks:
+    zf1: Zend Framework 1
+    zf2: Zend Framework 2
+    symfony2: Symfony
+    silex: Silex
+    slim: Slim
+    silly: Silly

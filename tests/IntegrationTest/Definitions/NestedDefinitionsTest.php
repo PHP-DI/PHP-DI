@@ -4,6 +4,7 @@ namespace DI\Test\IntegrationTest\Definitions;
 
 use DI\ContainerBuilder;
 use DI\Test\IntegrationTest\Fixtures\Class1;
+use DI\Test\IntegrationTest\Fixtures\Class2;
 use DI\Test\IntegrationTest\Fixtures\Implementation1;
 use DI\Test\IntegrationTest\Fixtures\LazyDependency;
 
@@ -43,11 +44,11 @@ class NestedDefinitionsTest extends \PHPUnit_Framework_TestCase
         $lazyDep = new LazyDependency();
 
         $builder->addDefinitions([
-            'foo'                                             => 'bar',
-            'DI\Test\IntegrationTest\Fixtures\LazyDependency' => $lazyDep,
-            'obj'                                             => \DI\object('DI\Test\IntegrationTest\Fixtures\Class1')
+            'foo' => 'bar',
+            LazyDependency::class => $lazyDep,
+            'obj' => \DI\object(Class1::class)
                 ->constructor(
-                    \DI\object('DI\Test\IntegrationTest\Fixtures\Class2'),
+                    \DI\object(Class2::class),
                     \DI\factory(function () use ($impl) {
                         return $impl;
                     })
@@ -63,7 +64,7 @@ class NestedDefinitionsTest extends \PHPUnit_Framework_TestCase
         $obj = $container->get('obj');
 
         // Assertions on constructor parameters
-        $this->assertInstanceOf('DI\Test\IntegrationTest\Fixtures\Class2', $obj->constructorParam1);
+        $this->assertInstanceOf(Class2::class, $obj->constructorParam1);
         $this->assertSame($impl, $obj->constructorParam2);
         $this->assertSame($lazyDep, $obj->constructorParam3);
 

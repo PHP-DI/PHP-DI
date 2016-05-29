@@ -31,9 +31,9 @@ class FactoryParameterResolverTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->container = $this->easyMock('Interop\Container\ContainerInterface');
+        $this->container = $this->easyMock(ContainerInterface::class);
         $this->resolver = new FactoryParameterResolver($this->container);
-        $this->requestedEntry = $this->easyMock('DI\Factory\RequestedEntry');
+        $this->requestedEntry = $this->easyMock(RequestedEntry::class);
     }
 
     /**
@@ -41,7 +41,8 @@ class FactoryParameterResolverTest extends \PHPUnit_Framework_TestCase
      */
     public function should_resolve_container_and_requested_entry()
     {
-        $callable = function (ContainerInterface $c, RequestedEntry $entry) {};
+        $callable = function (ContainerInterface $c, RequestedEntry $entry) {
+        };
         $reflection = new \ReflectionFunction($callable);
 
         $parameters = $this->resolver->getParameters($reflection, [$this->container, $this->requestedEntry], []);
@@ -56,7 +57,8 @@ class FactoryParameterResolverTest extends \PHPUnit_Framework_TestCase
      */
     public function should_resolve_only_container()
     {
-        $callable = function (ContainerInterface $c) {};
+        $callable = function (ContainerInterface $c) {
+        };
         $reflection = new \ReflectionFunction($callable);
 
         $parameters = $this->resolver->getParameters($reflection, [$this->container, $this->requestedEntry], []);
@@ -70,7 +72,8 @@ class FactoryParameterResolverTest extends \PHPUnit_Framework_TestCase
      */
     public function should_resolve_only_requested_entry()
     {
-        $callable = function (RequestedEntry $entry) {};
+        $callable = function (RequestedEntry $entry) {
+        };
         $reflection = new \ReflectionFunction($callable);
 
         $parameters = $this->resolver->getParameters($reflection, [$this->container, $this->requestedEntry], []);
@@ -84,7 +87,8 @@ class FactoryParameterResolverTest extends \PHPUnit_Framework_TestCase
      */
     public function should_resolve_nothing()
     {
-        $callable = function () {};
+        $callable = function () {
+        };
         $reflection = new \ReflectionFunction($callable);
 
         $parameters = $this->resolver->getParameters($reflection, [$this->container, $this->requestedEntry], []);

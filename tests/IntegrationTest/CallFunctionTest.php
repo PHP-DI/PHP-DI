@@ -195,7 +195,8 @@ class CallFunctionTest extends \PHPUnit_Framework_TestCase
      */
     public function test_not_enough_parameters()
     {
-        $this->container->call(function ($foo) {});
+        $this->container->call(function ($foo) {
+        });
     }
 
     /**

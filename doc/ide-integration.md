@@ -1,5 +1,6 @@
 ---
 layout: documentation
+current_menu: ide-integration
 ---
 
 # IDE integration
@@ -52,6 +53,8 @@ namespace PHPSTORM_META
 That configuration will make PhpStorm assume that anything returned by `->get('...')` is an instance of the first argument. For example `->get('DateTime')` (or `->get(DateTime::class)`) will be recognized to return a `DateTime` object.
 
 This however will not work if your service name is not a class or interface, for example `->get('foo.bar')` will not be understood by PhpStorm.
+
+**Note:** you may need to restart your IDE after adding this file to make sure PhpStorm takes it into account.
 
 ### PhpStorm plugin
 

@@ -24,10 +24,11 @@ title: Documentation index
 
 ### Frameworks integration
 
-- [Symfony 2](frameworks/symfony2.md)
+- [Symfony](frameworks/symfony2.md)
 - [Silex](frameworks/silex.md)
 - [Zend Framework 1](frameworks/zf1.md)
 - [Zend Framework 2](frameworks/zf2.md)
+- [Slim](frameworks/slim.md)
 - [Silly](frameworks/silly.md)
 
 ### Advanced topics

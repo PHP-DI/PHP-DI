@@ -3,6 +3,11 @@
 namespace DI\Test\UnitTest;
 
 use DI\ContainerBuilder;
+use DI\Test\UnitTest\Fixtures\Class1CircularDependencies;
+use DI\Test\UnitTest\Fixtures\InvalidScope;
+use DI\Test\UnitTest\Fixtures\PassByReferenceDependency;
+use DI\Test\UnitTest\Fixtures\Prototype;
+use DI\Test\UnitTest\Fixtures\Singleton;
 use stdClass;
 
 /**
@@ -54,8 +59,8 @@ class ContainerGetTest extends \PHPUnit_Framework_TestCase
         $builder->useAnnotations(true);
         $container = $builder->build();
         // With @Injectable(scope="prototype") annotation
-        $instance1 = $container->get('DI\Test\UnitTest\Fixtures\Prototype');
-        $instance2 = $container->get('DI\Test\UnitTest\Fixtures\Prototype');
+        $instance1 = $container->get(Prototype::class);
+        $instance2 = $container->get(Prototype::class);
         $this->assertNotSame($instance1, $instance2);
     }
 
@@ -67,8 +72,8 @@ class ContainerGetTest extends \PHPUnit_Framework_TestCase
         $instance2 = $container->get('stdClass');
         $this->assertSame($instance1, $instance2);
         // With @Injectable(scope="singleton") annotation
-        $instance3 = $container->get('DI\Test\UnitTest\Fixtures\Singleton');
-        $instance4 = $container->get('DI\Test\UnitTest\Fixtures\Singleton');
+        $instance3 = $container->get(Singleton::class);
+        $instance4 = $container->get(Singleton::class);
         $this->assertSame($instance3, $instance4);
     }
 
@@ -82,7 +87,7 @@ class ContainerGetTest extends \PHPUnit_Framework_TestCase
         $builder = new ContainerBuilder();
         $builder->useAnnotations(true);
         $container = $builder->build();
-        $container->get('DI\Test\UnitTest\Fixtures\InvalidScope');
+        $container->get(InvalidScope::class);
     }
 
     /**
@@ -91,8 +96,8 @@ class ContainerGetTest extends \PHPUnit_Framework_TestCase
     public function testCircularDependencies()
     {
         $container = ContainerBuilder::buildDevContainer();
-        $container->get('DI\Test\UnitTest\Fixtures\Prototype');
-        $container->get('DI\Test\UnitTest\Fixtures\Prototype');
+        $container->get(Prototype::class);
+        $container->get(Prototype::class);
     }
 
     /**
@@ -104,7 +109,7 @@ class ContainerGetTest extends \PHPUnit_Framework_TestCase
         $builder = new ContainerBuilder();
         $builder->useAnnotations(true);
         $container = $builder->build();
-        $container->get('DI\Test\UnitTest\Fixtures\Class1CircularDependencies');
+        $container->get(Class1CircularDependencies::class);
     }
 
     /**
@@ -135,7 +140,7 @@ class ContainerGetTest extends \PHPUnit_Framework_TestCase
     public function testPassByReferenceParameter()
     {
         $container = ContainerBuilder::buildDevContainer();
-        $object = $container->get('DI\Test\UnitTest\Fixtures\PassByReferenceDependency');
-        $this->assertInstanceOf('DI\Test\UnitTest\Fixtures\PassByReferenceDependency', $object);
+        $object = $container->get(PassByReferenceDependency::class);
+        $this->assertInstanceOf(PassByReferenceDependency::class, $object);
     }
 }
