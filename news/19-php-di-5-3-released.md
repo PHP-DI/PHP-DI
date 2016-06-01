@@ -2,7 +2,7 @@
 layout: blogpost
 title: PHP-DI 5.3 released
 author: Matthieu Napoli
-date: May 22, 2016
+date: June 1st, 2016
 ---
 
 I am happy to announce that PHP-DI version 5.3 has been released. The changes in this new version are:
