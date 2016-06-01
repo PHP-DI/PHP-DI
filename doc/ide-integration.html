@@ -139,7 +139,7 @@
                         <ul>
                                                             <li class="">
                                     <a href="http://php-di.org/doc/frameworks/symfony2.html">
-                                        Symfony 2
+                                        Symfony
                                     </a>
                                 </li>
                                                             <li class="">
@@ -303,6 +303,7 @@ namespace PHPSTORM_META
 }</code></pre>
 <p>That configuration will make PhpStorm assume that anything returned by <code>-&gt;get('...')</code> is an instance of the first argument. For example <code>-&gt;get('DateTime')</code> (or <code>-&gt;get(DateTime::class)</code>) will be recognized to return a <code>DateTime</code> object.</p>
 <p>This however will not work if your service name is not a class or interface, for example <code>-&gt;get('foo.bar')</code> will not be understood by PhpStorm.</p>
+<p><strong>Note:</strong> you may need to restart your IDE after adding this file to make sure PhpStorm takes it into account.</p>
 <h3 id="phpstorm-plugin">PhpStorm plugin</h3>
 <p>If you don't fancy writing a <code>.phpstorm.meta.php</code> file in each of your projects, you can install the <a href="https://github.com/pulyaevskiy/phpstorm-phpdi">PHP-DI plugin for PhpStorm</a> created by <a href="https://github.com/pulyaevskiy">Anatoly Pulyaevskiy</a>. The plugin can be installed in PhpStorm by searching for <em>PHP-DI</em> in the 3rd party plugin list.</p>
 <p>This plugin offers the same benefits as <code>.phpstorm.meta.php</code>, and has the same limitations.</p>

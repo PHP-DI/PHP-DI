@@ -139,7 +139,7 @@
                         <ul>
                                                             <li class="active">
                                     <a href="http://php-di.org/doc/frameworks/symfony2.html">
-                                        Symfony 2
+                                        Symfony
                                     </a>
                                 </li>
                                                             <li class="">
@@ -268,44 +268,31 @@
                 </a>
             </div>
 
-            <h1 id="php-di-in-symfony-2">PHP-DI in Symfony 2</h1>
-<p>If you are using Symfony 2, PHP-DI provides easy and clean integration, without replacing the original container
-(so all bundles and existing code still work).</p>
+            <h1 id="php-di-in-symfony">PHP-DI in Symfony</h1>
+<p>PHP-DI provides an easy and clean integration with Symfony that does not replace the original container:
+all bundles and existing code still work the same.</p>
 <p>Just to be clear: PHP-DI will work alongside Symfony's container. So you can use both at the same time.</p>
 <h2 id="installation">Installation</h2>
-<p>First, install the bridge:</p>
-<pre><code>composer require php-di/symfony2-bridge</code></pre>
-<p>Now you need to configure Symfony to use the alternative container in your <code>AppKernel</code>:</p>
-<pre><code class="language-php">class AppKernel extends Kernel
+<p>First install the bridge:</p>
+<pre><code>composer require php-di/symfony-bridge</code></pre>
+<p>Now you need to make your <code>AppKernel</code> extend <code>DI\Bridge\Symfony\Kernel</code> instead of Symfony's Kernel class:</p>
+<pre><code class="language-php">class AppKernel extends \DI\Bridge\Symfony\Kernel
 {
-    /**
-     * Gets the container's base class.
-     *
-     * @return string
-     */
-    protected function getContainerBaseClass()
-    {
-        return 'DI\Bridge\Symfony\SymfonyContainerBridge';
-    }
+    // ...
 
-    /**
-     * Initializes the DI container.
-     */
-    protected function initializeContainer()
+    protected function buildPHPDIContainer(ContainerBuilder $builder)
     {
-        parent::initializeContainer();
-
         // Configure your container here
-        // http://php-di.org/doc/container-configuration
-        $builder = new \DI\ContainerBuilder();
-        $builder-&gt;wrapContainer($this-&gt;getContainer());
+        // http://php-di.org/doc/container-configuration.html
+        $builder-&gt;addDefinitions(__DIR__ . '/config/config.php');
 
-        $this-&gt;getContainer()-&gt;setFallbackContainer($builder-&gt;build());
+        return $builder-&gt;build();
     }
 }</code></pre>
+<p>You will need to implement the <code>buildPHPDIContainer()</code> method. That method allows you to configure PHP-DI.</p>
 <h2 id="usage">Usage</h2>
 <p>You can now define <a href="http://symfony.com/doc/current/cookbook/controller/service.html">controllers as services</a>,
-without any configuration, using PHP-DI's power!</p>
+without any configuration, using PHP-DI's power.</p>
 <p>Example for the routing configuration:</p>
 <pre><code class="language-yaml">my_route:
     pattern:  /product-stock/clear
@@ -367,15 +354,19 @@ class TestController extends Controller
 <h2 id="using-symfonys-services-in-php-di">Using Symfony's services in PHP-DI</h2>
 <p>Let's say you want to inject the <code>EntityManager</code> in your controller: the entity manager is defined
 in Symfony's container, and the controller is resolved by PHP-DI.</p>
-<p><strong>You can reference services that are in Symfony's container in PHP-DI's configuration</strong>.
-That's because PHP-DI is designed to play nice with others:</p>
+<p><strong>You can reference services that are in Symfony's container in PHP-DI's configuration</strong>:</p>
 <pre><code class="language-php">return [
-    'Acme\MyBundle\Controller\ProductController' =&gt; DI\object()
+    'AppBundle\Controller\ProductController' =&gt; DI\object()
         -&gt;constructor(DI\get('doctrine.orm.entity_manager')),
 ];</code></pre>
-<p>However Symfony was not designed to play with his friends, so it has no idea that there is
-another container in the application. <strong>You can't inject PHP-DI's services in a Symfony service</strong>.
-That's however rarely a problem.</p>
+<p><strong>You can also inject PHP-DI services in a Symfony service</strong>:</p>
+<pre><code class="language-yaml">services:
+    # app.user_service is a Symfony service
+    app.user_service:
+        class: 'AppBundle\\Service\\UserService'
+        arguments:
+            # UserRepository is created by PHP-DI
+            - 'AppBundle\\Service\\UserRepository'</code></pre>
 <h3 id="service-name-aliases">Service name aliases</h3>
 <p>PHP-DI can also work with autowiring or annotations. These rely on the fact that the service name
 is the class name (or interface name), e.g. you reference the entity manager by its class name
@@ -394,7 +385,7 @@ So write your aliases with interfaces as much as possible.</p>
 <p>This bug has been fixed and will be released in &gt;=1.3.2 (not released yet at the time of writing).</p>
 <p>Full details are here: <a href="https://github.com/FriendsOfSymfony/FOSRestBundle/pull/743">FOSRestBundle#743</a></p>
 <h2 id="more">More</h2>
-<p>Read more on the <a href="https://github.com/PHP-DI/Symfony2-Bridge">Symfony2-Bridge project on GitHub</a>.</p>
+<p>Read more on the <a href="https://github.com/PHP-DI/Symfony-Bridge">Symfony-Bridge project on GitHub</a>.</p>
         </article>
 
     </div>

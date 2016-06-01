@@ -12,7 +12,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>PHP-DI 5.2 released - The Dependency Injection Container for humans</title>
+    <title>PHP-DI 5.3 released - The Dependency Injection Container for humans</title>
     <meta name="description" content="PHP-DI is a Dependency Injection Container for PHP that intends to be practical and powerful">
 
     <link rel="canonical" href="http://php-di.org" />
@@ -67,67 +67,29 @@
 
                 
     <article>
-        <h1>PHP-DI 5.2 released</h1>
+        <h1>PHP-DI 5.3 released</h1>
 
         <p class="article-information">
-            Posted by Matthieu Napoli on December 20, 2015
+            Posted by Matthieu Napoli on May 22, 2016
         </p>
 
-        <p>I am happy to announce that PHP-DI version 5.2 has been released. The main changes in this new version are:</p>
+        <p>I am happy to announce that PHP-DI version 5.3 has been released. The changes in this new version are:</p>
 <ul>
-<li>new features for factories</li>
-<li>improved documentation (including finally adding anchors to headers!)</li>
-<li>simpler and clearer exception messages</li>
-<li>bugfixes</li>
+<li>release of the <a href="https://github.com/PHP-DI/Symfony-Bridge/releases/tag/2.0.0">2.0 version</a> of the Symfony bridge</li>
+<li>PHP 5.5 or above is now required</li>
+<li>a lot of documentation improvements by 9 different contributors</li>
+<li><a href="https://github.com/PHP-DI/PHP-DI/pull/389">#389</a>: exception message improvement by <a href="https://github.com/mopahle">@mopahle</a></li>
+<li>compatibility with ProxyManager 1.x and 2.x by <a href="https://github.com/holtkamp">@holtkamp</a> and <a href="https://github.com/mnapoli">@mnapoli</a> (issues and pull requests: <a href="https://github.com/PHP-DI/PHP-DI/issues/359">#359</a>, <a href="https://github.com/PHP-DI/PHP-DI/issues/411">#411</a>, <a href="https://github.com/PHP-DI/PHP-DI/pull/414">#414</a>, <a href="https://github.com/PHP-DI/PHP-DI/pull/412">#412</a>)</li>
+<li><a href="https://github.com/PHP-DI/PHP-DI/pull/416">#416</a>: dumping definitions was refactored into a more lightweight and simple solution; definitions can now be cast to string directly (9 classes were removed)</li>
 </ul>
-<h2 id="factories">Factories</h2>
-<h3 id="injection-in-closures">Injection in closures</h3>
-<p>Currently the only way to write factories is to write a callable <strong>that takes the container as the only parameter</strong>:</p>
-<pre><code class="language-php">return [
-    'foo' =&gt; function(ContainerInterface $c) {
-        $bar = $c-&gt;get('bar');
-        return new Foo($bar);
-    },
-];</code></pre>
-<p>To get dependencies in your factory, you could either call <code>$container-&gt;get()</code> (as shown above) or create a full factory class that can use dependency injection in its constructor.</p>
-<p>From 5.2 and above, there is a simpler solution: <strong>you can inject services by type-hint into your closures:</strong></p>
-<pre><code class="language-php">return [
-    'foo' =&gt; function(Bar $bar) {
-        return new Foo($bar);
-    },
-];</code></pre>
-<p>Of course autowiring is limited to container entries you can type-hint (so it will not work with, for example, scalar values), but it will help you write simpler factories most of the time.</p>
-<p>Of course this is completely <strong>optional and backward compatible</strong>: you can still inject the container as before. Some work has also been done to ensure this new feature comes with no performance penalty (thanks <a href="https://blackfire.io/">Blackfire</a>).</p>
-<h3 id="get-the-requested-name">Get the requested name</h3>
-<p>Sometimes the same factory will be used to create several services, for example for a <code>RepositoryFactory</code>, or when using <a href="http://php-di.org/doc/php-definitions.html#wildcards">wildcards in definitions</a>.</p>
-<p>In those cases, you can now inject an argument type-hinted as <code>DI\Factory\RequestedEntry</code> to get the name of the entry that is being constructed:</p>
-<pre><code class="language-php">return [
-    'Acme\Repository\*Repository' =&gt; function(EntityManager $entityManager, RequestedEntry $e) {
-        $class = $e-&gt;getName();
-        return new $class($entityManager);
-    },
-];</code></pre>
-<p>The <code>RequestedEntry</code> object has a very simple API:</p>
-<pre><code class="language-php">interface RequestedEntry
-{
-    public function getName();
-}</code></pre>
-<h2 id="change-log">Change log</h2>
-<p>Here is the complete <a href="../change-log.html">change log</a>:</p>
-<ul>
-<li><a href="https://github.com/PHP-DI/PHP-DI/pull/347">#347</a> (includes <a href="https://github.com/PHP-DI/PHP-DI/pull/333">#333</a> and <a href="https://github.com/PHP-DI/PHP-DI/pull/345">#345</a>): by <a href="https://github.com/jdreesen">@jdreesen</a>, <a href="https://github.com/quimcalpe">@quimcalpe</a> and <a href="https://github.com/mnapoli">@mnapoli</a>
-<ul>
-<li>Allow injection of any container object as factory parameter via type hinting</li>
-<li>Allow injection of a <code>DI\Factory\RequestedEntry</code> object to get the requested entry name</li>
-</ul></li>
-<li><a href="https://github.com/PHP-DI/PHP-DI/issues/272">#272</a>: Support <code>"Class::method""</code> syntax for callables (by <a href="https://github.com/jdreesen">@jdreesen</a>)</li>
-<li><a href="https://github.com/PHP-DI/PHP-DI/issues/332">#332</a>: IDE support (plugin and documentation) (by <a href="https://github.com/pulyaevskiy">@pulyaevskiy</a>, <a href="https://github.com/avant1">@avant1</a> and <a href="https://github.com/mnapoli">@mnapoli</a>)</li>
-<li><a href="https://github.com/PHP-DI/PHP-DI/pull/326">#326</a>: Exception messages are simpler and more consistent (by <a href="https://github.com/mnapoli">@mnapoli</a>)</li>
-<li><a href="https://github.com/PHP-DI/PHP-DI/pull/325">#325</a>: Add a &quot;Edit this page&quot; button in the website to encourage users to improve the documentation (by <a href="https://github.com/jdreesen">@jdreesen</a>)</li>
-<li><a href="https://github.com/PHP-DI/PHP-DI/pull/321">#321</a>: Allow factory definitions to reference arbitrary container entries as callables (by <a href="https://github.com/jdreesen">@jdreesen</a>)</li>
-<li><a href="https://github.com/PHP-DI/PHP-DI/issues/335">#335</a>: Class imports in traits are now considered when parsing annotations (by <a href="https://github.com/thebigb">@thebigb</a>)</li>
-</ul>
-<p>Let's finish on a &quot;Thank you&quot; to all contributors involved in this release, especially <a href="https://github.com/jdreesen">@jdreesen</a> for his awesome work on several longstanding issues and <a href="https://github.com/quimcalpe">@quimcalpe</a> for his patience and great contribution to <a href="https://github.com/PHP-DI/PHP-DI/pull/347">#347</a>.</p>
+<h2 id="symfony-bridge-20">Symfony bridge 2.0</h2>
+<p>The Symfony bridge has been working well for 2 years but it had one main flaw: entries of the Symfony container (<code>services.yml</code> for example) couldn't reference PHP-DI entries.</p>
+<p>With the release of <a href="https://github.com/PHP-DI/Symfony-Bridge/releases/tag/2.0.0">v2.0.0</a> this is now solved: PHP-DI entries and Symfony entries can reference each others without limitations.</p>
+<p>The documentation has been updated to reflect this: <a href="../doc/frameworks/symfony2.html">Symfony bridge documentation</a>.</p>
+<h2 id="php-55-requirement">PHP 5.5 requirement</h2>
+<p>Following the example of Doctrine (which dropped support for PHP 5.3 in v2.5) or Laravel (which dropped support for PHP 5.4 in v5.1), PHP-DI 5.3 stops supporting PHP 5.4 in a minor version. Users using PHP 5.4 should not be affected as long as they use Composer (the only supported method for installing PHP-DI): the new version will not be installed automatically.</p>
+<h2 id="wrapping-up">Wrapping up</h2>
+<p>Let's finish on a &quot;Thank you&quot; to <a href="https://github.com/PHP-DI/PHP-DI/issues?utf8=%E2%9C%93&amp;q=milestone%3A5.3+is%3Aclosed+">all 12 contributors involved in this release</a>.</p>
     </article>
 
     <h3>
