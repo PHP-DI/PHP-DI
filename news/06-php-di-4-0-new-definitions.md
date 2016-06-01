@@ -1,6 +1,6 @@
 ---
 layout: blogpost
-title: What will change in PHP-DI 4: the new definition format
+title: "What will change in PHP-DI 4: the new definition format"
 author: Matthieu Napoli
 date: January 16th 2014
 ---
