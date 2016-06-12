@@ -84,6 +84,21 @@ class FactoryDefinitionTest extends \PHPUnit_Framework_TestCase
         $this->assertSame('bar', $container->get('factory'));
     }
 
+    /**
+     * @expectedException \DI\Definition\Exception\DefinitionException
+     * @expectedExceptionMessage Invokable classes cannot be automatically resolved if autowiring is disabled on the container, you need to enable autowiring or define the entry manually.
+     */
+    public function test_error_message_on_invokable_class_without_autowiring()
+    {
+        $builder = new ContainerBuilder();
+        $builder->addDefinitions([
+            'factory' => \DI\factory(FactoryDefinitionInvokableTestClass::class),
+        ]);
+        $builder->useAutowiring(false);
+        $container = $builder->build();
+        $container->get('factory');
+    }
+
     public function test_container_gets_injected_as_first_argument_without_typehint()
     {
         $container = $this->createContainer([

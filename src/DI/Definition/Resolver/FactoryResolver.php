@@ -62,9 +62,20 @@ class FactoryResolver implements DefinitionResolver
             $this->invoker = new Invoker($parameterResolver, $this->container);
         }
 
+        $callable = $definition->getCallable();
+
         try {
-            return $this->invoker->call($definition->getCallable(), [$this->container, $definition]);
+            return $this->invoker->call($callable, [$this->container, $definition]);
         } catch (NotCallableException $e) {
+            // Custom error message to help debugging
+            if (is_string($callable) && class_exists($callable) && method_exists($callable, '__invoke')) {
+                throw new DefinitionException(sprintf(
+                    'Entry "%s" cannot be resolved: factory %s. Invokable classes cannot be automatically resolved if autowiring is disabled on the container, you need to enable autowiring or define the entry manually.',
+                    $definition->getName(),
+                    $e->getMessage()
+                ));
+            }
+
             throw new DefinitionException(sprintf(
                 'Entry "%s" cannot be resolved: factory %s',
                 $definition->getName(),
