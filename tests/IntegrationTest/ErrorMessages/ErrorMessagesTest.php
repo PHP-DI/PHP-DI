@@ -125,7 +125,7 @@ MESSAGE;
 
     /**
      * @expectedException \DI\Definition\Exception\DefinitionException
-     * @expectedExceptionMessage Entry "foo" cannot be resolved: factory "bar" is neither a callable nor a valid container entry
+     * @expectedExceptionMessageRegExp /Entry "foo" cannot be resolved: factory ('|")bar('|") is neither a callable nor a valid container entry/
      */
     public function test_factory_not_callable()
     {

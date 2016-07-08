@@ -201,7 +201,7 @@ class CallFunctionTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException \Invoker\Exception\NotCallableException
-     * @expectedExceptionMessage "foo" is neither a callable nor a valid container entry
+     * @expectedExceptionMessageRegExp /('|")foo('|") is neither a callable nor a valid container entry/
      */
     public function test_not_callable()
     {
