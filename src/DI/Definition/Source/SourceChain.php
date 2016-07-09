@@ -5,6 +5,7 @@ namespace DI\Definition\Source;
 use DI\Definition\ArrayDefinition;
 use DI\Definition\Definition;
 use DI\Definition\HasSubDefinition;
+use DI\Definition\Helper\DefinitionHelper;
 use DI\Definition\Helper\ObjectDefinitionHelper;
 
 /**
@@ -57,14 +58,11 @@ class SourceChain implements DefinitionSource, MutableDefinitionSource
                     $this->resolveSubDefinition($definition, $i);
                 }
                 if ($definition instanceof ArrayDefinition) {
-                    foreach ($definition->getValues() as $definitionHelper) {
-                        if ($definitionHelper instanceof ObjectDefinitionHelper) {
-                            $subDefinition = $definitionHelper->getDefinition('');
-                            if ($subDefinition instanceof HasSubDefinition) {
-                                $this->resolveSubDefinition($subDefinition, $i);
-                            }
-                            $definitionHelper->setDefinition($subDefinition);
-                        }
+                    /** @var ObjectDefinitionHelper $definitionHelper */
+                    foreach ($definition->getValuesWithSubDefinition() as $definitionHelper) {
+                        $subDefinition = $definitionHelper->getDefinition('');
+                        $this->resolveSubDefinition($subDefinition, $i);
+                        $definitionHelper->setDefinition($subDefinition);
                     }
                 }
 

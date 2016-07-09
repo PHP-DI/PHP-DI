@@ -4,6 +4,7 @@ namespace DI\Test\UnitTest\Definition;
 
 use DI\Definition\ArrayDefinition;
 use DI\Definition\CacheableDefinition;
+use DI\Definition\HasSubDefinition;
 use DI\Scope;
 
 /**
@@ -84,5 +85,19 @@ class ArrayDefinitionTest extends \PHPUnit_Framework_TestCase
     ),
 ]';
         $this->assertEquals($str, (string) $definition);
+    }
+
+    public function test_get_values_with_sub_definitions()
+    {
+        $definition = new ArrayDefinition('foo', [
+            'bar',
+            \DI\object(\stdClass::class),
+            [],
+            1
+        ]);
+        $array = $definition->getValuesWithSubDefinition();
+
+        $this->assertCount(1, $array);
+        $this->assertInstanceOf(HasSubDefinition::class, $array[0]->getDefinition(''));
     }
 }
