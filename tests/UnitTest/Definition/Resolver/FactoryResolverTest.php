@@ -73,7 +73,7 @@ class FactoryResolverTest extends \PHPUnit_Framework_TestCase
      */
     public function should_throw_if_not_enough_parameters()
     {
-        $definition = new FactoryDefinition('foo', function($a, $b, $c) {
+        $definition = new FactoryDefinition('foo', function ($a, $b, $c) {
         });
 
         $this->resolver->resolve($definition);
@@ -85,9 +85,10 @@ class FactoryResolverTest extends \PHPUnit_Framework_TestCase
     public function should_inject_parameters()
     {
         $testCase = $this;
-        $definition = new FactoryDefinition('foo', function($c, $par1, $par2) use($testCase) {
+        $definition = new FactoryDefinition('foo', function ($c, $par1, $par2) use($testCase) {
             $testCase->assertEquals('Parameter 1', $par1);
             $testCase->assertEquals(2, $par2);
+
             return $c;
         }, null, ['par1' => 'Parameter 1', 'par2' => 2]);
 
@@ -95,5 +96,4 @@ class FactoryResolverTest extends \PHPUnit_Framework_TestCase
 
         $this->assertInstanceOf(ContainerInterface::class, $value);
     }
-
 }

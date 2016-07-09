@@ -62,7 +62,7 @@ class FactoryDefinitionHelperTest extends \PHPUnit_Framework_TestCase
      */
     public function allows_to_define_method_parameters()
     {
-        $callable = function($foo) {
+        $callable = function ($foo) {
         };
         $helper = new FactoryDefinitionHelper($callable);
         $helper->factoryParameter('foo', 'bar');
