@@ -87,7 +87,7 @@ class ArrayDefinitionTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($str, (string) $definition);
     }
 
-    public function test_get_values_with_sub_definitions()
+    public function test_get_values_with_sub_definition()
     {
         $definition = new ArrayDefinition('foo', [
             'bar',
