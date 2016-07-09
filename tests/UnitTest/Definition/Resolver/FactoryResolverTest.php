@@ -65,4 +65,22 @@ class FactoryResolverTest extends \PHPUnit_Framework_TestCase
 
         $this->resolver->resolve($definition);
     }
+
+    /**
+     * @test
+     */
+    public function should_inject_parameters()
+    {
+        $testCase = $this;
+        $definition = new FactoryDefinition('foo', function($c, $par1, $par2) use($testCase) {
+            $testCase->assertEquals("Parameter 1", $par1);
+            $testCase->assertEquals(2, $par2);
+            return $c;
+        }, null, ['par1' => "Parameter 1", 'par2' => 2]);
+
+        $value = $this->resolver->resolve($definition);
+
+        $this->assertInstanceOf(ContainerInterface::class, $value);
+    }
+
 }

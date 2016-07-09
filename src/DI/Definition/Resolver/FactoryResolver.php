@@ -10,6 +10,7 @@ use Interop\Container\ContainerInterface;
 use Invoker\Exception\NotCallableException;
 use Invoker\Exception\NotEnoughParametersException;
 use Invoker\Invoker;
+use Invoker\ParameterResolver\AssociativeArrayResolver;
 use Invoker\ParameterResolver\NumericArrayResolver;
 use Invoker\ParameterResolver\ResolverChain;
 
@@ -56,6 +57,7 @@ class FactoryResolver implements DefinitionResolver
         if (! $this->invoker) {
             $parameterResolver = new ResolverChain([
                new FactoryParameterResolver($this->container),
+               new AssociativeArrayResolver,
                new NumericArrayResolver,
             ]);
 
@@ -63,7 +65,9 @@ class FactoryResolver implements DefinitionResolver
         }
 
         try {
-            return $this->invoker->call($definition->getCallable(), [$this->container, $definition]);
+            $providedParams = [$this->container, $definition];
+            $providedParams = array_merge($providedParams, $definition->getParameters());
+            return $this->invoker->call($definition->getCallable(), $providedParams);
         } catch (NotCallableException $e) {
             throw new DefinitionException(sprintf(
                 'Entry "%s" cannot be resolved: factory %s',

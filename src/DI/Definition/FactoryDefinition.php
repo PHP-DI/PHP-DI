@@ -29,15 +29,23 @@ class FactoryDefinition implements Definition
     private $factory;
 
     /**
-     * @param string      $name    Entry name
-     * @param callable    $factory Callable that returns the value associated to the entry name.
-     * @param string|null $scope
+     * Factory parameters
+     * @var array
      */
-    public function __construct($name, $factory, $scope = null)
+    private $parameters = [];
+
+    /**
+     * @param string      $name       Entry name
+     * @param callable    $factory    Callable that returns the value associated to the entry name.
+     * @param string|null $scope
+     * @param array       $parameters Parameters to be passed to the callable
+     */
+    public function __construct($name, $factory, $scope = null, $parameters = [])
     {
         $this->name = $name;
         $this->factory = $factory;
         $this->scope = $scope;
+        $this->parameters = $parameters;
     }
 
     /**
@@ -64,6 +72,14 @@ class FactoryDefinition implements Definition
     public function getCallable()
     {
         return $this->factory;
+    }
+
+    /**
+     * @return array Array containing the parameters to be passed to the callable, indexed by name.
+     */
+    public function getParameters()
+    {
+        return $this->parameters;
     }
 
     public function __toString()
