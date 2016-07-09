@@ -85,7 +85,7 @@ class FactoryResolverTest extends \PHPUnit_Framework_TestCase
     public function should_inject_parameters()
     {
         $testCase = $this;
-        $definition = new FactoryDefinition('foo', function ($c, $par1, $par2) use($testCase) {
+        $definition = new FactoryDefinition('foo', function ($c, $par1, $par2) use ($testCase) {
             $testCase->assertEquals('Parameter 1', $par1);
             $testCase->assertEquals(2, $par2);
 
