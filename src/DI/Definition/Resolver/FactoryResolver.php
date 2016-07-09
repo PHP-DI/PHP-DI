@@ -67,6 +67,7 @@ class FactoryResolver implements DefinitionResolver
         try {
             $providedParams = [$this->container, $definition];
             $providedParams = array_merge($providedParams, $definition->getParameters());
+            
             return $this->invoker->call($definition->getCallable(), $providedParams);
         } catch (NotCallableException $e) {
             throw new DefinitionException(sprintf(

@@ -72,7 +72,8 @@ class FactoryDefinitionTest extends \PHPUnit_Framework_TestCase
     public function should_accept_parameters()
     {
         $parameters = ['flag' => true];
-        $definition = new FactoryDefinition('foo', function() {}, null, $parameters);
+        $definition = new FactoryDefinition('foo', function() {
+        }, null, $parameters);
 
         $this->assertEquals($parameters, $definition->getParameters());
     }

@@ -73,10 +73,10 @@ class FactoryResolverTest extends \PHPUnit_Framework_TestCase
     {
         $testCase = $this;
         $definition = new FactoryDefinition('foo', function($c, $par1, $par2) use($testCase) {
-            $testCase->assertEquals("Parameter 1", $par1);
+            $testCase->assertEquals('Parameter 1', $par1);
             $testCase->assertEquals(2, $par2);
             return $c;
-        }, null, ['par1' => "Parameter 1", 'par2' => 2]);
+        }, null, ['par1' => 'Parameter 1', 'par2' => 2]);
 
         $value = $this->resolver->resolve($definition);
 

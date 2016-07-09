@@ -29,7 +29,7 @@ class FactoryDefinition implements Definition
     private $factory;
 
     /**
-     * Factory parameters
+     * Factory parameters.
      * @var array
      */
     private $parameters = [];
