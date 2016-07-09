@@ -100,19 +100,21 @@ class FactoryResolver implements DefinitionResolver
         return true;
     }
 
-    private function resolveExtraParams(array $params) {
+    private function resolveExtraParams(array $params)
+    {
         $resolved = [];
-        foreach($params as $key => $value) {
-            if($value instanceof DefinitionHelper) {
+        foreach ($params as $key => $value) {
+            if ($value instanceof DefinitionHelper) {
                 // As per ObjectCreator::injectProperty, use '' for an anonymous sub-definition
                 $value = $value->getDefinition('');
             }
-            if(!$value instanceof Definition) {
+            if (!$value instanceof Definition) {
                 $resolved[$key] = $value;
             } else {
                 $resolved[$key] = $this->resolver->resolve($value);
             }
         }
+
         return $resolved;
     }
 }
