@@ -112,7 +112,6 @@ class FactoryResolverTest extends \PHPUnit_Framework_TestCase
      */
     public function should_resolve_nested_definition_in_parameters()
     {
-        $this->fail();
         $definition = new FactoryDefinition('foo', function ($par1) {
             return new FixtureClass($par1);
         }, null, ['par1' => \DI\object(NoConstructor::class)]);

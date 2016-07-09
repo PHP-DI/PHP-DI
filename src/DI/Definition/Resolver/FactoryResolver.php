@@ -5,6 +5,7 @@ namespace DI\Definition\Resolver;
 use DI\Definition\Definition;
 use DI\Definition\Exception\DefinitionException;
 use DI\Definition\FactoryDefinition;
+use DI\Definition\Helper\DefinitionHelper;
 use DI\Invoker\FactoryParameterResolver;
 use Interop\Container\ContainerInterface;
 use Invoker\Exception\NotCallableException;
@@ -72,7 +73,8 @@ class FactoryResolver implements DefinitionResolver
 
         try {
             $providedParams = [$this->container, $definition];
-            $providedParams = array_merge($providedParams, $definition->getParameters());
+            $extraParams = $this->resolveExtraParams($definition->getParameters());
+            $providedParams = array_merge($providedParams, $extraParams);
 
             return $this->invoker->call($definition->getCallable(), $providedParams);
         } catch (NotCallableException $e) {
@@ -96,5 +98,21 @@ class FactoryResolver implements DefinitionResolver
     public function isResolvable(Definition $definition, array $parameters = [])
     {
         return true;
+    }
+
+    private function resolveExtraParams(array $params) {
+        $resolved = [];
+        foreach($params as $key => $value) {
+            if($value instanceof DefinitionHelper) {
+                // As per ObjectCreator::injectProperty, use '' for an anonymous sub-definition
+                $value = $value->getDefinition('');
+            }
+            if(!$value instanceof Definition) {
+                $resolved[$key] = $value;
+            } else {
+                $resolved[$key] = $this->resolver->resolve($value);
+            }
+        }
+        return $resolved;
     }
 }
