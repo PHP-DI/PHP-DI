@@ -68,6 +68,19 @@ class FactoryResolverTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @test
+     * @expectedException  \DI\Definition\Exception\DefinitionException
+     * @expectedExceptionMessage Entry "foo" cannot be resolved: Unable to invoke the callable because no value was given for parameter 3 ($c)
+     */
+    public function should_throw_if_not_enough_parameters()
+    {
+        $definition = new FactoryDefinition('foo', function($a, $b, $c) {
+        });
+
+        $this->resolver->resolve($definition);
+    }
+
+    /**
+     * @test
      */
     public function should_inject_parameters()
     {
