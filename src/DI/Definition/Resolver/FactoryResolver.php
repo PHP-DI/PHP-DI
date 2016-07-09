@@ -33,14 +33,20 @@ class FactoryResolver implements DefinitionResolver
     private $invoker;
 
     /**
+     * @var DefinitionResolver
+     */
+    private $resolver;
+
+    /**
      * The resolver needs a container. This container will be passed to the factory as a parameter
      * so that the factory can access other entries of the container.
      *
      * @param ContainerInterface $container
      */
-    public function __construct(ContainerInterface $container)
+    public function __construct(ContainerInterface $container, DefinitionResolver $resolver)
     {
         $this->container = $container;
+        $this->resolver = $resolver;
     }
 
     /**
