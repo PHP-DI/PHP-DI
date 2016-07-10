@@ -65,7 +65,7 @@ class FactoryDefinitionHelperTest extends \PHPUnit_Framework_TestCase
         $callable = function ($foo) {
         };
         $helper = new FactoryDefinitionHelper($callable);
-        $helper->factoryParameter('foo', 'bar');
+        $helper->parameter('foo', 'bar');
         $definition = $helper->getDefinition('foo');
 
         $this->assertEquals($definition->getParameters(), ['foo' => 'bar']);

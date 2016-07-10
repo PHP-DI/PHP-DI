@@ -82,7 +82,7 @@ class FactoryDefinitionHelper implements DefinitionHelper
      *
      * @return FactoryDefinitionHelper
      */
-    public function factoryParameter($parameter, $value)
+    public function parameter($parameter, $value)
     {
         $this->parameters[$parameter] = $value;
 
