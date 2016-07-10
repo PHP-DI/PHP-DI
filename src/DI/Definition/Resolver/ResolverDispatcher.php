@@ -104,7 +104,7 @@ class ResolverDispatcher implements DefinitionResolver
                 return $this->decoratorResolver;
             case $definition instanceof \DI\Definition\FactoryDefinition:
                 if (! $this->factoryResolver) {
-                    $this->factoryResolver = new FactoryResolver($this->container);
+                    $this->factoryResolver = new FactoryResolver($this->container, $this);
                 }
 
                 return $this->factoryResolver;

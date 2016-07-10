@@ -151,9 +151,128 @@ class FactoryDefinitionTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf(ContainerInterface::class, $factory[2]);
     }
 
+    public function test_value_gets_injected_via_parameter()
+    {
+        $container = $this->createContainer([
+            'factory' => \DI\factory(function ($value) {
+                return $value;
+            })->parameter('value', 'Foo')
+        ]);
+
+        $factory = $container->get('factory');
+
+        $this->assertEquals('Foo', $factory);
+    }
+
+    public function test_named_entry_gets_injected_via_parameter()
+    {
+        $container = $this->createContainer([
+            'basicClass' => \DI\object(\stdClass::class),
+            'factory' => \DI\factory(function ($entry) {
+                return $entry;
+            })->parameter('entry', \DI\get('basicClass'))
+        ]);
+
+        $factory = $container->get('factory');
+
+        $this->assertInstanceOf(\stdClass::class, $factory);
+    }
+
+    public function test_sub_entry_gets_injected_via_parameter()
+    {
+        $container = $this->createContainer([
+            'factory' => \DI\factory(function ($entry) {
+                return $entry;
+            })->parameter('entry', \DI\object(\stdClass::class))
+        ]);
+
+        $factory = $container->get('factory');
+
+        $this->assertInstanceOf(\stdClass::class, $factory);
+    }
+
+    public function test_class_gets_injected_via_parameter()
+    {
+        $container = $this->createContainer([
+            'factory' => \DI\factory(function ($entry) {
+                return $entry;
+            })->parameter('entry', \DI\get(\stdClass::class))
+        ]);
+
+        $factory = $container->get('factory');
+
+        $this->assertInstanceOf(\stdClass::class, $factory);
+    }
+
+    public function test_multiple_injections_via_parameter()
+    {
+        $container = $this->createContainer([
+            'secret' => 'Bar',
+            'factory' => \DI\factory(function ($a, $b, $c) {
+                return [$a, $b, $c];
+            })->parameter('a', \DI\get('secret'))
+              ->parameter('b', \DI\object(FactoryDefinitionTestClass::class))
+              ->parameter('c', 'Foo')
+        ]);
+
+        $factory = $container->get('factory');
+
+        $this->assertEquals('Bar', $factory[0]);
+        $this->assertInstanceOf(FactoryDefinitionTestClass::class, $factory[1]);
+        $this->assertEquals('Foo', $factory[2]);
+    }
+
+    public function test_container_and_requested_entry_and_typehints_get_injected_with_parameter()
+    {
+        $container = $this->createContainer([
+            'secret' => 'Bar',
+            'factory' => \DI\factory(function ($container, $requestedEntry, \stdClass $object, $value) {
+                return [$container, $requestedEntry, $object, $value];
+            })->parameter('value', \DI\get('secret'))
+        ]);
+
+        $factory = $container->get('factory');
+
+        $this->assertInstanceOf(ContainerInterface::class, $factory[0]);
+        $this->assertInstanceOf(RequestedEntry::class, $factory[1]);
+        $this->assertInstanceOf('stdClass', $factory[2]);
+        $this->assertEquals('Bar', $factory[3]);
+    }
+
+    public function test_container_and_requested_entry_and_typehints_get_injected_in_arbitrary_positions_with_parameter()
+    {
+        $container = $this->createContainer([
+            'secret' => 'Bar',
+            'factory' => \DI\factory(function (\stdClass $object, RequestedEntry $requestedEntry, $value, ContainerInterface $container) {
+                return [$object, $requestedEntry, $value, $container];
+            })->parameter('value', \DI\get('secret'))
+        ]);
+
+        $factory = $container->get('factory');
+
+        $this->assertInstanceOf('stdClass', $factory[0]);
+        $this->assertInstanceOf(RequestedEntry::class, $factory[1]);
+        $this->assertEquals('Bar', $factory[2]);
+        $this->assertInstanceOf(ContainerInterface::class, $factory[3]);
+    }
+
+    /**
+     * @expectedException \DI\NotFoundException
+     * @expectedExceptionMessage No entry or class found for 'missing'
+     */
+    public function test_resolve_failure_on_parameter()
+    {
+        $container = $this->createContainer([
+            'factory' => \DI\factory(function($foo) {
+                return $foo;
+            })->parameter('foo', \DI\get('missing'))
+        ]);
+        $container->get('factory');
+    }
+
     /**
      * @expectedException \DI\Definition\Exception\DefinitionException
-     * @expectedExceptionMessage Entry "foo" cannot be resolved: factory "Hello World" is neither a callable nor a valid container entry
+     * @expectedExceptionMessageRegExp /Entry "foo" cannot be resolved: factory ('|")Hello World('|") is neither a callable nor a valid container entry/
      */
     public function test_not_callable_factory_definition()
     {
