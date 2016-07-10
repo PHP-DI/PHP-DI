@@ -29,6 +29,12 @@ class DefinitionArray implements DefinitionSource, MutableDefinitionSource
     private $definitions = [];
 
     /**
+     * Cache of wildcard definitions.
+     * @var array
+     */
+    private $wildcardDefinitions;
+
+    /**
      * @param array $definitions
      */
     public function __construct(array $definitions = [])
@@ -44,6 +50,9 @@ class DefinitionArray implements DefinitionSource, MutableDefinitionSource
         // The newly added data prevails
         // "for keys that exist in both arrays, the elements from the left-hand array will be used"
         $this->definitions = $definitions + $this->definitions;
+
+        // Clear cache
+        $this->wildcardDefinitions = null;
     }
 
     /**
@@ -52,6 +61,9 @@ class DefinitionArray implements DefinitionSource, MutableDefinitionSource
     public function addDefinition(Definition $definition)
     {
         $this->definitions[$definition->getName()] = $definition;
+
+        // Clear cache
+        $this->wildcardDefinitions = null;
     }
 
     /**
@@ -64,12 +76,18 @@ class DefinitionArray implements DefinitionSource, MutableDefinitionSource
             return $this->castDefinition($this->definitions[$name], $name);
         }
 
-        // Look if there are wildcards definitions
-        foreach ($this->definitions as $key => $definition) {
-            if (strpos($key, self::WILDCARD) === false) {
-                continue;
+        // Build the cache of wildcard definitions
+        if ($this->wildcardDefinitions === null) {
+            $this->wildcardDefinitions = [];
+            foreach ($this->definitions as $key => $definition) {
+                if (strpos($key, self::WILDCARD) !== false) {
+                    $this->wildcardDefinitions[$key] = $definition;
+                }
             }
+        }
 
+        // Look in wildcards definitions
+        foreach ($this->wildcardDefinitions as $key => $definition) {
             // Turn the pattern into a regex
             $key = preg_quote($key);
             $key = '#' . str_replace('\\' . self::WILDCARD, self::WILDCARD_PATTERN, $key) . '#';
