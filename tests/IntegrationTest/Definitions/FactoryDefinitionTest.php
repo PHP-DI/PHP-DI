@@ -168,7 +168,7 @@ class FactoryDefinitionTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException \DI\Definition\Exception\DefinitionException
-     * @expectedExceptionMessage Entry "foo" cannot be resolved: factory "Hello World" is neither a callable nor a valid container entry
+     * @expectedExceptionMessage Entry "foo" cannot be resolved: factory 'Hello World' is neither a callable nor a valid container entry
      */
     public function test_not_callable_factory_definition()
     {
