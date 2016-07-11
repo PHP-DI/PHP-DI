@@ -144,7 +144,7 @@ services:
         class: 'AppBundle\\Service\\UserService'
         arguments:
             # UserRepository is created by PHP-DI
-            - 'AppBundle\\Service\\UserRepository'
+            - '@AppBundle\\Service\\UserRepository'
 ```
 
 ### Service name aliases
