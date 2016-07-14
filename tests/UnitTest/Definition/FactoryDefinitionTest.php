@@ -21,6 +21,8 @@ class FactoryDefinitionTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($callable, $definition->getCallable());
         // Default scope
         $this->assertEquals(Scope::SINGLETON, $definition->getScope());
+        // Default parameters
+        $this->assertEquals([], $definition->getParameters());
     }
 
     /**
@@ -62,5 +64,17 @@ class FactoryDefinitionTest extends \PHPUnit_Framework_TestCase
     public function should_cast_to_string()
     {
         $this->assertEquals('Factory', new FactoryDefinition('', 'bar'));
+    }
+
+    /**
+     * @test
+     */
+    public function should_accept_parameters()
+    {
+        $parameters = ['flag' => true];
+        $definition = new FactoryDefinition('foo', function () {
+        }, null, $parameters);
+
+        $this->assertEquals($parameters, $definition->getParameters());
     }
 }

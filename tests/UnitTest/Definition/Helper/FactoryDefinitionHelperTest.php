@@ -56,4 +56,18 @@ class FactoryDefinitionHelperTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals(Scope::SINGLETON, $definition->getScope());
     }
+
+    /**
+     * @test
+     */
+    public function allows_to_define_method_parameters()
+    {
+        $callable = function ($foo) {
+        };
+        $helper = new FactoryDefinitionHelper($callable);
+        $helper->parameter('foo', 'bar');
+        $definition = $helper->getDefinition('foo');
+
+        $this->assertEquals($definition->getParameters(), ['foo' => 'bar']);
+    }
 }
