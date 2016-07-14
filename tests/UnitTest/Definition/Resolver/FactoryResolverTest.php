@@ -61,9 +61,7 @@ class FactoryResolverTest extends \PHPUnit_Framework_TestCase
 
         $definition = new FactoryDefinition('foo', 'Hello world');
 
-        $container->expects($this->once())
-            ->method('get')
-            ->with('Hello world')
+        $container->method('get')
             ->willThrowException(new NotFoundException);
 
         $resolver->resolve($definition);
