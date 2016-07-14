@@ -1,5 +1,7 @@
 <?php
 
+use DI\Test\PerformanceTest\Get\A;
+use DI\Test\PerformanceTest\Get\B;
 use Interop\Container\ContainerInterface;
 
 return [
@@ -16,4 +18,9 @@ return [
         'bar',
         \DI\get('string'),
     ],
+
+    A::class  => \DI\object()
+        ->constructorParameter('value', \DI\get('string')),
+    B::class  => \DI\object()
+        ->method('setValue', \DI\string('Wow: {string}'), \DI\get('value')),
 ];
