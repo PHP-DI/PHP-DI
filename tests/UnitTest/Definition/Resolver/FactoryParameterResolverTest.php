@@ -2,8 +2,10 @@
 
 namespace DI\Test\UnitTest\Definition\Resolver;
 
+use DI\Container;
 use DI\Factory\RequestedEntry;
 use DI\Invoker\FactoryParameterResolver;
+use DI\Test\UnitTest\Definition\Resolver\Fixture\NoConstructor;
 use EasyMock\EasyMock;
 use Interop\Container\ContainerInterface;
 
@@ -94,5 +96,56 @@ class FactoryParameterResolverTest extends \PHPUnit_Framework_TestCase
         $parameters = $this->resolver->getParameters($reflection, [$this->container, $this->requestedEntry], []);
 
         $this->assertCount(0, $parameters);
+    }
+
+    /**
+     * @test
+     */
+    public function should_not_overwrite_resolved_with_container_or_entry()
+    {
+        $callable = function (ContainerInterface $container, RequestedEntry $entry, $other) {
+        };
+        $reflection = new \ReflectionFunction($callable);
+
+        $mockContainer = $this->easyMock(Container::class);
+        $mockEntry = $this->easyMock(RequestedEntry::class);
+
+        $resolvedParams = [$mockContainer, $mockEntry, 'Foo'];
+
+        $parameters = $this->resolver->getParameters($reflection, [$this->container, $this->requestedEntry], $resolvedParams);
+
+        $this->assertCount(3, $parameters);
+        $this->assertSame($parameters[0], $mockContainer);
+        $this->assertSame($parameters[1], $mockEntry);
+        $this->assertEquals($parameters[2], 'Foo');
+    }
+
+    /**
+     * @test
+     */
+    public function should_not_overwrite_resolved_from_container()
+    {
+        $callable = function (NoConstructor $nc) {
+        };
+        $reflection = new \ReflectionFunction($callable);
+
+        $ncMock = $this->easyMock(NoConstructor::class);
+        $ncReal = new NoConstructor();
+
+        $preparedContainer = clone $this->container;
+        $preparedContainer->expects($this->once())
+                          ->method('has')
+                          ->with(NoConstructor::class)
+                          ->willReturn(true);
+        $preparedContainer->expects($this->once())
+                          ->method('get')
+                          ->with(NoConstructor::class)
+                          ->willReturn($ncReal);
+
+        $resolvedParams = [$ncMock];
+        $parameters = $this->resolver->getParameters($reflection, [$this->container, $this->requestedEntry], $resolvedParams);
+
+        $this->assertCount(1, $parameters);
+        $this->assertSame($parameters[0], $ncMock);
     }
 }

@@ -4,6 +4,7 @@ namespace DI\Test\IntegrationTest\Definitions;
 
 use DI\ContainerBuilder;
 use DI\Factory\RequestedEntry;
+use DI\Test\UnitTest\Definition\Resolver\Fixture\NoConstructor;
 use Interop\Container\ContainerInterface;
 
 /**
@@ -269,6 +270,34 @@ class FactoryDefinitionTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf(RequestedEntry::class, $factory[1]);
         $this->assertEquals('Bar', $factory[2]);
         $this->assertInstanceOf(ContainerInterface::class, $factory[3]);
+    }
+
+    public function test_parameters_take_priority_over_container()
+    {
+        $ncInst = new NoConstructor();
+
+        $container = $this->createContainer([
+            'factory' => \DI\factory(function (NoConstructor $nc) {
+                return $nc;
+            })->parameter('nc', $ncInst)
+        ]);
+
+        $factory = $container->get('factory');
+
+        $this->assertSame($ncInst, $factory);
+    }
+
+    public function test_parameters_take_priority_over_default_value()
+    {
+        $container = $this->createContainer([
+            'factory' => \DI\factory(function ($foo = 'Foo') {
+                return $foo;
+            })->parameter('foo', 'Bar')
+        ]);
+
+        $factory = $container->get('factory');
+
+        $this->assertEquals('Bar', $factory);
     }
 
     /**
