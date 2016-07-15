@@ -279,7 +279,7 @@ class FactoryDefinitionTest extends \PHPUnit_Framework_TestCase
         $container = $this->createContainer([
             'factory' => \DI\factory(function (NoConstructor $nc) {
                 return $nc;
-            })->parameter('nc', $ncInst)
+            })->parameter('nc', $ncInst),
         ]);
 
         $factory = $container->get('factory');
@@ -292,7 +292,7 @@ class FactoryDefinitionTest extends \PHPUnit_Framework_TestCase
         $container = $this->createContainer([
             'factory' => \DI\factory(function ($foo = 'Foo') {
                 return $foo;
-            })->parameter('foo', 'Bar')
+            })->parameter('foo', 'Bar'),
         ]);
 
         $factory = $container->get('factory');
