@@ -9,6 +9,9 @@ use ReflectionFunctionAbstract;
 /**
  * Inject the container, the definition or any other service using type-hints.
  *
+ * {@internal This class is similar to TypeHintingResolver and TypeHintingContainerResolver,
+ *            we use this instead for performance reasons}
+ *
  * @author Quim Calpe <quim@kalpe.com>
  * @author Matthieu Napoli <matthieu@mnapoli.fr>
  */
@@ -29,7 +32,14 @@ class FactoryParameterResolver implements ParameterResolver
         array $providedParameters,
         array $resolvedParameters
     ) {
-        foreach ($reflection->getParameters() as $index => $parameter) {
+        $parameters = $reflection->getParameters();
+
+        // Skip parameters already resolved
+        if (! empty($resolvedParameters)) {
+            $parameters = array_diff_key($parameters, $resolvedParameters);
+        }
+
+        foreach ($parameters as $index => $parameter) {
             $parameterClass = $parameter->getClass();
 
             if (!$parameterClass) {

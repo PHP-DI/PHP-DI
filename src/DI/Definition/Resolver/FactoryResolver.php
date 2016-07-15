@@ -63,8 +63,8 @@ class FactoryResolver implements DefinitionResolver
     {
         if (! $this->invoker) {
             $parameterResolver = new ResolverChain([
-               new FactoryParameterResolver($this->container),
                new AssociativeArrayResolver,
+               new FactoryParameterResolver($this->container),
                new NumericArrayResolver,
             ]);
 
