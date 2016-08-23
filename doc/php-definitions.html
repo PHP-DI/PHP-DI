@@ -347,7 +347,12 @@ return [
         return new Foo($logger);
     },
 ];</code></pre>
-<p>The container can also be injected (as seen in the first example) and used to retrieve entries, like values, that can't be automatically injected via type -hinting. If you inject the container, you should type-hint against the interface <code>Interop\Container\ContainerInterface</code> instead of the implementation <code>DI\Container</code>.</p>
+<p>The <code>DI\factory()</code> helper provides a <code>parameter()</code> method to allow you to specify entries, like values, that can't be automatically injected via type-hinting.</p>
+<pre><code class="language-php">return [
+    'Database' =&gt; DI\factory(function ($host) {...})
+        -&gt;parameter('host', DI\get('db.host')),
+];</code></pre>
+<p>This can also be done by injecting the container itself, as seen in the first example. When injecting the container, you should type-hint against the interface <code>Interop\Container\ContainerInterface</code> instead of the implementation <code>DI\Container</code>.</p>
 <p>Factories can be any PHP callable, so they can also be class methods:</p>
 <pre><code class="language-php">class FooFactory
 {

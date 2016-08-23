@@ -12,7 +12,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>Syntactic sugar in PHP-DI 5 - The Dependency Injection Container for humans</title>
+    <title>PHP-DI 5.4 released - The Dependency Injection Container for humans</title>
     <meta name="description" content="PHP-DI is a Dependency Injection Container for PHP that intends to be practical and powerful">
 
     <link rel="canonical" href="http://php-di.org" />
@@ -67,79 +67,62 @@
 
                 
     <article>
-        <h1>Syntactic sugar in PHP-DI 5</h1>
+        <h1>PHP-DI 5.4 released</h1>
 
         <p class="article-information">
-            Posted by Matthieu Napoli on February 4th 2015
+            Posted by Matthieu Napoli on August 23rd, 2016
         </p>
 
-        <p>It's been quite some time since there was a bit of news here. The reason is that a lot of work has been done for PHP-DI 5! It is not yet ready, but it is coming along great!</p>
-<p>I am not going to list everything that will be included in this next major version today. For now I'll simply give you a glimpse of the syntactic sugar that it will bring.</p>
-<p>Here is an example of a config file using <strong>PHP-DI 4</strong> and PHP 5.6. I show <code>use function</code> statements explicitly to minimize confusion for those unfamiliar with PHP 5.6.</p>
-<pre><code class="language-php">&lt;?php
-
-use ...;
-use function DI\factory;
-use function DI\link;
-use function DI\object;
-
-return [
-    'path.root' =&gt; __DIR__ . '/..',
-
-    'path.cache' =&gt; factory(function (ContainerInterface $c) {
-        return $c-&gt;get('path.root') . '/var/cache';
-    }),
-
-    PdfGenerator::class =&gt; factory(function () {
-        return ...;
-    }),
-
-    'notification.handlers' =&gt; factory(function (ContainerInterface $c) {
-        return [
-            $c-&gt;get(EmailHandler::class),
-            $c-&gt;get(TextHandler::class),
-            $c-&gt;get(PushHandler::class),
-        ];
-    }),
-
-    Cache::class =&gt; object(JsonFileCache::class)
-        -&gt;constructor(link('cache.filename')),
-    'cache.filename' =&gt; factory(function (ContainerInterface $c) {
-        return $c-&gt;get('path.cache') . '/cache.json';
-    }),
-
+        <p>I am happy to announce that PHP-DI version 5.4 has been released. Here is the list of changes in this new version.</p>
+<h2 id="factory-parameters">Factory parameters</h2>
+<p>Up to PHP-DI 5.3, factories could take as parameters:</p>
+<ul>
+<li>the container</li>
+<li>the requested entry name, by type-hinting <code>DI\Factory\RequestedEntry</code></li>
+<li>services, by type-hinting each service (PHP-DI would then use autowiring)</li>
+</ul>
+<p>With PHP-DI 5.4 you can now configure explicitly each parameter of the factory with the following syntax:</p>
+<pre><code class="language-php">return [
+    'Database' =&gt; DI\factory(function ($host) {
+        ...
+    })-&gt;parameter('host', DI\get('db.host')),
 ];</code></pre>
-<p>And here is the same config with the future <strong>PHP-DI 5</strong>:</p>
-<pre><code class="language-php">&lt;?php
-
-use ...;
-use function ...;
+<p>You can of course mix type-hinted parameters and configured parameters:</p>
+<pre><code class="language-php">return [
+    'Database' =&gt; DI\factory(function ($host, LoggerInterface $logger) {
+        ...
+    })-&gt;parameter('host', DI\get('db.host')),
+];</code></pre>
+<p>And of course it works with class methods too. A perfect example to illustrate that is <a href="http://docs.doctrine-project.org/projects/doctrine-orm/en/latest/reference/configuration.html#obtaining-an-entitymanager">Doctrine's entity manager factory</a>:</p>
+<pre><code class="language-php">use Doctrine\ORM\EntityManager;
 
 return [
-    'path.root' =&gt; __DIR__ . '/..',
+    EntityManager::class =&gt; DI\factory([EntityManager::class, 'create'])
+        -&gt;parameter('connection', DI\get('db.params'))
+        -&gt;parameter('config', DI\get('doctrine.config')),
 
-    // new DI\string() helper to write string expressions
-    'path.cache' =&gt; string('{path.root}/var/cache'),
-
-    // DI\factory is now optional when using closures
-    PdfGenerator::class =&gt; function () {
-        return ...;
-    },
-
-    // array of services, yay!
-    'notification.handlers' =&gt; [
-        link(EmailHandler::class),
-        link(TextHandler::class),
-        link(PushHandler::class),
+    'db.params' =&gt; [
+        'driver'   =&gt; 'pdo_mysql',
+        'user'     =&gt; 'root',
+        'password' =&gt; '',
+        'dbname'   =&gt; 'foo',
     ],
-
-    // inline definitions in other definitions!
-    Cache::class =&gt; object(JsonFileCache::class)
-        -&gt;constructor(string('{path.cache}/cache.json')),
-
+    'doctrine.config' =&gt; ...,
 ];</code></pre>
-<p>I will not get in more details today, things can always change before the release. Be also aware that <strong>syntactic sugar is absolutely not the major feature for PHP-DI 5</strong> :) But more on that in a future article!</p>
-<p>If you have any comment or question, please use the comment box below or pop up on <a href="https://github.com/PHP-DI/PHP-DI">GitHub</a> or in the <a href="https://gitter.im/PHP-DI/PHP-DI">Gitter chat</a>.</p>
+<p>You can read the original issue: <a href="https://github.com/PHP-DI/PHP-DI/issues/362">#362</a>, as well as all the pull requests: <a href="https://github.com/PHP-DI/PHP-DI/pull/428">#428</a>, <a href="https://github.com/PHP-DI/PHP-DI/pull/430">#430</a>, <a href="https://github.com/PHP-DI/PHP-DI/pull/431">#431</a> and <a href="https://github.com/PHP-DI/PHP-DI/pull/432">#432</a>. You can find that feature in the <a href="http://php-di.org/doc/php-definitions.html#factories">&quot;factories&quot; documentation</a>.</p>
+<p>This feature was contributed by <a href="https://github.com/predakanga">@predakanga</a>.</p>
+<h2 id="other-improvements">Other improvements</h2>
+<ul>
+<li><a href="https://github.com/PHP-DI/PHP-DI/pull/429">#429</a>: performance improvements in definition resolution.</li>
+<li><a href="https://github.com/PHP-DI/PHP-DI/issues/421">#421</a>: once a <code>ContainerBuilder</code> has built a container, it is locked to prevent confusion when adding new definitions to it.</li>
+<li><a href="https://github.com/PHP-DI/PHP-DI/pull/423">#423</a>: improved exception messages.</li>
+</ul>
+<h2 id="other-news">Other news</h2>
+<p>In other news the project passed 800 stars on GitHub, has now received contributions from 39 different people and has been installed more than 200 000 times through Packagist since its move to the PHP-DI organization.</p>
+<p>PHP-DI is now also used in <a href="https://pimcore.org/"><strong>Pimcore</strong></a>, an open source content management platform. You can read about it in their documentation: <a href="https://www.pimcore.org/wiki/pages/viewpage.action?pageId=22282310">Dependency injection in Pimcore</a>.</p>
+<p>And just for fun here is a graph showing the evolution of the traffic (per week) on <a href="http://php-di.org">PHP-DI's website</a> since 2013:</p>
+<p><img src="20-visits.png" alt="" /></p>
+<p>Thanks to all contributors and users!</p>
     </article>
 
     <h3>
