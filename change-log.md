@@ -1,5 +1,26 @@
 # Change log
 
+## 5.4
+
+Read the [news entry](news/20-php-di-5-4-released.md).
+
+New features:
+
+- [#362](https://github.com/PHP-DI/PHP-DI/issues/362) implemented in [#428](https://github.com/PHP-DI/PHP-DI/pull/428), [#430](https://github.com/PHP-DI/PHP-DI/pull/430), [#431](https://github.com/PHP-DI/PHP-DI/pull/431) and [#432](https://github.com/PHP-DI/PHP-DI/pull/432): factory parameters can now be configured, for example:
+    ```php
+    return [
+        'Database' => DI\factory(function ($host) {...})
+            ->parameter('host', DI\get('db.host')),
+    ];
+    ```
+    Read the [factories documentation](http://php-di.org/doc/php-definitions.html#factories) to learn more. Feature implemented by [@predakanga](https://github.com/predakanga).
+
+Improvements:
+
+- [#429](https://github.com/PHP-DI/PHP-DI/pull/429): performance improvements in definition resolution (by [@mnapoli](https://github.com/mnapoli))
+- [#421](https://github.com/PHP-DI/PHP-DI/issues/421): once a `ContainerBuilder` has built a container, it is locked to prevent confusion when adding new definitions to it (by [@mnapoli](https://github.com/mnapoli))
+- [#423](https://github.com/PHP-DI/PHP-DI/pull/423): improved exception messages (by [@mnapoli](https://github.com/mnapoli))
+
 ## 5.3
 
 Read the [news entry](news/19-php-di-5-3-released.md).
