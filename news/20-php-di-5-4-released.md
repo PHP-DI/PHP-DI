@@ -71,7 +71,7 @@ In other news the project passed 800 stars on GitHub, has now received contribut
 
 PHP-DI is now also used in [**Pimcore**](https://pimcore.org/), an open source content management platform. You can read about it in their documentation: [Dependency injection in Pimcore](https://www.pimcore.org/wiki/pages/viewpage.action?pageId=22282310).
 
-Here is a graph showing the evolution of the traffic (per week) on [PHP-DI's website](http://php-di.org):
+And just for fun here is a graph showing the evolution of the traffic (per week) on [PHP-DI's website](http://php-di.org) since 2013:
 
 ![](20-visits.png)
 
