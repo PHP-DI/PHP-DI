@@ -79,6 +79,12 @@ class ContainerBuilder
     private $definitionSources = [];
 
     /**
+     * Whether the container has already been built.
+     * @var bool
+     */
+    private $locked = false;
+
+    /**
      * Build a container configured for the dev environment.
      *
      * @return Container
@@ -125,6 +131,8 @@ class ContainerBuilder
 
         $proxyFactory = new ProxyFactory($this->writeProxiesToFile, $this->proxyDirectory);
 
+        $this->locked = true;
+
         $containerClass = $this->containerClass;
 
         return new $containerClass($source, $proxyFactory, $this->wrapperContainer);
@@ -140,6 +148,8 @@ class ContainerBuilder
      */
     public function useAutowiring($bool)
     {
+        $this->ensureNotLocked();
+
         $this->useAutowiring = $bool;
 
         return $this;
@@ -155,6 +165,8 @@ class ContainerBuilder
      */
     public function useAnnotations($bool)
     {
+        $this->ensureNotLocked();
+
         $this->useAnnotations = $bool;
 
         return $this;
@@ -168,6 +180,8 @@ class ContainerBuilder
      */
     public function ignorePhpDocErrors($bool)
     {
+        $this->ensureNotLocked();
+
         $this->ignorePhpDocErrors = $bool;
 
         return $this;
@@ -181,6 +195,8 @@ class ContainerBuilder
      */
     public function setDefinitionCache(Cache $cache)
     {
+        $this->ensureNotLocked();
+
         $this->cache = $cache;
 
         return $this;
@@ -199,6 +215,8 @@ class ContainerBuilder
      */
     public function writeProxiesToFile($writeToFile, $proxyDirectory = null)
     {
+        $this->ensureNotLocked();
+
         $this->writeProxiesToFile = $writeToFile;
 
         if ($writeToFile && $proxyDirectory === null) {
@@ -220,6 +238,8 @@ class ContainerBuilder
      */
     public function wrapContainer(ContainerInterface $otherContainer)
     {
+        $this->ensureNotLocked();
+
         $this->wrapperContainer = $otherContainer;
 
         return $this;
@@ -235,6 +255,8 @@ class ContainerBuilder
      */
     public function addDefinitions($definitions)
     {
+        $this->ensureNotLocked();
+
         if (is_string($definitions)) {
             // File
             $definitions = new DefinitionFile($definitions);
@@ -251,5 +273,12 @@ class ContainerBuilder
         $this->definitionSources[] = $definitions;
 
         return $this;
+    }
+
+    private function ensureNotLocked()
+    {
+        if ($this->locked) {
+            throw new \LogicException('The ContainerBuilder cannot be modified after the container has been built');
+        }
     }
 }
