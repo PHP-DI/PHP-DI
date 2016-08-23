@@ -73,6 +73,6 @@ PHP-DI is now also used in [**Pimcore**](https://pimcore.org/), an open source c
 
 Here is a graph showing the evolution of the traffic (per week) on [PHP-DI's website](http://php-di.org):
 
-![](visits.png)
+![](20-visits.png)
 
 Thanks to all contributors and users!
