@@ -187,4 +187,18 @@ class ContainerBuilderTest extends \PHPUnit_Framework_TestCase
         $result = $builder->wrapContainer($this->easyMock(ContainerInterface::class));
         $this->assertSame($builder, $result);
     }
+
+    /**
+     * Ensure the ContainerBuilder cannot be modified after the container has been built.
+     * @test
+     * @expectedException \LogicException
+     * @expectedExceptionMessage The ContainerBuilder cannot be modified after the container has been built
+     */
+    public function should_throw_if_modified_after_building_a_container()
+    {
+        $builder = new ContainerBuilder();
+        $builder->build();
+
+        $builder->addDefinitions([]);
+    }
 }
