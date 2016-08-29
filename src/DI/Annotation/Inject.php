@@ -32,6 +32,7 @@ final class Inject
 
     /**
      * @param array $values
+     * @throws AnnotationException
      */
     public function __construct(array $values)
     {
