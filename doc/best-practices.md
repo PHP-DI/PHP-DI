@@ -61,7 +61,7 @@ class UserController
 }
 ```
 
-As you can see, this solution requires very few code, is simple to understand and benefits from IDE support
+As you can see, this solution requires very little code, is simple to understand and benefits from IDE support
 (autocompletion, refactoring, …).
 
 Property injection is generally frowned upon, and for good reasons:
