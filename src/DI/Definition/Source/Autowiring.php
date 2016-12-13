@@ -13,7 +13,6 @@ use DI\Definition\ObjectDefinition\MethodInjection;
  */
 class Autowiring implements DefinitionSource
 {
-
     /** @var string */
     private $scalarEntryFormat;
 
