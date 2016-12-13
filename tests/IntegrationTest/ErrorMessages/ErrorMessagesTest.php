@@ -4,6 +4,7 @@ namespace DI\Test\IntegrationTest\ErrorMessages;
 
 use DI\ContainerBuilder;
 use DI\Definition\Exception\DefinitionException;
+use DI\DependencyException;
 
 /**
  * @coversNothing
@@ -48,25 +49,14 @@ MESSAGE;
     public function test_undefined_constructor_parameter()
     {
         $message = <<<'MESSAGE'
-Entry "DI\Test\IntegrationTest\ErrorMessages\Buggy1" cannot be resolved: Parameter $bar of __construct() has no value defined or guessable
-Full definition:
-Object (
-    class = DI\Test\IntegrationTest\ErrorMessages\Buggy1
-    scope = singleton
-    lazy = false
-    __construct(
-        $foo = 'some value'
-        $bar = #UNDEFINED#
-        $default = (default value) 123
-    )
-)
+Error while injecting dependencies into DI\Test\IntegrationTest\ErrorMessages\Buggy1: No entry or class found for 'DI\Test\IntegrationTest\ErrorMessages\Buggy1::bar
 MESSAGE;
-        $this->setExpectedException(DefinitionException::class, $message);
+        $this->setExpectedException(DependencyException::class, $message);
 
         $container = ContainerBuilder::buildDevContainer();
         $container->set(Buggy1::class, \DI\object()->constructorParameter('foo', 'some value'));
 
-        $container->get(Buggy1::class);
+	    $container->get(Buggy1::class);
     }
 
     /**
