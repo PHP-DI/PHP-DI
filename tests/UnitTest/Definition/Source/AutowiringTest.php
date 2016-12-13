@@ -29,10 +29,13 @@ class AutowiringTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf(MethodInjection::class, $constructorInjection);
 
         $parameters = $constructorInjection->getParameters();
-        $this->assertCount(1, $parameters);
+        $this->assertCount(2, $parameters);
 
         $param1 = $parameters[0];
         $this->assertEquals(new EntryReference(AutowiringFixture::class), $param1);
+
+        $param2 = $parameters[1];
+        $this->assertEquals(new EntryReference(AutowiringFixture::class . '::param2'), $param2);
     }
 
     public function testConstructorInParentClass()
@@ -44,10 +47,31 @@ class AutowiringTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf(MethodInjection::class, $constructorInjection);
 
         $parameters = $constructorInjection->getParameters();
-        $this->assertCount(1, $parameters);
+        $this->assertCount(2, $parameters);
 
         $param1 = $parameters[0];
         $this->assertEquals(new EntryReference(AutowiringFixture::class), $param1);
+
+	    $param2 = $parameters[1];
+	    $this->assertEquals(new EntryReference(AutowiringFixtureChild::class . '::param2'), $param2);
+    }
+
+    public function testConstructorWhenChangingScalarEntryFormat()
+    {
+        $definition = (new Autowiring('example->parameter'))->getDefinition(AutowiringFixtureChild::class);
+        $this->assertInstanceOf(ObjectDefinition::class, $definition);
+
+        $constructorInjection = $definition->getConstructorInjection();
+        $this->assertInstanceOf(MethodInjection::class, $constructorInjection);
+
+        $parameters = $constructorInjection->getParameters();
+        $this->assertCount(2, $parameters);
+
+        $param1 = $parameters[0];
+        $this->assertEquals(new EntryReference(AutowiringFixture::class), $param1);
+
+	    $param2 = $parameters[1];
+	    $this->assertEquals(new EntryReference('example->param2'), $param2);
     }
 }
 

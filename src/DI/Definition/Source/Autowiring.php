@@ -13,6 +13,15 @@ use DI\Definition\ObjectDefinition\MethodInjection;
  */
 class Autowiring implements DefinitionSource
 {
+
+	/** @var string */
+	private $scalarEntryFormat;
+
+	public function __construct($scalarEntryFormat = 'className::parameter')
+	{
+		$this->scalarEntryFormat = $scalarEntryFormat;
+	}
+
     /**
      * {@inheritdoc}
      */
@@ -29,7 +38,7 @@ class Autowiring implements DefinitionSource
         $constructor = $class->getConstructor();
         if ($constructor && $constructor->isPublic()) {
             $definition->setConstructorInjection(
-                MethodInjection::constructor($this->getParametersDefinition($constructor))
+                MethodInjection::constructor($this->getParametersDefinition($name, $constructor))
             );
         }
 
@@ -39,7 +48,7 @@ class Autowiring implements DefinitionSource
     /**
      * Read the type-hinting from the parameters of the function.
      */
-    private function getParametersDefinition(\ReflectionFunctionAbstract $constructor)
+    private function getParametersDefinition($className, \ReflectionFunctionAbstract $constructor)
     {
         $parameters = [];
 
@@ -52,8 +61,18 @@ class Autowiring implements DefinitionSource
             $parameterClass = $parameter->getClass();
 
             if ($parameterClass) {
-                $parameters[$index] = new EntryReference($parameterClass->getName());
+	            $entryReference = new EntryReference($parameterClass->getName());
+            } else {
+	            $entryReference = new EntryReference(
+	            	str_replace(
+	            		['className', 'parameter'],
+			            [$className, $parameter->getName()],
+			            $this->scalarEntryFormat
+		            )
+	            );
             }
+
+	        $parameters[$index] = $entryReference;
         }
 
         return $parameters;
