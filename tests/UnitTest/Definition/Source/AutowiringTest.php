@@ -52,8 +52,8 @@ class AutowiringTest extends \PHPUnit_Framework_TestCase
         $param1 = $parameters[0];
         $this->assertEquals(new EntryReference(AutowiringFixture::class), $param1);
 
-	    $param2 = $parameters[1];
-	    $this->assertEquals(new EntryReference(AutowiringFixtureChild::class . '::param2'), $param2);
+        $param2 = $parameters[1];
+        $this->assertEquals(new EntryReference(AutowiringFixtureChild::class . '::param2'), $param2);
     }
 
     public function testConstructorWhenChangingScalarEntryFormat()
@@ -70,8 +70,8 @@ class AutowiringTest extends \PHPUnit_Framework_TestCase
         $param1 = $parameters[0];
         $this->assertEquals(new EntryReference(AutowiringFixture::class), $param1);
 
-	    $param2 = $parameters[1];
-	    $this->assertEquals(new EntryReference('example->param2'), $param2);
+        $param2 = $parameters[1];
+        $this->assertEquals(new EntryReference('example->param2'), $param2);
     }
 }
 

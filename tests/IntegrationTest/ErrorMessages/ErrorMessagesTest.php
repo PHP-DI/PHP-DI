@@ -56,7 +56,7 @@ MESSAGE;
         $container = ContainerBuilder::buildDevContainer();
         $container->set(Buggy1::class, \DI\object()->constructorParameter('foo', 'some value'));
 
-	    $container->get(Buggy1::class);
+        $container->get(Buggy1::class);
     }
 
     /**

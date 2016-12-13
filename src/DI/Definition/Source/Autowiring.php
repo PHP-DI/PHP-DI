@@ -14,13 +14,13 @@ use DI\Definition\ObjectDefinition\MethodInjection;
 class Autowiring implements DefinitionSource
 {
 
-	/** @var string */
-	private $scalarEntryFormat;
+    /** @var string */
+    private $scalarEntryFormat;
 
-	public function __construct($scalarEntryFormat = 'className::parameter')
-	{
-		$this->scalarEntryFormat = $scalarEntryFormat;
-	}
+    public function __construct($scalarEntryFormat = 'className::parameter')
+    {
+        $this->scalarEntryFormat = $scalarEntryFormat;
+    }
 
     /**
      * {@inheritdoc}
@@ -61,18 +61,18 @@ class Autowiring implements DefinitionSource
             $parameterClass = $parameter->getClass();
 
             if ($parameterClass) {
-	            $entryReference = new EntryReference($parameterClass->getName());
+                $entryReference = new EntryReference($parameterClass->getName());
             } else {
-	            $entryReference = new EntryReference(
-	            	str_replace(
-	            		['className', 'parameter'],
-			            [$className, $parameter->getName()],
-			            $this->scalarEntryFormat
-		            )
-	            );
+                $entryReference = new EntryReference(
+                    str_replace(
+                        ['className', 'parameter'],
+                        [$className, $parameter->getName()],
+                        $this->scalarEntryFormat
+                    )
+                );
             }
 
-	        $parameters[$index] = $entryReference;
+            $parameters[$index] = $entryReference;
         }
 
         return $parameters;
