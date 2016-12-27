@@ -1,5 +1,11 @@
 # Change log
 
+## 6.0
+
+BC breaks:
+
+- The deprecated `DI\link()` helper was removed, used `DI\get()` instead
+
 ## 5.4
 
 Read the [news entry](news/20-php-di-5-4-released.md).
