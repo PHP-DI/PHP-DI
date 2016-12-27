@@ -89,22 +89,6 @@ if (! function_exists('DI\get')) {
     }
 }
 
-if (! function_exists('DI\link')) {
-    /**
-     * Helper for referencing another container entry in an object definition.
-     *
-     * @deprecated \DI\link() has been replaced by \DI\get()
-     *
-     * @param string $entryName
-     *
-     * @return EntryReference
-     */
-    function link($entryName)
-    {
-        return new EntryReference($entryName);
-    }
-}
-
 if (! function_exists('DI\env')) {
     /**
      * Helper for referencing environment variables.

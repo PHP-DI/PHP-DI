@@ -96,17 +96,6 @@ class FunctionsTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers ::\DI\link
-     */
-    public function test_link()
-    {
-        $reference = \DI\link('foo');
-
-        $this->assertInstanceOf(EntryReference::class, $reference);
-        $this->assertEquals('foo', $reference->getName());
-    }
-
-    /**
      * @covers ::\DI\env
      */
     public function test_env()
