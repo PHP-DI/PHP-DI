@@ -33,7 +33,7 @@
         "mnapoli/phpunit-easymock": "~0.2.0",
         "doctrine/cache": "~1.4",
         "doctrine/annotations": "~1.2",
-        "ocramius/proxy-manager": "~1.0|~2.0"
+        "ocramius/proxy-manager": "~2.0.2"
     },
     "replace": {
         "mnapoli/php-di": "*"
@@ -44,6 +44,6 @@
     "suggest": {
         "doctrine/cache": "Install it if you want to use the cache (version ~1.4)",
         "doctrine/annotations": "Install it if you want to use annotations (version ~1.2)",
-        "ocramius/proxy-manager": "Install it if you want to use lazy injection (version ~1.0 or ~2.0)"
+        "ocramius/proxy-manager": "Install it if you want to use lazy injection (version ~2.0)"
     }
 }
