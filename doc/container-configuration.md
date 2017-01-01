@@ -11,6 +11,8 @@ PHP-DI's container is preconfigured for "plug'n'play", i.e. development environm
 
 ```php
 $container = ContainerBuilder::buildDevContainer();
+// same as
+$container = new Container();
 ```
 
 By default, PHP-DI will have [Autowiring](definition.md) enabled (annotations are disabled by default).

@@ -37,7 +37,7 @@ class ProxyFactory
      */
     private $proxyManager;
 
-    public function __construct($writeProxiesToFile, $proxyDirectory = null)
+    public function __construct($writeProxiesToFile = false, $proxyDirectory = null)
     {
         $this->writeProxiesToFile = $writeProxiesToFile;
         $this->proxyDirectory = $proxyDirectory;
