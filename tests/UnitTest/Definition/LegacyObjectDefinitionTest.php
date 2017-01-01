@@ -11,7 +11,7 @@ use DI\Scope;
 /**
  * @deprecated To be removed.
  *
- * @covers \DI\Definition\LegacyLegacyObjectDefinition
+ * @covers \DI\Definition\LegacyObjectDefinition
  */
 class LegacyObjectDefinitionTest extends ObjectDefinitionTest
 {
