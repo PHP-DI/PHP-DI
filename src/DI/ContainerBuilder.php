@@ -91,9 +91,7 @@ class ContainerBuilder
      */
     public static function buildDevContainer()
     {
-        $builder = new self();
-
-        return $builder->build();
+        return new Container;
     }
 
     /**

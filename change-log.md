@@ -2,6 +2,10 @@
 
 ## 6.0
 
+Improvements:
+
+- The container can now be built without parameters: `new Container()`
+
 BC breaks:
 
 - The deprecated `DI\link()` helper was removed, used `DI\get()` instead

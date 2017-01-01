@@ -2,6 +2,7 @@
 
 namespace DI\Test\UnitTest;
 
+use DI\Container;
 use DI\ContainerBuilder;
 use DI\Definition\Source\CachedDefinitionSource;
 use DI\Definition\Source\DefinitionArray;
@@ -200,5 +201,13 @@ class ContainerBuilderTest extends \PHPUnit_Framework_TestCase
         $builder->build();
 
         $builder->addDefinitions([]);
+    }
+
+    /**
+     * @test
+     */
+    public function dev_container_configuration_should_be_identical_to_creating_a_new_container_from_defaults()
+    {
+        self::assertEquals(new Container, ContainerBuilder::buildDevContainer());
     }
 }
