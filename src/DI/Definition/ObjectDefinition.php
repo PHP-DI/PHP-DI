@@ -13,7 +13,7 @@ use ReflectionClass;
  *
  * @author Matthieu Napoli <matthieu@mnapoli.fr>
  */
-class ObjectDefinition implements Definition, CacheableDefinition, HasSubDefinition
+class ObjectDefinition implements Definition, CacheableDefinition
 {
     /**
      * Entry name (most of the time, same as $classname).
@@ -25,35 +25,35 @@ class ObjectDefinition implements Definition, CacheableDefinition, HasSubDefinit
      * Class name (if null, then the class name is $name).
      * @var string|null
      */
-    private $className;
+    protected $className;
 
     /**
      * Constructor parameter injection.
      * @var MethodInjection|null
      */
-    private $constructorInjection;
+    protected $constructorInjection;
 
     /**
      * Property injections.
      * @var PropertyInjection[]
      */
-    private $propertyInjections = [];
+    protected $propertyInjections = [];
 
     /**
      * Method calls.
      * @var MethodInjection[][]
      */
-    private $methodInjections = [];
+    protected $methodInjections = [];
 
     /**
      * @var string|null
      */
-    private $scope;
+    protected $scope;
 
     /**
      * @var bool|null
      */
-    private $lazy;
+    protected $lazy;
 
     /**
      * Store if the class exists. Storing it (in cache) avoids recomputing this.
@@ -226,96 +226,9 @@ class ObjectDefinition implements Definition, CacheableDefinition, HasSubDefinit
         return $this->isInstantiable;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function getSubDefinitionName()
-    {
-        return $this->getClassName();
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function setSubDefinition(Definition $definition)
-    {
-        if (! $definition instanceof self) {
-            return;
-        }
-
-        // The current prevails
-        if ($this->className === null) {
-            $this->setClassName($definition->className);
-        }
-        if ($this->scope === null) {
-            $this->scope = $definition->scope;
-        }
-        if ($this->lazy === null) {
-            $this->lazy = $definition->lazy;
-        }
-
-        // Merge constructor injection
-        $this->mergeConstructorInjection($definition);
-
-        // Merge property injections
-        $this->mergePropertyInjections($definition);
-
-        // Merge method injections
-        $this->mergeMethodInjections($definition);
-    }
-
     public function __toString()
     {
         return (new ObjectDefinitionDumper)->dump($this);
-    }
-
-    private function mergeConstructorInjection(ObjectDefinition $definition)
-    {
-        if ($definition->getConstructorInjection() !== null) {
-            if ($this->constructorInjection !== null) {
-                // Merge
-                $this->constructorInjection->merge($definition->getConstructorInjection());
-            } else {
-                // Set
-                $this->constructorInjection = $definition->getConstructorInjection();
-            }
-        }
-    }
-
-    private function mergePropertyInjections(ObjectDefinition $definition)
-    {
-        foreach ($definition->propertyInjections as $propertyName => $propertyInjection) {
-            if (! isset($this->propertyInjections[$propertyName])) {
-                // Add
-                $this->propertyInjections[$propertyName] = $propertyInjection;
-            }
-        }
-    }
-
-    private function mergeMethodInjections(ObjectDefinition $definition)
-    {
-        foreach ($definition->methodInjections as $methodName => $calls) {
-            if (array_key_exists($methodName, $this->methodInjections)) {
-                $this->mergeMethodCalls($calls, $methodName);
-            } else {
-                // Add
-                $this->methodInjections[$methodName] = $calls;
-            }
-        }
-    }
-
-    private function mergeMethodCalls(array $calls, $methodName)
-    {
-        foreach ($calls as $index => $methodInjection) {
-            // Merge
-            if (array_key_exists($index, $this->methodInjections[$methodName])) {
-                // Merge
-                $this->methodInjections[$methodName][$index]->merge($methodInjection);
-            } else {
-                // Add
-                $this->methodInjections[$methodName][$index] = $methodInjection;
-            }
-        }
     }
 
     private function updateCache()

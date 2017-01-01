@@ -23,7 +23,7 @@ class NestedDefinitionsTest extends \PHPUnit_Framework_TestCase
         $builder->addDefinitions([
             'foo'    => 'bar',
             'link'   => \DI\env('PHP_DI_DO_NOT_DEFINE_THIS', \DI\get('foo')),
-            'object' => \DI\env('PHP_DI_DO_NOT_DEFINE_THIS', \DI\object('stdClass')),
+            'object' => \DI\env('PHP_DI_DO_NOT_DEFINE_THIS', \DI\create('stdClass')),
         ]);
 
         $container = $builder->build();
@@ -46,12 +46,13 @@ class NestedDefinitionsTest extends \PHPUnit_Framework_TestCase
         $builder->addDefinitions([
             'foo' => 'bar',
             LazyDependency::class => $lazyDep,
-            'obj' => \DI\object(Class1::class)
+            'obj' => \DI\create(Class1::class)
                 ->constructor(
-                    \DI\object(Class2::class),
+                    \DI\create(Class2::class),
                     \DI\factory(function () use ($impl) {
                         return $impl;
-                    })
+                    }),
+                    \DI\get(LazyDependency::class)
                 )
                 ->property('property1', \DI\get('foo'))
                 ->property('property2', \DI\factory(function () use ($impl) {
@@ -85,7 +86,7 @@ class NestedDefinitionsTest extends \PHPUnit_Framework_TestCase
             'array' => [
                 'env'    => \DI\env('PHP_DI_DO_NOT_DEFINE_THIS', \DI\get('foo')),
                 'link'   => \DI\get('foo'),
-                'object' => \DI\object('stdClass'),
+                'object' => \DI\create('stdClass'),
             ],
         ]);
 

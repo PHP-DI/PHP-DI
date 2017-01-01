@@ -4,6 +4,7 @@ namespace DI;
 
 use DI\Definition\EntryReference;
 use DI\Definition\Helper\ArrayDefinitionExtensionHelper;
+use DI\Definition\Helper\CreateDefinitionHelper;
 use DI\Definition\Helper\EnvironmentVariableDefinitionHelper;
 use DI\Definition\Helper\FactoryDefinitionHelper;
 use DI\Definition\Helper\ObjectDefinitionHelper;
@@ -24,9 +25,26 @@ if (! function_exists('DI\value')) {
     }
 }
 
+if (! function_exists('DI\create')) {
+    /**
+     * Helper for defining an object.
+     *
+     * @param string|null $className Class name of the object.
+     *                               If null, the name of the entry (in the container) will be used as class name.
+     *
+     * @return CreateDefinitionHelper
+     */
+    function create($className = null)
+    {
+        return new CreateDefinitionHelper($className);
+    }
+}
+
 if (! function_exists('DI\object')) {
     /**
      * Helper for defining an object.
+     *
+     * @deprecated Use create() instead.
      *
      * @param string|null $className Class name of the object.
      *                               If null, the name of the entry (in the container) will be used as class name.
