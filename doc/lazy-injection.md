@@ -108,7 +108,7 @@ class MyClass
 
 ```php
 <?php
-$containerPHP->set('foo', \DI\object('MyClass')->lazy());
+$containerPHP->set('foo', \DI\create('MyClass')->lazy());
 ```
 
 ### PHP configuration file
@@ -117,7 +117,7 @@ $containerPHP->set('foo', \DI\object('MyClass')->lazy());
 <?php
 
 return [
-    'foo' => DI\object('MyClass')
+    'foo' => DI\create('MyClass')
         ->lazy(),
 ];
 ```

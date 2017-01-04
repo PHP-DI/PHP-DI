@@ -68,7 +68,7 @@ class FactoryDefinitionTest extends \PHPUnit_Framework_TestCase
     public function test_named_container_entry_as_factory($callable)
     {
         $container = $this->createContainer([
-            'bar_baz' => \DI\object(FactoryDefinitionTestClass::class),
+            'bar_baz' => \DI\create(FactoryDefinitionTestClass::class),
             'factory' => \DI\factory($callable),
         ]);
 
@@ -78,7 +78,7 @@ class FactoryDefinitionTest extends \PHPUnit_Framework_TestCase
     public function test_named_invokable_container_entry_as_factory()
     {
         $container = $this->createContainer([
-            'bar_baz' => \DI\object(FactoryDefinitionInvokableTestClass::class),
+            'bar_baz' => \DI\create(FactoryDefinitionInvokableTestClass::class),
             'factory' => \DI\factory('bar_baz'),
         ]);
 
@@ -183,7 +183,7 @@ class FactoryDefinitionTest extends \PHPUnit_Framework_TestCase
     public function test_named_entry_gets_injected_via_parameter()
     {
         $container = $this->createContainer([
-            'basicClass' => \DI\object(\stdClass::class),
+            'basicClass' => \DI\create(\stdClass::class),
             'factory' => \DI\factory(function ($entry) {
                 return $entry;
             })->parameter('entry', \DI\get('basicClass')),
@@ -199,7 +199,7 @@ class FactoryDefinitionTest extends \PHPUnit_Framework_TestCase
         $container = $this->createContainer([
             'factory' => \DI\factory(function ($entry) {
                 return $entry;
-            })->parameter('entry', \DI\object(\stdClass::class)),
+            })->parameter('entry', \DI\create(\stdClass::class)),
         ]);
 
         $factory = $container->get('factory');
@@ -227,7 +227,7 @@ class FactoryDefinitionTest extends \PHPUnit_Framework_TestCase
             'factory' => \DI\factory(function ($a, $b, $c) {
                 return [$a, $b, $c];
             })->parameter('a', \DI\get('secret'))
-              ->parameter('b', \DI\object(FactoryDefinitionTestClass::class))
+              ->parameter('b', \DI\create(FactoryDefinitionTestClass::class))
               ->parameter('c', 'Foo'),
         ]);
 

@@ -37,8 +37,8 @@ class ArrayDefinitionTest extends \PHPUnit_Framework_TestCase
                 \DI\get('singleton'),
                 \DI\get('prototype'),
             ],
-            'singleton' => \DI\object('stdClass'),
-            'prototype' => \DI\object('stdClass')
+            'singleton' => \DI\create('stdClass'),
+            'prototype' => \DI\create('stdClass')
                 ->scope(Scope::PROTOTYPE),
         ]);
         $container = $builder->build();
@@ -61,7 +61,7 @@ class ArrayDefinitionTest extends \PHPUnit_Framework_TestCase
         $builder->addDefinitions([
             'array' => [
                 \DI\env('PHP_DI_DO_NOT_DEFINE_THIS', 'env'),
-                \DI\object('stdClass'),
+                \DI\create('stdClass'),
             ],
         ]);
         $container = $builder->build();
@@ -82,7 +82,7 @@ class ArrayDefinitionTest extends \PHPUnit_Framework_TestCase
             'array'     => [
                 \DI\get('prototype'),
             ],
-            'prototype' => \DI\object('stdClass')
+            'prototype' => \DI\create('stdClass')
                 ->scope(Scope::PROTOTYPE),
         ]);
         $container = $builder->build();
@@ -107,7 +107,7 @@ class ArrayDefinitionTest extends \PHPUnit_Framework_TestCase
                 'another value',
                 \DI\get('foo'),
             ]),
-            'foo'    => \DI\object('stdClass'),
+            'foo'    => \DI\create('stdClass'),
         ]);
         $container = $builder->build();
 
@@ -126,13 +126,13 @@ class ArrayDefinitionTest extends \PHPUnit_Framework_TestCase
         $builder->addDefinitions([
             'array' => [
                 \DI\env('PHP_DI_DO_NOT_DEFINE_THIS', 'env'),
-                \DI\object('stdClass'),
+                \DI\create('stdClass'),
             ],
         ]);
         $builder->addDefinitions([
             'array' => \DI\add([
                 \DI\env('PHP_DI_DO_NOT_DEFINE_THIS', 'foo'),
-                \DI\object('stdClass'),
+                \DI\create('stdClass'),
             ]),
         ]);
         $container = $builder->build();

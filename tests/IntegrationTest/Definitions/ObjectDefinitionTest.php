@@ -20,11 +20,11 @@ class ObjectDefinitionTest extends \PHPUnit_Framework_TestCase
         $builder->useAutowiring(false);
         $builder->addDefinitions([
             // with the same name
-            'stdClass' => \DI\object('stdClass'),
+            'stdClass' => \DI\create('stdClass'),
             // with name inferred
-            Class1::class => \DI\object(),
+            Class1::class => \DI\create(),
             // with a different name
-            'object' => \DI\object(Class1::class),
+            'object' => \DI\create(Class1::class),
         ]);
         $container = $builder->build();
 
@@ -38,7 +38,7 @@ class ObjectDefinitionTest extends \PHPUnit_Framework_TestCase
         $builder = new ContainerBuilder();
         $builder->useAutowiring(false);
         $builder->addDefinitions([
-            Class1::class => \DI\object()
+            Class1::class => \DI\create()
                 ->method('increment')
                 ->method('increment'),
         ]);

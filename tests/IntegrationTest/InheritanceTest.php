@@ -67,10 +67,10 @@ class InheritanceTest extends \PHPUnit_Framework_TestCase
         $builder->useAutowiring(false);
         $builder->useAnnotations(false);
         $containerPHPDefinitions = $builder->build();
-        $containerPHPDefinitions->set(Dependency::class, \DI\object());
+        $containerPHPDefinitions->set(Dependency::class, \DI\create());
         $containerPHPDefinitions->set(
             BaseClass::class,
-            \DI\object(SubClass::class)
+            \DI\create(SubClass::class)
                 ->property('property1', \DI\get(Dependency::class))
                 ->property('property4', \DI\get(Dependency::class))
                 ->constructor(\DI\get(Dependency::class))
@@ -78,7 +78,7 @@ class InheritanceTest extends \PHPUnit_Framework_TestCase
         );
         $containerPHPDefinitions->set(
             SubClass::class,
-            \DI\object()
+            \DI\create()
                 ->property('property1', \DI\get(Dependency::class))
                 ->property('property4', \DI\get(Dependency::class))
                 ->constructor(\DI\get(Dependency::class))

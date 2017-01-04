@@ -5,7 +5,7 @@ use DI\Test\PerformanceTest\Get\B;
 use Interop\Container\ContainerInterface;
 
 return [
-    'object'  => \DI\object('DI\Test\PerformanceTest\Get\GetFixture')
+    'object'  => \DI\create('DI\Test\PerformanceTest\Get\GetFixture')
         ->constructor(\DI\get('array')),
     'value'   => 'foo',
     'string'  => \DI\string('Hello this is {value}'),
@@ -19,8 +19,8 @@ return [
         \DI\get('string'),
     ],
 
-    A::class  => \DI\object()
+    A::class  => \DI\create()
         ->constructorParameter('value', \DI\get('string')),
-    B::class  => \DI\object()
+    B::class  => \DI\create()
         ->method('setValue', \DI\string('Wow: {string}'), \DI\get('value')),
 ];

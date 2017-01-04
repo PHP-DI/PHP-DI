@@ -115,7 +115,7 @@ class ObjectCreatorTest extends \PHPUnit_Framework_TestCase
         $definition = new ObjectDefinition(FixtureClass::class);
         // The constructor definition uses a nested definition
         $definition->setConstructorInjection(MethodInjection::constructor([
-            \DI\object(NoConstructor::class),
+            \DI\create(NoConstructor::class),
         ]));
 
         $this->parentResolver->expects($this->once())
@@ -135,7 +135,7 @@ class ObjectCreatorTest extends \PHPUnit_Framework_TestCase
     public function testResolveWithNestedDefinitionInProperties()
     {
         $definition = new ObjectDefinition(FixtureClass::class);
-        $definition->addPropertyInjection(new PropertyInjection('prop', \DI\object(NoConstructor::class)));
+        $definition->addPropertyInjection(new PropertyInjection('prop', \DI\create(NoConstructor::class)));
         // Unrelated to the test but necessary since it's a mandatory parameter
         $definition->setConstructorInjection(MethodInjection::constructor(['foo']));
 

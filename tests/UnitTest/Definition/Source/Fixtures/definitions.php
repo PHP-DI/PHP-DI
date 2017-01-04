@@ -2,5 +2,5 @@
 
 return [
     'foo' => 'bar',
-    'bim' => DI\object(),
+    'bim' => DI\create(),
 ];

@@ -145,7 +145,7 @@ return [
 ];
 ```
 
-This solution is generally preferred give it avoids redefining everything.
+This solution is generally preferred given it avoids redefining everything.
 
 *Side note:* as explained in rule n°3, we recommend **type-hinting against interfaces**. In that case,
 you will need to map interfaces to the implementation the container should use in the configuration:
@@ -155,7 +155,7 @@ you will need to map interfaces to the implementation the container should use i
 // config.php
 return [
     // ...
-    OrderServiceInterface::class => DI\object(OrderService::class),
+    OrderServiceInterface::class => DI\get(OrderService::class),
 ];
 ```
 

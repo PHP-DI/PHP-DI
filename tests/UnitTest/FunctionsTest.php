@@ -8,6 +8,7 @@ use DI\Definition\DecoratorDefinition;
 use DI\Definition\EntryReference;
 use DI\Definition\FactoryDefinition;
 use DI\Definition\Helper\ArrayDefinitionExtensionHelper;
+use DI\Definition\Helper\CreateDefinitionHelper;
 use DI\Definition\Helper\EnvironmentVariableDefinitionHelper;
 use DI\Definition\Helper\FactoryDefinitionHelper;
 use DI\Definition\Helper\ObjectDefinitionHelper;
@@ -30,6 +31,26 @@ class FunctionsTest extends \PHPUnit_Framework_TestCase
 
         $this->assertInstanceOf(ValueDefinitionHelper::class, $definition);
         $this->assertEquals('foo', $definition->getDefinition('entry')->getValue());
+    }
+
+    /**
+     * @covers ::\DI\create
+     */
+    public function test_create()
+    {
+        $helper = \DI\create();
+
+        $this->assertTrue($helper instanceof CreateDefinitionHelper);
+        $definition = $helper->getDefinition('entry');
+        $this->assertTrue($definition instanceof ObjectDefinition);
+        $this->assertEquals('entry', $definition->getClassName());
+
+        $helper = \DI\create('foo');
+
+        $this->assertTrue($helper instanceof CreateDefinitionHelper);
+        $definition = $helper->getDefinition('entry');
+        $this->assertTrue($definition instanceof ObjectDefinition);
+        $this->assertEquals('foo', $definition->getClassName());
     }
 
     /**

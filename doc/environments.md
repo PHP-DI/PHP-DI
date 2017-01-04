@@ -14,7 +14,7 @@ return [
     'db.host' => 'localhost',
     'db.port' => 3336,
 
-    'DbAdapter' => DI\object()
+    'DbAdapter' => DI\create()
         ->constructor(DI\get('db.host'), DI\get('db.port')),
 ];
 ```
@@ -43,7 +43,7 @@ return [
 <?php
 // config.php
 return [
-    'DbAdapter' => DI\object()
+    'DbAdapter' => DI\create()
         ->constructor(DI\get('db.host'), DI\get('db.port')),
 ];
 ```
