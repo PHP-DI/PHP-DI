@@ -34,6 +34,7 @@ class ArrayCache implements Cache, FlushableCache, ClearableCache
         if (isset($this->data[$id]) || array_key_exists($id, $this->data)) {
             return $this->data[$id];
         }
+
         return false;
     }
 
