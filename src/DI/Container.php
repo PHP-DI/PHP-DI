@@ -107,13 +107,6 @@ class Container implements ContainerInterface, FactoryInterface, \DI\InvokerInte
      */
     public function get($name)
     {
-        if (! is_string($name)) {
-            throw new InvalidArgumentException(sprintf(
-                'The name parameter must be of type string, %s given',
-                is_object($name) ? get_class($name) : gettype($name)
-            ));
-        }
-
         // Try to find the entry in the singleton map
         if (isset($this->singletonEntries[$name]) || array_key_exists($name, $this->singletonEntries)) {
             return $this->singletonEntries[$name];
