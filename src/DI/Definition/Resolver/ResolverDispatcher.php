@@ -53,6 +53,11 @@ class ResolverDispatcher implements DefinitionResolver
      */
     public function resolve(Definition $definition, array $parameters = [])
     {
+        // Special case, tested early for speed
+        if ($definition instanceof \DI\Definition\SelfResolvingDefinition) {
+            return $definition->resolve($this->container);
+        }
+
         $definitionResolver = $this->getDefinitionResolver($definition);
 
         return $definitionResolver->resolve($definition, $parameters);
@@ -68,6 +73,11 @@ class ResolverDispatcher implements DefinitionResolver
      */
     public function isResolvable(Definition $definition, array $parameters = [])
     {
+        // Special case, tested early for speed
+        if ($definition instanceof \DI\Definition\SelfResolvingDefinition) {
+            return $definition->isResolvable($this->container);
+        }
+
         $definitionResolver = $this->getDefinitionResolver($definition);
 
         return $definitionResolver->isResolvable($definition, $parameters);
@@ -84,12 +94,6 @@ class ResolverDispatcher implements DefinitionResolver
     private function getDefinitionResolver(Definition $definition)
     {
         switch (true) {
-            case $definition instanceof \DI\Definition\SelfResolvingDefinition:
-                if (! $this->selfResolvingResolver) {
-                    $this->selfResolvingResolver = new SelfResolver($this->container);
-                }
-
-                return $this->selfResolvingResolver;
             case $definition instanceof \DI\Definition\ObjectDefinition:
                 if (! $this->objectResolver) {
                     $this->objectResolver = new ObjectCreator($this, $this->proxyFactory);
