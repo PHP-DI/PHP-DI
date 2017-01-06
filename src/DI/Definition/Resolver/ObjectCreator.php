@@ -146,10 +146,26 @@ class ObjectCreator implements DefinitionResolver
                 $parameters
             );
 
-            if (count($args) > 0) {
-                $object = $classReflection->newInstanceArgs($args);
-            } else {
-                $object = new $classname;
+            // Optimization trick
+            switch (count($args)) {
+                case 0:
+                    $object = new $classname;
+                    break;
+                case 1:
+                    $object = new $classname($args[0]);
+                    break;
+                case 2:
+                    $object = new $classname($args[0], $args[1]);
+                    break;
+                case 3:
+                    $object = new $classname($args[0], $args[1], $args[2]);
+                    break;
+                case 4:
+                    $object = new $classname($args[0], $args[1], $args[2], $args[3]);
+                    break;
+                default:
+                    $object = $classReflection->newInstanceArgs($args);
+                    break;
             }
 
             $this->injectMethodsAndProperties($object, $definition);
