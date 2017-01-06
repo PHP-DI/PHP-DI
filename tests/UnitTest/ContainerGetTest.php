@@ -125,16 +125,6 @@ class ContainerGetTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage The name parameter must be of type string
-     */
-    public function testNonStringParameter()
-    {
-        $container = ContainerBuilder::buildDevContainer();
-        $container->get(new stdClass());
-    }
-
-    /**
      * Tests a class can be initialized with a parameter passed by reference.
      */
     public function testPassByReferenceParameter()
