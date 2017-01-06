@@ -118,24 +118,24 @@ class ObjectCreator implements DefinitionResolver
      */
     private function createInstance(ObjectDefinition $definition, array $parameters)
     {
-        // Check that the class exists
-        if (! $definition->classExists()) {
+        // Check that the class is instantiable
+        if (! $definition->isInstantiable()) {
+            // Check that the class exists
+            if (! $definition->classExists()) {
+                throw DefinitionException::create($definition, sprintf(
+                    'Entry "%s" cannot be resolved: the class doesn\'t exist',
+                    $definition->getName()
+                ));
+            }
+
             throw DefinitionException::create($definition, sprintf(
-                'Entry "%s" cannot be resolved: the class doesn\'t exist',
+                'Entry "%s" cannot be resolved: the class is not instantiable',
                 $definition->getName()
             ));
         }
 
         $classname = $definition->getClassName();
         $classReflection = new ReflectionClass($classname);
-
-        // Check that the class is instantiable
-        if (! $definition->isInstantiable()) {
-            throw DefinitionException::create($definition, sprintf(
-                'Entry "%s" cannot be resolved: the class is not instantiable',
-                $definition->getName()
-            ));
-        }
 
         $constructorInjection = $definition->getConstructorInjection();
 
