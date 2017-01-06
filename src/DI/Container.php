@@ -115,7 +115,7 @@ class Container implements ContainerInterface, FactoryInterface, \DI\InvokerInte
         }
 
         // Try to find the entry in the singleton map
-        if (array_key_exists($name, $this->singletonEntries)) {
+        if (isset($this->singletonEntries[$name]) || array_key_exists($name, $this->singletonEntries)) {
             return $this->singletonEntries[$name];
         }
 
