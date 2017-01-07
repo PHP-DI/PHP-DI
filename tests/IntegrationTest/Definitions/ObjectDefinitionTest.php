@@ -5,6 +5,7 @@ namespace DI\Test\IntegrationTest\Definitions;
 use DI\ContainerBuilder;
 use DI\Test\IntegrationTest\Definitions\ObjectDefinition\Class1;
 use DI\Test\IntegrationTest\Definitions\ObjectDefinition\Class2;
+use DI\Test\IntegrationTest\Definitions\ObjectDefinition\Class3;
 
 /**
  * Test object definitions.
@@ -33,7 +34,7 @@ class ObjectDefinitionTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf(Class1::class, $container->get('object'));
     }
 
-    public function test_create_overrides_the_previous_entry()
+    public function test_overrides_the_previous_entry()
     {
         $builder = new ContainerBuilder();
         $builder->addDefinitions([
@@ -51,7 +52,23 @@ class ObjectDefinitionTest extends \PHPUnit_Framework_TestCase
         self::assertEquals(456, $foo->bim, 'The "bim" property is set');
     }
 
-    public function test_multiple_method_call()
+    /**
+     * It should not inherit the definition from autowiring.
+     * @expectedException \DI\Definition\Exception\DefinitionException
+     * @expectedExceptionMessage Parameter $parameter of __construct() has no value defined or guessable
+     */
+    public function test_does_not_trigger_autowiring()
+    {
+        $builder = new ContainerBuilder();
+        $builder->useAutowiring(true);
+        $builder->addDefinitions([
+            Class3::class => \DI\create(),
+        ]);
+        $container = $builder->build();
+        $container->get(Class3::class);
+    }
+
+    public function test_same_method_can_be_called_multiple_times()
     {
         $builder = new ContainerBuilder();
         $builder->useAutowiring(false);
@@ -66,6 +83,9 @@ class ObjectDefinitionTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(2, $class->count);
     }
 
+    /**
+     * @deprecated
+     */
     public function test_override_parameter_with_multiple_method_call()
     {
         $builder = new ContainerBuilder();
