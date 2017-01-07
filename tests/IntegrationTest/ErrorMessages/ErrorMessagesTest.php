@@ -64,7 +64,7 @@ MESSAGE;
         $this->setExpectedException(DefinitionException::class, $message);
 
         $container = ContainerBuilder::buildDevContainer();
-        $container->set(Buggy1::class, \DI\create()->constructorParameter('foo', 'some value'));
+        $container->set(Buggy1::class, \DI\object()->constructorParameter('foo', 'some value'));
 
         $container->get(Buggy1::class);
     }

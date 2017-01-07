@@ -19,7 +19,7 @@ return [
         \DI\get('string'),
     ],
 
-    A::class  => \DI\create()
+    A::class  => \DI\object()
         ->constructorParameter('value', \DI\get('string')),
     B::class  => \DI\create()
         ->method('setValue', \DI\string('Wow: {string}'), \DI\get('value')),
