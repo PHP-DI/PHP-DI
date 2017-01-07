@@ -113,4 +113,12 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
 
         $this->assertSame('hello', $container->get('foo'));
     }
+
+    /**
+     * @test
+     */
+    public function canBeBuiltWithoutParameters()
+    {
+        self::assertInstanceOf(Container::class, new Container); // Should not be an error
+    }
 }

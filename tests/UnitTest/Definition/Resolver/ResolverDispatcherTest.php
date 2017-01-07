@@ -58,4 +58,15 @@ class ResolverDispatcherTest extends \PHPUnit_Framework_TestCase
     {
         $this->resolver->resolve($this->easyMock(Definition::class));
     }
+
+    /**
+     * @test
+     */
+    public function should_resolve_definitions()
+    {
+        $definition = new ValueDefinition('foo', 'bar');
+
+        $this->assertTrue($this->resolver->isResolvable($definition));
+        $this->assertEquals('bar', $this->resolver->resolve($definition));
+    }
 }

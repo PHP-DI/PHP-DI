@@ -30,7 +30,12 @@ class ArrayCache implements Cache, FlushableCache, ClearableCache
 
     public function fetch($id)
     {
-        return $this->contains($id) ? $this->data[$id] : false;
+        // isset() is required for performance optimizations, to avoid unnecessary function calls to array_key_exists.
+        if (isset($this->data[$id]) || array_key_exists($id, $this->data)) {
+            return $this->data[$id];
+        }
+
+        return false;
     }
 
     public function contains($id)

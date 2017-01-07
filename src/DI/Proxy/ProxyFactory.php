@@ -37,7 +37,7 @@ class ProxyFactory
      */
     private $proxyManager;
 
-    public function __construct($writeProxiesToFile, $proxyDirectory = null)
+    public function __construct($writeProxiesToFile = false, $proxyDirectory = null)
     {
         $this->writeProxiesToFile = $writeProxiesToFile;
         $this->proxyDirectory = $proxyDirectory;
@@ -66,7 +66,7 @@ class ProxyFactory
         }
 
         if (! class_exists(Configuration::class)) {
-            throw new \RuntimeException('The ocramius/proxy-manager library is not installed. Lazy injection requires that library to be installed with Composer in order to work. Run "composer require ocramius/proxy-manager:~1.0".');
+            throw new \RuntimeException('The ocramius/proxy-manager library is not installed. Lazy injection requires that library to be installed with Composer in order to work. Run "composer require ocramius/proxy-manager:~2.0".');
         }
 
         $config = new Configuration();

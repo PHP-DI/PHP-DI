@@ -2,8 +2,13 @@
 
 ## 6.0
 
+Improvements:
+
+- The container can now be built without parameters: `new Container()`
+
 BC breaks:
 
+- PHP 7 or greater is required
 - The deprecated `DI\link()` helper was removed, used `DI\get()` instead
 
 ## 5.4

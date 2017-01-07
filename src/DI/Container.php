@@ -9,9 +9,12 @@ use DI\Definition\InstanceDefinition;
 use DI\Definition\ObjectDefinition;
 use DI\Definition\Resolver\DefinitionResolver;
 use DI\Definition\Resolver\ResolverDispatcher;
+use DI\Definition\Source\Autowiring;
 use DI\Definition\Source\CachedDefinitionSource;
+use DI\Definition\Source\DefinitionArray;
 use DI\Definition\Source\DefinitionSource;
 use DI\Definition\Source\MutableDefinitionSource;
+use DI\Definition\Source\SourceChain;
 use DI\Invoker\DefinitionParameterResolver;
 use DI\Proxy\ProxyFactory;
 use Exception;
@@ -66,22 +69,24 @@ class Container implements ContainerInterface, FactoryInterface, \DI\InvokerInte
     private $wrapperContainer;
 
     /**
-     * Use the ContainerBuilder to ease constructing the Container.
+     * Use `$container = new Container()` if you want a container with the default configuration.
+     *
+     * If you want to customize the container's behavior, you are discouraged to create and pass the
+     * dependencies yourself, the ContainerBuilder class is here to help you instead.
      *
      * @see ContainerBuilder
      *
-     * @param DefinitionSource   $definitionSource
-     * @param ProxyFactory       $proxyFactory
      * @param ContainerInterface $wrapperContainer If the container is wrapped by another container.
      */
     public function __construct(
-        DefinitionSource $definitionSource,
-        ProxyFactory $proxyFactory,
+        DefinitionSource $definitionSource = null,
+        ProxyFactory $proxyFactory = null,
         ContainerInterface $wrapperContainer = null
     ) {
         $this->wrapperContainer = $wrapperContainer ?: $this;
 
-        $this->definitionSource = $definitionSource;
+        $this->definitionSource = $definitionSource ?: $this->createDefaultDefinitionSource();
+        $proxyFactory = $proxyFactory ?: new ProxyFactory(false);
         $this->definitionResolver = new ResolverDispatcher($this->wrapperContainer, $proxyFactory);
 
         // Auto-register the container
@@ -102,15 +107,8 @@ class Container implements ContainerInterface, FactoryInterface, \DI\InvokerInte
      */
     public function get($name)
     {
-        if (! is_string($name)) {
-            throw new InvalidArgumentException(sprintf(
-                'The name parameter must be of type string, %s given',
-                is_object($name) ? get_class($name) : gettype($name)
-            ));
-        }
-
         // Try to find the entry in the singleton map
-        if (array_key_exists($name, $this->singletonEntries)) {
+        if (isset($this->singletonEntries[$name]) || array_key_exists($name, $this->singletonEntries)) {
             return $this->singletonEntries[$name];
         }
 
@@ -330,5 +328,16 @@ class Container implements ContainerInterface, FactoryInterface, \DI\InvokerInte
         }
 
         return $this->invoker;
+    }
+
+    /**
+     * @return DefinitionSource
+     */
+    private function createDefaultDefinitionSource()
+    {
+        $source = new SourceChain([new Autowiring]);
+        $source->setMutableDefinitionSource(new DefinitionArray);
+
+        return $source;
     }
 }
