@@ -10,7 +10,7 @@ use DI\Test\IntegrationTest\Fixtures\LazyDependency;
 return [
     'foo' => 'bar',
 
-    Class1::class => DI\object()
+    Class1::class => DI\autowire()
             ->scope(Scope::PROTOTYPE)
             ->property('property1', DI\get(Class2::class))
             ->property('property2', DI\get(Interface1::class))

@@ -11,7 +11,7 @@ use DI\Definition\Helper\ArrayDefinitionExtensionHelper;
 use DI\Definition\Helper\CreateDefinitionHelper;
 use DI\Definition\Helper\EnvironmentVariableDefinitionHelper;
 use DI\Definition\Helper\FactoryDefinitionHelper;
-use DI\Definition\Helper\ObjectDefinitionHelper;
+use DI\Definition\Helper\AutowireDefinitionHelper;
 use DI\Definition\Helper\StringDefinitionHelper;
 use DI\Definition\Helper\ValueDefinitionHelper;
 use DI\Definition\ObjectDefinition;
@@ -54,20 +54,20 @@ class FunctionsTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers ::\DI\object
+     * @covers ::\DI\autowire
      */
-    public function test_object()
+    public function test_autowire()
     {
-        $helper = \DI\object();
+        $helper = \DI\autowire();
 
-        $this->assertTrue($helper instanceof ObjectDefinitionHelper);
+        $this->assertTrue($helper instanceof AutowireDefinitionHelper);
         $definition = $helper->getDefinition('entry');
         $this->assertTrue($definition instanceof ObjectDefinition);
         $this->assertEquals('entry', $definition->getClassName());
 
-        $helper = \DI\object('foo');
+        $helper = \DI\autowire('foo');
 
-        $this->assertTrue($helper instanceof ObjectDefinitionHelper);
+        $this->assertTrue($helper instanceof AutowireDefinitionHelper);
         $definition = $helper->getDefinition('entry');
         $this->assertTrue($definition instanceof ObjectDefinition);
         $this->assertEquals('foo', $definition->getClassName());

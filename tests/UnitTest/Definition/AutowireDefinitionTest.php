@@ -2,29 +2,27 @@
 
 namespace DI\Test\UnitTest\Definition;
 
-use DI\Definition\LegacyObjectDefinition;
+use DI\Definition\AutowireDefinition;
 use DI\Definition\ObjectDefinition\MethodInjection;
 use DI\Definition\ObjectDefinition\PropertyInjection;
 use DI\Definition\ValueDefinition;
 use DI\Scope;
 
 /**
- * @deprecated To be removed.
- *
- * @covers \DI\Definition\LegacyObjectDefinition
+ * @covers \DI\Definition\AutowireDefinition
  */
-class LegacyObjectDefinitionTest extends ObjectDefinitionTest
+class AutowireDefinitionTest extends ObjectDefinitionTest
 {
     /**
      * @test
      */
     public function should_only_merge_with_object_subdefinitions()
     {
-        $definition = new LegacyObjectDefinition('foo', 'bar');
+        $definition = new AutowireDefinition('foo', 'bar');
         $definition->setSubDefinition(new ValueDefinition('bar', 'Hello'));
 
         // Unchanged definition
-        $this->assertEquals(new LegacyObjectDefinition('foo', 'bar'), $definition);
+        $this->assertEquals(new AutowireDefinition('foo', 'bar'), $definition);
     }
 
     /**
@@ -32,13 +30,13 @@ class LegacyObjectDefinitionTest extends ObjectDefinitionTest
      */
     public function should_merge_with_its_subdefinition()
     {
-        $definition = new LegacyObjectDefinition('foo', 'bar');
+        $definition = new AutowireDefinition('foo', 'bar');
         $definition->addPropertyInjection(new PropertyInjection('property1', 'Property1'));
         $definition->addPropertyInjection(new PropertyInjection('property2', 'Property2'));
         $definition->addMethodInjection(new MethodInjection('method1', ['foo']));
         $definition->addMethodInjection(new MethodInjection('method2'));
 
-        $subDefinition = new LegacyObjectDefinition('bar');
+        $subDefinition = new AutowireDefinition('bar');
         $subDefinition->setLazy(true);
         $subDefinition->setScope(Scope::PROTOTYPE);
         $subDefinition->setConstructorInjection(MethodInjection::constructor());
@@ -68,12 +66,12 @@ class LegacyObjectDefinitionTest extends ObjectDefinitionTest
      */
     public function should_merge_multiple_method_calls()
     {
-        $definition = new LegacyObjectDefinition('foo');
+        $definition = new AutowireDefinition('foo');
         $definition->addMethodInjection(new MethodInjection('method1'));
         $definition->addMethodInjection(new MethodInjection('method2', ['bam']));
         $definition->addMethodInjection(new MethodInjection('method2', ['baz']));
 
-        $subDefinition = new LegacyObjectDefinition('bar');
+        $subDefinition = new AutowireDefinition('bar');
         $subDefinition->addMethodInjection(new MethodInjection('method1', ['bar']));
         $subDefinition->addMethodInjection(new MethodInjection('method2', ['foo', 'bar']));
         $subDefinition->addMethodInjection(new MethodInjection('method3'));

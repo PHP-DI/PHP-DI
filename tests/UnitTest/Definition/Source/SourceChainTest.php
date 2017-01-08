@@ -90,11 +90,11 @@ class SourceChainTest extends \PHPUnit_Framework_TestCase
     {
         $chain = new SourceChain([
             new DefinitionArray([
-                'subdef' => \DI\object('stdClass')
+                'subdef' => \DI\autowire('stdClass')
                     ->lazy(),
             ]),
             new DefinitionArray([
-                'def' => \DI\object('subdef'),
+                'def' => \DI\autowire('subdef'),
             ]),
             new Autowiring(),
         ]);
@@ -108,7 +108,7 @@ class SourceChainTest extends \PHPUnit_Framework_TestCase
 
         // Define a new root source: should be used
         $chain->setRootDefinitionSource(new DefinitionArray([
-            'subdef' => \DI\object('stdClass'), // this one is not lazy
+            'subdef' => \DI\autowire('stdClass'), // this one is not lazy
         ]));
         $definition = $chain->getDefinition('def');
         $this->assertFalse($definition->isLazy()); // shouldn't be lazy
@@ -121,14 +121,14 @@ class SourceChainTest extends \PHPUnit_Framework_TestCase
     {
         $chain = new SourceChain([
             new DefinitionArray([
-                'def' => \DI\object(),
+                'def' => \DI\autowire(),
             ]),
             new DefinitionArray([
-                'def' => \DI\object('stdClass') // Should use this definition
+                'def' => \DI\autowire('stdClass') // Should use this definition
                     ->lazy(),
             ]),
             new DefinitionArray([
-                'def' => \DI\object('DateTime'), // Should NOT use this one
+                'def' => \DI\autowire('DateTime'), // Should NOT use this one
             ]),
             new Autowiring(),
         ]);

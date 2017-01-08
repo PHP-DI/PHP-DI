@@ -91,13 +91,13 @@ class ObjectDefinitionTest extends \PHPUnit_Framework_TestCase
         $builder = new ContainerBuilder();
         $builder->useAutowiring(false);
         $builder->addDefinitions([
-            Class1::class => \DI\object()
+            Class1::class => \DI\autowire()
                 ->method('add', 'foo')
                 ->method('add', 'foo'),
         ]);
         $builder->addDefinitions([
             // Override a method parameter
-            Class1::class => \DI\object()
+            Class1::class => \DI\autowire()
                 ->methodParameter('add', 0, 'bar'),
         ]);
         $container = $builder->build();

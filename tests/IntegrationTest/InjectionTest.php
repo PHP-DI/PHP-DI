@@ -72,7 +72,7 @@ class InjectionTest extends \PHPUnit_Framework_TestCase
         $containerPHP->set('foo', 'bar');
         $containerPHP->set(
             Class1::class,
-            \DI\object()
+            \DI\autowire()
                 ->scope(Scope::PROTOTYPE)
                 ->property('property1', \DI\get(Class2::class))
                 ->property('property2', \DI\get(Interface1::class))

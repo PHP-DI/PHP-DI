@@ -3,11 +3,9 @@
 namespace DI\Definition;
 
 /**
- * @deprecated Use ObjectDefinition instead.
- *
  * @author Matthieu Napoli <matthieu@mnapoli.fr>
  */
-class LegacyObjectDefinition extends ObjectDefinition implements HasSubDefinition
+class AutowireDefinition extends ObjectDefinition implements HasSubDefinition
 {
     /**
      * {@inheritdoc}

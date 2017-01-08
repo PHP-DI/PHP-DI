@@ -7,7 +7,7 @@ use DI\Definition\Helper\ArrayDefinitionExtensionHelper;
 use DI\Definition\Helper\CreateDefinitionHelper;
 use DI\Definition\Helper\EnvironmentVariableDefinitionHelper;
 use DI\Definition\Helper\FactoryDefinitionHelper;
-use DI\Definition\Helper\ObjectDefinitionHelper;
+use DI\Definition\Helper\AutowireDefinitionHelper;
 use DI\Definition\Helper\StringDefinitionHelper;
 use DI\Definition\Helper\ValueDefinitionHelper;
 
@@ -40,20 +40,18 @@ if (! function_exists('DI\create')) {
     }
 }
 
-if (! function_exists('DI\object')) {
+if (! function_exists('DI\autowire')) {
     /**
-     * Helper for defining an object.
-     *
-     * @deprecated Use create() instead.
+     * Helper for autowiring an object.
      *
      * @param string|null $className Class name of the object.
      *                               If null, the name of the entry (in the container) will be used as class name.
      *
-     * @return ObjectDefinitionHelper
+     * @return AutowireDefinitionHelper
      */
-    function object($className = null)
+    function autowire($className = null)
     {
-        return new ObjectDefinitionHelper($className);
+        return new AutowireDefinitionHelper($className);
     }
 }
 

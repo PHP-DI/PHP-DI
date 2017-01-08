@@ -2,18 +2,16 @@
 
 namespace DI\Definition\Helper;
 
-use DI\Definition\LegacyObjectDefinition;
+use DI\Definition\AutowireDefinition;
 
 /**
- * Helps defining how to create an instance of a class.
- *
- * @deprecated Use CreateDefinitionHelper instead.
+ * Helps defining how to create an instance of a class using autowiring.
  *
  * @author Matthieu Napoli <matthieu@mnapoli.fr>
  */
-class ObjectDefinitionHelper extends CreateDefinitionHelper
+class AutowireDefinitionHelper extends CreateDefinitionHelper
 {
-    const DEFINITION_CLASS = LegacyObjectDefinition::class;
+    const DEFINITION_CLASS = AutowireDefinition::class;
 
     /**
      * Defines a value for a specific argument of the constructor.
