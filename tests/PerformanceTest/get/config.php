@@ -21,6 +21,6 @@ return [
 
     A::class  => \DI\autowire()
         ->constructorParameter('value', \DI\get('string')),
-    B::class  => \DI\create()
+    B::class  => \DI\autowire()
         ->method('setValue', \DI\string('Wow: {string}'), \DI\get('value')),
 ];
