@@ -3,12 +3,12 @@
 namespace DI;
 
 use DI\Definition\Source\AnnotationBasedAutowiring;
-use DI\Definition\Source\NoAutowiring;
-use DI\Definition\Source\ReflectionBasedAutowiring;
 use DI\Definition\Source\CachedDefinitionSource;
 use DI\Definition\Source\DefinitionArray;
 use DI\Definition\Source\DefinitionFile;
 use DI\Definition\Source\DefinitionSource;
+use DI\Definition\Source\NoAutowiring;
+use DI\Definition\Source\ReflectionBasedAutowiring;
 use DI\Definition\Source\SourceChain;
 use DI\Proxy\ProxyFactory;
 use Doctrine\Common\Cache\Cache;
@@ -129,6 +129,7 @@ class ContainerBuilder
             } elseif (is_array($definitions)) {
                 return new DefinitionArray($definitions, $autowiring);
             }
+
             return $definitions;
         }, $sources);
         $chain = new SourceChain($sources);

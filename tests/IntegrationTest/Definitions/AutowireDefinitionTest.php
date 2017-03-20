@@ -66,6 +66,7 @@ class AutowireDefinitionTest extends \PHPUnit_Framework_TestCase
     {
         $class = get_class(new class() {
             public $bar;
+
             public function __construct($bar = null)
             {
                 $this->bar = $bar;
@@ -84,6 +85,7 @@ class AutowireDefinitionTest extends \PHPUnit_Framework_TestCase
     {
         $class = get_class(new class() {
             public $bar;
+
             public function __construct(\stdClass $bar = null)
             {
                 $this->bar = $bar;
@@ -105,6 +107,7 @@ class AutowireDefinitionTest extends \PHPUnit_Framework_TestCase
     {
         $class = get_class(new class() {
             public $bar;
+
             public function setFoo($bar)
             {
                 $this->bar = $bar;
@@ -123,6 +126,7 @@ class AutowireDefinitionTest extends \PHPUnit_Framework_TestCase
     {
         $class = get_class(new class() {
             public $bar;
+
             public function setFoo(\stdClass $bar)
             {
                 $this->bar = $bar;

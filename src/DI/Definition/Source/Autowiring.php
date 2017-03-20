@@ -15,9 +15,8 @@ interface Autowiring
     /**
      * Autowire the given definition.
      *
-     * @return AutowireDefinition|null
-     *
      * @throws DefinitionException An invalid definition was found.
+     * @return AutowireDefinition|null
      */
     public function autowire(string $name, AutowireDefinition $definition = null);
 }
