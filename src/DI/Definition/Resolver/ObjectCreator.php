@@ -10,8 +10,8 @@ use DI\Definition\ObjectDefinition\PropertyInjection;
 use DI\DependencyException;
 use DI\Proxy\ProxyFactory;
 use Exception;
-use Psr\Container\NotFoundExceptionInterface;
 use ProxyManager\Proxy\LazyLoadingInterface;
+use Psr\Container\NotFoundExceptionInterface;
 use ReflectionClass;
 use ReflectionProperty;
 
