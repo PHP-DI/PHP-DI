@@ -7,7 +7,7 @@ use DI\Definition\Exception\DefinitionException;
 use DI\Definition\FactoryDefinition;
 use DI\Definition\Helper\DefinitionHelper;
 use DI\Invoker\FactoryParameterResolver;
-use Interop\Container\ContainerInterface;
+use Psr\Container\ContainerInterface;
 use Invoker\Exception\NotCallableException;
 use Invoker\Exception\NotEnoughParametersException;
 use Invoker\Invoker;

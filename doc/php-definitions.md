@@ -100,7 +100,7 @@ Factories are **PHP callables** that return the instance. They allow to define o
 Here is an example using a closure:
 
 ```php
-use Interop\Container\ContainerInterface;
+use Psr\Container\ContainerInterface;
 
 return [
     'Foo' => function (ContainerInterface $c) {
@@ -130,7 +130,7 @@ return [
 ];
 ```
 
-This can also be done by injecting the container itself, as seen in the first example. When injecting the container, you should type-hint against the interface `Interop\Container\ContainerInterface` instead of the implementation `DI\Container`.
+This can also be done by injecting the container itself, as seen in the first example. When injecting the container, you should type-hint against the interface `Psr\Container\ContainerInterface` instead of the implementation `DI\Container`.
 
 Factories can be any PHP callable, so they can also be class methods:
 

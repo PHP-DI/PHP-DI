@@ -7,7 +7,7 @@ use DI\Definition\Resolver\DecoratorResolver;
 use DI\Definition\Resolver\DefinitionResolver;
 use DI\Definition\ValueDefinition;
 use EasyMock\EasyMock;
-use Interop\Container\ContainerInterface;
+use Psr\Container\ContainerInterface;
 use PHPUnit_Framework_MockObject_MockObject;
 
 /**

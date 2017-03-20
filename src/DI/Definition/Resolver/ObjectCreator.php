@@ -10,7 +10,7 @@ use DI\Definition\ObjectDefinition\PropertyInjection;
 use DI\DependencyException;
 use DI\Proxy\ProxyFactory;
 use Exception;
-use Interop\Container\Exception\NotFoundException;
+use Psr\Container\NotFoundExceptionInterface;
 use ProxyManager\Proxy\LazyLoadingInterface;
 use ReflectionClass;
 use ReflectionProperty;
@@ -141,7 +141,7 @@ class ObjectCreator implements DefinitionResolver
             }
 
             $this->injectMethodsAndProperties($object, $definition);
-        } catch (NotFoundException $e) {
+        } catch (NotFoundExceptionInterface $e) {
             throw new DependencyException(sprintf(
                 'Error while injecting dependencies into %s: %s',
                 $classReflection->getName(),

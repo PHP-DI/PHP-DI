@@ -4,7 +4,7 @@ namespace DI\Definition\Resolver;
 
 use DI\Definition\Definition;
 use DI\Definition\SelfResolvingDefinition;
-use Interop\Container\ContainerInterface;
+use Psr\Container\ContainerInterface;
 
 /**
  * Resolves self-resolving definitions.

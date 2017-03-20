@@ -9,7 +9,7 @@ use DI\Definition\ValueDefinition;
 use DI\Test\UnitTest\Fixtures\FakeContainer;
 use Doctrine\Common\Cache\Cache;
 use EasyMock\EasyMock;
-use Interop\Container\ContainerInterface;
+use Psr\Container\ContainerInterface;
 
 /**
  * @covers \DI\ContainerBuilder

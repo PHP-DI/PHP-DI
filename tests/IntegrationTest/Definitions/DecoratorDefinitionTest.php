@@ -3,7 +3,7 @@
 namespace DI\Test\IntegrationTest\Definitions;
 
 use DI\ContainerBuilder;
-use Interop\Container\ContainerInterface;
+use Psr\Container\ContainerInterface;
 
 /**
  * Test decorator definitions.

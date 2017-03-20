@@ -11,7 +11,7 @@ use DI\Definition\Source\DefinitionSource;
 use DI\Definition\Source\SourceChain;
 use DI\Proxy\ProxyFactory;
 use Doctrine\Common\Cache\Cache;
-use Interop\Container\ContainerInterface;
+use Psr\Container\ContainerInterface;
 use InvalidArgumentException;
 
 /**

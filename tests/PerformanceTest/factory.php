@@ -2,7 +2,7 @@
 
 use DI\ContainerBuilder;
 use DI\Scope;
-use Interop\Container\ContainerInterface;
+use Psr\Container\ContainerInterface;
 
 require_once __DIR__ . '/vendor/autoload.php';
 
