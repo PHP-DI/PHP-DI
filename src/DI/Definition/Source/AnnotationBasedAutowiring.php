@@ -4,6 +4,7 @@ namespace DI\Definition\Source;
 
 use DI\Annotation\Inject;
 use DI\Annotation\Injectable;
+use DI\Definition\AutowireDefinition;
 use DI\Definition\EntryReference;
 use DI\Definition\Exception\AnnotationException;
 use DI\Definition\Exception\DefinitionException;
@@ -29,7 +30,7 @@ use UnexpectedValueException;
  *
  * @author Matthieu Napoli <matthieu@mnapoli.fr>
  */
-class AnnotationReader implements DefinitionSource
+class AnnotationBasedAutowiring implements DefinitionSource, Autowiring
 {
     /**
      * @var Reader
@@ -51,19 +52,17 @@ class AnnotationReader implements DefinitionSource
         $this->ignorePhpDocErrors = (bool) $ignorePhpDocErrors;
     }
 
-    /**
-     * {@inheritdoc}
-     * @throws AnnotationException
-     * @throws InvalidArgumentException The class doesn't exist
-     */
-    public function getDefinition($name)
+    public function autowire(string $name, AutowireDefinition $definition = null)
     {
-        if (!class_exists($name) && !interface_exists($name)) {
-            return null;
+        $className = $definition ? $definition->getClassName() : $name;
+
+        if (!class_exists($className) && !interface_exists($className)) {
+            return $definition;
         }
 
-        $class = new ReflectionClass($name);
-        $definition = new ObjectDefinition($name);
+        $definition = $definition ?: new AutowireDefinition($name);
+
+        $class = new ReflectionClass($className);
 
         $this->readInjectableAnnotation($class, $definition);
 
@@ -74,6 +73,16 @@ class AnnotationReader implements DefinitionSource
         $this->readMethods($class, $definition);
 
         return $definition;
+    }
+
+    /**
+     * {@inheritdoc}
+     * @throws AnnotationException
+     * @throws InvalidArgumentException The class doesn't exist
+     */
+    public function getDefinition($name)
+    {
+        return $this->autowire($name);
     }
 
     /**

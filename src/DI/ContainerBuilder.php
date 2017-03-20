@@ -2,8 +2,9 @@
 
 namespace DI;
 
-use DI\Definition\Source\AnnotationReader;
-use DI\Definition\Source\Autowiring;
+use DI\Definition\Source\AnnotationBasedAutowiring;
+use DI\Definition\Source\NoAutowiring;
+use DI\Definition\Source\ReflectionBasedAutowiring;
 use DI\Definition\Source\CachedDefinitionSource;
 use DI\Definition\Source\DefinitionArray;
 use DI\Definition\Source\DefinitionFile;
@@ -74,7 +75,7 @@ class ContainerBuilder
     private $wrapperContainer;
 
     /**
-     * @var DefinitionSource[]
+     * @var DefinitionSource[]|string[]|array[]
      */
     private $definitionSources = [];
 
@@ -110,12 +111,26 @@ class ContainerBuilder
     public function build()
     {
         $sources = array_reverse($this->definitionSources);
+
         if ($this->useAnnotations) {
-            $sources[] = new AnnotationReader($this->ignorePhpDocErrors);
+            $autowiring = new AnnotationBasedAutowiring($this->ignorePhpDocErrors);
+            $sources[] = $autowiring;
         } elseif ($this->useAutowiring) {
-            $sources[] = new Autowiring();
+            $autowiring = new ReflectionBasedAutowiring;
+            $sources[] = $autowiring;
+        } else {
+            $autowiring = new NoAutowiring;
         }
 
+        $sources = array_map(function ($definitions) use ($autowiring) {
+            if (is_string($definitions)) {
+                // File
+                return new DefinitionFile($definitions, $autowiring);
+            } elseif (is_array($definitions)) {
+                return new DefinitionArray($definitions, $autowiring);
+            }
+            return $definitions;
+        }, $sources);
         $chain = new SourceChain($sources);
 
         if ($this->cache) {
@@ -124,7 +139,7 @@ class ContainerBuilder
         } else {
             $source = $chain;
             // Mutable definition source
-            $source->setMutableDefinitionSource(new DefinitionArray());
+            $source->setMutableDefinitionSource(new DefinitionArray([], $autowiring));
         }
 
         $proxyFactory = new ProxyFactory($this->writeProxiesToFile, $this->proxyDirectory);
@@ -255,12 +270,7 @@ class ContainerBuilder
     {
         $this->ensureNotLocked();
 
-        if (is_string($definitions)) {
-            // File
-            $definitions = new DefinitionFile($definitions);
-        } elseif (is_array($definitions)) {
-            $definitions = new DefinitionArray($definitions);
-        } elseif (! $definitions instanceof DefinitionSource) {
+        if (!is_string($definitions) && !is_array($definitions) && !($definitions instanceof DefinitionSource)) {
             throw new InvalidArgumentException(sprintf(
                 '%s parameter must be a string, an array or a DefinitionSource object, %s given',
                 'ContainerBuilder::addDefinitions()',

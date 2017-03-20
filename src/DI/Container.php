@@ -9,7 +9,7 @@ use DI\Definition\InstanceDefinition;
 use DI\Definition\ObjectDefinition;
 use DI\Definition\Resolver\DefinitionResolver;
 use DI\Definition\Resolver\ResolverDispatcher;
-use DI\Definition\Source\Autowiring;
+use DI\Definition\Source\ReflectionBasedAutowiring;
 use DI\Definition\Source\CachedDefinitionSource;
 use DI\Definition\Source\DefinitionArray;
 use DI\Definition\Source\DefinitionSource;
@@ -335,8 +335,8 @@ class Container implements ContainerInterface, FactoryInterface, \DI\InvokerInte
      */
     private function createDefaultDefinitionSource()
     {
-        $source = new SourceChain([new Autowiring]);
-        $source->setMutableDefinitionSource(new DefinitionArray);
+        $source = new SourceChain([new ReflectionBasedAutowiring]);
+        $source->setMutableDefinitionSource(new DefinitionArray([], new ReflectionBasedAutowiring));
 
         return $source;
     }

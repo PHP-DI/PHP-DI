@@ -72,7 +72,7 @@ class InjectionTest extends \PHPUnit_Framework_TestCase
         $containerPHP->set('foo', 'bar');
         $containerPHP->set(
             Class1::class,
-            \DI\autowire()
+            \DI\create()
                 ->scope(Scope::PROTOTYPE)
                 ->property('property1', \DI\get(Class2::class))
                 ->property('property2', \DI\get(Interface1::class))
@@ -88,8 +88,6 @@ class InjectionTest extends \PHPUnit_Framework_TestCase
                 ->method('method2', \DI\get(Interface1::class))
                 ->method('method3', \DI\get('namedDependency'), \DI\get('foo'))
                 ->method('method4', \DI\get(LazyDependency::class))
-                ->methodParameter('method5', 'param1', \DI\get(Interface1::class))
-                ->methodParameter('method5', 'param2', \DI\get('foo'))
         );
         $containerPHP->set(Class2::class, \DI\create());
         $containerPHP->set(Implementation1::class, \DI\create());
@@ -108,19 +106,6 @@ class InjectionTest extends \PHPUnit_Framework_TestCase
             'array'      => [self::DEFINITION_ARRAY, $containerArray],
             'php'        => [self::DEFINITION_PHP, $containerPHP],
         ];
-    }
-
-    /**
-     * @dataProvider containerProvider
-     */
-    public function testContainerHas($type, Container $container)
-    {
-        $this->assertTrue($container->has(Class1::class));
-        $this->assertTrue($container->has(Class2::class));
-        $this->assertTrue($container->has(Interface1::class));
-        $this->assertTrue($container->has('namedDependency'));
-        $this->assertTrue($container->has(LazyDependency::class));
-        $this->assertFalse($container->has('unknown'));
     }
 
     /**
@@ -267,10 +252,6 @@ class InjectionTest extends \PHPUnit_Framework_TestCase
         /** @var LazyDependency|LazyLoadingInterface $proxy */
         $proxy = $class1->method4Param1;
         $this->assertFalse($proxy->isProxyInitialized());
-
-        // Method 5 (defining a parameter by its name)
-        $this->assertInstanceOf(Implementation1::class, $class1->method5Param1);
-        $this->assertEquals('bar', $class1->method5Param2);
 
         return $proxy;
     }

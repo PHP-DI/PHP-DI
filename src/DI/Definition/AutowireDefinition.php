@@ -2,6 +2,8 @@
 
 namespace DI\Definition;
 
+use DI\Definition\ObjectDefinition\MethodInjection;
+
 /**
  * @author Matthieu Napoli <matthieu@mnapoli.fr>
  */
@@ -17,6 +19,8 @@ class AutowireDefinition extends ObjectDefinition implements HasSubDefinition
 
     /**
      * {@inheritdoc}
+     *
+     * @deprecated
      */
     public function setSubDefinition(Definition $definition)
     {
@@ -43,6 +47,17 @@ class AutowireDefinition extends ObjectDefinition implements HasSubDefinition
 
         // Merge method injections
         $this->mergeMethodInjections($definition);
+    }
+
+    public function setDefaultConstructorInjection(MethodInjection $injection)
+    {
+        if ($this->constructorInjection !== null) {
+            // Merge
+            $this->constructorInjection->merge($injection);
+        } else {
+            // Set
+            $this->constructorInjection = $injection;
+        }
     }
 
     private function mergeConstructorInjection(ObjectDefinition $definition)

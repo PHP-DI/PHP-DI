@@ -10,7 +10,7 @@ use DI\Test\IntegrationTest\Fixtures\LazyDependency;
 return [
     'foo' => 'bar',
 
-    Class1::class => DI\autowire()
+    Class1::class => DI\create()
             ->scope(Scope::PROTOTYPE)
             ->property('property1', DI\get(Class2::class))
             ->property('property2', DI\get(Interface1::class))
@@ -21,9 +21,7 @@ return [
             ->method('method1', DI\get(Class2::class))
             ->method('method2', DI\get(Interface1::class))
             ->method('method3', DI\get('namedDependency'), DI\get('foo'))
-            ->method('method4', DI\get(LazyDependency::class))
-            ->methodParameter('method5', 'param1', \DI\get(Interface1::class))
-            ->methodParameter('method5', 'param2', \DI\get('foo')),
+            ->method('method4', DI\get(LazyDependency::class)),
 
     Class2::class => DI\create(),
 

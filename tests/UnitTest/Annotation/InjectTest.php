@@ -3,7 +3,7 @@
 namespace DI\Test\UnitTest\Annotation;
 
 use DI\Annotation\Inject;
-use DI\Definition\Source\AnnotationReader;
+use DI\Definition\Source\AnnotationBasedAutowiring;
 use DI\Test\UnitTest\Annotation\Fixtures\InjectFixture;
 use DI\Test\UnitTest\Annotation\Fixtures\MixedAnnotationsFixture;
 use DI\Test\UnitTest\Annotation\Fixtures\NonImportedInjectFixture;
@@ -29,7 +29,7 @@ class InjectTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $definitionReader = new AnnotationReader();
+        $definitionReader = new AnnotationBasedAutowiring();
         $this->annotationReader = $definitionReader->getAnnotationReader();
         $this->reflectionClass = new ReflectionClass(InjectFixture::class);
     }

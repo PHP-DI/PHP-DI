@@ -2,60 +2,22 @@
 
 namespace DI\Definition\Source;
 
-use DI\Definition\EntryReference;
-use DI\Definition\ObjectDefinition;
-use DI\Definition\ObjectDefinition\MethodInjection;
+use DI\Definition\AutowireDefinition;
+use DI\Definition\Exception\DefinitionException;
 
 /**
- * Reads DI class definitions using reflection.
+ * Source of definitions for entries of the container.
  *
  * @author Matthieu Napoli <matthieu@mnapoli.fr>
  */
-class Autowiring implements DefinitionSource
+interface Autowiring
 {
     /**
-     * {@inheritdoc}
+     * Autowire the given definition.
+     *
+     * @return AutowireDefinition|null
+     *
+     * @throws DefinitionException An invalid definition was found.
      */
-    public function getDefinition($name)
-    {
-        if (!class_exists($name) && !interface_exists($name)) {
-            return null;
-        }
-
-        $definition = new ObjectDefinition($name);
-
-        // Constructor
-        $class = new \ReflectionClass($name);
-        $constructor = $class->getConstructor();
-        if ($constructor && $constructor->isPublic()) {
-            $definition->setConstructorInjection(
-                MethodInjection::constructor($this->getParametersDefinition($constructor))
-            );
-        }
-
-        return $definition;
-    }
-
-    /**
-     * Read the type-hinting from the parameters of the function.
-     */
-    private function getParametersDefinition(\ReflectionFunctionAbstract $constructor)
-    {
-        $parameters = [];
-
-        foreach ($constructor->getParameters() as $index => $parameter) {
-            // Skip optional parameters
-            if ($parameter->isOptional()) {
-                continue;
-            }
-
-            $parameterClass = $parameter->getClass();
-
-            if ($parameterClass) {
-                $parameters[$index] = new EntryReference($parameterClass->getName());
-            }
-        }
-
-        return $parameters;
-    }
+    public function autowire(string $name, AutowireDefinition $definition = null);
 }

@@ -52,9 +52,6 @@ class Class1
 
     public $method4Param1;
 
-    public $method5Param1;
-    public $method5Param2;
-
     /**
      * @param Class2         $param1
      * @param Interface1     $param2
@@ -120,16 +117,5 @@ class Class1
     public function method4(LazyDependency $param1)
     {
         $this->method4Param1 = $param1;
-    }
-
-    /**
-     * Tests defining a parameter by its name.
-     *
-     * @Inject({"param2" = "foo"})
-     */
-    public function method5(Interface1 $param1, $param2)
-    {
-        $this->method5Param1 = $param1;
-        $this->method5Param2 = $param2;
     }
 }
