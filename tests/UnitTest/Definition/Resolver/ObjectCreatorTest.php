@@ -2,7 +2,7 @@
 
 namespace DI\Test\UnitTest\Definition\Resolver;
 
-use DI\Definition\Exception\DefinitionException;
+use DI\Definition\Exception\InvalidDefinition;
 use DI\Definition\ObjectDefinition;
 use DI\Definition\ObjectDefinition\MethodInjection;
 use DI\Definition\ObjectDefinition\PropertyInjection;
@@ -189,7 +189,7 @@ Object (
     lazy = false
 )
 MESSAGE;
-        $this->setExpectedException(DefinitionException::class, $message);
+        $this->setExpectedException(InvalidDefinition::class, $message);
 
         $definition = new ObjectDefinition('foo', 'bar');
 
@@ -207,7 +207,7 @@ Object (
     lazy = false
 )
 MESSAGE;
-        $this->setExpectedException(DefinitionException::class, $message);
+        $this->setExpectedException(InvalidDefinition::class, $message);
 
         $definition = new ObjectDefinition('ArrayAccess');
 
@@ -225,7 +225,7 @@ Object (
     lazy = false
 )
 MESSAGE;
-        $this->setExpectedException(DefinitionException::class, $message);
+        $this->setExpectedException(InvalidDefinition::class, $message);
 
         $definition = new ObjectDefinition(FixtureClass::class);
 

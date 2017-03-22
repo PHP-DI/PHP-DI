@@ -3,7 +3,7 @@
 namespace DI\Definition\Resolver;
 
 use DI\Definition\Definition;
-use DI\Definition\Exception\DefinitionException;
+use DI\Definition\Exception\InvalidDefinition;
 
 /**
  * Resolves a definition to a value.
@@ -19,7 +19,7 @@ interface DefinitionResolver
      * @param Definition $definition Object that defines how the value should be obtained.
      * @param array      $parameters Optional parameters to use to build the entry.
      *
-     * @throws DefinitionException If the definition cannot be resolved.
+     * @throws InvalidDefinition If the definition cannot be resolved.
      *
      * @return mixed Value obtained from the definition.
      */

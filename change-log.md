@@ -10,6 +10,7 @@ BC breaks:
 
 - PHP 7 or greater is required
 - The deprecated `DI\link()` helper was removed, used `DI\get()` instead
+- The exception `DI\Definition\Exception\DefinitionException` was renamed to `DI\Definition\Exception\InvalidDefinition`
 
 ## 5.4.1
 
