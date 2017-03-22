@@ -7,6 +7,6 @@ namespace DI\Definition\Exception;
  *
  * @author Matthieu Napoli <matthieu@mnapoli.fr>
  */
-class AnnotationException extends DefinitionException
+class AnnotationException extends InvalidDefinition
 {
 }

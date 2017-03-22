@@ -104,7 +104,7 @@ class DecoratorDefinitionTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \DI\Definition\Exception\DefinitionException
+     * @expectedException \DI\Definition\Exception\InvalidDefinition
      * @expectedExceptionMessage Entry "foo" decorates nothing: no previous definition with the same name was found
      */
     public function test_decorate_must_have_previous_definition()

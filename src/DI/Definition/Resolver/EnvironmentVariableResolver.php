@@ -4,7 +4,7 @@ namespace DI\Definition\Resolver;
 
 use DI\Definition\Definition;
 use DI\Definition\EnvironmentVariableDefinition;
-use DI\Definition\Exception\DefinitionException;
+use DI\Definition\Exception\InvalidDefinition;
 use DI\Definition\Helper\DefinitionHelper;
 
 /**
@@ -46,7 +46,7 @@ class EnvironmentVariableResolver implements DefinitionResolver
         }
 
         if (!$definition->isOptional()) {
-            throw new DefinitionException(sprintf(
+            throw new InvalidDefinition(sprintf(
                 "The environment variable '%s' has not been defined",
                 $definition->getVariableName()
             ));

@@ -78,7 +78,7 @@ class ContainerGetTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \DI\Definition\Exception\DefinitionException
+     * @expectedException \DI\Definition\Exception\InvalidDefinition
      * @expectedExceptionMessage Error while reading @Injectable on DI\Test\UnitTest\Fixtures\InvalidScope: Value 'foobar' is not a valid scope
      * @coversNothing
      */
