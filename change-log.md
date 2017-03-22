@@ -5,6 +5,7 @@
 Improvements:
 
 - The container can now be built without parameters: `new Container()`
+- [#242](https://github.com/PHP-DI/PHP-DI/issues/242) Error in case a definition is not indexed by a string
 
 BC breaks:
 
