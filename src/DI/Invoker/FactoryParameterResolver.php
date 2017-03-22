@@ -2,8 +2,8 @@
 
 namespace DI\Invoker;
 
-use Interop\Container\ContainerInterface;
 use Invoker\ParameterResolver\ParameterResolver;
+use Psr\Container\ContainerInterface;
 use ReflectionFunctionAbstract;
 
 /**
@@ -46,7 +46,8 @@ class FactoryParameterResolver implements ParameterResolver
                 continue;
             }
 
-            if ($parameterClass->name === 'Interop\Container\ContainerInterface') {
+            if ($parameterClass->name === 'Interop\Container\ContainerInterface'
+                || $parameterClass->name === 'Psr\Container\ContainerInterface') {
                 $resolvedParameters[$index] = $this->container;
             } elseif ($parameterClass->name === 'DI\Factory\RequestedEntry') {
                 // By convention the second parameter is the definition

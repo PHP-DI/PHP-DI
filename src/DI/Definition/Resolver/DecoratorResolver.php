@@ -5,7 +5,7 @@ namespace DI\Definition\Resolver;
 use DI\Definition\DecoratorDefinition;
 use DI\Definition\Definition;
 use DI\Definition\Exception\DefinitionException;
-use Interop\Container\ContainerInterface;
+use Psr\Container\ContainerInterface;
 
 /**
  * Resolves a decorator definition to a value.

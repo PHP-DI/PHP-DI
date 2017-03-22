@@ -8,7 +8,7 @@ use DI\Definition\StringDefinition;
 use DI\Definition\ValueDefinition;
 use DI\Proxy\ProxyFactory;
 use EasyMock\EasyMock;
-use Interop\Container\ContainerInterface;
+use Psr\Container\ContainerInterface;
 
 /**
  * @covers \DI\Definition\Resolver\ResolverDispatcher

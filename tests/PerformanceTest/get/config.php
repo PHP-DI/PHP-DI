@@ -2,7 +2,7 @@
 
 use DI\Test\PerformanceTest\Get\A;
 use DI\Test\PerformanceTest\Get\B;
-use Interop\Container\ContainerInterface;
+use Psr\Container\ContainerInterface;
 
 return [
     'object'  => \DI\object('DI\Test\PerformanceTest\Get\GetFixture')
