@@ -5,7 +5,7 @@ namespace DI\Definition\Resolver;
 use DI\Definition\Definition;
 use DI\Definition\InstanceDefinition;
 use DI\DependencyException;
-use Interop\Container\Exception\NotFoundException;
+use Psr\Container\NotFoundExceptionInterface;
 
 /**
  * Injects dependencies on an existing instance.
@@ -26,7 +26,7 @@ class InstanceInjector extends ObjectCreator
     {
         try {
             $this->injectMethodsAndProperties($definition->getInstance(), $definition->getObjectDefinition());
-        } catch (NotFoundException $e) {
+        } catch (NotFoundExceptionInterface $e) {
             $message = sprintf(
                 'Error while injecting dependencies into %s: %s',
                 get_class($definition->getInstance()),

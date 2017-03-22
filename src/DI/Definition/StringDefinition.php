@@ -4,8 +4,8 @@ namespace DI\Definition;
 
 use DI\DependencyException;
 use DI\Scope;
-use Interop\Container\ContainerInterface;
-use Interop\Container\Exception\NotFoundException;
+use Psr\Container\ContainerInterface;
+use Psr\Container\NotFoundExceptionInterface;
 
 /**
  * Definition of a string composed of other strings.
@@ -67,7 +67,7 @@ class StringDefinition implements Definition, SelfResolvingDefinition
         $result = preg_replace_callback('#\{([^\{\}]+)\}#', function (array $matches) use ($container) {
             try {
                 return $container->get($matches[1]);
-            } catch (NotFoundException $e) {
+            } catch (NotFoundExceptionInterface $e) {
                 throw new DependencyException(sprintf(
                     "Error while parsing string expression for entry '%s': %s",
                     $this->getName(),

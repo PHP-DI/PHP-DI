@@ -9,10 +9,10 @@ This documentation describes the API of the container object itself.
 
 ## get() & has()
 
-The container implements the [container-interop](https://github.com/container-interop/container-interop) standard. That means it implements [`Interop\Container\ContainerInterface`](https://github.com/container-interop/container-interop/blob/master/src/Interop/Container/ContainerInterface.php):
+The container implements the [PSR-11](http://www.php-fig.org/psr/) standard. That means it implements [`Psr\Container\ContainerInterface`](https://github.com/php-fig/container/blob/master/src/ContainerInterface.php):
 
 ```php
-namespace Interop\Container;
+namespace Psr\Container;
 
 interface ContainerInterface
 {

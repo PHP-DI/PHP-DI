@@ -3,7 +3,7 @@
 namespace DI\Definition;
 
 use DI\Scope;
-use Interop\Container\ContainerInterface;
+use Psr\Container\ContainerInterface;
 
 /**
  * Defines an alias from an entry to another.

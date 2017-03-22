@@ -1,5 +1,11 @@
 # Change log
 
+## 5.4.1
+
+- [PSR-11](http://www.php-fig.org/psr/) compliance
+
+Note that PHP-DI was already compliant with PSR-11 because it was implementing container-interop, and container-interop 1.2 extends PSR-11. This new version just makes it more explicit and will allow to drop container-interop support in the next major versions.
+
 ## 5.4
 
 Read the [news entry](news/20-php-di-5-4-released.md).

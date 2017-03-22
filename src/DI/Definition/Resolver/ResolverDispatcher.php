@@ -5,7 +5,7 @@ namespace DI\Definition\Resolver;
 use DI\Definition\Definition;
 use DI\Definition\Exception\DefinitionException;
 use DI\Proxy\ProxyFactory;
-use Interop\Container\ContainerInterface;
+use Psr\Container\ContainerInterface;
 
 /**
  * Dispatches to more specific resolvers.

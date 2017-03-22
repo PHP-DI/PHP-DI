@@ -5,7 +5,7 @@ namespace DI\Test\UnitTest\Definition\Resolver;
 use DI\Definition\Resolver\SelfResolver;
 use DI\Definition\ValueDefinition;
 use EasyMock\EasyMock;
-use Interop\Container\ContainerInterface;
+use Psr\Container\ContainerInterface;
 
 /**
  * @covers \DI\Definition\Resolver\SelfResolver

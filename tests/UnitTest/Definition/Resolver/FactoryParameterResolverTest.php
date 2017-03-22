@@ -7,7 +7,7 @@ use DI\Factory\RequestedEntry;
 use DI\Invoker\FactoryParameterResolver;
 use DI\Test\UnitTest\Definition\Resolver\Fixture\NoConstructor;
 use EasyMock\EasyMock;
-use Interop\Container\ContainerInterface;
+use Psr\Container\ContainerInterface;
 
 /**
  * @covers \DI\Invoker\FactoryParameterResolver
@@ -36,6 +36,36 @@ class FactoryParameterResolverTest extends \PHPUnit_Framework_TestCase
         $this->container = $this->easyMock(ContainerInterface::class);
         $this->resolver = new FactoryParameterResolver($this->container);
         $this->requestedEntry = $this->easyMock(RequestedEntry::class);
+    }
+
+    /**
+     * @test
+     */
+    public function should_resolve_interop_container()
+    {
+        $callable = function (\Interop\Container\ContainerInterface $c) {
+        };
+        $reflection = new \ReflectionFunction($callable);
+
+        $parameters = $this->resolver->getParameters($reflection, [$this->container, $this->requestedEntry], []);
+
+        $this->assertCount(1, $parameters);
+        $this->assertSame($this->container, $parameters[0]);
+    }
+
+    /**
+     * @test
+     */
+    public function should_resolve_psr11_container()
+    {
+        $callable = function (ContainerInterface $c) {
+        };
+        $reflection = new \ReflectionFunction($callable);
+
+        $parameters = $this->resolver->getParameters($reflection, [$this->container, $this->requestedEntry], []);
+
+        $this->assertCount(1, $parameters);
+        $this->assertSame($this->container, $parameters[0]);
     }
 
     /**
