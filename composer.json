@@ -40,7 +40,8 @@
         "mnapoli/php-di": "*"
     },
     "provide": {
-        "container-interop/container-interop-implementation": "^1.0"
+        "container-interop/container-interop-implementation": "^1.0",
+        "psr/container-implementation": "^1.0"
     },
     "suggest": {
         "doctrine/cache": "Install it if you want to use the cache (version ~1.4)",
