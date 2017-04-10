@@ -89,6 +89,7 @@ class Container implements ContainerInterface, InteropContainerInterface, Factor
         $this->singletonEntries[self::class] = $this;
         $this->singletonEntries[FactoryInterface::class] = $this;
         $this->singletonEntries[InvokerInterface::class] = $this;
+        $this->singletonEntries[ContainerInterface::class] = $this;
     }
 
     /**
