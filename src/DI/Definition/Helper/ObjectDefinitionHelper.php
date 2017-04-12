@@ -48,6 +48,11 @@ class ObjectDefinitionHelper implements DefinitionHelper
     private $methods = [];
 
     /**
+     * @var ObjectDefinition\
+     */
+    private $definition;
+
+    /**
      * Helper for defining an object.
      *
      * @param string|null $className Class name of the object.
@@ -56,6 +61,18 @@ class ObjectDefinitionHelper implements DefinitionHelper
     public function __construct($className = null)
     {
         $this->className = $className;
+    }
+
+    /**
+     * @param ObjectDefinition $definition
+     *
+     * @return $this
+     */
+    public function setDefinition(ObjectDefinition $definition)
+    {
+        $this->definition = $definition;
+
+        return $this;
     }
 
     /**
@@ -206,6 +223,10 @@ class ObjectDefinitionHelper implements DefinitionHelper
      */
     public function getDefinition($entryName)
     {
+        if ($this->definition !== null) {
+            return $this->definition;
+        }
+
         $definition = new ObjectDefinition($entryName, $this->className);
 
         if ($this->lazy !== null) {

@@ -3,6 +3,7 @@
 namespace DI\Definition;
 
 use DI\Definition\Helper\DefinitionHelper;
+use DI\Definition\Helper\ObjectDefinitionHelper;
 use DI\Scope;
 
 /**
@@ -56,6 +57,22 @@ class ArrayDefinition implements Definition
     public function getValues()
     {
         return $this->values;
+    }
+
+    /**
+     * @return array
+     */
+    public function getValuesWithSubDefinition()
+    {
+        return array_values(
+            array_filter(
+                $this->values,
+                function ($value) {
+                    return ($value instanceof ObjectDefinitionHelper)
+                    && ($value->getDefinition('') instanceof HasSubDefinition);
+                }
+            )
+        );
     }
 
     public function __toString()

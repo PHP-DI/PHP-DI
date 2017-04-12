@@ -4,6 +4,9 @@ namespace DI\Test\IntegrationTest\Definitions;
 
 use DI\ContainerBuilder;
 use DI\Scope;
+use DI\Test\IntegrationTest\Definitions\ObjectDefinition\A;
+use DI\Test\IntegrationTest\Definitions\ObjectDefinition\B;
+use DI\Test\IntegrationTest\Definitions\ObjectDefinition\C;
 
 /**
  * Test array definitions.
@@ -160,4 +163,24 @@ class ArrayDefinitionTest extends \PHPUnit_Framework_TestCase
         $this->assertCount(1, $array);
         $this->assertEquals('value 1', $array[0]);
     }
+
+    public function test_autowiring_inside_arrays()
+    {
+        $builder = new ContainerBuilder();
+        $builder->addDefinitions([
+            'values' => [
+                \DI\object(A::class),
+                \DI\object(C::class)
+            ]
+        ]);
+        $container = $builder->build();
+
+        $array = $container->get('values');
+
+        $this->assertCount(2, $array);
+        $this->assertInstanceOf(A::class, $array[0]);
+        $this->assertInstanceOf(C::class, $array[1]);
+        $this->assertInstanceOf(B::class, $array[1]->a->b);
+    }
 }
+
