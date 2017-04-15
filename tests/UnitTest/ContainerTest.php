@@ -6,6 +6,7 @@ use DI\Container;
 use DI\ContainerBuilder;
 use DI\FactoryInterface;
 use DI\InvokerInterface;
+use Psr\Container\ContainerInterface;
 use stdClass;
 
 /**
@@ -97,6 +98,16 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
         $container = ContainerBuilder::buildDevContainer();
 
         $this->assertSame($container, $container->get(InvokerInterface::class));
+    }
+
+    /**
+     * The container auto-registers itself (with the container interface).
+     */
+    public function testContainerInterfaceIsRegistered()
+    {
+        $container = ContainerBuilder::buildDevContainer();
+
+        $this->assertSame($container, $container->get(ContainerInterface::class));
     }
 
     /**

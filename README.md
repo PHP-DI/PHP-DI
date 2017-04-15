@@ -5,7 +5,6 @@ layout: home
 [![](doc/img.png)](http://php-di.org/)
 
 [![Build Status](https://img.shields.io/travis/PHP-DI/PHP-DI.svg?style=flat-square)](https://travis-ci.org/PHP-DI/PHP-DI)
-[![HHVM Status](https://img.shields.io/hhvm/php-di/php-di.svg?style=flat-square)](http://hhvm.h4cc.de/package/php-di/php-di)
 [![Coverage Status](https://img.shields.io/coveralls/PHP-DI/PHP-DI/master.svg?style=flat-square)](https://coveralls.io/r/PHP-DI/PHP-DI?branch=master)
 [![Scrutinizer Code Quality](https://img.shields.io/scrutinizer/g/PHP-DI/PHP-DI.svg?style=flat-square)](https://scrutinizer-ci.com/g/PHP-DI/PHP-DI/?branch=master)
 [![Downloads per months](https://img.shields.io/packagist/dm/PHP-DI/PHP-DI.svg?style=flat-square)](https://packagist.org/packages/PHP-DI/PHP-DI)
