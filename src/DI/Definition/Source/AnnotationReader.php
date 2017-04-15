@@ -6,7 +6,6 @@ use DI\Annotation\Inject;
 use DI\Annotation\Injectable;
 use DI\Definition\EntryReference;
 use DI\Definition\Exception\AnnotationException;
-use DI\Definition\Exception\DefinitionException;
 use DI\Definition\ObjectDefinition;
 use DI\Definition\ObjectDefinition\MethodInjection;
 use DI\Definition\ObjectDefinition\PropertyInjection;
@@ -252,7 +251,7 @@ class AnnotationReader implements DefinitionSource
             $annotation = $this->getAnnotationReader()
                 ->getClassAnnotation($class, 'DI\Annotation\Injectable');
         } catch (UnexpectedValueException $e) {
-            throw new DefinitionException(sprintf(
+            throw new AnnotationException(sprintf(
                 'Error while reading @Injectable on %s: %s',
                 $class->getName(),
                 $e->getMessage()

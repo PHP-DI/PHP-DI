@@ -86,7 +86,7 @@ class EnvironmentVariableResolverTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @test
-     * @expectedException \DI\Definition\Exception\DefinitionException
+     * @expectedException \DI\Definition\Exception\InvalidDefinition
      * @expectedExceptionMessage The environment variable 'UNDEFINED' has not been defined
      */
     public function should_throw_if_undefined_env_variable_and_no_default()

@@ -5,11 +5,13 @@
 Improvements:
 
 - The container can now be built without parameters: `new Container()`
+- [#242](https://github.com/PHP-DI/PHP-DI/issues/242) Error in case a definition is not indexed by a string
 
 BC breaks:
 
 - PHP 7 or greater is required
 - The deprecated `DI\link()` helper was removed, used `DI\get()` instead
+- The exception `DI\Definition\Exception\DefinitionException` was renamed to `DI\Definition\Exception\InvalidDefinition`
 
 ## 5.4.1
 

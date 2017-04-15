@@ -63,7 +63,7 @@ class ArrayDefinitionExtensionTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @test
-     * @expectedException \DI\Definition\Exception\DefinitionException
+     * @expectedException \DI\Definition\Exception\InvalidDefinition
      * @expectedExceptionMessage Definition name tries to add array entries but the previous definition is not an array
      */
     public function should_error_if_not_extending_an_array()

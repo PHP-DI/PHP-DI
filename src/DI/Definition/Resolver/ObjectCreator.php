@@ -3,7 +3,7 @@
 namespace DI\Definition\Resolver;
 
 use DI\Definition\Definition;
-use DI\Definition\Exception\DefinitionException;
+use DI\Definition\Exception\InvalidDefinition;
 use DI\Definition\Helper\DefinitionHelper;
 use DI\Definition\ObjectDefinition;
 use DI\Definition\ObjectDefinition\PropertyInjection;
@@ -112,7 +112,7 @@ class ObjectCreator implements DefinitionResolver
      * @param ObjectDefinition $definition
      * @param array            $parameters      Optional parameters to use to create the instance.
      *
-     * @throws DefinitionException
+     * @throws InvalidDefinition
      * @throws DependencyException
      * @return object
      */
@@ -122,13 +122,13 @@ class ObjectCreator implements DefinitionResolver
         if (! $definition->isInstantiable()) {
             // Check that the class exists
             if (! $definition->classExists()) {
-                throw DefinitionException::create($definition, sprintf(
+                throw InvalidDefinition::create($definition, sprintf(
                     'Entry "%s" cannot be resolved: the class doesn\'t exist',
                     $definition->getName()
                 ));
             }
 
-            throw DefinitionException::create($definition, sprintf(
+            throw InvalidDefinition::create($definition, sprintf(
                 'Entry "%s" cannot be resolved: the class is not instantiable',
                 $definition->getName()
             ));
@@ -155,8 +155,8 @@ class ObjectCreator implements DefinitionResolver
                 $classReflection->getName(),
                 $e->getMessage()
             ), 0, $e);
-        } catch (DefinitionException $e) {
-            throw DefinitionException::create($definition, sprintf(
+        } catch (InvalidDefinition $e) {
+            throw InvalidDefinition::create($definition, sprintf(
                 'Entry "%s" cannot be resolved: %s',
                 $definition->getName(),
                 $e->getMessage()
@@ -197,7 +197,7 @@ class ObjectCreator implements DefinitionResolver
      * @param PropertyInjection $propertyInjection Property injection definition
      *
      * @throws DependencyException
-     * @throws DefinitionException
+     * @throws InvalidDefinition
      */
     private function injectProperty($object, PropertyInjection $propertyInjection)
     {

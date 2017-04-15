@@ -245,4 +245,33 @@ class DefinitionArrayTest extends \PHPUnit_Framework_TestCase
         $this->assertNotNull($source->getDefinition('foo.test'));
         $this->assertNull($source->getDefinition('footest'));
     }
+
+    /**
+     * @see https://github.com/PHP-DI/PHP-DI/issues/242
+     *
+     * @expectedException \Exception
+     * @expectedExceptionMessage The PHP-DI definition is not indexed by an entry name in the definition array
+     */
+    public function testDefinitionsWithoutKeyThrowAnError()
+    {
+        new DefinitionArray([
+            'foo' => 'bar',
+            'baz', // error => this entry is not indexed by a string
+        ]);
+    }
+
+    /**
+     * @see https://github.com/PHP-DI/PHP-DI/issues/242
+     *
+     * @expectedException \Exception
+     * @expectedExceptionMessage The PHP-DI definition is not indexed by an entry name in the definition array
+     */
+    public function testDefinitionsWithoutKeyThrowAnError2()
+    {
+        $source = new DefinitionArray;
+        $source->addDefinitions([
+            'foo' => 'bar',
+            'baz', // error => this entry is not indexed by a string
+        ]);
+    }
 }

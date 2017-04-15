@@ -9,7 +9,7 @@ use DI\Definition\Definition;
  *
  * @author Matthieu Napoli <matthieu@mnapoli.fr>
  */
-class DefinitionException extends \Exception
+class InvalidDefinition extends \Exception
 {
     public static function create(Definition $definition, $message)
     {
