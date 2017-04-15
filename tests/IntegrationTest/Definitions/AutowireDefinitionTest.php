@@ -145,7 +145,7 @@ class AutowireDefinitionTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \DI\Definition\Exception\DefinitionException
+     * @expectedException \DI\Definition\Exception\InvalidDefinition
      * @expectedExceptionMessage Cannot autowire entry "DI\Test\IntegrationTest\Definitions\ObjectDefinition\Class3" because autowiring is disabled
      */
     public function test_cannot_use_autowire_if_autowiring_is_disabled()

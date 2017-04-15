@@ -63,7 +63,7 @@ class CreateDefinitionTest extends \PHPUnit_Framework_TestCase
 
     /**
      * It should not inherit the definition from autowiring.
-     * @expectedException \DI\Definition\Exception\DefinitionException
+     * @expectedException \DI\Definition\Exception\InvalidDefinition
      * @expectedExceptionMessage Parameter $parameter of __construct() has no value defined or guessable
      */
     public function test_does_not_trigger_autowiring()

@@ -3,7 +3,7 @@
 namespace DI\Definition\Source;
 
 use DI\Definition\AutowireDefinition;
-use DI\Definition\Exception\DefinitionException;
+use DI\Definition\Exception\InvalidDefinition;
 
 /**
  * Source of definitions for entries of the container.
@@ -15,7 +15,7 @@ interface Autowiring
     /**
      * Autowire the given definition.
      *
-     * @throws DefinitionException An invalid definition was found.
+     * @throws InvalidDefinition An invalid definition was found.
      * @return AutowireDefinition|null
      */
     public function autowire(string $name, AutowireDefinition $definition = null);
