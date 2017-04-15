@@ -153,7 +153,6 @@ class CreateDefinitionHelper implements DefinitionHelper
      */
     public function getDefinition($entryName)
     {
-        // TODO remove that hack, used only to ease the removal of object() definitions
         $class = $this::DEFINITION_CLASS;
         /** @var ObjectDefinition $definition */
         $definition = new $class($entryName, $this->className);
