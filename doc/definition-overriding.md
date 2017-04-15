@@ -47,7 +47,7 @@ You can go even further by overriding annotations and autowiring using file-base
 
 ```php
 return [
-    'Foo' => DI\object()
+    'Foo' => DI\create()
         ->constructor(DI\get('another.specific.service')),
     // ...
 ];
@@ -59,7 +59,9 @@ If we had another definition file (registered after this one), we could override
 
 ### Objects
 
-A `DI\object()` definition **always extends a previous object definition**. The reason for this is to allow to easily extend autowiring and annotations definitions:
+`DI\create()` overrides completely any previous definition or even autowiring. It doesn't allow extending another definition. See the "decorators" section below if you want to do that.
+
+If an object is built using autowiring (or annotations), you can override specific parameters with `DI\autowire()`:
 
 ```php
 class Foo
@@ -70,34 +72,28 @@ class Foo
 }
 
 return [
-    Foo::class => DI\object()
+    Foo::class => DI\autowire()
         ->constructorParameter('param2', 'Hello!'),
 ];
 ```
 
-In this example we extend the autowiring definition to set `$param2` because it can't be guessed through autowiring (no type-hint).
+In this example we extend the autowiring definition to set `$param2` because it can't be guessed through autowiring (no type-hint). `$param1` is not affected and is autowired.
 
-You can also take advantage of this when using multiple definition files:
-
-```php
-return [
-    Database::class => DI\object()
-        ->constructor('localhost', 3306)
-        ->method('setLogger', DI\get('logger.default')),
-];
-```
+Please not that `DI\autowire()`, like `DI\create()`, does not allow extending definitions. It only allows to customize how autowiring is done. In the example below the second definition will completely override the first one:
 
 ```php
 return [
-    // Override only the first constructor parameter
-    Database::class => DI\object()
+    Database::class => DI\autowire()
         ->constructorParameter('host', '192.168.34.121'),
 ];
 ```
 
-Since `DI\object()` extends (instead of overriding) we have only replaced one constructor parameter. The rest is preserved.
-
-**`DI\object()` is the only kind of definition that extends by default:** all other definitions override the previous definition completely.
+```php
+return [
+    Database::class => DI\autowire()
+        ->constructorParameter('port', 3306),
+];
+```
 
 ### Arrays
 
@@ -120,6 +116,8 @@ return [
 ```
 
 When resolved, the array will contain the 2 entries. **If you forget to use `DI\add()`, the array will be overridden entirely!**
+
+Note that you can use `DI\add()` even if the array was not declared before.
 
 ### Decorators
 

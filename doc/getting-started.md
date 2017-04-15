@@ -118,7 +118,7 @@ return [
     'Webservice' => function (Container $c) {
         return new Webservice($c->get('api.url'));
     },
-    'Controller' => DI\object()
+    'Controller' => DI\create()
         ->constructor(DI\get('Webservice')),
 ];
 ```

@@ -61,7 +61,7 @@ class Foo
     }
 }
 
-$container->set('Foo', \DI\object()->lazy());
+$container->set('Foo', \DI\create()->lazy());
 
 // $proxy is a Proxy object, it is not initialized
 // It is very lightweight in memory

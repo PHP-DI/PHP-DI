@@ -41,36 +41,40 @@ All the examples shown in this page are using a PHP 5.5 compatible syntax. If yo
     use Monolog\Logger;
 
     return [
-        LoggerInterface::class => DI\object(Logger::class)
+        LoggerInterface::class => DI\create(Logger::class)
     ];
     ```
 - PHP 5.6 function import:
 
     ```php
-    use function DI\object;
+    use function DI\create;
     use function DI\get;
 
     return [
-        'Foo' => object()
+        'Foo' => create()
             ->constructor(get('Bar')),
     ];
     ```
 
-*Watch out:* remember the helper functions (`DI\object()` for example) are namespaced functions, not classes. Do not use `new` (e.g. `new DI\object()`) or you will get a fatal error "Class 'DI\object' not found".
+*Watch out:* remember the helper functions (`DI\create()` for example) are namespaced functions, not classes. Do not use `new` (e.g. `new DI\create()`) or you will get a fatal error "Class 'DI\create' not found".
 
 ## Definition types
 
 This definition format is the most powerful of all. There are several kind of **entries** you can define:
 
-- **values**
-- **factories**
-- **objects**
-- **aliases**
-- ...
+- **[values](#values)**
+- **[factories](#factories)**
+- **[objects](#objects)**
+- **[autowired objects](#autowired-objects)**
+- **[aliases](#aliases)**
+- **[environment variables](#environment-variables)**
+- **[string expressions](#string-expressions)**
+- **[arrays](#arrays)**
+- **[wildcards](#wildcards)**
 
 ### Values
 
-Values (aka parameters in Symfony) are simple PHP values.
+Values (aka *parameters* in Symfony) are simple PHP values.
 
 ```php
 return [
@@ -113,7 +117,7 @@ Other services can be injected via type-hinting (as long as they are registered 
 
 ```php
 return [
-    'LoggerInterface' => DI\object('MyLogger'),
+    'LoggerInterface' => DI\create('MyLogger'),
 
     'Foo' => function (LoggerInterface $logger) {
         return new Foo($logger);
@@ -191,9 +195,9 @@ return [
 
 Please note:
 
-- `factory([FooFactory::class, 'create'])`: if `create()` is a **static** method then the object will not be created: `FooFactory::create()` will be called statically (as one would expect)
-- you can set any container entry name in the array, e.g. `DI\factory(['foo_bar_baz', 'create'])` (or alternatively: `DI\factory('foo_bar_baz::create')`), allowing you to configure `foo_bar_baz` and its dependencies like any other object
-- as a factory can be any PHP callable, you can use invocable objects, too: `DI\factory(InvocableFooFactory::class)` (or alternatively: `DI\factory('invocable_foo_factory')`, if it's defined in the container)
+- `factory([FooFactory::class, 'build'])`: if `build()` is a **static** method then the object will not be created: `FooFactory::build()` will be called statically (as one would expect)
+- you can set any container entry name in the array, e.g. `DI\factory(['foo_bar_baz', 'build'])` (or alternatively: `DI\factory('foo_bar_baz::build')`), allowing you to configure `foo_bar_baz` and its dependencies like any other object
+- as a factory can be any PHP callable, you can use invokable objects, too: `DI\factory(InvocableFooFactory::class)` (or alternatively: `DI\factory('invocable_foo_factory')`, if it's defined in the container)
 
 #### Retrieving the name of the requested entry
 
@@ -230,26 +234,24 @@ Please read the [definition overriding guide](definition-overriding.md) to learn
 
 ### Objects
 
-Using factories to create object is very powerful (as we can do anything using PHP), but the `DI\object()` helper can sometimes be simpler.
-
-Simple examples:
+Using factories to create object is very powerful (as we can do anything using PHP), but the `DI\create()` helper can sometimes be simpler. Some examples:
 
 ```php
 return [
-    // definition of an object (unnecessary if you use autowiring)
-    'Logger' => DI\object(),
+    // instantiate the Logger class to create the object
+    'Logger' => DI\create(),
     // mapping an interface to an implementation
-    'LoggerInterface' => DI\object('MyLogger'),
+    'LoggerInterface' => DI\create('MyLogger'),
     // using an arbitrary name for the entry
-    'logger.for.backend' => DI\object('Logger'),
+    'logger.for.backend' => DI\create('Logger'),
 ];
 ```
 
-The `DI\object()` helper lets you define constructor parameters:
+The `DI\create()` helper lets you define constructor parameters:
 
 ```php
 return [
-    'Logger' => DI\object()
+    'Logger' => DI\create()
         ->constructor('app.log', DI\get('log.level'), DI\get('FileWriter')),
 ];
 ```
@@ -258,10 +260,10 @@ As well as setter/method injections:
 
 ```php
 return [
-    'Database' => DI\object()
+    'Database' => DI\create()
         ->method('setLogger', DI\get('Logger')),
     // you can call a method twice
-    'Logger' => DI\object()
+    'Logger' => DI\create()
         ->method('addBackend', 'file')
         ->method('addBackend', 'syslog'),
 ];
@@ -271,18 +273,8 @@ And property injections:
 
 ```php
 return [
-    'Foo' => DI\object()
+    'Foo' => DI\create()
         ->property('bar', DI\get('Bar')),
-];
-```
-
-You can also define only specific parameters. This is useful when combined with autowiring: it allows to define the parameters that couldn't be guessed using type-hints.
-
-```php
-return [
-    'Logger' => DI\object()
-        ->constructorParameter('filename', 'app.log')
-        ->methodParameter('setHandler', 'handler', DI\get('SyslogHandler')),
 ];
 ```
 
@@ -290,8 +282,66 @@ By default each entry will be created once and the same instance will be injecte
 
 ```php
 return [
-    'FormBuilder' => DI\object()
+    'FormBuilder' => DI\create()
         ->scope(Scope::PROTOTYPE),
+];
+```
+
+### Autowired objects
+
+**If you have enabled [autowiring](autowiring.md)** you can use the `DI\autowire()` helper to customize how objects will be autowired.
+
+`DI\autowire()` behaves like `DI\create()` excepts instead of configuring from scratch how the object will be built, we only override what we need from the autowiring.
+
+```php
+return [
+    // when using no option it is not necessary to write it in the config file
+    'MyLogger' => DI\autowire(),
+    
+    // mapping an interface to an implementation (autowire the MyLogger class)
+    'LoggerInterface' => DI\autowire('MyLogger'),
+    
+    // using an arbitrary name for the entry
+    'logger.for.backend' => DI\autowire('MyLogger'),
+];
+```
+
+Like `DI\create()`, you can explicitly set constructor parameters:
+
+```php
+return [
+    'Logger' => DI\autowire()
+        ->constructor('app.log', DI\get('log.level'), DI\get('FileWriter')),
+];
+```
+
+As well as setter/method injections:
+
+```php
+return [
+    'Database' => DI\autowire()
+        ->method('setLogger', DI\get('Logger')),
+];
+```
+
+And property injections:
+
+```php
+return [
+    'Foo' => DI\autowire()
+        ->property('bar', DI\get('Bar')),
+];
+```
+
+You can also define only specific parameters: it allows to define the parameters that couldn't be guessed by the autowiring using type-hints.
+
+```php
+return [
+    'Logger' => DI\autowire()
+        // set the $filename parameter
+        ->constructorParameter('filename', 'app.log')
+        // set the $handler parameter
+        ->methodParameter('setHandler', 'handler', DI\get('SyslogHandler')),
 ];
 ```
 
@@ -355,7 +405,7 @@ You can use wildcards to define a batch of entries. It can be very useful to bin
 
 ```php
 return [
-    'Blog\Domain\*RepositoryInterface' => DI\object('Blog\Architecture\*DoctrineRepository'),
+    'Blog\Domain\*RepositoryInterface' => DI\create('Blog\Architecture\*DoctrineRepository'),
 ];
 ```
 
@@ -375,8 +425,8 @@ You can nest definitions inside others to avoid polluting the container with unn
 
 ```php
 return [
-    'Foo' => DI\object()
-        ->constructor(DI\string('{root_directory}/test.json'), DI\object('Bar')),
+    'Foo' => DI\create()
+        ->constructor(DI\string('{root_directory}/test.json'), DI\create('Bar')),
 ];
 ```
 
@@ -386,7 +436,7 @@ In addition to defining entries in an array, you can set them directly in the co
 
 ```php
 $container->set('db.host', 'localhost');
-$container->set('My\Class', \DI\object()
+$container->set('My\Class', \DI\create()
     ->constructor('some raw value')));
 ```
 
@@ -404,7 +454,7 @@ $container->set('foo', 'hello');
 $container->set('bar', new MyClass());
 
 // Error: you can't set definitions using ->set() when using a cache
-$container->set('foo', DI\object('MyClass'));
+$container->set('foo', DI\create('MyClass'));
 ```
 
 The reason for this is that definitions are cached (not values). If you set a definition dynamically, then it will be cached, which could lead to very weird bugs (because dynamic definitions should of course not be cached since they are… dynamic).

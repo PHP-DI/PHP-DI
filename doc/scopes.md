@@ -68,7 +68,7 @@ You can specify the scope by using the `scope` method:
 ```php
 return [
     // A new object will be created every time it is used
-    'MyClass1' => DI\object()
+    'MyClass1' => DI\create()
         ->scope(Scope::PROTOTYPE),
 
     // The closure will be called every time MyClass2 is used (and return a new object every time)
