@@ -2,8 +2,6 @@
 
 namespace DI\Definition\Source;
 
-use DI\Definition\Exception\DefinitionException;
-
 /**
  * Reads DI definitions from a file returning a PHP array.
  *
@@ -45,7 +43,6 @@ class DefinitionFile extends DefinitionArray
 
     /**
      * Lazy-loading of the definitions.
-     * @throws DefinitionException
      */
     private function initialize()
     {
@@ -56,7 +53,7 @@ class DefinitionFile extends DefinitionArray
         $definitions = require $this->file;
 
         if (! is_array($definitions)) {
-            throw new DefinitionException("File {$this->file} should return an array of definitions");
+            throw new \Exception("File {$this->file} should return an array of definitions");
         }
 
         $this->addDefinitions($definitions);

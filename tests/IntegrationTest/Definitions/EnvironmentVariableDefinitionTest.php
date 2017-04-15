@@ -30,7 +30,7 @@ class EnvironmentVariableDefinitionTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \DI\Definition\Exception\DefinitionException
+     * @expectedException \DI\Definition\Exception\InvalidDefinition
      * @expectedExceptionMessage The environment variable 'PHP_DI_DO_NOT_DEFINE_THIS' has not been defined
      */
     public function test_nonexistent_env_variable()

@@ -5,7 +5,7 @@ namespace DI\Test\IntegrationTest\Definitions;
 use DI\ContainerBuilder;
 use DI\Factory\RequestedEntry;
 use DI\Test\UnitTest\Definition\Resolver\Fixture\NoConstructor;
-use Interop\Container\ContainerInterface;
+use Psr\Container\ContainerInterface;
 
 /**
  * Test factory definitions.
@@ -86,7 +86,7 @@ class FactoryDefinitionTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \DI\Definition\Exception\DefinitionException
+     * @expectedException \DI\Definition\Exception\InvalidDefinition
      * @expectedExceptionMessage Invokable classes cannot be automatically resolved if autowiring is disabled on the container, you need to enable autowiring or define the entry manually.
      */
     public function test_error_message_on_invokable_class_without_autowiring()
@@ -165,6 +165,20 @@ class FactoryDefinitionTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf('stdClass', $factory[0]);
         $this->assertInstanceOf(RequestedEntry::class, $factory[1]);
         $this->assertInstanceOf(ContainerInterface::class, $factory[2]);
+    }
+
+    public function test_interop_container_get_injected_in_arbitrary_position_via_typehint()
+    {
+        $container = $this->createContainer([
+            'factory' => function (\stdClass $stdClass, \Interop\Container\ContainerInterface $c) {
+                return [$stdClass, $c];
+            },
+        ]);
+
+        $factory = $container->get('factory');
+
+        $this->assertInstanceOf('stdClass', $factory[0]);
+        $this->assertInstanceOf(ContainerInterface::class, $factory[1]);
     }
 
     public function test_value_gets_injected_via_parameter()
@@ -315,7 +329,7 @@ class FactoryDefinitionTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \DI\Definition\Exception\DefinitionException
+     * @expectedException \DI\Definition\Exception\InvalidDefinition
      * @expectedExceptionMessage Entry "foo" cannot be resolved: factory 'Hello World' is neither a callable nor a valid container entry
      */
     public function test_not_callable_factory_definition()

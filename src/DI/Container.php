@@ -18,7 +18,7 @@ use DI\Definition\Source\SourceChain;
 use DI\Invoker\DefinitionParameterResolver;
 use DI\Proxy\ProxyFactory;
 use Exception;
-use Interop\Container\ContainerInterface;
+use Interop\Container\ContainerInterface as InteropContainerInterface;
 use InvalidArgumentException;
 use Invoker\Invoker;
 use Invoker\ParameterResolver\AssociativeArrayResolver;
@@ -26,13 +26,14 @@ use Invoker\ParameterResolver\Container\TypeHintContainerResolver;
 use Invoker\ParameterResolver\DefaultValueResolver;
 use Invoker\ParameterResolver\NumericArrayResolver;
 use Invoker\ParameterResolver\ResolverChain;
+use Psr\Container\ContainerInterface;
 
 /**
  * Dependency Injection Container.
  *
  * @author Matthieu Napoli <matthieu@mnapoli.fr>
  */
-class Container implements ContainerInterface, FactoryInterface, \DI\InvokerInterface
+class Container implements ContainerInterface, InteropContainerInterface, FactoryInterface, \DI\InvokerInterface
 {
     /**
      * Map of entries with Singleton scope that are already resolved.
@@ -93,6 +94,7 @@ class Container implements ContainerInterface, FactoryInterface, \DI\InvokerInte
         $this->singletonEntries[self::class] = $this;
         $this->singletonEntries[FactoryInterface::class] = $this;
         $this->singletonEntries[InvokerInterface::class] = $this;
+        $this->singletonEntries[ContainerInterface::class] = $this;
     }
 
     /**

@@ -2,7 +2,7 @@
 
 namespace DI\Definition\Resolver;
 
-use DI\Definition\Exception\DefinitionException;
+use DI\Definition\Exception\InvalidDefinition;
 use DI\Definition\Helper\DefinitionHelper;
 use DI\Definition\ObjectDefinition\MethodInjection;
 use ReflectionMethod;
@@ -34,7 +34,7 @@ class ParameterResolver
      * @param ReflectionMethod $method
      * @param array            $parameters
      *
-     * @throws DefinitionException A parameter has no value defined or guessable.
+     * @throws InvalidDefinition A parameter has no value defined or guessable.
      * @return array Parameters to use to call the function.
      */
     public function resolveParameters(
@@ -64,7 +64,7 @@ class ParameterResolver
                     continue;
                 }
 
-                throw new DefinitionException(sprintf(
+                throw new InvalidDefinition(sprintf(
                     'Parameter $%s of %s has no value defined or guessable',
                     $parameter->getName(),
                     $this->getFunctionName($method)
@@ -94,7 +94,7 @@ class ParameterResolver
      * @param ReflectionParameter $parameter
      * @param ReflectionMethod    $function
      *
-     * @throws DefinitionException Can't get default values from PHP internal classes and functions
+     * @throws InvalidDefinition Can't get default values from PHP internal classes and functions
      * @return mixed
      */
     private function getParameterDefaultValue(
@@ -104,7 +104,7 @@ class ParameterResolver
         try {
             return $parameter->getDefaultValue();
         } catch (\ReflectionException $e) {
-            throw new DefinitionException(sprintf(
+            throw new InvalidDefinition(sprintf(
                 'The parameter "%s" of %s has no type defined or guessable. It has a default value, '
                 . 'but the default value can\'t be read through Reflection because it is a PHP internal class.',
                 $parameter->getName(),

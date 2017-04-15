@@ -4,8 +4,8 @@ namespace DI\Definition\Resolver;
 
 use DI\Definition\DecoratorDefinition;
 use DI\Definition\Definition;
-use DI\Definition\Exception\DefinitionException;
-use Interop\Container\ContainerInterface;
+use DI\Definition\Exception\InvalidDefinition;
+use Psr\Container\ContainerInterface;
 
 /**
  * Resolves a decorator definition to a value.
@@ -52,7 +52,7 @@ class DecoratorResolver implements DefinitionResolver
         $callable = $definition->getCallable();
 
         if (! is_callable($callable)) {
-            throw new DefinitionException(sprintf(
+            throw new InvalidDefinition(sprintf(
                 'The decorator "%s" is not callable',
                 $definition->getName()
             ));
@@ -62,10 +62,10 @@ class DecoratorResolver implements DefinitionResolver
 
         if (! $decoratedDefinition instanceof Definition) {
             if (! $definition->getSubDefinitionName()) {
-                throw new DefinitionException('Decorators cannot be nested in another definition');
+                throw new InvalidDefinition('Decorators cannot be nested in another definition');
             }
 
-            throw new DefinitionException(sprintf(
+            throw new InvalidDefinition(sprintf(
                 'Entry "%s" decorates nothing: no previous definition with the same name was found',
                 $definition->getName()
             ));

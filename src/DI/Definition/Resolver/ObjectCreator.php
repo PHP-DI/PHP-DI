@@ -3,15 +3,15 @@
 namespace DI\Definition\Resolver;
 
 use DI\Definition\Definition;
-use DI\Definition\Exception\DefinitionException;
+use DI\Definition\Exception\InvalidDefinition;
 use DI\Definition\Helper\DefinitionHelper;
 use DI\Definition\ObjectDefinition;
 use DI\Definition\ObjectDefinition\PropertyInjection;
 use DI\DependencyException;
 use DI\Proxy\ProxyFactory;
 use Exception;
-use Interop\Container\Exception\NotFoundException;
 use ProxyManager\Proxy\LazyLoadingInterface;
+use Psr\Container\NotFoundExceptionInterface;
 use ReflectionClass;
 use ReflectionProperty;
 
@@ -112,7 +112,7 @@ class ObjectCreator implements DefinitionResolver
      * @param ObjectDefinition $definition
      * @param array            $parameters      Optional parameters to use to create the instance.
      *
-     * @throws DefinitionException
+     * @throws InvalidDefinition
      * @throws DependencyException
      * @return object
      */
@@ -122,13 +122,13 @@ class ObjectCreator implements DefinitionResolver
         if (! $definition->isInstantiable()) {
             // Check that the class exists
             if (! $definition->classExists()) {
-                throw DefinitionException::create($definition, sprintf(
+                throw InvalidDefinition::create($definition, sprintf(
                     'Entry "%s" cannot be resolved: the class doesn\'t exist',
                     $definition->getName()
                 ));
             }
 
-            throw DefinitionException::create($definition, sprintf(
+            throw InvalidDefinition::create($definition, sprintf(
                 'Entry "%s" cannot be resolved: the class is not instantiable',
                 $definition->getName()
             ));
@@ -146,37 +146,17 @@ class ObjectCreator implements DefinitionResolver
                 $parameters
             );
 
-            // Optimization trick
-            switch (count($args)) {
-                case 0:
-                    $object = new $classname;
-                    break;
-                case 1:
-                    $object = new $classname($args[0]);
-                    break;
-                case 2:
-                    $object = new $classname($args[0], $args[1]);
-                    break;
-                case 3:
-                    $object = new $classname($args[0], $args[1], $args[2]);
-                    break;
-                case 4:
-                    $object = new $classname($args[0], $args[1], $args[2], $args[3]);
-                    break;
-                default:
-                    $object = $classReflection->newInstanceArgs($args);
-                    break;
-            }
+            $object = new $classname(...$args);
 
             $this->injectMethodsAndProperties($object, $definition);
-        } catch (NotFoundException $e) {
+        } catch (NotFoundExceptionInterface $e) {
             throw new DependencyException(sprintf(
                 'Error while injecting dependencies into %s: %s',
                 $classReflection->getName(),
                 $e->getMessage()
             ), 0, $e);
-        } catch (DefinitionException $e) {
-            throw DefinitionException::create($definition, sprintf(
+        } catch (InvalidDefinition $e) {
+            throw InvalidDefinition::create($definition, sprintf(
                 'Entry "%s" cannot be resolved: %s',
                 $definition->getName(),
                 $e->getMessage()
@@ -217,7 +197,7 @@ class ObjectCreator implements DefinitionResolver
      * @param PropertyInjection $propertyInjection Property injection definition
      *
      * @throws DependencyException
-     * @throws DefinitionException
+     * @throws InvalidDefinition
      */
     private function injectProperty($object, PropertyInjection $propertyInjection)
     {

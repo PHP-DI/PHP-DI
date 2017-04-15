@@ -30,4 +30,16 @@ class DefinitionFileTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('bim', $definition->getName());
         $this->assertEquals('bim', $definition->getClassName());
     }
+
+    /**
+     * @see https://github.com/PHP-DI/PHP-DI/issues/242
+     *
+     * @expectedException \Exception
+     * @expectedExceptionMessage The PHP-DI definition is not indexed by an entry name in the definition array
+     */
+    public function testDefinitionsWithoutKeyThrowAnError()
+    {
+        $source = new DefinitionFile(__DIR__ . '/Fixtures/definitions-fail.php');
+        $source->getDefinition('foo');
+    }
 }

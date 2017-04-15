@@ -55,7 +55,7 @@ class FactoryResolverTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @test
-     * @expectedException \DI\Definition\Exception\DefinitionException
+     * @expectedException \DI\Definition\Exception\InvalidDefinition
      * @expectedExceptionMessage Entry "foo" cannot be resolved: factory 'Hello world' is neither a callable nor a valid container entry
      */
     public function should_throw_if_the_factory_is_not_callable()
@@ -73,7 +73,7 @@ class FactoryResolverTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @test
-     * @expectedException  \DI\Definition\Exception\DefinitionException
+     * @expectedException  \DI\Definition\Exception\InvalidDefinition
      * @expectedExceptionMessage Entry "foo" cannot be resolved: Unable to invoke the callable because no value was given for parameter 3 ($c)
      */
     public function should_throw_if_not_enough_parameters()

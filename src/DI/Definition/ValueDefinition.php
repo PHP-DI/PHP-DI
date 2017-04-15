@@ -3,7 +3,7 @@
 namespace DI\Definition;
 
 use DI\Scope;
-use Interop\Container\ContainerInterface;
+use Psr\Container\ContainerInterface;
 
 /**
  * Definition of a value for dependency injection.

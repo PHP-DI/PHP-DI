@@ -3,17 +3,17 @@
 namespace DI\Definition\Resolver;
 
 use DI\Definition\Definition;
-use DI\Definition\Exception\DefinitionException;
+use DI\Definition\Exception\InvalidDefinition;
 use DI\Definition\FactoryDefinition;
 use DI\Definition\Helper\DefinitionHelper;
 use DI\Invoker\FactoryParameterResolver;
-use Interop\Container\ContainerInterface;
 use Invoker\Exception\NotCallableException;
 use Invoker\Exception\NotEnoughParametersException;
 use Invoker\Invoker;
 use Invoker\ParameterResolver\AssociativeArrayResolver;
 use Invoker\ParameterResolver\NumericArrayResolver;
 use Invoker\ParameterResolver\ResolverChain;
+use Psr\Container\ContainerInterface;
 
 /**
  * Resolves a factory definition to a value.
@@ -82,20 +82,20 @@ class FactoryResolver implements DefinitionResolver
         } catch (NotCallableException $e) {
             // Custom error message to help debugging
             if (is_string($callable) && class_exists($callable) && method_exists($callable, '__invoke')) {
-                throw new DefinitionException(sprintf(
+                throw new InvalidDefinition(sprintf(
                     'Entry "%s" cannot be resolved: factory %s. Invokable classes cannot be automatically resolved if autowiring is disabled on the container, you need to enable autowiring or define the entry manually.',
                     $definition->getName(),
                     $e->getMessage()
                 ));
             }
 
-            throw new DefinitionException(sprintf(
+            throw new InvalidDefinition(sprintf(
                 'Entry "%s" cannot be resolved: factory %s',
                 $definition->getName(),
                 $e->getMessage()
             ));
         } catch (NotEnoughParametersException $e) {
-            throw new DefinitionException(sprintf(
+            throw new InvalidDefinition(sprintf(
                 'Entry "%s" cannot be resolved: %s',
                 $definition->getName(),
                 $e->getMessage()

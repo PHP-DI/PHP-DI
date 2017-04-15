@@ -5,11 +5,19 @@
 Improvements:
 
 - The container can now be built without parameters: `new Container()`
+- [#242](https://github.com/PHP-DI/PHP-DI/issues/242) Error in case a definition is not indexed by a string
 
 BC breaks:
 
 - PHP 7 or greater is required
 - The deprecated `DI\link()` helper was removed, used `DI\get()` instead
+- The exception `DI\Definition\Exception\DefinitionException` was renamed to `DI\Definition\Exception\InvalidDefinition`
+
+## 5.4.1
+
+- [PSR-11](http://www.php-fig.org/psr/) compliance
+
+Note that PHP-DI was already compliant with PSR-11 because it was implementing container-interop, and container-interop 1.2 extends PSR-11. This new version just makes it more explicit and will allow to drop container-interop support in the next major versions.
 
 ## 5.4
 

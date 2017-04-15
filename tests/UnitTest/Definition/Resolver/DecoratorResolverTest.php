@@ -7,8 +7,8 @@ use DI\Definition\Resolver\DecoratorResolver;
 use DI\Definition\Resolver\DefinitionResolver;
 use DI\Definition\ValueDefinition;
 use EasyMock\EasyMock;
-use Interop\Container\ContainerInterface;
 use PHPUnit_Framework_MockObject_MockObject;
+use Psr\Container\ContainerInterface;
 
 /**
  * @covers \DI\Definition\Resolver\DecoratorResolver
@@ -59,7 +59,7 @@ class DecoratorResolverTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @test
-     * @expectedException \DI\Definition\Exception\DefinitionException
+     * @expectedException \DI\Definition\Exception\InvalidDefinition
      * @expectedExceptionMessage The decorator "foo" is not callable
      */
     public function should_throw_if_the_factory_is_not_callable()

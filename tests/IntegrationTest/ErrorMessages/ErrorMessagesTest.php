@@ -3,7 +3,7 @@
 namespace DI\Test\IntegrationTest\ErrorMessages;
 
 use DI\ContainerBuilder;
-use DI\Definition\Exception\DefinitionException;
+use DI\Definition\Exception\InvalidDefinition;
 
 /**
  * @coversNothing
@@ -21,7 +21,7 @@ Object (
     lazy = false
 )
 MESSAGE;
-        $this->setExpectedException(DefinitionException::class, $message);
+        $this->setExpectedException(InvalidDefinition::class, $message);
 
         $container = ContainerBuilder::buildDevContainer();
         $container->get('DI\Test\IntegrationTest\ErrorMessages\InterfaceFixture');
@@ -38,7 +38,7 @@ Object (
     lazy = false
 )
 MESSAGE;
-        $this->setExpectedException(DefinitionException::class, $message);
+        $this->setExpectedException(InvalidDefinition::class, $message);
 
         $container = ContainerBuilder::buildDevContainer();
         $container->set('Acme\Foo\Bar\Bar', \DI\create());
@@ -61,7 +61,7 @@ Object (
     )
 )
 MESSAGE;
-        $this->setExpectedException(DefinitionException::class, $message);
+        $this->setExpectedException(InvalidDefinition::class, $message);
 
         $container = ContainerBuilder::buildDevContainer();
         $container->set(Buggy1::class, \DI\autowire()->constructorParameter('foo', 'some value'));
@@ -116,7 +116,7 @@ Object (
     )
 )
 MESSAGE;
-        $this->setExpectedException(DefinitionException::class, $message);
+        $this->setExpectedException(InvalidDefinition::class, $message);
 
         $builder = new ContainerBuilder();
         $builder->useAnnotations(true);
@@ -124,7 +124,7 @@ MESSAGE;
     }
 
     /**
-     * @expectedException \DI\Definition\Exception\DefinitionException
+     * @expectedException \DI\Definition\Exception\InvalidDefinition
      * @expectedExceptionMessage Entry "foo" cannot be resolved: factory 'bar' is neither a callable nor a valid container entry
      */
     public function test_factory_not_callable()

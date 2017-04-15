@@ -45,6 +45,10 @@ class DefinitionArray implements DefinitionSource, MutableDefinitionSource
      */
     public function __construct(array $definitions = [], Autowiring $autowiring = null)
     {
+        if (isset($definitions[0])) {
+            throw new \Exception('The PHP-DI definition is not indexed by an entry name in the definition array');
+        }
+
         $this->definitions = $definitions;
         $this->autowiring = $autowiring ?: new NoAutowiring;
     }
@@ -54,6 +58,10 @@ class DefinitionArray implements DefinitionSource, MutableDefinitionSource
      */
     public function addDefinitions(array $definitions)
     {
+        if (isset($definitions[0])) {
+            throw new \Exception('The PHP-DI definition is not indexed by an entry name in the definition array');
+        }
+
         // The newly added data prevails
         // "for keys that exist in both arrays, the elements from the left-hand array will be used"
         $this->definitions = $definitions + $this->definitions;

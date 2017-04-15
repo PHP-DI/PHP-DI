@@ -2,7 +2,7 @@
 
 namespace DI\Definition\Helper;
 
-use DI\Definition\Exception\DefinitionException;
+use DI\Definition\Exception\InvalidDefinition;
 use DI\Definition\ObjectDefinition;
 use DI\Definition\ObjectDefinition\MethodInjection;
 use DI\Definition\ObjectDefinition\PropertyInjection;
@@ -200,7 +200,7 @@ class CreateDefinitionHelper implements DefinitionHelper
      * @param ObjectDefinition $definition
      * @param string          $method
      * @param array           $parameters
-     * @throws DefinitionException
+     * @throws InvalidDefinition
      * @return array
      */
     private function fixParameters(ObjectDefinition $definition, $method, $parameters)
@@ -214,7 +214,7 @@ class CreateDefinitionHelper implements DefinitionHelper
                 try {
                     $reflectionParameter = new \ReflectionParameter($callable, $index);
                 } catch (\ReflectionException $e) {
-                    throw DefinitionException::create($definition, sprintf("Parameter with name '%s' could not be found. %s.", $index, $e->getMessage()));
+                    throw InvalidDefinition::create($definition, sprintf("Parameter with name '%s' could not be found. %s.", $index, $e->getMessage()));
                 }
 
                 $index = $reflectionParameter->getPosition();

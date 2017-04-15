@@ -2,7 +2,7 @@
 
 namespace DI\Test\UnitTest\Definition\Helper;
 
-use DI\Definition\Exception\DefinitionException;
+use DI\Definition\Exception\InvalidDefinition;
 use DI\Definition\Helper\AutowireDefinitionHelper;
 use DI\Definition\ObjectDefinition\MethodInjection;
 use DI\Scope;
@@ -193,7 +193,7 @@ class AutowireDefinitionHelperTest extends \PHPUnit_Framework_TestCase
         }
         $helper = new AutowireDefinitionHelper();
         $helper->methodParameter('__construct', 'wrongName', 42);
-        $this->setExpectedException(DefinitionException::class, "Parameter with name 'wrongName' could not be found");
+        $this->setExpectedException(InvalidDefinition::class, "Parameter with name 'wrongName' could not be found");
         $helper->getDefinition(Class1::class);
     }
 }

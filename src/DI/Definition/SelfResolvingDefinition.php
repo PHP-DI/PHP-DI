@@ -2,7 +2,7 @@
 
 namespace DI\Definition;
 
-use Interop\Container\ContainerInterface;
+use Psr\Container\ContainerInterface;
 
 /**
  * Describes a definition that can resolve itself.

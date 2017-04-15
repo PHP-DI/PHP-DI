@@ -6,7 +6,7 @@ use DI\Definition\AliasDefinition;
 use DI\Definition\CacheableDefinition;
 use DI\Scope;
 use EasyMock\EasyMock;
-use Interop\Container\ContainerInterface;
+use Psr\Container\ContainerInterface;
 
 /**
  * @covers \DI\Definition\AliasDefinition

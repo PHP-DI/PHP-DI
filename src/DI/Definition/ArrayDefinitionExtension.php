@@ -2,7 +2,7 @@
 
 namespace DI\Definition;
 
-use DI\Definition\Exception\DefinitionException;
+use DI\Definition\Exception\InvalidDefinition;
 
 /**
  * Extends an array definition by adding new elements into it.
@@ -43,7 +43,7 @@ class ArrayDefinitionExtension extends ArrayDefinition implements HasSubDefiniti
     public function setSubDefinition(Definition $definition)
     {
         if (! $definition instanceof ArrayDefinition) {
-            throw new DefinitionException(sprintf(
+            throw new InvalidDefinition(sprintf(
                 'Definition %s tries to add array entries but the previous definition is not an array',
                 $this->getName()
             ));
