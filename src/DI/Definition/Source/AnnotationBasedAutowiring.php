@@ -233,7 +233,7 @@ class AnnotationBasedAutowiring implements DefinitionSource, Autowiring
     public function getAnnotationReader()
     {
         if ($this->annotationReader === null) {
-            AnnotationRegistry::registerAutoloadNamespace('DI\Annotation', __DIR__ . '/../../../');
+            AnnotationRegistry::registerLoader('class_exists');
             $this->annotationReader = new SimpleAnnotationReader();
             $this->annotationReader->addNamespace('DI\Annotation');
         }
