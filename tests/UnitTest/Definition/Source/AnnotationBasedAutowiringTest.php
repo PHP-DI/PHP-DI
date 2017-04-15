@@ -7,7 +7,7 @@ use DI\Definition\EntryReference;
 use DI\Definition\ObjectDefinition;
 use DI\Definition\ObjectDefinition\MethodInjection;
 use DI\Definition\ObjectDefinition\PropertyInjection;
-use DI\Definition\Source\AnnotationReader;
+use DI\Definition\Source\AnnotationBasedAutowiring;
 use DI\Scope;
 use DI\Test\UnitTest\Definition\Source\Fixtures\AnnotationFixture;
 use DI\Test\UnitTest\Definition\Source\Fixtures\AnnotationFixture2;
@@ -18,18 +18,18 @@ use DI\Test\UnitTest\Definition\Source\Fixtures\AnnotationFixtureChild;
 use DI\Test\UnitTest\Definition\Source\Fixtures\AnnotationInjectableFixture;
 
 /**
- * @covers \DI\Definition\Source\AnnotationReader
+ * @covers \DI\Definition\Source\AnnotationBasedAutowiring
  */
-class AnnotationReaderTest extends \PHPUnit_Framework_TestCase
+class AnnotationBasedAutowiringTest extends \PHPUnit_Framework_TestCase
 {
     public function testUnknownClass()
     {
-        $this->assertNull((new AnnotationReader)->getDefinition('foo'));
+        $this->assertNull((new AnnotationBasedAutowiring)->autowire('foo'));
     }
 
     public function testProperty1()
     {
-        $definition = (new AnnotationReader)->getDefinition(AnnotationFixture::class);
+        $definition = (new AnnotationBasedAutowiring)->autowire(AnnotationFixture::class);
         $this->assertInstanceOf(Definition::class, $definition);
 
         $properties = $definition->getPropertyInjections();
@@ -42,14 +42,14 @@ class AnnotationReaderTest extends \PHPUnit_Framework_TestCase
 
     public function testUnannotatedProperty()
     {
-        $definition = (new AnnotationReader)->getDefinition(AnnotationFixture::class);
+        $definition = (new AnnotationBasedAutowiring)->autowire(AnnotationFixture::class);
 
         $this->assertNotHasPropertyInjection($definition, 'unannotatedProperty');
     }
 
     public function testStaticProperty()
     {
-        $definition = (new AnnotationReader)->getDefinition(AnnotationFixture::class);
+        $definition = (new AnnotationBasedAutowiring)->autowire(AnnotationFixture::class);
 
         $this->assertNotHasPropertyInjection($definition, 'staticProperty');
     }
@@ -60,12 +60,12 @@ class AnnotationReaderTest extends \PHPUnit_Framework_TestCase
      */
     public function testUnguessableProperty()
     {
-        (new AnnotationReader)->getDefinition(AnnotationFixture4::class);
+        (new AnnotationBasedAutowiring)->autowire(AnnotationFixture4::class);
     }
 
     public function testConstructor()
     {
-        $definition = (new AnnotationReader)->getDefinition(AnnotationFixture::class);
+        $definition = (new AnnotationBasedAutowiring)->autowire(AnnotationFixture::class);
         $this->assertInstanceOf(Definition::class, $definition);
 
         $constructorInjection = $definition->getConstructorInjection();
@@ -79,7 +79,7 @@ class AnnotationReaderTest extends \PHPUnit_Framework_TestCase
 
     public function testMethod1()
     {
-        $definition = (new AnnotationReader)->getDefinition(AnnotationFixture::class);
+        $definition = (new AnnotationBasedAutowiring)->autowire(AnnotationFixture::class);
         $this->assertInstanceOf(Definition::class, $definition);
 
         $methodInjection = $this->getMethodInjection($definition, 'method1');
@@ -90,7 +90,7 @@ class AnnotationReaderTest extends \PHPUnit_Framework_TestCase
 
     public function testMethod2()
     {
-        $definition = (new AnnotationReader)->getDefinition(AnnotationFixture::class);
+        $definition = (new AnnotationBasedAutowiring)->autowire(AnnotationFixture::class);
         $this->assertInstanceOf(Definition::class, $definition);
 
         $methodInjection = $this->getMethodInjection($definition, 'method2');
@@ -104,7 +104,7 @@ class AnnotationReaderTest extends \PHPUnit_Framework_TestCase
 
     public function testMethod3()
     {
-        $definition = (new AnnotationReader)->getDefinition(AnnotationFixture::class);
+        $definition = (new AnnotationBasedAutowiring)->autowire(AnnotationFixture::class);
         $this->assertInstanceOf(Definition::class, $definition);
 
         $methodInjection = $this->getMethodInjection($definition, 'method3');
@@ -120,7 +120,7 @@ class AnnotationReaderTest extends \PHPUnit_Framework_TestCase
 
     public function testMethod4()
     {
-        $definition = (new AnnotationReader)->getDefinition(AnnotationFixture::class);
+        $definition = (new AnnotationBasedAutowiring)->autowire(AnnotationFixture::class);
         $this->assertInstanceOf(Definition::class, $definition);
 
         $methodInjection = $this->getMethodInjection($definition, 'method4');
@@ -134,7 +134,7 @@ class AnnotationReaderTest extends \PHPUnit_Framework_TestCase
 
     public function testMethod5()
     {
-        $definition = (new AnnotationReader)->getDefinition(AnnotationFixture::class);
+        $definition = (new AnnotationBasedAutowiring)->autowire(AnnotationFixture::class);
         $this->assertInstanceOf(Definition::class, $definition);
 
         $methodInjection = $this->getMethodInjection($definition, 'method5');
@@ -149,7 +149,7 @@ class AnnotationReaderTest extends \PHPUnit_Framework_TestCase
 
     public function testUnannotatedMethod()
     {
-        $definition = (new AnnotationReader)->getDefinition(AnnotationFixture::class);
+        $definition = (new AnnotationBasedAutowiring)->autowire(AnnotationFixture::class);
 
         $this->assertNull($this->getMethodInjection($definition, 'unannotatedMethod'));
     }
@@ -159,7 +159,7 @@ class AnnotationReaderTest extends \PHPUnit_Framework_TestCase
      */
     public function optionalParametersShouldBeIgnored()
     {
-        $definition = (new AnnotationReader)->getDefinition(AnnotationFixture::class);
+        $definition = (new AnnotationBasedAutowiring)->autowire(AnnotationFixture::class);
 
         $methodInjection = $this->getMethodInjection($definition, 'optionalParameter');
 
@@ -172,14 +172,14 @@ class AnnotationReaderTest extends \PHPUnit_Framework_TestCase
 
     public function testStaticMethod()
     {
-        $definition = (new AnnotationReader)->getDefinition(AnnotationFixture::class);
+        $definition = (new AnnotationBasedAutowiring)->autowire(AnnotationFixture::class);
 
         $this->assertNull($this->getMethodInjection($definition, 'staticMethod'));
     }
 
     public function testInjectable()
     {
-        $definition = (new AnnotationReader)->getDefinition(AnnotationInjectableFixture::class);
+        $definition = (new AnnotationBasedAutowiring)->autowire(AnnotationInjectableFixture::class);
         $this->assertInstanceOf(Definition::class, $definition);
 
         $this->assertEquals(Scope::PROTOTYPE, $definition->getScope());
@@ -191,7 +191,7 @@ class AnnotationReaderTest extends \PHPUnit_Framework_TestCase
      */
     public function testIssue99()
     {
-        $definition = (new AnnotationReader)->getDefinition(AnnotationFixture3::class);
+        $definition = (new AnnotationBasedAutowiring)->autowire(AnnotationFixture3::class);
         $this->assertInstanceOf(Definition::class, $definition);
 
         $methodInjection = $this->getMethodInjection($definition, 'method1');
@@ -211,7 +211,7 @@ class AnnotationReaderTest extends \PHPUnit_Framework_TestCase
      */
     public function testFailWithPhpDocErrors()
     {
-        (new AnnotationReader)->getDefinition(AnnotationFixture5::class);
+        (new AnnotationBasedAutowiring)->autowire(AnnotationFixture5::class);
     }
 
     /**
@@ -219,13 +219,13 @@ class AnnotationReaderTest extends \PHPUnit_Framework_TestCase
      */
     public function testIgnorePhpDocErrors()
     {
-        $source = new AnnotationReader($ignorePhpDocErrors = true);
-        $source->getDefinition(AnnotationFixture5::class);
+        $source = new AnnotationBasedAutowiring($ignorePhpDocErrors = true);
+        $source->autowire(AnnotationFixture5::class);
     }
 
     public function testMergedWithParentDefinition()
     {
-        $definition = (new AnnotationReader)->getDefinition(AnnotationFixtureChild::class);
+        $definition = (new AnnotationBasedAutowiring)->autowire(AnnotationFixtureChild::class);
 
         $this->assertHasPropertyInjection($definition, 'propertyChild');
         $this->assertNotNull($this->getMethodInjection($definition, 'methodChild'));
@@ -240,7 +240,7 @@ class AnnotationReaderTest extends \PHPUnit_Framework_TestCase
      */
     public function testReadParentPrivateProperties()
     {
-        $definition = (new AnnotationReader)->getDefinition(AnnotationFixtureChild::class);
+        $definition = (new AnnotationBasedAutowiring)->autowire(AnnotationFixtureChild::class);
         $this->assertHasPropertyInjection($definition, 'propertyParentPrivate');
     }
 

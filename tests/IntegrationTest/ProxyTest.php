@@ -21,7 +21,7 @@ class ProxyTest extends \PHPUnit_Framework_TestCase
     public function container_can_create_lazy_objects()
     {
         $container = $this->createContainer([
-            'foo' => \DI\object(LazyDependency::class)
+            'foo' => \DI\create(LazyDependency::class)
                 ->lazy(),
         ]);
 
@@ -36,7 +36,7 @@ class ProxyTest extends \PHPUnit_Framework_TestCase
     public function lazy_singletons_resolve_to_the_same_instance()
     {
         $container = $this->createContainer([
-            'foo' => \DI\object(LazyDependency::class)
+            'foo' => \DI\create(LazyDependency::class)
                 ->lazy(),
         ]);
 
@@ -54,10 +54,10 @@ class ProxyTest extends \PHPUnit_Framework_TestCase
     public function singleton_dependencies_of_proxies_are_resolved_once()
     {
         $container = $this->createContainer([
-            'A' => \DI\object(A::class)
+            'A' => \DI\create(A::class)
                 ->constructor(\DI\get('B'))
                 ->lazy(),
-            'B' => \DI\object(B::class),
+            'B' => \DI\create(B::class),
         ]);
 
         /** @var A $a1 */

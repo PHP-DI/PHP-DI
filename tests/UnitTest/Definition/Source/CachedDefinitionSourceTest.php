@@ -40,7 +40,7 @@ class CachedDefinitionSourceTest extends \PHPUnit_Framework_TestCase
         ]);
 
         $cachedSource = new DefinitionArray([
-            'foo' => \DI\object(),
+            'foo' => \DI\create(),
         ]);
 
         $source = new CachedDefinitionSource($cachedSource, $cache);

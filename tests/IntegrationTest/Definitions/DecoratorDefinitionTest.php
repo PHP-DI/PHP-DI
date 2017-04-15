@@ -50,7 +50,7 @@ class DecoratorDefinitionTest extends \PHPUnit_Framework_TestCase
     {
         $builder = new ContainerBuilder();
         $builder->addDefinitions([
-            'foo' => \DI\object('stdClass'),
+            'foo' => \DI\create('stdClass'),
         ]);
         $builder->addDefinitions([
             'foo' => \DI\decorate(function ($previous) {

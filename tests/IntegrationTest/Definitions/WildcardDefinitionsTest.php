@@ -19,7 +19,7 @@ class WildcardDefinitionsTest extends \PHPUnit_Framework_TestCase
         $builder = new ContainerBuilder();
         $builder->addDefinitions([
             'foo*'                                 => 'bar',
-            'DI\Test\IntegrationTest\*\Interface*' => \DI\object('DI\Test\IntegrationTest\*\Implementation*'),
+            'DI\Test\IntegrationTest\*\Interface*' => \DI\create('DI\Test\IntegrationTest\*\Implementation*'),
         ]);
         $container = $builder->build();
 
@@ -34,7 +34,7 @@ class WildcardDefinitionsTest extends \PHPUnit_Framework_TestCase
         $builder = new ContainerBuilder();
         $builder->useAnnotations(true);
         $builder->addDefinitions([
-            'DI\Test\IntegrationTest\*\Interface*' => \DI\object('DI\Test\IntegrationTest\*\Implementation*'),
+            'DI\Test\IntegrationTest\*\Interface*' => \DI\create('DI\Test\IntegrationTest\*\Implementation*'),
         ]);
         $container = $builder->build();
 

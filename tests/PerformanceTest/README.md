@@ -3,7 +3,7 @@
 These tests are work in progress. They are mostly useful to profile with Blackfire and detect possible improvements.
 
 ```
-composer update -o
+composer update -o --classmap-authoritative
 blackfire run --samples=100 php get.php
 ```
 

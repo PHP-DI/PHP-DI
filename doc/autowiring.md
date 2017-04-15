@@ -67,4 +67,4 @@ class Database
 - it will not know what parameters to give to the constructor (since there is no type-hinting for an object)
 - `setLogger()` will not be called
 
-For those classes, you will need to use [PHP definitions](php-definitions.md) to declare explicitly what to inject.
+For those classes, you will need to use `DI\autowire()` in [PHP definitions](php-definitions.md) to declare explicitly what to inject.

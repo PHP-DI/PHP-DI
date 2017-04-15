@@ -4,9 +4,10 @@ namespace DI;
 
 use DI\Definition\EntryReference;
 use DI\Definition\Helper\ArrayDefinitionExtensionHelper;
+use DI\Definition\Helper\AutowireDefinitionHelper;
+use DI\Definition\Helper\CreateDefinitionHelper;
 use DI\Definition\Helper\EnvironmentVariableDefinitionHelper;
 use DI\Definition\Helper\FactoryDefinitionHelper;
-use DI\Definition\Helper\ObjectDefinitionHelper;
 use DI\Definition\Helper\StringDefinitionHelper;
 use DI\Definition\Helper\ValueDefinitionHelper;
 
@@ -24,18 +25,33 @@ if (! function_exists('DI\value')) {
     }
 }
 
-if (! function_exists('DI\object')) {
+if (! function_exists('DI\create')) {
     /**
      * Helper for defining an object.
      *
      * @param string|null $className Class name of the object.
      *                               If null, the name of the entry (in the container) will be used as class name.
      *
-     * @return ObjectDefinitionHelper
+     * @return CreateDefinitionHelper
      */
-    function object($className = null)
+    function create($className = null)
     {
-        return new ObjectDefinitionHelper($className);
+        return new CreateDefinitionHelper($className);
+    }
+}
+
+if (! function_exists('DI\autowire')) {
+    /**
+     * Helper for autowiring an object.
+     *
+     * @param string|null $className Class name of the object.
+     *                               If null, the name of the entry (in the container) will be used as class name.
+     *
+     * @return AutowireDefinitionHelper
+     */
+    function autowire($className = null)
+    {
+        return new AutowireDefinitionHelper($className);
     }
 }
 

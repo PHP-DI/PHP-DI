@@ -3,22 +3,22 @@
 namespace DI\Test\UnitTest\Definition\Helper;
 
 use DI\Definition\Exception\InvalidDefinition;
-use DI\Definition\Helper\ObjectDefinitionHelper;
+use DI\Definition\Helper\AutowireDefinitionHelper;
 use DI\Definition\ObjectDefinition\MethodInjection;
 use DI\Scope;
 use DI\Test\UnitTest\Definition\Helper\Fixtures\Class1;
 
 /**
- * @covers \DI\Definition\Helper\ObjectDefinitionHelper
+ * @covers \DI\Definition\Helper\AutowireDefinitionHelper
  */
-class ObjectDefinitionHelperTest extends \PHPUnit_Framework_TestCase
+class AutowireDefinitionHelperTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @test
      */
     public function test_default_config()
     {
-        $helper = new ObjectDefinitionHelper();
+        $helper = new AutowireDefinitionHelper();
         $definition = $helper->getDefinition('foo');
 
         $this->assertEquals('foo', $definition->getName());
@@ -34,7 +34,7 @@ class ObjectDefinitionHelperTest extends \PHPUnit_Framework_TestCase
      */
     public function allows_to_define_the_class_name()
     {
-        $helper = new ObjectDefinitionHelper('bar');
+        $helper = new AutowireDefinitionHelper('bar');
         $definition = $helper->getDefinition('foo');
 
         $this->assertEquals('foo', $definition->getName());
@@ -46,7 +46,7 @@ class ObjectDefinitionHelperTest extends \PHPUnit_Framework_TestCase
      */
     public function allows_to_define_the_scope()
     {
-        $helper = new ObjectDefinitionHelper();
+        $helper = new AutowireDefinitionHelper();
         $helper->scope(Scope::PROTOTYPE);
         $definition = $helper->getDefinition('foo');
 
@@ -58,7 +58,7 @@ class ObjectDefinitionHelperTest extends \PHPUnit_Framework_TestCase
      */
     public function allows_to_declare_the_service_as_lazy()
     {
-        $helper = new ObjectDefinitionHelper();
+        $helper = new AutowireDefinitionHelper();
         $helper->lazy();
         $definition = $helper->getDefinition('foo');
 
@@ -70,7 +70,7 @@ class ObjectDefinitionHelperTest extends \PHPUnit_Framework_TestCase
      */
     public function allows_to_define_constructor_parameters()
     {
-        $helper = new ObjectDefinitionHelper();
+        $helper = new AutowireDefinitionHelper();
         $helper->constructor(1, 2, 3);
         $definition = $helper->getDefinition('foo');
 
@@ -82,7 +82,7 @@ class ObjectDefinitionHelperTest extends \PHPUnit_Framework_TestCase
      */
     public function allows_to_override_a_parameter_injection()
     {
-        $helper = new ObjectDefinitionHelper();
+        $helper = new AutowireDefinitionHelper();
         $helper->constructorParameter(0, 42);
         $definition = $helper->getDefinition('foo');
 
@@ -96,7 +96,7 @@ class ObjectDefinitionHelperTest extends \PHPUnit_Framework_TestCase
      */
     public function allows_to_define_a_property_injection()
     {
-        $helper = new ObjectDefinitionHelper();
+        $helper = new AutowireDefinitionHelper();
         $helper->property('prop', 1);
         $definition = $helper->getDefinition('foo');
 
@@ -110,7 +110,7 @@ class ObjectDefinitionHelperTest extends \PHPUnit_Framework_TestCase
      */
     public function allows_to_define_a_method_call()
     {
-        $helper = new ObjectDefinitionHelper();
+        $helper = new AutowireDefinitionHelper();
         $helper->method('method', 1, 2, 3);
         $definition = $helper->getDefinition('foo');
 
@@ -124,7 +124,7 @@ class ObjectDefinitionHelperTest extends \PHPUnit_Framework_TestCase
      */
     public function allows_to_define_multiple_method_calls()
     {
-        $helper = new ObjectDefinitionHelper();
+        $helper = new AutowireDefinitionHelper();
         $helper->method('method', 1, 2);
         $helper->method('method', 3, 4);
         $definition = $helper->getDefinition('foo');
@@ -142,7 +142,7 @@ class ObjectDefinitionHelperTest extends \PHPUnit_Framework_TestCase
      */
     public function allows_to_override_a_parameter_injection_by_index()
     {
-        $helper = new ObjectDefinitionHelper();
+        $helper = new AutowireDefinitionHelper();
         $helper->methodParameter('method', 0, 42);
         $definition = $helper->getDefinition('foo');
 
@@ -159,7 +159,7 @@ class ObjectDefinitionHelperTest extends \PHPUnit_Framework_TestCase
      */
     public function allows_to_override_a_parameter_injection_by_name()
     {
-        $helper = new ObjectDefinitionHelper();
+        $helper = new AutowireDefinitionHelper();
         $helper->methodParameter('method', 'param2', 'val2');
         $helper->methodParameter('method', 'param1', 'val1');
         $definition = $helper->getDefinition(Class1::class);
@@ -176,7 +176,7 @@ class ObjectDefinitionHelperTest extends \PHPUnit_Framework_TestCase
      */
     public function should_update_constructor_definition_if_overriding_parameter_for_constructor()
     {
-        $helper = new ObjectDefinitionHelper();
+        $helper = new AutowireDefinitionHelper();
         $helper->methodParameter('__construct', 0, 42);
         $definition = $helper->getDefinition('foo');
 
@@ -191,7 +191,7 @@ class ObjectDefinitionHelperTest extends \PHPUnit_Framework_TestCase
         if (defined('HHVM_VERSION')) {
             $this->markTestSkipped('This test fails on HHVM 3.5 (version currently used by Travis)');
         }
-        $helper = new ObjectDefinitionHelper();
+        $helper = new AutowireDefinitionHelper();
         $helper->methodParameter('__construct', 'wrongName', 42);
         $this->setExpectedException(InvalidDefinition::class, "Parameter with name 'wrongName' could not be found");
         $helper->getDefinition(Class1::class);

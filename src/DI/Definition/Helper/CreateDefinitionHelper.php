@@ -12,8 +12,10 @@ use DI\Definition\ObjectDefinition\PropertyInjection;
  *
  * @author Matthieu Napoli <matthieu@mnapoli.fr>
  */
-class ObjectDefinitionHelper implements DefinitionHelper
+class CreateDefinitionHelper implements DefinitionHelper
 {
+    const DEFINITION_CLASS = ObjectDefinition::class;
+
     /**
      * @var string|null
      */
@@ -33,7 +35,7 @@ class ObjectDefinitionHelper implements DefinitionHelper
      * Array of constructor parameters.
      * @var array
      */
-    private $constructor = [];
+    protected $constructor = [];
 
     /**
      * Array of properties and their value.
@@ -45,7 +47,7 @@ class ObjectDefinitionHelper implements DefinitionHelper
      * Array of methods and their parameters.
      * @var array
      */
-    private $methods = [];
+    protected $methods = [];
 
     /**
      * Helper for defining an object.
@@ -63,7 +65,7 @@ class ObjectDefinitionHelper implements DefinitionHelper
      *
      * A lazy entry is created only when it is used, a proxy is injected instead.
      *
-     * @return ObjectDefinitionHelper
+     * @return CreateDefinitionHelper
      */
     public function lazy()
     {
@@ -77,7 +79,7 @@ class ObjectDefinitionHelper implements DefinitionHelper
      *
      * @param string $scope
      *
-     * @return ObjectDefinitionHelper
+     * @return CreateDefinitionHelper
      */
     public function scope($scope)
     {
@@ -94,31 +96,11 @@ class ObjectDefinitionHelper implements DefinitionHelper
      *
      * @param mixed ... Parameters to use for calling the constructor of the class.
      *
-     * @return ObjectDefinitionHelper
+     * @return CreateDefinitionHelper
      */
     public function constructor()
     {
         $this->constructor = func_get_args();
-
-        return $this;
-    }
-
-    /**
-     * Defines a value for a specific argument of the constructor.
-     *
-     * This method is usually used together with annotations or autowiring, when a parameter
-     * is not (or cannot be) type-hinted. Using this method instead of constructor() allows to
-     * avoid defining all the parameters (letting them being resolved using annotations or autowiring)
-     * and only define one.
-     *
-     * @param string $parameter Parameter for which the value will be given.
-     * @param mixed  $value     Value to give to this parameter.
-     *
-     * @return ObjectDefinitionHelper
-     */
-    public function constructorParameter($parameter, $value)
-    {
-        $this->constructor[$parameter] = $value;
 
         return $this;
     }
@@ -129,7 +111,7 @@ class ObjectDefinitionHelper implements DefinitionHelper
      * @param string $property Entry in which to inject the value.
      * @param mixed  $value    Value to inject in the property.
      *
-     * @return ObjectDefinitionHelper
+     * @return CreateDefinitionHelper
      */
     public function property($property, $value)
     {
@@ -150,7 +132,7 @@ class ObjectDefinitionHelper implements DefinitionHelper
      * @param string $method Name of the method to call.
      * @param mixed  ...     Parameters to use for calling the method.
      *
-     * @return ObjectDefinitionHelper
+     * @return CreateDefinitionHelper
      */
     public function method($method)
     {
@@ -167,46 +149,13 @@ class ObjectDefinitionHelper implements DefinitionHelper
     }
 
     /**
-     * Defines a method to call and a value for a specific argument.
-     *
-     * This method is usually used together with annotations or autowiring, when a parameter
-     * is not (or cannot be) type-hinted. Using this method instead of method() allows to
-     * avoid defining all the parameters (letting them being resolved using annotations or
-     * autowiring) and only define one.
-     *
-     * If multiple calls to the method have been configured already (e.g. in a previous definition)
-     * then this method only overrides the parameter for the *first* call.
-     *
-     * @param string $method    Name of the method to call.
-     * @param string $parameter Name or index of the parameter for which the value will be given.
-     * @param mixed  $value     Value to give to this parameter.
-     *
-     * @return ObjectDefinitionHelper
-     */
-    public function methodParameter($method, $parameter, $value)
-    {
-        // Special case for the constructor
-        if ($method === '__construct') {
-            $this->constructor[$parameter] = $value;
-
-            return $this;
-        }
-
-        if (! isset($this->methods[$method])) {
-            $this->methods[$method] = [0 => []];
-        }
-
-        $this->methods[$method][0][$parameter] = $value;
-
-        return $this;
-    }
-
-    /**
      * {@inheritdoc}
      */
     public function getDefinition($entryName)
     {
-        $definition = new ObjectDefinition($entryName, $this->className);
+        $class = $this::DEFINITION_CLASS;
+        /** @var ObjectDefinition $definition */
+        $definition = new $class($entryName, $this->className);
 
         if ($this->lazy !== null) {
             $definition->setLazy($this->lazy);

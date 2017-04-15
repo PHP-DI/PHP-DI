@@ -88,7 +88,7 @@ class DefinitionArrayTest extends \PHPUnit_Framework_TestCase
     public function testObjectDefinition()
     {
         $source = new DefinitionArray([
-            'foo' => \DI\object(),
+            'foo' => \DI\create(),
         ]);
         /** @var $definition ObjectDefinition */
         $definition = $source->getDefinition('foo');
@@ -171,9 +171,9 @@ class DefinitionArrayTest extends \PHPUnit_Framework_TestCase
     {
         $source = new DefinitionArray([
             'foo*'                   => 'bar',
-            'Namespaced\*Interface'  => \DI\object('Namespaced\*'),
-            'Namespaced2\*Interface' => \DI\object('Namespaced2\Foo'),
-            'Multiple\*\*\Matches'   => \DI\object('Multiple\*\*\Implementation'),
+            'Namespaced\*Interface'  => \DI\create('Namespaced\*'),
+            'Namespaced2\*Interface' => \DI\create('Namespaced2\Foo'),
+            'Multiple\*\*\Matches'   => \DI\create('Multiple\*\*\Implementation'),
         ]);
 
         $definition = $source->getDefinition('foo1');
@@ -229,7 +229,7 @@ class DefinitionArrayTest extends \PHPUnit_Framework_TestCase
     public function testWildcardShouldNotMatchAcrossNamespaces()
     {
         $source = new DefinitionArray([
-            'My\*Interface' => \DI\object('My\*'),
+            'My\*Interface' => \DI\create('My\*'),
         ]);
         $this->assertNull($source->getDefinition('My\Foo\BarInterface'));
     }

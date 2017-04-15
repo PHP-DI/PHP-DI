@@ -4,12 +4,16 @@
 
 Improvements:
 
+- [#294](https://github.com/PHP-DI/PHP-DI/issues/294), [#349](https://github.com/PHP-DI/PHP-DI/issues/349), [#449](https://github.com/PHP-DI/PHP-DI/pull/449): `DI\object()` has been replaced by more specific and less ambiguous helpers:
+    - `DI\create()` creates an object, overrides autowiring and previous definitions
+    - `DI\autowire()` autowires an object and allows to override specific constructor and method parameters
 - The container can now be built without parameters: `new Container()`
 - [#242](https://github.com/PHP-DI/PHP-DI/issues/242) Error in case a definition is not indexed by a string
 
 BC breaks:
 
 - PHP 7 or greater is required
+- `DI\object()` has been removed, use `DI\create()` or `DI\autowire()` instead
 - The deprecated `DI\link()` helper was removed, used `DI\get()` instead
 - The exception `DI\Definition\Exception\DefinitionException` was renamed to `DI\Definition\Exception\InvalidDefinition`
 

@@ -59,7 +59,7 @@ class CallFunctionTest extends \PHPUnit_Framework_TestCase
 
             return $foo;
         }, [
-            'bar' => \DI\object('stdClass'),
+            'bar' => \DI\create('stdClass'),
             'foo' => \DI\get('bar'),
         ]);
         $this->assertEquals('bam', $result);
@@ -74,7 +74,7 @@ class CallFunctionTest extends \PHPUnit_Framework_TestCase
             $self->assertInstanceOf('stdClass', $bar);
 
             return $foo;
-        }, [\DI\get('bar'), \DI\object('stdClass')]);
+        }, [\DI\get('bar'), \DI\create('stdClass')]);
         $this->assertEquals('bam', $result);
     }
 

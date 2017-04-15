@@ -110,7 +110,7 @@ class Issue72Test extends \PHPUnit_Framework_TestCase
         // Override 'service1' to 'service2'
         $container->set(
             Class1::class,
-            \DI\object()
+            \DI\create()
                 ->constructor(\DI\get('service2'))
         );
 

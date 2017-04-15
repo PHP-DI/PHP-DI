@@ -6,8 +6,8 @@ use DI\Definition\CacheableDefinition;
 use DI\Definition\ObjectDefinition;
 use DI\Definition\ObjectDefinition\MethodInjection;
 use DI\Definition\ObjectDefinition\PropertyInjection;
-use DI\Definition\ValueDefinition;
 use DI\Scope;
+use DI\Test\UnitTest\Definition\Fixture\NonInstantiableClass;
 
 /**
  * @covers \DI\Definition\ObjectDefinition
@@ -42,83 +42,54 @@ class ObjectDefinitionTest extends \PHPUnit_Framework_TestCase
         $this->assertEmpty($definition->getMethodInjections());
     }
 
-    public function should_be_cacheable()
+    public function test_class_exists()
     {
-        $this->assertInstanceOf(CacheableDefinition::class, new ObjectDefinition('foo'));
+        $definition = new ObjectDefinition('foo');
+        self::assertFalse($definition->classExists());
+        $definition = new ObjectDefinition(self::class);
+        self::assertTrue($definition->classExists());
     }
 
-    /**
-     * @test
-     */
-    public function should_only_merge_with_object_subdefinitions()
+    public function test_is_instantiable()
     {
-        $definition = new ObjectDefinition('foo', 'bar');
-        $definition->setSubDefinition(new ValueDefinition('bar', 'Hello'));
-
-        // Unchanged definition
-        $this->assertEquals(new ObjectDefinition('foo', 'bar'), $definition);
+        $definition = new ObjectDefinition('foo');
+        self::assertFalse($definition->isInstantiable());
+        $definition = new ObjectDefinition(NonInstantiableClass::class);
+        self::assertFalse($definition->isInstantiable());
+        $definition = new ObjectDefinition(\stdClass::class);
+        self::assertTrue($definition->classExists());
     }
 
-    /**
-     * @test
-     */
-    public function should_merge_with_its_subdefinition()
+    public function test_property_injections()
     {
-        $definition = new ObjectDefinition('foo', 'bar');
+        $definition = new ObjectDefinition('foo');
         $definition->addPropertyInjection(new PropertyInjection('property1', 'Property1'));
         $definition->addPropertyInjection(new PropertyInjection('property2', 'Property2'));
+        $this->assertEquals([
+            'property1' => new PropertyInjection('property1', 'Property1'),
+            'property2' => new PropertyInjection('property2', 'Property2'),
+        ], $definition->getPropertyInjections());
+    }
+
+    public function test_method_injections()
+    {
+        $definition = new ObjectDefinition('foo');
+        $definition->setConstructorInjection(MethodInjection::constructor());
         $definition->addMethodInjection(new MethodInjection('method1', ['foo']));
         $definition->addMethodInjection(new MethodInjection('method2'));
 
-        $subDefinition = new ObjectDefinition('bar');
-        $subDefinition->setLazy(true);
-        $subDefinition->setScope(Scope::PROTOTYPE);
-        $subDefinition->setConstructorInjection(MethodInjection::constructor());
-        $subDefinition->addPropertyInjection(new PropertyInjection('property1', 'Property1'));
-        $subDefinition->addPropertyInjection(new PropertyInjection('property3', 'Property3'));
-        $subDefinition->addMethodInjection(new MethodInjection('method1', ['bar']));
-        $subDefinition->addMethodInjection(new MethodInjection('method3'));
-
-        $definition->setSubDefinition($subDefinition);
-
-        $this->assertEquals('foo', $definition->getName());
-        $this->assertEquals('bar', $definition->getClassName());
-        $this->assertTrue($definition->isLazy());
-        $this->assertEquals(Scope::PROTOTYPE, $definition->getScope());
         $this->assertNotNull($definition->getConstructorInjection());
-        $this->assertCount(3, $definition->getPropertyInjections());
-        $this->assertCount(3, $definition->getMethodInjections());
         $this->assertEquals([
             new MethodInjection('method1', ['foo']),
             new MethodInjection('method2'),
-            new MethodInjection('method3'),
         ], $definition->getMethodInjections());
     }
 
     /**
      * @test
      */
-    public function should_merge_multiple_method_calls()
+    public function should_be_cacheable()
     {
-        $definition = new ObjectDefinition('foo');
-        $definition->addMethodInjection(new MethodInjection('method1'));
-        $definition->addMethodInjection(new MethodInjection('method2', ['bam']));
-        $definition->addMethodInjection(new MethodInjection('method2', ['baz']));
-
-        $subDefinition = new ObjectDefinition('bar');
-        $subDefinition->addMethodInjection(new MethodInjection('method1', ['bar']));
-        $subDefinition->addMethodInjection(new MethodInjection('method2', ['foo', 'bar']));
-        $subDefinition->addMethodInjection(new MethodInjection('method3'));
-        $subDefinition->addMethodInjection(new MethodInjection('method3'));
-
-        $definition->setSubDefinition($subDefinition);
-
-        $this->assertEquals([
-            new MethodInjection('method1', ['bar']),
-            new MethodInjection('method2', ['bam', 'bar']),
-            new MethodInjection('method2', ['baz']),
-            new MethodInjection('method3'),
-            new MethodInjection('method3'),
-        ], $definition->getMethodInjections());
+        $this->assertInstanceOf(CacheableDefinition::class, new ObjectDefinition('foo'));
     }
 }

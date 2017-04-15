@@ -10,7 +10,7 @@ use DI\Test\IntegrationTest\Fixtures\LazyDependency;
 return [
     'foo' => 'bar',
 
-    Class1::class => DI\object()
+    Class1::class => DI\create()
             ->scope(Scope::PROTOTYPE)
             ->property('property1', DI\get(Class2::class))
             ->property('property2', DI\get(Interface1::class))
@@ -21,21 +21,19 @@ return [
             ->method('method1', DI\get(Class2::class))
             ->method('method2', DI\get(Interface1::class))
             ->method('method3', DI\get('namedDependency'), DI\get('foo'))
-            ->method('method4', DI\get(LazyDependency::class))
-            ->methodParameter('method5', 'param1', \DI\get(Interface1::class))
-            ->methodParameter('method5', 'param2', \DI\get('foo')),
+            ->method('method4', DI\get(LazyDependency::class)),
 
-    Class2::class => DI\object(),
+    Class2::class => DI\create(),
 
-    Implementation1::class => DI\object(),
+    Implementation1::class => DI\create(),
 
-    Interface1::class => DI\object(Implementation1::class)
+    Interface1::class => DI\create(Implementation1::class)
             ->scope(Scope::SINGLETON),
-    'DI\Test\IntegrationTest\Fixtures\Interface2' => DI\object('DI\Test\IntegrationTest\Fixtures\Class3'),
+    'DI\Test\IntegrationTest\Fixtures\Interface2' => DI\create('DI\Test\IntegrationTest\Fixtures\Class3'),
 
-    'namedDependency' => DI\object(Class2::class),
+    'namedDependency' => DI\create(Class2::class),
 
-    LazyDependency::class => DI\object()->lazy(),
+    LazyDependency::class => DI\create()->lazy(),
 
     'alias' => DI\get('namedDependency'),
 ];

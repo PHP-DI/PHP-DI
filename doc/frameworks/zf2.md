@@ -65,7 +65,7 @@ If you'd like to define injections using a configuration file, put them in `appl
 ```
 <?php
 return [
-    'Application\Service\GreetingServiceInterface' => DI\object('Application\Service\GreetingService'),
+    'Application\Service\GreetingServiceInterface' => DI\create('Application\Service\GreetingService'),
 ];
 ```
 

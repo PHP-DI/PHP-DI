@@ -130,7 +130,7 @@ in Symfony's container, and the controller is resolved by PHP-DI.
 
 ```php
 return [
-    'AppBundle\Controller\ProductController' => DI\object()
+    'AppBundle\Controller\ProductController' => DI\create()
         ->constructor(DI\get('doctrine.orm.entity_manager')),
 ];
 ```

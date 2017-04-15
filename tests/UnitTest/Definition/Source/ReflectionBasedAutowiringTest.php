@@ -5,24 +5,24 @@ namespace DI\Test\UnitTest\Definition\Source;
 use DI\Definition\EntryReference;
 use DI\Definition\ObjectDefinition;
 use DI\Definition\ObjectDefinition\MethodInjection;
-use DI\Definition\Source\Autowiring;
+use DI\Definition\Source\ReflectionBasedAutowiring;
 use DI\Test\UnitTest\Definition\Source\Fixtures\AutowiringFixture;
 use DI\Test\UnitTest\Definition\Source\Fixtures\AutowiringFixtureChild;
 
 /**
- * @covers \DI\Definition\Source\Autowiring
+ * @covers \DI\Definition\Source\ReflectionBasedAutowiring
  */
-class AutowiringTest extends \PHPUnit_Framework_TestCase
+class ReflectionBasedAutowiringTest extends \PHPUnit_Framework_TestCase
 {
     public function testUnknownClass()
     {
-        $source = new Autowiring();
-        $this->assertNull($source->getDefinition('foo'));
+        $source = new ReflectionBasedAutowiring();
+        $this->assertNull($source->autowire('foo'));
     }
 
     public function testConstructor()
     {
-        $definition = (new Autowiring)->getDefinition(AutowiringFixture::class);
+        $definition = (new ReflectionBasedAutowiring)->autowire(AutowiringFixture::class);
         $this->assertInstanceOf(ObjectDefinition::class, $definition);
 
         $constructorInjection = $definition->getConstructorInjection();
@@ -37,7 +37,7 @@ class AutowiringTest extends \PHPUnit_Framework_TestCase
 
     public function testConstructorInParentClass()
     {
-        $definition = (new Autowiring)->getDefinition(AutowiringFixtureChild::class);
+        $definition = (new ReflectionBasedAutowiring)->autowire(AutowiringFixtureChild::class);
         $this->assertInstanceOf(ObjectDefinition::class, $definition);
 
         $constructorInjection = $definition->getConstructorInjection();
@@ -48,16 +48,5 @@ class AutowiringTest extends \PHPUnit_Framework_TestCase
 
         $param1 = $parameters[0];
         $this->assertEquals(new EntryReference(AutowiringFixture::class), $param1);
-    }
-}
-
-class TestClass
-{
-    public function foo(\stdClass $foo, $bar)
-    {
-    }
-
-    public function optional(\stdClass $foo = null)
-    {
     }
 }

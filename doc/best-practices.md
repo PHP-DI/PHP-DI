@@ -117,7 +117,7 @@ the types of your parameters.
 In some cases, autowiring will not be enough because some parameter will be a scalar (string, int, …).
 At that point, you will need to define explicitly what to inject in that scalar parameter, and for this you can either:
 
-- define the whole injection of the method/class (i.e. every parameters).
+- define the whole injection of the method/class (i.e. every parameters) using `DI\create()`.
 
 Example:
 
@@ -126,12 +126,12 @@ Example:
 // config.php
 return [
     // ...
-    OrderService::class => DI\object()
+    OrderService::class => DI\create()
         ->constructor(DI\get(SomeOtherService::class), 'a value'),
 ];
 ```
 
-- or define *just the scalar parameter* and let PHP-DI use autowiring for the rest.
+- or define *just the scalar parameter* using `DI\autowire()` and let PHP-DI autowire the rest.
 
 Example:
 
@@ -140,12 +140,12 @@ Example:
 // config.php
 return [
     // ...
-    OrderService::class => DI\object()
+    OrderService::class => DI\autowire()
         ->constructorParameter('paramName', 'a value'),
 ];
 ```
 
-This solution is generally preferred give it avoids redefining everything.
+This solution is generally preferred given it avoids redefining everything.
 
 *Side note:* as explained in rule n°3, we recommend **type-hinting against interfaces**. In that case,
 you will need to map interfaces to the implementation the container should use in the configuration:
@@ -155,7 +155,7 @@ you will need to map interfaces to the implementation the container should use i
 // config.php
 return [
     // ...
-    OrderServiceInterface::class => DI\object(OrderService::class),
+    OrderServiceInterface::class => DI\get(OrderService::class),
 ];
 ```
 

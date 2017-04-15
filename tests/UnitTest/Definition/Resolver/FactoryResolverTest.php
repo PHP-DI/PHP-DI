@@ -119,7 +119,7 @@ class FactoryResolverTest extends \PHPUnit_Framework_TestCase
 
         $definition = new FactoryDefinition('foo', function ($par1) {
             return new FixtureClass($par1);
-        }, null, ['par1' => \DI\object(NoConstructor::class)]);
+        }, null, ['par1' => \DI\create(NoConstructor::class)]);
 
         $parentResolver->expects($this->once())
             ->method('resolve')

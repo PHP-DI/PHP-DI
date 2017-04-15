@@ -59,10 +59,7 @@ class InheritanceTest extends \PHPUnit_Framework_TestCase
         $builder->useAutowiring(true);
         $builder->useAnnotations(true);
         $containerAnnotations = $builder->build();
-        $containerAnnotations->set(
-            BaseClass::class,
-            \DI\object(SubClass::class)
-        );
+        $containerAnnotations->set(BaseClass::class, \DI\get(SubClass::class));
 
         // Test with a container using PHP configuration -> entries are different,
         // definitions shouldn't be shared between 2 different entries se we redefine all properties and methods
@@ -70,10 +67,10 @@ class InheritanceTest extends \PHPUnit_Framework_TestCase
         $builder->useAutowiring(false);
         $builder->useAnnotations(false);
         $containerPHPDefinitions = $builder->build();
-        $containerPHPDefinitions->set(Dependency::class, \DI\object());
+        $containerPHPDefinitions->set(Dependency::class, \DI\create());
         $containerPHPDefinitions->set(
             BaseClass::class,
-            \DI\object(SubClass::class)
+            \DI\create(SubClass::class)
                 ->property('property1', \DI\get(Dependency::class))
                 ->property('property4', \DI\get(Dependency::class))
                 ->constructor(\DI\get(Dependency::class))
@@ -81,7 +78,7 @@ class InheritanceTest extends \PHPUnit_Framework_TestCase
         );
         $containerPHPDefinitions->set(
             SubClass::class,
-            \DI\object()
+            \DI\create()
                 ->property('property1', \DI\get(Dependency::class))
                 ->property('property4', \DI\get(Dependency::class))
                 ->constructor(\DI\get(Dependency::class))

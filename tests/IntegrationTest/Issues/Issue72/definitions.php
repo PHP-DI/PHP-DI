@@ -7,6 +7,6 @@ return [
 
         return $value;
     }),
-    'DI\Test\IntegrationTest\Issues\Issue72\Class1' => \DI\object()
+    'DI\Test\IntegrationTest\Issues\Issue72\Class1' => \DI\create()
             ->constructor(\DI\get('service2')),
 ];

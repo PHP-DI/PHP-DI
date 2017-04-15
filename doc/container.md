@@ -29,7 +29,7 @@ You can set entries directly on the container:
 
 ```php
 $container->set('foo', 'bar');
-$container->set('MyInterface', \DI\object('MyClass'));
+$container->set('MyInterface', \DI\create('MyClass'));
 ```
 
 However it is recommended to use definition files. See the [definition documentation](definition.md).

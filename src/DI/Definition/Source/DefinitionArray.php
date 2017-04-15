@@ -3,6 +3,7 @@
 namespace DI\Definition\Source;
 
 use DI\Definition\ArrayDefinition;
+use DI\Definition\AutowireDefinition;
 use DI\Definition\Definition;
 use DI\Definition\FactoryDefinition;
 use DI\Definition\Helper\DefinitionHelper;
@@ -35,15 +36,21 @@ class DefinitionArray implements DefinitionSource, MutableDefinitionSource
     private $wildcardDefinitions;
 
     /**
+     * @var Autowiring
+     */
+    private $autowiring;
+
+    /**
      * @param array $definitions
      */
-    public function __construct(array $definitions = [])
+    public function __construct(array $definitions = [], Autowiring $autowiring = null)
     {
         if (isset($definitions[0])) {
             throw new \Exception('The PHP-DI definition is not indexed by an entry name in the definition array');
         }
 
         $this->definitions = $definitions;
+        $this->autowiring = $autowiring ?: new NoAutowiring;
     }
 
     /**
@@ -133,6 +140,10 @@ class DefinitionArray implements DefinitionSource, MutableDefinitionSource
             $definition = new FactoryDefinition($name, $definition);
         } elseif (! $definition instanceof Definition) {
             $definition = new ValueDefinition($name, $definition);
+        }
+
+        if ($definition instanceof AutowireDefinition) {
+            $definition = $this->autowiring->autowire($name, $definition);
         }
 
         return $definition;

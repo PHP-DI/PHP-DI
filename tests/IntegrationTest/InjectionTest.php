@@ -40,10 +40,10 @@ class InjectionTest extends \PHPUnit_Framework_TestCase
         $containerReflection->set('foo', 'bar');
         $containerReflection->set(
             Interface1::class,
-            \DI\object(Implementation1::class)
+            \DI\create(Implementation1::class)
         );
-        $containerReflection->set('namedDependency', \DI\object(Class2::class));
-        $containerReflection->set(LazyDependency::class, \DI\object()->lazy());
+        $containerReflection->set('namedDependency', \DI\create(Class2::class));
+        $containerReflection->set(LazyDependency::class, \DI\create()->lazy());
         $containerReflection->set('alias', \DI\get('namedDependency'));
 
         // Test with a container using annotations and reflection
@@ -53,11 +53,8 @@ class InjectionTest extends \PHPUnit_Framework_TestCase
         $containerAnnotations = $builder->build();
         // We have to define some entries for the test because annotations on itself doesn't make it possible
         $containerAnnotations->set('foo', 'bar');
-        $containerAnnotations->set(
-            Interface1::class,
-            \DI\object(Implementation1::class)
-        );
-        $containerAnnotations->set('namedDependency', \DI\object(Class2::class));
+        $containerAnnotations->set(Interface1::class, \DI\create(Implementation1::class));
+        $containerAnnotations->set('namedDependency', \DI\create(Class2::class));
         $containerAnnotations->set('alias', \DI\get('namedDependency'));
 
         // Test with a container using array configuration
@@ -75,7 +72,7 @@ class InjectionTest extends \PHPUnit_Framework_TestCase
         $containerPHP->set('foo', 'bar');
         $containerPHP->set(
             Class1::class,
-            \DI\object()
+            \DI\create()
                 ->scope(Scope::PROTOTYPE)
                 ->property('property1', \DI\get(Class2::class))
                 ->property('property2', \DI\get(Interface1::class))
@@ -91,18 +88,16 @@ class InjectionTest extends \PHPUnit_Framework_TestCase
                 ->method('method2', \DI\get(Interface1::class))
                 ->method('method3', \DI\get('namedDependency'), \DI\get('foo'))
                 ->method('method4', \DI\get(LazyDependency::class))
-                ->methodParameter('method5', 'param1', \DI\get(Interface1::class))
-                ->methodParameter('method5', 'param2', \DI\get('foo'))
         );
-        $containerPHP->set(Class2::class, \DI\object());
-        $containerPHP->set(Implementation1::class, \DI\object());
+        $containerPHP->set(Class2::class, \DI\create());
+        $containerPHP->set(Implementation1::class, \DI\create());
         $containerPHP->set(
             Interface1::class,
-            \DI\object(Implementation1::class)
+            \DI\create(Implementation1::class)
                 ->scope(Scope::SINGLETON)
         );
-        $containerPHP->set('namedDependency', \DI\object(Class2::class));
-        $containerPHP->set(LazyDependency::class, \DI\object()->lazy());
+        $containerPHP->set('namedDependency', \DI\create(Class2::class));
+        $containerPHP->set(LazyDependency::class, \DI\create()->lazy());
         $containerPHP->set('alias', \DI\get('namedDependency'));
 
         return [
@@ -111,19 +106,6 @@ class InjectionTest extends \PHPUnit_Framework_TestCase
             'array'      => [self::DEFINITION_ARRAY, $containerArray],
             'php'        => [self::DEFINITION_PHP, $containerPHP],
         ];
-    }
-
-    /**
-     * @dataProvider containerProvider
-     */
-    public function testContainerHas($type, Container $container)
-    {
-        $this->assertTrue($container->has(Class1::class));
-        $this->assertTrue($container->has(Class2::class));
-        $this->assertTrue($container->has(Interface1::class));
-        $this->assertTrue($container->has('namedDependency'));
-        $this->assertTrue($container->has(LazyDependency::class));
-        $this->assertFalse($container->has('unknown'));
     }
 
     /**
@@ -270,10 +252,6 @@ class InjectionTest extends \PHPUnit_Framework_TestCase
         /** @var LazyDependency|LazyLoadingInterface $proxy */
         $proxy = $class1->method4Param1;
         $this->assertFalse($proxy->isProxyInitialized());
-
-        // Method 5 (defining a parameter by its name)
-        $this->assertInstanceOf(Implementation1::class, $class1->method5Param1);
-        $this->assertEquals('bar', $class1->method5Param2);
 
         return $proxy;
     }

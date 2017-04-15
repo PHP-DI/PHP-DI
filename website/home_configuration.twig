@@ -10,7 +10,7 @@
         <div class='col-md-6'>
             <h4>Object creation</h4>
 <pre><code class="php">return [
-    Foo::class => object()
+    Foo::class => create()
         ->constructor(
             get(Bar::class)
         )
@@ -59,14 +59,14 @@
         <div class='col-md-4'>
             <h4>PHP 5.5 <code>::class</code> magic constant</h4>
 <pre><code class="php">return [
-    Foo::class => DI\object()
+    Foo::class => DI\create()
       ->constructor(DI\get(Bar::class))
 ];</code></pre>
         </div>
         <div class='col-md-4'>
             <h4>PHP 5.6 <code>use function</code></h4>
 <pre><code class="php">return [
-    Foo::class => object()
+    Foo::class => create()
       ->constructor(get(Bar::class))
 ];</code></pre>
         </div>

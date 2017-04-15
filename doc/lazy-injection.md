@@ -61,7 +61,7 @@ class Foo
     }
 }
 
-$container->set('Foo', \DI\object()->lazy());
+$container->set('Foo', \DI\create()->lazy());
 
 // $proxy is a Proxy object, it is not initialized
 // It is very lightweight in memory
@@ -108,7 +108,7 @@ class MyClass
 
 ```php
 <?php
-$containerPHP->set('foo', \DI\object('MyClass')->lazy());
+$containerPHP->set('foo', \DI\create('MyClass')->lazy());
 ```
 
 ### PHP configuration file
@@ -117,7 +117,7 @@ $containerPHP->set('foo', \DI\object('MyClass')->lazy());
 <?php
 
 return [
-    'foo' => DI\object('MyClass')
+    'foo' => DI\create('MyClass')
         ->lazy(),
 ];
 ```

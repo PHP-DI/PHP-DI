@@ -64,7 +64,7 @@ class ArrayResolverTest extends \PHPUnit_Framework_TestCase
         $definition = new ArrayDefinition('foo', [
             'bar',
             \DI\get('bar'),
-            \DI\object('bar'),
+            \DI\create('bar'),
         ]);
 
         $value = $this->resolver->resolve($definition);
