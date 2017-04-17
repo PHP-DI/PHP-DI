@@ -3,6 +3,7 @@
 namespace DI\Test\UnitTest\Cache;
 
 use ArrayObject;
+use Psr\SimpleCache\CacheInterface;
 
 /**
  * Copy of Doctrine's test.
@@ -17,18 +18,18 @@ abstract class CacheTest extends \PHPUnit_Framework_TestCase
         $cache = $this->getCacheDriver();
 
         // Test saving a value, checking if it exists, and fetching it back
-        $this->assertTrue($cache->save('key', 'value'));
-        $this->assertTrue($cache->contains('key'));
-        $this->assertEquals('value', $cache->fetch('key'));
+        $this->assertTrue($cache->set('key', 'value'));
+        $this->assertTrue($cache->has('key'));
+        $this->assertEquals('value', $cache->get('key'));
 
         // Test updating the value of a cache entry
-        $this->assertTrue($cache->save('key', 'value-changed'));
-        $this->assertTrue($cache->contains('key'));
-        $this->assertEquals('value-changed', $cache->fetch('key'));
+        $this->assertTrue($cache->set('key', 'value-changed'));
+        $this->assertTrue($cache->has('key'));
+        $this->assertEquals('value-changed', $cache->get('key'));
 
         // Test deleting a value
         $this->assertTrue($cache->delete('key'));
-        $this->assertFalse($cache->contains('key'));
+        $this->assertFalse($cache->has('key'));
     }
 
     public function provideCrudValues()
@@ -47,35 +48,19 @@ abstract class CacheTest extends \PHPUnit_Framework_TestCase
     {
         $cache = $this->getCacheDriver();
 
-        $this->assertTrue($cache->save('key1', 1));
-        $this->assertTrue($cache->save('key2', 2));
-        $this->assertTrue($cache->deleteAll());
-        $this->assertFalse($cache->contains('key1'));
-        $this->assertFalse($cache->contains('key2'));
-    }
-
-    public function testFlushAll()
-    {
-        $cache = $this->getCacheDriver();
-
-        $this->assertTrue($cache->save('key1', 1));
-        $this->assertTrue($cache->save('key2', 2));
-        $this->assertTrue($cache->flushAll());
-        $this->assertFalse($cache->contains('key1'));
-        $this->assertFalse($cache->contains('key2'));
+        $this->assertTrue($cache->set('key1', 1));
+        $this->assertTrue($cache->set('key2', 2));
+        $this->assertTrue($cache->clear());
+        $this->assertFalse($cache->has('key1'));
+        $this->assertFalse($cache->has('key2'));
     }
 
     public function testFetchMissShouldReturnFalse()
     {
         $cache = $this->getCacheDriver();
 
-        /* Ensure that caches return boolean false instead of null on a fetch
-         * miss to be compatible with ORM integration.
-         */
-        $result = $cache->fetch('nonexistent_key');
-
-        $this->assertFalse($result);
-        $this->assertNotNull($result);
+        $this->assertNull($cache->get('nonexistent_key'));
+        $this->assertFalse($cache->get('nonexistent_key', false));
     }
 
     /**
@@ -88,9 +73,9 @@ abstract class CacheTest extends \PHPUnit_Framework_TestCase
     {
         $cache = $this->getCacheDriver();
 
-        $this->assertTrue($cache->save('key', $value));
-        $this->assertTrue($cache->contains('key'));
-        $this->assertEquals($value, $cache->fetch('key'));
+        $this->assertTrue($cache->set('key', $value));
+        $this->assertTrue($cache->has('key'));
+        $this->assertEquals($value, $cache->get('key'));
     }
 
     /**
@@ -117,16 +102,16 @@ abstract class CacheTest extends \PHPUnit_Framework_TestCase
     public function testCachedObject()
     {
         $cache = $this->getCacheDriver();
-        $cache->deleteAll();
+        $cache->clear();
         $obj = new \stdClass();
         $obj->foo = 'bar';
         $obj2 = new \stdClass();
         $obj2->bar = 'foo';
         $obj2->obj = $obj;
         $obj->obj2 = $obj2;
-        $cache->save('obj', $obj);
+        $cache->set('obj', $obj);
 
-        $fetched = $cache->fetch('obj');
+        $fetched = $cache->get('obj');
 
         $this->assertInstanceOf('stdClass', $obj);
         $this->assertInstanceOf('stdClass', $obj->obj2);
@@ -135,8 +120,5 @@ abstract class CacheTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('foo', $fetched->obj2->bar);
     }
 
-    /**
-     * @return \Doctrine\Common\Cache\CacheProvider
-     */
-    abstract protected function getCacheDriver();
+    abstract protected function getCacheDriver() : CacheInterface;
 }

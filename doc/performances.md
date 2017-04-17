@@ -9,47 +9,34 @@ current_menu: performances
 
 PHP-DI uses the [definitions](definition.md) you configured to instantiate classes.
 
-Reading those definitions (and, if enabled, reading annotations or autowiring) on each request can be avoided by using a cache. The caching system PHP-DI uses is the [Doctrine Cache](http://doctrine-common.readthedocs.org/en/latest/reference/caching.html) library.
+Reading those definitions (and, if enabled, reading [autowiring](autowiring.md) or [annotations](annotations.md)) on each request can be avoided by using a cache.
+
+PHP-DI is compatible with all [PSR-16](https://github.com/php-fig/simple-cache) caches (PSR-16 is a standard for PHP cache systems). To choose which library you want to use, you can have a look at [Packagist](https://packagist.org/providers/psr/simple-cache-implementation). You can for example use Symfony's [cache component](https://github.com/symfony/cache) or the [PHP Cache library](http://www.php-cache.com/en/latest/).
 
 ### Setup
 
-The Doctrine Cache library is not installed by default with PHP-DI, you need to install it with Composer:
+There is no cache system installed by default with PHP-DI, you need to install it with Composer. The examples below use the Symfony cache component.
 
-```json
-{
-    "require": {
-        ...
-        "doctrine/cache": "~1.4"
-    }
-}
+```
+composer require symfony/cache
 ```
 
-Then you can then pass a cache instance to the container builder:
+You can then pass a cache instance to the container builder:
 
 ```php
-$containerBuilder->setDefinitionCache(new Doctrine\Common\Cache\ApcCache());
+$cache = new Symfony\Component\Cache\Simple\ApcuCache();
+$containerBuilder->setDefinitionCache($cache);
 ```
 
-Heads up: do not use a cache in a development environment, else changes you make to the definitions (annotations, configuration files, etc.) may not be taken into account. The only cache you might use in development is the `ArrayCache` because it doesn't persist data between requests.
+Heads up: do not use a cache in a development environment, else all the changes you make to the definitions (annotations, configuration files, etc.) may not be taken into account. The only cache you may use in development is `DI\Cache\ArrayCache` (which is the only cache implementation provided by PHP-DI) because it doesn't persist data between requests.
 
 ### Cache types
 
-The cache implementation is provided by Doctrine (because it works very well) and supports the following adapters:
+Depending on the cache library you will choose, it will provide adapters to different kind of backends, for example: APCu, Memcache, Redis, Filesystem, etc.
 
-- `ArrayCache` (in memory, lifetime of the request)
-- `ApcCache` (requires the APC or APCu extension)
-- `MemcacheCache` (requires the memcache extension)
-- `MemcachedCache` (requires the memcached extension)
-- `RedisCache` (requires the phpredis extension)
-- `FilesystemCache` (not optimal for high concurrency)
-- `PhpFileCache`: incompatible with data stored by PHP-DI
-- `WinCacheCache` (requires the wincache extension)
-- `XcacheCache` (requires the xcache extension)
-- `ZendDataCache` (requires Zend Server Platform)
+Here is the list of caches Symfony Cache supports: [supported adapters](http://symfony.com/doc/current/components/cache.html#available-simple-cache-psr-16-classes).
 
-Read the [Doctrine documentation](http://docs.doctrine-project.org/projects/doctrine-common/en/latest/reference/caching.html) for more details.
-
-The recommended cache is the `ApcCache`.
+In production environments, **caches based on APCu are recommended**. Given PHP-DI's architecture, there will be a cache request for each container entry you get. Remote caches (like Redis or Memcache) will most certainly have a latency too high for such low level calls and will not be efficient.
 
 ### Cache prefixes
 
@@ -60,8 +47,15 @@ Conflicts can also happen if an application runs on different "environments" (e.
 To avoid this situation, you should use a cache "prefix": each installation of your app has a unique ID, and this ID is used to prefix cache keys
 to avoid collisions.
 
+You can also add your application's version to the cache prefix so that on each new deployment the cache for the old version is discarded.
+
+For example with Symfony Cache:
+
 ```php
-$cache = new Doctrine\Common\Cache\ApcCache();
-$cache->setNamespace('MyApplication');
+$environment = 'prod'; // or 'dev'
+$appVersion = '...';
+$namespace = 'MySuperApplication-' . $environment . '-' . $appVersion;
+
+$cache = new Symfony\Component\Cache\Simple\ApcuCache($namespace);
 $containerBuilder->setDefinitionCache($cache);
 ```

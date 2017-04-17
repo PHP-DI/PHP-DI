@@ -11,9 +11,9 @@ use DI\Definition\Source\NoAutowiring;
 use DI\Definition\Source\ReflectionBasedAutowiring;
 use DI\Definition\Source\SourceChain;
 use DI\Proxy\ProxyFactory;
-use Doctrine\Common\Cache\Cache;
 use InvalidArgumentException;
 use Psr\Container\ContainerInterface;
+use Psr\SimpleCache\CacheInterface;
 
 /**
  * Helper to create and configure a Container.
@@ -52,7 +52,7 @@ class ContainerBuilder
     private $ignorePhpDocErrors = false;
 
     /**
-     * @var Cache
+     * @var CacheInterface
      */
     private $cache;
 
@@ -204,10 +204,10 @@ class ContainerBuilder
     /**
      * Enables the use of a cache for the definitions.
      *
-     * @param Cache $cache Cache backend to use
+     * @param CacheInterface $cache Cache backend to use
      * @return ContainerBuilder
      */
-    public function setDefinitionCache(Cache $cache)
+    public function setDefinitionCache(CacheInterface $cache)
     {
         $this->ensureNotLocked();
 
