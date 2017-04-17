@@ -40,6 +40,15 @@ class ObjectDefinitionTest extends \PHPUnit_Framework_TestCase
         $this->assertNull($definition->getConstructorInjection());
         $this->assertEmpty($definition->getPropertyInjections());
         $this->assertEmpty($definition->getMethodInjections());
+        $this->assertEmpty($definition->getMethodInjectionsForMethod('nonExistent'));
+    }
+
+    public function test_get_method_injections_for_method()
+    {
+        $definition = new ObjectDefinition('foo');
+        $definition->addMethodInjection(new MethodInjection('barMethod'));
+
+        $this->assertEquals([new MethodInjection('barMethod')], $definition->getMethodInjectionsForMethod('barMethod'));
     }
 
     public function test_class_exists()

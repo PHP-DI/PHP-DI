@@ -147,6 +147,11 @@ class ObjectDefinition implements Definition, CacheableDefinition
         $this->propertyInjections[$key] = $propertyInjection;
     }
 
+    public function getMethodInjectionsForMethod($methodName)
+    {
+        return isset($this->methodInjections[$methodName]) ? $this->methodInjections[$methodName] : [];
+    }
+
     /**
      * @return MethodInjection[] Method injections
      */
