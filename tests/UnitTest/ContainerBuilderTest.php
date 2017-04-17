@@ -8,9 +8,9 @@ use DI\Definition\Source\CachedDefinitionSource;
 use DI\Definition\Source\DefinitionArray;
 use DI\Definition\ValueDefinition;
 use DI\Test\UnitTest\Fixtures\FakeContainer;
-use Doctrine\Common\Cache\Cache;
 use EasyMock\EasyMock;
 use Psr\Container\ContainerInterface;
+use Psr\SimpleCache\CacheInterface;
 
 /**
  * @covers \DI\ContainerBuilder
@@ -40,7 +40,7 @@ class ContainerBuilderTest extends \PHPUnit_Framework_TestCase
      */
     public function should_allow_to_configure_a_cache()
     {
-        $cache = $this->easyMock(Cache::class);
+        $cache = $this->easyMock(CacheInterface::class);
 
         $builder = new ContainerBuilder(FakeContainer::class);
         $builder->setDefinitionCache($cache);
@@ -181,7 +181,7 @@ class ContainerBuilderTest extends \PHPUnit_Framework_TestCase
         $result = $builder->writeProxiesToFile(false);
         $this->assertSame($builder, $result);
 
-        $mockCache = $this->easyMock(Cache::class);
+        $mockCache = $this->easyMock(CacheInterface::class);
         $result = $builder->setDefinitionCache($mockCache);
         $this->assertSame($builder, $result);
 

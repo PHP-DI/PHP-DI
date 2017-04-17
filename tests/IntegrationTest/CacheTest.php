@@ -2,8 +2,8 @@
 
 namespace DI\Test\IntegrationTest;
 
+use DI\Cache\ArrayCache;
 use DI\ContainerBuilder;
-use Doctrine\Common\Cache\ArrayCache;
 
 /**
  * Test caching.

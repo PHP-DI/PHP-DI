@@ -5,8 +5,8 @@ namespace DI\Test\UnitTest\Definition\Source;
 use DI\Definition\ObjectDefinition;
 use DI\Definition\Source\CachedDefinitionSource;
 use DI\Definition\Source\DefinitionArray;
-use Doctrine\Common\Cache\Cache;
 use EasyMock\EasyMock;
+use Psr\SimpleCache\CacheInterface;
 
 /**
  * @covers \DI\Definition\Source\CachedDefinitionSource
@@ -20,9 +20,9 @@ class CachedDefinitionSourceTest extends \PHPUnit_Framework_TestCase
      */
     public function should_get_from_cache()
     {
-        /** @var Cache $cache */
-        $cache = $this->easySpy(Cache::class, [
-            'fetch' => 'foo',
+        /** @var CacheInterface $cache */
+        $cache = $this->easySpy(CacheInterface::class, [
+            'get' => 'foo',
         ]);
 
         $source = new CachedDefinitionSource(new DefinitionArray(), $cache);
@@ -35,8 +35,8 @@ class CachedDefinitionSourceTest extends \PHPUnit_Framework_TestCase
      */
     public function should_save_to_cache_and_return()
     {
-        $cache = $this->easySpy(Cache::class, [
-            'fetch' => false,
+        $cache = $this->easySpy(CacheInterface::class, [
+            'get' => false,
         ]);
 
         $cachedSource = new DefinitionArray([
@@ -47,7 +47,7 @@ class CachedDefinitionSourceTest extends \PHPUnit_Framework_TestCase
 
         $expectedDefinition = new ObjectDefinition('foo');
         $cache->expects($this->once())
-            ->method('save')
+            ->method('set')
             ->with($this->isType('string'), $expectedDefinition);
 
         $this->assertEquals($expectedDefinition, $source->getDefinition('foo'));
@@ -58,14 +58,14 @@ class CachedDefinitionSourceTest extends \PHPUnit_Framework_TestCase
      */
     public function should_save_null_to_cache_and_return_null()
     {
-        $cache = $this->easySpy(Cache::class, [
-            'fetch' => false,
+        $cache = $this->easySpy(CacheInterface::class, [
+            'get' => false,
         ]);
 
         $source = new CachedDefinitionSource(new DefinitionArray(), $cache);
 
         $cache->expects($this->once())
-            ->method('save')
+            ->method('set')
             ->with($this->isType('string'), null);
         $this->assertNull($source->getDefinition('foo'));
     }

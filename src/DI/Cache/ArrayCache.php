@@ -2,76 +2,90 @@
 
 namespace DI\Cache;
 
-use Doctrine\Common\Cache\Cache;
-use Doctrine\Common\Cache\ClearableCache;
-use Doctrine\Common\Cache\FlushableCache;
+use Psr\SimpleCache\CacheInterface;
 
 /**
  * Simple implementation of a cache based on an array.
  *
- * This implementation can be used instead of Doctrine's ArrayCache for
- * better performances (because simpler implementation).
+ * The code is based on Doctrine's ArrayCache provider.
  *
- * The code is based on Doctrine's ArrayCache provider:
- * @see \Doctrine\Common\Cache\ArrayCache
- * @link   www.doctrine-project.org
+ * @link www.doctrine-project.org
  * @author Benjamin Eberlei <kontakt@beberlei.de>
  * @author Guilherme Blanco <guilhermeblanco@hotmail.com>
  * @author Jonathan Wage <jonwage@gmail.com>
  * @author Roman Borschel <roman@code-factory.org>
  * @author David Abdemoulaie <dave@hobodave.com>
+ * @author Matthieu Napoli <matthieu@mnapoli.fr>
  */
-class ArrayCache implements Cache, FlushableCache, ClearableCache
+class ArrayCache implements CacheInterface
 {
     /**
      * @var array
      */
     private $data = [];
 
-    public function fetch($id)
+    public function get($key, $default = null)
     {
         // isset() is required for performance optimizations, to avoid unnecessary function calls to array_key_exists.
-        if (isset($this->data[$id]) || array_key_exists($id, $this->data)) {
-            return $this->data[$id];
+        if (isset($this->data[$key]) || array_key_exists($key, $this->data)) {
+            return $this->data[$key];
         }
 
-        return false;
+        return $default;
     }
 
-    public function contains($id)
+    public function has($key)
     {
         // isset() is required for performance optimizations, to avoid unnecessary function calls to array_key_exists.
-        return isset($this->data[$id]) || array_key_exists($id, $this->data);
+        return isset($this->data[$key]) || array_key_exists($key, $this->data);
     }
 
-    public function save($id, $data, $lifeTime = 0)
+    public function set($key, $value, $ttl = 0)
     {
-        $this->data[$id] = $data;
+        $this->data[$key] = $value;
 
         return true;
     }
 
-    public function delete($id)
+    public function delete($key)
     {
-        unset($this->data[$id]);
+        unset($this->data[$key]);
 
         return true;
     }
 
-    public function getStats()
-    {
-        return null;
-    }
-
-    public function flushAll()
+    public function clear()
     {
         $this->data = [];
 
         return true;
     }
 
-    public function deleteAll()
+    public function getMultiple($keys, $default = null)
     {
-        return $this->flushAll();
+        $values = [];
+        foreach ($keys as $key) {
+            $values[$key] = $this->get($key, $default);
+        }
+
+        return $values;
+    }
+
+    public function setMultiple($values, $ttl = null)
+    {
+        foreach ($values as $key => $value) {
+            $this->data[$key] = $value;
+        }
+
+        return true;
+    }
+
+    public function deleteMultiple($keys)
+    {
+        foreach ($keys as $key) {
+            unset($this->data[$key]);
+        }
+
+        return true;
     }
 }

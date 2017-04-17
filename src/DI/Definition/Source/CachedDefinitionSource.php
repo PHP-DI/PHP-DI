@@ -4,7 +4,7 @@ namespace DI\Definition\Source;
 
 use DI\Definition\CacheableDefinition;
 use DI\Definition\Definition;
-use Doctrine\Common\Cache\Cache;
+use Psr\SimpleCache\CacheInterface;
 
 /**
  * Caches another definition source.
@@ -25,11 +25,11 @@ class CachedDefinitionSource implements DefinitionSource
     private $source;
 
     /**
-     * @var Cache
+     * @var CacheInterface
      */
     private $cache;
 
-    public function __construct(DefinitionSource $source, Cache $cache)
+    public function __construct(DefinitionSource $source, CacheInterface $cache)
     {
         $this->source = $source;
         $this->cache = $cache;
@@ -55,10 +55,7 @@ class CachedDefinitionSource implements DefinitionSource
         return $definition;
     }
 
-    /**
-     * @return Cache
-     */
-    public function getCache()
+    public function getCache() : CacheInterface
     {
         return $this->cache;
     }
@@ -73,7 +70,7 @@ class CachedDefinitionSource implements DefinitionSource
     {
         $cacheKey = self::CACHE_PREFIX . $name;
 
-        $data = $this->cache->fetch($cacheKey);
+        $data = $this->cache->get($cacheKey, false);
 
         if ($data !== false) {
             return $data;
@@ -92,6 +89,6 @@ class CachedDefinitionSource implements DefinitionSource
     {
         $cacheKey = self::CACHE_PREFIX . $name;
 
-        $this->cache->save($cacheKey, $definition);
+        $this->cache->set($cacheKey, $definition);
     }
 }
