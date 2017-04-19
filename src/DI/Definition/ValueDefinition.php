@@ -33,20 +33,15 @@ class ValueDefinition implements Definition, SelfResolvingDefinition
         $this->value = $value;
     }
 
-    /**
-     * @return string Entry name
-     */
-    public function getName()
+    public function getName() : string
     {
         return $this->name;
     }
 
     /**
      * A value definition is like a constant, there is nothing to compute, the value is the same for everyone.
-     *
-     * {@inheritdoc}
      */
-    public function getScope()
+    public function getScope() : string
     {
         return Scope::SINGLETON;
     }
@@ -64,7 +59,7 @@ class ValueDefinition implements Definition, SelfResolvingDefinition
         return $this->getValue();
     }
 
-    public function isResolvable(ContainerInterface $container)
+    public function isResolvable(ContainerInterface $container) : bool
     {
         return true;
     }

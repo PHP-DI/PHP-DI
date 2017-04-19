@@ -79,7 +79,7 @@ class AnnotationBasedAutowiring implements DefinitionSource, Autowiring
      * @throws AnnotationException
      * @throws InvalidArgumentException The class doesn't exist
      */
-    public function getDefinition($name)
+    public function getDefinition(string $name)
     {
         return $this->autowire($name);
     }

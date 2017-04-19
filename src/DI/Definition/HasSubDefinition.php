@@ -9,13 +9,7 @@ namespace DI\Definition;
  */
 interface HasSubDefinition extends Definition
 {
-    /**
-     * @return string
-     */
-    public function getSubDefinitionName();
+    public function getSubDefinitionName() : string;
 
-    /**
-     * @param Definition $definition
-     */
     public function setSubDefinition(Definition $definition);
 }

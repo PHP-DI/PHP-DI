@@ -78,20 +78,15 @@ class ObjectCreator implements DefinitionResolver
      *
      * {@inheritdoc}
      */
-    public function isResolvable(Definition $definition, array $parameters = [])
+    public function isResolvable(Definition $definition, array $parameters = []) : bool
     {
         return $definition->isInstantiable();
     }
 
     /**
      * Returns a proxy instance.
-     *
-     * @param ObjectDefinition $definition
-     * @param array           $parameters
-     *
-     * @return LazyLoadingInterface Proxy instance
      */
-    private function createProxy(ObjectDefinition $definition, array $parameters)
+    private function createProxy(ObjectDefinition $definition, array $parameters) : LazyLoadingInterface
     {
         /** @noinspection PhpUnusedParameterInspection */
         $proxy = $this->proxyFactory->createProxy(
@@ -109,7 +104,6 @@ class ObjectCreator implements DefinitionResolver
     /**
      * Creates an instance of the class and injects dependencies..
      *
-     * @param ObjectDefinition $definition
      * @param array            $parameters      Optional parameters to use to create the instance.
      *
      * @throws InvalidDefinition

@@ -35,10 +35,7 @@ class CachedDefinitionSource implements DefinitionSource
         $this->cache = $cache;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function getDefinition($name)
+    public function getDefinition(string $name)
     {
         // Look in cache
         $definition = $this->fetchFromCache($name);
@@ -66,7 +63,7 @@ class CachedDefinitionSource implements DefinitionSource
      * @param string $name Entry name
      * @return Definition|null|bool The cached definition, null or false if the value is not already cached
      */
-    private function fetchFromCache($name)
+    private function fetchFromCache(string $name)
     {
         $cacheKey = self::CACHE_PREFIX . $name;
 
@@ -82,10 +79,9 @@ class CachedDefinitionSource implements DefinitionSource
     /**
      * Saves a definition to the cache.
      *
-     * @param string          $name Entry name
-     * @param Definition|null $definition
+     * @param string $name Entry name
      */
-    private function saveToCache($name, Definition $definition = null)
+    private function saveToCache(string $name, Definition $definition = null)
     {
         $cacheKey = self::CACHE_PREFIX . $name;
 

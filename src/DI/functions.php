@@ -16,10 +16,8 @@ if (! function_exists('DI\value')) {
      * Helper for defining a value.
      *
      * @param mixed $value
-     *
-     * @return ValueDefinitionHelper
      */
-    function value($value)
+    function value($value) : ValueDefinitionHelper
     {
         return new ValueDefinitionHelper($value);
     }
@@ -31,10 +29,8 @@ if (! function_exists('DI\create')) {
      *
      * @param string|null $className Class name of the object.
      *                               If null, the name of the entry (in the container) will be used as class name.
-     *
-     * @return CreateDefinitionHelper
      */
-    function create($className = null)
+    function create(string $className = null) : CreateDefinitionHelper
     {
         return new CreateDefinitionHelper($className);
     }
@@ -46,10 +42,8 @@ if (! function_exists('DI\autowire')) {
      *
      * @param string|null $className Class name of the object.
      *                               If null, the name of the entry (in the container) will be used as class name.
-     *
-     * @return AutowireDefinitionHelper
      */
-    function autowire($className = null)
+    function autowire(string $className = null) : AutowireDefinitionHelper
     {
         return new AutowireDefinitionHelper($className);
     }
@@ -61,10 +55,8 @@ if (! function_exists('DI\factory')) {
      *
      * @param callable $factory The factory is a callable that takes the container as parameter
      *                          and returns the value to register in the container.
-     *
-     * @return FactoryDefinitionHelper
      */
-    function factory($factory)
+    function factory($factory) : FactoryDefinitionHelper
     {
         return new FactoryDefinitionHelper($factory);
     }
@@ -82,10 +74,8 @@ if (! function_exists('DI\decorate')) {
      *
      * @param callable $callable The callable takes the decorated object as first parameter and
      *                           the container as second.
-     *
-     * @return FactoryDefinitionHelper
      */
-    function decorate($callable)
+    function decorate($callable) : FactoryDefinitionHelper
     {
         return new FactoryDefinitionHelper($callable, true);
     }
@@ -94,12 +84,8 @@ if (! function_exists('DI\decorate')) {
 if (! function_exists('DI\get')) {
     /**
      * Helper for referencing another container entry in an object definition.
-     *
-     * @param string $entryName
-     *
-     * @return EntryReference
      */
-    function get($entryName)
+    function get(string $entryName) : EntryReference
     {
         return new EntryReference($entryName);
     }
@@ -111,10 +97,8 @@ if (! function_exists('DI\env')) {
      *
      * @param string $variableName The name of the environment variable.
      * @param mixed $defaultValue The default value to be used if the environment variable is not defined.
-     *
-     * @return EnvironmentVariableDefinitionHelper
      */
-    function env($variableName, $defaultValue = null)
+    function env(string $variableName, $defaultValue = null) : EnvironmentVariableDefinitionHelper
     {
         // Only mark as optional if the default value was *explicitly* provided.
         $isOptional = 2 === func_num_args();
@@ -139,11 +123,9 @@ if (! function_exists('DI\add')) {
      *
      * @param mixed|array $values A value or an array of values to add to the array.
      *
-     * @return ArrayDefinitionExtensionHelper
-     *
      * @since 5.0
      */
-    function add($values)
+    function add($values) : ArrayDefinitionExtensionHelper
     {
         if (! is_array($values)) {
             $values = [$values];
@@ -167,8 +149,8 @@ if (! function_exists('DI\string')) {
      *
      * @since 5.0
      */
-    function string($expression)
+    function string(string $expression) : StringDefinitionHelper
     {
-        return new StringDefinitionHelper((string) $expression);
+        return new StringDefinitionHelper($expression);
     }
 }

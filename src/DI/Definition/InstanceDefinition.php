@@ -25,8 +25,7 @@ class InstanceDefinition implements Definition
     private $objectDefinition;
 
     /**
-     * @param object          $instance
-     * @param ObjectDefinition $objectDefinition
+     * @param object $instance
      */
     public function __construct($instance, ObjectDefinition $objectDefinition)
     {
@@ -34,19 +33,13 @@ class InstanceDefinition implements Definition
         $this->objectDefinition = $objectDefinition;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function getName()
+    public function getName() : string
     {
         // Name are superfluous for instance definitions
         return '';
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function getScope()
+    public function getScope() : string
     {
         return Scope::PROTOTYPE;
     }
@@ -59,10 +52,7 @@ class InstanceDefinition implements Definition
         return $this->instance;
     }
 
-    /**
-     * @return ObjectDefinition
-     */
-    public function getObjectDefinition()
+    public function getObjectDefinition() : ObjectDefinition
     {
         return $this->objectDefinition;
     }

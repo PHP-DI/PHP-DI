@@ -2,6 +2,7 @@
 
 namespace DI\Definition\Helper;
 
+use DI\Definition\Definition;
 use DI\Definition\Exception\InvalidDefinition;
 use DI\Definition\ObjectDefinition;
 use DI\Definition\ObjectDefinition\MethodInjection;
@@ -55,7 +56,7 @@ class CreateDefinitionHelper implements DefinitionHelper
      * @param string|null $className Class name of the object.
      *                               If null, the name of the entry (in the container) will be used as class name.
      */
-    public function __construct($className = null)
+    public function __construct(string $className = null)
     {
         $this->className = $className;
     }
@@ -77,11 +78,9 @@ class CreateDefinitionHelper implements DefinitionHelper
     /**
      * Defines the scope of the entry.
      *
-     * @param string $scope
-     *
      * @return $this
      */
-    public function scope($scope)
+    public function scope(string $scope)
     {
         $this->scope = $scope;
 
@@ -98,9 +97,9 @@ class CreateDefinitionHelper implements DefinitionHelper
      *
      * @return $this
      */
-    public function constructor()
+    public function constructor(...$parameters)
     {
-        $this->constructor = func_get_args();
+        $this->constructor = $parameters;
 
         return $this;
     }
@@ -113,7 +112,7 @@ class CreateDefinitionHelper implements DefinitionHelper
      *
      * @return $this
      */
-    public function property($property, $value)
+    public function property(string $property, $value)
     {
         $this->properties[$property] = $value;
 
@@ -134,24 +133,18 @@ class CreateDefinitionHelper implements DefinitionHelper
      *
      * @return $this
      */
-    public function method($method)
+    public function method(string $method, ...$parameters)
     {
-        $args = func_get_args();
-        array_shift($args);
-
         if (! isset($this->methods[$method])) {
             $this->methods[$method] = [];
         }
 
-        $this->methods[$method][] = $args;
+        $this->methods[$method][] = $parameters;
 
         return $this;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function getDefinition($entryName)
+    public function getDefinition(string $entryName) : Definition
     {
         $class = $this::DEFINITION_CLASS;
         /** @var ObjectDefinition $definition */
@@ -196,13 +189,9 @@ class CreateDefinitionHelper implements DefinitionHelper
      *
      * This is necessary so that merging definitions between sources is possible.
      *
-     * @param ObjectDefinition $definition
-     * @param string          $method
-     * @param array           $parameters
      * @throws InvalidDefinition
-     * @return array
      */
-    private function fixParameters(ObjectDefinition $definition, $method, $parameters)
+    private function fixParameters(ObjectDefinition $definition, string $method, array $parameters) : array
     {
         $fixedParameters = [];
 

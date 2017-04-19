@@ -25,9 +25,6 @@ class DefinitionParameterResolver implements ParameterResolver
         $this->definitionResolver = $definitionResolver;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getParameters(
         ReflectionFunctionAbstract $reflection,
         array $providedParameters,

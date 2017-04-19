@@ -31,10 +31,7 @@ class DefinitionFile extends DefinitionArray
         parent::__construct([], $autowiring);
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function getDefinition($name)
+    public function getDefinition(string $name)
     {
         $this->initialize();
 

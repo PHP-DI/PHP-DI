@@ -3,6 +3,7 @@
 namespace DI\Definition\Helper;
 
 use DI\Definition\ArrayDefinitionExtension;
+use DI\Definition\Definition;
 
 /**
  * Helps extending the definition of an array.
@@ -32,7 +33,7 @@ class ArrayDefinitionExtensionHelper implements DefinitionHelper
      *
      * @return ArrayDefinitionExtension
      */
-    public function getDefinition($entryName)
+    public function getDefinition(string $entryName) : Definition
     {
         return new ArrayDefinitionExtension($entryName, $this->values);
     }

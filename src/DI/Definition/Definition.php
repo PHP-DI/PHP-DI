@@ -13,17 +13,13 @@ interface Definition extends RequestedEntry
 {
     /**
      * Returns the name of the entry in the container.
-     *
-     * @return string
      */
-    public function getName();
+    public function getName() : string;
 
     /**
      * Returns the scope of the entry.
-     *
-     * @return string
      */
-    public function getScope();
+    public function getScope() : string;
 
     /**
      * Definitions can be cast to string for debugging information.

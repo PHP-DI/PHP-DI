@@ -87,10 +87,8 @@ class ContainerBuilder
 
     /**
      * Build a container configured for the dev environment.
-     *
-     * @return Container
      */
-    public static function buildDevContainer()
+    public static function buildDevContainer() : Container
     {
         return new Container;
     }
@@ -98,7 +96,7 @@ class ContainerBuilder
     /**
      * @param string $containerClass Name of the container class, used to create the container.
      */
-    public function __construct($containerClass = 'DI\Container')
+    public function __construct(string $containerClass = 'DI\Container')
     {
         $this->containerClass = $containerClass;
     }
@@ -157,10 +155,9 @@ class ContainerBuilder
      *
      * Enabled by default.
      *
-     * @param bool $bool
-     * @return ContainerBuilder
+     * @return $this
      */
-    public function useAutowiring($bool)
+    public function useAutowiring(bool $bool) : ContainerBuilder
     {
         $this->ensureNotLocked();
 
@@ -174,10 +171,9 @@ class ContainerBuilder
      *
      * Disabled by default.
      *
-     * @param bool $bool
-     * @return ContainerBuilder
+     * @return $this
      */
-    public function useAnnotations($bool)
+    public function useAnnotations(bool $bool) : ContainerBuilder
     {
         $this->ensureNotLocked();
 
@@ -189,10 +185,9 @@ class ContainerBuilder
     /**
      * Enable or disable ignoring phpdoc errors (non-existent classes in `@param` or `@var`).
      *
-     * @param bool $bool
-     * @return ContainerBuilder
+     * @return $this
      */
-    public function ignorePhpDocErrors($bool)
+    public function ignorePhpDocErrors(bool $bool) : ContainerBuilder
     {
         $this->ensureNotLocked();
 
@@ -205,9 +200,9 @@ class ContainerBuilder
      * Enables the use of a cache for the definitions.
      *
      * @param CacheInterface $cache Cache backend to use
-     * @return ContainerBuilder
+     * @return $this
      */
-    public function setDefinitionCache(CacheInterface $cache)
+    public function setDefinitionCache(CacheInterface $cache) : ContainerBuilder
     {
         $this->ensureNotLocked();
 
@@ -222,12 +217,12 @@ class ContainerBuilder
      * For dev environment, use writeProxiesToFile(false) (default configuration)
      * For production environment, use writeProxiesToFile(true, 'tmp/proxies')
      *
-     * @param bool     $writeToFile    If true, write the proxies to disk to improve performances
+     * @param bool $writeToFile If true, write the proxies to disk to improve performances
      * @param string|null $proxyDirectory Directory where to write the proxies
      * @throws InvalidArgumentException when writeToFile is set to true and the proxy directory is null
-     * @return ContainerBuilder
+     * @return $this
      */
-    public function writeProxiesToFile($writeToFile, $proxyDirectory = null)
+    public function writeProxiesToFile(bool $writeToFile, string $proxyDirectory = null) : ContainerBuilder
     {
         $this->ensureNotLocked();
 
@@ -247,10 +242,9 @@ class ContainerBuilder
      * If PHP-DI's container is wrapped by another container, we can
      * set this so that PHP-DI will use the wrapper rather than itself for building objects.
      *
-     * @param ContainerInterface $otherContainer
      * @return $this
      */
-    public function wrapContainer(ContainerInterface $otherContainer)
+    public function wrapContainer(ContainerInterface $otherContainer) : ContainerBuilder
     {
         $this->ensureNotLocked();
 
@@ -267,7 +261,7 @@ class ContainerBuilder
      *                                                   or a DefinitionSource object.
      * @return $this
      */
-    public function addDefinitions($definitions)
+    public function addDefinitions($definitions) : ContainerBuilder
     {
         $this->ensureNotLocked();
 

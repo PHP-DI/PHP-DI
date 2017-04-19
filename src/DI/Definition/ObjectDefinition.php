@@ -70,37 +70,27 @@ class ObjectDefinition implements Definition, CacheableDefinition
     private $isInstantiable;
 
     /**
-     * @param string $name Class name
-     * @param string $className
+     * @param string $name Entry name
      */
-    public function __construct($name, $className = null)
+    public function __construct(string $name, string $className = null)
     {
-        $this->name = (string) $name;
+        $this->name = $name;
         $this->setClassName($className);
     }
 
-    /**
-     * @return string Entry name
-     */
-    public function getName()
+    public function getName() : string
     {
         return $this->name;
     }
 
-    /**
-     * @param string|null $className
-     */
-    public function setClassName($className)
+    public function setClassName(string $className = null)
     {
         $this->className = $className;
 
         $this->updateCache();
     }
 
-    /**
-     * @return string Class name
-     */
-    public function getClassName()
+    public function getClassName() : string
     {
         if ($this->className !== null) {
             return $this->className;
@@ -117,9 +107,6 @@ class ObjectDefinition implements Definition, CacheableDefinition
         return $this->constructorInjection;
     }
 
-    /**
-     * @param MethodInjection $constructorInjection
-     */
     public function setConstructorInjection(MethodInjection $constructorInjection)
     {
         $this->constructorInjection = $constructorInjection;
@@ -128,7 +115,7 @@ class ObjectDefinition implements Definition, CacheableDefinition
     /**
      * @return PropertyInjection[] Property injections
      */
-    public function getPropertyInjections()
+    public function getPropertyInjections() : array
     {
         return $this->propertyInjections;
     }
@@ -150,7 +137,7 @@ class ObjectDefinition implements Definition, CacheableDefinition
     /**
      * @return MethodInjection[] Method injections
      */
-    public function getMethodInjections()
+    public function getMethodInjections() : array
     {
         // Return array leafs
         $injections = [];
@@ -161,9 +148,6 @@ class ObjectDefinition implements Definition, CacheableDefinition
         return $injections;
     }
 
-    /**
-     * @param MethodInjection $methodInjection
-     */
     public function addMethodInjection(MethodInjection $methodInjection)
     {
         $method = $methodInjection->getMethodName();
@@ -173,34 +157,22 @@ class ObjectDefinition implements Definition, CacheableDefinition
         $this->methodInjections[$method][] = $methodInjection;
     }
 
-    /**
-     * @param string $scope
-     */
-    public function setScope($scope)
+    public function setScope(string $scope)
     {
         $this->scope = $scope;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function getScope()
+    public function getScope() : string
     {
         return $this->scope ?: Scope::SINGLETON;
     }
 
-    /**
-     * @param bool|null $lazy
-     */
-    public function setLazy($lazy)
+    public function setLazy(bool $lazy = null)
     {
         $this->lazy = $lazy;
     }
 
-    /**
-     * @return bool
-     */
-    public function isLazy()
+    public function isLazy() : bool
     {
         if ($this->lazy !== null) {
             return $this->lazy;
@@ -210,18 +182,12 @@ class ObjectDefinition implements Definition, CacheableDefinition
         }
     }
 
-    /**
-     * @return bool
-     */
-    public function classExists()
+    public function classExists() : bool
     {
         return $this->classExists;
     }
 
-    /**
-     * @return bool
-     */
-    public function isInstantiable()
+    public function isInstantiable() : bool
     {
         return $this->isInstantiable;
     }
