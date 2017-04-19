@@ -22,23 +22,17 @@ class EntryReference implements DefinitionHelper
     /**
      * @param string $entryName Entry name
      */
-    public function __construct($entryName)
+    public function __construct(string $entryName)
     {
         $this->name = $entryName;
     }
 
-    /**
-     * @return string Entry name
-     */
-    public function getName()
+    public function getName() : string
     {
         return $this->name;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function getDefinition($entryName)
+    public function getDefinition(string $entryName) : Definition
     {
         return new AliasDefinition($entryName, $this->name);
     }

@@ -31,7 +31,6 @@ final class Inject
     private $parameters = [];
 
     /**
-     * @param array $values
      * @throws AnnotationException
      */
     public function __construct(array $values)
@@ -73,7 +72,7 @@ final class Inject
     }
 
     /**
-     * @return string Name of the entry to inject
+     * @return string|null Name of the entry to inject
      */
     public function getName()
     {
@@ -83,7 +82,7 @@ final class Inject
     /**
      * @return array Parameters, indexed by the parameter number (index) or name
      */
-    public function getParameters()
+    public function getParameters() : array
     {
         return $this->parameters;
     }

@@ -22,11 +22,11 @@ class AutowireDefinitionHelper extends CreateDefinitionHelper
      * and only define one.
      *
      * @param string $parameter Parameter for which the value will be given.
-     * @param mixed  $value     Value to give to this parameter.
+     * @param mixed $value Value to give to this parameter.
      *
      * @return $this
      */
-    public function constructorParameter($parameter, $value)
+    public function constructorParameter(string $parameter, $value)
     {
         $this->constructor[$parameter] = $value;
 
@@ -44,13 +44,13 @@ class AutowireDefinitionHelper extends CreateDefinitionHelper
      * If multiple calls to the method have been configured already (e.g. in a previous definition)
      * then this method only overrides the parameter for the *first* call.
      *
-     * @param string $method    Name of the method to call.
+     * @param string $method Name of the method to call.
      * @param string $parameter Name or index of the parameter for which the value will be given.
-     * @param mixed  $value     Value to give to this parameter.
+     * @param mixed $value Value to give to this parameter.
      *
      * @return $this
      */
-    public function methodParameter($method, $parameter, $value)
+    public function methodParameter(string $method, string $parameter, $value)
     {
         // Special case for the constructor
         if ($method === '__construct') {

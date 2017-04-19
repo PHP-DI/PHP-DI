@@ -33,5 +33,5 @@ interface DefinitionResolver
      *
      * @return bool
      */
-    public function isResolvable(Definition $definition, array $parameters = []);
+    public function isResolvable(Definition $definition, array $parameters = []) : bool;
 }

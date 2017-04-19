@@ -81,10 +81,7 @@ class DefinitionArray implements DefinitionSource, MutableDefinitionSource
         $this->wildcardDefinitions = null;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function getDefinition($name)
+    public function getDefinition(string $name)
     {
         // Look for the definition by name
         if (array_key_exists($name, $this->definitions)) {
@@ -126,11 +123,9 @@ class DefinitionArray implements DefinitionSource, MutableDefinitionSource
     }
 
     /**
-     * @param mixed  $definition
-     * @param string $name
-     * @return Definition
+     * @param mixed $definition
      */
-    private function castDefinition($definition, $name)
+    private function castDefinition($definition, string $name) : Definition
     {
         if ($definition instanceof DefinitionHelper) {
             $definition = $definition->getDefinition($name);
@@ -151,11 +146,9 @@ class DefinitionArray implements DefinitionSource, MutableDefinitionSource
 
     /**
      * Replaces all the wildcards in the string with the given replacements.
-     * @param string   $string
      * @param string[] $replacements
-     * @return string
      */
-    private function replaceWildcards($string, array $replacements)
+    private function replaceWildcards(string $string, array $replacements) : string
     {
         foreach ($replacements as $replacement) {
             $pos = strpos($string, self::WILDCARD);

@@ -14,8 +14,6 @@ interface RequestedEntry
 {
     /**
      * Returns the name of the entry that was requested by the container.
-     *
-     * @return string
      */
-    public function getName();
+    public function getName() : string;
 }

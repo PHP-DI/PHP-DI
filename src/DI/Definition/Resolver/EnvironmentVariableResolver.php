@@ -62,12 +62,7 @@ class EnvironmentVariableResolver implements DefinitionResolver
         return $value;
     }
 
-    /**
-     * @param EnvironmentVariableDefinition $definition
-     *
-     * {@inheritdoc}
-     */
-    public function isResolvable(Definition $definition, array $parameters = [])
+    public function isResolvable(Definition $definition, array $parameters = []) : bool
     {
         return true;
     }

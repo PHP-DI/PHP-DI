@@ -7,13 +7,14 @@ use ProxyManager\Factory\LazyLoadingValueHolderFactory;
 use ProxyManager\FileLocator\FileLocator;
 use ProxyManager\GeneratorStrategy\EvaluatingGeneratorStrategy;
 use ProxyManager\GeneratorStrategy\FileWriterGeneratorStrategy;
+use ProxyManager\Proxy\LazyLoadingInterface;
 
 /**
  * Creates proxy classes.
  *
  * Wraps Ocramius/ProxyManager LazyLoadingValueHolderFactory.
  *
- * @see ProxyManager\Factory\LazyLoadingValueHolderFactory
+ * @see \ProxyManager\Factory\LazyLoadingValueHolderFactory
  *
  * @since  5.0
  * @author Matthieu Napoli <matthieu@mnapoli.fr>
@@ -28,7 +29,7 @@ class ProxyFactory
 
     /**
      * Directory where to write the proxies (if $writeProxiesToFile is enabled).
-     * @var string
+     * @var string|null
      */
     private $proxyDirectory;
 
@@ -37,7 +38,7 @@ class ProxyFactory
      */
     private $proxyManager;
 
-    public function __construct($writeProxiesToFile = false, $proxyDirectory = null)
+    public function __construct(bool $writeProxiesToFile = false, string $proxyDirectory = null)
     {
         $this->writeProxiesToFile = $writeProxiesToFile;
         $this->proxyDirectory = $proxyDirectory;
@@ -47,12 +48,10 @@ class ProxyFactory
      * Creates a new lazy proxy instance of the given class with
      * the given initializer.
      *
-     * @param string   $className   name of the class to be proxied
+     * @param string $className name of the class to be proxied
      * @param \Closure $initializer initializer to be passed to the proxy
-     *
-     * @return \ProxyManager\Proxy\LazyLoadingInterface
      */
-    public function createProxy($className, \Closure $initializer)
+    public function createProxy(string $className, \Closure $initializer) : LazyLoadingInterface
     {
         $this->createProxyManager();
 

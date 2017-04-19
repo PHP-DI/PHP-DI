@@ -27,40 +27,30 @@ class StringDefinition implements Definition, SelfResolvingDefinition
     private $expression;
 
     /**
-     * @param string $name       Entry name
-     * @param string $expression
+     * @param string $name Entry name
      */
-    public function __construct($name, $expression)
+    public function __construct(string $name, string $expression)
     {
         $this->name = $name;
         $this->expression = $expression;
     }
 
-    /**
-     * @return string Entry name
-     */
-    public function getName()
+    public function getName() : string
     {
         return $this->name;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function getScope()
+    public function getScope() : string
     {
         return Scope::SINGLETON;
     }
 
-    /**
-     * @return string
-     */
-    public function getExpression()
+    public function getExpression() : string
     {
         return $this->expression;
     }
 
-    public function resolve(ContainerInterface $container)
+    public function resolve(ContainerInterface $container) : string
     {
         $expression = $this->expression;
 
@@ -83,7 +73,7 @@ class StringDefinition implements Definition, SelfResolvingDefinition
         return $result;
     }
 
-    public function isResolvable(ContainerInterface $container)
+    public function isResolvable(ContainerInterface $container) : bool
     {
         return true;
     }

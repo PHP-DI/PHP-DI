@@ -9,10 +9,7 @@ use DI\Definition\ObjectDefinition\MethodInjection;
  */
 class AutowireDefinition extends ObjectDefinition implements HasSubDefinition
 {
-    /**
-     * {@inheritdoc}
-     */
-    public function getSubDefinitionName()
+    public function getSubDefinitionName() : string
     {
         return $this->getClassName();
     }
@@ -95,7 +92,7 @@ class AutowireDefinition extends ObjectDefinition implements HasSubDefinition
         }
     }
 
-    private function mergeMethodCalls(array $calls, $methodName)
+    private function mergeMethodCalls(array $calls, string $methodName)
     {
         foreach ($calls as $index => $methodInjection) {
             // Merge

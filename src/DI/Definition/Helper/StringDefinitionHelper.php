@@ -2,6 +2,7 @@
 
 namespace DI\Definition\Helper;
 
+use DI\Definition\Definition;
 use DI\Definition\StringDefinition;
 
 /**
@@ -15,7 +16,7 @@ class StringDefinitionHelper implements DefinitionHelper
      */
     private $expression;
 
-    public function __construct($expression)
+    public function __construct(string $expression)
     {
         $this->expression = $expression;
     }
@@ -25,7 +26,7 @@ class StringDefinitionHelper implements DefinitionHelper
      *
      * @return StringDefinition
      */
-    public function getDefinition($entryName)
+    public function getDefinition(string $entryName) : Definition
     {
         return new StringDefinition($entryName, $this->expression);
     }

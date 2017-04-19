@@ -22,11 +22,7 @@ class MethodInjection implements Definition
      */
     private $parameters = [];
 
-    /**
-     * @param string $methodName
-     * @param array  $parameters
-     */
-    public function __construct($methodName, array $parameters = [])
+    public function __construct(string $methodName, array $parameters = [])
     {
         $this->methodName = (string) $methodName;
         $this->parameters = $parameters;
@@ -37,26 +33,18 @@ class MethodInjection implements Definition
         return new self('__construct', $parameters);
     }
 
-    /**
-     * @return string Method name
-     */
-    public function getMethodName()
+    public function getMethodName() : string
     {
         return $this->methodName;
     }
 
-    /**
-     * @return array
-     */
-    public function getParameters()
+    public function getParameters() : array
     {
         return $this->parameters;
     }
 
     /**
      * Replace the parameters of the definition by a new array of parameters.
-     *
-     * @param array $parameters
      */
     public function replaceParameters(array $parameters)
     {
@@ -69,18 +57,12 @@ class MethodInjection implements Definition
         $this->parameters = $this->parameters + $definition->parameters;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function getName()
+    public function getName() : string
     {
-        return null;
+        return '';
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function getScope()
+    public function getScope() : string
     {
         return Scope::PROTOTYPE;
     }

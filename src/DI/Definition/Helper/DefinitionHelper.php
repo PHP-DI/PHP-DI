@@ -2,6 +2,8 @@
 
 namespace DI\Definition\Helper;
 
+use DI\Definition\Definition;
+
 /**
  * Helps defining container entries.
  *
@@ -11,7 +13,6 @@ interface DefinitionHelper
 {
     /**
      * @param string $entryName Container entry name
-     * @return \DI\Definition\Definition
      */
-    public function getDefinition($entryName);
+    public function getDefinition(string $entryName) : Definition;
 }

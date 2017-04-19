@@ -30,9 +30,6 @@ final class Injectable
      */
     private $lazy;
 
-    /**
-     * @param array $values
-     */
     public function __construct(array $values)
     {
         if (isset($values['scope'])) {

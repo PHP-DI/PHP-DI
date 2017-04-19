@@ -52,7 +52,7 @@ class EnvironmentVariableDefinition implements CacheableDefinition
      * @param bool $isOptional Whether or not the environment variable definition is optional
      * @param mixed $defaultValue The default value to use if the environment variable is optional and not provided
      */
-    public function __construct($name, $variableName, $isOptional = false, $defaultValue = null)
+    public function __construct(string $name, string $variableName, bool $isOptional = false, $defaultValue = null)
     {
         $this->name = $name;
         $this->variableName = $variableName;
@@ -60,10 +60,7 @@ class EnvironmentVariableDefinition implements CacheableDefinition
         $this->defaultValue = $defaultValue;
     }
 
-    /**
-     * @return string Entry name
-     */
-    public function getName()
+    public function getName() : string
     {
         return $this->name;
     }
@@ -71,7 +68,7 @@ class EnvironmentVariableDefinition implements CacheableDefinition
     /**
      * @return string The name of the environment variable
      */
-    public function getVariableName()
+    public function getVariableName() : string
     {
         return $this->variableName;
     }
@@ -79,7 +76,7 @@ class EnvironmentVariableDefinition implements CacheableDefinition
     /**
      * @return bool Whether or not the environment variable definition is optional
      */
-    public function isOptional()
+    public function isOptional() : bool
     {
         return $this->isOptional;
     }
@@ -92,18 +89,12 @@ class EnvironmentVariableDefinition implements CacheableDefinition
         return $this->defaultValue;
     }
 
-    /**
-     * @param string $scope
-     */
-    public function setScope($scope)
+    public function setScope(string $scope)
     {
         $this->scope = $scope;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function getScope()
+    public function getScope() : string
     {
         return $this->scope ?: Scope::SINGLETON;
     }

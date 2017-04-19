@@ -11,28 +11,22 @@ namespace DI\Definition;
 class DecoratorDefinition extends FactoryDefinition implements Definition, HasSubDefinition
 {
     /**
-     * @var Definition
+     * @var Definition|null
      */
     private $decorated;
 
-    /**
-     * @return string
-     */
-    public function getSubDefinitionName()
+    public function getSubDefinitionName() : string
     {
         return $this->getName();
     }
 
-    /**
-     * @param Definition $definition
-     */
     public function setSubDefinition(Definition $definition)
     {
         $this->decorated = $definition;
     }
 
     /**
-     * @return Definition
+     * @return Definition|null
      */
     public function getDecoratedDefinition()
     {

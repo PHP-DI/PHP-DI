@@ -30,10 +30,6 @@ class ParameterResolver
     }
 
     /**
-     * @param MethodInjection  $definition
-     * @param ReflectionMethod $method
-     * @param array            $parameters
-     *
      * @throws InvalidDefinition A parameter has no value defined or guessable.
      * @return array Parameters to use to call the function.
      */
@@ -91,16 +87,11 @@ class ParameterResolver
     /**
      * Returns the default value of a function parameter.
      *
-     * @param ReflectionParameter $parameter
-     * @param ReflectionMethod    $function
-     *
      * @throws InvalidDefinition Can't get default values from PHP internal classes and functions
      * @return mixed
      */
-    private function getParameterDefaultValue(
-        ReflectionParameter $parameter,
-        ReflectionMethod $function
-    ) {
+    private function getParameterDefaultValue(ReflectionParameter $parameter, ReflectionMethod $function)
+    {
         try {
             return $parameter->getDefaultValue();
         } catch (\ReflectionException $e) {
@@ -113,7 +104,7 @@ class ParameterResolver
         }
     }
 
-    private function getFunctionName(ReflectionMethod $method)
+    private function getFunctionName(ReflectionMethod $method) : string
     {
         return $method->getName() . '()';
     }

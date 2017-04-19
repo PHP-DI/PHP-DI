@@ -25,35 +25,25 @@ class ArrayDefinition implements Definition
     private $values;
 
     /**
-     * @param string $name   Entry name
-     * @param array  $values
+     * @param string $name Entry name
      */
-    public function __construct($name, array $values)
+    public function __construct(string $name, array $values)
     {
         $this->name = $name;
         $this->values = $values;
     }
 
-    /**
-     * @return string Entry name
-     */
-    public function getName()
+    public function getName() : string
     {
         return $this->name;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function getScope()
+    public function getScope() : string
     {
         return Scope::SINGLETON;
     }
 
-    /**
-     * @return array
-     */
-    public function getValues()
+    public function getValues() : array
     {
         return $this->values;
     }

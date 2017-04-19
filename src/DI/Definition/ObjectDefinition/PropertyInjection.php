@@ -30,21 +30,17 @@ class PropertyInjection
     private $className;
 
     /**
-     * @param string      $propertyName Property name
-     * @param mixed       $value        Value that should be injected in the property
-     * @param string|null $className
+     * @param string $propertyName Property name
+     * @param mixed $value Value that should be injected in the property
      */
-    public function __construct($propertyName, $value, $className = null)
+    public function __construct(string $propertyName, $value, string $className = null)
     {
-        $this->propertyName = (string) $propertyName;
+        $this->propertyName = $propertyName;
         $this->value = $value;
         $this->className = $className;
     }
 
-    /**
-     * @return string Property name
-     */
-    public function getPropertyName()
+    public function getPropertyName() : string
     {
         return $this->propertyName;
     }

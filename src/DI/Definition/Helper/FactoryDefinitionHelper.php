@@ -3,6 +3,7 @@
 namespace DI\Definition\Helper;
 
 use DI\Definition\DecoratorDefinition;
+use DI\Definition\Definition;
 use DI\Definition\FactoryDefinition;
 
 /**
@@ -34,9 +35,9 @@ class FactoryDefinitionHelper implements DefinitionHelper
 
     /**
      * @param callable $factory
-     * @param bool     $decorate Is the factory decorating a previous definition?
+     * @param bool $decorate Is the factory decorating a previous definition?
      */
-    public function __construct($factory, $decorate = false)
+    public function __construct($factory, bool $decorate = false)
     {
         $this->factory = $factory;
         $this->decorate = $decorate;
@@ -45,11 +46,9 @@ class FactoryDefinitionHelper implements DefinitionHelper
     /**
      * Defines the scope of the entry.
      *
-     * @param string $scope
-     *
      * @return $this
      */
-    public function scope($scope)
+    public function scope(string $scope)
     {
         $this->scope = $scope;
 
@@ -60,7 +59,7 @@ class FactoryDefinitionHelper implements DefinitionHelper
      * @param string $entryName Container entry name
      * @return FactoryDefinition
      */
-    public function getDefinition($entryName)
+    public function getDefinition(string $entryName) : Definition
     {
         if ($this->decorate) {
             return new DecoratorDefinition($entryName, $this->factory, $this->scope, $this->parameters);
@@ -82,7 +81,7 @@ class FactoryDefinitionHelper implements DefinitionHelper
      *
      * @return $this
      */
-    public function parameter($parameter, $value)
+    public function parameter(string $parameter, $value)
     {
         $this->parameters[$parameter] = $value;
 

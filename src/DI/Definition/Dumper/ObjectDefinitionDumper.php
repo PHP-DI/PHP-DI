@@ -17,10 +17,8 @@ class ObjectDefinitionDumper
 {
     /**
      * Returns the definition as string representation.
-     *
-     * @return string
      */
-    public function dump(ObjectDefinition $definition)
+    public function dump(ObjectDefinition $definition) : string
     {
         $className = $definition->getClassName();
         $classExist = class_exists($className) || interface_exists($className);
@@ -54,7 +52,7 @@ class ObjectDefinitionDumper
         return sprintf('Object (' . PHP_EOL . '%s' . PHP_EOL . ')', $str);
     }
 
-    private function dumpConstructor($className, ObjectDefinition $definition)
+    private function dumpConstructor(string $className, ObjectDefinition $definition) : string
     {
         $str = '';
 
@@ -69,7 +67,7 @@ class ObjectDefinitionDumper
         return $str;
     }
 
-    private function dumpProperties(ObjectDefinition $definition)
+    private function dumpProperties(ObjectDefinition $definition) : string
     {
         $str = '';
 
@@ -87,7 +85,7 @@ class ObjectDefinitionDumper
         return $str;
     }
 
-    private function dumpMethods($className, ObjectDefinition $definition)
+    private function dumpMethods(string $className, ObjectDefinition $definition) : string
     {
         $str = '';
 
@@ -100,7 +98,7 @@ class ObjectDefinitionDumper
         return $str;
     }
 
-    private function dumpMethodParameters($className, MethodInjection $methodInjection)
+    private function dumpMethodParameters(string $className, MethodInjection $methodInjection) : string
     {
         $methodReflection = new \ReflectionMethod($className, $methodInjection->getMethodName());
 

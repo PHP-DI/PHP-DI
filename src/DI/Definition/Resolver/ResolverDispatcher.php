@@ -27,7 +27,6 @@ class ResolverDispatcher implements DefinitionResolver
      */
     private $proxyFactory;
 
-    private $selfResolvingResolver;
     private $arrayResolver;
     private $factoryResolver;
     private $decoratorResolver;
@@ -63,15 +62,7 @@ class ResolverDispatcher implements DefinitionResolver
         return $definitionResolver->resolve($definition, $parameters);
     }
 
-    /**
-     * Check if a definition can be resolved.
-     *
-     * @param Definition $definition Object that defines how the value should be obtained.
-     * @param array      $parameters Optional parameters to use to build the entry.
-     *
-     * @return bool
-     */
-    public function isResolvable(Definition $definition, array $parameters = [])
+    public function isResolvable(Definition $definition, array $parameters = []) : bool
     {
         // Special case, tested early for speed
         if ($definition instanceof \DI\Definition\SelfResolvingDefinition) {
@@ -86,12 +77,9 @@ class ResolverDispatcher implements DefinitionResolver
     /**
      * Returns a resolver capable of handling the given definition.
      *
-     * @param Definition $definition
-     *
      * @throws \RuntimeException No definition resolver was found for this type of definition.
-     * @return DefinitionResolver
      */
-    private function getDefinitionResolver(Definition $definition)
+    private function getDefinitionResolver(Definition $definition) : DefinitionResolver
     {
         switch (true) {
             case $definition instanceof \DI\Definition\ObjectDefinition:

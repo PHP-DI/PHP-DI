@@ -35,12 +35,11 @@ class FactoryDefinition implements Definition
     private $parameters = [];
 
     /**
-     * @param string      $name       Entry name
-     * @param callable    $factory    Callable that returns the value associated to the entry name.
-     * @param string|null $scope
-     * @param array       $parameters Parameters to be passed to the callable
+     * @param string $name Entry name
+     * @param callable $factory Callable that returns the value associated to the entry name.
+     * @param array $parameters Parameters to be passed to the callable
      */
-    public function __construct($name, $factory, $scope = null, $parameters = [])
+    public function __construct(string $name, $factory, string $scope = null, array $parameters = [])
     {
         $this->name = $name;
         $this->factory = $factory;
@@ -48,20 +47,15 @@ class FactoryDefinition implements Definition
         $this->parameters = $parameters;
     }
 
-    /**
-     * @return string Entry name.
-     */
-    public function getName()
+    public function getName() : string
     {
         return $this->name;
     }
 
     /**
      * Default scope is singleton: the callable is called once and the result is shared.
-     *
-     * {@inheritdoc}
      */
-    public function getScope()
+    public function getScope() : string
     {
         return $this->scope ?: Scope::SINGLETON;
     }
@@ -77,7 +71,7 @@ class FactoryDefinition implements Definition
     /**
      * @return array Array containing the parameters to be passed to the callable, indexed by name.
      */
-    public function getParameters()
+    public function getParameters() : array
     {
         return $this->parameters;
     }

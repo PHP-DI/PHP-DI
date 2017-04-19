@@ -17,10 +17,7 @@ class ArrayDefinitionExtension extends ArrayDefinition implements HasSubDefiniti
      */
     private $subDefinition;
 
-    /**
-     * {@inheritdoc}
-     */
-    public function getValues()
+    public function getValues() : array
     {
         if (! $this->subDefinition) {
             return parent::getValues();
@@ -29,17 +26,11 @@ class ArrayDefinitionExtension extends ArrayDefinition implements HasSubDefiniti
         return array_merge($this->subDefinition->getValues(), parent::getValues());
     }
 
-    /**
-     * @return string
-     */
-    public function getSubDefinitionName()
+    public function getSubDefinitionName() : string
     {
         return $this->getName();
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function setSubDefinition(Definition $definition)
     {
         if (! $definition instanceof ArrayDefinition) {

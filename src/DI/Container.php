@@ -241,10 +241,10 @@ class Container implements ContainerInterface, InteropContainerInterface, Factor
     /**
      * Define an object or a value in the container.
      *
-     * @param string                 $name  Entry name
+     * @param string $name Entry name
      * @param mixed|DefinitionHelper $value Value, use definition helpers to define objects
      */
-    public function set($name, $value)
+    public function set(string $name, $value)
     {
         if ($value instanceof DefinitionHelper) {
             $value = $value->getDefinition($name);
@@ -263,9 +263,6 @@ class Container implements ContainerInterface, InteropContainerInterface, Factor
      * Resolves a definition.
      *
      * Checks for circular dependencies while resolving the definition.
-     *
-     * @param Definition $definition
-     * @param array      $parameters
      *
      * @throws DependencyException Error while resolving the entry.
      * @return mixed
@@ -293,7 +290,7 @@ class Container implements ContainerInterface, InteropContainerInterface, Factor
         return $value;
     }
 
-    private function setDefinition($name, Definition $definition)
+    private function setDefinition(string $name, Definition $definition)
     {
         if ($this->definitionSource instanceof CachedDefinitionSource) {
             throw new \LogicException('You cannot set a definition at runtime on a container that has a cache configured. Doing so would risk caching the definition for the next execution, where it might be different. You can either put your definitions in a file, remove the cache or ->set() a raw value directly (PHP object, string, int, ...) instead of a PHP-DI definition.');
@@ -312,10 +309,7 @@ class Container implements ContainerInterface, InteropContainerInterface, Factor
         $this->definitionSource->addDefinition($definition);
     }
 
-    /**
-     * @return \Invoker\InvokerInterface
-     */
-    private function getInvoker()
+    private function getInvoker() : \Invoker\InvokerInterface
     {
         if (! $this->invoker) {
             $parameterResolver = new ResolverChain([
@@ -332,10 +326,7 @@ class Container implements ContainerInterface, InteropContainerInterface, Factor
         return $this->invoker;
     }
 
-    /**
-     * @return DefinitionSource
-     */
-    private function createDefaultDefinitionSource()
+    private function createDefaultDefinitionSource() : DefinitionSource
     {
         $source = new SourceChain([new ReflectionBasedAutowiring]);
         $source->setMutableDefinitionSource(new DefinitionArray([], new ReflectionBasedAutowiring));

@@ -15,10 +15,8 @@ interface DefinitionSource
     /**
      * Returns the DI definition for the entry name.
      *
-     * @param string $name
-     *
      * @throws InvalidDefinition An invalid definition was found.
      * @return Definition|null
      */
-    public function getDefinition($name);
+    public function getDefinition(string $name);
 }

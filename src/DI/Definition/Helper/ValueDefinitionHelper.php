@@ -2,6 +2,7 @@
 
 namespace DI\Definition\Helper;
 
+use DI\Definition\Definition;
 use DI\Definition\ValueDefinition;
 
 /**
@@ -28,7 +29,7 @@ class ValueDefinitionHelper implements DefinitionHelper
      * @param string $entryName Container entry name
      * @return ValueDefinition
      */
-    public function getDefinition($entryName)
+    public function getDefinition(string $entryName) : Definition
     {
         return new ValueDefinition($entryName, $this->value);
     }

@@ -29,7 +29,6 @@ class DecoratorResolver implements DefinitionResolver
      * The resolver needs a container. This container will be passed to the factory as a parameter
      * so that the factory can access other entries of the container.
      *
-     * @param ContainerInterface $container
      * @param DefinitionResolver $definitionResolver Used to resolve nested definitions.
      */
     public function __construct(ContainerInterface $container, DefinitionResolver $definitionResolver)
@@ -76,10 +75,7 @@ class DecoratorResolver implements DefinitionResolver
         return call_user_func($callable, $decorated, $this->container);
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function isResolvable(Definition $definition, array $parameters = [])
+    public function isResolvable(Definition $definition, array $parameters = []) : bool
     {
         return true;
     }

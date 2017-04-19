@@ -34,10 +34,7 @@ class ReflectionBasedAutowiring implements DefinitionSource, Autowiring
         return $definition;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function getDefinition($name)
+    public function getDefinition(string $name)
     {
         return $this->autowire($name);
     }
@@ -45,7 +42,7 @@ class ReflectionBasedAutowiring implements DefinitionSource, Autowiring
     /**
      * Read the type-hinting from the parameters of the function.
      */
-    private function getParametersDefinition(\ReflectionFunctionAbstract $constructor)
+    private function getParametersDefinition(\ReflectionFunctionAbstract $constructor) : array
     {
         $parameters = [];
 

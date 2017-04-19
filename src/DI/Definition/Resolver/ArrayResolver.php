@@ -52,15 +52,12 @@ class ArrayResolver implements DefinitionResolver
         return $values;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function isResolvable(Definition $definition, array $parameters = [])
+    public function isResolvable(Definition $definition, array $parameters = []) : bool
     {
         return true;
     }
 
-    private function resolveDefinition(DefinitionHelper $value, ArrayDefinition $definition, $key)
+    private function resolveDefinition(DefinitionHelper $value, ArrayDefinition $definition, string $key)
     {
         try {
             return $this->definitionResolver->resolve($value->getDefinition(''));
