@@ -24,7 +24,7 @@ class AutowireDefinitionHelper extends CreateDefinitionHelper
      * @param string $parameter Parameter for which the value will be given.
      * @param mixed  $value     Value to give to this parameter.
      *
-     * @return AutowireDefinitionHelper
+     * @return $this
      */
     public function constructorParameter($parameter, $value)
     {
@@ -48,7 +48,7 @@ class AutowireDefinitionHelper extends CreateDefinitionHelper
      * @param string $parameter Name or index of the parameter for which the value will be given.
      * @param mixed  $value     Value to give to this parameter.
      *
-     * @return AutowireDefinitionHelper
+     * @return $this
      */
     public function methodParameter($method, $parameter, $value)
     {
