@@ -17,7 +17,7 @@ class CachedDefinitionSource implements DefinitionSource
      * Prefix for cache key, to avoid conflicts with other systems using the same cache.
      * @var string
      */
-    const CACHE_PREFIX = 'DI\\Definition\\';
+    const CACHE_PREFIX = 'DI_Definition_';
 
     /**
      * @var DefinitionSource
