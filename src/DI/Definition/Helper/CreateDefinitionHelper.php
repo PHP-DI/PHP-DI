@@ -65,7 +65,7 @@ class CreateDefinitionHelper implements DefinitionHelper
      *
      * A lazy entry is created only when it is used, a proxy is injected instead.
      *
-     * @return CreateDefinitionHelper
+     * @return $this
      */
     public function lazy()
     {
@@ -79,7 +79,7 @@ class CreateDefinitionHelper implements DefinitionHelper
      *
      * @param string $scope
      *
-     * @return CreateDefinitionHelper
+     * @return $this
      */
     public function scope($scope)
     {
@@ -96,7 +96,7 @@ class CreateDefinitionHelper implements DefinitionHelper
      *
      * @param mixed ... Parameters to use for calling the constructor of the class.
      *
-     * @return CreateDefinitionHelper
+     * @return $this
      */
     public function constructor()
     {
@@ -111,7 +111,7 @@ class CreateDefinitionHelper implements DefinitionHelper
      * @param string $property Entry in which to inject the value.
      * @param mixed  $value    Value to inject in the property.
      *
-     * @return CreateDefinitionHelper
+     * @return $this
      */
     public function property($property, $value)
     {
@@ -132,7 +132,7 @@ class CreateDefinitionHelper implements DefinitionHelper
      * @param string $method Name of the method to call.
      * @param mixed  ...     Parameters to use for calling the method.
      *
-     * @return CreateDefinitionHelper
+     * @return $this
      */
     public function method($method)
     {
