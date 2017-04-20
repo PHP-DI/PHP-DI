@@ -30,6 +30,24 @@ class CachedDefinitionSourceTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('foo', $source->getDefinition('foo'));
     }
 
+    public function testCacheKey()
+    {
+        $cache = $this->easySpy(CacheInterface::class);
+
+        $source = new CachedDefinitionSource(new DefinitionArray(), $cache);
+
+        $cache->expects($this->once())
+            ->method('get')
+            ->with(CachedDefinitionSource::CACHE_PREFIX . 'foo.bar.baz')
+            ->will($this->returnValue(false));
+
+        $cache->expects($this->once())
+            ->method('set')
+            ->with(CachedDefinitionSource::CACHE_PREFIX . 'foo.bar.baz');
+
+        $source->getDefinition('foo\\bar\\baz');
+    }
+
     /**
      * @test
      */
