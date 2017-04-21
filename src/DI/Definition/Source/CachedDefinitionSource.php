@@ -93,6 +93,6 @@ class CachedDefinitionSource implements DefinitionSource
      */
     private function getCacheKey(string $name) : string
     {
-        return self::CACHE_PREFIX . str_replace('\\', '.', $name);
+        return self::CACHE_PREFIX . str_replace(['{', '}', '(', ')', '/', '\\', '@', ':'], '.', $name);
     }
 }
