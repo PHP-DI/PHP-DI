@@ -20,7 +20,8 @@
         }
     },
     "scripts": {
-        "test": "phpunit"
+        "test": "phpunit",
+        "format-code": "php-cs-fixer fix --allow-risky=yes"
     },
     "require": {
         "php": ">=7.0.0",

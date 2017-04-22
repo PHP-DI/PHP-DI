@@ -9,7 +9,7 @@ use Psr\SimpleCache\CacheInterface;
  *
  * The code is based on Doctrine's ArrayCache provider.
  *
- * @link www.doctrine-project.org
+ * @see www.doctrine-project.org
  * @author Benjamin Eberlei <kontakt@beberlei.de>
  * @author Guilherme Blanco <guilhermeblanco@hotmail.com>
  * @author Jonathan Wage <jonwage@gmail.com>

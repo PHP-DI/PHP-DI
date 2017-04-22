@@ -45,7 +45,7 @@ class SourceChain implements DefinitionSource, MutableDefinitionSource
     public function getDefinition(string $name, int $startIndex = 0)
     {
         $count = count($this->sources);
-        for ($i = $startIndex; $i < $count; $i++) {
+        for ($i = $startIndex; $i < $count; ++$i) {
             $source = $this->sources[$i];
 
             $definition = $source->getDefinition($name);
