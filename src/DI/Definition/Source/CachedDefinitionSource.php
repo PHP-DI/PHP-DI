@@ -17,7 +17,7 @@ class CachedDefinitionSource implements DefinitionSource
      * Prefix for cache key, to avoid conflicts with other systems using the same cache.
      * @var string
      */
-    const CACHE_PREFIX = 'DI_Definition_';
+    const CACHE_PREFIX = 'DI.Definition.';
 
     /**
      * @var DefinitionSource
@@ -65,9 +65,7 @@ class CachedDefinitionSource implements DefinitionSource
      */
     private function fetchFromCache(string $name)
     {
-        $cacheKey = self::CACHE_PREFIX . $name;
-
-        $data = $this->cache->get($cacheKey, false);
+        $data = $this->cache->get($this->getCacheKey($name), false);
 
         if ($data !== false) {
             return $data;
@@ -83,8 +81,18 @@ class CachedDefinitionSource implements DefinitionSource
      */
     private function saveToCache(string $name, Definition $definition = null)
     {
-        $cacheKey = self::CACHE_PREFIX . $name;
+        $this->cache->set($this->getCacheKey($name), $definition);
+    }
 
-        $this->cache->set($cacheKey, $definition);
+    /**
+     * Get normalized cache key.
+     *
+     * @param string $name
+     *
+     * @return string
+     */
+    private function getCacheKey(string $name) : string
+    {
+        return self::CACHE_PREFIX . str_replace(['{', '}', '(', ')', '/', '\\', '@', ':'], '.', $name);
     }
 }
