@@ -176,10 +176,9 @@ class ObjectDefinition implements Definition, CacheableDefinition
     {
         if ($this->lazy !== null) {
             return $this->lazy;
-        } else {
-            // Default value
-            return false;
         }
+        // Default value
+        return false;
     }
 
     public function classExists() : bool

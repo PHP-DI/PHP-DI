@@ -190,9 +190,9 @@ class AnnotationBasedAutowiring implements DefinitionSource, Autowiring
 
         if ($method->isConstructor()) {
             return MethodInjection::constructor($parameters);
-        } else {
-            return new MethodInjection($method->getName(), $parameters);
         }
+
+        return new MethodInjection($method->getName(), $parameters);
     }
 
     /**
