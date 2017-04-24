@@ -49,6 +49,8 @@ Now you can inject dependencies in your controllers!
 For example, here is the GuestbookController of the quickstart:
 
 ```php
+use DI\Annotation\Inject;
+
 class GuestbookController extends Zend_Controller_Action
 {
     /**
