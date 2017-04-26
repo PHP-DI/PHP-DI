@@ -35,11 +35,17 @@ class StringDefinition implements Definition, SelfResolvingDefinition
         $this->expression = $expression;
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function getName() : string
     {
         return $this->name;
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function getScope() : string
     {
         return Scope::SINGLETON;
@@ -78,6 +84,9 @@ class StringDefinition implements Definition, SelfResolvingDefinition
         return true;
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function __toString()
     {
         return $this->expression;

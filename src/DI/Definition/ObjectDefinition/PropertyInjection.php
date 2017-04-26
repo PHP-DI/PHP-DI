@@ -60,4 +60,12 @@ class PropertyInjection
     {
         return $this->className;
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function __toString()
+    {
+        return sprintf('property(%s)', $this->propertyName);
+    }
 }

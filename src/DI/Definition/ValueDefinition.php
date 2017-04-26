@@ -33,12 +33,16 @@ class ValueDefinition implements Definition, SelfResolvingDefinition
         $this->value = $value;
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function getName() : string
     {
         return $this->name;
     }
 
     /**
+     * {@inheritdoc}
      * A value definition is like a constant, there is nothing to compute, the value is the same for everyone.
      */
     public function getScope() : string
@@ -64,6 +68,9 @@ class ValueDefinition implements Definition, SelfResolvingDefinition
         return true;
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function __toString()
     {
         return sprintf('Value (%s)', var_export($this->value, true));
