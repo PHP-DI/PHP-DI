@@ -41,21 +41,6 @@ class FactoryParameterResolverTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function should_resolve_interop_container()
-    {
-        $callable = function (\Interop\Container\ContainerInterface $c) {
-        };
-        $reflection = new \ReflectionFunction($callable);
-
-        $parameters = $this->resolver->getParameters($reflection, [$this->container, $this->requestedEntry], []);
-
-        $this->assertCount(1, $parameters);
-        $this->assertSame($this->container, $parameters[0]);
-    }
-
-    /**
-     * @test
-     */
     public function should_resolve_psr11_container()
     {
         $callable = function (ContainerInterface $c) {

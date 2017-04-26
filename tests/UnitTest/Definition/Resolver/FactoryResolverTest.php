@@ -10,7 +10,7 @@ use DI\NotFoundException;
 use DI\Test\UnitTest\Definition\Resolver\Fixture\FixtureClass;
 use DI\Test\UnitTest\Definition\Resolver\Fixture\NoConstructor;
 use EasyMock\EasyMock;
-use Interop\Container\ContainerInterface;
+use Psr\Container\ContainerInterface;
 
 /**
  * @covers \DI\Definition\Resolver\FactoryResolver
