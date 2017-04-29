@@ -21,11 +21,8 @@ interface Definition extends RequestedEntry
      */
     public function getScope() : string;
 
-    /**
-     * Definitions can be cast to string for debugging information.
-     *
-     * This method is not enforced by the interface yet for backward
-     * compatibility.
-     */
-    // public function __toString();
+     /**
+      * Definitions can be cast to string for debugging information.
+      */
+     public function __toString();
 }

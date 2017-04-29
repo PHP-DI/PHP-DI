@@ -60,4 +60,9 @@ class PropertyInjection
     {
         return $this->className;
     }
+
+    public function __toString()
+    {
+        return sprintf('property(%s)', $this->propertyName);
+    }
 }

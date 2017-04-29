@@ -39,6 +39,7 @@ class ValueDefinition implements Definition, SelfResolvingDefinition
     }
 
     /**
+     * {@inheritdoc}
      * A value definition is like a constant, there is nothing to compute, the value is the same for everyone.
      */
     public function getScope() : string

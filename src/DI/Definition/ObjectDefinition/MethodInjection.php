@@ -66,4 +66,12 @@ class MethodInjection implements Definition
     {
         return Scope::PROTOTYPE;
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function __toString()
+    {
+        return sprintf('method(%s)', $this->methodName);
+    }
 }

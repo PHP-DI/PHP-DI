@@ -53,6 +53,7 @@ class FactoryDefinition implements Definition
     }
 
     /**
+     * {@inheritdoc}
      * Default scope is singleton: the callable is called once and the result is shared.
      */
     public function getScope() : string

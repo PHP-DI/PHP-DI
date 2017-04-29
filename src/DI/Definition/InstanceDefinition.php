@@ -56,4 +56,9 @@ class InstanceDefinition implements Definition
     {
         return $this->objectDefinition;
     }
+
+    public function __toString()
+    {
+        return 'Instance';
+    }
 }
