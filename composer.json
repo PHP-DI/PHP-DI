@@ -27,7 +27,7 @@
         "php": ">=7.0.0",
         "psr/container": "^1.0",
         "psr/simple-cache": "^1.0",
-        "php-di/invoker": "dev-master",
+        "php-di/invoker": "^2.0",
         "php-di/phpdoc-reader": "^2.0.1"
     },
     "require-dev": {

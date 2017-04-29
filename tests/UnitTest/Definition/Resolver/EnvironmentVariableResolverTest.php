@@ -104,6 +104,8 @@ class EnvironmentVariableResolverTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @test
+     *
+     * @see https://github.com/container-interop/container-interop/issues/37
      */
     public function should_be_able_to_resolve_undefined_env_variables()
     {
