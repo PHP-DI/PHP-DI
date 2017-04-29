@@ -18,6 +18,7 @@ BC breaks:
 - PHP 7 or greater is required
 - `DI\object()` has been removed, use `DI\create()` or `DI\autowire()` instead
 - The deprecated `DI\link()` helper was removed, used `DI\get()` instead
+- [#484](https://github.com/PHP-DI/PHP-DI/pull/484) The deprecated `\DI\Debug` class has been removed. Definitions can be cast to string directly
 - The cache system has been moved from Doctrine Cache to PSR-16 (the simple cache standard)
 - The exception `DI\Definition\Exception\DefinitionException` was renamed to `DI\Definition\Exception\InvalidDefinition`
 

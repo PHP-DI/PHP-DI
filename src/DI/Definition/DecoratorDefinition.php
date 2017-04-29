@@ -8,7 +8,7 @@ namespace DI\Definition;
  * @since 5.0
  * @author Matthieu Napoli <matthieu@mnapoli.fr>
  */
-class DecoratorDefinition extends FactoryDefinition implements HasSubDefinition
+class DecoratorDefinition extends FactoryDefinition implements Definition, HasSubDefinition
 {
     /**
      * @var Definition|null
@@ -33,9 +33,6 @@ class DecoratorDefinition extends FactoryDefinition implements HasSubDefinition
         return $this->decorated;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function __toString()
     {
         return 'Decorate(' . $this->getSubDefinitionName() . ')';

@@ -33,17 +33,11 @@ class ArrayDefinition implements Definition
         $this->values = $values;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getName() : string
     {
         return $this->name;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getScope() : string
     {
         return Scope::SINGLETON;
@@ -54,9 +48,6 @@ class ArrayDefinition implements Definition
         return $this->values;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function __toString()
     {
         $str = '[' . PHP_EOL;

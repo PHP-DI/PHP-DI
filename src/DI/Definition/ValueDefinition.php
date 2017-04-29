@@ -33,9 +33,6 @@ class ValueDefinition implements Definition, SelfResolvingDefinition
         $this->value = $value;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getName() : string
     {
         return $this->name;
@@ -68,9 +65,6 @@ class ValueDefinition implements Definition, SelfResolvingDefinition
         return true;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function __toString()
     {
         return sprintf('Value (%s)', var_export($this->value, true));

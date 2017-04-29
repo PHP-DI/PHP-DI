@@ -34,17 +34,11 @@ class AliasDefinition implements CacheableDefinition, SelfResolvingDefinition
         $this->targetEntryName = $targetEntryName;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getName() : string
     {
         return $this->name;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getScope() : string
     {
         return Scope::PROTOTYPE;
@@ -65,9 +59,6 @@ class AliasDefinition implements CacheableDefinition, SelfResolvingDefinition
         return $container->has($this->getTargetEntryName());
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function __toString()
     {
         return sprintf(

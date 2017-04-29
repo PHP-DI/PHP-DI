@@ -47,9 +47,6 @@ class FactoryDefinition implements Definition
         $this->parameters = $parameters;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getName() : string
     {
         return $this->name;
@@ -80,9 +77,6 @@ class FactoryDefinition implements Definition
         return $this->parameters;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function __toString()
     {
         return 'Factory';
