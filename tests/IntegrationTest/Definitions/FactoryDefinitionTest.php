@@ -167,10 +167,10 @@ class FactoryDefinitionTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf(ContainerInterface::class, $factory[2]);
     }
 
-    public function test_interop_container_get_injected_in_arbitrary_position_via_typehint()
+    public function test_container_get_injected_in_arbitrary_position_via_typehint()
     {
         $container = $this->createContainer([
-            'factory' => function (\stdClass $stdClass, \Interop\Container\ContainerInterface $c) {
+            'factory' => function (\stdClass $stdClass, ContainerInterface $c) {
                 return [$stdClass, $c];
             },
         ]);

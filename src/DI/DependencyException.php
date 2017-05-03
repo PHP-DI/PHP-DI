@@ -2,11 +2,11 @@
 
 namespace DI;
 
-use Interop\Container\Exception\ContainerException;
+use Psr\Container\ContainerExceptionInterface;
 
 /**
  * Exception for the Container.
  */
-class DependencyException extends \Exception implements ContainerException
+class DependencyException extends \Exception implements ContainerExceptionInterface
 {
 }
