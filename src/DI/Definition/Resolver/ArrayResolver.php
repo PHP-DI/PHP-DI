@@ -43,11 +43,11 @@ class ArrayResolver implements DefinitionResolver
         $values = $definition->getValues();
 
         // Resolve nested definitions
-        foreach ($values as $key => $value) {
+        array_walk_recursive($values, function (&$value, $key) use ($definition) {
             if ($value instanceof DefinitionHelper) {
-                $values[$key] = $this->resolveDefinition($value, $definition, $key);
+                $value = $this->resolveDefinition($value, $definition, $key);
             }
-        }
+        });
 
         return $values;
     }

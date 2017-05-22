@@ -72,6 +72,25 @@ class ArrayDefinitionTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(new \stdClass, $array[1]);
     }
 
+    public function test_nested_array_with_nested_definitions()
+    {
+        $builder = new ContainerBuilder();
+        $builder->addDefinitions([
+            'array' => [
+                'array' => [
+                    \DI\env('PHP_DI_DO_NOT_DEFINE_THIS', 'env'),
+                    \DI\create('stdClass'),
+                ],
+            ],
+        ]);
+        $container = $builder->build();
+
+        $array = $container->get('array');
+
+        $this->assertEquals('env', $array['array'][0]);
+        $this->assertEquals(new \stdClass, $array['array'][1]);
+    }
+
     /**
      * An array entry is a singleton.
      */
