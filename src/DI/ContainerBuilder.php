@@ -133,7 +133,10 @@ class ContainerBuilder
         $chain = new SourceChain($sources);
 
         if ($this->cache) {
-            $source = new CachedDefinitionSource($chain, $this->cache);
+            if (!CachedDefinitionSource::isSupported()) {
+                throw new \Exception('APCu is not enabled, PHP-DI cannot use it as a cache');
+            }
+            $source = new CachedDefinitionSource($chain);
             $chain->setRootDefinitionSource($source);
         } else {
             $source = $chain;
