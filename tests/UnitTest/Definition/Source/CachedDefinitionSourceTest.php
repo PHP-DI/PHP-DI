@@ -6,15 +6,12 @@ use DI\Definition\ObjectDefinition;
 use DI\Definition\Source\CachedDefinitionSource;
 use DI\Definition\Source\DefinitionArray;
 use DI\Definition\Source\DefinitionSource;
-use EasyMock\EasyMock;
 
 /**
  * @covers \DI\Definition\Source\CachedDefinitionSource
  */
 class CachedDefinitionSourceTest extends \PHPUnit_Framework_TestCase
 {
-    use EasyMock;
-
     public function setUp()
     {
         parent::setUp();

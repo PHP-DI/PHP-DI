@@ -4,6 +4,7 @@ namespace DI\Test\IntegrationTest;
 
 use DI\Cache\ArrayCache;
 use DI\ContainerBuilder;
+use DI\Definition\Source\CachedDefinitionSource;
 
 /**
  * Test caching.
@@ -12,6 +13,17 @@ use DI\ContainerBuilder;
  */
 class CacheTest extends \PHPUnit_Framework_TestCase
 {
+    public function setUp()
+    {
+        parent::setUp();
+
+        if (!CachedDefinitionSource::isSupported()) {
+            $this->markTestSkipped('APCu extension is required');
+        }
+
+        apcu_clear_cache();
+    }
+
     /**
      * @test
      */
