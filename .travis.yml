@@ -24,6 +24,7 @@ matrix:
       env: dependencies=lowest
 
 before_script:
+  - phpenv config-add travis.php.ini
   - if [[ $(phpenv version-name) == '7.1' ]]; then composer require satooshi/php-coveralls:dev-master -n ; fi
   - if [[ $(phpenv version-name) != '7.1' ]]; then composer install -n ; fi
   - if [ "$dependencies" = "lowest" ]; then composer update --prefer-lowest --prefer-stable -n; fi;
