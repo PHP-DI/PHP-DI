@@ -4,7 +4,6 @@ namespace DI\Definition\Source;
 
 use DI\Definition\CacheableDefinition;
 use DI\Definition\Definition;
-use Psr\SimpleCache\CacheInterface;
 
 /**
  * Caches another definition source.
