@@ -202,6 +202,20 @@ class ContainerBuilder
     /**
      * Enables the use of a cache for the definitions.
      *
+     * @return $this
+     */
+    public function cacheDefinitions(bool $useCache = true) : ContainerBuilder
+    {
+        $this->ensureNotLocked();
+
+        $this->cache = $useCache;
+
+        return $this;
+    }
+
+    /**
+     * Enables the use of a cache for the definitions.
+     *
      * @param CacheInterface $cache Cache backend to use
      * @return $this
      */
