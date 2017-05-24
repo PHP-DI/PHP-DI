@@ -2,6 +2,7 @@
 
 namespace DI\Test\UnitTest\Definition\Source;
 
+use DI\Definition\AliasDefinition;
 use DI\Definition\ObjectDefinition;
 use DI\Definition\Source\CachedDefinitionSource;
 use DI\Definition\Source\DefinitionArray;
@@ -28,16 +29,18 @@ class CachedDefinitionSourceTest extends \PHPUnit_Framework_TestCase
      */
     public function should_get_from_cache()
     {
+        $definition = new AliasDefinition('foo', 'bar');
+
         $source = $this->createMock(DefinitionSource::class);
         $source
             ->expects($this->once()) // The sub-source should be called ONLY ONCE
             ->method('getDefinition')
-            ->willReturn('bar');
+            ->willReturn($definition);
 
         $source = new CachedDefinitionSource($source);
 
-        self::assertEquals('bar', $source->getDefinition('foo'));
-        self::assertEquals('bar', $source->getDefinition('foo'));
+        self::assertEquals($definition, $source->getDefinition('foo'));
+        self::assertEquals($definition, $source->getDefinition('foo'));
     }
 
     /**
