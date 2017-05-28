@@ -24,6 +24,9 @@
     <filter>
         <whitelist processUncoveredFilesFromWhitelist="true">
             <directory suffix=".php">src</directory>
+            <exclude>
+                <file>src/DI/Compiler/Template.php</file>
+            </exclude>
         </whitelist>
     </filter>
 
