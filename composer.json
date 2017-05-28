@@ -31,7 +31,7 @@
         "php-di/phpdoc-reader": "^2.0.1"
     },
     "require-dev": {
-        "phpunit/phpunit": "~5.0",
+        "phpunit/phpunit": "~5.7",
         "mnapoli/phpunit-easymock": "~0.2.0",
         "doctrine/annotations": "~1.2",
         "ocramius/proxy-manager": "~2.0.2"
