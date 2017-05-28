@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace DI;
@@ -138,6 +139,7 @@ PHP;
         } elseif (is_resource($value)) {
             throw new \Exception('Cannot compile a resource');
         }
+
         return var_export($value, true);
     }
 
