@@ -85,6 +85,14 @@ class AnnotationBasedAutowiring implements DefinitionSource, Autowiring
     }
 
     /**
+     * Autowiring cannot guess all existing definitions.
+     */
+    public function getDefinitions() : array
+    {
+        return [];
+    }
+
+    /**
      * Browse the class properties looking for annotated properties.
      */
     private function readProperties(ReflectionClass $class, ObjectDefinition $definition)

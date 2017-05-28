@@ -2,7 +2,6 @@
 
 namespace DI\Test\IntegrationTest\Definitions;
 
-use DI\Container;
 use DI\ContainerBuilder;
 use stdClass;
 
@@ -11,16 +10,13 @@ use stdClass;
  *
  * @coversNothing
  */
-class ValueDefinitionTest extends \PHPUnit_Framework_TestCase
+class ValueDefinitionTest extends BaseDefinitionTest
 {
     /**
-     * @var Container
+     * @dataProvider provideContainer
      */
-    private $container;
-
-    public function setUp()
+    public function test_value_definitions(ContainerBuilder $builder)
     {
-        $builder = new ContainerBuilder();
         $builder->addDefinitions([
             'string'  => 'foo',
             'int'     => 123,
@@ -30,16 +26,12 @@ class ValueDefinitionTest extends \PHPUnit_Framework_TestCase
                 return 'foo';
             }),
         ]);
+        $container = $builder->build();
 
-        $this->container = $builder->build();
-    }
-
-    public function test_value_definitions()
-    {
-        $this->assertEquals('foo', $this->container->get('string'));
-        $this->assertEquals(123, $this->container->get('int'));
-        $this->assertEquals(new \stdClass(), $this->container->get('object'));
-        $this->assertEquals('foo', $this->container->get('helper'));
-        $this->assertEquals('foo', call_user_func($this->container->get('closure')));
+        $this->assertEquals('foo', $container->get('string'));
+        $this->assertEquals(123, $container->get('int'));
+        $this->assertEquals(new \stdClass(), $container->get('object'));
+        $this->assertEquals('foo', $container->get('helper'));
+        $this->assertEquals('foo', call_user_func($container->get('closure')));
     }
 }

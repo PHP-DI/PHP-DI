@@ -52,6 +52,11 @@ class CachedDefinitionSource implements DefinitionSource
         return $definition;
     }
 
+    public function getDefinitions() : array
+    {
+        return $this->source->getDefinitions();
+    }
+
     public function getCache() : CacheInterface
     {
         return $this->cache;

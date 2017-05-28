@@ -9,9 +9,12 @@ use DI\ContainerBuilder;
  *
  * @coversNothing
  */
-class EnvironmentVariableDefinitionTest extends \PHPUnit_Framework_TestCase
+class EnvironmentVariableDefinitionTest extends BaseDefinitionTest
 {
-    public function test_existing_env_variable()
+    /**
+     * @dataProvider provideContainer
+     */
+    public function test_existing_env_variable(ContainerBuilder $builder)
     {
         $expectedValue = getenv('USER');
         if (! $expectedValue) {
@@ -20,7 +23,6 @@ class EnvironmentVariableDefinitionTest extends \PHPUnit_Framework_TestCase
             );
         }
 
-        $builder = new ContainerBuilder();
         $builder->addDefinitions([
             'var' => \DI\env('USER'),
         ]);
@@ -30,12 +32,12 @@ class EnvironmentVariableDefinitionTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @dataProvider provideContainer
      * @expectedException \DI\Definition\Exception\InvalidDefinition
      * @expectedExceptionMessage The environment variable 'PHP_DI_DO_NOT_DEFINE_THIS' has not been defined
      */
-    public function test_nonexistent_env_variable()
+    public function test_nonexistent_env_variable(ContainerBuilder $builder)
     {
-        $builder = new ContainerBuilder();
         $builder->addDefinitions([
             'var' => \DI\env('PHP_DI_DO_NOT_DEFINE_THIS'),
         ]);
@@ -44,9 +46,11 @@ class EnvironmentVariableDefinitionTest extends \PHPUnit_Framework_TestCase
         $container->get('var');
     }
 
-    public function test_nonexistent_env_variable_with_default_value()
+    /**
+     * @dataProvider provideContainer
+     */
+    public function test_nonexistent_env_variable_with_default_value(ContainerBuilder $builder)
     {
-        $builder = new ContainerBuilder();
         $builder->addDefinitions([
             'var' => \DI\env('PHP_DI_DO_NOT_DEFINE_THIS', '<default>'),
         ]);
@@ -55,9 +59,11 @@ class EnvironmentVariableDefinitionTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('<default>', $container->get('var'));
     }
 
-    public function test_nonexistent_env_variable_with_null_as_default()
+    /**
+     * @dataProvider provideContainer
+     */
+    public function test_nonexistent_env_variable_with_null_as_default(ContainerBuilder $builder)
     {
-        $builder = new ContainerBuilder();
         $builder->addDefinitions([
             'var' => \DI\env('PHP_DI_DO_NOT_DEFINE_THIS', null),
         ]);
@@ -66,9 +72,11 @@ class EnvironmentVariableDefinitionTest extends \PHPUnit_Framework_TestCase
         $this->assertNull($container->get('var'));
     }
 
-    public function test_nonexistent_env_variable_with_other_entry_as_default()
+    /**
+     * @dataProvider provideContainer
+     */
+    public function test_nonexistent_env_variable_with_other_entry_as_default(ContainerBuilder $builder)
     {
-        $builder = new ContainerBuilder();
         $builder->addDefinitions([
             'var' => \DI\env('PHP_DI_DO_NOT_DEFINE_THIS', \DI\get('foo')),
             'foo' => 'bar',

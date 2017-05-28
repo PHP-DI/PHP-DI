@@ -40,6 +40,14 @@ class ReflectionBasedAutowiring implements DefinitionSource, Autowiring
     }
 
     /**
+     * Autowiring cannot guess all existing definitions.
+     */
+    public function getDefinitions() : array
+    {
+        return [];
+    }
+
+    /**
      * Read the type-hinting from the parameters of the function.
      */
     private function getParametersDefinition(\ReflectionFunctionAbstract $constructor) : array

@@ -9,11 +9,13 @@ use DI\ContainerBuilder;
  *
  * @coversNothing
  */
-class StringDefinitionTest extends \PHPUnit_Framework_TestCase
+class StringDefinitionTest extends BaseDefinitionTest
 {
-    public function test_string_without_placeholder()
+    /**
+     * @dataProvider provideContainer
+     */
+    public function test_string_without_placeholder(ContainerBuilder $builder)
     {
-        $builder = new ContainerBuilder();
         $builder->addDefinitions([
             'foo' => \DI\string('bar'),
         ]);
@@ -22,9 +24,11 @@ class StringDefinitionTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('bar', $container->get('foo'));
     }
 
-    public function test_string_with_placeholder()
+    /**
+     * @dataProvider provideContainer
+     */
+    public function test_string_with_placeholder(ContainerBuilder $builder)
     {
-        $builder = new ContainerBuilder();
         $builder->addDefinitions([
             'foo'         => 'bar',
             'test-string' => \DI\string('Hello {foo}'),
@@ -34,9 +38,11 @@ class StringDefinitionTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('Hello bar', $container->get('test-string'));
     }
 
-    public function test_string_with_multiple_placeholders()
+    /**
+     * @dataProvider provideContainer
+     */
+    public function test_string_with_multiple_placeholders(ContainerBuilder $builder)
     {
-        $builder = new ContainerBuilder();
         $builder->addDefinitions([
             'foo'         => 'bar',
             'bim'         => 'bam',
@@ -47,9 +53,11 @@ class StringDefinitionTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('Hello bar, bam', $container->get('test-string'));
     }
 
-    public function test_nested_string_expressions()
+    /**
+     * @dataProvider provideContainer
+     */
+    public function test_nested_string_expressions(ContainerBuilder $builder)
     {
-        $builder = new ContainerBuilder();
         $builder->addDefinitions([
             'name'        => 'John',
             'welcome'     => \DI\string('Welcome {name}'),
@@ -61,12 +69,12 @@ class StringDefinitionTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @dataProvider provideContainer
      * @expectedException \DI\DependencyException
      * @expectedExceptionMessage Error while parsing string expression for entry 'test-string': No entry or class found for 'foo'
      */
-    public function test_string_with_nonexistent_placeholder()
+    public function test_string_with_nonexistent_placeholder(ContainerBuilder $builder)
     {
-        $builder = new ContainerBuilder();
         $builder->addDefinitions([
             'test-string' => \DI\string('Hello {foo}'),
         ]);

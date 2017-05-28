@@ -86,6 +86,16 @@ class ContainerBuilder
     private $locked = false;
 
     /**
+     * @var bool
+     */
+    private $compile = false;
+
+    /**
+     * @var string|null
+     */
+    private $compilationDirectory;
+
+    /**
      * Build a container configured for the dev environment.
      */
     public static function buildDevContainer() : Container
@@ -147,7 +157,32 @@ class ContainerBuilder
 
         $containerClass = $this->containerClass;
 
+        if ($this->compile) {
+            $fileName = (new Compiler)->compile($source, $this->compilationDirectory);
+            $containerClass = require $fileName;
+        }
+
         return new $containerClass($source, $proxyFactory, $this->wrapperContainer);
+    }
+
+    /**
+     * Compile the container for optimum performances.
+     *
+     * Be aware that the container is compiled once and never updated!
+     *
+     * Therefore:
+     *
+     * - in production you should clear that directory every time you deploy
+     * - in development you should not compile the container
+     *
+     * @param string $directory Directory in which to put the compiled container.
+     */
+    public function compile(string $directory) : ContainerBuilder
+    {
+        $this->compile = true;
+        $this->compilationDirectory = $directory;
+
+        return $this;
     }
 
     /**
