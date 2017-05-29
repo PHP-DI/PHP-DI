@@ -5,9 +5,11 @@ declare(strict_types=1);
 namespace DI;
 
 use DI\Definition\AliasDefinition;
+use DI\Definition\ArrayDefinition;
 use DI\Definition\Definition;
 use DI\Definition\EnvironmentVariableDefinition;
 use DI\Definition\Helper\DefinitionHelper;
+use DI\Definition\ObjectDefinition;
 use DI\Definition\Source\DefinitionSource;
 use DI\Definition\StringDefinition;
 use DI\Definition\ValueDefinition;
@@ -54,6 +56,9 @@ class Compiler
         $this->containerClass = uniqid('CompiledContainer');
 
         foreach ($definitions as $entryName => $definition) {
+            if ($definition instanceof ObjectDefinition) {
+                continue;
+            }
             if ($definition instanceof ValueDefinition && is_object($definition->getValue())) {
                 continue;
             }
@@ -114,6 +119,15 @@ class Compiler
         }
         return $defaultValue;
 PHP;
+                break;
+            case ArrayDefinition::class:
+                /** @var ArrayDefinition $definition */
+                $values = $definition->getValues();
+                $values = array_map(function ($value) {
+                    return '            ' . $this->compileValue($value) . ",\n";
+                }, $values);
+                $values = implode('', $values);
+                $code = "return [\n$values        ];";
                 break;
             default:
                 throw new \Exception('Cannot compile definition of type ' . get_class($definition));

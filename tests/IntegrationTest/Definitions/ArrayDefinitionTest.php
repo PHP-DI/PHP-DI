@@ -10,11 +10,13 @@ use DI\Scope;
  *
  * @coversNothing
  */
-class ArrayDefinitionTest extends \PHPUnit_Framework_TestCase
+class ArrayDefinitionTest extends BaseDefinitionTest
 {
-    public function test_array_with_values()
+    /**
+     * @dataProvider provideContainer
+     */
+    public function test_array_with_values(ContainerBuilder $builder)
     {
-        $builder = new ContainerBuilder();
         $builder->addDefinitions([
             'values' => [
                 'value 1',
@@ -29,9 +31,38 @@ class ArrayDefinitionTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('value 2', $array[1]);
     }
 
-    public function test_array_with_links()
+    /**
+     * @dataProvider provideContainer
+     */
+    public function test_array_containing_sub_array(ContainerBuilder $builder)
     {
-        $builder = new ContainerBuilder();
+        $builder->addDefinitions([
+            'values' => [
+                [
+                    'value 1',
+                    'value 2',
+                ],
+                [
+                    'value 1',
+                    'value 2',
+                ],
+            ],
+        ]);
+        $container = $builder->build();
+
+        $array = $container->get('values');
+
+        $this->assertEquals('value 1', $array[0][0]);
+        $this->assertEquals('value 2', $array[0][1]);
+        $this->assertEquals('value 1', $array[1][0]);
+        $this->assertEquals('value 2', $array[1][1]);
+    }
+
+    /**
+     * @dataProvider provideContainer
+     */
+    public function test_array_with_links(ContainerBuilder $builder)
+    {
         $builder->addDefinitions([
             'links'     => [
                 \DI\get('singleton'),
@@ -55,9 +86,11 @@ class ArrayDefinitionTest extends \PHPUnit_Framework_TestCase
         $this->assertNotSame($prototype, $array[1]);
     }
 
-    public function test_array_with_nested_definitions()
+    /**
+     * @dataProvider provideContainer
+     */
+    public function test_array_with_nested_definitions(ContainerBuilder $builder)
     {
-        $builder = new ContainerBuilder();
         $builder->addDefinitions([
             'array' => [
                 \DI\env('PHP_DI_DO_NOT_DEFINE_THIS', 'env'),
@@ -74,10 +107,10 @@ class ArrayDefinitionTest extends \PHPUnit_Framework_TestCase
 
     /**
      * An array entry is a singleton.
+     * @dataProvider provideContainer
      */
-    public function test_array_with_prototype_entries()
+    public function test_array_with_prototype_entries(ContainerBuilder $builder)
     {
-        $builder = new ContainerBuilder();
         $builder->addDefinitions([
             'array'     => [
                 \DI\get('prototype'),
@@ -93,9 +126,11 @@ class ArrayDefinitionTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($array1[0], $array2[0]);
     }
 
-    public function test_add_entries()
+    /**
+     * @dataProvider provideContainer
+     */
+    public function test_add_entries(ContainerBuilder $builder)
     {
-        $builder = new ContainerBuilder();
         $builder->addDefinitions([
             'values' => [
                 'value 1',
@@ -120,9 +155,11 @@ class ArrayDefinitionTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($array[3] instanceof \stdClass);
     }
 
-    public function test_add_entries_with_nested_definitions()
+    /**
+     * @dataProvider provideContainer
+     */
+    public function test_add_entries_with_nested_definitions(ContainerBuilder $builder)
     {
-        $builder = new ContainerBuilder();
         $builder->addDefinitions([
             'array' => [
                 \DI\env('PHP_DI_DO_NOT_DEFINE_THIS', 'env'),
@@ -145,9 +182,11 @@ class ArrayDefinitionTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(new \stdClass, $array[3]);
     }
 
-    public function test_add_to_non_existing_array_works()
+    /**
+     * @dataProvider provideContainer
+     */
+    public function test_add_to_non_existing_array_works(ContainerBuilder $builder)
     {
-        $builder = new ContainerBuilder();
         $builder->addDefinitions([
             'values' => \DI\add([
                 'value 1',
