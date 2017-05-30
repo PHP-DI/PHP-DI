@@ -3,6 +3,7 @@
 namespace DI\Test\IntegrationTest\Definitions;
 
 use DI\ContainerBuilder;
+use DI\Test\IntegrationTest\BaseContainerTest;
 use stdClass;
 
 /**
@@ -10,7 +11,7 @@ use stdClass;
  *
  * @coversNothing
  */
-class ValueDefinitionTest extends BaseDefinitionTest
+class ValueDefinitionTest extends BaseContainerTest
 {
     /**
      * @dataProvider provideContainer

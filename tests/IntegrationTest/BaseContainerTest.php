@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace DI\Test\IntegrationTest\Definitions;
+namespace DI\Test\IntegrationTest;
 
 use DI\ContainerBuilder;
 use PHPUnit\Framework\TestCase;
@@ -10,7 +10,7 @@ use PHPUnit\Framework\TestCase;
 /**
  * @author Matthieu Napoli <matthieu@mnapoli.fr>
  */
-abstract class BaseDefinitionTest extends TestCase
+abstract class BaseContainerTest extends TestCase
 {
     public function setUp()
     {

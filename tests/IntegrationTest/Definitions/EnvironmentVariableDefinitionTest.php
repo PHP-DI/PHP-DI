@@ -3,13 +3,14 @@
 namespace DI\Test\IntegrationTest\Definitions;
 
 use DI\ContainerBuilder;
+use DI\Test\IntegrationTest\BaseContainerTest;
 
 /**
  * Test environment variable definitions.
  *
  * @coversNothing
  */
-class EnvironmentVariableDefinitionTest extends BaseDefinitionTest
+class EnvironmentVariableDefinitionTest extends BaseContainerTest
 {
     /**
      * @dataProvider provideContainer

@@ -3,13 +3,14 @@
 namespace DI\Test\IntegrationTest\Definitions;
 
 use DI\ContainerBuilder;
+use DI\Test\IntegrationTest\BaseContainerTest;
 
 /**
  * Test string definitions.
  *
  * @coversNothing
  */
-class StringDefinitionTest extends BaseDefinitionTest
+class StringDefinitionTest extends BaseContainerTest
 {
     /**
      * @dataProvider provideContainer

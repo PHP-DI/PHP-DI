@@ -4,13 +4,14 @@ namespace DI\Test\IntegrationTest\Definitions;
 
 use DI\ContainerBuilder;
 use DI\Scope;
+use DI\Test\IntegrationTest\BaseContainerTest;
 
 /**
  * Test array definitions.
  *
  * @coversNothing
  */
-class ArrayDefinitionTest extends BaseDefinitionTest
+class ArrayDefinitionTest extends BaseContainerTest
 {
     /**
      * @dataProvider provideContainer

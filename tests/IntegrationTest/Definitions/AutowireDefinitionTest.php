@@ -3,6 +3,7 @@
 namespace DI\Test\IntegrationTest\Definitions;
 
 use DI\ContainerBuilder;
+use DI\Test\IntegrationTest\BaseContainerTest;
 use DI\Test\IntegrationTest\Definitions\AutowireDefinitionTest\NullableConstructorParameter;
 use DI\Test\IntegrationTest\Definitions\AutowireDefinitionTest\NullableTypedConstructorParameter;
 use DI\Test\IntegrationTest\Definitions\AutowireDefinitionTest\Setter;
@@ -18,7 +19,7 @@ use function DI\get;
  *
  * @coversNothing
  */
-class AutowireDefinitionTest extends BaseDefinitionTest
+class AutowireDefinitionTest extends BaseContainerTest
 {
     /**
      * @dataProvider provideContainer

@@ -3,13 +3,14 @@
 namespace DI\Test\IntegrationTest\Definitions;
 
 use DI\ContainerBuilder;
+use DI\Test\IntegrationTest\BaseContainerTest;
 
 /**
  * Test alias definitions.
  *
  * @coversNothing
  */
-class AliasDefinitionTest extends BaseDefinitionTest
+class AliasDefinitionTest extends BaseContainerTest
 {
     /**
      * @dataProvider provideContainer

@@ -3,6 +3,7 @@
 namespace DI\Test\IntegrationTest\Definitions;
 
 use DI\ContainerBuilder;
+use DI\Test\IntegrationTest\BaseContainerTest;
 use DI\Test\IntegrationTest\Definitions\ObjectDefinition\Class1;
 use DI\Test\IntegrationTest\Definitions\ObjectDefinition\Class2;
 use DI\Test\IntegrationTest\Definitions\ObjectDefinition\Class3;
@@ -15,7 +16,7 @@ use function DI\create;
  *
  * @coversNothing
  */
-class CreateDefinitionTest extends BaseDefinitionTest
+class CreateDefinitionTest extends BaseContainerTest
 {
     /**
      * @dataProvider provideContainer
