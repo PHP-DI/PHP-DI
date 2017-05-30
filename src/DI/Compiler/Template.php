@@ -23,6 +23,22 @@ class <?=$this->containerClass?> extends \DI\Container
         return parent::get($name);
     }
 
+    public function has($name)
+    {
+        if (! is_string($name)) {
+            throw new InvalidArgumentException(sprintf(
+                'The name parameter must be of type string, %s given',
+                is_object($name) ? get_class($name) : gettype($name)
+            ));
+        }
+
+        if (isset(self::METHOD_MAPPING[$name])) {
+            return true;
+        }
+
+        return parent::has($name);
+    }
+
 <?php foreach ($this->methods as $methodName => $methodContent) : ?>
     private function <?=$methodName?>()
     {
