@@ -38,7 +38,7 @@ class Container implements ContainerInterface, FactoryInterface, \DI\InvokerInte
      * Map of entries with Singleton scope that are already resolved.
      * @var array
      */
-    private $singletonEntries = [];
+    protected $singletonEntries = [];
 
     /**
      * @var DefinitionSource

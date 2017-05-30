@@ -37,6 +37,18 @@ class AutowireDefinitionTest extends BaseDefinitionTest
     /**
      * @dataProvider provideContainer
      */
+    public function test_singleton(ContainerBuilder $builder)
+    {
+        $container = $builder->addDefinitions([
+            'stdClass' => autowire(),
+        ])->build();
+
+        self::assertSame($container->get('stdClass'), $container->get('stdClass'));
+    }
+
+    /**
+     * @dataProvider provideContainer
+     */
     public function test_infer_class_name_from_entry(ContainerBuilder $builder)
     {
         $container = $builder->addDefinitions([

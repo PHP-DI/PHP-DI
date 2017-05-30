@@ -40,6 +40,18 @@ class CreateDefinitionTest extends BaseDefinitionTest
     /**
      * @dataProvider provideContainer
      */
+    public function test_singleton(ContainerBuilder $builder)
+    {
+        $container = $builder->addDefinitions([
+            'stdClass' => create(),
+        ])->build();
+
+        self::assertSame($container->get('stdClass'), $container->get('stdClass'));
+    }
+
+    /**
+     * @dataProvider provideContainer
+     */
     public function test_overrides_the_previous_entry(ContainerBuilder $builder)
     {
         $builder->addDefinitions([

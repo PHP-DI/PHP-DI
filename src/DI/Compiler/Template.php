@@ -7,10 +7,19 @@ class <?=$this->containerClass?> extends \DI\Container
 
     public function get($name)
     {
+        // Try to find the entry in the singleton map
+        if (isset($this->singletonEntries[$name]) || array_key_exists($name, $this->singletonEntries)) {
+            return $this->singletonEntries[$name];
+        }
+
         $method = self::METHOD_MAPPING[$name] ?? null;
         if ($method !== null) {
-            return $this->$method();
+            $value = $this->$method();
+            // Store the entry to always return it without recomputing it
+            $this->singletonEntries[$name] = $value;
+            return $value;
         }
+
         return parent::get($name);
     }
 
