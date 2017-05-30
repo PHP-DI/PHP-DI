@@ -90,22 +90,22 @@ class Compiler
         $this->entryToMethodMapping[$entryName] = $methodName;
 
         switch (true) {
-            case ($definition instanceof ValueDefinition):
+            case $definition instanceof ValueDefinition:
                 $value = $definition->getValue();
                 $code = 'return ' . $this->compileValue($value) . ';';
                 break;
-            case ($definition instanceof AliasDefinition):
+            case $definition instanceof AliasDefinition:
                 $targetEntryName = $definition->getTargetEntryName();
                 // TODO delegate container
                 $code = 'return $this->get(' . $this->compileValue($targetEntryName) . ');';
                 break;
-            case ($definition instanceof StringDefinition):
+            case $definition instanceof StringDefinition:
                 $entryName = $this->compileValue($definition->getName());
                 $expression = $this->compileValue($definition->getExpression());
                 // TODO delegate container
                 $code = 'return \DI\Definition\StringDefinition::resolveExpression(' . $entryName . ', ' . $expression . ', $this);';
                 break;
-            case ($definition instanceof EnvironmentVariableDefinition):
+            case $definition instanceof EnvironmentVariableDefinition:
                 $variableName = $this->compileValue($definition->getVariableName());
                 $isOptional = $this->compileValue($definition->isOptional());
                 $defaultValue = $this->compileValue($definition->getDefaultValue());
@@ -118,7 +118,7 @@ class Compiler
         return $defaultValue;
 PHP;
                 break;
-            case ($definition instanceof ArrayDefinition):
+            case $definition instanceof ArrayDefinition:
                 $values = $definition->getValues();
                 $values = array_map(function ($value) {
                     return '            ' . $this->compileValue($value) . ",\n";
@@ -126,7 +126,7 @@ PHP;
                 $values = implode('', $values);
                 $code = "return [\n$values        ];";
                 break;
-            case ($definition instanceof ObjectDefinition):
+            case $definition instanceof ObjectDefinition:
                 $compiler = new ObjectCreationCompiler($this);
                 $code = $compiler->compile($definition);
                 $code .= "\n        return \$object;";

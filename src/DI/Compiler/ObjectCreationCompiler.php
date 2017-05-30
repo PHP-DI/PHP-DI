@@ -7,7 +7,6 @@ use DI\Definition\Exception\InvalidDefinition;
 use DI\Definition\Helper\DefinitionHelper;
 use DI\Definition\ObjectDefinition;
 use DI\Definition\ObjectDefinition\MethodInjection;
-use DI\Definition\ObjectDefinition\PropertyInjection;
 use ReflectionClass;
 use ReflectionMethod;
 use ReflectionParameter;

@@ -3,7 +3,6 @@
 namespace DI\Test\IntegrationTest\Definitions;
 
 use DI\ContainerBuilder;
-use function DI\get;
 use DI\Test\IntegrationTest\Definitions\AutowireDefinitionTest\NullableConstructorParameter;
 use DI\Test\IntegrationTest\Definitions\AutowireDefinitionTest\NullableTypedConstructorParameter;
 use DI\Test\IntegrationTest\Definitions\AutowireDefinitionTest\Setter;
@@ -12,6 +11,7 @@ use DI\Test\IntegrationTest\Definitions\ObjectDefinition\Class1;
 use DI\Test\IntegrationTest\Definitions\ObjectDefinition\Class2;
 use DI\Test\IntegrationTest\Definitions\ObjectDefinition\Class3;
 use function DI\autowire;
+use function DI\get;
 
 /**
  * Test autowired definitions.
@@ -175,6 +175,7 @@ namespace DI\Test\IntegrationTest\Definitions\AutowireDefinitionTest;
 class NullableConstructorParameter
 {
     public $bar;
+
     public function __construct($bar = null)
     {
         $this->bar = $bar;
@@ -184,6 +185,7 @@ class NullableConstructorParameter
 class NullableTypedConstructorParameter
 {
     public $bar;
+
     public function __construct(\stdClass $bar = null)
     {
         $this->bar = $bar;
@@ -193,6 +195,7 @@ class NullableTypedConstructorParameter
 class Setter
 {
     public $bar;
+
     public function setFoo($bar)
     {
         $this->bar = $bar;
@@ -202,6 +205,7 @@ class Setter
 class TypedSetter
 {
     public $bar;
+
     public function setFoo(\stdClass $bar)
     {
         $this->bar = $bar;
