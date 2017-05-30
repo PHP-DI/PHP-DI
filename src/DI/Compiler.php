@@ -4,10 +4,12 @@ declare(strict_types=1);
 
 namespace DI;
 
+use DI\Compiler\ObjectCreationCompiler;
 use DI\Definition\AliasDefinition;
 use DI\Definition\ArrayDefinition;
 use DI\Definition\Definition;
 use DI\Definition\EnvironmentVariableDefinition;
+use DI\Definition\FactoryDefinition;
 use DI\Definition\Helper\DefinitionHelper;
 use DI\Definition\ObjectDefinition;
 use DI\Definition\Source\DefinitionSource;
@@ -56,7 +58,7 @@ class Compiler
         $this->containerClass = uniqid('CompiledContainer');
 
         foreach ($definitions as $entryName => $definition) {
-            if ($definition instanceof ObjectDefinition) {
+            if ($definition instanceof FactoryDefinition) {
                 continue;
             }
             if ($definition instanceof ValueDefinition && is_object($definition->getValue())) {
@@ -87,27 +89,23 @@ class Compiler
         $methodName = uniqid('get');
         $this->entryToMethodMapping[$entryName] = $methodName;
 
-        switch (get_class($definition)) {
-            case ValueDefinition::class:
-                /** @var ValueDefinition $definition */
+        switch (true) {
+            case ($definition instanceof ValueDefinition):
                 $value = $definition->getValue();
                 $code = 'return ' . $this->compileValue($value) . ';';
                 break;
-            case AliasDefinition::class:
-                /** @var AliasDefinition $definition */
+            case ($definition instanceof AliasDefinition):
                 $targetEntryName = $definition->getTargetEntryName();
                 // TODO delegate container
                 $code = 'return $this->get(' . $this->compileValue($targetEntryName) . ');';
                 break;
-            case StringDefinition::class:
-                /** @var StringDefinition $definition */
+            case ($definition instanceof StringDefinition):
                 $entryName = $this->compileValue($definition->getName());
                 $expression = $this->compileValue($definition->getExpression());
                 // TODO delegate container
                 $code = 'return \DI\Definition\StringDefinition::resolveExpression(' . $entryName . ', ' . $expression . ', $this);';
                 break;
-            case EnvironmentVariableDefinition::class:
-                /** @var EnvironmentVariableDefinition $definition */
+            case ($definition instanceof EnvironmentVariableDefinition):
                 $variableName = $this->compileValue($definition->getVariableName());
                 $isOptional = $this->compileValue($definition->isOptional());
                 $defaultValue = $this->compileValue($definition->getDefaultValue());
@@ -120,14 +118,18 @@ class Compiler
         return $defaultValue;
 PHP;
                 break;
-            case ArrayDefinition::class:
-                /** @var ArrayDefinition $definition */
+            case ($definition instanceof ArrayDefinition):
                 $values = $definition->getValues();
                 $values = array_map(function ($value) {
                     return '            ' . $this->compileValue($value) . ",\n";
                 }, $values);
                 $values = implode('', $values);
                 $code = "return [\n$values        ];";
+                break;
+            case ($definition instanceof ObjectDefinition):
+                $compiler = new ObjectCreationCompiler($this);
+                $code = $compiler->compile($definition);
+                $code .= "\n        return \$object;";
                 break;
             default:
                 throw new \Exception('Cannot compile definition of type ' . get_class($definition));
@@ -138,7 +140,7 @@ PHP;
         return $methodName;
     }
 
-    private function compileValue($value) : string
+    public function compileValue($value) : string
     {
         if ($value instanceof DefinitionHelper) {
             // Give it an arbitrary unique name

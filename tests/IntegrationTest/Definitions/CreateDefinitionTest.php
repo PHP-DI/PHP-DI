@@ -15,11 +15,13 @@ use function DI\create;
  *
  * @coversNothing
  */
-class CreateDefinitionTest extends \PHPUnit_Framework_TestCase
+class CreateDefinitionTest extends BaseDefinitionTest
 {
-    public function test_create_simple_object()
+    /**
+     * @dataProvider provideContainer
+     */
+    public function test_create_simple_object(ContainerBuilder $builder)
     {
-        $builder = new ContainerBuilder();
         $builder->addDefinitions([
             // with the same name
             'stdClass' => create('stdClass'),
@@ -35,9 +37,11 @@ class CreateDefinitionTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf(Class1::class, $container->get('object'));
     }
 
-    public function test_overrides_the_previous_entry()
+    /**
+     * @dataProvider provideContainer
+     */
+    public function test_overrides_the_previous_entry(ContainerBuilder $builder)
     {
-        $builder = new ContainerBuilder();
         $builder->addDefinitions([
             'foo' => create(Class2::class)
                 ->property('bar', 123),
@@ -53,9 +57,12 @@ class CreateDefinitionTest extends \PHPUnit_Framework_TestCase
         self::assertEquals(456, $foo->bim, 'The "bim" property is set');
     }
 
-    public function test_has_entry()
+    /**
+     * @dataProvider provideContainer
+     */
+    public function test_has_entry(ContainerBuilder $builder)
     {
-        $container = (new ContainerBuilder)->addDefinitions([
+        $container = $builder->addDefinitions([
             Class1::class => create(),
         ])->build();
         self::assertTrue($container->has(Class1::class));
@@ -63,12 +70,12 @@ class CreateDefinitionTest extends \PHPUnit_Framework_TestCase
 
     /**
      * It should not inherit the definition from autowiring.
+     * @dataProvider provideContainer
      * @expectedException \DI\Definition\Exception\InvalidDefinition
      * @expectedExceptionMessage Parameter $parameter of __construct() has no value defined or guessable
      */
-    public function test_does_not_trigger_autowiring()
+    public function test_does_not_trigger_autowiring(ContainerBuilder $builder)
     {
-        $builder = new ContainerBuilder();
         $builder->useAutowiring(true);
         $builder->addDefinitions([
             Class3::class => create(),
@@ -77,9 +84,11 @@ class CreateDefinitionTest extends \PHPUnit_Framework_TestCase
         $container->get(Class3::class);
     }
 
-    public function test_same_method_can_be_called_multiple_times()
+    /**
+     * @dataProvider provideContainer
+     */
+    public function test_same_method_can_be_called_multiple_times(ContainerBuilder $builder)
     {
-        $builder = new ContainerBuilder();
         $builder->useAutowiring(false);
         $builder->addDefinitions([
             Class1::class => create()
