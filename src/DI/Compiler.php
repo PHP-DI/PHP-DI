@@ -40,15 +40,13 @@ class Compiler
     private $methods = [];
 
     /**
-     * @return string File name
+     * Compile the container.
      */
-    public function compile(DefinitionSource $definitionSource, string $compilationDirectory) : string
+    public function compile(DefinitionSource $definitionSource, string $fileName)
     {
-        $fileName = $compilationDirectory . '/CompiledContainer.php';
-
         if (file_exists($fileName)) {
             // The container is already compiled
-            return $fileName;
+            return;
         }
 
         $definitions = $definitionSource->getDefinitions();
@@ -74,10 +72,8 @@ class Compiler
 
         $fileContent = "<?php\n" . $fileContent;
 
-        $this->createCompilationDirectory($compilationDirectory);
+        $this->createCompilationDirectory(basename($fileName));
         file_put_contents($fileName, $fileContent);
-
-        return $fileName;
     }
 
     /**

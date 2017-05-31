@@ -28,7 +28,7 @@ abstract class BaseContainerTest extends TestCase
                 new ContainerBuilder,
             ],
             'compiled' => [
-                (new ContainerBuilder)->compile(__DIR__ . '/tmp'),
+                (new ContainerBuilder)->compile(__DIR__ . '/tmp/CompiledContainer.php'),
             ],
         ];
     }

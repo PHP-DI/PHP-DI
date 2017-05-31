@@ -86,14 +86,9 @@ class ContainerBuilder
     private $locked = false;
 
     /**
-     * @var bool
-     */
-    private $compile = false;
-
-    /**
      * @var string|null
      */
-    private $compilationDirectory;
+    private $compileToFile;
 
     /**
      * Build a container configured for the dev environment.
@@ -157,9 +152,9 @@ class ContainerBuilder
 
         $containerClass = $this->containerClass;
 
-        if ($this->compile) {
-            $fileName = (new Compiler)->compile($source, $this->compilationDirectory);
-            $containerClass = require $fileName;
+        if ($this->compileToFile) {
+            (new Compiler)->compile($source, $this->compileToFile);
+            $containerClass = require $this->compileToFile;
         }
 
         return new $containerClass($source, $proxyFactory, $this->wrapperContainer);
@@ -175,12 +170,11 @@ class ContainerBuilder
      * - in production you should clear that directory every time you deploy
      * - in development you should not compile the container
      *
-     * @param string $directory Directory in which to put the compiled container.
+     * @param string $fileName File in which to put the compiled container.
      */
-    public function compile(string $directory) : ContainerBuilder
+    public function compile(string $fileName) : ContainerBuilder
     {
-        $this->compile = true;
-        $this->compilationDirectory = $directory;
+        $this->compileToFile = $fileName;
 
         return $this;
     }
