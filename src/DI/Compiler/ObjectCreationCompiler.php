@@ -4,7 +4,6 @@ namespace DI\Compiler;
 
 use DI\Compiler;
 use DI\Definition\Exception\InvalidDefinition;
-use DI\Definition\Helper\DefinitionHelper;
 use DI\Definition\ObjectDefinition;
 use DI\Definition\ObjectDefinition\MethodInjection;
 use ReflectionClass;
