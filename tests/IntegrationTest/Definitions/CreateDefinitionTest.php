@@ -8,8 +8,8 @@ use DI\Test\IntegrationTest\Definitions\CreateDefinitionTest\Property;
 use DI\Test\IntegrationTest\Definitions\ObjectDefinition\Class1;
 use DI\Test\IntegrationTest\Definitions\ObjectDefinition\Class2;
 use DI\Test\IntegrationTest\Definitions\ObjectDefinition\Class3;
-use function DI\create;
 use ProxyManager\Proxy\LazyLoadingInterface;
+use function DI\create;
 
 /**
  * Test object definitions.

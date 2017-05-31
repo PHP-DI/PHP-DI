@@ -11,9 +11,9 @@ use DI\Test\IntegrationTest\Definitions\AutowireDefinitionTest\TypedSetter;
 use DI\Test\IntegrationTest\Definitions\ObjectDefinition\Class1;
 use DI\Test\IntegrationTest\Definitions\ObjectDefinition\Class2;
 use DI\Test\IntegrationTest\Definitions\ObjectDefinition\Class3;
+use ProxyManager\Proxy\LazyLoadingInterface;
 use function DI\autowire;
 use function DI\get;
-use ProxyManager\Proxy\LazyLoadingInterface;
 
 /**
  * Test autowired definitions.
