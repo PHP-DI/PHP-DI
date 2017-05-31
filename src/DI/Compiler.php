@@ -139,9 +139,12 @@ PHP;
     public function compileValue($value) : string
     {
         if ($value instanceof DefinitionHelper) {
+            $value = $value->getDefinition('');
+        }
+
+        if ($value instanceof Definition) {
             // Give it an arbitrary unique name
             $subEntryName = uniqid('SubEntry');
-            $value = $value->getDefinition($subEntryName);
             // Compile the sub-definition in another method
             $methodName = $this->compileDefinition($subEntryName, $value);
             // The value is now a method call to that method (which returns the value)

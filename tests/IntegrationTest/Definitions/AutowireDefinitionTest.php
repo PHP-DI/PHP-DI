@@ -13,11 +13,10 @@ use DI\Test\IntegrationTest\Definitions\ObjectDefinition\Class2;
 use DI\Test\IntegrationTest\Definitions\ObjectDefinition\Class3;
 use function DI\autowire;
 use function DI\get;
+use ProxyManager\Proxy\LazyLoadingInterface;
 
 /**
  * Test autowired definitions.
- *
- * @coversNothing
  */
 class AutowireDefinitionTest extends BaseContainerTest
 {
@@ -180,6 +179,27 @@ class AutowireDefinitionTest extends BaseContainerTest
 
         $class = $container->get(Class1::class);
         $this->assertEquals(2, $class->count);
+    }
+
+    /**
+     * @dataProvider provideContainer
+     */
+    public function test_autowire_lazy_object(ContainerBuilder $builder)
+    {
+        $builder->addDefinitions([
+            NullableConstructorParameter::class => autowire()
+                ->property('bar', 'bar')
+                ->lazy(),
+        ]);
+        $container = $builder->build();
+
+        $object = $container->get(NullableConstructorParameter::class);
+
+        self::assertInstanceOf(NullableConstructorParameter::class, $object);
+        self::assertInstanceOf(LazyLoadingInterface::class, $object);
+        self::assertFalse($object->isProxyInitialized());
+        self::assertEquals('bar', $object->bar);
+        self::assertTrue($object->isProxyInitialized());
     }
 }
 

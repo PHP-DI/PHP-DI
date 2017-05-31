@@ -28,28 +28,12 @@ class ObjectCreationCompiler
 
     public function compile(ObjectDefinition $definition)
     {
-        if (strpos($definition->getClassName(), '@') !== false) {
-            throw new \Exception('Cannot compile anonymous classes');
-        }
+        $this->assertClassIsNotAnonymous($definition);
+        $this->assertClassIsInstantiable($definition);
 
         // Lazy?
         if ($definition->isLazy()) {
-            // TODO
-        }
-
-        // Check that the class is instantiable
-        if (! $definition->isInstantiable()) {
-            // Check that the class exists
-            if (! $definition->classExists()) {
-                throw InvalidDefinition::create($definition, sprintf(
-                    'Entry "%s" cannot be compiled: the class doesn\'t exist',
-                    $definition->getName()
-                ));
-            }
-            throw InvalidDefinition::create($definition, sprintf(
-                'Entry "%s" cannot be compiled: the class is not instantiable',
-                $definition->getName()
-            ));
+            return $this->compileLazyDefinition($definition);
         }
 
         $classReflection = new ReflectionClass($definition->getClassName());
@@ -76,7 +60,6 @@ class ObjectCreationCompiler
                 throw new \Exception('Unable to compile access to private properties');
             }
 
-            // TODO compile value
             $code[] = sprintf('$object->%s = %s;', $propertyInjection->getPropertyName(), $value);
         }
 
@@ -131,6 +114,24 @@ class ObjectCreationCompiler
         return $args;
     }
 
+    private function compileLazyDefinition(ObjectDefinition $definition) : string
+    {
+        $subDefinition = clone $definition;
+        $subDefinition->setLazy(false);
+        $subDefinition = $this->compiler->compileValue($subDefinition);
+
+        return <<<PHP
+        \$object = \$this->proxyFactory->createProxy(
+            '{$definition->getClassName()}',
+            function (&\$wrappedObject, \$proxy, \$method, \$params, &\$initializer) {
+                \$wrappedObject = $subDefinition;
+                \$initializer = null; // turning off further lazy initialization
+                return true;
+            }
+        );
+PHP;
+    }
+
     /**
      * Returns the default value of a function parameter.
      *
@@ -154,5 +155,29 @@ class ObjectCreationCompiler
     private function getFunctionName(ReflectionMethod $method) : string
     {
         return $method->getName() . '()';
+    }
+
+    private function assertClassIsNotAnonymous(ObjectDefinition $definition)
+    {
+        if (strpos($definition->getClassName(), '@') !== false) {
+            throw new \Exception('Cannot compile anonymous classes');
+        }
+    }
+
+    private function assertClassIsInstantiable(ObjectDefinition $definition)
+    {
+        if (! $definition->isInstantiable()) {
+            // Check that the class exists
+            if (! $definition->classExists()) {
+                throw InvalidDefinition::create($definition, sprintf(
+                    'Entry "%s" cannot be compiled: the class doesn\'t exist',
+                    $definition->getName()
+                ));
+            }
+            throw InvalidDefinition::create($definition, sprintf(
+                'Entry "%s" cannot be compiled: the class is not instantiable',
+                $definition->getName()
+            ));
+        }
     }
 }

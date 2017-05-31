@@ -4,17 +4,17 @@ namespace DI\Test\IntegrationTest\Definitions;
 
 use DI\ContainerBuilder;
 use DI\Test\IntegrationTest\BaseContainerTest;
+use DI\Test\IntegrationTest\Definitions\CreateDefinitionTest\Property;
 use DI\Test\IntegrationTest\Definitions\ObjectDefinition\Class1;
 use DI\Test\IntegrationTest\Definitions\ObjectDefinition\Class2;
 use DI\Test\IntegrationTest\Definitions\ObjectDefinition\Class3;
 use function DI\create;
+use ProxyManager\Proxy\LazyLoadingInterface;
 
 /**
  * Test object definitions.
  *
  * TODO add more tests
- *
- * @coversNothing
  */
 class CreateDefinitionTest extends BaseContainerTest
 {
@@ -113,4 +113,32 @@ class CreateDefinitionTest extends BaseContainerTest
         $class = $container->get(Class1::class);
         $this->assertEquals(2, $class->count);
     }
+
+    /**
+     * @dataProvider provideContainer
+     */
+    public function test_create_lazy_object(ContainerBuilder $builder)
+    {
+        $builder->addDefinitions([
+            Property::class => create()
+                ->property('foo', 'bar')
+                ->lazy(),
+        ]);
+        $container = $builder->build();
+
+        $object = $container->get(Property::class);
+
+        self::assertInstanceOf(Property::class, $object);
+        self::assertInstanceOf(LazyLoadingInterface::class, $object);
+        self::assertFalse($object->isProxyInitialized());
+        self::assertEquals('bar', $object->foo);
+        self::assertTrue($object->isProxyInitialized());
+    }
+}
+
+namespace DI\Test\IntegrationTest\Definitions\CreateDefinitionTest;
+
+class Property
+{
+    public $foo;
 }

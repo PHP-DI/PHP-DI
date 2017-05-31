@@ -68,6 +68,11 @@ class Container implements ContainerInterface, FactoryInterface, \DI\InvokerInte
     private $wrapperContainer;
 
     /**
+     * @var ProxyFactory
+     */
+    protected $proxyFactory;
+
+    /**
      * Use `$container = new Container()` if you want a container with the default configuration.
      *
      * If you want to customize the container's behavior, you are discouraged to create and pass the
@@ -85,8 +90,8 @@ class Container implements ContainerInterface, FactoryInterface, \DI\InvokerInte
         $this->wrapperContainer = $wrapperContainer ?: $this;
 
         $this->definitionSource = $definitionSource ?: $this->createDefaultDefinitionSource();
-        $proxyFactory = $proxyFactory ?: new ProxyFactory(false);
-        $this->definitionResolver = new ResolverDispatcher($this->wrapperContainer, $proxyFactory);
+        $this->proxyFactory = $proxyFactory ?: new ProxyFactory(false);
+        $this->definitionResolver = new ResolverDispatcher($this->wrapperContainer, $this->proxyFactory);
 
         // Auto-register the container
         $this->singletonEntries[self::class] = $this;
