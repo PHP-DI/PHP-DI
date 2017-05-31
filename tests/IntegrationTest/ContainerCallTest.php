@@ -7,7 +7,7 @@ use DI\ContainerBuilder;
 /**
  * Tests the call() method from the container.
  */
-class CallFunctionTest extends BaseContainerTest
+class ContainerCallTest extends BaseContainerTest
 {
     /**
      * @dataProvider provideContainer
