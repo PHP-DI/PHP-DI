@@ -9,8 +9,8 @@ require_once __DIR__ . '/get-object/GetFixture.php';
 $builder = new ContainerBuilder();
 $builder->useAutowiring(true);
 $builder->useAnnotations(false);
-$builder->setDefinitionCache(new ArrayCache());
 $builder->addDefinitions(__DIR__ . '/get-object/config.php');
+$builder->compile(__DIR__ . '/tmp/get-object.php');
 $container = $builder->build();
 
 $container->get('object1');

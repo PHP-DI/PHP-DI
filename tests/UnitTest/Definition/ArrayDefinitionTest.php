@@ -3,7 +3,6 @@
 namespace DI\Test\UnitTest\Definition;
 
 use DI\Definition\ArrayDefinition;
-use DI\Definition\CacheableDefinition;
 use DI\Scope;
 
 /**
@@ -30,14 +29,6 @@ class ArrayDefinitionTest extends \PHPUnit_Framework_TestCase
         $definition = new ArrayDefinition('foo', []);
 
         $this->assertEquals(Scope::SINGLETON, $definition->getScope());
-    }
-
-    /**
-     * @test
-     */
-    public function should_be_cacheable()
-    {
-        $this->assertNotInstanceOf(CacheableDefinition::class, new ArrayDefinition('foo', []));
     }
 
     /**

@@ -2,7 +2,6 @@
 
 namespace DI\Test\UnitTest\Definition;
 
-use DI\Definition\CacheableDefinition;
 use DI\Definition\EnvironmentVariableDefinition;
 use DI\Scope;
 
@@ -29,14 +28,6 @@ class EnvironmentVariableDefinitionTest extends \PHPUnit_Framework_TestCase
         $definition = new EnvironmentVariableDefinition('foo', 'bar');
 
         $this->assertEquals(Scope::SINGLETON, $definition->getScope());
-    }
-
-    /**
-     * @test
-     */
-    public function should_be_cacheable()
-    {
-        $this->assertInstanceOf(CacheableDefinition::class, new EnvironmentVariableDefinition('foo', 'bar'));
     }
 
     /**

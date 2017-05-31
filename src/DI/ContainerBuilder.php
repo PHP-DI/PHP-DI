@@ -3,7 +3,6 @@
 namespace DI;
 
 use DI\Definition\Source\AnnotationBasedAutowiring;
-use DI\Definition\Source\CachedDefinitionSource;
 use DI\Definition\Source\DefinitionArray;
 use DI\Definition\Source\DefinitionFile;
 use DI\Definition\Source\DefinitionSource;
@@ -13,7 +12,6 @@ use DI\Definition\Source\SourceChain;
 use DI\Proxy\ProxyFactory;
 use InvalidArgumentException;
 use Psr\Container\ContainerInterface;
-use Psr\SimpleCache\CacheInterface;
 
 /**
  * Helper to create and configure a Container.
@@ -50,11 +48,6 @@ class ContainerBuilder
      * @var bool
      */
     private $ignorePhpDocErrors = false;
-
-    /**
-     * @var CacheInterface
-     */
-    private $cache;
 
     /**
      * If true, write the proxies to disk to improve performances.
@@ -135,16 +128,10 @@ class ContainerBuilder
 
             return $definitions;
         }, $sources);
-        $chain = new SourceChain($sources);
+        $source = new SourceChain($sources);
 
-        if ($this->cache) {
-            $source = new CachedDefinitionSource($chain, $this->cache);
-            $chain->setRootDefinitionSource($source);
-        } else {
-            $source = $chain;
-            // Mutable definition source
-            $source->setMutableDefinitionSource(new DefinitionArray([], $autowiring));
-        }
+        // Mutable definition source
+        $source->setMutableDefinitionSource(new DefinitionArray([], $autowiring));
 
         $proxyFactory = new ProxyFactory($this->writeProxiesToFile, $this->proxyDirectory);
 
@@ -221,21 +208,6 @@ class ContainerBuilder
         $this->ensureNotLocked();
 
         $this->ignorePhpDocErrors = $bool;
-
-        return $this;
-    }
-
-    /**
-     * Enables the use of a cache for the definitions.
-     *
-     * @param CacheInterface $cache Cache backend to use
-     * @return $this
-     */
-    public function setDefinitionCache(CacheInterface $cache) : ContainerBuilder
-    {
-        $this->ensureNotLocked();
-
-        $this->cache = $cache;
 
         return $this;
     }

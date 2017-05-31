@@ -158,10 +158,10 @@ PHP;
     private function createCompilationDirectory(string $directory)
     {
         if (!is_dir($directory) && !@mkdir($directory, 0777, true)) {
-            throw new InvalidArgumentException(sprintf('Cache directory does not exist and cannot be created: %s.', $directory));
+            throw new InvalidArgumentException(sprintf('Compilation directory does not exist and cannot be created: %s.', $directory));
         }
         if (!is_writable($directory)) {
-            throw new InvalidArgumentException(sprintf('Cache directory is not writable: %s.', $directory));
+            throw new InvalidArgumentException(sprintf('Compilation directory is not writable: %s.', $directory));
         }
     }
 }

@@ -2,7 +2,6 @@
 
 namespace DI\Test\UnitTest\Definition;
 
-use DI\Definition\CacheableDefinition;
 use DI\Definition\StringDefinition;
 use DI\NotFoundException;
 use DI\Scope;
@@ -32,14 +31,6 @@ class StringDefinitionTest extends \PHPUnit_Framework_TestCase
         $definition = new StringDefinition('foo', 'bar');
 
         $this->assertEquals(Scope::SINGLETON, $definition->getScope());
-    }
-
-    /**
-     * @test
-     */
-    public function should_not_be_cacheable()
-    {
-        $this->assertNotInstanceOf(CacheableDefinition::class, new StringDefinition('foo', 'bar'));
     }
 
     /**

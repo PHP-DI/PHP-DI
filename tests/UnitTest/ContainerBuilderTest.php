@@ -2,15 +2,14 @@
 
 namespace DI\Test\UnitTest;
 
+use DI\CompiledContainer;
 use DI\Container;
 use DI\ContainerBuilder;
-use DI\Definition\Source\CachedDefinitionSource;
 use DI\Definition\Source\DefinitionArray;
 use DI\Definition\ValueDefinition;
 use DI\Test\UnitTest\Fixtures\FakeContainer;
 use EasyMock\EasyMock;
 use Psr\Container\ContainerInterface;
-use Psr\SimpleCache\CacheInterface;
 
 /**
  * @covers \DI\ContainerBuilder
@@ -29,27 +28,10 @@ class ContainerBuilderTest extends \PHPUnit_Framework_TestCase
         /** @var FakeContainer $container */
         $container = $builder->build();
 
-        // No cache
-        $this->assertFalse($container->definitionSource instanceof CachedDefinitionSource);
+        // Not compiled
+        $this->assertFalse($container instanceof CompiledContainer);
         // Proxies evaluated in memory
         $this->assertFalse($this->getObjectAttribute($container->proxyFactory, 'writeProxiesToFile'));
-    }
-
-    /**
-     * @test
-     */
-    public function should_allow_to_configure_a_cache()
-    {
-        $cache = $this->easyMock(CacheInterface::class);
-
-        $builder = new ContainerBuilder(FakeContainer::class);
-        $builder->setDefinitionCache($cache);
-
-        /** @var FakeContainer $container */
-        $container = $builder->build();
-
-        $this->assertTrue($container->definitionSource instanceof CachedDefinitionSource);
-        $this->assertSame($cache, $container->definitionSource->getCache());
     }
 
     /**
@@ -181,8 +163,7 @@ class ContainerBuilderTest extends \PHPUnit_Framework_TestCase
         $result = $builder->writeProxiesToFile(false);
         $this->assertSame($builder, $result);
 
-        $mockCache = $this->easyMock(CacheInterface::class);
-        $result = $builder->setDefinitionCache($mockCache);
+        $result = $builder->compile('foo.php');
         $this->assertSame($builder, $result);
 
         $result = $builder->wrapContainer($this->easyMock(ContainerInterface::class));
