@@ -12,17 +12,30 @@ use PHPUnit\Framework\TestCase;
  */
 abstract class BaseContainerTest extends TestCase
 {
-    public function setUp()
+    public static function setUpBeforeClass()
     {
-        parent::setUp();
-
         if (file_exists(__DIR__ . '/tmp/CompiledContainer.php')) {
             unlink(__DIR__ . '/tmp/CompiledContainer.php');
         }
+
+        parent::setUpBeforeClass();
+    }
+
+    public function setUp()
+    {
+        if (file_exists(__DIR__ . '/tmp/CompiledContainer.php')) {
+            unlink(__DIR__ . '/tmp/CompiledContainer.php');
+        }
+
+        parent::setUp();
     }
 
     public function provideContainer() : array
     {
+        if (file_exists(__DIR__ . '/tmp/CompiledContainer.php')) {
+            unlink(__DIR__ . '/tmp/CompiledContainer.php');
+        }
+
         return [
             'not-compiled' => [
                 new ContainerBuilder,

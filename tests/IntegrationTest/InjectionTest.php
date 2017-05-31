@@ -153,26 +153,6 @@ class InjectionTest extends \PHPUnit_Framework_TestCase
     /**
      * @dataProvider containerProvider
      */
-    public function testInjectOn($type, Container $container)
-    {
-        $obj = new Class1(new Class2(), new Implementation1(), new LazyDependency());
-        $container->injectOn($obj);
-
-        $proxies = [];
-
-        // Only constructor injection with autowiring
-        if ($type != self::DEFINITION_REFLECTION) {
-            $proxies[] = $this->validatePropertyInjection($obj);
-            $proxies[] = $this->validateMethodInjection($obj);
-        }
-
-        // The proxies are checked last, else there is no lazy injection once they are resolved
-        $this->validateProxyResolution($proxies);
-    }
-
-    /**
-     * @dataProvider containerProvider
-     */
     public function testScope($type, Container $container)
     {
         // No scope definition possible with autowiring only

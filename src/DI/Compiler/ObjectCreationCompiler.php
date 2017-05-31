@@ -68,10 +68,7 @@ class ObjectCreationCompiler
         // Property injections
         foreach ($definition->getPropertyInjections() as $propertyInjection) {
             $value = $propertyInjection->getValue();
-            // TODO
-            if ($value instanceof DefinitionHelper) {
-                throw new \Exception('Unable to compile sub-definitions in property injections');
-            }
+            $value = $this->compiler->compileValue($value);
 
             // TODO handle private properties
             $className = $propertyInjection->getClassName() ?: $definition->getClassName();
