@@ -3,7 +3,6 @@
 namespace DI\Test\IntegrationTest\Definitions;
 
 use DI\ContainerBuilder;
-use function DI\get;
 use DI\Test\IntegrationTest\BaseContainerTest;
 use DI\Test\IntegrationTest\Definitions\CreateDefinitionTest\ConstructorInjection;
 use DI\Test\IntegrationTest\Definitions\CreateDefinitionTest\MethodInjection;
@@ -14,6 +13,7 @@ use DI\Test\IntegrationTest\Definitions\ObjectDefinition\Class2;
 use DI\Test\IntegrationTest\Definitions\ObjectDefinition\Class3;
 use ProxyManager\Proxy\LazyLoadingInterface;
 use function DI\create;
+use function DI\get;
 
 /**
  * Test object definitions.

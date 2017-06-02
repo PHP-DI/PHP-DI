@@ -7,9 +7,9 @@ use DI\Test\IntegrationTest\BaseContainerTest;
 use DI\Test\IntegrationTest\Definitions\AnnotationTest\ConstructorInjection;
 use DI\Test\IntegrationTest\Definitions\AnnotationTest\NamespacedClass;
 use DI\Test\IntegrationTest\Definitions\AnnotationTest\NonAnnotatedClass;
-use function DI\autowire;
 use DI\Test\IntegrationTest\Definitions\AnnotationTest\PropertyInjection;
 use ProxyManager\Proxy\LazyLoadingInterface;
+use function DI\autowire;
 
 /**
  * Test definitions autowired with annotations.
@@ -101,9 +101,13 @@ namespace DI\Test\IntegrationTest\Definitions\AnnotationTest;
 
 use DI\Annotation\Inject;
 
-class NonAnnotatedClass {}
+class NonAnnotatedClass
+{
+}
 
-class NamespacedClass {}
+class NamespacedClass
+{
+}
 
 class ConstructorInjection
 {

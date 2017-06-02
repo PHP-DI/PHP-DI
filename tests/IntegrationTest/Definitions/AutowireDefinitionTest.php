@@ -299,4 +299,6 @@ class ConstructorInjection
     }
 }
 
-class LazyService {}
+class LazyService
+{
+}
