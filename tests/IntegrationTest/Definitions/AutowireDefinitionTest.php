@@ -4,6 +4,8 @@ namespace DI\Test\IntegrationTest\Definitions;
 
 use DI\ContainerBuilder;
 use DI\Test\IntegrationTest\BaseContainerTest;
+use DI\Test\IntegrationTest\Definitions\AutowireDefinitionTest\ConstructorInjection;
+use DI\Test\IntegrationTest\Definitions\AutowireDefinitionTest\LazyService;
 use DI\Test\IntegrationTest\Definitions\AutowireDefinitionTest\NullableConstructorParameter;
 use DI\Test\IntegrationTest\Definitions\AutowireDefinitionTest\NullableTypedConstructorParameter;
 use DI\Test\IntegrationTest\Definitions\AutowireDefinitionTest\Setter;
@@ -32,6 +34,31 @@ class AutowireDefinitionTest extends BaseContainerTest
 
         self::assertInstanceOf('stdClass', $container->get('stdClass'));
         self::assertInstanceOf(Class1::class, $container->get('object'));
+    }
+
+    /**
+     * @dataProvider provideContainer
+     */
+    public function test_constructor_injection(ContainerBuilder $builder)
+    {
+        $builder->addDefinitions([
+            ConstructorInjection::class => autowire()
+                ->constructorParameter('value', 'bar'),
+            'foo' => 'bar',
+            LazyService::class => autowire()->lazy(),
+        ]);
+        $container = $builder->build();
+
+        $object = $container->get(ConstructorInjection::class);
+
+        self::assertEquals(new \stdClass, $object->typedValue);
+        self::assertEquals(new \stdClass, $object->typedOptionalValue);
+        self::assertEquals('bar', $object->value);
+        self::assertInstanceOf(LazyService::class, $object->lazyService);
+        self::assertInstanceOf(LazyLoadingInterface::class, $object->lazyService);
+        self::assertFalse($object->lazyService->isProxyInitialized());
+        self::assertNull($object->unknownTypedAndOptional);
+        self::assertEquals('hello', $object->optionalValue);
     }
 
     /**
@@ -244,3 +271,32 @@ class TypedSetter
         $this->bar = $bar;
     }
 }
+
+class ConstructorInjection
+{
+    public $value;
+    public $typedValue;
+    public $typedOptionalValue;
+    /** @var \ProxyManager\Proxy\LazyLoadingInterface */
+    public $lazyService;
+    public $unknownTypedAndOptional;
+    public $optionalValue;
+
+    public function __construct(
+        \stdClass $typedValue,
+        string $value,
+        \stdClass $typedOptionalValue = null,
+        LazyService $lazyService,
+        UnknownClass $unknownTypedAndOptional = null,
+        $optionalValue = 'hello'
+    ) {
+        $this->value = $value;
+        $this->typedValue = $typedValue;
+        $this->typedOptionalValue = $typedOptionalValue;
+        $this->lazyService = $lazyService;
+        $this->unknownTypedAndOptional = $unknownTypedAndOptional;
+        $this->optionalValue = $optionalValue;
+    }
+}
+
+class LazyService {}
