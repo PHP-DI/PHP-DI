@@ -34,6 +34,4 @@ return [
     'namedDependency' => DI\create(Class2::class),
 
     LazyDependency::class => DI\create()->lazy(),
-
-    'alias' => DI\get('namedDependency'),
 ];

@@ -44,7 +44,6 @@ class InjectionTest extends \PHPUnit_Framework_TestCase
         );
         $containerReflection->set('namedDependency', \DI\create(Class2::class));
         $containerReflection->set(LazyDependency::class, \DI\create()->lazy());
-        $containerReflection->set('alias', \DI\get('namedDependency'));
 
         // Test with a container using annotations and reflection
         $builder = new ContainerBuilder();
@@ -55,7 +54,6 @@ class InjectionTest extends \PHPUnit_Framework_TestCase
         $containerAnnotations->set('foo', 'bar');
         $containerAnnotations->set(Interface1::class, \DI\create(Implementation1::class));
         $containerAnnotations->set('namedDependency', \DI\create(Class2::class));
-        $containerAnnotations->set('alias', \DI\get('namedDependency'));
 
         // Test with a container using array configuration
         $builder = new ContainerBuilder();
@@ -98,7 +96,6 @@ class InjectionTest extends \PHPUnit_Framework_TestCase
         );
         $containerPHP->set('namedDependency', \DI\create(Class2::class));
         $containerPHP->set(LazyDependency::class, \DI\create()->lazy());
-        $containerPHP->set('alias', \DI\get('namedDependency'));
 
         return [
             'autowiring' => [self::DEFINITION_REFLECTION, $containerReflection],
@@ -168,14 +165,6 @@ class InjectionTest extends \PHPUnit_Framework_TestCase
         $class3_1 = $container->get(Interface1::class);
         $class3_2 = $container->get(Interface1::class);
         $this->assertSame($class3_1, $class3_2);
-    }
-
-    /**
-     * @dataProvider containerProvider
-     */
-    public function testAlias($type, Container $container)
-    {
-        $this->assertInstanceOf(Class2::class, $container->get('alias'));
     }
 
     private function validateConstructorInjection(Class1 $class1, $type)
