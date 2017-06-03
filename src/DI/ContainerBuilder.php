@@ -140,8 +140,12 @@ class ContainerBuilder
         $containerClass = $this->containerClass;
 
         if ($this->compileToFile) {
-            (new Compiler)->compile($source, $this->compileToFile);
-            $containerClass = require $this->compileToFile;
+            $containerClass = (new Compiler)->compile($source, $this->compileToFile);
+            // Only load the file if it hasn't been already loaded
+            // (the container can be created multiple times in the same process)
+            if (!class_exists($containerClass, false)) {
+                require $this->compileToFile;
+            }
         }
 
         return new $containerClass($source, $proxyFactory, $this->wrapperContainer);
@@ -149,6 +153,11 @@ class ContainerBuilder
 
     /**
      * Compile the container for optimum performances.
+     *
+     * The filename provided must be a valid class name! For example:
+     *
+     * - `var/cache/ContainerProd.php` -> valid since `ContainerProd` is a valid class name
+     * - `var/cache/Container-Prod.php` -> invalid since `Container-Prod` is NOT a valid class name
      *
      * Be aware that the container is compiled once and never updated!
      *

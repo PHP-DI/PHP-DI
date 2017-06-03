@@ -43,19 +43,25 @@ class Compiler
 
     /**
      * Compile the container.
+     *
+     * @return string The compiled container class name.
      */
-    public function compile(DefinitionSource $definitionSource, string $fileName)
+    public function compile(DefinitionSource $definitionSource, string $fileName) : string
     {
+        $this->containerClass = basename($fileName, '.php');
+
+        // Validate that it's a valid class name
+        $validClassName = preg_match('/^[a-zA-Z_][a-zA-Z0-9_]*$/', $this->containerClass);
+        if (!$validClassName) {
+            throw new InvalidArgumentException("The file in which to compile the container must have a name that is a valid class name: {$this->containerClass} is not a valid PHP class name");
+        }
+
         if (file_exists($fileName)) {
             // The container is already compiled
-            return;
+            return $this->containerClass;
         }
 
         $definitions = $definitionSource->getDefinitions();
-
-        // The name of the class must be unique to allow using multiple compiled containers
-        // in the same process (for example for tests).
-        $this->containerClass = uniqid('CompiledContainer');
 
         foreach ($definitions as $entryName => $definition) {
             if ($definition instanceof FactoryDefinition) {
@@ -76,6 +82,8 @@ class Compiler
 
         $this->createCompilationDirectory(dirname($fileName));
         file_put_contents($fileName, $fileContent);
+
+        return $this->containerClass;
     }
 
     /**

@@ -14,5 +14,3 @@ class <?=$this->containerClass?> extends \DI\CompiledContainer
 
 <?php endforeach ?>
 }
-
-return '<?=$this->containerClass?>';
