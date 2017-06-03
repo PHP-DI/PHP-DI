@@ -7,8 +7,6 @@ use DI\Test\IntegrationTest\BaseContainerTest;
 
 /**
  * Test string definitions.
- *
- * @coversNothing
  */
 class StringDefinitionTest extends BaseContainerTest
 {

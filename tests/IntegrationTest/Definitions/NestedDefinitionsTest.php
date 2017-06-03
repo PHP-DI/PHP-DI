@@ -8,9 +8,6 @@ use DI\Test\IntegrationTest\Fixtures\Class2;
 use DI\Test\IntegrationTest\Fixtures\Implementation1;
 use DI\Test\IntegrationTest\Fixtures\LazyDependency;
 
-/**
- * @coversNothing
- */
 class NestedDefinitionsTest extends \PHPUnit_Framework_TestCase
 {
     /**

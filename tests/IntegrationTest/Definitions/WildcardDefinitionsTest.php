@@ -9,8 +9,6 @@ use DI\Test\IntegrationTest\Fixtures\Interface1;
 
 /**
  * Test definitions using wildcards.
- *
- * @coversNothing
  */
 class WildcardDefinitionsTest extends \PHPUnit_Framework_TestCase
 {

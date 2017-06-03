@@ -7,8 +7,6 @@ use DI\Test\IntegrationTest\Annotations\InjectWithUseStatements\InjectWithUseSta
 
 /**
  * Test using annotations.
- *
- * @coversNothing
  */
 class AnnotationsTest extends \PHPUnit_Framework_TestCase
 {

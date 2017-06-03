@@ -9,8 +9,6 @@ use Psr\Container\ContainerInterface;
 
 /**
  * Test factory definitions.
- *
- * @coversNothing
  */
 class FactoryDefinitionTest extends \PHPUnit_Framework_TestCase
 {

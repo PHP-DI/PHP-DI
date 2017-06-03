@@ -9,8 +9,6 @@ use DI\ContainerBuilder;
  * interface (or other uninstantiable) type hint.
  *
  * @link https://github.com/mnapoli/PHP-DI/pull/168
- *
- * @coversNothing
  */
 class Issue168Test extends \PHPUnit_Framework_TestCase
 {

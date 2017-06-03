@@ -8,8 +8,6 @@ use DI\ContainerBuilder;
  * Test that chaining several sources works.
  *
  * @see https://github.com/mnapoli/PHP-DI/issues/141
- *
- * @coversNothing
  */
 class Issue141Test extends \PHPUnit_Framework_TestCase
 {

@@ -7,8 +7,6 @@ use DI\Test\IntegrationTest\BaseContainerTest;
 
 /**
  * Test alias definitions.
- *
- * @coversNothing
  */
 class AliasDefinitionTest extends BaseContainerTest
 {

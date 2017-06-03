@@ -30,9 +30,6 @@ class ContainerGetTest extends \PHPUnit_Framework_TestCase
         $container->get('key');
     }
 
-    /**
-     * @coversNothing
-     */
     public function testClosureIsResolved()
     {
         $closure = function () {

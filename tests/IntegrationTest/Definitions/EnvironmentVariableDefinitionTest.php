@@ -7,8 +7,6 @@ use DI\Test\IntegrationTest\BaseContainerTest;
 
 /**
  * Test environment variable definitions.
- *
- * @coversNothing
  */
 class EnvironmentVariableDefinitionTest extends BaseContainerTest
 {

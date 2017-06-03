@@ -8,8 +8,6 @@ use stdClass;
 
 /**
  * Test value definitions.
- *
- * @coversNothing
  */
 class ValueDefinitionTest extends BaseContainerTest
 {

@@ -7,8 +7,6 @@ use DI\Test\IntegrationTest\BaseContainerTest;
 
 /**
  * Test array definitions.
- *
- * @coversNothing
  */
 class ArrayDefinitionTest extends BaseContainerTest
 {

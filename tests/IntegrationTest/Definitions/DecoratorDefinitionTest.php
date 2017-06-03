@@ -7,8 +7,6 @@ use Psr\Container\ContainerInterface;
 
 /**
  * Test decorator definitions.
- *
- * @coversNothing
  */
 class DecoratorDefinitionTest extends \PHPUnit_Framework_TestCase
 {
