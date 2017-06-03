@@ -54,14 +54,19 @@ class ObjectCreationCompiler
             $value = $propertyInjection->getValue();
             $value = $this->compiler->compileValue($value);
 
-            // TODO handle private properties
             $className = $propertyInjection->getClassName() ?: $definition->getClassName();
             $property = new ReflectionProperty($className, $propertyInjection->getPropertyName());
-            if (! $property->isPublic()) {
-                throw new \Exception('Unable to compile access to private properties');
+            if ($property->isPublic()) {
+                $code[] = sprintf('$object->%s = %s;', $propertyInjection->getPropertyName(), $value);
+            } else {
+                // Private/protected property
+                $code[] = sprintf(
+                    '\DI\Definition\Resolver\ObjectCreator::setPrivatePropertyValue(%s, $object, \'%s\', %s);',
+                    var_export($propertyInjection->getClassName(), true),
+                    $propertyInjection->getPropertyName(),
+                    $value
+                );
             }
-
-            $code[] = sprintf('$object->%s = %s;', $propertyInjection->getPropertyName(), $value);
         }
 
         // Method injections

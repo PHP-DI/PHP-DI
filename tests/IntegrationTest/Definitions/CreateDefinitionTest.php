@@ -6,6 +6,8 @@ use DI\ContainerBuilder;
 use DI\Test\IntegrationTest\BaseContainerTest;
 use DI\Test\IntegrationTest\Definitions\CreateDefinitionTest\ConstructorInjection;
 use DI\Test\IntegrationTest\Definitions\CreateDefinitionTest\MethodInjection;
+use DI\Test\IntegrationTest\Definitions\CreateDefinitionTest\PrivatePropertyInjection;
+use DI\Test\IntegrationTest\Definitions\CreateDefinitionTest\PrivatePropertyInjectionSubClass;
 use DI\Test\IntegrationTest\Definitions\CreateDefinitionTest\Property;
 use DI\Test\IntegrationTest\Definitions\CreateDefinitionTest\PropertyInjection;
 use DI\Test\IntegrationTest\Definitions\ObjectDefinition\Class1;
@@ -17,8 +19,6 @@ use function DI\get;
 
 /**
  * Test object definitions.
- *
- * TODO add more tests
  */
 class CreateDefinitionTest extends BaseContainerTest
 {
@@ -228,6 +228,62 @@ class CreateDefinitionTest extends BaseContainerTest
         self::assertEquals('bar', $object->foo);
         self::assertTrue($object->isProxyInitialized());
     }
+
+    /**
+     * @dataProvider provideContainer
+     */
+    public function test_property_injection_in_private_properties(ContainerBuilder $builder)
+    {
+        $builder->addDefinitions([
+            PrivatePropertyInjection::class => create()
+                ->property('private', 'foo')
+                ->property('protected', 'bar'),
+        ]);
+        $container = $builder->build();
+
+        $object = $container->get(PrivatePropertyInjection::class);
+
+        self::assertEquals('foo', $object->getPrivate());
+        self::assertEquals('bar', $object->getProtected());
+    }
+
+    /**
+     * @dataProvider provideContainer
+     */
+    public function test_property_injection_in_private_properties_of_parent_class(ContainerBuilder $builder)
+    {
+        $builder->addDefinitions([
+            PrivatePropertyInjection::class => create()
+                ->property('private', 'parent')
+                ->property('protected', 'bar'),
+            PrivatePropertyInjectionSubClass::class => create()
+                ->property('private', 'child')
+                ->property('protected', 'overloaded'),
+        ]);
+        $container = $builder->build();
+
+        $object = $container->get(PrivatePropertyInjectionSubClass::class);
+
+        // For now it's not possible to define private properties in parent classes using array config
+        self::assertEquals(null, $object->getPrivate());
+        self::assertEquals('overloaded', $object->getProtected());
+        self::assertEquals('child', $object->getSubClassPrivate());
+    }
+
+    /**
+     * @dataProvider provideContainer
+     * @expectedException \Exception
+     * @expectedExceptionMessage Property stdClass::$foo does not exist
+     */
+    public function test_property_injection_in_unknown_property(ContainerBuilder $builder)
+    {
+        $builder->addDefinitions([
+            \stdClass::class => create()
+                ->property('foo', 'bar'),
+        ]);
+        $container = $builder->build();
+        $container->get(\stdClass::class);
+    }
 }
 
 namespace DI\Test\IntegrationTest\Definitions\CreateDefinitionTest;
@@ -296,5 +352,31 @@ class MethodInjection
         $this->typedOptionalValue = $typedOptionalValue;
         $this->lazyService = $lazyService;
         $this->optionalValue = $optionalValue;
+    }
+}
+
+class PrivatePropertyInjection
+{
+    private $private;
+    protected $protected;
+
+    public function getPrivate()
+    {
+        return $this->private;
+    }
+
+    public function getProtected()
+    {
+        return $this->protected;
+    }
+}
+
+class PrivatePropertyInjectionSubClass extends PrivatePropertyInjection
+{
+    private $private;
+
+    public function getSubClassPrivate()
+    {
+        return $this->private;
     }
 }
