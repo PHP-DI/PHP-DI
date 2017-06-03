@@ -187,6 +187,7 @@ PHP;
                     $e->getMessage()
                 ), 0, $e);
             }
+
             return '            ' . $compiledValue . ",\n";
         }, $values, $keys);
 
