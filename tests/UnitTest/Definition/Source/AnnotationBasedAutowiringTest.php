@@ -8,7 +8,6 @@ use DI\Definition\ObjectDefinition;
 use DI\Definition\ObjectDefinition\MethodInjection;
 use DI\Definition\ObjectDefinition\PropertyInjection;
 use DI\Definition\Source\AnnotationBasedAutowiring;
-use DI\Scope;
 use DI\Test\UnitTest\Definition\Source\Fixtures\AnnotationFixture;
 use DI\Test\UnitTest\Definition\Source\Fixtures\AnnotationFixture2;
 use DI\Test\UnitTest\Definition\Source\Fixtures\AnnotationFixture3;
@@ -181,8 +180,6 @@ class AnnotationBasedAutowiringTest extends \PHPUnit_Framework_TestCase
     {
         $definition = (new AnnotationBasedAutowiring)->autowire(AnnotationInjectableFixture::class);
         $this->assertInstanceOf(Definition::class, $definition);
-
-        $this->assertEquals(Scope::PROTOTYPE, $definition->getScope());
         $this->assertTrue($definition->isLazy());
     }
 

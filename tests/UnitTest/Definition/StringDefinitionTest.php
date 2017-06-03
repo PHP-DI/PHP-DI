@@ -5,7 +5,6 @@ namespace DI\Test\UnitTest\Definition;
 use DI\Definition\CacheableDefinition;
 use DI\Definition\StringDefinition;
 use DI\NotFoundException;
-use DI\Scope;
 use EasyMock\EasyMock;
 use Psr\Container\ContainerInterface;
 
@@ -22,16 +21,6 @@ class StringDefinitionTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals('foo', $definition->getName());
         $this->assertEquals('bar', $definition->getExpression());
-    }
-
-    /**
-     * @test
-     */
-    public function should_have_singleton_scope()
-    {
-        $definition = new StringDefinition('foo', 'bar');
-
-        $this->assertEquals(Scope::SINGLETON, $definition->getScope());
     }
 
     /**

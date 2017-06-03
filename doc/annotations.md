@@ -108,7 +108,7 @@ The `@Injectable` annotation lets you set options on injectable classes:
 
 ```php
 /**
- * @Injectable(scope="prototype", lazy=true)
+ * @Injectable(lazy=true)
  */
 class Example
 {

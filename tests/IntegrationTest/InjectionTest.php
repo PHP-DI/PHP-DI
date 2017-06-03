@@ -4,7 +4,6 @@ namespace DI\Test\IntegrationTest;
 
 use DI\Container;
 use DI\ContainerBuilder;
-use DI\Scope;
 use DI\Test\IntegrationTest\Fixtures\Class1;
 use DI\Test\IntegrationTest\Fixtures\Class2;
 use DI\Test\IntegrationTest\Fixtures\Implementation1;
@@ -73,7 +72,6 @@ class InjectionTest extends \PHPUnit_Framework_TestCase
         $containerPHP->set(
             Class1::class,
             \DI\create()
-                ->scope(Scope::PROTOTYPE)
                 ->property('property1', \DI\get(Class2::class))
                 ->property('property2', \DI\get(Interface1::class))
                 ->property('property3', \DI\get('namedDependency'))
@@ -94,7 +92,6 @@ class InjectionTest extends \PHPUnit_Framework_TestCase
         $containerPHP->set(
             Interface1::class,
             \DI\create(Implementation1::class)
-                ->scope(Scope::SINGLETON)
         );
         $containerPHP->set('namedDependency', \DI\create(Class2::class));
         $containerPHP->set(LazyDependency::class, \DI\create()->lazy());
@@ -168,26 +165,6 @@ class InjectionTest extends \PHPUnit_Framework_TestCase
 
         // The proxies are checked last, else there is no lazy injection once they are resolved
         $this->validateProxyResolution($proxies);
-    }
-
-    /**
-     * @dataProvider containerProvider
-     */
-    public function testScope($type, Container $container)
-    {
-        // No scope definition possible with autowiring only
-        if ($type == self::DEFINITION_REFLECTION) {
-            return;
-        }
-        $class1_1 = $container->get(Class1::class);
-        $class1_2 = $container->get(Class1::class);
-        $this->assertNotSame($class1_1, $class1_2);
-        $class2_1 = $container->get(Class2::class);
-        $class2_2 = $container->get(Class2::class);
-        $this->assertSame($class2_1, $class2_2);
-        $class3_1 = $container->get(Interface1::class);
-        $class3_2 = $container->get(Interface1::class);
-        $this->assertSame($class3_1, $class3_2);
     }
 
     /**

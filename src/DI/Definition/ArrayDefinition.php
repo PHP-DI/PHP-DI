@@ -3,7 +3,6 @@
 namespace DI\Definition;
 
 use DI\Definition\Helper\DefinitionHelper;
-use DI\Scope;
 
 /**
  * Definition of an array containing values or references.
@@ -36,11 +35,6 @@ class ArrayDefinition implements Definition
     public function getName() : string
     {
         return $this->name;
-    }
-
-    public function getScope() : string
-    {
-        return Scope::SINGLETON;
     }
 
     public function getValues() : array

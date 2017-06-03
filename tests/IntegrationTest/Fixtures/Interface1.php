@@ -6,7 +6,7 @@ use DI\Annotation\Injectable;
 
 /**
  * Fixture interface.
- * @Injectable(scope="singleton")
+ * @Injectable
  */
 interface Interface1
 {

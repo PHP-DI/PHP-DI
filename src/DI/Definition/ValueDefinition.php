@@ -2,7 +2,6 @@
 
 namespace DI\Definition;
 
-use DI\Scope;
 use Psr\Container\ContainerInterface;
 
 /**
@@ -36,15 +35,6 @@ class ValueDefinition implements Definition, SelfResolvingDefinition
     public function getName() : string
     {
         return $this->name;
-    }
-
-    /**
-     * {@inheritdoc}
-     * A value definition is like a constant, there is nothing to compute, the value is the same for everyone.
-     */
-    public function getScope() : string
-    {
-        return Scope::SINGLETON;
     }
 
     /**

@@ -6,7 +6,6 @@ use DI\Definition\CacheableDefinition;
 use DI\Definition\DecoratorDefinition;
 use DI\Definition\HasSubDefinition;
 use DI\Definition\ValueDefinition;
-use DI\Scope;
 
 /**
  * @covers \DI\Definition\DecoratorDefinition
@@ -21,8 +20,6 @@ class DecoratorDefinitionTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals('foo', $definition->getName());
         $this->assertEquals($callable, $definition->getCallable());
-        // Default scope
-        $this->assertEquals(Scope::SINGLETON, $definition->getScope());
     }
 
     /**

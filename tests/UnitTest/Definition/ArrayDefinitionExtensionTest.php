@@ -6,7 +6,6 @@ use DI\Definition\ArrayDefinition;
 use DI\Definition\ArrayDefinitionExtension;
 use DI\Definition\CacheableDefinition;
 use DI\Definition\ValueDefinition;
-use DI\Scope;
 
 /**
  * @covers \DI\Definition\ArrayDefinitionExtension
@@ -23,16 +22,6 @@ class ArrayDefinitionExtensionTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('foo', $definition->getName());
         $this->assertEquals('foo', $definition->getSubDefinitionName());
         $this->assertEquals(['hello'], $definition->getValues());
-    }
-
-    /**
-     * @test
-     */
-    public function scope_should_be_singleton()
-    {
-        $definition = new ArrayDefinitionExtension('foo', []);
-
-        $this->assertEquals(Scope::SINGLETON, $definition->getScope());
     }
 
     /**

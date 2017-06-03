@@ -3,7 +3,7 @@
 namespace DI\Test\UnitTest\Definition\Source\Fixtures;
 
 /**
- * @Injectable(lazy=true, scope="prototype")
+ * @Injectable(lazy=true)
  */
 class AnnotationInjectableFixture
 {

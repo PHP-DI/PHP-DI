@@ -82,9 +82,6 @@ menu:
                 performances:
                     text: Performances
                     url: doc/performances.html
-                scopes:
-                    text: Scopes
-                    url: doc/scopes.html
                 lazy-injection:
                     text: Lazy injection
                     url: doc/lazy-injection.html

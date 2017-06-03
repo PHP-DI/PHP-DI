@@ -16,11 +16,6 @@ interface Definition extends RequestedEntry
      */
     public function getName() : string;
 
-    /**
-     * Returns the scope of the entry.
-     */
-    public function getScope() : string;
-
      /**
       * Definitions can be cast to string for debugging information.
       */

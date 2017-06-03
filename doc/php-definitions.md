@@ -278,14 +278,7 @@ return [
 ];
 ```
 
-By default each entry will be created once and the same instance will be injected everywhere it is used (singleton instance). You can use the "prototype" [scope](scopes.md) if you want a new instance to be created every time it is injected:
-
-```php
-return [
-    'FormBuilder' => DI\create()
-        ->scope(Scope::PROTOTYPE),
-];
-```
+Each entry will be resolved once and the same instance will be injected everywhere it is used.
 
 ### Autowired objects
 
