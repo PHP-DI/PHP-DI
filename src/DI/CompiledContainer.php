@@ -23,7 +23,7 @@ abstract class CompiledContainer extends Container
 
         // If it's a compiled entry, then there is a method in this class
         if ($method !== null) {
-            $value = $this->$method();
+            $value = $this->resolveCompiledEntry($name, $method);
 
             // Store the entry to always return it without recomputing it
             $this->singletonEntries[$name] = $value;
@@ -52,5 +52,30 @@ abstract class CompiledContainer extends Container
         }
 
         return parent::has($name);
+    }
+
+    /**
+     * Resolves a compiled entry.
+     *
+     * Checks for circular dependencies while resolving it.
+     *
+     * @throws DependencyException Error while resolving the entry.
+     * @return mixed
+     */
+    private function resolveCompiledEntry(string $entryName, string $method)
+    {
+        // Check if we are already getting this entry -> circular dependency
+        if (isset($this->entriesBeingResolved[$entryName])) {
+            throw new DependencyException("Circular dependency detected while trying to resolve entry '$entryName'");
+        }
+        $this->entriesBeingResolved[$entryName] = true;
+
+        try {
+            $value = $this->$method();
+        } finally {
+            unset($this->entriesBeingResolved[$entryName]);
+        }
+
+        return $value;
     }
 }

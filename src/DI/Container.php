@@ -53,7 +53,7 @@ class Container implements ContainerInterface, FactoryInterface, \DI\InvokerInte
      * Array of entries being resolved. Used to avoid circular dependencies and infinite loops.
      * @var array
      */
-    private $entriesBeingResolved = [];
+    protected $entriesBeingResolved = [];
 
     /**
      * @var \Invoker\InvokerInterface|null
