@@ -3,7 +3,6 @@
 namespace DI\Test\UnitTest;
 
 use DI\ContainerBuilder;
-use DI\Test\UnitTest\Fixtures\Class1CircularDependencies;
 use DI\Test\UnitTest\Fixtures\InvalidScope;
 use DI\Test\UnitTest\Fixtures\PassByReferenceDependency;
 use DI\Test\UnitTest\Fixtures\Prototype;

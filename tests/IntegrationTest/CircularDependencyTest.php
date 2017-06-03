@@ -3,11 +3,11 @@
 namespace DI\Test\UnitTest;
 
 use DI\ContainerBuilder;
-use function DI\create;
-use function DI\get;
 use DI\Test\IntegrationTest\BaseContainerTest;
 use DI\Test\UnitTest\Fixtures\Class1CircularDependencies;
 use DI\Test\UnitTest\Fixtures\Class2CircularDependencies;
+use function DI\create;
+use function DI\get;
 
 /**
  * Test that circular dependencies are handled correctly.
