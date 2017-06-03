@@ -10,35 +10,38 @@ use ProxyManager\Proxy\LazyLoadingInterface;
 
 /**
  * Test lazy injections with proxies.
- *
- * @coversNothing
  */
-class ProxyTest extends \PHPUnit_Framework_TestCase
+class ProxyTest extends BaseContainerTest
 {
     /**
      * @test
+     * @dataProvider provideContainer
      */
-    public function container_can_create_lazy_objects()
+    public function container_can_create_lazy_objects(ContainerBuilder $builder)
     {
-        $container = $this->createContainer([
+        $builder->useAutowiring(false);
+        $builder->addDefinitions([
             'foo' => \DI\create(LazyDependency::class)
                 ->lazy(),
         ]);
 
-        $proxy = $container->get('foo');
+        $proxy = $builder->build()->get('foo');
         $this->assertInstanceOf(LazyLoadingInterface::class, $proxy);
         $this->assertInstanceOf(LazyDependency::class, $proxy);
     }
 
     /**
      * @test
+     * @dataProvider provideContainer
      */
-    public function lazy_singletons_resolve_to_the_same_instance()
+    public function lazy_singletons_resolve_to_the_same_instance(ContainerBuilder $builder)
     {
-        $container = $this->createContainer([
+        $builder->useAutowiring(false);
+        $builder->addDefinitions([
             'foo' => \DI\create(LazyDependency::class)
                 ->lazy(),
         ]);
+        $container = $builder->build();
 
         /** @var LazyDependency $proxy */
         $proxy = $container->get('foo');
@@ -50,29 +53,23 @@ class ProxyTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @test
+     * @dataProvider provideContainer
      */
-    public function singleton_dependencies_of_proxies_are_resolved_once()
+    public function singleton_dependencies_of_proxies_are_resolved_once(ContainerBuilder $builder)
     {
-        $container = $this->createContainer([
+        $builder->useAutowiring(false);
+        $builder->addDefinitions([
             'A' => \DI\create(A::class)
                 ->constructor(\DI\get('B'))
                 ->lazy(),
             'B' => \DI\create(B::class),
         ]);
+        $container = $builder->build();
 
         /** @var A $a1 */
         $a1 = $container->get('A');
         /** @var A $a2 */
         $a2 = $container->get('A');
         $this->assertSame($a1->getB(), $a2->getB());
-    }
-
-    private function createContainer(array $definitions)
-    {
-        $builder = new ContainerBuilder;
-        $builder->useAutowiring(false);
-        $builder->addDefinitions($definitions);
-
-        return $builder->build();
     }
 }
