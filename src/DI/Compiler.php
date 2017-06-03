@@ -72,7 +72,7 @@ class Compiler
 
         $fileContent = "<?php\n" . $fileContent;
 
-        $this->createCompilationDirectory(basename($fileName));
+        $this->createCompilationDirectory(dirname($fileName));
         file_put_contents($fileName, $fileContent);
     }
 
