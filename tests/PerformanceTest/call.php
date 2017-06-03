@@ -8,7 +8,7 @@ require_once __DIR__ . '/vendor/autoload.php';
 $builder = new ContainerBuilder();
 $builder->useAutowiring(true);
 $builder->useAnnotations(false);
-$builder->setDefinitionCache(new ArrayCache());
+$builder->compile(__DIR__ . '/tmp/call.php');
 $builder->addDefinitions([
     'link' => 'Hello',
 ]);

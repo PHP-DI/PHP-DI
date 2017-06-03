@@ -9,7 +9,7 @@ $builder = new ContainerBuilder();
 $builder->useAutowiring(true);
 $builder->useAnnotations(false);
 $builder->addDefinitions(__DIR__ . '/get-object/config.php');
-$builder->compile(__DIR__ . '/tmp/get-object.php');
+$builder->compile(__DIR__ . '/tmp/getobject.php');
 $container = $builder->build();
 
 $container->get('object1');
