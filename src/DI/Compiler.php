@@ -7,8 +7,10 @@ namespace DI;
 use DI\Compiler\ObjectCreationCompiler;
 use DI\Definition\AliasDefinition;
 use DI\Definition\ArrayDefinition;
+use DI\Definition\DecoratorDefinition;
 use DI\Definition\Definition;
 use DI\Definition\EnvironmentVariableDefinition;
+use DI\Definition\Exception\InvalidDefinition;
 use DI\Definition\FactoryDefinition;
 use DI\Definition\Helper\DefinitionHelper;
 use DI\Definition\ObjectDefinition;
@@ -114,10 +116,7 @@ class Compiler
 PHP;
                 break;
             case $definition instanceof ArrayDefinition:
-                $values = $definition->getValues();
-                $values = array_map(function ($value) {
-                    return '            ' . $this->compileValue($value) . ",\n";
-                }, $values);
+                $values = $this->compileArrayValues($definition);
                 $values = implode('', $values);
                 $code = "return [\n$values        ];";
                 break;
@@ -126,6 +125,8 @@ PHP;
                 $code = $compiler->compile($definition);
                 $code .= "\n        return \$object;";
                 break;
+            case $definition instanceof DecoratorDefinition:
+                throw new InvalidDefinition('Decorators cannot be nested in another definition');
             default:
                 throw new \Exception('Cannot compile definition of type ' . get_class($definition));
         }
@@ -165,5 +166,30 @@ PHP;
         if (!is_writable($directory)) {
             throw new InvalidArgumentException(sprintf('Compilation directory is not writable: %s.', $directory));
         }
+    }
+
+    /**
+     * @return string[]
+     */
+    private function compileArrayValues(ArrayDefinition $definition) : array
+    {
+        $values = $definition->getValues();
+        $keys = array_keys($values);
+
+        $values = array_map(function ($value, $key) use ($definition) {
+            try {
+                $compiledValue = $this->compileValue($value);
+            } catch (\Exception $e) {
+                throw new DependencyException(sprintf(
+                    'Error while compiling %s[%s]. %s',
+                    $definition->getName(),
+                    $key,
+                    $e->getMessage()
+                ), 0, $e);
+            }
+            return '            ' . $compiledValue . ",\n";
+        }, $values, $keys);
+
+        return $values;
     }
 }
