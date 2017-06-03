@@ -65,7 +65,7 @@ class Container implements ContainerInterface, FactoryInterface, \DI\InvokerInte
      *
      * @var ContainerInterface
      */
-    private $wrapperContainer;
+    protected $delegateContainer;
 
     /**
      * @var ProxyFactory
@@ -87,11 +87,11 @@ class Container implements ContainerInterface, FactoryInterface, \DI\InvokerInte
         ProxyFactory $proxyFactory = null,
         ContainerInterface $wrapperContainer = null
     ) {
-        $this->wrapperContainer = $wrapperContainer ?: $this;
+        $this->delegateContainer = $wrapperContainer ?: $this;
 
         $this->definitionSource = $definitionSource ?: $this->createDefaultDefinitionSource();
         $this->proxyFactory = $proxyFactory ?: new ProxyFactory(false);
-        $this->definitionResolver = new ResolverDispatcher($this->wrapperContainer, $this->proxyFactory);
+        $this->definitionResolver = new ResolverDispatcher($this->delegateContainer, $this->proxyFactory);
 
         // Auto-register the container
         $this->singletonEntries[self::class] = $this;
@@ -316,7 +316,7 @@ class Container implements ContainerInterface, FactoryInterface, \DI\InvokerInte
                 new NumericArrayResolver,
                 new AssociativeArrayResolver,
                 new DefaultValueResolver,
-                new TypeHintContainerResolver($this->wrapperContainer),
+                new TypeHintContainerResolver($this->delegateContainer),
             ]);
 
             $this->invoker = new Invoker($parameterResolver, $this);

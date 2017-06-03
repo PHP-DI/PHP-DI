@@ -92,14 +92,13 @@ class Compiler
                 break;
             case $definition instanceof AliasDefinition:
                 $targetEntryName = $definition->getTargetEntryName();
-                // TODO delegate container
-                $code = 'return $this->get(' . $this->compileValue($targetEntryName) . ');';
+                $code = 'return $this->delegateContainer->get(' . $this->compileValue($targetEntryName) . ');';
                 break;
             case $definition instanceof StringDefinition:
                 $entryName = $this->compileValue($definition->getName());
                 $expression = $this->compileValue($definition->getExpression());
                 // TODO delegate container
-                $code = 'return \DI\Definition\StringDefinition::resolveExpression(' . $entryName . ', ' . $expression . ', $this);';
+                $code = 'return \DI\Definition\StringDefinition::resolveExpression(' . $entryName . ', ' . $expression . ', $this->delegateContainer);';
                 break;
             case $definition instanceof EnvironmentVariableDefinition:
                 $variableName = $this->compileValue($definition->getVariableName());

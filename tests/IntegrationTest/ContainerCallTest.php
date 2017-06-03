@@ -131,24 +131,6 @@ class ContainerCallTest extends BaseContainerTest
     }
 
     /**
-     * @dataProvider provideContainer
-     */
-    public function test_parameter_from_type_hint_with_root_container(ContainerBuilder $subContainerBuilder)
-    {
-        $rootContainer = ContainerBuilder::buildDevContainer();
-        $value = new \stdClass();
-        $rootContainer->set('stdClass', $value);
-
-        $subContainerBuilder->wrapContainer($rootContainer);
-        $subContainer = $subContainerBuilder->build();
-
-        $result = $subContainer->call(function (\stdClass $foo) {
-            return $foo;
-        });
-        $this->assertSame($value, $result, 'The root container was not used for the type-hint');
-    }
-
-    /**
      * @test
      * @dataProvider provideContainer
      */
