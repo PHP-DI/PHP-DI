@@ -4,7 +4,6 @@ namespace DI\Definition\Source;
 
 use DI\Definition\CacheableDefinition;
 use DI\Definition\Definition;
-use Psr\SimpleCache\CacheInterface;
 
 /**
  * Caches another definition source.
@@ -14,85 +13,53 @@ use Psr\SimpleCache\CacheInterface;
 class CachedDefinitionSource implements DefinitionSource
 {
     /**
-     * Prefix for cache key, to avoid conflicts with other systems using the same cache.
      * @var string
      */
-    const CACHE_PREFIX = 'DI.Definition.';
+    const CACHE_KEY = 'php-di.definitions';
 
     /**
      * @var DefinitionSource
      */
-    private $source;
+    private $cachedSource;
 
     /**
-     * @var CacheInterface
+     * Definitions loaded from the cache (or null if not loaded yet).
+     *
+     * @var Definition[]|null
      */
-    private $cache;
+    private $cachedDefinitions;
 
-    public function __construct(DefinitionSource $source, CacheInterface $cache)
+    public function __construct(DefinitionSource $cachedSource)
     {
-        $this->source = $source;
-        $this->cache = $cache;
+        $this->cachedSource = $cachedSource;
     }
 
     public function getDefinition(string $name)
     {
+        if ($this->cachedDefinitions === null) {
+            $this->cachedDefinitions = apcu_fetch(self::CACHE_KEY) ?: [];
+        }
+
         // Look in cache
-        $definition = $this->fetchFromCache($name);
+        $definition = $this->cachedDefinitions[$name] ?? false;
 
         if ($definition === false) {
-            $definition = $this->source->getDefinition($name);
+            $definition = $this->cachedSource->getDefinition($name);
 
-            // Save to cache
+            // Update the cache
             if ($definition === null || ($definition instanceof CacheableDefinition)) {
-                $this->saveToCache($name, $definition);
+                $this->cachedDefinitions[$name] = $definition;
+                apcu_store(self::CACHE_KEY, $this->cachedDefinitions);
             }
         }
 
         return $definition;
     }
 
-    public function getCache() : CacheInterface
+    public static function isSupported() : bool
     {
-        return $this->cache;
-    }
-
-    /**
-     * Fetches a definition from the cache.
-     *
-     * @param string $name Entry name
-     * @return Definition|null|bool The cached definition, null or false if the value is not already cached
-     */
-    private function fetchFromCache(string $name)
-    {
-        $data = $this->cache->get($this->getCacheKey($name), false);
-
-        if ($data !== false) {
-            return $data;
-        }
-
-        return false;
-    }
-
-    /**
-     * Saves a definition to the cache.
-     *
-     * @param string $name Entry name
-     */
-    private function saveToCache(string $name, Definition $definition = null)
-    {
-        $this->cache->set($this->getCacheKey($name), $definition);
-    }
-
-    /**
-     * Get normalized cache key.
-     *
-     * @param string $name
-     *
-     * @return string
-     */
-    private function getCacheKey(string $name) : string
-    {
-        return self::CACHE_PREFIX . str_replace(['{', '}', '(', ')', '/', '\\', '@', ':'], '.', $name);
+        return function_exists('apcu_fetch')
+            && ini_get('apc.enabled')
+            && !('cli' === PHP_SAPI && !ini_get('apc.enable_cli'));
     }
 }

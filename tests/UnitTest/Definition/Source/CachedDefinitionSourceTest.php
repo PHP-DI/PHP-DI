@@ -2,63 +2,45 @@
 
 namespace DI\Test\UnitTest\Definition\Source;
 
+use DI\Definition\AliasDefinition;
 use DI\Definition\ObjectDefinition;
 use DI\Definition\Source\CachedDefinitionSource;
 use DI\Definition\Source\DefinitionArray;
-use EasyMock\EasyMock;
-use Psr\SimpleCache\CacheInterface;
+use DI\Definition\Source\DefinitionSource;
 
 /**
  * @covers \DI\Definition\Source\CachedDefinitionSource
  */
 class CachedDefinitionSourceTest extends \PHPUnit_Framework_TestCase
 {
-    use EasyMock;
+    public function setUp()
+    {
+        parent::setUp();
+
+        if (!CachedDefinitionSource::isSupported()) {
+            $this->markTestSkipped('APCu extension is required');
+        }
+
+        apcu_clear_cache();
+    }
 
     /**
      * @test
      */
     public function should_get_from_cache()
     {
-        /** @var CacheInterface $cache */
-        $cache = $this->easySpy(CacheInterface::class, [
-            'get' => 'foo',
-        ]);
+        $definition = new AliasDefinition('foo', 'bar');
 
-        $source = new CachedDefinitionSource(new DefinitionArray(), $cache);
+        $source = $this->createMock(DefinitionSource::class);
+        $source
+            ->expects($this->once()) // The sub-source should be called ONLY ONCE
+            ->method('getDefinition')
+            ->willReturn($definition);
 
-        $this->assertEquals('foo', $source->getDefinition('foo'));
-    }
+        $source = new CachedDefinitionSource($source);
 
-    /**
-     * @dataProvider cacheKeyProvider
-     */
-    public function testCacheKey($rawName, $cacheName)
-    {
-        $cache = $this->easySpy(CacheInterface::class);
-
-        $source = new CachedDefinitionSource(new DefinitionArray(), $cache);
-
-        $cache->expects($this->once())
-            ->method('get')
-            ->with(CachedDefinitionSource::CACHE_PREFIX . $cacheName)
-            ->will($this->returnValue(false));
-
-        $cache->expects($this->once())
-            ->method('set')
-            ->with(CachedDefinitionSource::CACHE_PREFIX . $cacheName);
-
-        $source->getDefinition($rawName);
-    }
-
-    public function cacheKeyProvider()
-    {
-        return [
-            ['foo{bar}baz', 'foo.bar.baz'],
-            ['foo(bar)baz', 'foo.bar.baz'],
-            ['foo/bar\baz', 'foo.bar.baz'],
-            ['foo@bar:baz', 'foo.bar.baz'],
-        ];
+        self::assertEquals($definition, $source->getDefinition('foo'));
+        self::assertEquals($definition, $source->getDefinition('foo'));
     }
 
     /**
@@ -66,22 +48,20 @@ class CachedDefinitionSourceTest extends \PHPUnit_Framework_TestCase
      */
     public function should_save_to_cache_and_return()
     {
-        $cache = $this->easySpy(CacheInterface::class, [
-            'get' => false,
-        ]);
-
         $cachedSource = new DefinitionArray([
             'foo' => \DI\create(),
         ]);
 
-        $source = new CachedDefinitionSource($cachedSource, $cache);
+        $source = new CachedDefinitionSource($cachedSource);
 
-        $expectedDefinition = new ObjectDefinition('foo');
-        $cache->expects($this->once())
-            ->method('set')
-            ->with($this->isType('string'), $expectedDefinition);
+        // Sanity check
+        self::assertSavedInCache('foo', null);
 
-        $this->assertEquals($expectedDefinition, $source->getDefinition('foo'));
+        // Return the definition
+        self::assertEquals(new ObjectDefinition('foo'), $source->getDefinition('foo'));
+
+        // The definition is saved in the cache
+        self::assertSavedInCache('foo', new ObjectDefinition('foo'));
     }
 
     /**
@@ -89,15 +69,15 @@ class CachedDefinitionSourceTest extends \PHPUnit_Framework_TestCase
      */
     public function should_save_null_to_cache_and_return_null()
     {
-        $cache = $this->easySpy(CacheInterface::class, [
-            'get' => false,
-        ]);
+        $source = new CachedDefinitionSource(new DefinitionArray());
 
-        $source = new CachedDefinitionSource(new DefinitionArray(), $cache);
+        self::assertNull($source->getDefinition('foo'));
+        self::assertSavedInCache('foo', null);
+    }
 
-        $cache->expects($this->once())
-            ->method('set')
-            ->with($this->isType('string'), null);
-        $this->assertNull($source->getDefinition('foo'));
+    private static function assertSavedInCache(string $definitionName, $expectedValue)
+    {
+        $definitions = apcu_fetch(CachedDefinitionSource::CACHE_KEY);
+        self::assertEquals($expectedValue, $definitions[$definitionName]);
     }
 }

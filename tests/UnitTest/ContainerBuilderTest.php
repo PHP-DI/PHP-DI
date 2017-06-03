@@ -38,23 +38,6 @@ class ContainerBuilderTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function should_allow_to_configure_a_cache()
-    {
-        $cache = $this->easyMock(CacheInterface::class);
-
-        $builder = new ContainerBuilder(FakeContainer::class);
-        $builder->setDefinitionCache($cache);
-
-        /** @var FakeContainer $container */
-        $container = $builder->build();
-
-        $this->assertTrue($container->definitionSource instanceof CachedDefinitionSource);
-        $this->assertSame($cache, $container->definitionSource->getCache());
-    }
-
-    /**
-     * @test
-     */
     public function the_container_should_not_be_wrapped_by_default()
     {
         $builder = new ContainerBuilder(FakeContainer::class);
