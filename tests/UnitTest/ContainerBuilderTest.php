@@ -141,6 +141,17 @@ class ContainerBuilderTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
+    public function should_allow_to_create_a_compiled_container()
+    {
+        $builder = new ContainerBuilder();
+        $builder->compile(__DIR__ . '/../IntegrationTest/tmp/CompiledContainer.php');
+
+        $this->assertInstanceOf(CompiledContainer::class, $builder->build());
+    }
+
+    /**
+     * @test
+     */
     public function should_have_a_fluent_interface()
     {
         $builder = new ContainerBuilder();
