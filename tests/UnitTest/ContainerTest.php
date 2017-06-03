@@ -7,7 +7,6 @@ use DI\ContainerBuilder;
 use DI\FactoryInterface;
 use DI\InvokerInterface;
 use Psr\Container\ContainerInterface;
-use stdClass;
 
 /**
  * Test class for Container.
@@ -16,18 +15,6 @@ use stdClass;
  */
 class ContainerTest extends \PHPUnit_Framework_TestCase
 {
-    /**
-     * We should be able to set a null value.
-     * @see https://github.com/mnapoli/PHP-DI/issues/79
-     */
-    public function testSetNullValue()
-    {
-        $container = ContainerBuilder::buildDevContainer();
-        $container->set('foo', null);
-
-        $this->assertNull($container->get('foo'));
-    }
-
     /**
      * The container auto-registers itself.
      */
@@ -66,21 +53,6 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
         $container = ContainerBuilder::buildDevContainer();
 
         $this->assertSame($container, $container->get(ContainerInterface::class));
-    }
-
-    /**
-     * @see https://github.com/mnapoli/PHP-DI/issues/126
-     * @test
-     */
-    public function testSetGetSetGet()
-    {
-        $container = ContainerBuilder::buildDevContainer();
-
-        $container->set('foo', 'bar');
-        $container->get('foo');
-        $container->set('foo', 'hello');
-
-        $this->assertSame('hello', $container->get('foo'));
     }
 
     /**

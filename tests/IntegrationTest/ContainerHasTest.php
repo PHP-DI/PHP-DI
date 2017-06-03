@@ -6,7 +6,7 @@ use DI\ContainerBuilder;
 use stdClass;
 
 /**
- * Test class for Container.
+ * Tests the has() method from the container.
  */
 class ContainerHasTest extends BaseContainerTest
 {
