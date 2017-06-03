@@ -2,6 +2,7 @@
 
 namespace DI\Test\IntegrationTest\ErrorMessages;
 
+use function DI\autowire;
 use DI\ContainerBuilder;
 use DI\Definition\Exception\InvalidDefinition;
 use DI\Test\IntegrationTest\BaseContainerTest;
@@ -16,8 +17,9 @@ class ErrorMessagesTest extends BaseContainerTest
      */
     public function test_non_instantiable_class(ContainerBuilder $builder)
     {
-        $message = <<<'MESSAGE'
-Entry "DI\Test\IntegrationTest\ErrorMessages\InterfaceFixture" cannot be resolved: the class is not instantiable
+        $word = $builder->isCompiled() ? 'compiled' : 'resolved';
+        $message = <<<MESSAGE
+Entry "DI\Test\IntegrationTest\ErrorMessages\InterfaceFixture" cannot be $word: the class is not instantiable
 Full definition:
 Object (
     class = #NOT INSTANTIABLE# DI\Test\IntegrationTest\ErrorMessages\InterfaceFixture
@@ -26,8 +28,11 @@ Object (
 MESSAGE;
         $this->expectException(InvalidDefinition::class);
         $this->expectExceptionMessage($message);
+        $builder->addDefinitions([
+            InterfaceFixture::class => autowire(),
+        ]);
 
-        $builder->build()->get('DI\Test\IntegrationTest\ErrorMessages\InterfaceFixture');
+        $builder->build()->get(InterfaceFixture::class);
     }
 
     /**
@@ -35,19 +40,23 @@ MESSAGE;
      */
     public function test_non_existent_class(ContainerBuilder $builder)
     {
-        $message = <<<'MESSAGE'
-Entry "Acme\Foo\Bar\Bar" cannot be resolved: the class doesn't exist
+        $word = $builder->isCompiled() ? 'compiled' : 'resolved';
+        $message = <<<MESSAGE
+Entry "Acme\Foo\Bar\Bar" cannot be $word: the class doesn't exist
 Full definition:
 Object (
     class = #UNKNOWN# Acme\Foo\Bar\Bar
     lazy = false
 )
 MESSAGE;
-        $this->setExpectedException(InvalidDefinition::class, $message);
+        $this->expectException(InvalidDefinition::class);
+        $this->expectExceptionMessage($message);
 
-        $container = $builder->build();
-        $container->set('Acme\Foo\Bar\Bar', \DI\create());
-        $container->get('Acme\Foo\Bar\Bar');
+        $builder->addDefinitions([
+            'Acme\Foo\Bar\Bar' => \DI\create(),
+        ]);
+
+        $builder->build()->get('Acme\Foo\Bar\Bar');
     }
 
     /**
@@ -55,23 +64,27 @@ MESSAGE;
      */
     public function test_undefined_constructor_parameter(ContainerBuilder $builder)
     {
-        $message = <<<'MESSAGE'
-Entry "DI\Test\IntegrationTest\ErrorMessages\Buggy1" cannot be resolved: Parameter $bar of __construct() has no value defined or guessable
+        $word = $builder->isCompiled() ? 'compiled' : 'resolved';
+        $message = <<<MESSAGE
+Entry "DI\Test\IntegrationTest\ErrorMessages\Buggy1" cannot be $word: Parameter \$bar of __construct() has no value defined or guessable
 Full definition:
 Object (
     class = DI\Test\IntegrationTest\ErrorMessages\Buggy1
     lazy = false
     __construct(
-        $foo = 'some value'
-        $bar = #UNDEFINED#
-        $default = (default value) 123
+        \$foo = 'some value'
+        \$bar = #UNDEFINED#
+        \$default = (default value) 123
     )
 )
 MESSAGE;
-        $this->setExpectedException(InvalidDefinition::class, $message);
+        $this->expectException(InvalidDefinition::class);
+        $this->expectExceptionMessage($message);
 
+        $builder->addDefinitions([
+            Buggy1::class => \DI\autowire()->constructorParameter('foo', 'some value'),
+        ]);
         $container = $builder->build();
-        $container->set(Buggy1::class, \DI\autowire()->constructorParameter('foo', 'some value'));
 
         $container->get(Buggy1::class);
     }
@@ -114,20 +127,26 @@ MESSAGE;
      */
     public function test_setter_injection_not_type_hinted(ContainerBuilder $builder)
     {
-        $message = <<<'MESSAGE'
-Entry "DI\Test\IntegrationTest\ErrorMessages\Buggy5" cannot be resolved: Parameter $dependency of setDependency() has no value defined or guessable
+        $word = $builder->isCompiled() ? 'compiled' : 'resolved';
+        $message = <<<MESSAGE
+Entry "DI\Test\IntegrationTest\ErrorMessages\Buggy5" cannot be $word: Parameter \$dependency of setDependency() has no value defined or guessable
 Full definition:
 Object (
     class = DI\Test\IntegrationTest\ErrorMessages\Buggy5
     lazy = false
     setDependency(
-        $dependency = #UNDEFINED#
+        \$dependency = #UNDEFINED#
     )
 )
 MESSAGE;
-        $this->setExpectedException(InvalidDefinition::class, $message);
+        $this->expectException(InvalidDefinition::class);
+        $this->expectExceptionMessage($message);
 
         $builder->useAnnotations(true);
+        $builder->addDefinitions([
+            Buggy5::class => \DI\autowire(),
+        ]);
+
         $builder->build()->get(Buggy5::class);
     }
 
@@ -138,8 +157,9 @@ MESSAGE;
      */
     public function test_factory_not_callable(ContainerBuilder $builder)
     {
-        $container = $builder->build();
-        $container->set('foo', \DI\factory('bar'));
-        $container->get('foo');
+        $builder->addDefinitions([
+            'foo' => \DI\factory('bar'),
+        ]);
+        $builder->build()->get('foo');
     }
 }

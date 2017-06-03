@@ -3,6 +3,7 @@
 namespace DI\Test\IntegrationTest;
 
 use DI\ContainerBuilder;
+use function DI\create;
 
 /**
  * Tests specific to the compiled container.
@@ -48,5 +49,22 @@ class CompiledContainerTest extends BaseContainerTest
         // (the compiled file already existed so the second container did not recompile into it)
         // This behavior is obvious for performance reasons.
         self::assertEquals('bar', $container->get('foo'));
+    }
+
+    /**
+     * @test
+     * @expectedException \DI\Definition\Exception\InvalidDefinition
+     * @expectedExceptionMessage Entry "foo" cannot be compiled: anonymous classes cannot be compiled
+     */
+    public function anonymous_classes_cannot_be_compiled()
+    {
+        $class = get_class(new class() {});
+
+        $builder = new ContainerBuilder;
+        $builder->addDefinitions([
+            'foo' => create($class),
+        ]);
+        $builder->compile(self::generateCompilationFileName());
+        $builder->build();
     }
 }

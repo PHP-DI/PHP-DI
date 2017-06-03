@@ -170,6 +170,8 @@ class ContainerBuilder
      */
     public function compile(string $fileName) : ContainerBuilder
     {
+        $this->ensureNotLocked();
+
         $this->compileToFile = $fileName;
 
         return $this;
@@ -286,6 +288,14 @@ class ContainerBuilder
         $this->definitionSources[] = $definitions;
 
         return $this;
+    }
+
+    /**
+     * Will the container be compiled?
+     */
+    public function isCompiled() : bool
+    {
+        return (bool) $this->compileToFile;
     }
 
     private function ensureNotLocked()

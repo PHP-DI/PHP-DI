@@ -36,53 +36,61 @@ class ObjectCreationCompiler
             return $this->compileLazyDefinition($definition);
         }
 
-        $classReflection = new ReflectionClass($definition->getClassName());
-        $constructorArguments = $this->resolveParameters($definition->getConstructorInjection(), $classReflection->getConstructor());
-        $dumpedConstructorArguments = array_map(function ($value) {
-            return $this->compiler->compileValue($value);
-        }, $constructorArguments);
+        try {
+            $classReflection = new ReflectionClass($definition->getClassName());
+            $constructorArguments = $this->resolveParameters($definition->getConstructorInjection(), $classReflection->getConstructor());
+            $dumpedConstructorArguments = array_map(function ($value) {
+                return $this->compiler->compileValue($value);
+            }, $constructorArguments);
 
-        $code = [];
-        $code[] = sprintf(
-            '$object = new %s(%s);',
-            $definition->getClassName(),
-            implode(', ', $dumpedConstructorArguments)
-        );
+            $code = [];
+            $code[] = sprintf(
+                '$object = new %s(%s);',
+                $definition->getClassName(),
+                implode(', ', $dumpedConstructorArguments)
+            );
 
-        // Property injections
-        foreach ($definition->getPropertyInjections() as $propertyInjection) {
-            $value = $propertyInjection->getValue();
-            $value = $this->compiler->compileValue($value);
+            // Property injections
+            foreach ($definition->getPropertyInjections() as $propertyInjection) {
+                $value = $propertyInjection->getValue();
+                $value = $this->compiler->compileValue($value);
 
-            $className = $propertyInjection->getClassName() ?: $definition->getClassName();
-            $property = new ReflectionProperty($className, $propertyInjection->getPropertyName());
-            if ($property->isPublic()) {
-                $code[] = sprintf('$object->%s = %s;', $propertyInjection->getPropertyName(), $value);
-            } else {
-                // Private/protected property
+                $className = $propertyInjection->getClassName() ?: $definition->getClassName();
+                $property = new ReflectionProperty($className, $propertyInjection->getPropertyName());
+                if ($property->isPublic()) {
+                    $code[] = sprintf('$object->%s = %s;', $propertyInjection->getPropertyName(), $value);
+                } else {
+                    // Private/protected property
+                    $code[] = sprintf(
+                        '\DI\Definition\Resolver\ObjectCreator::setPrivatePropertyValue(%s, $object, \'%s\', %s);',
+                        var_export($propertyInjection->getClassName(), true),
+                        $propertyInjection->getPropertyName(),
+                        $value
+                    );
+                }
+            }
+
+            // Method injections
+            foreach ($definition->getMethodInjections() as $methodInjection) {
+                $methodReflection = new \ReflectionMethod($definition->getClassName(), $methodInjection->getMethodName());
+                $parameters = $this->resolveParameters($methodInjection, $methodReflection);
+
+                $dumpedParameters = array_map(function ($value) {
+                    return $this->compiler->compileValue($value);
+                }, $parameters);
+
                 $code[] = sprintf(
-                    '\DI\Definition\Resolver\ObjectCreator::setPrivatePropertyValue(%s, $object, \'%s\', %s);',
-                    var_export($propertyInjection->getClassName(), true),
-                    $propertyInjection->getPropertyName(),
-                    $value
+                    '$object->%s(%s);',
+                    $methodInjection->getMethodName(),
+                    implode(', ', $dumpedParameters)
                 );
             }
-        }
-
-        // Method injections
-        foreach ($definition->getMethodInjections() as $methodInjection) {
-            $methodReflection = new \ReflectionMethod($definition->getClassName(), $methodInjection->getMethodName());
-            $parameters = $this->resolveParameters($methodInjection, $methodReflection);
-
-            $dumpedParameters = array_map(function ($value) {
-                return $this->compiler->compileValue($value);
-            }, $parameters);
-
-            $code[] = sprintf(
-                '$object->%s(%s);',
-                $methodInjection->getMethodName(),
-                implode(', ', $dumpedParameters)
-            );
+        } catch (InvalidDefinition $e) {
+            throw InvalidDefinition::create($definition, sprintf(
+                'Entry "%s" cannot be compiled: %s',
+                $definition->getName(),
+                $e->getMessage()
+            ));
         }
 
         return implode("\n        ", $code);
@@ -166,7 +174,10 @@ PHP;
     private function assertClassIsNotAnonymous(ObjectDefinition $definition)
     {
         if (strpos($definition->getClassName(), '@') !== false) {
-            throw new \Exception('Cannot compile anonymous classes');
+            throw InvalidDefinition::create($definition, sprintf(
+                'Entry "%s" cannot be compiled: anonymous classes cannot be compiled',
+                $definition->getName()
+            ));
         }
     }
 
