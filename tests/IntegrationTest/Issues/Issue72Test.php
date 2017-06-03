@@ -3,6 +3,7 @@
 namespace DI\Test\IntegrationTest\Issues;
 
 use DI\ContainerBuilder;
+use DI\Test\IntegrationTest\BaseContainerTest;
 use DI\Test\IntegrationTest\Issues\Issue72\Class1;
 
 /**
@@ -10,14 +11,14 @@ use DI\Test\IntegrationTest\Issues\Issue72\Class1;
  *
  * @see https://github.com/mnapoli/PHP-DI/issues/72
  */
-class Issue72Test extends \PHPUnit_Framework_TestCase
+class Issue72Test extends BaseContainerTest
 {
     /**
      * @test
+     * @dataProvider provideContainer
      */
-    public function annotationDefinitionShouldOverrideReflectionDefinition()
+    public function annotationDefinitionShouldOverrideReflectionDefinition(ContainerBuilder $builder)
     {
-        $builder = new ContainerBuilder();
         $builder->useAutowiring(true);
         $builder->useAnnotations(true);
         $container = $builder->build();
@@ -34,10 +35,10 @@ class Issue72Test extends \PHPUnit_Framework_TestCase
 
     /**
      * @test
+     * @dataProvider provideContainer
      */
-    public function arrayDefinitionShouldOverrideReflectionDefinition()
+    public function arrayDefinitionShouldOverrideReflectionDefinition(ContainerBuilder $builder)
     {
-        $builder = new ContainerBuilder();
         $builder->useAutowiring(true);
         $builder->useAnnotations(false);
 
@@ -54,10 +55,10 @@ class Issue72Test extends \PHPUnit_Framework_TestCase
 
     /**
      * @test
+     * @dataProvider provideContainer
      */
-    public function arrayDefinitionShouldOverrideAnnotationDefinition()
+    public function arrayDefinitionShouldOverrideAnnotationDefinition(ContainerBuilder $builder)
     {
-        $builder = new ContainerBuilder();
         $builder->useAutowiring(false);
         $builder->useAnnotations(true);
 
@@ -74,10 +75,10 @@ class Issue72Test extends \PHPUnit_Framework_TestCase
 
     /**
      * @test
+     * @dataProvider provideContainer
      */
-    public function arrayDefinitionShouldOverrideAnotherArrayDefinition()
+    public function arrayDefinitionShouldOverrideAnotherArrayDefinition(ContainerBuilder $builder)
     {
-        $builder = new ContainerBuilder();
         $builder->useAutowiring(false);
         $builder->useAnnotations(false);
 
@@ -96,10 +97,10 @@ class Issue72Test extends \PHPUnit_Framework_TestCase
 
     /**
      * @test
+     * @dataProvider provideContainer
      */
-    public function phpDefinitionShouldOverrideArrayDefinition()
+    public function phpDefinitionShouldOverrideArrayDefinition(ContainerBuilder $builder)
     {
-        $builder = new ContainerBuilder();
         $builder->useAutowiring(false);
         $builder->useAnnotations(false);
         $builder->addDefinitions(__DIR__ . '/Issue72/definitions.php');

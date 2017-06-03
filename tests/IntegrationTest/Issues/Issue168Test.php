@@ -3,6 +3,7 @@
 namespace DI\Test\IntegrationTest\Issues;
 
 use DI\ContainerBuilder;
+use DI\Test\IntegrationTest\BaseContainerTest;
 
 /**
  * Test for constructor injection of parameters that are optional, and use an
@@ -10,11 +11,14 @@ use DI\ContainerBuilder;
  *
  * @link https://github.com/mnapoli/PHP-DI/pull/168
  */
-class Issue168Test extends \PHPUnit_Framework_TestCase
+class Issue168Test extends BaseContainerTest
 {
-    public function testInterfaceOptionalParameter()
+    /**
+     * @dataProvider provideContainer
+     */
+    public function testInterfaceOptionalParameter(ContainerBuilder $builder)
     {
-        $container = ContainerBuilder::buildDevContainer();
+        $container = $builder->build();
         $object = $container->get(TestClass::class);
         $this->assertInstanceOf(TestClass::class, $object);
     }

@@ -3,19 +3,21 @@
 namespace DI\Test\IntegrationTest\Issues;
 
 use DI\ContainerBuilder;
+use DI\Test\IntegrationTest\BaseContainerTest;
 
 /**
  * @see https://github.com/mnapoli/PHP-DI/issues/70
  * @see https://github.com/mnapoli/PHP-DI/issues/76
  */
-class Issue70and76Test extends \PHPUnit_Framework_TestCase
+class Issue70and76Test extends BaseContainerTest
 {
     /**
      * @test
+     * @dataProvider provideContainer
      */
-    public function valueDefinitionShouldOverrideReflectionDefinition()
+    public function valueDefinitionShouldOverrideReflectionDefinition(ContainerBuilder $builder)
     {
-        $container = ContainerBuilder::buildDevContainer();
+        $container = $builder->build();
 
         $container->set('stdClass', 'foo');
         $this->assertEquals('foo', $container->get('stdClass'));
@@ -23,10 +25,11 @@ class Issue70and76Test extends \PHPUnit_Framework_TestCase
 
     /**
      * @test
+     * @dataProvider provideContainer
      */
-    public function closureDefinitionShouldOverrideReflectionDefinition()
+    public function closureDefinitionShouldOverrideReflectionDefinition(ContainerBuilder $builder)
     {
-        $container = ContainerBuilder::buildDevContainer();
+        $container = $builder->build();
 
         $container->set('stdClass', \DI\factory(function () {
             return 'foo';
