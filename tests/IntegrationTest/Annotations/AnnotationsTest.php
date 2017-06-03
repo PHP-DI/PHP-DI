@@ -4,20 +4,24 @@ namespace DI\Test\IntegrationTest\Annotations;
 
 use DI\ContainerBuilder;
 use DI\Test\IntegrationTest\Annotations\InjectWithUseStatements\InjectWithUseStatements2;
+use DI\Test\IntegrationTest\BaseContainerTest;
 
 /**
  * Test using annotations.
  */
-class AnnotationsTest extends \PHPUnit_Framework_TestCase
+class AnnotationsTest extends BaseContainerTest
 {
     /**
      * @test
+     * @dataProvider provideContainer
      */
-    public function inject_in_properties()
+    public function inject_in_properties(ContainerBuilder $builder)
     {
-        $container = $this->createContainer();
+        $builder->useAnnotations(true);
+
         /** @var B $object */
-        $object = $container->get(B::class);
+        $object = $builder->build()->get(B::class);
+
         $this->assertTrue($object->public instanceof A);
         $this->assertTrue($object->getProtected() instanceof A);
         $this->assertTrue($object->getPrivate() instanceof A);
@@ -27,10 +31,12 @@ class AnnotationsTest extends \PHPUnit_Framework_TestCase
      * Inject in parent properties (public, protected and private).
      *
      * @test
+     * @dataProvider provideContainer
      */
-    public function inject_in_parent_properties()
+    public function inject_in_parent_properties(ContainerBuilder $builder)
     {
-        $container = $this->createContainer();
+        $builder->useAnnotations(true);
+        $container = $builder->build();
 
         /** @var C $object */
         $object = $container->get(C::class);
@@ -49,10 +55,12 @@ class AnnotationsTest extends \PHPUnit_Framework_TestCase
      * Inject in private parent properties even if they have the same name of child properties.
      *
      * @test
+     * @dataProvider provideContainer
      */
-    public function inject_in_private_parent_properties_with_same_name()
+    public function inject_in_private_parent_properties_with_same_name(ContainerBuilder $builder)
     {
-        $container = $this->createContainer();
+        $builder->useAnnotations(true);
+        $container = $builder->build();
 
         /** @var Child $object */
         $object = $container->get(Child::class);
@@ -64,14 +72,18 @@ class AnnotationsTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @test
+     * @dataProvider provideContainer
      */
-    public function inject_by_name()
+    public function inject_by_name(ContainerBuilder $builder)
     {
+        $builder->useAnnotations(true);
+
         $dependency = new \stdClass();
 
-        $container = $this->createContainer([
+        $builder->addDefinitions([
             'namedDependency'  => $dependency,
         ]);
+        $container = $builder->build();
 
         /** @var NamedInjection $object */
         $object = $container->get(NamedInjection::class);
@@ -80,22 +92,25 @@ class AnnotationsTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @test
+     * @dataProvider provideContainer
      * @expectedException \DI\DependencyException
      */
-    public function errors_if_dependency_by_name_not_found()
+    public function errors_if_dependency_by_name_not_found(ContainerBuilder $builder)
     {
-        $container = $this->createContainer();
-        $container->get(NamedInjection::class);
+        $builder->useAnnotations(true);
+        $builder->build()->get(NamedInjection::class);
     }
 
     /**
      * Check that @ var annotation takes "use" statements into account.
      * @test
+     * @dataProvider provideContainer
      * @link https://github.com/PHP-DI/PHP-DI/issues/1
      */
-    public function resolve_class_names_using_import_statements()
+    public function resolve_class_names_using_import_statements(ContainerBuilder $builder)
     {
-        $container = $this->createContainer();
+        $builder->useAnnotations(true);
+        $container = $builder->build();
 
         /** @var $object InjectWithUseStatements */
         $object = $container->get(InjectWithUseStatements::class);
@@ -110,22 +125,12 @@ class AnnotationsTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @test
+     * @dataProvider provideContainer
      * @expectedException \PhpDocReader\AnnotationException
      */
-    public function testNotFoundVarAnnotation()
+    public function testNotFoundVarAnnotation(ContainerBuilder $builder)
     {
-        $container = $this->createContainer();
-        $container->get(NotFoundVarAnnotation::class);
-    }
-
-    private function createContainer(array $definitions = [])
-    {
-        $builder = new ContainerBuilder;
         $builder->useAnnotations(true);
-        if ($definitions) {
-            $builder->addDefinitions($definitions);
-        }
-
-        return $builder->build();
+        $builder->build()->get(NotFoundVarAnnotation::class);
     }
 }
