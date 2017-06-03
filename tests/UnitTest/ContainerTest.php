@@ -16,25 +16,6 @@ use stdClass;
  */
 class ContainerTest extends \PHPUnit_Framework_TestCase
 {
-    public function testHas()
-    {
-        $container = ContainerBuilder::buildDevContainer();
-        $container->set('foo', 'bar');
-
-        $this->assertTrue($container->has('foo'));
-        $this->assertFalse($container->has('wow'));
-    }
-
-    /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage The name parameter must be of type string
-     */
-    public function testHasNonStringParameter()
-    {
-        $container = ContainerBuilder::buildDevContainer();
-        $container->has(new stdClass());
-    }
-
     /**
      * We should be able to set a null value.
      * @see https://github.com/mnapoli/PHP-DI/issues/79
