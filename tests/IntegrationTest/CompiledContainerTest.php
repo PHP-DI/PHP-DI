@@ -58,7 +58,8 @@ class CompiledContainerTest extends BaseContainerTest
      */
     public function anonymous_classes_cannot_be_compiled()
     {
-        $class = get_class(new class() {});
+        $class = get_class(new class() {
+        });
 
         $builder = new ContainerBuilder;
         $builder->addDefinitions([

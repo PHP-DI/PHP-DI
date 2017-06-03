@@ -2,10 +2,10 @@
 
 namespace DI\Test\IntegrationTest\ErrorMessages;
 
-use function DI\autowire;
 use DI\ContainerBuilder;
 use DI\Definition\Exception\InvalidDefinition;
 use DI\Test\IntegrationTest\BaseContainerTest;
+use function DI\autowire;
 
 /**
  * Test error messages.
