@@ -42,6 +42,7 @@ class ObjectCreationCompiler
             return $this->compiler->compileValue($value);
         }, $constructorArguments);
 
+        $code = [];
         $code[] = sprintf(
             '$object = new %s(%s);',
             $definition->getClassName(),
