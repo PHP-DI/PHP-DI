@@ -3,7 +3,6 @@
 namespace DI\Definition;
 
 use DI\DependencyException;
-use DI\Scope;
 use Psr\Container\ContainerInterface;
 use Psr\Container\NotFoundExceptionInterface;
 
@@ -38,11 +37,6 @@ class StringDefinition implements Definition, SelfResolvingDefinition
     public function getName() : string
     {
         return $this->name;
-    }
-
-    public function getScope() : string
-    {
-        return Scope::SINGLETON;
     }
 
     public function getExpression() : string

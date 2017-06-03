@@ -3,7 +3,6 @@
 namespace DI\Test\UnitTest\Definition\ObjectDefinition;
 
 use DI\Definition\ObjectDefinition\MethodInjection;
-use DI\Scope;
 
 /**
  * @covers \DI\Definition\ObjectDefinition\MethodInjection
@@ -16,7 +15,6 @@ class MethodInjectionTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals('foo', $definition->getMethodName());
         $this->assertEquals('', $definition->getName());
-        $this->assertEquals(Scope::PROTOTYPE, $definition->getScope());
         $this->assertEmpty($definition->getParameters());
     }
 

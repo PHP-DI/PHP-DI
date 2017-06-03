@@ -15,8 +15,8 @@ abstract class CompiledContainer extends Container
     public function get($name)
     {
         // Try to find the entry in the singleton map
-        if (isset($this->singletonEntries[$name]) || array_key_exists($name, $this->singletonEntries)) {
-            return $this->singletonEntries[$name];
+        if (isset($this->resolvedEntries[$name]) || array_key_exists($name, $this->resolvedEntries)) {
+            return $this->resolvedEntries[$name];
         }
 
         $method = static::METHOD_MAPPING[$name] ?? null;
@@ -26,7 +26,7 @@ abstract class CompiledContainer extends Container
             $value = $this->resolveCompiledEntry($name, $method);
 
             // Store the entry to always return it without recomputing it
-            $this->singletonEntries[$name] = $value;
+            $this->resolvedEntries[$name] = $value;
 
             return $value;
         }

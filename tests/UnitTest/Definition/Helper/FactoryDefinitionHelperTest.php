@@ -5,7 +5,6 @@ namespace DI\Test\UnitTest\Definition\Helper;
 use DI\Definition\DecoratorDefinition;
 use DI\Definition\FactoryDefinition;
 use DI\Definition\Helper\FactoryDefinitionHelper;
-use DI\Scope;
 
 /**
  * @covers \DI\Definition\Helper\FactoryDefinitionHelper
@@ -20,12 +19,10 @@ class FactoryDefinitionHelperTest extends \PHPUnit_Framework_TestCase
         $callable = function () {
         };
         $helper = new FactoryDefinitionHelper($callable);
-        $helper->scope(Scope::PROTOTYPE);
         $definition = $helper->getDefinition('foo');
 
         $this->assertTrue($definition instanceof FactoryDefinition);
         $this->assertSame('foo', $definition->getName());
-        $this->assertEquals(Scope::PROTOTYPE, $definition->getScope());
         $this->assertSame($callable, $definition->getCallable());
     }
 
@@ -42,19 +39,6 @@ class FactoryDefinitionHelperTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($definition instanceof DecoratorDefinition);
         $this->assertSame('foo', $definition->getName());
         $this->assertSame($callable, $definition->getCallable());
-    }
-
-    /**
-     * @test
-     */
-    public function is_singleton_by_default()
-    {
-        $callable = function () {
-        };
-        $helper = new FactoryDefinitionHelper($callable);
-        $definition = $helper->getDefinition('foo');
-
-        $this->assertEquals(Scope::SINGLETON, $definition->getScope());
     }
 
     /**

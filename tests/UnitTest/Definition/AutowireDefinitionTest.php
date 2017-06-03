@@ -6,7 +6,6 @@ use DI\Definition\AutowireDefinition;
 use DI\Definition\ObjectDefinition\MethodInjection;
 use DI\Definition\ObjectDefinition\PropertyInjection;
 use DI\Definition\ValueDefinition;
-use DI\Scope;
 
 /**
  * @covers \DI\Definition\AutowireDefinition
@@ -38,7 +37,6 @@ class AutowireDefinitionTest extends ObjectDefinitionTest
 
         $subDefinition = new AutowireDefinition('bar');
         $subDefinition->setLazy(true);
-        $subDefinition->setScope(Scope::PROTOTYPE);
         $subDefinition->setConstructorInjection(MethodInjection::constructor());
         $subDefinition->addPropertyInjection(new PropertyInjection('property1', 'Property1'));
         $subDefinition->addPropertyInjection(new PropertyInjection('property3', 'Property3'));
@@ -50,7 +48,6 @@ class AutowireDefinitionTest extends ObjectDefinitionTest
         $this->assertEquals('foo', $definition->getName());
         $this->assertEquals('bar', $definition->getClassName());
         $this->assertTrue($definition->isLazy());
-        $this->assertEquals(Scope::PROTOTYPE, $definition->getScope());
         $this->assertNotNull($definition->getConstructorInjection());
         $this->assertCount(3, $definition->getPropertyInjections());
         $this->assertCount(3, $definition->getMethodInjections());

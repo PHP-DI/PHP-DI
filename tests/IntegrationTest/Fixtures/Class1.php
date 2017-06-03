@@ -7,7 +7,7 @@ use DI\Annotation\Injectable;
 
 /**
  * Fixture class.
- * @Injectable(scope="prototype")
+ * @Injectable
  */
 class Class1
 {

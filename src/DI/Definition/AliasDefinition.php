@@ -2,7 +2,6 @@
 
 namespace DI\Definition;
 
-use DI\Scope;
 use Psr\Container\ContainerInterface;
 
 /**
@@ -37,11 +36,6 @@ class AliasDefinition implements Definition, SelfResolvingDefinition
     public function getName() : string
     {
         return $this->name;
-    }
-
-    public function getScope() : string
-    {
-        return Scope::PROTOTYPE;
     }
 
     public function getTargetEntryName() : string

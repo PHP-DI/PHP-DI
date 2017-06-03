@@ -3,7 +3,6 @@
 namespace DI\Test\IntegrationTest\Definitions;
 
 use DI\ContainerBuilder;
-use DI\Scope;
 use DI\Test\IntegrationTest\BaseContainerTest;
 
 /**
@@ -66,12 +65,11 @@ class ArrayDefinitionTest extends BaseContainerTest
     {
         $builder->addDefinitions([
             'links'     => [
-                \DI\get('singleton'),
-                \DI\get('prototype'),
+                \DI\get('dependency1'),
+                \DI\get('dependency2'),
             ],
-            'singleton' => \DI\create('stdClass'),
-            'prototype' => \DI\create('stdClass')
-                ->scope(Scope::PROTOTYPE),
+            'dependency1' => \DI\create('stdClass'),
+            'dependency2' => \DI\create('stdClass'),
         ]);
         $container = $builder->build();
 
@@ -79,12 +77,8 @@ class ArrayDefinitionTest extends BaseContainerTest
 
         $this->assertTrue($array[0] instanceof \stdClass);
         $this->assertTrue($array[1] instanceof \stdClass);
-
-        $singleton = $container->get('singleton');
-        $prototype = $container->get('prototype');
-
-        $this->assertSame($singleton, $array[0]);
-        $this->assertNotSame($prototype, $array[1]);
+        $this->assertSame($container->get('dependency1'), $array[0]);
+        $this->assertSame($container->get('dependency2'), $array[1]);
     }
 
     /**
@@ -104,27 +98,6 @@ class ArrayDefinitionTest extends BaseContainerTest
 
         $this->assertEquals('env', $array[0]);
         $this->assertEquals(new \stdClass, $array[1]);
-    }
-
-    /**
-     * An array entry is a singleton.
-     * @dataProvider provideContainer
-     */
-    public function test_array_with_prototype_entries(ContainerBuilder $builder)
-    {
-        $builder->addDefinitions([
-            'array'     => [
-                \DI\get('prototype'),
-            ],
-            'prototype' => \DI\create('stdClass')
-                ->scope(Scope::PROTOTYPE),
-        ]);
-        $container = $builder->build();
-
-        $array1 = $container->get('array');
-        $array2 = $container->get('array');
-
-        $this->assertSame($array1[0], $array2[0]);
     }
 
     /**

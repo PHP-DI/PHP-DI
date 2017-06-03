@@ -2,8 +2,6 @@
 
 namespace DI\Definition;
 
-use DI\Scope;
-
 /**
  * Definition of a value or class with a factory.
  *
@@ -16,11 +14,6 @@ class FactoryDefinition implements Definition
      * @var string
      */
     private $name;
-
-    /**
-     * @var string
-     */
-    private $scope;
 
     /**
      * Callable that returns the value.
@@ -39,26 +32,16 @@ class FactoryDefinition implements Definition
      * @param callable $factory Callable that returns the value associated to the entry name.
      * @param array $parameters Parameters to be passed to the callable
      */
-    public function __construct(string $name, $factory, string $scope = null, array $parameters = [])
+    public function __construct(string $name, $factory, array $parameters = [])
     {
         $this->name = $name;
         $this->factory = $factory;
-        $this->scope = $scope;
         $this->parameters = $parameters;
     }
 
     public function getName() : string
     {
         return $this->name;
-    }
-
-    /**
-     * {@inheritdoc}
-     * Default scope is singleton: the callable is called once and the result is shared.
-     */
-    public function getScope() : string
-    {
-        return $this->scope ?: Scope::SINGLETON;
     }
 
     /**

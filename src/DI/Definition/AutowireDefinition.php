@@ -29,9 +29,6 @@ class AutowireDefinition extends ObjectDefinition implements HasSubDefinition
         if ($this->className === null) {
             $this->setClassName($definition->className);
         }
-        if ($this->scope === null) {
-            $this->scope = $definition->scope;
-        }
         if ($this->lazy === null) {
             $this->lazy = $definition->lazy;
         }

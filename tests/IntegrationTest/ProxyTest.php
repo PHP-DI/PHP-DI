@@ -34,7 +34,7 @@ class ProxyTest extends BaseContainerTest
      * @test
      * @dataProvider provideContainer
      */
-    public function lazy_singletons_resolve_to_the_same_instance(ContainerBuilder $builder)
+    public function lazy_services_resolve_to_the_same_instance(ContainerBuilder $builder)
     {
         $builder->useAutowiring(false);
         $builder->addDefinitions([
@@ -55,7 +55,7 @@ class ProxyTest extends BaseContainerTest
      * @test
      * @dataProvider provideContainer
      */
-    public function singleton_dependencies_of_proxies_are_resolved_once(ContainerBuilder $builder)
+    public function dependencies_of_proxies_are_resolved_once(ContainerBuilder $builder)
     {
         $builder->useAutowiring(false);
         $builder->addDefinitions([

@@ -5,9 +5,7 @@ namespace DI\Test\UnitTest;
 use DI\ContainerBuilder;
 use DI\Test\IntegrationTest\BaseContainerTest;
 use DI\Test\UnitTest\Fixtures\Class1CircularDependencies;
-use DI\Test\UnitTest\Fixtures\InvalidScope;
 use DI\Test\UnitTest\Fixtures\PassByReferenceDependency;
-use DI\Test\UnitTest\Fixtures\Prototype;
 use DI\Test\UnitTest\Fixtures\Singleton;
 use stdClass;
 
@@ -45,45 +43,12 @@ class ContainerMakeTest extends BaseContainerTest
     }
 
     /**
-     * Checks that the singleton scope is ignored.
      * @dataProvider provideContainer
      */
-    public function testGetWithSingletonScope(ContainerBuilder $builder)
+    public function testMakeAlwaysReturnsNewInstance(ContainerBuilder $builder)
     {
         $container = $builder->build();
-        // Without @Injectable annotation => default is Singleton
-        $instance1 = $container->make('stdClass');
-        $instance2 = $container->make('stdClass');
-        $this->assertNotSame($instance1, $instance2);
-        // With @Injectable(scope="singleton") annotation
-        $instance3 = $container->make(Singleton::class);
-        $instance4 = $container->make(Singleton::class);
-        $this->assertNotSame($instance3, $instance4);
-    }
-
-    /**
-     * @dataProvider provideContainer
-     */
-    public function testMakeWithPrototypeScope(ContainerBuilder $builder)
-    {
-        $container = $builder->build();
-        // With @Injectable(scope="prototype") annotation
-        $instance1 = $container->make(Prototype::class);
-        $instance2 = $container->make(Prototype::class);
-        $this->assertNotSame($instance1, $instance2);
-    }
-
-    /**
-     * @dataProvider provideContainer
-     * @expectedException \DI\Definition\Exception\InvalidDefinition
-     * @expectedExceptionMessage Error while reading @Injectable on DI\Test\UnitTest\Fixtures\InvalidScope: Value 'foobar' is not a valid scope
-     * @coversNothing
-     */
-    public function testMakeWithInvalidScope(ContainerBuilder $builder)
-    {
-        $builder->useAnnotations(true);
-        $container = $builder->build();
-        $container->make(InvalidScope::class);
+        $this->assertNotSame($container->make('stdClass'), $container->make('stdClass'));
     }
 
     /**
@@ -93,8 +58,8 @@ class ContainerMakeTest extends BaseContainerTest
     public function testCircularDependencies(ContainerBuilder $builder)
     {
         $container = $builder->build();
-        $container->make(Prototype::class);
-        $container->make(Prototype::class);
+        $container->make(Singleton::class);
+        $container->make(Singleton::class);
     }
 
     /**

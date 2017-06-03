@@ -34,10 +34,10 @@ use Psr\Container\ContainerInterface;
 class Container implements ContainerInterface, FactoryInterface, \DI\InvokerInterface
 {
     /**
-     * Map of entries with Singleton scope that are already resolved.
+     * Map of entries that are already resolved.
      * @var array
      */
-    protected $singletonEntries = [];
+    protected $resolvedEntries = [];
 
     /**
      * @var DefinitionSource
@@ -94,10 +94,10 @@ class Container implements ContainerInterface, FactoryInterface, \DI\InvokerInte
         $this->definitionResolver = new ResolverDispatcher($this->delegateContainer, $this->proxyFactory);
 
         // Auto-register the container
-        $this->singletonEntries[self::class] = $this;
-        $this->singletonEntries[FactoryInterface::class] = $this;
-        $this->singletonEntries[InvokerInterface::class] = $this;
-        $this->singletonEntries[ContainerInterface::class] = $this;
+        $this->resolvedEntries[self::class] = $this;
+        $this->resolvedEntries[FactoryInterface::class] = $this;
+        $this->resolvedEntries[InvokerInterface::class] = $this;
+        $this->resolvedEntries[ContainerInterface::class] = $this;
     }
 
     /**
@@ -112,9 +112,9 @@ class Container implements ContainerInterface, FactoryInterface, \DI\InvokerInte
      */
     public function get($name)
     {
-        // Try to find the entry in the singleton map
-        if (isset($this->singletonEntries[$name]) || array_key_exists($name, $this->singletonEntries)) {
-            return $this->singletonEntries[$name];
+        // If the entry is already resolved we return it
+        if (isset($this->resolvedEntries[$name]) || array_key_exists($name, $this->resolvedEntries)) {
+            return $this->resolvedEntries[$name];
         }
 
         $definition = $this->definitionSource->getDefinition($name);
@@ -124,10 +124,7 @@ class Container implements ContainerInterface, FactoryInterface, \DI\InvokerInte
 
         $value = $this->resolveDefinition($definition);
 
-        // If the entry is singleton, we store it to always return it without recomputing it
-        if ($definition->getScope() === Scope::SINGLETON) {
-            $this->singletonEntries[$name] = $value;
-        }
+        $this->resolvedEntries[$name] = $value;
 
         return $value;
     }
@@ -135,9 +132,8 @@ class Container implements ContainerInterface, FactoryInterface, \DI\InvokerInte
     /**
      * Build an entry of the container by its name.
      *
-     * This method behave like get() except it forces the scope to "prototype",
-     * which means the definition of the entry will be re-evaluated each time.
-     * For example, if the entry is a class, then a new instance will be created each time.
+     * This method behave like get() except resolves the entry again every time.
+     * For example if the entry is a class then a new instance will be created each time.
      *
      * This method makes the container behave like a factory.
      *
@@ -162,9 +158,9 @@ class Container implements ContainerInterface, FactoryInterface, \DI\InvokerInte
 
         $definition = $this->definitionSource->getDefinition($name);
         if (! $definition) {
-            // Try to find the entry in the singleton map
-            if (array_key_exists($name, $this->singletonEntries)) {
-                return $this->singletonEntries[$name];
+            // If the entry is already resolved we return it
+            if (array_key_exists($name, $this->resolvedEntries)) {
+                return $this->resolvedEntries[$name];
             }
 
             throw new NotFoundException("No entry or class found for '$name'");
@@ -190,7 +186,7 @@ class Container implements ContainerInterface, FactoryInterface, \DI\InvokerInte
             ));
         }
 
-        if (array_key_exists($name, $this->singletonEntries)) {
+        if (array_key_exists($name, $this->resolvedEntries)) {
             return true;
         }
 
@@ -258,7 +254,7 @@ class Container implements ContainerInterface, FactoryInterface, \DI\InvokerInte
         if ($value instanceof Definition) {
             $this->setDefinition($name, $value);
         } else {
-            $this->singletonEntries[$name] = $value;
+            $this->resolvedEntries[$name] = $value;
         }
     }
 
@@ -301,8 +297,8 @@ class Container implements ContainerInterface, FactoryInterface, \DI\InvokerInte
         }
 
         // Clear existing entry if it exists
-        if (array_key_exists($name, $this->singletonEntries)) {
-            unset($this->singletonEntries[$name]);
+        if (array_key_exists($name, $this->resolvedEntries)) {
+            unset($this->resolvedEntries[$name]);
         }
 
         $this->definitionSource->addDefinition($definition);

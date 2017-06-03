@@ -28,11 +28,6 @@ class CreateDefinitionHelper implements DefinitionHelper
     private $lazy;
 
     /**
-     * @var string|null
-     */
-    private $scope;
-
-    /**
      * Array of constructor parameters.
      * @var array
      */
@@ -71,18 +66,6 @@ class CreateDefinitionHelper implements DefinitionHelper
     public function lazy()
     {
         $this->lazy = true;
-
-        return $this;
-    }
-
-    /**
-     * Defines the scope of the entry.
-     *
-     * @return $this
-     */
-    public function scope(string $scope)
-    {
-        $this->scope = $scope;
 
         return $this;
     }
@@ -144,6 +127,9 @@ class CreateDefinitionHelper implements DefinitionHelper
         return $this;
     }
 
+    /**
+     * @return ObjectDefinition
+     */
     public function getDefinition(string $entryName) : Definition
     {
         $class = $this::DEFINITION_CLASS;
@@ -152,9 +138,6 @@ class CreateDefinitionHelper implements DefinitionHelper
 
         if ($this->lazy !== null) {
             $definition->setLazy($this->lazy);
-        }
-        if ($this->scope !== null) {
-            $definition->setScope($this->scope);
         }
 
         if (! empty($this->constructor)) {
