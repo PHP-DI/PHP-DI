@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace DI\Test\IntegrationTest\Issues\Issue72;
 
 use DI\Annotation\Inject;

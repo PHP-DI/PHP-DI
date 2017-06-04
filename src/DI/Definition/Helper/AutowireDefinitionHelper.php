@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace DI\Definition\Helper;
 
 use DI\Definition\AutowireDefinition;
@@ -21,12 +23,12 @@ class AutowireDefinitionHelper extends CreateDefinitionHelper
      * avoid defining all the parameters (letting them being resolved using annotations or autowiring)
      * and only define one.
      *
-     * @param string $parameter Parameter for which the value will be given.
+     * @param string|int $parameter Parameter name of position for which the value will be given.
      * @param mixed $value Value to give to this parameter.
      *
      * @return $this
      */
-    public function constructorParameter(string $parameter, $value)
+    public function constructorParameter($parameter, $value)
     {
         $this->constructor[$parameter] = $value;
 
@@ -45,12 +47,12 @@ class AutowireDefinitionHelper extends CreateDefinitionHelper
      * then this method only overrides the parameter for the *first* call.
      *
      * @param string $method Name of the method to call.
-     * @param string $parameter Name or index of the parameter for which the value will be given.
+     * @param string|int $parameter Parameter name of position for which the value will be given.
      * @param mixed $value Value to give to this parameter.
      *
      * @return $this
      */
-    public function methodParameter(string $method, string $parameter, $value)
+    public function methodParameter(string $method, $parameter, $value)
     {
         // Special case for the constructor
         if ($method === '__construct') {

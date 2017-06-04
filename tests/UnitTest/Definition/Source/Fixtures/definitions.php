@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 return [
     'foo' => 'bar',
     'bim' => DI\create(),
