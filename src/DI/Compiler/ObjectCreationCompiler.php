@@ -12,6 +12,8 @@ use ReflectionParameter;
 use ReflectionProperty;
 
 /**
+ * Compiles an object definition into native PHP code that, when executed, creates the object.
+ *
  * @author Matthieu Napoli <matthieu@mnapoli.fr>
  */
 class ObjectCreationCompiler

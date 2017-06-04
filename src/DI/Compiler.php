@@ -1,5 +1,4 @@
 <?php
-
 declare(strict_types=1);
 
 namespace DI;
@@ -20,6 +19,8 @@ use DI\Definition\ValueDefinition;
 use InvalidArgumentException;
 
 /**
+ * Compiles the container into PHP code much more optimized for performances.
+ *
  * @author Matthieu Napoli <matthieu@mnapoli.fr>
  */
 class Compiler
@@ -64,10 +65,9 @@ class Compiler
         $definitions = $definitionSource->getDefinitions();
 
         foreach ($definitions as $entryName => $definition) {
-            if ($definition instanceof FactoryDefinition) {
-                continue;
-            }
-            if ($definition instanceof ValueDefinition && is_object($definition->getValue())) {
+            // Check that the definition can be compiled
+            $errorMessage = $this->isCompilable($definition);
+            if ($errorMessage !== true) {
                 continue;
             }
             $this->compileDefinition($entryName, $definition);
@@ -132,9 +132,8 @@ PHP;
                 $code = $compiler->compile($definition);
                 $code .= "\n        return \$object;";
                 break;
-            case $definition instanceof DecoratorDefinition:
-                throw new InvalidDefinition('Decorators cannot be nested in another definition');
             default:
+                // This case should not happen (so it cannot be tested)
                 throw new \Exception('Cannot compile definition of type ' . get_class($definition));
         }
 
@@ -149,6 +148,12 @@ PHP;
             $value = $value->getDefinition('');
         }
 
+        // Check that the value can be compiled
+        $errorMessage = $this->isCompilable($value);
+        if ($errorMessage !== true) {
+            throw new InvalidDefinition($errorMessage);
+        }
+
         if ($value instanceof Definition) {
             // Give it an arbitrary unique name
             $subEntryName = uniqid('SubEntry');
@@ -156,10 +161,6 @@ PHP;
             $methodName = $this->compileDefinition($subEntryName, $value);
             // The value is now a method call to that method (which returns the value)
             return "\$this->$methodName()";
-        } elseif (is_object($value)) {
-            throw new \Exception('Cannot compile an object');
-        } elseif (is_resource($value)) {
-            throw new \Exception('Cannot compile a resource');
         }
 
         return var_export($value, true);
@@ -199,5 +200,49 @@ PHP;
         }, $values, $keys);
 
         return $values;
+    }
+
+    /**
+     * @return string|null If null is returned that means that the value is compilable.
+     */
+    private function isCompilable($value)
+    {
+        if ($value instanceof ValueDefinition) {
+            return $this->isCompilable($value->getValue());
+        }
+        if ($value instanceof DecoratorDefinition) {
+            if (empty($value->getName())) {
+                return 'Decorators cannot be nested in another definition';
+            }
+            return 'A decorator definition was found but decorators cannot be compiled';
+        }
+        if ($value instanceof FactoryDefinition) {
+            return 'A factory definition was found but factories cannot be compiled';
+        }
+        // All other definitions are compilable
+        if ($value instanceof Definition) {
+            return true;
+        }
+        if (is_array($value)) {
+            $compilable = true;
+            array_walk_recursive($value, function ($value) use (&$compilable) {
+                // The if avoids unnecessary checks
+                if ($compilable === true) {
+                    $message = $this->isCompilable($value);
+                    if ($message !== true) {
+                        $compilable = $message;
+                    }
+                }
+            });
+            return $compilable;
+        }
+        if (is_object($value)) {
+            return 'An object was found but objects cannot be compiled';
+        }
+        if (is_resource($value)) {
+            return 'A resource was found but resources cannot be compiled';
+        }
+
+        return true;
     }
 }

@@ -4,6 +4,7 @@ namespace DI\Test\IntegrationTest;
 
 use DI\ContainerBuilder;
 use function DI\create;
+use function DI\factory;
 
 /**
  * Tests specific to the compiled container.
@@ -66,6 +67,93 @@ class CompiledContainerTest extends BaseContainerTest
             'foo' => create($class),
         ]);
         $builder->compile(self::generateCompilationFileName());
+        $builder->build();
+    }
+
+    /**
+     * @test
+     * @expectedException \DI\Definition\Exception\InvalidDefinition
+     * @expectedExceptionMessage Entry "stdClass" cannot be compiled: A factory definition was found but factories cannot be compiled
+     */
+    public function factories_nested_in_other_definitions_cannot_be_compiled()
+    {
+        $builder = new ContainerBuilder;
+        $builder->addDefinitions([
+            \stdClass::class => create()
+                ->property('foo', factory(function () {
+                    return 'hello';
+                }))
+        ]);
+        $builder->compile(self::generateCompilationFileName());
+        $builder->build();
+    }
+
+    /**
+     * @test
+     * @expectedException \DI\Definition\Exception\InvalidDefinition
+     * @expectedExceptionMessage Entry "stdClass" cannot be compiled: An object was found but objects cannot be compiled
+     */
+    public function object_nested_in_other_definitions_cannot_be_compiled()
+    {
+        $builder = new ContainerBuilder;
+        $builder->addDefinitions([
+            \stdClass::class => create()
+                ->property('foo', new \stdClass)
+        ]);
+        $builder->compile(self::generateCompilationFileName());
+        $builder->build();
+    }
+
+    /**
+     * @test
+     * @expectedException \DI\DependencyException
+     * @expectedExceptionMessage Error while compiling foo[bar]. An object was found but objects cannot be compiled
+     */
+    public function object_nested_in_arrays_cannot_be_compiled()
+    {
+        $builder = new ContainerBuilder;
+        $builder->addDefinitions([
+            'foo' => [
+                'bar' => [
+                    'baz' => [
+                        new \stdClass,
+                    ],
+                ],
+            ],
+        ]);
+        $builder->compile(self::generateCompilationFileName());
+        $builder->build();
+    }
+
+    /**
+     * @test
+     * @expectedException \DI\Definition\Exception\InvalidDefinition
+     * @expectedExceptionMessage Entry "stdClass" cannot be compiled: An object was found but objects cannot be compiled
+     */
+    public function object_nested_in_array_in_other_definitions_cannot_be_compiled()
+    {
+        $builder = new ContainerBuilder;
+        $builder->addDefinitions([
+            \stdClass::class => create()
+                ->property('foo', [
+                    [
+                        new \stdClass
+                    ],
+                ])
+        ]);
+        $builder->compile(self::generateCompilationFileName());
+        $builder->build();
+    }
+
+    /**
+     * @test
+     * @expectedException \InvalidArgumentException
+     * @expectedExceptionMessage The file in which to compile the container must have a name that is a valid class name: foo-bar is not a valid PHP class name
+     */
+    public function the_compiled_filename_must_be_a_valid_class_name()
+    {
+        $builder = new ContainerBuilder;
+        $builder->compile('/tmp/foo-bar.php');
         $builder->build();
     }
 }
