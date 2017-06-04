@@ -62,6 +62,8 @@ $builder->addDefinitions("config.$environment.php");
 $container = $builder->build();
 ```
 
-## Caches
+## Compilation
 
-If you configure PHP-DI to use a cache, you need to make sure that different environments don't share the same cache. To solve that problem, it is recommended to use a **cache prefix**: read about this in the [Performances](performances.md) documentation.
+If you configure PHP-DI to be compiled you need to compile each environment into a separate file to avoid mixups.
+
+Read the [Performances](performances.md) documentation to learn about compiling the container.

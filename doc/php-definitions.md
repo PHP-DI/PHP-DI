@@ -433,9 +433,9 @@ $container->set('My\Class', \DI\create()
     ->constructor('some raw value')));
 ```
 
-**Using array definitions is however recommended since it allows to cache the definitions.**
+**Using array definitions is however recommended since it allows to [compile the container](performances.md).** All entries configured with `Container::set()` will **not** be compiled.
 
-Be also aware that it isn't possible to add definitions to a container on the fly **when using a cache**:
+Be also aware that it isn't possible to add definitions to a container on the fly **when using a compiled container**:
 
 ```php
 $builder = new ContainerBuilder();
