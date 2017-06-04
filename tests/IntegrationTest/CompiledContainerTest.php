@@ -82,7 +82,7 @@ class CompiledContainerTest extends BaseContainerTest
             \stdClass::class => create()
                 ->property('foo', factory(function () {
                     return 'hello';
-                }))
+                })),
         ]);
         $builder->compile(self::generateCompilationFileName());
         $builder->build();
@@ -98,7 +98,7 @@ class CompiledContainerTest extends BaseContainerTest
         $builder = new ContainerBuilder;
         $builder->addDefinitions([
             \stdClass::class => create()
-                ->property('foo', new \stdClass)
+                ->property('foo', new \stdClass),
         ]);
         $builder->compile(self::generateCompilationFileName());
         $builder->build();
@@ -137,9 +137,9 @@ class CompiledContainerTest extends BaseContainerTest
             \stdClass::class => create()
                 ->property('foo', [
                     [
-                        new \stdClass
+                        new \stdClass,
                     ],
-                ])
+                ]),
         ]);
         $builder->compile(self::generateCompilationFileName());
         $builder->build();

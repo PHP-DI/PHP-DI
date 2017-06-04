@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace DI;
@@ -214,6 +215,7 @@ PHP;
             if (empty($value->getName())) {
                 return 'Decorators cannot be nested in another definition';
             }
+
             return 'A decorator definition was found but decorators cannot be compiled';
         }
         if ($value instanceof FactoryDefinition) {
@@ -234,6 +236,7 @@ PHP;
                     }
                 }
             });
+
             return $compilable;
         }
         if (is_object($value)) {
