@@ -14,6 +14,10 @@ Improvements:
 - [#490](https://github.com/PHP-DI/PHP-DI/issues/490) Support definitions in nested arrays (by [@yuloh](https://github.com/yuloh))
 - [#242](https://github.com/PHP-DI/PHP-DI/issues/242) Error in case a definition is not indexed by a string
 
+Fixes:
+
+- [#343](https://github.com/PHP-DI/PHP-DI/issues/343) Autowiring and Annotations do not work for `object()` inside arrays: it now works with the new `create()` and `autowire()` helpers
+
 BC breaks:
 
 - PHP 7 or greater is required
