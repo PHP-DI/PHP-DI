@@ -1,5 +1,6 @@
 <?php
 
+declare(strict_types=1);
 use DI\Test\PerformanceTest\Get\A;
 use DI\Test\PerformanceTest\Get\B;
 use Psr\Container\ContainerInterface;

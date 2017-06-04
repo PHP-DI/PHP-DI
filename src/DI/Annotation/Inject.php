@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace DI\Annotation;
 
 use DI\Definition\Exception\AnnotationException;

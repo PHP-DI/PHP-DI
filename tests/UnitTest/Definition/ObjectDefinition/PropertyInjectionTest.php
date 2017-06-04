@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace DI\Test\UnitTest\Definition\ObjectDefinition;
 
 use DI\Definition\ObjectDefinition\PropertyInjection;

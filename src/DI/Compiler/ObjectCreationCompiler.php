@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace DI\Compiler;
 
 use DI\Compiler;

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 return [
     'object1'  => \DI\create('DI\Test\PerformanceTest\Get\GetFixture'),
     'object2'  => \DI\create('DI\Test\PerformanceTest\Get\GetFixture'),
