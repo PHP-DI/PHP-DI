@@ -230,20 +230,6 @@ class AutowireDefinitionTest extends BaseContainerTest
         self::assertEquals('bar', $object->bar);
         self::assertTrue($object->isProxyInitialized());
     }
-
-    /**
-     * @dataProvider provideContainer
-     */
-    public function test_autowire_in_array(ContainerBuilder $builder)
-    {
-        $container = $builder->addDefinitions([
-            'foo' => [
-                'bar' => autowire(Class1::class),
-            ],
-        ])->build();
-
-        self::assertInstanceOf(Class1::class, $container->get('foo')['bar']);
-    }
 }
 
 namespace DI\Test\IntegrationTest\Definitions\AutowireDefinitionTest;
@@ -317,4 +303,21 @@ class ConstructorInjection
 
 class LazyService
 {
+}
+
+class AllKindsOfInjections
+{
+    public $property;
+    public $constructorParameter;
+    public $methodParameter;
+
+    public function __construct($constructorParameter)
+    {
+        $this->constructorParameter = $constructorParameter;
+    }
+
+    public function method($methodParameter)
+    {
+        $this->methodParameter = $methodParameter;
+    }
 }

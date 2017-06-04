@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace DI\Definition\Resolver;
 
+use DI\Definition\ArrayDefinition;
+use DI\Definition\Definition;
 use DI\Definition\Exception\InvalidDefinition;
 use DI\Definition\Helper\DefinitionHelper;
 use DI\Definition\ObjectDefinition\MethodInjection;
@@ -70,13 +72,17 @@ class ParameterResolver
             }
 
             if ($value instanceof DefinitionHelper) {
-                $nestedDefinition = $value->getDefinition('');
-
+                $value = $value->getDefinition('');
+            } elseif (is_array($value)) {
+                // Cast arrays into array definitions to allow resolution of nested definitions
+                $value = new ArrayDefinition('', $value);
+            }
+            if ($value instanceof Definition) {
                 // If the container cannot produce the entry, we can use the default parameter value
-                if ($parameter->isOptional() && ! $this->definitionResolver->isResolvable($nestedDefinition)) {
+                if ($parameter->isOptional() && ! $this->definitionResolver->isResolvable($value)) {
                     $value = $this->getParameterDefaultValue($parameter, $method);
                 } else {
-                    $value = $this->definitionResolver->resolve($nestedDefinition);
+                    $value = $this->definitionResolver->resolve($value);
                 }
             }
 

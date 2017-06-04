@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace DI\Definition\Resolver;
 
+use DI\Definition\ArrayDefinition;
 use DI\Definition\Definition;
 use DI\Definition\Exception\InvalidDefinition;
 use DI\Definition\FactoryDefinition;
@@ -115,6 +116,9 @@ class FactoryResolver implements DefinitionResolver
             if ($value instanceof DefinitionHelper) {
                 // As per ObjectCreator::injectProperty, use '' for an anonymous sub-definition
                 $value = $value->getDefinition('');
+            } elseif (is_array($value)) {
+                // Cast arrays into array definitions to allow resolution of nested definitions
+                $value = new ArrayDefinition('', $value);
             }
             if (!$value instanceof Definition) {
                 $resolved[$key] = $value;

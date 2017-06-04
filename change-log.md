@@ -16,6 +16,9 @@ Improvements:
 
 Fixes:
 
+- [#499](https://github.com/PHP-DI/PHP-DI/issues/499) & [#488](https://github.com/PHP-DI/PHP-DI/issues/488) Standardize resolution of nested definitions everywhere.
+    In PHP-DI 5, definitions could be nested in some places (e.g. use a get() in an object definition, etc.). However it did not behave everywhere the same, for example it didn't work for sub-definitions in arrays.
+    Now in PHP-DI 6 all nested definitions will all be recognized and resolved correctly everywhere. Since #494 (compiled container) performance will not be affected so we can implement a more robust behavior.
 - [#343](https://github.com/PHP-DI/PHP-DI/issues/343) Autowiring and Annotations do not work for `object()` inside arrays: it now works with the new `create()` and `autowire()` helpers
 
 BC breaks:

@@ -129,26 +129,6 @@ class CompiledContainerTest extends BaseContainerTest
 
     /**
      * @test
-     * @expectedException \DI\Definition\Exception\InvalidDefinition
-     * @expectedExceptionMessage Entry "stdClass" cannot be compiled: An object was found but objects cannot be compiled
-     */
-    public function object_nested_in_array_in_other_definitions_cannot_be_compiled()
-    {
-        $builder = new ContainerBuilder;
-        $builder->addDefinitions([
-            \stdClass::class => create()
-                ->property('foo', [
-                    [
-                        new \stdClass,
-                    ],
-                ]),
-        ]);
-        $builder->compile(self::generateCompilationFileName());
-        $builder->build();
-    }
-
-    /**
-     * @test
      * @expectedException \InvalidArgumentException
      * @expectedExceptionMessage The file in which to compile the container must have a name that is a valid class name: foo-bar is not a valid PHP class name
      */

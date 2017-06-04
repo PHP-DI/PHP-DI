@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace DI\Definition\Resolver;
 
+use DI\Definition\ArrayDefinition;
 use DI\Definition\Definition;
 use DI\Definition\Exception\InvalidDefinition;
 use DI\Definition\Helper\DefinitionHelper;
@@ -194,11 +195,14 @@ class ObjectCreator implements DefinitionResolver
         $value = $propertyInjection->getValue();
 
         if ($value instanceof DefinitionHelper) {
-            /** @var Definition $nestedDefinition */
-            $nestedDefinition = $value->getDefinition('');
-
+            $value = $value->getDefinition('');
+        } elseif (is_array($value)) {
+            // Cast arrays into array definitions to allow resolution of nested definitions
+            $value = new ArrayDefinition('', $value);
+        }
+        if ($value instanceof Definition) {
             try {
-                $value = $this->definitionResolver->resolve($nestedDefinition);
+                $value = $this->definitionResolver->resolve($value);
             } catch (DependencyException $e) {
                 throw $e;
             } catch (Exception $e) {
