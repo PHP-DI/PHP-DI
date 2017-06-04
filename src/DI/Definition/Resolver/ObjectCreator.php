@@ -159,14 +159,6 @@ class ObjectCreator implements DefinitionResolver
             ));
         }
 
-        if (! $object) {
-            throw new DependencyException(sprintf(
-                'Entry "%s" cannot be resolved: %s could not be constructed',
-                $definition->getName(),
-                $classReflection->getName()
-            ));
-        }
-
         return $object;
     }
 
