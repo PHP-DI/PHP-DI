@@ -8,6 +8,7 @@ require_once __DIR__ . '/vendor/autoload.php';
 $builder = new ContainerBuilder();
 $builder->useAutowiring(false);
 $builder->useAnnotations(false);
+$builder->compile(__DIR__ . '/tmp/factory.php');
 
 $builder->addDefinitions([
 

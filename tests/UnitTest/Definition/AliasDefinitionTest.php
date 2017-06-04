@@ -3,7 +3,6 @@
 namespace DI\Test\UnitTest\Definition;
 
 use DI\Definition\AliasDefinition;
-use DI\Definition\CacheableDefinition;
 use EasyMock\EasyMock;
 use Psr\Container\ContainerInterface;
 
@@ -32,14 +31,6 @@ class AliasDefinitionTest extends \PHPUnit_Framework_TestCase
         $definition = new AliasDefinition('foo', 'bar');
 
         $this->assertEquals('bar', $definition->getTargetEntryName());
-    }
-
-    /**
-     * @test
-     */
-    public function should_be_cacheable()
-    {
-        $this->assertInstanceOf(CacheableDefinition::class, new AliasDefinition('foo', 'bar'));
     }
 
     /**

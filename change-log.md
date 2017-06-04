@@ -9,6 +9,7 @@ Improvements:
 - [#294](https://github.com/PHP-DI/PHP-DI/issues/294), [#349](https://github.com/PHP-DI/PHP-DI/issues/349), [#449](https://github.com/PHP-DI/PHP-DI/pull/449): `DI\object()` has been replaced by more specific and less ambiguous helpers:
     - `DI\create()` creates an object, overrides autowiring and previous definitions
     - `DI\autowire()` autowires an object and allows to override specific constructor and method parameters
+- [#494](https://github.com/PHP-DI/PHP-DI/pull/494) The container can now be compiled for optimum performances in production
 - The container can now be built without parameters: `new Container()`
 - [#242](https://github.com/PHP-DI/PHP-DI/issues/242) Error in case a definition is not indexed by a string
 - [#376](https://github.com/PHP-DI/PHP-DI/issues/376) [PSR-16](https://github.com/php-fig/simple-cache) support for the cache system (which replaces Doctrine's Cache)

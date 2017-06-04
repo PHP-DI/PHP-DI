@@ -2,7 +2,6 @@
 
 namespace DI\Test\IntegrationTest;
 
-use DI\Container;
 use DI\ContainerBuilder;
 use DI\Test\IntegrationTest\Fixtures\InheritanceTest\BaseClass;
 use DI\Test\IntegrationTest\Fixtures\InheritanceTest\Dependency;
@@ -10,20 +9,56 @@ use DI\Test\IntegrationTest\Fixtures\InheritanceTest\SubClass;
 
 /**
  * Test class for bean injection.
- *
- * @coversNothing
  */
-class InheritanceTest extends \PHPUnit_Framework_TestCase
+class InheritanceTest extends BaseContainerTest
 {
     /**
      * Test a dependency is injected if the injection is defined on a parent class.
      *
-     * @dataProvider containerProvider
+     * @dataProvider provideContainer
      */
-    public function testInjectionSubClass(Container $container)
+    public function test_dependency_is_injected_if_injection_defined_on_parent_class_with_config(ContainerBuilder $builder)
     {
+        $builder->useAutowiring(false);
+        $builder->useAnnotations(false);
+        $builder->addDefinitions([
+            Dependency::class => \DI\create(),
+            BaseClass::class => \DI\create(SubClass::class)
+                ->property('property1', \DI\get(Dependency::class))
+                ->property('property4', \DI\get(Dependency::class))
+                ->constructor(\DI\get(Dependency::class))
+                ->method('setProperty2', \DI\get(Dependency::class)),
+            SubClass::class => \DI\create()
+                ->property('property1', \DI\get(Dependency::class))
+                ->property('property4', \DI\get(Dependency::class))
+                ->constructor(\DI\get(Dependency::class))
+                ->method('setProperty2', \DI\get(Dependency::class)),
+        ]);
+
         /** @var $instance SubClass */
-        $instance = $container->get(SubClass::class);
+        $instance = $builder->build()->get(SubClass::class);
+
+        $this->assertInstanceOf(Dependency::class, $instance->property1);
+        $this->assertInstanceOf(Dependency::class, $instance->property2);
+        $this->assertInstanceOf(Dependency::class, $instance->property3);
+        $this->assertInstanceOf(Dependency::class, $instance->property4);
+    }
+
+    /**
+     * Test a dependency is injected if the injection is defined on a parent class.
+     *
+     * @dataProvider provideContainer
+     */
+    public function test_dependency_is_injected_if_injection_defined_on_parent_class_with_annotations(ContainerBuilder $builder)
+    {
+        $builder->useAutowiring(true);
+        $builder->useAnnotations(true);
+        $builder->addDefinitions([
+            BaseClass::class => \DI\get(SubClass::class),
+        ]);
+
+        /** @var $instance SubClass */
+        $instance = $builder->build()->get(SubClass::class);
 
         $this->assertInstanceOf(Dependency::class, $instance->property1);
         $this->assertInstanceOf(Dependency::class, $instance->property2);
@@ -34,12 +69,28 @@ class InheritanceTest extends \PHPUnit_Framework_TestCase
     /**
      * Test a dependency is injected if the injection is defined on a child class.
      *
-     * @dataProvider containerProvider
+     * @dataProvider provideContainer
      */
-    public function testInjectionBaseClass(Container $container)
+    public function test_dependency_is_injected_if_injection_defined_on_base_class_with_config(ContainerBuilder $builder)
     {
+        $builder->useAutowiring(false);
+        $builder->useAnnotations(false);
+        $builder->addDefinitions([
+            Dependency::class => \DI\create(),
+            BaseClass::class => \DI\create(SubClass::class)
+                ->property('property1', \DI\get(Dependency::class))
+                ->property('property4', \DI\get(Dependency::class))
+                ->constructor(\DI\get(Dependency::class))
+                ->method('setProperty2', \DI\get(Dependency::class)),
+            SubClass::class => \DI\create()
+                ->property('property1', \DI\get(Dependency::class))
+                ->property('property4', \DI\get(Dependency::class))
+                ->constructor(\DI\get(Dependency::class))
+                ->method('setProperty2', \DI\get(Dependency::class)),
+        ]);
+
         /** @var $instance SubClass */
-        $instance = $container->get(BaseClass::class);
+        $instance = $builder->build()->get(BaseClass::class);
 
         $this->assertInstanceOf(Dependency::class, $instance->property1);
         $this->assertInstanceOf(Dependency::class, $instance->property2);
@@ -48,46 +99,24 @@ class InheritanceTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * PHPUnit data provider: generates container configurations for running the same tests
-     * for each configuration possible.
-     * @return array
+     * Test a dependency is injected if the injection is defined on a child class.
+     *
+     * @dataProvider provideContainer
      */
-    public static function containerProvider()
+    public function test_dependency_is_injected_if_injection_defined_on_base_class_with_annotations(ContainerBuilder $builder)
     {
-        // Test with a container using annotations
-        $builder = new ContainerBuilder();
         $builder->useAutowiring(true);
         $builder->useAnnotations(true);
-        $containerAnnotations = $builder->build();
-        $containerAnnotations->set(BaseClass::class, \DI\get(SubClass::class));
+        $builder->addDefinitions([
+            BaseClass::class => \DI\get(SubClass::class),
+        ]);
 
-        // Test with a container using PHP configuration -> entries are different,
-        // definitions shouldn't be shared between 2 different entries se we redefine all properties and methods
-        $builder = new ContainerBuilder();
-        $builder->useAutowiring(false);
-        $builder->useAnnotations(false);
-        $containerPHPDefinitions = $builder->build();
-        $containerPHPDefinitions->set(Dependency::class, \DI\create());
-        $containerPHPDefinitions->set(
-            BaseClass::class,
-            \DI\create(SubClass::class)
-                ->property('property1', \DI\get(Dependency::class))
-                ->property('property4', \DI\get(Dependency::class))
-                ->constructor(\DI\get(Dependency::class))
-                ->method('setProperty2', \DI\get(Dependency::class))
-        );
-        $containerPHPDefinitions->set(
-            SubClass::class,
-            \DI\create()
-                ->property('property1', \DI\get(Dependency::class))
-                ->property('property4', \DI\get(Dependency::class))
-                ->constructor(\DI\get(Dependency::class))
-                ->method('setProperty2', \DI\get(Dependency::class))
-        );
+        /** @var $instance SubClass */
+        $instance = $builder->build()->get(BaseClass::class);
 
-        return [
-            'annotation' => [$containerAnnotations],
-            'php'        => [$containerPHPDefinitions],
-        ];
+        $this->assertInstanceOf(Dependency::class, $instance->property1);
+        $this->assertInstanceOf(Dependency::class, $instance->property2);
+        $this->assertInstanceOf(Dependency::class, $instance->property3);
+        $this->assertInstanceOf(Dependency::class, $instance->property4);
     }
 }

@@ -2,7 +2,6 @@
 
 namespace DI\Test\UnitTest\Definition\ObjectDefinition;
 
-use DI\Definition\CacheableDefinition;
 use DI\Definition\ObjectDefinition\MethodInjection;
 
 /**
@@ -50,11 +49,6 @@ class MethodInjectionTest extends \PHPUnit_Framework_TestCase
         $definition1->merge($definition2);
 
         $this->assertEquals([null], $definition1->getParameters());
-    }
-
-    public function testNotCacheable()
-    {
-        $this->assertNotInstanceOf(CacheableDefinition::class, new MethodInjection('foo'));
     }
 
     public function testEmptyParameters()

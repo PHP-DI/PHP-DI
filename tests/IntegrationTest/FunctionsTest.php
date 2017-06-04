@@ -2,9 +2,6 @@
 
 namespace DI\Test\IntegrationTest;
 
-/**
- * @coversNothing
- */
 class FunctionsTest extends \PHPUnit_Framework_TestCase
 {
     /**

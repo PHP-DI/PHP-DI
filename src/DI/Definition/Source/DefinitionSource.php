@@ -19,4 +19,9 @@ interface DefinitionSource
      * @return Definition|null
      */
     public function getDefinition(string $name);
+
+    /**
+     * @return Definition[] Definitions indexed by their name.
+     */
+    public function getDefinitions() : array;
 }

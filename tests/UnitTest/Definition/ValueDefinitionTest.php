@@ -2,7 +2,6 @@
 
 namespace DI\Test\UnitTest\Definition;
 
-use DI\Definition\CacheableDefinition;
 use DI\Definition\ValueDefinition;
 use EasyMock\EasyMock;
 use Psr\Container\ContainerInterface;
@@ -20,14 +19,6 @@ class ValueDefinitionTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals('foo', $definition->getName());
         $this->assertEquals(1, $definition->getValue());
-    }
-
-    /**
-     * @test
-     */
-    public function should_not_be_cacheable()
-    {
-        $this->assertNotInstanceOf(CacheableDefinition::class, new ValueDefinition('foo', 'bar'));
     }
 
     /**

@@ -3,6 +3,7 @@
 namespace DI\Test\UnitTest;
 
 use DI\ContainerBuilder;
+use DI\Test\IntegrationTest\BaseContainerTest;
 use DI\Test\UnitTest\Fixtures\Class1CircularDependencies;
 use DI\Test\UnitTest\Fixtures\PassByReferenceDependency;
 use DI\Test\UnitTest\Fixtures\Singleton;
@@ -10,101 +11,111 @@ use stdClass;
 
 /**
  * Test class for Container.
- *
- * @covers \DI\Container
  */
-class ContainerMakeTest extends \PHPUnit_Framework_TestCase
+class ContainerMakeTest extends BaseContainerTest
 {
-    public function testSetMake()
+    /**
+     * @dataProvider provideContainer
+     */
+    public function testSetMake(ContainerBuilder $builder)
     {
-        $container = ContainerBuilder::buildDevContainer();
+        $container = $builder->build();
         $dummy = new stdClass();
         $container->set('key', $dummy);
         $this->assertSame($dummy, $container->make('key'));
     }
 
     /**
+     * @dataProvider provideContainer
      * @expectedException \DI\NotFoundException
      */
-    public function testMakeNotFound()
+    public function testMakeNotFound(ContainerBuilder $builder)
     {
-        $container = ContainerBuilder::buildDevContainer();
-        $container->make('key');
+        $builder->build()->make('key');
     }
 
-    public function testMakeWithClassName()
+    /**
+     * @dataProvider provideContainer
+     */
+    public function testMakeWithClassName(ContainerBuilder $builder)
     {
-        $container = ContainerBuilder::buildDevContainer();
-        $this->assertInstanceOf('stdClass', $container->make('stdClass'));
+        $this->assertInstanceOf('stdClass', $builder->build()->make('stdClass'));
     }
 
-    public function testMakeAlwaysReturnsNewInstance()
+    /**
+     * @dataProvider provideContainer
+     */
+    public function testMakeAlwaysReturnsNewInstance(ContainerBuilder $builder)
     {
-        $container = ContainerBuilder::buildDevContainer();
+        $container = $builder->build();
         $this->assertNotSame($container->make('stdClass'), $container->make('stdClass'));
     }
 
     /**
      * Tests if instantiation unlock works. We should be able to create two instances of the same class.
+     * @dataProvider provideContainer
      */
-    public function testCircularDependencies()
+    public function testCircularDependencies(ContainerBuilder $builder)
     {
-        $container = ContainerBuilder::buildDevContainer();
+        $container = $builder->build();
         $container->make(Singleton::class);
         $container->make(Singleton::class);
     }
 
     /**
+     * @dataProvider provideContainer
      * @expectedException \DI\DependencyException
      * @expectedExceptionMessage Circular dependency detected while trying to resolve entry 'DI\Test\UnitTest\Fixtures\Class1CircularDependencies'
      */
-    public function testCircularDependencyException()
+    public function testCircularDependencyException(ContainerBuilder $builder)
     {
-        $builder = new ContainerBuilder();
         $builder->useAnnotations(true);
         $container = $builder->build();
         $container->make(Class1CircularDependencies::class);
     }
 
     /**
+     * @dataProvider provideContainer
      * @expectedException \DI\DependencyException
      * @expectedExceptionMessage Circular dependency detected while trying to resolve entry 'foo'
      */
-    public function testCircularDependencyExceptionWithAlias()
+    public function testCircularDependencyExceptionWithAlias(ContainerBuilder $builder)
     {
-        $container = ContainerBuilder::buildDevContainer();
-        // Alias to itself -> infinite recursive loop
-        $container->set('foo', \DI\get('foo'));
+        $builder->addDefinitions([
+            // Alias to itself -> infinite recursive loop
+            'foo' => \DI\get('foo'),
+        ]);
+        $container = $builder->build();
         $container->make('foo');
     }
 
     /**
+     * @dataProvider provideContainer
      * @expectedException \InvalidArgumentException
      * @expectedExceptionMessage The name parameter must be of type string
      */
-    public function testNonStringParameter()
+    public function testNonStringParameter(ContainerBuilder $builder)
     {
-        $container = ContainerBuilder::buildDevContainer();
-        $container->make(new stdClass());
+        $builder->build()->make(new stdClass);
     }
 
     /**
      * Tests a dependency can be made when a dependency is passed by reference.
+     * @dataProvider provideContainer
      */
-    public function testPassByReferenceParameter()
+    public function testPassByReferenceParameter(ContainerBuilder $builder)
     {
-        $container = ContainerBuilder::buildDevContainer();
-        $container->make(PassByReferenceDependency::class);
+        $builder->build()->make(PassByReferenceDependency::class);
     }
 
     /**
      * Tests the parameter can be provided by reference.
+     * @dataProvider provideContainer
      */
-    public function testProvidedPassByReferenceParameter()
+    public function testProvidedPassByReferenceParameter(ContainerBuilder $builder)
     {
         $object = new stdClass();
-        $container = ContainerBuilder::buildDevContainer();
-        $container->make(PassByReferenceDependency::class, [
+        $builder->build()->make(PassByReferenceDependency::class, [
             'object' => &$object,
         ]);
         $this->assertEquals('bar', $object->foo);

@@ -10,7 +10,7 @@ use DI\Definition\Helper\DefinitionHelper;
  *
  * @author James Harris <james.harris@icecave.com.au>
  */
-class EnvironmentVariableDefinition implements CacheableDefinition
+class EnvironmentVariableDefinition implements Definition
 {
     /**
      * Entry name.

@@ -12,7 +12,7 @@ use ReflectionClass;
  *
  * @author Matthieu Napoli <matthieu@mnapoli.fr>
  */
-class ObjectDefinition implements Definition, CacheableDefinition
+class ObjectDefinition implements Definition
 {
     /**
      * Entry name (most of the time, same as $classname).

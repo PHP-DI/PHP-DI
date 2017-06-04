@@ -2,7 +2,6 @@
 
 namespace DI\Test\UnitTest\Definition;
 
-use DI\Definition\CacheableDefinition;
 use DI\Definition\DecoratorDefinition;
 use DI\Definition\HasSubDefinition;
 use DI\Definition\ValueDefinition;
@@ -32,16 +31,6 @@ class DecoratorDefinitionTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals('foo', $definition->getName());
         $this->assertEquals($callable, $definition->getCallable());
-    }
-
-    /**
-     * @test
-     */
-    public function should_not_be_cacheable()
-    {
-        $definition = new DecoratorDefinition('foo', function () {
-        });
-        $this->assertNotInstanceOf(CacheableDefinition::class, $definition);
     }
 
     /**

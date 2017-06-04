@@ -9,7 +9,7 @@ use Psr\Container\ContainerInterface;
  *
  * @author Matthieu Napoli <matthieu@mnapoli.fr>
  */
-class AliasDefinition implements CacheableDefinition, SelfResolvingDefinition
+class AliasDefinition implements Definition, SelfResolvingDefinition
 {
     /**
      * Entry name.

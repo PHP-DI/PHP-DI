@@ -122,6 +122,19 @@ class DefinitionArray implements DefinitionSource, MutableDefinitionSource
         return null;
     }
 
+    public function getDefinitions() : array
+    {
+        // Return all definitions except wildcard definitions
+        $definitions = [];
+        foreach ($this->definitions as $key => $definition) {
+            if (strpos($key, self::WILDCARD) === false) {
+                $definitions[$key] = $definition;
+            }
+        }
+
+        return $definitions;
+    }
+
     /**
      * @param mixed $definition
      */

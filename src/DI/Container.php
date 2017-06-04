@@ -9,7 +9,6 @@ use DI\Definition\InstanceDefinition;
 use DI\Definition\ObjectDefinition;
 use DI\Definition\Resolver\DefinitionResolver;
 use DI\Definition\Resolver\ResolverDispatcher;
-use DI\Definition\Source\CachedDefinitionSource;
 use DI\Definition\Source\DefinitionArray;
 use DI\Definition\Source\DefinitionSource;
 use DI\Definition\Source\MutableDefinitionSource;
@@ -38,7 +37,7 @@ class Container implements ContainerInterface, FactoryInterface, \DI\InvokerInte
      * Map of entries that are already resolved.
      * @var array
      */
-    private $resolvedEntries = [];
+    protected $resolvedEntries = [];
 
     /**
      * @var DefinitionSource
@@ -54,7 +53,7 @@ class Container implements ContainerInterface, FactoryInterface, \DI\InvokerInte
      * Array of entries being resolved. Used to avoid circular dependencies and infinite loops.
      * @var array
      */
-    private $entriesBeingResolved = [];
+    protected $entriesBeingResolved = [];
 
     /**
      * @var \Invoker\InvokerInterface|null
@@ -66,7 +65,12 @@ class Container implements ContainerInterface, FactoryInterface, \DI\InvokerInte
      *
      * @var ContainerInterface
      */
-    private $wrapperContainer;
+    protected $delegateContainer;
+
+    /**
+     * @var ProxyFactory
+     */
+    protected $proxyFactory;
 
     /**
      * Use `$container = new Container()` if you want a container with the default configuration.
@@ -83,11 +87,11 @@ class Container implements ContainerInterface, FactoryInterface, \DI\InvokerInte
         ProxyFactory $proxyFactory = null,
         ContainerInterface $wrapperContainer = null
     ) {
-        $this->wrapperContainer = $wrapperContainer ?: $this;
+        $this->delegateContainer = $wrapperContainer ?: $this;
 
         $this->definitionSource = $definitionSource ?: $this->createDefaultDefinitionSource();
-        $proxyFactory = $proxyFactory ?: new ProxyFactory(false);
-        $this->definitionResolver = new ResolverDispatcher($this->wrapperContainer, $proxyFactory);
+        $this->proxyFactory = $proxyFactory ?: new ProxyFactory(false);
+        $this->definitionResolver = new ResolverDispatcher($this->delegateContainer, $this->proxyFactory);
 
         // Auto-register the container
         $this->resolvedEntries[self::class] = $this;
@@ -285,12 +289,8 @@ class Container implements ContainerInterface, FactoryInterface, \DI\InvokerInte
         return $value;
     }
 
-    private function setDefinition(string $name, Definition $definition)
+    protected function setDefinition(string $name, Definition $definition)
     {
-        if ($this->definitionSource instanceof CachedDefinitionSource) {
-            throw new \LogicException('You cannot set a definition at runtime on a container that has a cache configured. Doing so would risk caching the definition for the next execution, where it might be different. You can either put your definitions in a file, remove the cache or ->set() a raw value directly (PHP object, string, int, ...) instead of a PHP-DI definition.');
-        }
-
         if (! $this->definitionSource instanceof MutableDefinitionSource) {
             // This can happen if you instantiate the container yourself
             throw new \LogicException('The container has not been initialized correctly');
@@ -312,7 +312,7 @@ class Container implements ContainerInterface, FactoryInterface, \DI\InvokerInte
                 new NumericArrayResolver,
                 new AssociativeArrayResolver,
                 new DefaultValueResolver,
-                new TypeHintContainerResolver($this->wrapperContainer),
+                new TypeHintContainerResolver($this->delegateContainer),
             ]);
 
             $this->invoker = new Invoker($parameterResolver, $this);
