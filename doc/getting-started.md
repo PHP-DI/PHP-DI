@@ -18,7 +18,7 @@ Install PHP-DI with [Composer](http://getcomposer.org/doc/00-intro.md):
 composer require php-di/php-di
 ```
 
-PHP-DI requires PHP 5.5 or above.
+PHP-DI requires PHP 7.0 or above.
 
 ## Basic usage
 
