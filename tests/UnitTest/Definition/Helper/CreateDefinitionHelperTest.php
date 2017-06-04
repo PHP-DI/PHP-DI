@@ -3,7 +3,6 @@
 namespace DI\Test\UnitTest\Definition\Helper;
 
 use DI\Definition\Helper\CreateDefinitionHelper;
-use DI\Scope;
 
 /**
  * @covers \DI\Definition\Helper\CreateDefinitionHelper
@@ -20,7 +19,6 @@ class CreateDefinitionHelperTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals('foo', $definition->getName());
         $this->assertEquals('foo', $definition->getClassName());
-        $this->assertEquals(Scope::SINGLETON, $definition->getScope());
         $this->assertNull($definition->getConstructorInjection());
         $this->assertEmpty($definition->getPropertyInjections());
         $this->assertEmpty($definition->getMethodInjections());
@@ -36,18 +34,6 @@ class CreateDefinitionHelperTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals('foo', $definition->getName());
         $this->assertEquals('bar', $definition->getClassName());
-    }
-
-    /**
-     * @test
-     */
-    public function allows_to_define_the_scope()
-    {
-        $helper = new CreateDefinitionHelper();
-        $helper->scope(Scope::PROTOTYPE);
-        $definition = $helper->getDefinition('foo');
-
-        $this->assertEquals(Scope::PROTOTYPE, $definition->getScope());
     }
 
     /**

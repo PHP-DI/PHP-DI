@@ -2,9 +2,7 @@
 
 namespace DI\Test\UnitTest\Definition;
 
-use DI\Definition\CacheableDefinition;
 use DI\Definition\FactoryDefinition;
-use DI\Scope;
 
 /**
  * @covers \DI\Definition\FactoryDefinition
@@ -19,8 +17,6 @@ class FactoryDefinitionTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals('foo', $definition->getName());
         $this->assertEquals($callable, $definition->getCallable());
-        // Default scope
-        $this->assertEquals(Scope::SINGLETON, $definition->getScope());
         // Default parameters
         $this->assertEquals([], $definition->getParameters());
     }
@@ -40,27 +36,6 @@ class FactoryDefinitionTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function can_have_a_custom_scope()
-    {
-        $definition = new FactoryDefinition('foo', function () {
-        }, Scope::PROTOTYPE);
-
-        $this->assertEquals(Scope::PROTOTYPE, $definition->getScope());
-    }
-
-    /**
-     * @test
-     */
-    public function should_not_be_cacheable()
-    {
-        $definition = new FactoryDefinition('foo', function () {
-        });
-        $this->assertNotInstanceOf(CacheableDefinition::class, $definition);
-    }
-
-    /**
-     * @test
-     */
     public function should_cast_to_string()
     {
         $this->assertEquals('Factory', new FactoryDefinition('', 'bar'));
@@ -73,7 +48,7 @@ class FactoryDefinitionTest extends \PHPUnit_Framework_TestCase
     {
         $parameters = ['flag' => true];
         $definition = new FactoryDefinition('foo', function () {
-        }, null, $parameters);
+        }, $parameters);
 
         $this->assertEquals($parameters, $definition->getParameters());
     }

@@ -197,10 +197,6 @@ class ObjectCreator implements DefinitionResolver
     {
         $propertyName = $propertyInjection->getPropertyName();
 
-        $className = $propertyInjection->getClassName();
-        $className = $className ?: get_class($object);
-        $property = new ReflectionProperty($className, $propertyName);
-
         $value = $propertyInjection->getValue();
 
         if ($value instanceof DefinitionHelper) {
@@ -221,9 +217,17 @@ class ObjectCreator implements DefinitionResolver
             }
         }
 
+        self::setPrivatePropertyValue($propertyInjection->getClassName(), $object, $propertyName, $value);
+    }
+
+    public static function setPrivatePropertyValue(string $className = null, $object, string $propertyName, $propertyValue)
+    {
+        $className = $className ?: get_class($object);
+
+        $property = new ReflectionProperty($className, $propertyName);
         if (! $property->isPublic()) {
             $property->setAccessible(true);
         }
-        $property->setValue($object, $value);
+        $property->setValue($object, $propertyValue);
     }
 }

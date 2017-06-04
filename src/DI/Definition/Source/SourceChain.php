@@ -62,6 +62,21 @@ class SourceChain implements DefinitionSource, MutableDefinitionSource
         return null;
     }
 
+    public function getDefinitions() : array
+    {
+        $names = [];
+        foreach ($this->sources as $source) {
+            $names = array_merge($names, $source->getDefinitions());
+        }
+        $names = array_keys($names);
+
+        $definitions = array_combine($names, array_map(function (string $name) {
+            return $this->getDefinition($name);
+        }, $names));
+
+        return $definitions;
+    }
+
     public function addDefinition(Definition $definition)
     {
         if (! $this->mutableSource) {

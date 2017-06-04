@@ -9,7 +9,6 @@ use DI\Definition\InstanceDefinition;
 use DI\Definition\ObjectDefinition;
 use DI\Definition\Resolver\DefinitionResolver;
 use DI\Definition\Resolver\ResolverDispatcher;
-use DI\Definition\Source\CachedDefinitionSource;
 use DI\Definition\Source\DefinitionArray;
 use DI\Definition\Source\DefinitionSource;
 use DI\Definition\Source\MutableDefinitionSource;
@@ -35,10 +34,10 @@ use Psr\Container\ContainerInterface;
 class Container implements ContainerInterface, FactoryInterface, \DI\InvokerInterface
 {
     /**
-     * Map of entries with Singleton scope that are already resolved.
+     * Map of entries that are already resolved.
      * @var array
      */
-    private $singletonEntries = [];
+    protected $resolvedEntries = [];
 
     /**
      * @var DefinitionSource
@@ -54,7 +53,7 @@ class Container implements ContainerInterface, FactoryInterface, \DI\InvokerInte
      * Array of entries being resolved. Used to avoid circular dependencies and infinite loops.
      * @var array
      */
-    private $entriesBeingResolved = [];
+    protected $entriesBeingResolved = [];
 
     /**
      * @var \Invoker\InvokerInterface|null
@@ -66,7 +65,12 @@ class Container implements ContainerInterface, FactoryInterface, \DI\InvokerInte
      *
      * @var ContainerInterface
      */
-    private $wrapperContainer;
+    protected $delegateContainer;
+
+    /**
+     * @var ProxyFactory
+     */
+    protected $proxyFactory;
 
     /**
      * Use `$container = new Container()` if you want a container with the default configuration.
@@ -83,17 +87,17 @@ class Container implements ContainerInterface, FactoryInterface, \DI\InvokerInte
         ProxyFactory $proxyFactory = null,
         ContainerInterface $wrapperContainer = null
     ) {
-        $this->wrapperContainer = $wrapperContainer ?: $this;
+        $this->delegateContainer = $wrapperContainer ?: $this;
 
         $this->definitionSource = $definitionSource ?: $this->createDefaultDefinitionSource();
-        $proxyFactory = $proxyFactory ?: new ProxyFactory(false);
-        $this->definitionResolver = new ResolverDispatcher($this->wrapperContainer, $proxyFactory);
+        $this->proxyFactory = $proxyFactory ?: new ProxyFactory(false);
+        $this->definitionResolver = new ResolverDispatcher($this->delegateContainer, $this->proxyFactory);
 
         // Auto-register the container
-        $this->singletonEntries[self::class] = $this;
-        $this->singletonEntries[FactoryInterface::class] = $this;
-        $this->singletonEntries[InvokerInterface::class] = $this;
-        $this->singletonEntries[ContainerInterface::class] = $this;
+        $this->resolvedEntries[self::class] = $this;
+        $this->resolvedEntries[FactoryInterface::class] = $this;
+        $this->resolvedEntries[InvokerInterface::class] = $this;
+        $this->resolvedEntries[ContainerInterface::class] = $this;
     }
 
     /**
@@ -108,9 +112,9 @@ class Container implements ContainerInterface, FactoryInterface, \DI\InvokerInte
      */
     public function get($name)
     {
-        // Try to find the entry in the singleton map
-        if (isset($this->singletonEntries[$name]) || array_key_exists($name, $this->singletonEntries)) {
-            return $this->singletonEntries[$name];
+        // If the entry is already resolved we return it
+        if (isset($this->resolvedEntries[$name]) || array_key_exists($name, $this->resolvedEntries)) {
+            return $this->resolvedEntries[$name];
         }
 
         $definition = $this->definitionSource->getDefinition($name);
@@ -120,10 +124,7 @@ class Container implements ContainerInterface, FactoryInterface, \DI\InvokerInte
 
         $value = $this->resolveDefinition($definition);
 
-        // If the entry is singleton, we store it to always return it without recomputing it
-        if ($definition->getScope() === Scope::SINGLETON) {
-            $this->singletonEntries[$name] = $value;
-        }
+        $this->resolvedEntries[$name] = $value;
 
         return $value;
     }
@@ -131,9 +132,8 @@ class Container implements ContainerInterface, FactoryInterface, \DI\InvokerInte
     /**
      * Build an entry of the container by its name.
      *
-     * This method behave like get() except it forces the scope to "prototype",
-     * which means the definition of the entry will be re-evaluated each time.
-     * For example, if the entry is a class, then a new instance will be created each time.
+     * This method behave like get() except resolves the entry again every time.
+     * For example if the entry is a class then a new instance will be created each time.
      *
      * This method makes the container behave like a factory.
      *
@@ -158,9 +158,9 @@ class Container implements ContainerInterface, FactoryInterface, \DI\InvokerInte
 
         $definition = $this->definitionSource->getDefinition($name);
         if (! $definition) {
-            // Try to find the entry in the singleton map
-            if (array_key_exists($name, $this->singletonEntries)) {
-                return $this->singletonEntries[$name];
+            // If the entry is already resolved we return it
+            if (array_key_exists($name, $this->resolvedEntries)) {
+                return $this->resolvedEntries[$name];
             }
 
             throw new NotFoundException("No entry or class found for '$name'");
@@ -186,7 +186,7 @@ class Container implements ContainerInterface, FactoryInterface, \DI\InvokerInte
             ));
         }
 
-        if (array_key_exists($name, $this->singletonEntries)) {
+        if (array_key_exists($name, $this->resolvedEntries)) {
             return true;
         }
 
@@ -254,7 +254,7 @@ class Container implements ContainerInterface, FactoryInterface, \DI\InvokerInte
         if ($value instanceof Definition) {
             $this->setDefinition($name, $value);
         } else {
-            $this->singletonEntries[$name] = $value;
+            $this->resolvedEntries[$name] = $value;
         }
     }
 
@@ -289,20 +289,16 @@ class Container implements ContainerInterface, FactoryInterface, \DI\InvokerInte
         return $value;
     }
 
-    private function setDefinition(string $name, Definition $definition)
+    protected function setDefinition(string $name, Definition $definition)
     {
-        if ($this->definitionSource instanceof CachedDefinitionSource) {
-            throw new \LogicException('You cannot set a definition at runtime on a container that has a cache configured. Doing so would risk caching the definition for the next execution, where it might be different. You can either put your definitions in a file, remove the cache or ->set() a raw value directly (PHP object, string, int, ...) instead of a PHP-DI definition.');
-        }
-
         if (! $this->definitionSource instanceof MutableDefinitionSource) {
             // This can happen if you instantiate the container yourself
             throw new \LogicException('The container has not been initialized correctly');
         }
 
         // Clear existing entry if it exists
-        if (array_key_exists($name, $this->singletonEntries)) {
-            unset($this->singletonEntries[$name]);
+        if (array_key_exists($name, $this->resolvedEntries)) {
+            unset($this->resolvedEntries[$name]);
         }
 
         $this->definitionSource->addDefinition($definition);
@@ -316,7 +312,7 @@ class Container implements ContainerInterface, FactoryInterface, \DI\InvokerInte
                 new NumericArrayResolver,
                 new AssociativeArrayResolver,
                 new DefaultValueResolver,
-                new TypeHintContainerResolver($this->wrapperContainer),
+                new TypeHintContainerResolver($this->delegateContainer),
             ]);
 
             $this->invoker = new Invoker($parameterResolver, $this);

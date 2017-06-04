@@ -3,18 +3,19 @@
 namespace DI\Test\IntegrationTest\Definitions;
 
 use DI\ContainerBuilder;
+use DI\Test\IntegrationTest\BaseContainerTest;
 use Psr\Container\ContainerInterface;
 
 /**
  * Test decorator definitions.
- *
- * @coversNothing
  */
-class DecoratorDefinitionTest extends \PHPUnit_Framework_TestCase
+class DecoratorDefinitionTest extends BaseContainerTest
 {
-    public function test_decorate_value()
+    /**
+     * @dataProvider provideContainer
+     */
+    public function test_decorate_value(ContainerBuilder $builder)
     {
-        $builder = new ContainerBuilder();
         $builder->addDefinitions([
             'foo' => 'bar',
         ]);
@@ -28,9 +29,11 @@ class DecoratorDefinitionTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('barbaz', $container->get('foo'));
     }
 
-    public function test_decorate_factory()
+    /**
+     * @dataProvider provideContainer
+     */
+    public function test_decorate_factory(ContainerBuilder $builder)
     {
-        $builder = new ContainerBuilder();
         $builder->addDefinitions([
             'foo' => function () {
                 return 'bar';
@@ -46,9 +49,11 @@ class DecoratorDefinitionTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('barbaz', $container->get('foo'));
     }
 
-    public function test_decorate_object()
+    /**
+     * @dataProvider provideContainer
+     */
+    public function test_decorate_object(ContainerBuilder $builder)
     {
-        $builder = new ContainerBuilder();
         $builder->addDefinitions([
             'foo' => \DI\create('stdClass'),
         ]);
@@ -65,9 +70,11 @@ class DecoratorDefinitionTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('bar', $object->foo);
     }
 
-    public function test_decorator_gets_container()
+    /**
+     * @dataProvider provideContainer
+     */
+    public function test_decorator_gets_container(ContainerBuilder $builder)
     {
-        $builder = new ContainerBuilder();
         $builder->addDefinitions([
             'foo' => 'hello ',
             'bar' => 'world',
@@ -82,9 +89,11 @@ class DecoratorDefinitionTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('hello world', $container->get('foo'));
     }
 
-    public function test_multiple_decorators()
+    /**
+     * @dataProvider provideContainer
+     */
+    public function test_multiple_decorators(ContainerBuilder $builder)
     {
-        $builder = new ContainerBuilder();
         $builder->addDefinitions([
             'foo' => 'bar',
         ]);
@@ -104,12 +113,12 @@ class DecoratorDefinitionTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @dataProvider provideContainer
      * @expectedException \DI\Definition\Exception\InvalidDefinition
      * @expectedExceptionMessage Entry "foo" decorates nothing: no previous definition with the same name was found
      */
-    public function test_decorate_must_have_previous_definition()
+    public function test_decorate_must_have_previous_definition(ContainerBuilder $builder)
     {
-        $builder = new ContainerBuilder();
         $builder->addDefinitions([
             'foo' => \DI\decorate(function ($previous) {
                 return $previous;
@@ -120,12 +129,12 @@ class DecoratorDefinitionTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @dataProvider provideContainer
      * @expectedException \DI\DependencyException
-     * @expectedExceptionMessage Error while resolving foo[0]. Decorators cannot be nested in another definition
+     * @expectedExceptionMessageRegExp /Error while (resolving|compiling) foo\[0\]. Decorators cannot be nested in another definition/
      */
-    public function test_decorator_in_array()
+    public function test_decorator_in_array(ContainerBuilder $builder)
     {
-        $builder = new ContainerBuilder();
         $builder->addDefinitions([
             'foo' => [
                 \DI\decorate(function ($previous) {

@@ -7,6 +7,8 @@ current_menu: annotations
 
 On top of [autowiring](autowiring.md) and [PHP configuration files](php-definitions.md), you can define injections using annotations.
 
+Using annotations do not affect performances when [compiling the container](performances.md).
+
 ## Installation
 
 Annotations **are disabled by default**. To be able to use them, you first need to install the [Doctrine Annotations](http://doctrine-common.readthedocs.org/en/latest/reference/annotations.html) library using Composer:
@@ -108,7 +110,7 @@ The `@Injectable` annotation lets you set options on injectable classes:
 
 ```php
 /**
- * @Injectable(scope="prototype", lazy=true)
+ * @Injectable(lazy=true)
  */
 class Example
 {

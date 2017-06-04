@@ -185,7 +185,6 @@ Entry "foo" cannot be resolved: the class doesn't exist
 Full definition:
 Object (
     class = #UNKNOWN# bar
-    scope = singleton
     lazy = false
 )
 MESSAGE;
@@ -203,7 +202,6 @@ Entry "ArrayAccess" cannot be resolved: the class is not instantiable
 Full definition:
 Object (
     class = #NOT INSTANTIABLE# ArrayAccess
-    scope = singleton
     lazy = false
 )
 MESSAGE;
@@ -221,7 +219,6 @@ Entry "DI\Test\UnitTest\Definition\Resolver\Fixture\FixtureClass" cannot be reso
 Full definition:
 Object (
     class = DI\Test\UnitTest\Definition\Resolver\Fixture\FixtureClass
-    scope = singleton
     lazy = false
 )
 MESSAGE;

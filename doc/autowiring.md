@@ -9,6 +9,8 @@ current_menu: autowiring
 
 In order to achieve that, PHP-DI uses [PHP's reflection](http://php.net/manual/book.reflection.php) to detect what parameters a constructor needs.
 
+Autowiring does not affect performances when [compiling the container](performances.md).
+
 Let's take this example:
 
 ```php
@@ -26,7 +28,7 @@ class UserRegistrationService
 }
 ```
 
-When PHP-DI needs to create the `UserRegistrationService`, it detects that the constructor takes a `UserRepository` object (using the [type hinting](http://www.php.net/manual/en/language.oop5.typehinting.php)).
+When PHP-DI needs to create the `UserRegistrationService`, it detects that the constructor takes a `UserRepository` object (using the [type hinting](http://www.php.net/manual/en/functions.arguments.php#functions.arguments.type-declaration)).
 
 **Without any configuration**, PHP-DI will create a `UserRepository` instance (if it wasn't already created) and pass it as a constructor parameter. The equivalent raw PHP code would be:
 

@@ -2,7 +2,6 @@
 
 namespace DI\Definition;
 
-use DI\Scope;
 use Psr\Container\ContainerInterface;
 
 /**
@@ -10,7 +9,7 @@ use Psr\Container\ContainerInterface;
  *
  * @author Matthieu Napoli <matthieu@mnapoli.fr>
  */
-class AliasDefinition implements CacheableDefinition, SelfResolvingDefinition
+class AliasDefinition implements Definition, SelfResolvingDefinition
 {
     /**
      * Entry name.
@@ -37,11 +36,6 @@ class AliasDefinition implements CacheableDefinition, SelfResolvingDefinition
     public function getName() : string
     {
         return $this->name;
-    }
-
-    public function getScope() : string
-    {
-        return Scope::PROTOTYPE;
     }
 
     public function getTargetEntryName() : string

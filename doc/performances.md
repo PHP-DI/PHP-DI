@@ -5,57 +5,111 @@ current_menu: performances
 
 # Performances
 
-## Cache
+## A note about caching
 
-PHP-DI uses the [definitions](definition.md) you configured to instantiate classes.
+Since PHP-DI 6.0 there is no caching system anymore. Instead the container can be compiled (see below), which allows for even better performances than caching.
 
-Reading those definitions (and, if enabled, reading [autowiring](autowiring.md) or [annotations](annotations.md)) on each request can be avoided by using a cache.
+## Compiling the container
 
-PHP-DI is compatible with all [PSR-16](https://github.com/php-fig/simple-cache) caches (PSR-16 is a standard for PHP cache systems). To choose which library you want to use, you can have a look at [Packagist](https://packagist.org/providers/psr/simple-cache-implementation). You can for example use Symfony's [cache component](https://github.com/symfony/cache) or the [PHP Cache library](http://www.php-cache.com/en/latest/).
+PHP-DI performs two tasks that can be expensive:
+
+- reading definitions from your [configuration](php-definitions.md), from [autowiring](autowiring.md) or from [annotations](annotations.md)
+- resolving those definitions to create your services
+
+In order to avoid those two tasks, the container can be compiled into PHP code optimized especially for your configuration and your classes.
 
 ### Setup
 
-There is no cache system installed by default with PHP-DI, you need to install it with Composer. The examples below use the Symfony cache component.
-
-```
-composer require symfony/cache
-```
-
-You can then pass a cache instance to the container builder:
+Compiling the container is as easy as calling the `compile()` method on the container builder:
 
 ```php
-$cache = new Symfony\Component\Cache\Simple\ApcuCache();
-$containerBuilder->setDefinitionCache($cache);
+$containerBuilder = new \DI\ContainerBuilder();
+$containerBuilder->compile(__DIR__ . '/var/cache/CompiledContainer.php');
+
+// […]
+
+$container = $containerBuilder->build();
 ```
 
-Heads up: do not use a cache in a development environment, else all the changes you make to the definitions (annotations, configuration files, etc.) may not be taken into account. The only cache you may use in development is `DI\Cache\ArrayCache` (which is the only cache implementation provided by PHP-DI) because it doesn't persist data between requests.
+The `compile()` method takes a single argument: the name of a file in which to store the container.
 
-### Cache types
+Please note that the file name will also be the name of the generated PHP class. Because of that the filename you specify must also be a valid class name. For example:
 
-Depending on the cache library you will choose, it will provide adapters to different kind of backends, for example: APCu, Memcache, Redis, Filesystem, etc.
+- `var/cache/CompiledContainer.php`: valid
+- `var/cache/compiled-container.php`: invalid since `compiled-container` is not a valid PHP class name
 
-Here is the list of caches Symfony Cache supports: [supported adapters](http://symfony.com/doc/current/components/cache.html#available-simple-cache-psr-16-classes).
+### Deployment in production
 
-In production environments, **caches based on APCu are recommended**. Given PHP-DI's architecture, there will be a cache request for each container entry you get. Remote caches (like Redis or Memcache) will most certainly have a latency too high for such low level calls and will not be efficient.
+When a container is configured to be compiled, **it will be compiled once and never be regenerated again**. That allows for maximum performances in production.
 
-### Cache prefixes
+When you deploy new versions of your code to production **you must delete the generated file** to ensure that the container is re-compiled.
 
-If you run the same application twice on the same machine, both installs will use the same cache which can cause conflicts.
+If your production handles a lot of traffic you may also want to generate the compiled container *before* the new version of your code goes live. That phase is known as the "warmup" phase. To do this, simply create the container (call `$containerBuilder->build()`) during your deployment step and the compiled container will be created.
 
-Conflicts can also happen if an application runs on different "environments" (e.g. production, development…) on the same machine (see the [environments documentation](environments.md)).
+### Development environment
 
-To avoid this situation, you should use a cache "prefix": each installation of your app has a unique ID, and this ID is used to prefix cache keys
-to avoid collisions.
-
-You can also add your application's version to the cache prefix so that on each new deployment the cache for the old version is discarded.
-
-For example with Symfony Cache:
+**Do not compile the container in a development environment**, else all the changes you make to the definitions (annotations, configuration files, etc.) will not be taken into account. Here is an example of what you can do:
 
 ```php
-$environment = 'prod'; // or 'dev'
-$appVersion = '...';
-$namespace = 'MySuperApplication-' . $environment . '-' . $appVersion;
-
-$cache = new Symfony\Component\Cache\Simple\ApcuCache($namespace);
-$containerBuilder->setDefinitionCache($cache);
+$containerBuilder = new \DI\ContainerBuilder();
+if (/* is production */) {
+    $containerBuilder->compile(__DIR__ . '/var/cache/CompiledContainer.php');
+}
 ```
+
+As a side note, do not confuse "development environment" with your automated tests. You are encouraged to run your automated tests (PHPUnit, Behat, etc.) on a system as close to your production setup (which means with the container compiled).
+
+### Optimizing for compilation
+
+As you can read in the "*How it works*" section, PHP-DI will take all the definitions it can find and compile them. That means that definitions like autowired classes that are not listed in the configuration cannot be compiled since PHP-DI doesn't know about them.
+
+If you want to optimize performances to a maximum in exchange for more verbosity, you can let PHP-DI know about all the autowired classes by listing them in definition files:
+
+```php
+return [
+    // ... (your definitions)
+
+    UserController::class => autowire(),
+    BlogController::class => autowire(),
+    ProductController::class => autowire(),
+    // ...
+];
+```
+
+You do not need to configure them (autowiring will still take care of that) but at least now PHP-DI will know about those classes and will compile their definitions.
+
+Currently PHP-DI does not traverse directories to find autowired or annotated classes automatically. It also does not resolve [wildcard definitions](php-definitions.md#wildcards) when it is compiled.
+
+Please note that the following definitions are not compiled (yet):
+
+- [factory definitions](php-definitions.md#factories)
+- [decorator definitions](php-definitions.md#decoration)
+- [wildcard definitions](php-definitions.md#wildcards)
+
+Those definitions will still work perfectly, they will simply not get a performance boost when using a compiled container.
+
+### How it works
+
+PHP-DI will read definitions from your [configuration](php-definitions.md). When the container is compiled, PHP code will be generated based on those definitions.
+
+For example let's take the definition for creating an object:
+
+```php
+return [
+    'Logger' => DI\create()
+        ->constructor('/tmp/app.log')
+        ->method('setLevel', 'warning'),
+];
+```
+
+This definition will be compiled to PHP code similar to this:
+
+```php
+$object = new Logger('/tmp/app.log');
+$object->setLevel('warning');
+return $object;
+```
+
+All the compiled definitions will be dumped into a PHP class (the compiled container) which will be written to a file (for example `CompiledContainer.php`).
+
+At runtime, the container builder will see that the file `CompiledContainer.php` exists and will load it (instead of loading the definition files). That PHP file may contain a lot of code but PHP's opcode cache will cache that class in memory (remember to use opcache in production). When a definition needs to be resolved, PHP-DI will simply execute the compiled code and return the created instance.

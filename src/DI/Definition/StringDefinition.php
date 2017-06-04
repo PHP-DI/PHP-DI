@@ -3,7 +3,6 @@
 namespace DI\Definition;
 
 use DI\DependencyException;
-use DI\Scope;
 use Psr\Container\ContainerInterface;
 use Psr\Container\NotFoundExceptionInterface;
 
@@ -40,11 +39,6 @@ class StringDefinition implements Definition, SelfResolvingDefinition
         return $this->name;
     }
 
-    public function getScope() : string
-    {
-        return Scope::SINGLETON;
-    }
-
     public function getExpression() : string
     {
         return $this->expression;
@@ -52,25 +46,7 @@ class StringDefinition implements Definition, SelfResolvingDefinition
 
     public function resolve(ContainerInterface $container) : string
     {
-        $expression = $this->expression;
-
-        $result = preg_replace_callback('#\{([^\{\}]+)\}#', function (array $matches) use ($container) {
-            try {
-                return $container->get($matches[1]);
-            } catch (NotFoundExceptionInterface $e) {
-                throw new DependencyException(sprintf(
-                    "Error while parsing string expression for entry '%s': %s",
-                    $this->getName(),
-                    $e->getMessage()
-                ), 0, $e);
-            }
-        }, $expression);
-
-        if ($result === null) {
-            throw new \RuntimeException(sprintf('An unknown error occurred while parsing the string definition: \'%s\'', $expression));
-        }
-
-        return $result;
+        return self::resolveExpression($this->name, $this->expression, $container);
     }
 
     public function isResolvable(ContainerInterface $container) : bool
@@ -81,5 +57,33 @@ class StringDefinition implements Definition, SelfResolvingDefinition
     public function __toString()
     {
         return $this->expression;
+    }
+
+    /**
+     * Resolve a string expression.
+     */
+    public static function resolveExpression(
+        string $entryName,
+        string $expression,
+        ContainerInterface $container
+    ) : string {
+        $callback = function (array $matches) use ($entryName, $container) {
+            try {
+                return $container->get($matches[1]);
+            } catch (NotFoundExceptionInterface $e) {
+                throw new DependencyException(sprintf(
+                    "Error while parsing string expression for entry '%s': %s",
+                    $entryName,
+                    $e->getMessage()
+                ), 0, $e);
+            }
+        };
+
+        $result = preg_replace_callback('#\{([^\{\}]+)\}#', $callback, $expression);
+        if ($result === null) {
+            throw new \RuntimeException(sprintf('An unknown error occurred while parsing the string definition: \'%s\'', $expression));
+        }
+
+        return $result;
     }
 }

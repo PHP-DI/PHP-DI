@@ -5,99 +5,80 @@ current_menu: scopes
 
 # Scopes
 
-By default, PHP-DI will inject **the same instance of an object** everywhere.
+**Scopes have been removed in PHP-DI 6.** Read below for more explanations.
 
-```
-class UserManager
-{
-    public function __construct(Database $db) {
-        // ...
-    }
-}
+Scopes were used to make the container work as a factory: instead of using scopes you should rather inject a proper factory and create the objects you need on demand.
 
-class ArticleManager
-{
-    public function __construct(Database $db) {
-        // ...
-    }
-}
-```
-
-In the example above the same `Database` object will be injected if both `UserManager` and `ArticleManager` are instantiated (or injected).
-
-The same rule apply when getting twice the same entry from the container:
-
-```php
-$object1 = $container->get('Database');
-$object2 = $container->get('Database');
-
-// $object1 === $object2
-```
-
-The reason for this behavior is:
-
-- we sometimes need to ensure that only one instance of a class exist (because for example we want to share the same database connection between classes)
-- more generally there is no reason to create a new instance every time we want to use a class
-
-If injectable classes (aka services) are correctly designed, they should be [**stateless**](https://igor.io/2013/03/31/stateless-services.html). That means that reusing the same instance in several places of the application doesn't have any side effect.
-
-This behavior is however configurable using **scopes**.
-
-## Available scopes
-
-Container entries can have the following scopes:
-
-- **singleton** (applied by default for every container entry)
-
-    The object instance is unique (shared) during the container's lifecycle - each injection by the container or explicit call of `get()` returns the same instance.
-
-    Please note that while this scope is named "singleton", it is not related to [the Singleton design pattern](http://en.wikipedia.org/wiki/Singleton_pattern).
-
-- **prototype**
-
-    The object instance is not unique - each injection or call of the container's `get()` method returns a new instance.
-
-## Configuring the scope
-
-Scopes are part of the [definitions](definition.md) of injections, so you can define them using annotations or PHP configuration.
-
-### PHP configuration
-
-You can specify the scope by using the `scope` method:
+Before:
 
 ```php
 return [
-    // A new object will be created every time it is used
-    'MyClass1' => DI\create()
-        ->scope(Scope::PROTOTYPE),
+    Form::class => create()
+        ->scope(Scope::PROTOTYPE), // a new form is created everytime it is injected
+];
 
-    // The closure will be called every time MyClass2 is used (and return a new object every time)
-    'MyClass2' => DI\factory(function () {
-        return new MyClass2();
+class Service
+{
+    public function __construct(Form $form)
+    {
+        $this->form = $form;
+    }
+}
+```
+
+After:
+
+```php
+return [
+    FormFactory::class => create(),
+];
+
+class Service
+{
+    public function __construct(FormFactory $formFactory)
+    {
+        $this->form = $formFactory->createForm();
+    }
+}
+```
+
+or:
+
+```php
+class Service
+{
+    public function __construct()
+    {
+        $this->form = new Form(/* parameters */);
+    }
+}
+```
+
+or you can also inject the container and use it explicitly as a factory (type-hint against `DI\FactoryInterface` to avoid being coupled to the container):
+
+```php
+class Service
+{
+    public function __construct(\DI\FactoryInterface $factory)
+    {
+        $this->form = $factory->make(Form::class, /* parameters */);
+    }
+}
+```
+
+Scopes also created an illusion that some values could be recalculated on demand. For example you could imagine a factory that returns the current value of an environment variable:
+
+```php
+return [
+    'config' => factory(function () {
+        return getenv('CONFIG_VAR');
     })->scope(Scope::PROTOTYPE),
+    
+    Service1::class => create()
+        ->constructor(get('config')),
+    Service2::class => create()
+        ->constructor(get('config')),
 ];
 ```
 
-Remember singleton is the default scope. The only exception is when aliasing an entry to another:
-
-```php
-return [
-    'Foo' => DI\get('Bar'),
-];
-```
-
-The alias will be cached, instead it will be resolved every time because the target entry (`Bar`) could have the "prototype" scope.
-
-### Annotation
-
-You can specify the scope by using the `@Injectable` annotation on the target class. Remember singleton is the default scope.
-
-```php
-/**
- * @Injectable(scope="prototype")
- */
-class MyService
-{
-    // ...
-}
-```
+Contrary to what one could think, if the `CONFIG_VAR` changes it will not be updated in places were it has already been injected before the change. Scopes are not a solution for values that can change during execution, yet they could be misinterpreted as such a solution.

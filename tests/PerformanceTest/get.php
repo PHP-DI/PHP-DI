@@ -11,6 +11,7 @@ $builder = new ContainerBuilder();
 $builder->useAutowiring(true);
 $builder->useAnnotations(false);
 $builder->addDefinitions(__DIR__ . '/get/config.php');
+$builder->compile(__DIR__ . '/tmp/get.php');
 $container = $builder->build();
 
 $container->get(A::class);

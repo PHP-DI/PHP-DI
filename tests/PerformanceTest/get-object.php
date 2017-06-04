@@ -1,6 +1,5 @@
 <?php
 
-use DI\Cache\ArrayCache;
 use DI\ContainerBuilder;
 
 require_once __DIR__ . '/vendor/autoload.php';
@@ -9,8 +8,8 @@ require_once __DIR__ . '/get-object/GetFixture.php';
 $builder = new ContainerBuilder();
 $builder->useAutowiring(true);
 $builder->useAnnotations(false);
-$builder->setDefinitionCache(new ArrayCache());
 $builder->addDefinitions(__DIR__ . '/get-object/config.php');
+$builder->compile(__DIR__ . '/tmp/getobject.php');
 $container = $builder->build();
 
 $container->get('object1');

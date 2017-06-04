@@ -4,21 +4,22 @@ namespace DI\Test\IntegrationTest\Definitions;
 
 use DI\Annotation\Inject;
 use DI\ContainerBuilder;
+use DI\Test\IntegrationTest\BaseContainerTest;
 use DI\Test\IntegrationTest\Fixtures\Implementation1;
 use DI\Test\IntegrationTest\Fixtures\Interface1;
 
 /**
  * Test definitions using wildcards.
- *
- * @coversNothing
  */
-class WildcardDefinitionsTest extends \PHPUnit_Framework_TestCase
+class WildcardDefinitionsTest extends BaseContainerTest
 {
-    public function test_wildcards()
+    /**
+     * @dataProvider provideContainer
+     */
+    public function test_wildcards(ContainerBuilder $builder)
     {
-        $builder = new ContainerBuilder();
         $builder->addDefinitions([
-            'foo*'                                 => 'bar',
+            'foo*' => 'bar',
             'DI\Test\IntegrationTest\*\Interface*' => \DI\create('DI\Test\IntegrationTest\*\Implementation*'),
         ]);
         $container = $builder->build();
@@ -29,9 +30,11 @@ class WildcardDefinitionsTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf(Implementation1::class, $object);
     }
 
-    public function test_wildcards_as_dependency()
+    /**
+     * @dataProvider provideContainer
+     */
+    public function test_wildcards_as_dependency(ContainerBuilder $builder)
     {
-        $builder = new ContainerBuilder();
         $builder->useAnnotations(true);
         $builder->addDefinitions([
             'DI\Test\IntegrationTest\*\Interface*' => \DI\create('DI\Test\IntegrationTest\*\Implementation*'),

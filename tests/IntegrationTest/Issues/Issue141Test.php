@@ -3,19 +3,20 @@
 namespace DI\Test\IntegrationTest\Issues;
 
 use DI\ContainerBuilder;
+use DI\Test\IntegrationTest\BaseContainerTest;
 
 /**
  * Test that chaining several sources works.
  *
  * @see https://github.com/mnapoli/PHP-DI/issues/141
- *
- * @coversNothing
  */
-class Issue141Test extends \PHPUnit_Framework_TestCase
+class Issue141Test extends BaseContainerTest
 {
-    public function testIssue141()
+    /**
+     * @dataProvider provideContainer
+     */
+    public function testIssue141(ContainerBuilder $builder)
     {
-        $builder = new ContainerBuilder();
         $builder->addDefinitions(__DIR__ . '/Issue141/config1.php');
         $builder->addDefinitions(__DIR__ . '/Issue141/config2.php');
         $container = $builder->build();

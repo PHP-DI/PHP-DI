@@ -3,7 +3,6 @@
 namespace DI\Definition;
 
 use DI\Definition\Helper\DefinitionHelper;
-use DI\Scope;
 
 /**
  * Defines a reference to an environment variable, with fallback to a default
@@ -11,7 +10,7 @@ use DI\Scope;
  *
  * @author James Harris <james.harris@icecave.com.au>
  */
-class EnvironmentVariableDefinition implements CacheableDefinition
+class EnvironmentVariableDefinition implements Definition
 {
     /**
      * Entry name.
@@ -40,11 +39,6 @@ class EnvironmentVariableDefinition implements CacheableDefinition
      * @var mixed
      */
     private $defaultValue;
-
-    /**
-     * @var string|null
-     */
-    private $scope;
 
     /**
      * @param string $name Entry name
@@ -87,16 +81,6 @@ class EnvironmentVariableDefinition implements CacheableDefinition
     public function getDefaultValue()
     {
         return $this->defaultValue;
-    }
-
-    public function setScope(string $scope)
-    {
-        $this->scope = $scope;
-    }
-
-    public function getScope() : string
-    {
-        return $this->scope ?: Scope::SINGLETON;
     }
 
     public function __toString()

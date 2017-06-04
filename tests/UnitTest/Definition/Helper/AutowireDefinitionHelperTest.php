@@ -5,7 +5,6 @@ namespace DI\Test\UnitTest\Definition\Helper;
 use DI\Definition\Exception\InvalidDefinition;
 use DI\Definition\Helper\AutowireDefinitionHelper;
 use DI\Definition\ObjectDefinition\MethodInjection;
-use DI\Scope;
 use DI\Test\UnitTest\Definition\Helper\Fixtures\Class1;
 
 /**
@@ -23,7 +22,6 @@ class AutowireDefinitionHelperTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals('foo', $definition->getName());
         $this->assertEquals('foo', $definition->getClassName());
-        $this->assertEquals(Scope::SINGLETON, $definition->getScope());
         $this->assertNull($definition->getConstructorInjection());
         $this->assertEmpty($definition->getPropertyInjections());
         $this->assertEmpty($definition->getMethodInjections());
@@ -39,18 +37,6 @@ class AutowireDefinitionHelperTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals('foo', $definition->getName());
         $this->assertEquals('bar', $definition->getClassName());
-    }
-
-    /**
-     * @test
-     */
-    public function allows_to_define_the_scope()
-    {
-        $helper = new AutowireDefinitionHelper();
-        $helper->scope(Scope::PROTOTYPE);
-        $definition = $helper->getDefinition('foo');
-
-        $this->assertEquals(Scope::PROTOTYPE, $definition->getScope());
     }
 
     /**

@@ -10,12 +10,17 @@ current_menu: container-configuration
 PHP-DI's container is preconfigured for "plug and play", i.e. development environment. You can start using it simply like so:
 
 ```php
-$container = ContainerBuilder::buildDevContainer();
-// or even simpler
 $container = new Container();
 ```
 
 By default, PHP-DI will have [Autowiring](definition.md) enabled ([annotations](annotations.md) are disabled by default).
+
+To change options on the container you can use the `ContainerBuilder` class:
+
+```php
+$builder = new \DI\ContainerBuilder();
+$container = $builder->build();
+```
 
 ## Production environment
 
@@ -23,13 +28,13 @@ In production environment, you will of course favor speed:
 
 ```php
 $builder = new \DI\ContainerBuilder();
-$builder->setDefinitionCache(/* a cache */);
+$builder->compile('tmp/CompiledContainer.php');
 $builder->writeProxiesToFile(true, 'tmp/proxies');
 
 $container = $builder->build();
 ```
 
-To choose a cache, read [the performances documentation](performances.md).
+Read [the performances documentation](performances.md) to learn more.
 
 ## Lightweight container
 

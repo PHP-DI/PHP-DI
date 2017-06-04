@@ -4,7 +4,6 @@ namespace DI\Test\UnitTest\Definition;
 
 use DI\Definition\InstanceDefinition;
 use DI\Definition\ObjectDefinition;
-use DI\Scope;
 use EasyMock\EasyMock;
 
 /**
@@ -36,16 +35,5 @@ class InstanceDefinitionTest extends \PHPUnit_Framework_TestCase
         $definition = new InstanceDefinition(new \stdClass(), $objectDefinition);
 
         $this->assertSame($objectDefinition, $definition->getObjectDefinition());
-    }
-
-    /**
-     * @test
-     */
-    public function should_have_the_prototype_scope()
-    {
-        $instance = new \stdClass();
-        $definition = new InstanceDefinition($instance, $this->easyMock(ObjectDefinition::class));
-
-        $this->assertEquals(Scope::PROTOTYPE, $definition->getScope());
     }
 }

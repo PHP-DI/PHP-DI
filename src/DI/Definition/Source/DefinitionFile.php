@@ -38,6 +38,13 @@ class DefinitionFile extends DefinitionArray
         return parent::getDefinition($name);
     }
 
+    public function getDefinitions() : array
+    {
+        $this->initialize();
+
+        return parent::getDefinitions();
+    }
+
     /**
      * Lazy-loading of the definitions.
      */

@@ -142,8 +142,8 @@ To quote the Symfony documentation:
 For this reason, PHP-DI integrates with some frameworks so that you don't have to call the container (dependencies are injected in controllers):
 
 - [Symfony](frameworks/symfony2.md)
+- [Slim](frameworks/slim.md)
 - [Silex](frameworks/silex.md)
-- [Zend Framework 1](frameworks/zf1.md)
 - [Zend Framework 2](frameworks/zf2.md)
 - [Silly](frameworks/silly.md)
 

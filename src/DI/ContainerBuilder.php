@@ -3,7 +3,6 @@
 namespace DI;
 
 use DI\Definition\Source\AnnotationBasedAutowiring;
-use DI\Definition\Source\CachedDefinitionSource;
 use DI\Definition\Source\DefinitionArray;
 use DI\Definition\Source\DefinitionFile;
 use DI\Definition\Source\DefinitionSource;
@@ -13,7 +12,6 @@ use DI\Definition\Source\SourceChain;
 use DI\Proxy\ProxyFactory;
 use InvalidArgumentException;
 use Psr\Container\ContainerInterface;
-use Psr\SimpleCache\CacheInterface;
 
 /**
  * Helper to create and configure a Container.
@@ -52,11 +50,6 @@ class ContainerBuilder
     private $ignorePhpDocErrors = false;
 
     /**
-     * @var CacheInterface
-     */
-    private $cache;
-
-    /**
      * If true, write the proxies to disk to improve performances.
      * @var bool
      */
@@ -84,6 +77,11 @@ class ContainerBuilder
      * @var bool
      */
     private $locked = false;
+
+    /**
+     * @var string|null
+     */
+    private $compileToFile;
 
     /**
      * Build a container configured for the dev environment.
@@ -130,16 +128,10 @@ class ContainerBuilder
 
             return $definitions;
         }, $sources);
-        $chain = new SourceChain($sources);
+        $source = new SourceChain($sources);
 
-        if ($this->cache) {
-            $source = new CachedDefinitionSource($chain, $this->cache);
-            $chain->setRootDefinitionSource($source);
-        } else {
-            $source = $chain;
-            // Mutable definition source
-            $source->setMutableDefinitionSource(new DefinitionArray([], $autowiring));
-        }
+        // Mutable definition source
+        $source->setMutableDefinitionSource(new DefinitionArray([], $autowiring));
 
         $proxyFactory = new ProxyFactory($this->writeProxiesToFile, $this->proxyDirectory);
 
@@ -147,7 +139,42 @@ class ContainerBuilder
 
         $containerClass = $this->containerClass;
 
+        if ($this->compileToFile) {
+            $containerClass = (new Compiler)->compile($source, $this->compileToFile);
+            // Only load the file if it hasn't been already loaded
+            // (the container can be created multiple times in the same process)
+            if (!class_exists($containerClass, false)) {
+                require $this->compileToFile;
+            }
+        }
+
         return new $containerClass($source, $proxyFactory, $this->wrapperContainer);
+    }
+
+    /**
+     * Compile the container for optimum performances.
+     *
+     * The filename provided must be a valid class name! For example:
+     *
+     * - `var/cache/ContainerProd.php` -> valid since `ContainerProd` is a valid class name
+     * - `var/cache/Container-Prod.php` -> invalid since `Container-Prod` is NOT a valid class name
+     *
+     * Be aware that the container is compiled once and never updated!
+     *
+     * Therefore:
+     *
+     * - in production you should clear that directory every time you deploy
+     * - in development you should not compile the container
+     *
+     * @param string $fileName File in which to put the compiled container.
+     */
+    public function compile(string $fileName) : ContainerBuilder
+    {
+        $this->ensureNotLocked();
+
+        $this->compileToFile = $fileName;
+
+        return $this;
     }
 
     /**
@@ -192,21 +219,6 @@ class ContainerBuilder
         $this->ensureNotLocked();
 
         $this->ignorePhpDocErrors = $bool;
-
-        return $this;
-    }
-
-    /**
-     * Enables the use of a cache for the definitions.
-     *
-     * @param CacheInterface $cache Cache backend to use
-     * @return $this
-     */
-    public function setDefinitionCache(CacheInterface $cache) : ContainerBuilder
-    {
-        $this->ensureNotLocked();
-
-        $this->cache = $cache;
 
         return $this;
     }
@@ -276,6 +288,14 @@ class ContainerBuilder
         $this->definitionSources[] = $definitions;
 
         return $this;
+    }
+
+    /**
+     * Will the container be compiled?
+     */
+    public function isCompiled() : bool
+    {
+        return (bool) $this->compileToFile;
     }
 
     private function ensureNotLocked()

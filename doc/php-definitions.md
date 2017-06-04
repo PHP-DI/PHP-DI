@@ -278,14 +278,7 @@ return [
 ];
 ```
 
-By default each entry will be created once and the same instance will be injected everywhere it is used (singleton instance). You can use the "prototype" [scope](scopes.md) if you want a new instance to be created every time it is injected:
-
-```php
-return [
-    'FormBuilder' => DI\create()
-        ->scope(Scope::PROTOTYPE),
-];
-```
+Each entry will be resolved once and the same instance will be injected everywhere it is used.
 
 ### Autowired objects
 
@@ -440,9 +433,9 @@ $container->set('My\Class', \DI\create()
     ->constructor('some raw value')));
 ```
 
-**Using array definitions is however recommended since it allows to cache the definitions.**
+**Using array definitions is however recommended since it allows to [compile the container](performances.md).** All entries configured with `Container::set()` will **not** be compiled.
 
-Be also aware that it isn't possible to add definitions to a container on the fly **when using a cache**:
+Be also aware that it isn't possible to add definitions to a container on the fly **when using a compiled container**:
 
 ```php
 $builder = new ContainerBuilder();

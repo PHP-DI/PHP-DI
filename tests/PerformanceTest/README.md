@@ -13,5 +13,4 @@ Improvements to do:
 
 - run through webserver with Nginx and php-fpm (so that opcache is used)
 - use a VM (e.g. homestead or a vagrant box)
-- performance test with `ApcCache`
 - add more tests
