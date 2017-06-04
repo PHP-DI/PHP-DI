@@ -5,87 +5,164 @@ declare(strict_types=1);
 namespace DI\Test\IntegrationTest\Definitions;
 
 use DI\ContainerBuilder;
-use DI\Test\IntegrationTest\Fixtures\Class1;
-use DI\Test\IntegrationTest\Fixtures\Class2;
-use DI\Test\IntegrationTest\Fixtures\Implementation1;
-use DI\Test\IntegrationTest\Fixtures\LazyDependency;
+use DI\Test\IntegrationTest\BaseContainerTest;
+use DI\Test\IntegrationTest\Definitions\NestedDefinitionsTest\AllKindsOfInjections;
+use function DI\autowire;
+use function DI\create;
+use function DI\env;
+use function DI\get;
 
-class NestedDefinitionsTest extends \PHPUnit_Framework_TestCase
+class NestedDefinitionsTest extends BaseContainerTest
 {
     /**
      * @test
+     * @dataProvider provideContainer
      */
-    public function should_allow_nested_definitions_in_environment_variables()
+    public function should_allow_nested_definitions_in_environment_variables(ContainerBuilder $builder)
     {
-        $builder = new ContainerBuilder();
-
         $builder->addDefinitions([
-            'foo'    => 'bar',
-            'link'   => \DI\env('PHP_DI_DO_NOT_DEFINE_THIS', \DI\get('foo')),
+            'foo' => 'bar',
+            'link' => \DI\env('PHP_DI_DO_NOT_DEFINE_THIS', \DI\get('foo')),
             'object' => \DI\env('PHP_DI_DO_NOT_DEFINE_THIS', \DI\create('stdClass')),
+            'objectInArray' => \DI\env('PHP_DI_DO_NOT_DEFINE_THIS', [\DI\create('stdClass')]),
         ]);
-
         $container = $builder->build();
 
         $this->assertEquals('bar', $container->get('link'));
-        $this->assertEquals(new \stdClass(), $container->get('object'));
+        $this->assertEquals(new \stdClass, $container->get('object'));
+        $this->assertEquals([new \stdClass], $container->get('objectInArray'));
     }
 
     /**
      * @test
+     * @dataProvider provideContainer
      */
-    public function should_allow_nested_definitions_in_object_definitions()
+    public function should_allow_nested_definitions_in_factories(ContainerBuilder $builder)
     {
-        $builder = new ContainerBuilder();
-        $builder->useAnnotations(false);
-
-        $impl = new Implementation1();
-        $lazyDep = new LazyDependency();
-
         $builder->addDefinitions([
-            'foo' => 'bar',
-            LazyDependency::class => $lazyDep,
-            'obj' => \DI\create(Class1::class)
-                ->constructor(
-                    \DI\create(Class2::class),
-                    \DI\factory(function () use ($impl) {
-                        return $impl;
-                    }),
-                    \DI\get(LazyDependency::class)
-                )
-                ->property('property1', \DI\get('foo'))
-                ->property('property2', \DI\factory(function () use ($impl) {
-                    return $impl;
-                })),
+            'factory' => \DI\factory(function ($entry) {
+                return $entry;
+            })->parameter('entry', [create(\stdClass::class)]),
         ]);
 
-        $container = $builder->build();
-        /** @var Class1 $obj */
-        $obj = $container->get('obj');
+        $factory = $builder->build()->get('factory');
 
-        // Assertions on constructor parameters
-        $this->assertInstanceOf(Class2::class, $obj->constructorParam1);
-        $this->assertSame($impl, $obj->constructorParam2);
-        $this->assertSame($lazyDep, $obj->constructorParam3);
-
-        // Assertions on properties
-        $this->assertEquals('bar', $obj->property1);
-        $this->assertSame($impl, $obj->property2);
+        $this->assertInstanceOf(\stdClass::class, $factory[0]);
     }
 
     /**
      * @test
+     * @dataProvider provideContainer
      */
-    public function should_allow_nested_definitions_in_arrays()
+    public function should_allow_nested_definitions_in_create_definitions(ContainerBuilder $builder)
     {
-        $builder = new ContainerBuilder();
+        $builder->addDefinitions([
+            AllKindsOfInjections::class => create()
+                ->constructor(create('stdClass'))
+                ->property('property', create('stdClass'))
+                ->method('method', create('stdClass')),
+        ]);
+        $container = $builder->build();
 
+        $object = $container->get(AllKindsOfInjections::class);
+
+        $this->assertEquals(new \stdClass, $object->property);
+        $this->assertEquals(new \stdClass, $object->constructorParameter);
+        $this->assertEquals(new \stdClass, $object->methodParameter);
+    }
+
+    /**
+     * @test
+     * @dataProvider provideContainer
+     */
+    public function should_allow_nested_definitions_in_arrays_in_create_definitions(ContainerBuilder $builder)
+    {
+        $builder->addDefinitions([
+            AllKindsOfInjections::class => create()
+                ->constructor([
+                    create('stdClass'),
+                ])
+                ->property('property', [
+                    create('stdClass'),
+                ])
+                ->method('method', [
+                    create('stdClass'),
+                ]),
+        ]);
+        $container = $builder->build();
+
+        $object = $container->get(AllKindsOfInjections::class);
+
+        $this->assertEquals(new \stdClass, $object->property[0]);
+        $this->assertEquals(new \stdClass, $object->constructorParameter[0]);
+        $this->assertEquals(new \stdClass, $object->methodParameter[0]);
+    }
+
+    /**
+     * @test
+     * @dataProvider provideContainer
+     */
+    public function should_allow_nested_definitions_in_autowire_definitions(ContainerBuilder $builder)
+    {
+        $builder->addDefinitions([
+            AllKindsOfInjections::class => autowire()
+                ->constructorParameter('constructorParameter', create('stdClass'))
+                ->property('property', create('stdClass'))
+                ->methodParameter('method', 'methodParameter', create('stdClass')),
+        ]);
+        $container = $builder->build();
+
+        $object = $container->get(AllKindsOfInjections::class);
+
+        $this->assertEquals(new \stdClass, $object->property);
+        $this->assertEquals(new \stdClass, $object->constructorParameter);
+        $this->assertEquals(new \stdClass, $object->methodParameter);
+    }
+
+    /**
+     * @test
+     * @dataProvider provideContainer
+     */
+    public function should_allow_nested_definitions_in_arrays_in_autowire_definitions(ContainerBuilder $builder)
+    {
+        $builder->addDefinitions([
+            AllKindsOfInjections::class => autowire()
+                ->constructorParameter('constructorParameter', [
+                    create('stdClass'),
+                ])
+                ->property('property', [
+                    create('stdClass'),
+                ])
+                ->methodParameter('method', 'methodParameter', [
+                    create('stdClass'),
+                ]),
+        ]);
+        $container = $builder->build();
+
+        $object = $container->get(AllKindsOfInjections::class);
+
+        $this->assertEquals(new \stdClass, $object->property[0]);
+        $this->assertEquals(new \stdClass, $object->constructorParameter[0]);
+        $this->assertEquals(new \stdClass, $object->methodParameter[0]);
+    }
+
+    /**
+     * @test
+     * @dataProvider provideContainer
+     */
+    public function should_allow_nested_definitions_in_arrays(ContainerBuilder $builder)
+    {
         $builder->addDefinitions([
             'foo'   => 'bar',
             'array' => [
-                'env'    => \DI\env('PHP_DI_DO_NOT_DEFINE_THIS', \DI\get('foo')),
-                'link'   => \DI\get('foo'),
-                'object' => \DI\create('stdClass'),
+                'env'    => env('PHP_DI_DO_NOT_DEFINE_THIS', get('foo')),
+                'link'   => get('foo'),
+                'object' => create('stdClass'),
+                'objectInArray' => [create('stdClass')],
+                'autowired' => autowire('stdClass'),
+                'array' => [
+                    'object' => create('stdClass'),
+                ],
             ],
         ]);
 
@@ -94,9 +171,33 @@ class NestedDefinitionsTest extends \PHPUnit_Framework_TestCase
         $expected = [
             'env'    => 'bar',
             'link'   => 'bar',
-            'object' => new \stdClass(),
+            'object' => new \stdClass,
+            'objectInArray' => [new \stdClass],
+            'autowired' => new \stdClass,
+            'array' => [
+                'object' => new \stdClass,
+            ],
         ];
 
         $this->assertEquals($expected, $container->get('array'));
+    }
+}
+
+namespace DI\Test\IntegrationTest\Definitions\NestedDefinitionsTest;
+
+class AllKindsOfInjections
+{
+    public $property;
+    public $constructorParameter;
+    public $methodParameter;
+
+    public function __construct($constructorParameter)
+    {
+        $this->constructorParameter = $constructorParameter;
+    }
+
+    public function method($methodParameter)
+    {
+        $this->methodParameter = $methodParameter;
     }
 }
