@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 return [
     'service2' => \DI\factory(function () {
         $value = new \stdClass();
