@@ -156,4 +156,21 @@ class CompiledContainerTest extends BaseContainerTest
         $builder->compile('/tmp/foo-bar.php');
         $builder->build();
     }
+
+    /**
+     * @test
+     * @expectedException \LogicException
+     * @expectedExceptionMessage You cannot set a definition at runtime on a compiled container. You can either put your definitions in a file, disable compilation or ->set() a raw value directly (PHP object, string, int, ...) instead of a PHP-DI definition.
+     */
+    public function entries_cannot_be_overridden_by_definitions_in_the_compiled_container()
+    {
+        $builder = new ContainerBuilder;
+        $builder->compile(self::generateCompilationFileName());
+        $builder->addDefinitions([
+            'foo' => create(\stdClass::class),
+        ]);
+        $container = $builder->build();
+
+        $container->set('foo', create(ContainerSetTest\Dummy::class));
+    }
 }

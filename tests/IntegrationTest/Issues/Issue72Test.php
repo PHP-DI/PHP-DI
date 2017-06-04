@@ -101,6 +101,11 @@ class Issue72Test extends BaseContainerTest
      */
     public function phpDefinitionShouldOverrideArrayDefinition(ContainerBuilder $builder)
     {
+        if ($builder->isCompiled()) {
+            // This behavior is not allowed on the compiled container
+            return;
+        }
+
         $builder->useAutowiring(false);
         $builder->useAnnotations(false);
         $builder->addDefinitions(__DIR__ . '/Issue72/definitions.php');

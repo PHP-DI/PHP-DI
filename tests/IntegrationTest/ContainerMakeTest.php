@@ -81,9 +81,11 @@ class ContainerMakeTest extends BaseContainerTest
      */
     public function testCircularDependencyExceptionWithAlias(ContainerBuilder $builder)
     {
+        $builder->addDefinitions([
+            // Alias to itself -> infinite recursive loop
+            'foo' => \DI\get('foo'),
+        ]);
         $container = $builder->build();
-        // Alias to itself -> infinite recursive loop
-        $container->set('foo', \DI\get('foo'));
         $container->make('foo');
     }
 

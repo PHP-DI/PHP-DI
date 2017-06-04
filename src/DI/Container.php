@@ -289,7 +289,7 @@ class Container implements ContainerInterface, FactoryInterface, \DI\InvokerInte
         return $value;
     }
 
-    private function setDefinition(string $name, Definition $definition)
+    protected function setDefinition(string $name, Definition $definition)
     {
         if (! $this->definitionSource instanceof MutableDefinitionSource) {
             // This can happen if you instantiate the container yourself

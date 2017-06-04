@@ -29,11 +29,12 @@ class Issue70and76Test extends BaseContainerTest
      */
     public function closureDefinitionShouldOverrideReflectionDefinition(ContainerBuilder $builder)
     {
-        $container = $builder->build();
+        $builder->addDefinitions([
+            'stdClass' => \DI\factory(function () {
+                return 'foo';
+            }),
+        ]);
 
-        $container->set('stdClass', \DI\factory(function () {
-            return 'foo';
-        }));
-        $this->assertEquals('foo', $container->get('stdClass'));
+        $this->assertEquals('foo', $builder->build()->get('stdClass'));
     }
 }
