@@ -25,6 +25,8 @@ use Psr\Container\ContainerInterface;
  *     $builder = new ContainerBuilder();
  *     $container = $builder->build();
  *
+ * @api
+ *
  * @since  3.2
  * @author Matthieu Napoli <matthieu@mnapoli.fr>
  */

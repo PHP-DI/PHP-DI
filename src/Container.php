@@ -31,6 +31,8 @@ use Psr\Container\ContainerInterface;
 /**
  * Dependency Injection Container.
  *
+ * @api
+ *
  * @author Matthieu Napoli <matthieu@mnapoli.fr>
  */
 class Container implements ContainerInterface, FactoryInterface, \DI\InvokerInterface

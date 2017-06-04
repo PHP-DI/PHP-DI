@@ -205,3 +205,9 @@ class UserController extends BaseController
 As you might have guessed, you can't use constructor injection with this method.
 But other kind of injections (property or setter) will work, whether you use annotations
 or whether you configured your object in a definition file.
+
+## Extending the container
+
+If you wish to delve into the container's internals, be aware that only the classes and interfaces tagged with the `@api` annotation are meant to be used by PHP-DI users.
+
+All other classes and interfaces are internal classes, you may try to use them but backward compatibility is not guaranteed, even between minor versions.

@@ -10,6 +10,8 @@ namespace DI\Factory;
  * Implementations of this interface can be injected in factory parameters in order
  * to know what was the name of the requested entry.
  *
+ * @api
+ *
  * @author Matthieu Napoli <matthieu@mnapoli.fr>
  */
 interface RequestedEntry

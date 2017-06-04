@@ -9,6 +9,8 @@ namespace DI\Annotation;
  *
  * Marks a class as injectable
  *
+ * @api
+ *
  * @Annotation
  * @Target("CLASS")
  *

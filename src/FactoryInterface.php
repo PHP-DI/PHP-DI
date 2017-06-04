@@ -7,6 +7,8 @@ namespace DI;
 /**
  * Describes the basic interface of a factory.
  *
+ * @api
+ *
  * @since 4.0
  * @author Matthieu Napoli <matthieu@mnapoli.fr>
  */

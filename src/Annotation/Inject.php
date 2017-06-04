@@ -11,6 +11,8 @@ use DI\Definition\Exception\AnnotationException;
  *
  * Marks a property or method as an injection point
  *
+ * @api
+ *
  * @Annotation
  * @Target({"METHOD","PROPERTY"})
  *

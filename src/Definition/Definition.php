@@ -9,6 +9,8 @@ use DI\Factory\RequestedEntry;
 /**
  * Definition.
  *
+ * @internal This interface is internal to PHP-DI and may change between minor versions.
+ *
  * @author Matthieu Napoli <matthieu@mnapoli.fr>
  */
 interface Definition extends RequestedEntry
