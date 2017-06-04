@@ -98,9 +98,11 @@ class ArrayDefinitionTest extends BaseContainerTest
         $this->assertEquals(new \stdClass, $array[1]);
     }
 
-    public function test_nested_array_with_nested_definitions()
+    /**
+     * @dataProvider provideContainer
+     */
+    public function test_nested_array_with_nested_definitions(ContainerBuilder $builder)
     {
-        $builder = new ContainerBuilder();
         $builder->addDefinitions([
             'array' => [
                 'array' => [
@@ -115,6 +117,27 @@ class ArrayDefinitionTest extends BaseContainerTest
 
         $this->assertEquals('env', $array['array'][0]);
         $this->assertEquals(new \stdClass, $array['array'][1]);
+    }
+
+    /**
+     * @dataProvider provideContainer
+     */
+    public function test_nested_array_preserve_keys(ContainerBuilder $builder)
+    {
+        $builder->addDefinitions([
+            'array' => [
+                'array' => [
+                    'foo',
+                    'bar',
+                ],
+            ],
+        ]);
+        $container = $builder->build();
+
+        $array = $container->get('array');
+
+        $this->assertEquals('foo', $array['array'][0]);
+        $this->assertEquals('bar', $array['array'][1]);
     }
 
     /**
@@ -190,4 +213,11 @@ class ArrayDefinitionTest extends BaseContainerTest
         $this->assertCount(1, $array);
         $this->assertEquals('value 1', $array[0]);
     }
+}
+
+namespace DI\Test\IntegrationTest\Definitions\ArrayDefinitionTest;
+
+class SimpleClass
+{
+    public $dependency;
 }

@@ -107,7 +107,7 @@ class CompiledContainerTest extends BaseContainerTest
     /**
      * @test
      * @expectedException \DI\DependencyException
-     * @expectedExceptionMessage Error while compiling foo[bar]. An object was found but objects cannot be compiled
+     * @expectedExceptionMessage Error while compiling foo. An object was found but objects cannot be compiled
      */
     public function object_nested_in_arrays_cannot_be_compiled()
     {

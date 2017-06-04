@@ -124,9 +124,15 @@ class Compiler
 PHP;
                 break;
             case $definition instanceof ArrayDefinition:
-                $values = $this->compileArrayValues($definition);
-                $values = implode('', $values);
-                $code = "return [\n$values        ];";
+                try {
+                    $code = 'return ' . $this->compileValue($definition->getValues()) . ';';
+                } catch (\Exception $e) {
+                    throw new DependencyException(sprintf(
+                        'Error while compiling %s. %s',
+                        $definition->getName(),
+                        $e->getMessage()
+                    ), 0, $e);
+                }
                 break;
             case $definition instanceof ObjectDefinition:
                 $compiler = new ObjectCreationCompiler($this);
@@ -164,6 +170,18 @@ PHP;
             return "\$this->$methodName()";
         }
 
+        if (is_array($value)) {
+            $value = array_map(function ($value, $key) {
+                $compiledValue = $this->compileValue($value);
+                $key = var_export($key, true);
+
+                return "            $key => $compiledValue,\n";
+            }, $value, array_keys($value));
+            $value = implode('', $value);
+
+            return "[\n$value        ]";
+        }
+
         return var_export($value, true);
     }
 
@@ -175,32 +193,6 @@ PHP;
         if (!is_writable($directory)) {
             throw new InvalidArgumentException(sprintf('Compilation directory is not writable: %s.', $directory));
         }
-    }
-
-    /**
-     * @return string[]
-     */
-    private function compileArrayValues(ArrayDefinition $definition) : array
-    {
-        $values = $definition->getValues();
-        $keys = array_keys($values);
-
-        $values = array_map(function ($value, $key) use ($definition) {
-            try {
-                $compiledValue = $this->compileValue($value);
-            } catch (\Exception $e) {
-                throw new DependencyException(sprintf(
-                    'Error while compiling %s[%s]. %s',
-                    $definition->getName(),
-                    $key,
-                    $e->getMessage()
-                ), 0, $e);
-            }
-
-            return '            ' . $compiledValue . ",\n";
-        }, $values, $keys);
-
-        return $values;
     }
 
     /**
@@ -224,20 +216,6 @@ PHP;
         // All other definitions are compilable
         if ($value instanceof Definition) {
             return true;
-        }
-        if (is_array($value)) {
-            $compilable = true;
-            array_walk_recursive($value, function ($value) use (&$compilable) {
-                // The if avoids unnecessary checks
-                if ($compilable === true) {
-                    $message = $this->isCompilable($value);
-                    if ($message !== true) {
-                        $compilable = $message;
-                    }
-                }
-            });
-
-            return $compilable;
         }
         if (is_object($value)) {
             return 'An object was found but objects cannot be compiled';

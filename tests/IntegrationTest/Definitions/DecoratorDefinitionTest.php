@@ -131,7 +131,7 @@ class DecoratorDefinitionTest extends BaseContainerTest
     /**
      * @dataProvider provideContainer
      * @expectedException \DI\DependencyException
-     * @expectedExceptionMessageRegExp /Error while (resolving|compiling) foo\[0\]. Decorators cannot be nested in another definition/
+     * @expectedExceptionMessageRegExp /Error while (resolving|compiling) foo(\[0\])?. Decorators cannot be nested in another definition/
      */
     public function test_decorator_in_array(ContainerBuilder $builder)
     {
