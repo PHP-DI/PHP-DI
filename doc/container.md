@@ -36,7 +36,7 @@ However it is recommended to use definition files. See the [definition documenta
 
 ## make()
 
-The container also offers a `make()` method. This method is defined in [`DI\FactoryInterface`](https://github.com/PHP-DI/PHP-DI/blob/master/src/DI/FactoryInterface.php).
+The container also offers a `make()` method. This method is defined in [`DI\FactoryInterface`](https://github.com/PHP-DI/PHP-DI/blob/master/src/FactoryInterface.php).
 
 ```php
 class GithubProfile

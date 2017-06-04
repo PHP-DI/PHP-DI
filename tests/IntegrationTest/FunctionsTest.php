@@ -11,7 +11,7 @@ class FunctionsTest extends \PHPUnit_Framework_TestCase
      */
     public function including_functions_twice_should_not_error()
     {
-        include __DIR__ . '/../../src/DI/functions.php';
-        include __DIR__ . '/../../src/DI/functions.php';
+        include __DIR__ . '/../../src/functions.php';
+        include __DIR__ . '/../../src/functions.php';
     }
 }

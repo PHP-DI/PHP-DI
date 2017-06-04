@@ -1,10 +1,10 @@
 {
     "autoload": {
         "psr-4": {
-            "DI\\": "../../src/DI/"
+            "DI\\": "../../src/"
         },
         "files": [
-            "../../src/DI/functions.php"
+            "../../src/functions.php"
         ]
     },
     "require": {
