@@ -12,7 +12,6 @@ Improvements:
 - [#494](https://github.com/PHP-DI/PHP-DI/pull/494) The container can now be compiled for optimum performances in production
 - The container can now be built without parameters: `new Container()`
 - [#242](https://github.com/PHP-DI/PHP-DI/issues/242) Error in case a definition is not indexed by a string
-- [#376](https://github.com/PHP-DI/PHP-DI/issues/376) [PSR-16](https://github.com/php-fig/simple-cache) support for the cache system (which replaces Doctrine's Cache)
 
 BC breaks:
 
@@ -22,7 +21,6 @@ BC breaks:
 - [#463](https://github.com/PHP-DI/PHP-DI/issues/463) & [#485](https://github.com/PHP-DI/PHP-DI/issues/485): Container-interop support was removed, PSR-11 is used instead (by [@juliangut](https://github.com/juliangut))
 - The deprecated `DI\link()` helper was removed, used `DI\get()` instead
 - [#484](https://github.com/PHP-DI/PHP-DI/pull/484) The deprecated `\DI\Debug` class has been removed. Definitions can be cast to string directly
-- The cache system has been moved from Doctrine Cache to PSR-16 (the simple cache standard)
 - The exception `DI\Definition\Exception\DefinitionException` was renamed to `DI\Definition\Exception\InvalidDefinition`
 
 Be also aware that internal classes or interfaces may have changed.
