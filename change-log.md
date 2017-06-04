@@ -18,7 +18,8 @@ BC breaks:
 
 - PHP 7 or greater is required
 - `DI\object()` has been removed, use `DI\create()` or `DI\autowire()` instead
-- [#409](https://github.com/PHP-DI/PHP-DI/issues/409): Scopes are removed (by [@mnapoli](https://github.com/mnapoli))
+- [#409](https://github.com/PHP-DI/PHP-DI/issues/409): Scopes are removed
+- [#463](https://github.com/PHP-DI/PHP-DI/issues/463) & [#485](https://github.com/PHP-DI/PHP-DI/issues/485): Container-interop support was removed, PSR-11 is used instead (by [@juliangut](https://github.com/juliangut))
 - The deprecated `DI\link()` helper was removed, used `DI\get()` instead
 - [#484](https://github.com/PHP-DI/PHP-DI/pull/484) The deprecated `\DI\Debug` class has been removed. Definitions can be cast to string directly
 - The cache system has been moved from Doctrine Cache to PSR-16 (the simple cache standard)
