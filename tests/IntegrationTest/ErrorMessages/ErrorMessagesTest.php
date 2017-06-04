@@ -162,4 +162,17 @@ MESSAGE;
         ]);
         $builder->build()->get('foo');
     }
+
+    /**
+     * @dataProvider provideContainer
+     * @expectedException \DI\Definition\Exception\InvalidDefinition
+     * @expectedExceptionMessage The parameter "time" of __construct() has no type defined or guessable. It has a default value, but the default value can't be read through Reflection because it is a PHP internal class.
+     */
+    public function test_internal_class_default_parameter_value(ContainerBuilder $builder)
+    {
+        $builder->addDefinitions([
+            \DateTime::class => autowire(),
+        ]);
+        $builder->build()->get(\DateTime::class);
+    }
 }
