@@ -212,6 +212,10 @@ class Container implements ContainerInterface, FactoryInterface, \DI\InvokerInte
      */
     public function injectOn($instance)
     {
+        if (!$instance) {
+            return $instance;
+        }
+
         $objectDefinition = $this->definitionSource->getDefinition(get_class($instance));
         if (! $objectDefinition instanceof ObjectDefinition) {
             return $instance;
