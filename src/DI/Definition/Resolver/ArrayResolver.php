@@ -59,7 +59,7 @@ class ArrayResolver implements DefinitionResolver
         return true;
     }
 
-    private function resolveDefinition(DefinitionHelper $value, ArrayDefinition $definition, string $key)
+    private function resolveDefinition(DefinitionHelper $value, ArrayDefinition $definition, $key)
     {
         try {
             return $this->definitionResolver->resolve($value->getDefinition(''));
