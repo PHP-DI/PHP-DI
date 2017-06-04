@@ -286,6 +286,20 @@ class CreateDefinitionTest extends BaseContainerTest
         $container = $builder->build();
         $container->get(\stdClass::class);
     }
+
+    /**
+     * @dataProvider provideContainer
+     */
+    public function test_create_in_array(ContainerBuilder $builder)
+    {
+        $container = $builder->addDefinitions([
+            'foo' => [
+                'bar' => create(Property::class),
+            ],
+        ])->build();
+
+        self::assertInstanceOf(Property::class, $container->get('foo')['bar']);
+    }
 }
 
 namespace DI\Test\IntegrationTest\Definitions\CreateDefinitionTest;
