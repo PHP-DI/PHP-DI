@@ -79,7 +79,7 @@ return [
 
 In this example we extend the autowiring definition to set `$param2` because it can't be guessed through autowiring (no type-hint). `$param1` is not affected and is autowired.
 
-Please not that `DI\autowire()`, like `DI\create()`, does not allow extending definitions. It only allows to customize how autowiring is done. In the example below the second definition will completely override the first one:
+Please note that `DI\autowire()`, like `DI\create()`, does not allow extending definitions. It only allows to customize how autowiring is done. In the example below the second definition will completely override the first one:
 
 ```php
 return [
