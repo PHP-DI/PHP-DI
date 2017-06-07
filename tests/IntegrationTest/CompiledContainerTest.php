@@ -75,24 +75,6 @@ class CompiledContainerTest extends BaseContainerTest
     /**
      * @test
      * @expectedException \DI\Definition\Exception\InvalidDefinition
-     * @expectedExceptionMessage Entry "stdClass" cannot be compiled: A factory definition was found but factories cannot be compiled
-     */
-    public function factories_nested_in_other_definitions_cannot_be_compiled()
-    {
-        $builder = new ContainerBuilder;
-        $builder->addDefinitions([
-            \stdClass::class => create()
-                ->property('foo', factory(function () {
-                    return 'hello';
-                })),
-        ]);
-        $builder->compile(self::generateCompilationFileName());
-        $builder->build();
-    }
-
-    /**
-     * @test
-     * @expectedException \DI\Definition\Exception\InvalidDefinition
      * @expectedExceptionMessage Entry "stdClass" cannot be compiled: An object was found but objects cannot be compiled
      */
     public function object_nested_in_other_definitions_cannot_be_compiled()
@@ -155,4 +137,11 @@ class CompiledContainerTest extends BaseContainerTest
 
         $container->set('foo', create(ContainerSetTest\Dummy::class));
     }
+}
+
+namespace DI\Test\IntegrationTest\CompiledContainerTest;
+
+class Property
+{
+    public $foo;
 }
