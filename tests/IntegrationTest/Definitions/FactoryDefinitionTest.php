@@ -60,6 +60,14 @@ class FactoryDefinitionTest extends BaseContainerTest
      */
     public function test_factory($callable, ContainerBuilder $builder)
     {
+        $isClosure = $callable instanceof \Closure;
+        $containsAnObject = is_object($callable) || is_object($callable[0]);
+        if ($builder->isCompiled() && $containsAnObject && !$isClosure) {
+            // Invokable objects are not compilable
+            $this->expectException(\DI\Definition\Exception\InvalidDefinition::class);
+            $this->expectExceptionMessage('An object was found but objects cannot be compiled');
+        }
+
         $builder->addDefinitions([
             'factory' => \DI\factory($callable),
         ]);
@@ -351,17 +359,19 @@ class FactoryDefinitionTest extends BaseContainerTest
      */
     public function test_parameters_take_priority_over_container(ContainerBuilder $builder)
     {
-        $ncInst = new NoConstructor();
-
         $builder->addDefinitions([
             'factory' => \DI\factory(function (NoConstructor $nc) {
                 return $nc;
-            })->parameter('nc', $ncInst),
+            })->parameter('nc', \DI\get('foo')),
+            NoConstructor::class => \DI\autowire(),
+            'foo' => \DI\autowire(NoConstructor::class),
         ]);
+        $container = $builder->build();
 
-        $factory = $builder->build()->get('factory');
+        $parameterPassed = $container->get('factory');
 
-        $this->assertSame($ncInst, $factory);
+        // Check that "foo" is injected, not the "NoConstructor" entry that could be autowired from the typehint
+        $this->assertSame($container->get('foo'), $parameterPassed);
     }
 
     /**
@@ -406,6 +416,124 @@ class FactoryDefinitionTest extends BaseContainerTest
             'foo' => \DI\factory('Hello World'),
         ]);
         $builder->build()->get('foo');
+    }
+
+    /**
+     * Test that __FILE__ and similar magic constants are preserved even when
+     * the container is compiled.
+     * @dataProvider provideContainer
+     */
+    public function test_closure_using_magic_constant(ContainerBuilder $builder)
+    {
+        $builder->addDefinitions([
+            'factory' => function () {
+                return __FILE__;
+            },
+        ]);
+        $this->assertEquals(__FILE__, $builder->build()->get('factory'));
+    }
+
+    /**
+     * Test that non FQN for classes are preserved even when the container is compiled.
+     * @dataProvider provideContainer
+     */
+    public function test_closure_containing_class_name_not_fully_qualified(ContainerBuilder $builder)
+    {
+        $builder->addDefinitions([
+            'factory' => function () {
+                return FactoryDefinitionTestClass::class;
+            },
+        ]);
+        $this->assertEquals('DI\Test\IntegrationTest\Definitions\FactoryDefinitionTestClass', $builder->build()->get('factory'));
+    }
+
+    /**
+     * @dataProvider provideContainer
+     */
+    public function test_closure_with_return_types_are_supported(ContainerBuilder $builder)
+    {
+        $builder->addDefinitions([
+            'factory' => function () : \stdClass {
+                return new \stdClass;
+            },
+        ]);
+        $this->assertEquals(new \stdClass, $builder->build()->get('factory'));
+    }
+
+    /**
+     * @expectedException \DI\Definition\Exception\InvalidDefinition
+     * @expectedExceptionMessage Cannot compile closures which import variables using the `use` keyword
+     */
+    public function test_closure_which_use_variables_cannot_be_compiled()
+    {
+        $builder = (new ContainerBuilder)->compile(self::generateCompilationFileName());
+        $foo = 'hello';
+        $builder->addDefinitions([
+            'factory' => function () use ($foo) {
+                return $foo;
+            },
+        ]);
+        $builder->build();
+    }
+
+    /**
+     * TODO would be better to have an error at compilation.
+     * @expectedException \Error
+     * @expectedExceptionMessage Using $this when not in object context
+     */
+    public function test_closure_which_use_this_cannot_be_compiled()
+    {
+        $builder = (new ContainerBuilder)->compile(self::generateCompilationFileName());
+        $builder->addDefinitions([
+            'factory' => function () {
+                return $this->foo();
+            },
+        ]);
+        $builder->build()->get('factory');
+    }
+
+    private function foo()
+    {
+        return 'hello';
+    }
+
+    /**
+     * @dataProvider provideContainer
+     */
+    public function test_static_closure_are_supported(ContainerBuilder $builder)
+    {
+        $builder->addDefinitions([
+            'factory' => static function () {
+                return new \stdClass;
+            },
+        ]);
+        $this->assertEquals(new \stdClass, $builder->build()->get('factory'));
+    }
+
+    /**
+     * @dataProvider provideContainer
+     */
+    public function test_closure_with_static_variables_are_supported(ContainerBuilder $builder)
+    {
+        $builder->addDefinitions([
+            'factory' => function () {
+                static $i = 0;
+
+                return $i;
+            },
+        ]);
+        $this->assertEquals(0, $builder->build()->get('factory'));
+    }
+
+    /**
+     * @expectedException \DI\Definition\Exception\InvalidDefinition
+     * @expectedExceptionMessage Cannot compile closures when two closures are defined on the same line
+     */
+    public function test_multiple_closures_on_the_same_line_cannot_be_compiled()
+    {
+        $builder = (new ContainerBuilder)->compile(self::generateCompilationFileName());
+        $builder->addDefinitions(__DIR__ . '/FactoryDefinition/config.inc');
+        $this->assertEquals('foo', $builder->build()->get('factory'));
     }
 }
 

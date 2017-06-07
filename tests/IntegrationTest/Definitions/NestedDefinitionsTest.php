@@ -25,12 +25,16 @@ class NestedDefinitionsTest extends BaseContainerTest
             'link' => \DI\env('PHP_DI_DO_NOT_DEFINE_THIS', \DI\get('foo')),
             'object' => \DI\env('PHP_DI_DO_NOT_DEFINE_THIS', \DI\create('stdClass')),
             'objectInArray' => \DI\env('PHP_DI_DO_NOT_DEFINE_THIS', [\DI\create('stdClass')]),
+            'factory' => \DI\env('PHP_DI_DO_NOT_DEFINE_THIS', \DI\factory(function () {
+                return 'hello';
+            })),
         ]);
         $container = $builder->build();
 
         $this->assertEquals('bar', $container->get('link'));
         $this->assertEquals(new \stdClass, $container->get('object'));
         $this->assertEquals([new \stdClass], $container->get('objectInArray'));
+        $this->assertEquals('hello', $container->get('factory'));
     }
 
     /**
@@ -60,7 +64,9 @@ class NestedDefinitionsTest extends BaseContainerTest
             AllKindsOfInjections::class => create()
                 ->constructor(create('stdClass'))
                 ->property('property', create('stdClass'))
-                ->method('method', create('stdClass')),
+                ->method('method', \DI\factory(function () {
+                    return new \stdClass;
+                })),
         ]);
         $container = $builder->build();
 
@@ -86,7 +92,9 @@ class NestedDefinitionsTest extends BaseContainerTest
                     create('stdClass'),
                 ])
                 ->method('method', [
-                    create('stdClass'),
+                    \DI\factory(function () {
+                        return new \stdClass;
+                    }),
                 ]),
         ]);
         $container = $builder->build();
@@ -108,7 +116,9 @@ class NestedDefinitionsTest extends BaseContainerTest
             AllKindsOfInjections::class => autowire()
                 ->constructorParameter('constructorParameter', create('stdClass'))
                 ->property('property', create('stdClass'))
-                ->methodParameter('method', 'methodParameter', create('stdClass')),
+                ->methodParameter('method', 'methodParameter', \DI\factory(function () {
+                    return new \stdClass;
+                })),
         ]);
         $container = $builder->build();
 
@@ -134,7 +144,9 @@ class NestedDefinitionsTest extends BaseContainerTest
                     create('stdClass'),
                 ])
                 ->methodParameter('method', 'methodParameter', [
-                    create('stdClass'),
+                    \DI\factory(function () {
+                        return new \stdClass;
+                    }),
                 ]),
         ]);
         $container = $builder->build();
@@ -163,6 +175,9 @@ class NestedDefinitionsTest extends BaseContainerTest
                 'array' => [
                     'object' => create('stdClass'),
                 ],
+                'factory' => \DI\factory(function () {
+                    return 'hello';
+                }),
             ],
         ]);
 
@@ -177,6 +192,7 @@ class NestedDefinitionsTest extends BaseContainerTest
             'array' => [
                 'object' => new \stdClass,
             ],
+            'factory' => 'hello',
         ];
 
         $this->assertEquals($expected, $container->get('array'));

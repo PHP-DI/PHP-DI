@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace DI;
 
+use BetterReflection\Reflection\ReflectionFunction;
+use BetterReflection\SourceLocator\Exception\TwoClosuresOneLine;
 use DI\Compiler\ObjectCreationCompiler;
 use DI\Definition\AliasDefinition;
 use DI\Definition\ArrayDefinition;
@@ -18,6 +20,7 @@ use DI\Definition\Source\DefinitionSource;
 use DI\Definition\StringDefinition;
 use DI\Definition\ValueDefinition;
 use InvalidArgumentException;
+use PhpParser\Node\Expr\Closure;
 
 /**
  * Compiles the container into PHP code much more optimized for performances.
@@ -44,12 +47,18 @@ class Compiler
     private $methods = [];
 
     /**
+     * @var bool
+     */
+    private $autowiringEnabled;
+
+    /**
      * Compile the container.
      *
      * @return string The compiled container class name.
      */
-    public function compile(DefinitionSource $definitionSource, string $fileName) : string
+    public function compile(DefinitionSource $definitionSource, string $fileName, bool $autowiringEnabled) : string
     {
+        $this->autowiringEnabled = $autowiringEnabled;
         $this->containerClass = basename($fileName, '.php');
 
         // Validate that it's a valid class name
@@ -88,6 +97,8 @@ class Compiler
     }
 
     /**
+     * @throws DependencyException
+     * @throws InvalidDefinition
      * @return string The method name
      */
     private function compileDefinition(string $entryName, Definition $definition) : string
@@ -139,6 +150,31 @@ PHP;
                 $code = $compiler->compile($definition);
                 $code .= "\n        return \$object;";
                 break;
+            case $definition instanceof FactoryDefinition:
+                $value = $definition->getCallable();
+
+                // Custom error message to help debugging
+                $isInvokableClassName = is_string($value) && class_exists($value) && method_exists($value, '__invoke');
+                if ($isInvokableClassName && !$this->autowiringEnabled) {
+                    throw new InvalidDefinition(sprintf(
+                        'Entry "%s" cannot be compiled. Invokable classes cannot be automatically resolved if autowiring is disabled on the container, you need to enable autowiring or define the entry manually.',
+                        $entryName
+                    ));
+                }
+
+                $definitionParameters = '';
+                if (!empty($definition->getParameters())) {
+                    $definitionParameters = ', ' . $this->compileValue($definition->getParameters());
+                }
+
+                $code = sprintf(
+                    'return $this->resolveFactory(%s, %s%s);',
+                    $this->compileValue($value),
+                    var_export($entryName, true),
+                    $definitionParameters
+                );
+
+                break;
             default:
                 // This case should not happen (so it cannot be tested)
                 throw new \Exception('Cannot compile definition of type ' . get_class($definition));
@@ -182,6 +218,33 @@ PHP;
             return "[\n$value        ]";
         }
 
+        if ($value instanceof \Closure) {
+            try {
+                $reflection = ReflectionFunction::createFromClosure($value);
+            } catch (TwoClosuresOneLine $e) {
+                throw new InvalidDefinition('Cannot compile closures when two closures are defined on the same line');
+            }
+
+            /** @var Closure $ast */
+            $ast = $reflection->getAst();
+
+            // Force all closures to be static (add the `static` keyword), i.e. they can't use
+            // $this, which makes sense since their code is copied into another class.
+            $ast->static = true;
+
+            // Check if the closure imports variables with `use`
+            if (!empty($ast->uses)) {
+                throw new InvalidDefinition('Cannot compile closures which import variables using the `use` keyword');
+            }
+
+            $code = (new \PhpParser\PrettyPrinter\Standard)->prettyPrint([$reflection->getAst()]);
+
+            // Trim spaces and the last `;`
+            $code = trim($code, "\t\n\r;");
+
+            return $code;
+        }
+
         return var_export($value, true);
     }
 
@@ -210,11 +273,11 @@ PHP;
 
             return 'A decorator definition was found but decorators cannot be compiled';
         }
-        if ($value instanceof FactoryDefinition) {
-            return 'A factory definition was found but factories cannot be compiled';
-        }
         // All other definitions are compilable
         if ($value instanceof Definition) {
+            return true;
+        }
+        if ($value instanceof \Closure) {
             return true;
         }
         if (is_object($value)) {
