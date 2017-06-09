@@ -477,7 +477,7 @@ class FactoryDefinitionTest extends BaseContainerTest
     }
 
     /**
-     * TODO would be better to have an error at compilation
+     * TODO would be better to have an error at compilation.
      * @expectedException \Error
      * @expectedExceptionMessage Using $this when not in object context
      */
@@ -518,6 +518,7 @@ class FactoryDefinitionTest extends BaseContainerTest
         $builder->addDefinitions([
             'factory' => function () {
                 static $i = 0;
+
                 return $i;
             },
         ]);
@@ -532,7 +533,11 @@ class FactoryDefinitionTest extends BaseContainerTest
     {
         $builder = (new ContainerBuilder)->compile(self::generateCompilationFileName());
         $builder->addDefinitions([
-            'factory' => function () { return 'foo'; }, 'factory2' => function () { return 'bar'; },
+            'factory' => function () {
+                return 'foo';
+            }, 'factory2' => function () {
+                return 'bar';
+            },
         ]);
         $this->assertEquals('foo', $builder->build()->get('factory'));
     }

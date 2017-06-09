@@ -6,7 +6,6 @@ namespace DI\Test\IntegrationTest;
 
 use DI\ContainerBuilder;
 use function DI\create;
-use function DI\factory;
 
 /**
  * Tests specific to the compiled container.

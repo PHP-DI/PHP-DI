@@ -177,7 +177,7 @@ class NestedDefinitionsTest extends BaseContainerTest
                 ],
                 'factory' => \DI\factory(function () {
                     return 'hello';
-                })
+                }),
             ],
         ]);
 
