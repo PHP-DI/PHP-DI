@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace DI;
 
 use DI\Definition\Definition;
+use DI\Definition\Exception\InvalidDefinition;
 use DI\Definition\FactoryDefinition;
 use DI\Definition\Helper\DefinitionHelper;
 use DI\Definition\InstanceDefinition;
@@ -264,6 +265,48 @@ class Container implements ContainerInterface, FactoryInterface, \DI\InvokerInte
         } else {
             $this->resolvedEntries[$name] = $value;
         }
+    }
+
+    /**
+     * Get defined container entries.
+     *
+     * @return array
+     */
+    public function getKnownEntryNames()
+    {
+        $entries = array_unique(array_merge(
+            array_keys($this->definitionSource->getDefinitions()),
+            array_keys($this->resolvedEntries)
+        ));
+        sort($entries);
+
+        return $entries;
+    }
+
+    /**
+     * Get entry debug information.
+     *
+     * @param string $name Entry name
+     *
+     * @throws InvalidArgumentException
+     * @throws InvalidDefinition
+     *
+     * @return string
+     */
+    public function debugEntry($name)
+    {
+        $definition = $this->definitionSource->getDefinition($name);
+        if ($definition instanceof Definition) {
+            return (string) $definition;
+        }
+
+        if (array_key_exists($name, $this->resolvedEntries)) {
+            $entry = $this->resolvedEntries[$name];
+
+            return is_object($entry) ? get_class($entry) : gettype($entry);
+        }
+
+        throw new InvalidArgumentException("No entry or class found for '$name'");
     }
 
     /**
