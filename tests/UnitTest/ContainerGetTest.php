@@ -94,8 +94,12 @@ class ContainerGetTest extends \PHPUnit_Framework_TestCase
             'value' => \DI\value('foo'),
             'create' => \DI\create(Container::class),
             'autowire' => \DI\autowire( Container::class),
-            'factory' => \DI\factory(function () { return true; }),
-            'decorator' => \DI\decorate(function () { return true; }),
+            'factory' => \DI\factory(function () {
+                return true;
+            }),
+            'decorator' => \DI\decorate(function () {
+                return true;
+            }),
             'alias' => \DI\get('value'),
             'environment' => \DI\env('foo'),
             'array' => \DI\add(['foo']),
