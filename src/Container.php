@@ -269,10 +269,8 @@ class Container implements ContainerInterface, FactoryInterface, \DI\InvokerInte
 
     /**
      * Get defined container entries.
-     *
-     * @return array
      */
-    public function getKnownEntryNames()
+    public function getKnownEntryNames(): array
     {
         $entries = array_unique(array_merge(
             array_keys($this->definitionSource->getDefinitions()),
@@ -288,12 +286,10 @@ class Container implements ContainerInterface, FactoryInterface, \DI\InvokerInte
      *
      * @param string $name Entry name
      *
-     * @throws InvalidArgumentException
      * @throws InvalidDefinition
-     *
-     * @return string
+     * @throws NotFoundException
      */
-    public function debugEntry($name)
+    public function debugEntry(string $name): string
     {
         $definition = $this->definitionSource->getDefinition($name);
         if ($definition instanceof Definition) {
@@ -306,7 +302,7 @@ class Container implements ContainerInterface, FactoryInterface, \DI\InvokerInte
             return is_object($entry) ? get_class($entry) : gettype($entry);
         }
 
-        throw new InvalidArgumentException("No entry or class found for '$name'");
+        throw new NotFoundException("No entry or class found for '$name'");
     }
 
     /**
