@@ -13,6 +13,7 @@ Improvements:
 - The container can now be built without parameters: `new Container()`
 - [#490](https://github.com/PHP-DI/PHP-DI/issues/490) Support definitions in nested arrays (by [@yuloh](https://github.com/yuloh))
 - [#242](https://github.com/PHP-DI/PHP-DI/issues/242) Error in case a definition is not indexed by a string
+- [#505](https://github.com/PHP-DI/PHP-DI/pull/505) Debug container entries
 
 Fixes:
 
