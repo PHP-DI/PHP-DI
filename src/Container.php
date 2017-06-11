@@ -99,10 +99,12 @@ class Container implements ContainerInterface, FactoryInterface, \DI\InvokerInte
         $this->definitionResolver = new ResolverDispatcher($this->delegateContainer, $this->proxyFactory);
 
         // Auto-register the container
-        $this->resolvedEntries[self::class] = $this;
-        $this->resolvedEntries[FactoryInterface::class] = $this;
-        $this->resolvedEntries[InvokerInterface::class] = $this;
-        $this->resolvedEntries[ContainerInterface::class] = $this;
+        $this->resolvedEntries = [
+            self::class => $this,
+            FactoryInterface::class => $this,
+            InvokerInterface::class => $this,
+            ContainerInterface::class => $this,
+        ];
     }
 
     /**
