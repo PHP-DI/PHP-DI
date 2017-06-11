@@ -6,8 +6,12 @@ use DI\ContainerBuilder;
 
 require_once __DIR__ . '/vendor/autoload.php';
 
-class Foo {}
-class Bar {}
+class Foo
+{
+}
+class Bar
+{
+}
 
 $builder = new ContainerBuilder();
 $builder->useAutowiring(false);
