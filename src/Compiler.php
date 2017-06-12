@@ -154,8 +154,8 @@ PHP;
                 $value = $definition->getCallable();
 
                 // Custom error message to help debugging
-                $isInvokableClassName = is_string($value) && class_exists($value) && method_exists($value, '__invoke');
-                if ($isInvokableClassName && !$this->autowiringEnabled) {
+                $isInvokableClass = is_string($value) && class_exists($value) && method_exists($value, '__invoke');
+                if ($isInvokableClass && !$this->autowiringEnabled) {
                     throw new InvalidDefinition(sprintf(
                         'Entry "%s" cannot be compiled. Invokable classes cannot be automatically resolved if autowiring is disabled on the container, you need to enable autowiring or define the entry manually.',
                         $entryName
