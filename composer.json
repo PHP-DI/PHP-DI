@@ -45,10 +45,5 @@
     "suggest": {
         "doctrine/annotations": "Install it if you want to use annotations (version ~1.2)",
         "ocramius/proxy-manager": "Install it if you want to use lazy injection (version ~2.0)"
-    },
-    "config": {
-        "platform": {
-            "php": "7.0"
-        }
     }
 }
