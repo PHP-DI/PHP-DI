@@ -219,30 +219,7 @@ PHP;
         }
 
         if ($value instanceof \Closure) {
-            try {
-                $reflection = ReflectionFunction::createFromClosure($value);
-            } catch (TwoClosuresOneLine $e) {
-                throw new InvalidDefinition('Cannot compile closures when two closures are defined on the same line');
-            }
-
-            /** @var Closure $ast */
-            $ast = $reflection->getAst();
-
-            // Force all closures to be static (add the `static` keyword), i.e. they can't use
-            // $this, which makes sense since their code is copied into another class.
-            $ast->static = true;
-
-            // Check if the closure imports variables with `use`
-            if (!empty($ast->uses)) {
-                throw new InvalidDefinition('Cannot compile closures which import variables using the `use` keyword');
-            }
-
-            $code = (new \PhpParser\PrettyPrinter\Standard)->prettyPrint([$reflection->getAst()]);
-
-            // Trim spaces and the last `;`
-            $code = trim($code, "\t\n\r;");
-
-            return $code;
+            return $this->compileClosure($value);
         }
 
         return var_export($value, true);
@@ -288,5 +265,33 @@ PHP;
         }
 
         return true;
+    }
+
+    private function compileClosure(\Closure $value) : string
+    {
+        try {
+            $reflection = ReflectionFunction::createFromClosure($value);
+        } catch (TwoClosuresOneLine $e) {
+            throw new InvalidDefinition('Cannot compile closures when two closures are defined on the same line', 0, $e);
+        }
+
+        /** @var Closure $ast */
+        $ast = $reflection->getAst();
+
+        // Force all closures to be static (add the `static` keyword), i.e. they can't use
+        // $this, which makes sense since their code is copied into another class.
+        $ast->static = true;
+
+        // Check if the closure imports variables with `use`
+        if (! empty($ast->uses)) {
+            throw new InvalidDefinition('Cannot compile closures which import variables using the `use` keyword');
+        }
+
+        $code = (new \PhpParser\PrettyPrinter\Standard)->prettyPrint([$reflection->getAst()]);
+
+        // Trim spaces and the last `;`
+        $code = trim($code, "\t\n\r;");
+
+        return $code;
     }
 }
