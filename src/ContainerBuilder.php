@@ -144,8 +144,12 @@ class ContainerBuilder
         $containerClass = $this->containerClass;
 
         if ($this->compileToFile) {
-            $autowiringEnabled = $this->useAutowiring || $this->useAnnotations;
-            $containerClass = (new Compiler)->compile($source, $this->compileToFile, $autowiringEnabled);
+            $containerClass = (new Compiler)->compile(
+                $source,
+                $this->compileToFile,
+                $this->useAutowiring || $this->useAnnotations
+            );
+
             // Only load the file if it hasn't been already loaded
             // (the container can be created multiple times in the same process)
             if (!class_exists($containerClass, false)) {
