@@ -28,7 +28,8 @@
         "psr/container": "^1.0",
         "php-di/invoker": "^2.0",
         "php-di/phpdoc-reader": "^2.0.1",
-        "roave/better-reflection": "^1.2.0"
+        "roave/better-reflection": "^1.2",
+        "nikic/php-parser": "^2.0|^3.0"
     },
     "require-dev": {
         "phpunit/phpunit": "~5.7",
