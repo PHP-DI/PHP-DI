@@ -109,7 +109,7 @@ class ContainerDebugTest extends BaseContainerTest
         $this->assertEquals('Value (100)', $container->debugEntry('entry_int'));
         $this->assertEquals('Value (false)', $container->debugEntry('entry_bool'));
         $this->assertEquals("Value ('string')", $container->debugEntry('entry_str'));
-        $this->assertEquals("Value (NULL)", $container->debugEntry('entry_null'));
+        $this->assertEquals('Value (NULL)', $container->debugEntry('entry_null'));
         $this->assertEquals('Value (Resource)', $container->debugEntry('entry_resource'));
         $this->assertEquals('Factory', $container->debugEntry('entry_callback'));
     }

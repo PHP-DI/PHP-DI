@@ -321,7 +321,7 @@ class Container implements ContainerInterface, FactoryInterface, \DI\InvokerInte
         }
 
         if (is_string($entry)) {
-            return sprintf('Value (\'%s\')', $entry );
+            return sprintf('Value (\'%s\')', $entry);
         }
 
         if (is_bool($entry)) {
