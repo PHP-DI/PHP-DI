@@ -16,7 +16,7 @@ class Bar
 $builder = new ContainerBuilder();
 $builder->useAutowiring(false);
 $builder->useAnnotations(false);
-$builder->compile(__DIR__ . '/tmp/factory.php');
+$builder->enableCompilation(__DIR__ . '/tmp', 'Factory');
 $builder->addDefinitions(__DIR__ . '/factory/config.php');
 
 $container = $builder->build();

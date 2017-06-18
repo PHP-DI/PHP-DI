@@ -9,6 +9,7 @@ use DI\Container;
 use DI\ContainerBuilder;
 use DI\Definition\Source\DefinitionArray;
 use DI\Definition\ValueDefinition;
+use DI\Test\IntegrationTest\BaseContainerTest;
 use DI\Test\UnitTest\Fixtures\FakeContainer;
 use EasyMock\EasyMock;
 use Psr\Container\ContainerInterface;
@@ -146,9 +147,23 @@ class ContainerBuilderTest extends \PHPUnit_Framework_TestCase
     public function should_allow_to_create_a_compiled_container()
     {
         $builder = new ContainerBuilder();
-        $builder->compile(__DIR__ . '/../IntegrationTest/tmp/CompiledContainer.php');
+        $builder->enableCompilation(BaseContainerTest::COMPILATION_DIR);
 
         $this->assertInstanceOf(CompiledContainer::class, $builder->build());
+    }
+
+    /**
+     * That allows to create several compiled containers in the same process.
+     * @test
+     */
+    public function should_allow_to_customize_the_class_name_of_the_compiled_container()
+    {
+        $builder = new ContainerBuilder();
+        $className = 'Container' . uniqid();
+        $builder->enableCompilation(BaseContainerTest::COMPILATION_DIR, $className);
+
+        $this->assertInstanceOf(CompiledContainer::class, $builder->build());
+        $this->assertInstanceOf($className, $builder->build());
     }
 
     /**
@@ -176,7 +191,7 @@ class ContainerBuilderTest extends \PHPUnit_Framework_TestCase
         $result = $builder->writeProxiesToFile(false);
         $this->assertSame($builder, $result);
 
-        $result = $builder->compile('foo.php');
+        $result = $builder->enableCompilation('foo');
         $this->assertSame($builder, $result);
 
         $result = $builder->wrapContainer($this->easyMock(ContainerInterface::class));
