@@ -131,14 +131,14 @@ For that, you can combine annotations with [definitions in PHP](php-definitions.
 
 ## Troubleshooting
 
-Since annotations are in PHP docblocks, the opcache option `opcache.load_comments` must be set to `1`. If it is set to `0`, comments will be stripped from the source code and annotations will not work.
+Since annotations are in PHP docblocks, the opcache option `opcache.save_comments` must be set to `1`. If it is set to `0`, comments will be stripped from the source code and annotations will not work.
 
-The default value for this option is `1` so everything should work by default. There is also no reason to set this option to `0` as it brings no performance benefit.
+The default value for this option is `1` so everything should work by default.
 
 To check the value of this option, you can run the following command:
 
 ```
-$ php -i | grep "opcache.load_comments"
+$ php -i | grep "opcache.save_comments"
 ```
 
 Furthermore, please mind that annotations are case-sensitive. You should write `@Inject` and `@Injectable` instead of `@inject` and `@injectable` to avoid bugs on certain systems.
