@@ -31,7 +31,7 @@ $containerBuilder->enableCompilation(__DIR__ . '/var/cache');
 $container = $containerBuilder->build();
 ```
 
-The `enableCompilation()` method takes the name of the directory in which to store the compiled container.
+The `enableCompilation()` method takes the path of the directory in which to store the compiled container.
 
 ### Deployment in production
 
