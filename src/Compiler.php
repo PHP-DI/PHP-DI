@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace DI;
 
-use BetterReflection\Reflection\ReflectionFunction;
-use BetterReflection\SourceLocator\Exception\TwoClosuresOneLine;
 use DI\Compiler\ObjectCreationCompiler;
 use DI\Definition\AliasDefinition;
 use DI\Definition\ArrayDefinition;
@@ -21,6 +19,8 @@ use DI\Definition\StringDefinition;
 use DI\Definition\ValueDefinition;
 use InvalidArgumentException;
 use PhpParser\Node\Expr\Closure;
+use SuperClosure\Analyzer\AstAnalyzer;
+use SuperClosure\Exception\ClosureAnalysisException;
 
 /**
  * Compiles the container into PHP code much more optimized for performances.
@@ -270,16 +270,22 @@ PHP;
         return true;
     }
 
-    private function compileClosure(\Closure $value) : string
+    private function compileClosure(\Closure $closure) : string
     {
+        $closureAnalyzer = new AstAnalyzer;
+
         try {
-            $reflection = ReflectionFunction::createFromClosure($value);
-        } catch (TwoClosuresOneLine $e) {
-            throw new InvalidDefinition('Cannot compile closures when two closures are defined on the same line', 0, $e);
+            $closureData = $closureAnalyzer->analyze($closure);
+        } catch (ClosureAnalysisException $e) {
+            if (stripos($e->getMessage(), 'Two closures were declared on the same line') !== false) {
+                throw new InvalidDefinition('Cannot compile closures when two closures are defined on the same line', 0, $e);
+            }
+
+            throw $e;
         }
 
         /** @var Closure $ast */
-        $ast = $reflection->getAst();
+        $ast = $closureData['ast'];
 
         // Force all closures to be static (add the `static` keyword), i.e. they can't use
         // $this, which makes sense since their code is copied into another class.
@@ -290,7 +296,7 @@ PHP;
             throw new InvalidDefinition('Cannot compile closures which import variables using the `use` keyword');
         }
 
-        $code = (new \PhpParser\PrettyPrinter\Standard)->prettyPrint([$reflection->getAst()]);
+        $code = (new \PhpParser\PrettyPrinter\Standard)->prettyPrint([$ast]);
 
         // Trim spaces and the last `;`
         $code = trim($code, "\t\n\r;");
