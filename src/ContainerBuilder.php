@@ -298,7 +298,7 @@ class ContainerBuilder
     }
 
     /**
-     * Will the container be compiled?
+     * Are we building a compiled container?
      */
     public function isCompiled() : bool
     {
