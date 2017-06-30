@@ -22,7 +22,7 @@ for ($i = 0; $i < 100; $i++) {
     $builder->useAnnotations(false);
     $builder->addDefinitions(__DIR__ . '/get/config.php');
     if ($compile) {
-        $builder->compile(__DIR__ . "/tmp/container$i.php");
+        $builder->enableCompilation(__DIR__ . '/tmp/', "Container$i");
     }
     $container = $builder->build();
 

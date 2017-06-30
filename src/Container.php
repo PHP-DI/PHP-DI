@@ -99,10 +99,12 @@ class Container implements ContainerInterface, FactoryInterface, \DI\InvokerInte
         $this->definitionResolver = new ResolverDispatcher($this->delegateContainer, $this->proxyFactory);
 
         // Auto-register the container
-        $this->resolvedEntries[self::class] = $this;
-        $this->resolvedEntries[FactoryInterface::class] = $this;
-        $this->resolvedEntries[InvokerInterface::class] = $this;
-        $this->resolvedEntries[ContainerInterface::class] = $this;
+        $this->resolvedEntries = [
+            self::class => $this,
+            FactoryInterface::class => $this,
+            InvokerInterface::class => $this,
+            ContainerInterface::class => $this,
+        ];
     }
 
     /**
@@ -297,12 +299,36 @@ class Container implements ContainerInterface, FactoryInterface, \DI\InvokerInte
         }
 
         if (array_key_exists($name, $this->resolvedEntries)) {
-            $entry = $this->resolvedEntries[$name];
-
-            return is_object($entry) ? get_class($entry) : gettype($entry);
+            return $this->getEntryType($this->resolvedEntries[$name]);
         }
 
         throw new NotFoundException("No entry or class found for '$name'");
+    }
+
+    /**
+     * Get formatted entry type.
+     *
+     * @param mixed $entry
+     */
+    private function getEntryType($entry): string
+    {
+        if (is_object($entry)) {
+            return sprintf("Object (\n    class = %s\n)", get_class($entry));
+        }
+
+        if (is_array($entry)) {
+            return preg_replace(['/^array \(/', '/\)$/'], ['[', ']'], var_export($entry, true));
+        }
+
+        if (is_string($entry)) {
+            return sprintf('Value (\'%s\')', $entry);
+        }
+
+        if (is_bool($entry)) {
+            return sprintf('Value (%s)', $entry === true ? 'true' : 'false');
+        }
+
+        return sprintf('Value (%s)', is_scalar($entry) ? $entry : ucfirst(gettype($entry)));
     }
 
     /**

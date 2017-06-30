@@ -28,8 +28,8 @@ In production environment, you will of course favor speed:
 
 ```php
 $builder = new \DI\ContainerBuilder();
-$builder->compile('tmp/CompiledContainer.php');
-$builder->writeProxiesToFile(true, 'tmp/proxies');
+$builder->enableCompilation(__DIR__ . '/tmp');
+$builder->writeProxiesToFile(true, __DIR__ . '/tmp/proxies');
 
 $container = $builder->build();
 ```

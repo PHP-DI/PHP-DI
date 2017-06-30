@@ -85,7 +85,7 @@ class ContainerBuilder
     /**
      * @var string|null
      */
-    private $compileToFile;
+    private $compileToDirectory;
 
     /**
      * Build a container configured for the dev environment.
@@ -143,17 +143,18 @@ class ContainerBuilder
 
         $containerClass = $this->containerClass;
 
-        if ($this->compileToFile) {
-            $containerClass = (new Compiler)->compile(
+        if ($this->compileToDirectory) {
+            $compiler = new Compiler;
+            $compiledContainerFile = $compiler->compile(
                 $source,
-                $this->compileToFile,
+                $this->compileToDirectory,
+                $containerClass,
                 $this->useAutowiring || $this->useAnnotations
             );
-
             // Only load the file if it hasn't been already loaded
             // (the container can be created multiple times in the same process)
             if (!class_exists($containerClass, false)) {
-                require $this->compileToFile;
+                require $compiledContainerFile;
             }
         }
 
@@ -163,11 +164,6 @@ class ContainerBuilder
     /**
      * Compile the container for optimum performances.
      *
-     * The filename provided must be a valid class name! For example:
-     *
-     * - `var/cache/ContainerProd.php` -> valid since `ContainerProd` is a valid class name
-     * - `var/cache/Container-Prod.php` -> invalid since `Container-Prod` is NOT a valid class name
-     *
      * Be aware that the container is compiled once and never updated!
      *
      * Therefore:
@@ -175,13 +171,20 @@ class ContainerBuilder
      * - in production you should clear that directory every time you deploy
      * - in development you should not compile the container
      *
-     * @param string $fileName File in which to put the compiled container.
+     * If you provide a filename it must be a valid class name! For example:
+     *
+     * - `ContainerProd.php` -> valid since `ContainerProd` is a valid class name
+     * - `Container-Prod.php` -> invalid since `Container-Prod` is NOT a valid class name
+     *
+     * @param string $directory Directory in which to put the compiled container.
+     * @param string $className Name of the class. Customize only if necessary.
      */
-    public function compile(string $fileName) : ContainerBuilder
+    public function enableCompilation(string $directory, string $className = 'CompiledContainer') : ContainerBuilder
     {
         $this->ensureNotLocked();
 
-        $this->compileToFile = $fileName;
+        $this->compileToDirectory = $directory;
+        $this->containerClass = $className;
 
         return $this;
     }
@@ -300,11 +303,11 @@ class ContainerBuilder
     }
 
     /**
-     * Will the container be compiled?
+     * Are we building a compiled container?
      */
     public function isCompiled() : bool
     {
-        return (bool) $this->compileToFile;
+        return (bool) $this->compileToDirectory;
     }
 
     private function ensureNotLocked()

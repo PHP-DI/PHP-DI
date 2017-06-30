@@ -12,12 +12,12 @@ use PHPUnit\Framework\TestCase;
  */
 abstract class BaseContainerTest extends TestCase
 {
-    const COMPILED_CONTAINER_DIRECTORY = __DIR__ . '/tmp';
+    const COMPILATION_DIR = __DIR__ . '/tmp';
 
     public static function setUpBeforeClass()
     {
         // Clear all files
-        array_map('unlink', glob(self::COMPILED_CONTAINER_DIRECTORY . '/*'));
+        array_map('unlink', glob(self::COMPILATION_DIR . '/*'));
 
         parent::setUpBeforeClass();
     }
@@ -25,7 +25,7 @@ abstract class BaseContainerTest extends TestCase
     public function setUp()
     {
         // Clear all files
-        array_map('unlink', glob(self::COMPILED_CONTAINER_DIRECTORY . '/*'));
+        array_map('unlink', glob(self::COMPILATION_DIR . '/*'));
 
         parent::setUp();
     }
@@ -33,20 +33,23 @@ abstract class BaseContainerTest extends TestCase
     public function provideContainer() : array
     {
         // Clear all files
-        array_map('unlink', glob(self::COMPILED_CONTAINER_DIRECTORY . '/*'));
+        array_map('unlink', glob(self::COMPILATION_DIR . '/*'));
 
         return [
             'not-compiled' => [
                 new ContainerBuilder,
             ],
             'compiled' => [
-                (new ContainerBuilder)->compile(self::generateCompilationFileName()),
+                (new ContainerBuilder)->enableCompilation(
+                    self::COMPILATION_DIR,
+                    self::generateCompiledClassName()
+                ),
             ],
         ];
     }
 
-    protected static function generateCompilationFileName()
+    protected static function generateCompiledClassName()
     {
-        return self::COMPILED_CONTAINER_DIRECTORY . '/Container' . uniqid() . '.php';
+        return 'Container' . uniqid();
     }
 }

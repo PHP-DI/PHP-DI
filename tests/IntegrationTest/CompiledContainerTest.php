@@ -16,7 +16,7 @@ class CompiledContainerTest extends BaseContainerTest
     public function the_same_container_can_be_recreated_multiple_times()
     {
         $builder = new ContainerBuilder;
-        $builder->compile(self::generateCompilationFileName());
+        $builder->enableCompilation(self::COMPILATION_DIR, self::generateCompiledClassName());
         $builder->addDefinitions([
             'foo' => 'bar',
         ]);
@@ -29,14 +29,14 @@ class CompiledContainerTest extends BaseContainerTest
     /** @test */
     public function the_container_is_compiled_once_and_never_recompiled_after()
     {
-        $compiledContainerFile = self::generateCompilationFileName();
+        $compiledContainerClass = self::generateCompiledClassName();
 
         // Create a first compiled container in the file
         $builder = new ContainerBuilder;
         $builder->addDefinitions([
             'foo' => 'bar',
         ]);
-        $builder->compile($compiledContainerFile);
+        $builder->enableCompilation(self::COMPILATION_DIR, $compiledContainerClass);
         $builder->build();
 
         // Create a second compiled container in the same file but with a DIFFERENT configuration
@@ -44,7 +44,7 @@ class CompiledContainerTest extends BaseContainerTest
         $builder->addDefinitions([
             'foo' => 'DIFFERENT',
         ]);
-        $builder->compile($compiledContainerFile);
+        $builder->enableCompilation(self::COMPILATION_DIR, $compiledContainerClass);
         $container = $builder->build();
 
         // The second container is actually using the config of the first because the container was already compiled
@@ -67,7 +67,7 @@ class CompiledContainerTest extends BaseContainerTest
         $builder->addDefinitions([
             'foo' => create($class),
         ]);
-        $builder->compile(self::generateCompilationFileName());
+        $builder->enableCompilation(self::COMPILATION_DIR, self::generateCompiledClassName());
         $builder->build();
     }
 
@@ -83,7 +83,7 @@ class CompiledContainerTest extends BaseContainerTest
             \stdClass::class => create()
                 ->property('foo', new \stdClass),
         ]);
-        $builder->compile(self::generateCompilationFileName());
+        $builder->enableCompilation(self::COMPILATION_DIR, self::generateCompiledClassName());
         $builder->build();
     }
 
@@ -104,19 +104,7 @@ class CompiledContainerTest extends BaseContainerTest
                 ],
             ],
         ]);
-        $builder->compile(self::generateCompilationFileName());
-        $builder->build();
-    }
-
-    /**
-     * @test
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage The file in which to compile the container must have a name that is a valid class name: foo-bar is not a valid PHP class name
-     */
-    public function the_compiled_filename_must_be_a_valid_class_name()
-    {
-        $builder = new ContainerBuilder;
-        $builder->compile('/tmp/foo-bar.php');
+        $builder->enableCompilation(self::COMPILATION_DIR, self::generateCompiledClassName());
         $builder->build();
     }
 
@@ -128,13 +116,25 @@ class CompiledContainerTest extends BaseContainerTest
     public function entries_cannot_be_overridden_by_definitions_in_the_compiled_container()
     {
         $builder = new ContainerBuilder;
-        $builder->compile(self::generateCompilationFileName());
+        $builder->enableCompilation(self::COMPILATION_DIR, self::generateCompiledClassName());
         $builder->addDefinitions([
             'foo' => create(\stdClass::class),
         ]);
         $container = $builder->build();
 
         $container->set('foo', create(ContainerSetTest\Dummy::class));
+    }
+
+    /**
+     * @test
+     * @expectedException \InvalidArgumentException
+     * @expectedExceptionMessage The container cannot be compiled: `123-abc` is not a valid PHP class name
+     */
+    public function compiling_to_an_invalid_class_name_throws_an_error()
+    {
+        $builder = new ContainerBuilder;
+        $builder->enableCompilation(self::COMPILATION_DIR, '123-abc');
+        $builder->build();
     }
 }
 

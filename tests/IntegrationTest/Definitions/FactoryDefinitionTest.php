@@ -466,7 +466,7 @@ class FactoryDefinitionTest extends BaseContainerTest
      */
     public function test_closure_which_use_variables_cannot_be_compiled()
     {
-        $builder = (new ContainerBuilder)->compile(self::generateCompilationFileName());
+        $builder = (new ContainerBuilder)->enableCompilation(self::COMPILATION_DIR, self::generateCompiledClassName());
         $foo = 'hello';
         $builder->addDefinitions([
             'factory' => function () use ($foo) {
@@ -483,7 +483,7 @@ class FactoryDefinitionTest extends BaseContainerTest
      */
     public function test_closure_which_use_this_cannot_be_compiled()
     {
-        $builder = (new ContainerBuilder)->compile(self::generateCompilationFileName());
+        $builder = (new ContainerBuilder)->enableCompilation(self::COMPILATION_DIR, self::generateCompiledClassName());
         $builder->addDefinitions([
             'factory' => function () {
                 return $this->foo();
@@ -531,7 +531,7 @@ class FactoryDefinitionTest extends BaseContainerTest
      */
     public function test_multiple_closures_on_the_same_line_cannot_be_compiled()
     {
-        $builder = (new ContainerBuilder)->compile(self::generateCompilationFileName());
+        $builder = (new ContainerBuilder)->enableCompilation(self::COMPILATION_DIR, self::generateCompiledClassName());
         $builder->addDefinitions(__DIR__ . '/FactoryDefinition/config.inc');
         $this->assertEquals('foo', $builder->build()->get('factory'));
     }

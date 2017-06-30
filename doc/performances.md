@@ -20,29 +20,24 @@ In order to avoid those two tasks, the container can be compiled into PHP code o
 
 ### Setup
 
-Compiling the container is as easy as calling the `compile()` method on the container builder:
+Compiling the container is as easy as calling the `enableCompilation()` method on the container builder:
 
 ```php
 $containerBuilder = new \DI\ContainerBuilder();
-$containerBuilder->compile(__DIR__ . '/var/cache/CompiledContainer.php');
+$containerBuilder->enableCompilation(__DIR__ . '/var/cache');
 
 // […]
 
 $container = $containerBuilder->build();
 ```
 
-The `compile()` method takes a single argument: the name of a file in which to store the container.
-
-Please note that the file name will also be the name of the generated PHP class. Because of that the filename you specify must also be a valid class name. For example:
-
-- `var/cache/CompiledContainer.php`: valid
-- `var/cache/compiled-container.php`: invalid since `compiled-container` is not a valid PHP class name
+The `enableCompilation()` method takes the path of the directory in which to store the compiled container.
 
 ### Deployment in production
 
 When a container is configured to be compiled, **it will be compiled once and never be regenerated again**. That allows for maximum performances in production.
 
-When you deploy new versions of your code to production **you must delete the generated file** to ensure that the container is re-compiled.
+When you deploy new versions of your code to production **you must delete the generated file** (or the directory that contains it) to ensure that the container is re-compiled.
 
 If your production handles a lot of traffic you may also want to generate the compiled container *before* the new version of your code goes live. That phase is known as the "warmup" phase. To do this, simply create the container (call `$containerBuilder->build()`) during your deployment step and the compiled container will be created.
 
@@ -53,7 +48,7 @@ If your production handles a lot of traffic you may also want to generate the co
 ```php
 $containerBuilder = new \DI\ContainerBuilder();
 if (/* is production */) {
-    $containerBuilder->compile(__DIR__ . '/var/cache/CompiledContainer.php');
+    $containerBuilder->enableCompilation(__DIR__ . '/var/cache');
 }
 ```
 
