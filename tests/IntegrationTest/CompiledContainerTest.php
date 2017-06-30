@@ -143,4 +143,16 @@ class CompiledContainerTest extends BaseContainerTest
 
         $container->set('foo', create(ContainerSetTest\Dummy::class));
     }
+
+    /**
+     * @test
+     * @expectedException \InvalidArgumentException
+     * @expectedExceptionMessage The container cannot be compiled: `123-abc` is not a valid PHP class name
+     */
+    public function compiling_to_an_invalid_class_name_throws_an_error()
+    {
+        $builder = new ContainerBuilder;
+        $builder->enableCompilation(self::COMPILATION_DIR, '123-abc');
+        $builder->build();
+    }
 }

@@ -57,6 +57,12 @@ class Compiler
             return $fileName;
         }
 
+        // Validate that a valid class name was provided
+        $validClassName = preg_match('/^[a-zA-Z_][a-zA-Z0-9_]*$/', $className);
+        if (!$validClassName) {
+            throw new InvalidArgumentException("The container cannot be compiled: `$className` is not a valid PHP class name");
+        }
+
         $definitions = $definitionSource->getDefinitions();
 
         foreach ($definitions as $entryName => $definition) {
