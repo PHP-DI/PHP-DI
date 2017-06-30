@@ -50,7 +50,7 @@ class Compiler
      */
     public function compile(DefinitionSource $definitionSource, string $directory, string $className) : string
     {
-        $fileName = $directory . '/' . $className . '.php';
+        $fileName = rtrim($directory, '/') . '/' . $className . '.php';
 
         if (file_exists($fileName)) {
             // The container is already compiled
