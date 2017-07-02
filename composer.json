@@ -35,9 +35,6 @@
         "doctrine/annotations": "~1.2",
         "ocramius/proxy-manager": "~2.0.2"
     },
-    "replace": {
-        "mnapoli/php-di": "*"
-    },
     "provide": {
         "psr/container-implementation": "^1.0"
     },
