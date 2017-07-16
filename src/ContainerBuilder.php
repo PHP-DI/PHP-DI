@@ -145,7 +145,12 @@ class ContainerBuilder
 
         if ($this->compileToDirectory) {
             $compiler = new Compiler;
-            $compiledContainerFile = $compiler->compile($source, $this->compileToDirectory, $containerClass);
+            $compiledContainerFile = $compiler->compile(
+                $source,
+                $this->compileToDirectory,
+                $containerClass,
+                $this->useAutowiring || $this->useAnnotations
+            );
             // Only load the file if it hasn't been already loaded
             // (the container can be created multiple times in the same process)
             if (!class_exists($containerClass, false)) {

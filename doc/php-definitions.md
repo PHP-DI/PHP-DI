@@ -99,7 +99,7 @@ However **this is not recommended** as that object will be created *for every PH
 
 ### Factories
 
-Factories are **PHP callables** that return the instance. They allow to define objects *lazily*, i.e. they will be created only when actually used.
+Factories are **PHP callables** that return the instance. They allow to define objects *lazily*, i.e. each object will be created only when actually needed.
 
 Here is an example using a closure:
 
@@ -197,7 +197,7 @@ Please note:
 
 - `factory([FooFactory::class, 'build'])`: if `build()` is a **static** method then the object will not be created: `FooFactory::build()` will be called statically (as one would expect)
 - you can set any container entry name in the array, e.g. `DI\factory(['foo_bar_baz', 'build'])` (or alternatively: `DI\factory('foo_bar_baz::build')`), allowing you to configure `foo_bar_baz` and its dependencies like any other object
-- as a factory can be any PHP callable, you can use invokable objects, too: `DI\factory(InvocableFooFactory::class)` (or alternatively: `DI\factory('invocable_foo_factory')`, if it's defined in the container)
+- as a factory can be any PHP callable, you can use invokable objects, too: `DI\factory(InvokableFooFactory::class)` (or alternatively: `DI\factory('invokable_foo_factory')`, if it's defined in the container)
 
 #### Retrieving the name of the requested entry
 

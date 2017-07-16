@@ -4,7 +4,17 @@ declare(strict_types=1);
 
 namespace DI;
 
+use DI\Compiler\RequestedEntryHolder;
 use DI\Definition\Definition;
+use DI\Definition\Exception\InvalidDefinition;
+use DI\Invoker\FactoryParameterResolver;
+use Invoker\Exception\NotCallableException;
+use Invoker\Exception\NotEnoughParametersException;
+use Invoker\Invoker;
+use Invoker\InvokerInterface;
+use Invoker\ParameterResolver\AssociativeArrayResolver;
+use Invoker\ParameterResolver\NumericArrayResolver;
+use Invoker\ParameterResolver\ResolverChain;
 
 /**
  * Compiled version of the dependency injection container.
@@ -13,6 +23,11 @@ use DI\Definition\Definition;
  */
 abstract class CompiledContainer extends Container
 {
+    /**
+     * @var InvokerInterface
+     */
+    private $factoryInvoker;
+
     /**
      * {@inheritdoc}
      */
@@ -73,5 +88,34 @@ abstract class CompiledContainer extends Container
         // It needs to be forbidden because that would mean get() must go through the definitions
         // every time, which kinds of defeats the performance gains of the compiled container
         throw new \LogicException('You cannot set a definition at runtime on a compiled container. You can either put your definitions in a file, disable compilation or ->set() a raw value directly (PHP object, string, int, ...) instead of a PHP-DI definition.');
+    }
+
+    /**
+     * Invoke the given callable.
+     */
+    protected function resolveFactory($callable, $entryName, array $extraParameters = [])
+    {
+        // Initialize the factory resolver
+        if (! $this->factoryInvoker) {
+            $parameterResolver = new ResolverChain([
+                new AssociativeArrayResolver,
+                new FactoryParameterResolver($this->delegateContainer),
+                new NumericArrayResolver,
+            ]);
+
+            $this->factoryInvoker = new Invoker($parameterResolver, $this->delegateContainer);
+        }
+
+        $parameters = [$this->delegateContainer, new RequestedEntryHolder($entryName)];
+
+        $parameters = array_merge($parameters, $extraParameters);
+
+        try {
+            return $this->factoryInvoker->call($callable, $parameters);
+        } catch (NotCallableException $e) {
+            throw new InvalidDefinition("Entry \"$entryName\" cannot be resolved: factory " . $e->getMessage());
+        } catch (NotEnoughParametersException $e) {
+            throw new InvalidDefinition("Entry \"$entryName\" cannot be resolved: " . $e->getMessage());
+        }
     }
 }

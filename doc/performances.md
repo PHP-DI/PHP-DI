@@ -77,11 +77,17 @@ Currently PHP-DI does not traverse directories to find autowired or annotated cl
 
 Please note that the following definitions are not compiled (yet):
 
-- [factory definitions](php-definitions.md#factories)
 - [decorator definitions](php-definitions.md#decoration)
 - [wildcard definitions](php-definitions.md#wildcards)
 
 Those definitions will still work perfectly, they will simply not get a performance boost when using a compiled container.
+
+On the other hand factory definitions (either defined with closures or with class factories) are supported in the compiled container. However please note that if you are using closures as factories:
+
+- you should not use `$this` inside closures
+- you should not import variables inside the closure using the `use` keyword, like in `function () use ($foo) { ...`
+
+These limitations exist because the code of each closure is copied into the compiled container. It is safe to say that you should probably not do these things even if you do not compile the container.
 
 ### How it works
 
