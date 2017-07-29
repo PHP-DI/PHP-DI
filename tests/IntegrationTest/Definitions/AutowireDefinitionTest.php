@@ -17,6 +17,7 @@ use DI\Test\IntegrationTest\Definitions\ObjectDefinition\Class2;
 use DI\Test\IntegrationTest\Definitions\ObjectDefinition\Class3;
 use ProxyManager\Proxy\LazyLoadingInterface;
 use function DI\autowire;
+use function DI\create;
 use function DI\get;
 
 /**
@@ -61,6 +62,82 @@ class AutowireDefinitionTest extends BaseContainerTest
         self::assertFalse($object->lazyService->isProxyInitialized());
         self::assertNull($object->unknownTypedAndOptional);
         self::assertEquals('hello', $object->optionalValue);
+    }
+
+    /**
+     * @dataProvider provideContainer
+     */
+    public function test_autowired_constructor_injection_can_be_overloaded(ContainerBuilder $builder)
+    {
+        $builder->addDefinitions([
+            AutowireDefinition\ConstructorInjection::class => autowire()
+                ->constructorParameter('overloadedParameter', get('foo')),
+
+            AutowireDefinition\Class1::class => create(),
+            'foo' => create(AutowireDefinition\Class1::class),
+        ]);
+        $container = $builder->build();
+
+        $object = $container->get(AutowireDefinition\ConstructorInjection::class);
+
+        self::assertSame($container->get(\stdClass::class), $object->autowiredParameter);
+
+        self::assertSame($container->get('foo'), $object->overloadedParameter);
+        self::assertNotSame($container->get(AutowireDefinition\Class1::class), $object->overloadedParameter);
+    }
+
+    /**
+     * @dataProvider provideContainer
+     */
+    public function test_annotated_constructor_injection_can_be_overloaded(ContainerBuilder $builder)
+    {
+        $builder->useAnnotations(true);
+        $builder->addDefinitions([
+            AutowireDefinition\ConstructorInjection::class => autowire()
+                ->constructorParameter('overloadedParameter', get('foo')),
+
+            \stdClass::class => create(),
+            'anotherStdClass' => create(\stdClass::class),
+
+            AutowireDefinition\Class1::class => create(),
+            'foo' => create(AutowireDefinition\Class1::class),
+        ]);
+        $container = $builder->build();
+
+        $object = $container->get(AutowireDefinition\ConstructorInjection::class);
+
+        self::assertSame($container->get('anotherStdClass'), $object->autowiredParameter);
+        self::assertNotSame($container->get(\stdClass::class), $object->autowiredParameter);
+
+        self::assertSame($container->get('foo'), $object->overloadedParameter);
+        self::assertNotSame($container->get(AutowireDefinition\Class1::class), $object->overloadedParameter);
+    }
+
+    /**
+     * @dataProvider provideContainer
+     */
+    public function test_annotated_method_injection_can_be_overloaded(ContainerBuilder $builder)
+    {
+        $builder->useAnnotations(true);
+        $builder->addDefinitions([
+            AutowireDefinition\MethodInjection::class => autowire()
+                ->methodParameter('setFoo', 'overloadedParameter', get('foo')),
+
+            \stdClass::class => create(),
+            'anotherStdClass' => create(\stdClass::class),
+
+            AutowireDefinition\Class1::class => create(),
+            'foo' => create(AutowireDefinition\Class1::class),
+        ]);
+        $container = $builder->build();
+
+        $object = $container->get(AutowireDefinition\MethodInjection::class);
+
+        self::assertSame($container->get('anotherStdClass'), $object->autowiredParameter);
+        self::assertNotSame($container->get(\stdClass::class), $object->autowiredParameter);
+
+        self::assertSame($container->get('foo'), $object->overloadedParameter);
+        self::assertNotSame($container->get(AutowireDefinition\Class1::class), $object->overloadedParameter);
     }
 
     /**

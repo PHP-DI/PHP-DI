@@ -108,6 +108,17 @@ class ObjectDefinition implements Definition
         $this->constructorInjection = $constructorInjection;
     }
 
+    public function completeConstructorInjection(MethodInjection $injection)
+    {
+        if ($this->constructorInjection !== null) {
+            // Merge
+            $this->constructorInjection->merge($injection);
+        } else {
+            // Set
+            $this->constructorInjection = $injection;
+        }
+    }
+
     /**
      * @return PropertyInjection[] Property injections
      */
@@ -151,6 +162,19 @@ class ObjectDefinition implements Definition
             $this->methodInjections[$method] = [];
         }
         $this->methodInjections[$method][] = $methodInjection;
+    }
+
+    public function completeFirstMethodInjection(MethodInjection $injection)
+    {
+        $method = $injection->getMethodName();
+
+        if (isset($this->methodInjections[$method][0])) {
+            // Merge
+            $this->methodInjections[$method][0]->merge($injection);
+        } else {
+            // Set
+            $this->addMethodInjection($injection);
+        }
     }
 
     public function setLazy(bool $lazy = null)

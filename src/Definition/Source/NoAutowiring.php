@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace DI\Definition\Source;
 
-use DI\Definition\AutowireDefinition;
 use DI\Definition\Exception\InvalidDefinition;
+use DI\Definition\ObjectDefinition;
 
 /**
  * Implementation used when autowiring is completely disabled.
@@ -14,7 +14,7 @@ use DI\Definition\Exception\InvalidDefinition;
  */
 class NoAutowiring implements Autowiring
 {
-    public function autowire(string $name, AutowireDefinition $definition = null)
+    public function autowire(string $name, ObjectDefinition $definition = null)
     {
         throw new InvalidDefinition(sprintf(
             'Cannot autowire entry "%s" because autowiring is disabled',

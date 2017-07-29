@@ -6,7 +6,6 @@ namespace DI\Definition\Source;
 
 use DI\Annotation\Inject;
 use DI\Annotation\Injectable;
-use DI\Definition\AutowireDefinition;
 use DI\Definition\EntryReference;
 use DI\Definition\Exception\AnnotationException;
 use DI\Definition\ObjectDefinition;
@@ -53,7 +52,7 @@ class AnnotationBasedAutowiring implements DefinitionSource, Autowiring
         $this->ignorePhpDocErrors = (bool) $ignorePhpDocErrors;
     }
 
-    public function autowire(string $name, AutowireDefinition $definition = null)
+    public function autowire(string $name, ObjectDefinition $definition = null)
     {
         $className = $definition ? $definition->getClassName() : $name;
 
@@ -61,7 +60,7 @@ class AnnotationBasedAutowiring implements DefinitionSource, Autowiring
             return $definition;
         }
 
-        $definition = $definition ?: new AutowireDefinition($name);
+        $definition = $definition ?: new ObjectDefinition($name);
 
         $class = new ReflectionClass($className);
 
@@ -161,9 +160,9 @@ class AnnotationBasedAutowiring implements DefinitionSource, Autowiring
             }
 
             if ($method->isConstructor()) {
-                $objectDefinition->setConstructorInjection($methodInjection);
+                $objectDefinition->completeConstructorInjection($methodInjection);
             } else {
-                $objectDefinition->addMethodInjection($methodInjection);
+                $objectDefinition->completeFirstMethodInjection($methodInjection);
             }
         }
     }
