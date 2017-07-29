@@ -13,8 +13,6 @@ use DI\Definition\ObjectDefinition;
 use DI\Definition\Resolver\DefinitionResolver;
 use DI\Definition\Resolver\ResolverDispatcher;
 use DI\Definition\Source\DefinitionArray;
-use DI\Definition\Source\DefinitionSource;
-use DI\Definition\Source\MutableDefinitionSource;
 use DI\Definition\Source\ReflectionBasedAutowiring;
 use DI\Definition\Source\SourceChain;
 use DI\Invoker\DefinitionParameterResolver;
@@ -45,7 +43,7 @@ class Container implements ContainerInterface, FactoryInterface, \DI\InvokerInte
     protected $resolvedEntries = [];
 
     /**
-     * @var DefinitionSource
+     * @var SourceChain
      */
     private $definitionSource;
 
@@ -88,7 +86,7 @@ class Container implements ContainerInterface, FactoryInterface, \DI\InvokerInte
      * @param ContainerInterface $wrapperContainer If the container is wrapped by another container.
      */
     public function __construct(
-        DefinitionSource $definitionSource = null,
+        SourceChain $definitionSource = null,
         ProxyFactory $proxyFactory = null,
         ContainerInterface $wrapperContainer = null
     ) {
@@ -364,11 +362,6 @@ class Container implements ContainerInterface, FactoryInterface, \DI\InvokerInte
 
     protected function setDefinition(string $name, Definition $definition)
     {
-        if (! $this->definitionSource instanceof MutableDefinitionSource) {
-            // This can happen if you instantiate the container yourself
-            throw new \LogicException('The container has not been initialized correctly');
-        }
-
         // Clear existing entry if it exists
         if (array_key_exists($name, $this->resolvedEntries)) {
             unset($this->resolvedEntries[$name]);
@@ -394,7 +387,7 @@ class Container implements ContainerInterface, FactoryInterface, \DI\InvokerInte
         return $this->invoker;
     }
 
-    private function createDefaultDefinitionSource() : DefinitionSource
+    private function createDefaultDefinitionSource() : SourceChain
     {
         $source = new SourceChain([new ReflectionBasedAutowiring]);
         $source->setMutableDefinitionSource(new DefinitionArray([], new ReflectionBasedAutowiring));
