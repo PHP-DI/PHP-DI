@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace DI\Definition\Source;
 
-use DI\Definition\AutowireDefinition;
 use DI\Definition\EntryReference;
+use DI\Definition\ObjectDefinition;
 use DI\Definition\ObjectDefinition\MethodInjection;
 
 /**
@@ -15,7 +15,7 @@ use DI\Definition\ObjectDefinition\MethodInjection;
  */
 class ReflectionBasedAutowiring implements DefinitionSource, Autowiring
 {
-    public function autowire(string $name, AutowireDefinition $definition = null)
+    public function autowire(string $name, ObjectDefinition $definition = null)
     {
         $className = $definition ? $definition->getClassName() : $name;
 
@@ -23,14 +23,14 @@ class ReflectionBasedAutowiring implements DefinitionSource, Autowiring
             return $definition;
         }
 
-        $definition = $definition ?: new AutowireDefinition($name);
+        $definition = $definition ?: new ObjectDefinition($name);
 
         // Constructor
         $class = new \ReflectionClass($className);
         $constructor = $class->getConstructor();
         if ($constructor && $constructor->isPublic()) {
             $constructorInjection = MethodInjection::constructor($this->getParametersDefinition($constructor));
-            $definition->setDefaultConstructorInjection($constructorInjection);
+            $definition->completeConstructorInjection($constructorInjection);
         }
 
         return $definition;
