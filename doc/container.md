@@ -131,12 +131,10 @@ $container->call($controller, $_GET); // $_GET contains ['name' => 'John']
 This leaves the liberty to the developer writing controllers to get request parameters
 *and* services using dependency injection.
 
-As with `make()`, `call()` is defined in `DI\InvokerInterface` so that you can type-hint
-against that interface without coupling yourself to the container.
-`DI\InvokerInterface` is automatically bound to `DI\Container` so you can inject it without any configuration.
+As with `make()`, `call()` is defined in `Invoker\InvokerInterface` (in the [PHP-DI/Invoker package](https://github.com/PHP-DI/Invoker)) so that you can type-hint against that interface without coupling yourself to the container. `Invoker\InvokerInterface` is automatically bound to `DI\Container` so you can inject it without any configuration.
 
 ```php
-namespace DI;
+namespace Invoker;
 
 interface InvokerInterface
 {

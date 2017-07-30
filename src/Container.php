@@ -20,6 +20,7 @@ use DI\Proxy\ProxyFactory;
 use Exception;
 use InvalidArgumentException;
 use Invoker\Invoker;
+use Invoker\InvokerInterface;
 use Invoker\ParameterResolver\AssociativeArrayResolver;
 use Invoker\ParameterResolver\Container\TypeHintContainerResolver;
 use Invoker\ParameterResolver\DefaultValueResolver;
@@ -34,7 +35,7 @@ use Psr\Container\ContainerInterface;
  *
  * @author Matthieu Napoli <matthieu@mnapoli.fr>
  */
-class Container implements ContainerInterface, FactoryInterface, \DI\InvokerInterface
+class Container implements ContainerInterface, FactoryInterface, InvokerInterface
 {
     /**
      * Map of entries that are already resolved.
@@ -59,7 +60,7 @@ class Container implements ContainerInterface, FactoryInterface, \DI\InvokerInte
     protected $entriesBeingResolved = [];
 
     /**
-     * @var \Invoker\InvokerInterface|null
+     * @var InvokerInterface|null
      */
     private $invoker;
 
@@ -370,7 +371,7 @@ class Container implements ContainerInterface, FactoryInterface, \DI\InvokerInte
         $this->definitionSource->addDefinition($definition);
     }
 
-    private function getInvoker() : \Invoker\InvokerInterface
+    private function getInvoker() : InvokerInterface
     {
         if (! $this->invoker) {
             $parameterResolver = new ResolverChain([
