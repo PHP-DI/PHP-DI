@@ -9,7 +9,7 @@ class OptionalParameterFollowedByRequiredParameter
     public $first;
     public $second;
 
-    public function __construct($first, \stdClass $second)
+    public function __construct($first = null, \stdClass $second)
     {
         $this->first = $first;
         $this->second = $second;
