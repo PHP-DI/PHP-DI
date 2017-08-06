@@ -6,6 +6,7 @@ namespace DI\Test\IntegrationTest\Definitions;
 
 use DI\ContainerBuilder;
 use DI\Test\IntegrationTest\BaseContainerTest;
+use DI\Test\IntegrationTest\Definitions\AutowireDefinition\OptionalParameterFollowedByRequiredParameter;
 use DI\Test\IntegrationTest\Definitions\AutowireDefinitionTest\ConstructorInjection;
 use DI\Test\IntegrationTest\Definitions\AutowireDefinitionTest\LazyService;
 use DI\Test\IntegrationTest\Definitions\AutowireDefinitionTest\NullableConstructorParameter;
@@ -306,6 +307,19 @@ class AutowireDefinitionTest extends BaseContainerTest
         self::assertFalse($object->isProxyInitialized());
         self::assertEquals('bar', $object->bar);
         self::assertTrue($object->isProxyInitialized());
+    }
+
+    /**
+     * @dataProvider provideContainer
+     */
+    public function test_optional_parameter_followed_by_required_parameters(ContainerBuilder $builder)
+    {
+        $container = $builder->build();
+
+        $object = $container->get(OptionalParameterFollowedByRequiredParameter::class);
+
+        self::assertNull($object->first);
+        self::assertInstanceOf(\stdClass::class, $object->second);
     }
 }
 

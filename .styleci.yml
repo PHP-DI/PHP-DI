@@ -14,3 +14,4 @@ disabled:
     - phpdoc_align
     - phpdoc_separation
     - align_double_arrow
+    - no_unreachable_default_argument_value
