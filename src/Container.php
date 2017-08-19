@@ -353,6 +353,7 @@ class Container implements ContainerInterface, FactoryInterface, InvokerInterfac
             $value = $this->definitionResolver->resolve($definition, $parameters);
         } catch (Exception $exception) {
             unset($this->entriesBeingResolved[$entryName]);
+
             throw $exception;
         }
 

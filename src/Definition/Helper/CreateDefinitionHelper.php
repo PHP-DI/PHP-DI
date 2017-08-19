@@ -184,6 +184,7 @@ class CreateDefinitionHelper implements DefinitionHelper
             // Parameter indexed by the parameter name, we reindex it with its position
             if (is_string($index)) {
                 $callable = [$definition->getClassName(), $method];
+
                 try {
                     $reflectionParameter = new \ReflectionParameter($callable, $index);
                 } catch (\ReflectionException $e) {

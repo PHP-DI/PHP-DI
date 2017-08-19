@@ -20,8 +20,8 @@ interface Definition extends RequestedEntry
      */
     public function getName() : string;
 
-     /**
-      * Definitions can be cast to string for debugging information.
-      */
-     public function __toString();
+    /**
+     * Definitions can be cast to string for debugging information.
+     */
+    public function __toString();
 }
