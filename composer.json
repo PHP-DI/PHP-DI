@@ -2,7 +2,7 @@
     "name": "php-di/php-di",
     "type": "library",
     "description": "The dependency injection container for humans",
-    "keywords": ["di", "dependency injection", "container"],
+    "keywords": ["di", "dependency injection", "container", "ioc", "psr-11", "psr11", "container-interop"],
     "homepage": "http://php-di.org/",
     "license": "MIT",
     "autoload": {
