@@ -30,7 +30,7 @@ return PhpCsFixer\Config::create()
         'no_useless_return' => true,
         'ordered_imports' => true,
         'php_unit_strict' => true,
-        'phpdoc_add_missing_param_annotation' => true,
+        'phpdoc_add_missing_param_annotation' => false,
         'phpdoc_align' => false,
         'phpdoc_annotation_without_dot' => false,
         'phpdoc_separation' => false,
