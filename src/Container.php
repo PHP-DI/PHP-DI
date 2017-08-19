@@ -271,7 +271,7 @@ class Container implements ContainerInterface, FactoryInterface, InvokerInterfac
     /**
      * Get defined container entries.
      */
-    public function getKnownEntryNames(): array
+    public function getKnownEntryNames() : array
     {
         $entries = array_unique(array_merge(
             array_keys($this->definitionSource->getDefinitions()),
@@ -290,7 +290,7 @@ class Container implements ContainerInterface, FactoryInterface, InvokerInterfac
      * @throws InvalidDefinition
      * @throws NotFoundException
      */
-    public function debugEntry(string $name): string
+    public function debugEntry(string $name) : string
     {
         $definition = $this->definitionSource->getDefinition($name);
         if ($definition instanceof Definition) {
@@ -309,7 +309,7 @@ class Container implements ContainerInterface, FactoryInterface, InvokerInterfac
      *
      * @param mixed $entry
      */
-    private function getEntryType($entry): string
+    private function getEntryType($entry) : string
     {
         if (is_object($entry)) {
             return sprintf("Object (\n    class = %s\n)", get_class($entry));
