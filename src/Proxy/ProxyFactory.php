@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace DI\Proxy;
 
+use InvalidArgumentException;
 use ProxyManager\Configuration;
 use ProxyManager\Factory\LazyLoadingValueHolderFactory;
 use ProxyManager\FileLocator\FileLocator;
@@ -73,6 +74,8 @@ class ProxyFactory
         $config = new Configuration();
 
         if ($this->writeProxiesToFile) {
+            $this->createProxiesDirectory($this->proxyDirectory);
+
             $config->setProxiesTargetDir($this->proxyDirectory);
             $config->setGeneratorStrategy(new FileWriterGeneratorStrategy(new FileLocator($this->proxyDirectory)));
             spl_autoload_register($config->getProxyAutoloader());
@@ -81,5 +84,12 @@ class ProxyFactory
         }
 
         $this->proxyManager = new LazyLoadingValueHolderFactory($config);
+    }
+
+    private function createProxiesDirectory(string $directory)
+    {
+        if ((!@mkdir($directory, 0777, true) && !is_dir($directory)) || !is_writable($directory)) {
+            throw new InvalidArgumentException(sprintf('Proxies directory cannot be created or is write protected: %s.', $directory));
+        }
     }
 }
