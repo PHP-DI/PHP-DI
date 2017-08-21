@@ -5,7 +5,7 @@ current_menu: scopes
 
 # Scopes
 
-**Scopes have been removed in PHP-DI 6.** Read below for more explanations.
+**Scopes have been removed in PHP-DI 6.** Read below for more explanations. From now on, all definitions are resolved once and their result is kept during the life of the container.
 
 Scopes were used to make the container work as a factory: instead of using scopes you should rather inject a proper factory and create the objects you need on demand.
 

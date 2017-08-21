@@ -28,6 +28,14 @@ return [
 $containerBuilder->addDefinitions('config.php');
 ```
 
+## A word about lazy loading
+
+PHP-DI loads the definitions you have written and uses them like instructions on how to create objects.
+
+However those objects are only created when/if they are requested from the container, for example through `$container->get(…)` or when they need to be injected in another object. That means you can have a large amount of definitions, PHP-DI will not create all the objects unless asked to.
+
+The only exception to that behavior is if you define *objects* as [values](#values) but this is not recommended (this is explained in the ["Values" section](#values)).
+
 ## Syntax
 
 PHP-DI's definitions are written using a *DSL* (Domain Specific Language) written in PHP and based on helper functions.
@@ -95,11 +103,15 @@ return [
 ];
 ```
 
-However **this is not recommended** as that object will be created *for every PHP request*, even if not used. You should instead use one of the methods documented below.
+However **this is not recommended** as that object will be created *for every PHP request*, even if not used (it will not be lazy loaded like explained at the top of this section). It will also prevent the container from being compiled.
+
+You should instead use one of the methods documented below.
 
 ### Factories
 
-Factories are **PHP callables** that return the instance. They allow to define objects *lazily*, i.e. each object will be created only when actually needed.
+Factories are **PHP callables** that return the instance. They allow to easily define objects *lazily*, i.e. each object will be created only when actually needed (because the callable will be called when actually needed).
+
+Just like any other definition, factories are called once and the same result is returned every time the factory needs to be resolved.
 
 Here is an example using a closure:
 
@@ -278,7 +290,7 @@ return [
 ];
 ```
 
-Each entry will be resolved once and the same instance will be injected everywhere it is used.
+Each entry will be resolved once and the same instance will be injected everywhere it is used. Just like with other definitions, objects defined with the `create()` helper are created only when needed (lazy-loading).
 
 ### Autowired objects
 
