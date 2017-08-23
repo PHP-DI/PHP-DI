@@ -108,6 +108,8 @@ class Compiler
     {
         // Generate a unique method name
         $methodName = uniqid('get');
+        // Windows system uniqid consecutive calls may return duplicate values
+        usleep(1);
         $this->entryToMethodMapping[$entryName] = $methodName;
 
         switch (true) {
