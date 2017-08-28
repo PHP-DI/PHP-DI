@@ -107,7 +107,7 @@ class Compiler
     private function compileDefinition(string $entryName, Definition $definition) : string
     {
         // Generate a unique method name
-        $methodName = uniqid('get');
+        $methodName = str_replace('.', '', uniqid('get', true));
         $this->entryToMethodMapping[$entryName] = $methodName;
 
         switch (true) {
