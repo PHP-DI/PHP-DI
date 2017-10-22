@@ -1,0 +1,12 @@
+tasks:
+    'Commit message': "git log -1 --pretty=%B | head -n 1"
+    'Commit author': "git log -1 --pretty=%an"
+    'Number of files': "find . -type f | wc -l"
+    'Number of directories': "find . -type d | wc -l"
+    'Number of PHP files': "find . -type f -name '*.php' | wc -l"
+    'Number of documentation files': "find . -type f -name '*.md' | wc -l"
+    'Lines of documentation': "find . -type f -name '*.md' | xargs wc -l | tail -n 1 | awk '{print $1}'"
+    'Lines of code': "phploc . | grep 'Lines of Code (LOC)' | awk '{print $5}'"
+    'Lines of comments': "phploc . | grep 'Comment Lines of Code (CLOC)' | awk '{print $6}'"
+    'Average Complexity per LLOC': "phploc . | grep 'Average Complexity per LLOC' | awk '{print $5}'"
+    'Number of tests': "phploc . --count-tests | grep 'Methods' | tail -n 1 | awk '{print $2}'"
