@@ -53,6 +53,13 @@ class Container implements ContainerInterface, FactoryInterface, InvokerInterfac
     private $definitionResolver;
 
     /**
+     * Map of definitions that are already fetched / looked up.
+     *
+     * @var array
+     */
+    private $fetchedDefinitions = [];
+
+    /**
      * Array of entries being resolved. Used to avoid circular dependencies and infinite loops.
      * @var array
      */
@@ -122,7 +129,7 @@ class Container implements ContainerInterface, FactoryInterface, InvokerInterfac
             return $this->resolvedEntries[$name];
         }
 
-        $definition = $this->definitionSource->getDefinition($name);
+        $definition = $this->getDefinition($name);
         if (! $definition) {
             throw new NotFoundException("No entry or class found for '$name'");
         }
@@ -132,6 +139,15 @@ class Container implements ContainerInterface, FactoryInterface, InvokerInterfac
         $this->resolvedEntries[$name] = $value;
 
         return $value;
+    }
+
+    private function getDefinition($name)
+    {
+        if(!array_key_exists($name, $this->fetchedDefinitions)){
+            $this->fetchedDefinitions[$name] = $this->definitionSource->getDefinition($name);
+        }
+
+        return $this->fetchedDefinitions[$name];
     }
 
     /**
@@ -161,7 +177,7 @@ class Container implements ContainerInterface, FactoryInterface, InvokerInterfac
             ));
         }
 
-        $definition = $this->definitionSource->getDefinition($name);
+        $definition = $this->getDefinition($name);
         if (! $definition) {
             // If the entry is already resolved we return it
             if (array_key_exists($name, $this->resolvedEntries)) {
@@ -195,7 +211,7 @@ class Container implements ContainerInterface, FactoryInterface, InvokerInterfac
             return true;
         }
 
-        $definition = $this->definitionSource->getDefinition($name);
+        $definition = $this->getDefinition($name);
         if ($definition === null) {
             return false;
         }
