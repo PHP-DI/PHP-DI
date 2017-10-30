@@ -3,6 +3,7 @@
 These tests are work in progress. They are mostly useful to profile with Blackfire and detect possible improvements.
 
 ```
+composer install
 make test-get
 make test-...
 ```
