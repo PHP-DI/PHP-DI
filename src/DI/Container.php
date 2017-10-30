@@ -49,6 +49,13 @@ class Container implements ContainerInterface, InteropContainerInterface, Factor
     private $definitionResolver;
 
     /**
+     * Map of definitions that are already fetched / looked up.
+     *
+     * @var array
+     */
+    private $fetchedDefinitions = [];
+
+    /**
      * Array of entries being resolved. Used to avoid circular dependencies and infinite loops.
      * @var array
      */
@@ -116,7 +123,7 @@ class Container implements ContainerInterface, InteropContainerInterface, Factor
             return $this->singletonEntries[$name];
         }
 
-        $definition = $this->definitionSource->getDefinition($name);
+        $definition = $this->getDefinition($name);
         if (! $definition) {
             throw new NotFoundException("No entry or class found for '$name'");
         }
@@ -129,6 +136,15 @@ class Container implements ContainerInterface, InteropContainerInterface, Factor
         }
 
         return $value;
+    }
+
+    private function getDefinition($name)
+    {
+        if(!array_key_exists($name, $this->fetchedDefinitions)){
+            $this->fetchedDefinitions[$name] = $this->definitionSource->getDefinition($name);
+        }
+
+        return $this->fetchedDefinitions[$name];
     }
 
     /**
@@ -159,7 +175,7 @@ class Container implements ContainerInterface, InteropContainerInterface, Factor
             ));
         }
 
-        $definition = $this->definitionSource->getDefinition($name);
+        $definition = $this->getDefinition($name);
         if (! $definition) {
             // Try to find the entry in the singleton map
             if (array_key_exists($name, $this->singletonEntries)) {
@@ -193,7 +209,7 @@ class Container implements ContainerInterface, InteropContainerInterface, Factor
             return true;
         }
 
-        $definition = $this->definitionSource->getDefinition($name);
+        $definition = $this->getDefinition($name);
         if ($definition === null) {
             return false;
         }
