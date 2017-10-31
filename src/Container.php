@@ -379,6 +379,9 @@ class Container implements ContainerInterface, FactoryInterface, InvokerInterfac
         if (array_key_exists($name, $this->resolvedEntries)) {
             unset($this->resolvedEntries[$name]);
         }
+        if (array_key_exists($name, $this->fetchedDefinitions)) {
+            unset($this->fetchedDefinitions[$name]);
+        }
 
         $this->definitionSource->addDefinition($definition);
     }
