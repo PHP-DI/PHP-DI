@@ -322,7 +322,10 @@ class Container implements ContainerInterface, InteropContainerInterface, Factor
             throw new \LogicException('The container has not been initialized correctly');
         }
 
-        // Clear existing entry if it exists
+        // Clear existing entries if it exists
+        if (array_key_exists($name, $this->fetchedDefinitions)) {
+            unset($this->fetchedDefinitions[$name]);
+        }
         if (array_key_exists($name, $this->singletonEntries)) {
             unset($this->singletonEntries[$name]);
         }
