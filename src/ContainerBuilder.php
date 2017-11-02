@@ -39,6 +39,12 @@ class ContainerBuilder
     private $containerClass;
 
     /**
+     * Name of the container parent class, used on compiled container.
+     * @var string
+     */
+    private $containerParentClass;
+
+    /**
      * @var bool
      */
     private $useAutowiring = true;
@@ -149,6 +155,7 @@ class ContainerBuilder
                 $source,
                 $this->compileToDirectory,
                 $containerClass,
+                $this->containerParentClass,
                 $this->useAutowiring || $this->useAnnotations
             );
             // Only load the file if it hasn't been already loaded
@@ -177,14 +184,19 @@ class ContainerBuilder
      * - `Container-Prod.php` -> invalid since `Container-Prod` is NOT a valid class name
      *
      * @param string $directory Directory in which to put the compiled container.
-     * @param string $className Name of the class. Customize only if necessary.
+     * @param string $containerClass Name of the compiled class. Customize only if necessary.
+     * @param string $containerParentClass Name of the compiled container parent class. Customize only if necessary.
      */
-    public function enableCompilation(string $directory, string $className = 'CompiledContainer') : ContainerBuilder
-    {
+    public function enableCompilation(
+        string $directory,
+        string $containerClass = 'CompiledContainer',
+        string $containerParentClass = CompiledContainer::class
+    ) : ContainerBuilder {
         $this->ensureNotLocked();
 
         $this->compileToDirectory = $directory;
-        $this->containerClass = $className;
+        $this->containerClass = $containerClass;
+        $this->containerParentClass = $containerParentClass;
 
         return $this;
     }

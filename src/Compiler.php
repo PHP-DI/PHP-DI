@@ -35,6 +35,11 @@ class Compiler
     private $containerClass;
 
     /**
+     * @var string
+     */
+    private $containerParentClass;
+
+    /**
      * Map of entry names to method names.
      *
      * @var string[]
@@ -56,8 +61,13 @@ class Compiler
      *
      * @return string The compiled container file name.
      */
-    public function compile(DefinitionSource $definitionSource, string $directory, string $className, bool $autowiringEnabled) : string
-    {
+    public function compile(
+        DefinitionSource $definitionSource,
+        string $directory,
+        string $className,
+        string $parentClassName,
+        bool $autowiringEnabled
+    ) : string {
         $fileName = rtrim($directory, '/') . '/' . $className . '.php';
 
         if (file_exists($fileName)) {
@@ -85,6 +95,7 @@ class Compiler
         }
 
         $this->containerClass = $className;
+        $this->containerParentClass = $parentClassName;
 
         ob_start();
         require __DIR__ . '/Compiler/Template.php';
