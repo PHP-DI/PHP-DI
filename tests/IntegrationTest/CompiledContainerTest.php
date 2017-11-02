@@ -136,6 +136,23 @@ class CompiledContainerTest extends BaseContainerTest
         $builder->enableCompilation(self::COMPILATION_DIR, '123-abc');
         $builder->build();
     }
+
+    /**
+     * @test
+     */
+    public function the_compiled_container_can_extend_a_custom_class()
+    {
+        $builder = new ContainerBuilder;
+        $builder->enableCompilation(
+            self::COMPILATION_DIR,
+            self::generateCompiledClassName(),
+            // Customize the parent class
+            CompiledContainerTest\CustomParentContainer::class
+        );
+        $container = $builder->build();
+
+        self::assertInstanceOf(CompiledContainerTest\CustomParentContainer::class, $container);
+    }
 }
 
 namespace DI\Test\IntegrationTest\CompiledContainerTest;
@@ -143,4 +160,8 @@ namespace DI\Test\IntegrationTest\CompiledContainerTest;
 class Property
 {
     public $foo;
+}
+
+class CustomParentContainer extends \DI\Container
+{
 }
