@@ -190,7 +190,7 @@ class ContainerBuilder
     public function enableCompilation(
         string $directory,
         string $containerClass = 'CompiledContainer',
-        string $containerParentClass = '\DI\CompiledContainer'
+        string $containerParentClass = CompiledContainer::class
     ) : ContainerBuilder {
         $this->ensureNotLocked();
 
