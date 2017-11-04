@@ -49,6 +49,6 @@ class ArrayDefinitionExtensionTest extends \PHPUnit_Framework_TestCase
     public function should_error_if_not_extending_an_array()
     {
         $definition = new ArrayDefinitionExtension('name', ['foo']);
-        $definition->setSubDefinition(new ValueDefinition('name', 'value'));
+        $definition->setSubDefinition(new ValueDefinition('value'));
     }
 }

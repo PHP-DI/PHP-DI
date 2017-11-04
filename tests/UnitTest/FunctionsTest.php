@@ -14,9 +14,9 @@ use DI\Definition\Helper\ArrayDefinitionExtensionHelper;
 use DI\Definition\Helper\AutowireDefinitionHelper;
 use DI\Definition\Helper\CreateDefinitionHelper;
 use DI\Definition\Helper\FactoryDefinitionHelper;
-use DI\Definition\Helper\ValueDefinitionHelper;
 use DI\Definition\ObjectDefinition;
 use DI\Definition\StringDefinition;
+use DI\Definition\ValueDefinition;
 
 /**
  * Tests the helper functions.
@@ -30,8 +30,8 @@ class FunctionsTest extends \PHPUnit_Framework_TestCase
     {
         $definition = \DI\value('foo');
 
-        $this->assertInstanceOf(ValueDefinitionHelper::class, $definition);
-        $this->assertEquals('foo', $definition->getDefinition('entry')->getValue());
+        $this->assertInstanceOf(ValueDefinition::class, $definition);
+        $this->assertEquals('foo', $definition->getValue());
     }
 
     /**

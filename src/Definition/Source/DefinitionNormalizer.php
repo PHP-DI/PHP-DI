@@ -50,7 +50,7 @@ class DefinitionNormalizer
         } elseif ($definition instanceof \Closure) {
             $definition = new FactoryDefinition($name, $definition);
         } elseif (! $definition instanceof Definition) {
-            $definition = new ValueDefinition($name, $definition);
+            $definition = new ValueDefinition($definition);
         }
 
         if ($definition instanceof AutowireDefinition) {

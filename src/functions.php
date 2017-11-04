@@ -10,8 +10,8 @@ use DI\Definition\Helper\ArrayDefinitionExtensionHelper;
 use DI\Definition\Helper\AutowireDefinitionHelper;
 use DI\Definition\Helper\CreateDefinitionHelper;
 use DI\Definition\Helper\FactoryDefinitionHelper;
-use DI\Definition\Helper\ValueDefinitionHelper;
 use DI\Definition\StringDefinition;
+use DI\Definition\ValueDefinition;
 
 if (! function_exists('DI\value')) {
     /**
@@ -19,9 +19,9 @@ if (! function_exists('DI\value')) {
      *
      * @param mixed $value
      */
-    function value($value) : ValueDefinitionHelper
+    function value($value) : ValueDefinition
     {
-        return new ValueDefinitionHelper($value);
+        return new ValueDefinition($value);
     }
 }
 
