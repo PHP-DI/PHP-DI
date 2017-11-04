@@ -88,11 +88,6 @@ class SourceChain implements DefinitionSource, MutableDefinitionSource
         $this->mutableSource->addDefinition($definition);
     }
 
-    public function setRootDefinitionSource(DefinitionSource $rootSource)
-    {
-        $this->rootSource = $rootSource;
-    }
-
     private function resolveSubDefinition(HasSubDefinition $definition, int $currentIndex)
     {
         $subDefinitionName = $definition->getSubDefinitionName();
