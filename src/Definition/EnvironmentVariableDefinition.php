@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace DI\Definition;
 
-use DI\Definition\Helper\DefinitionHelper;
-
 /**
  * Defines a reference to an environment variable, with fallback to a default
  * value if the environment variable is not defined.
@@ -18,7 +16,7 @@ class EnvironmentVariableDefinition implements Definition
      * Entry name.
      * @var string
      */
-    private $name;
+    private $name = '';
 
     /**
      * The name of the environment variable.
@@ -43,14 +41,12 @@ class EnvironmentVariableDefinition implements Definition
     private $defaultValue;
 
     /**
-     * @param string $name Entry name
      * @param string $variableName The name of the environment variable
      * @param bool $isOptional Whether or not the environment variable definition is optional
      * @param mixed $defaultValue The default value to use if the environment variable is optional and not provided
      */
-    public function __construct(string $name, string $variableName, bool $isOptional = false, $defaultValue = null)
+    public function __construct(string $variableName, bool $isOptional = false, $defaultValue = null)
     {
-        $this->name = $name;
         $this->variableName = $variableName;
         $this->isOptional = $isOptional;
         $this->defaultValue = $defaultValue;

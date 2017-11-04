@@ -45,10 +45,10 @@ class EnvironmentVariableResolverTest extends \PHPUnit_Framework_TestCase
         };
 
         $this->resolver = new EnvironmentVariableResolver($this->parentResolver, $variableReader);
-        $this->definedDefinition = new EnvironmentVariableDefinition('foo', 'DEFINED');
-        $this->undefinedDefinition = new EnvironmentVariableDefinition('foo', 'UNDEFINED');
-        $this->optionalDefinition = new EnvironmentVariableDefinition('foo', 'UNDEFINED', true, '<default>');
-        $this->nestedDefinition = new EnvironmentVariableDefinition('foo', 'UNDEFINED', true, new Reference('foo'));
+        $this->definedDefinition = new EnvironmentVariableDefinition('DEFINED');
+        $this->undefinedDefinition = new EnvironmentVariableDefinition('UNDEFINED');
+        $this->optionalDefinition = new EnvironmentVariableDefinition('UNDEFINED', true, '<default>');
+        $this->nestedDefinition = new EnvironmentVariableDefinition('UNDEFINED', true, new Reference('foo'));
     }
 
     /**

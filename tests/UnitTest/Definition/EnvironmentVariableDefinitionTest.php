@@ -13,7 +13,8 @@ class EnvironmentVariableDefinitionTest extends \PHPUnit_Framework_TestCase
 {
     public function test_getters()
     {
-        $definition = new EnvironmentVariableDefinition('foo', 'bar', false, 'default');
+        $definition = new EnvironmentVariableDefinition('bar', false, 'default');
+        $definition->setName('foo');
 
         $this->assertEquals('foo', $definition->getName());
         $this->assertEquals('bar', $definition->getVariableName());
@@ -30,7 +31,7 @@ class EnvironmentVariableDefinitionTest extends \PHPUnit_Framework_TestCase
     variable = bar
     optional = no
 )';
-        $this->assertEquals($str, (string) new EnvironmentVariableDefinition('', 'bar'));
+        $this->assertEquals($str, (string) new EnvironmentVariableDefinition('bar'));
     }
 
     /**
@@ -43,7 +44,7 @@ class EnvironmentVariableDefinitionTest extends \PHPUnit_Framework_TestCase
     optional = yes
     default = \'<default>\'
 )';
-        $this->assertEquals($str, (string) new EnvironmentVariableDefinition('', 'bar', true, '<default>'));
+        $this->assertEquals($str, (string) new EnvironmentVariableDefinition('bar', true, '<default>'));
     }
 
     /**
@@ -56,7 +57,7 @@ class EnvironmentVariableDefinitionTest extends \PHPUnit_Framework_TestCase
     optional = yes
     default = get(foo)
 )';
-        $this->assertEquals($str, (string) new EnvironmentVariableDefinition('', 'bar', true, \DI\get('foo')));
+        $this->assertEquals($str, (string) new EnvironmentVariableDefinition('bar', true, \DI\get('foo')));
     }
 
     /**
@@ -72,6 +73,6 @@ class EnvironmentVariableDefinitionTest extends \PHPUnit_Framework_TestCase
         optional = no
     )
 )';
-        $this->assertEquals($str, (string) new EnvironmentVariableDefinition('', 'bar', true, new EnvironmentVariableDefinition('', 'foo')));
+        $this->assertEquals($str, (string) new EnvironmentVariableDefinition('bar', true, new EnvironmentVariableDefinition('foo')));
     }
 }

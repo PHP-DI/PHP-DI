@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace DI;
 
+use DI\Definition\EnvironmentVariableDefinition;
 use DI\Definition\Reference;
 use DI\Definition\Helper\ArrayDefinitionExtensionHelper;
 use DI\Definition\Helper\AutowireDefinitionHelper;
 use DI\Definition\Helper\CreateDefinitionHelper;
-use DI\Definition\Helper\EnvironmentVariableDefinitionHelper;
 use DI\Definition\Helper\FactoryDefinitionHelper;
 use DI\Definition\Helper\StringDefinitionHelper;
 use DI\Definition\Helper\ValueDefinitionHelper;
@@ -100,12 +100,12 @@ if (! function_exists('DI\env')) {
      * @param string $variableName The name of the environment variable.
      * @param mixed $defaultValue The default value to be used if the environment variable is not defined.
      */
-    function env(string $variableName, $defaultValue = null) : EnvironmentVariableDefinitionHelper
+    function env(string $variableName, $defaultValue = null) : EnvironmentVariableDefinition
     {
         // Only mark as optional if the default value was *explicitly* provided.
         $isOptional = 2 === func_num_args();
 
-        return new EnvironmentVariableDefinitionHelper($variableName, $isOptional, $defaultValue);
+        return new EnvironmentVariableDefinition($variableName, $isOptional, $defaultValue);
     }
 }
 

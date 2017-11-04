@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace DI\Test\UnitTest;
 
+use DI\Definition\EnvironmentVariableDefinition;
 use DI\Definition\Reference;
 use DI\Definition\ArrayDefinition;
 use DI\Definition\ArrayDefinitionExtension;
@@ -12,7 +13,6 @@ use DI\Definition\FactoryDefinition;
 use DI\Definition\Helper\ArrayDefinitionExtensionHelper;
 use DI\Definition\Helper\AutowireDefinitionHelper;
 use DI\Definition\Helper\CreateDefinitionHelper;
-use DI\Definition\Helper\EnvironmentVariableDefinitionHelper;
 use DI\Definition\Helper\FactoryDefinitionHelper;
 use DI\Definition\Helper\StringDefinitionHelper;
 use DI\Definition\Helper\ValueDefinitionHelper;
@@ -125,8 +125,7 @@ class FunctionsTest extends \PHPUnit_Framework_TestCase
     {
         $definition = \DI\env('foo');
 
-        $this->assertTrue($definition instanceof EnvironmentVariableDefinitionHelper);
-        $definition = $definition->getDefinition('entry');
+        $this->assertTrue($definition instanceof EnvironmentVariableDefinition);
         $this->assertEquals('foo', $definition->getVariableName());
         $this->assertFalse($definition->isOptional());
     }
@@ -138,8 +137,7 @@ class FunctionsTest extends \PHPUnit_Framework_TestCase
     {
         $definition = \DI\env('foo', 'default');
 
-        $this->assertTrue($definition instanceof EnvironmentVariableDefinitionHelper);
-        $definition = $definition->getDefinition('entry');
+        $this->assertTrue($definition instanceof EnvironmentVariableDefinition);
         $this->assertEquals('foo', $definition->getVariableName());
         $this->assertTrue($definition->isOptional());
         $this->assertEquals('default', $definition->getDefaultValue());
@@ -152,8 +150,7 @@ class FunctionsTest extends \PHPUnit_Framework_TestCase
     {
         $definition = \DI\env('foo', null);
 
-        $this->assertTrue($definition instanceof EnvironmentVariableDefinitionHelper);
-        $definition = $definition->getDefinition('entry');
+        $this->assertTrue($definition instanceof EnvironmentVariableDefinition);
         $this->assertEquals('foo', $definition->getVariableName());
         $this->assertTrue($definition->isOptional());
         $this->assertSame(null, $definition->getDefaultValue());
