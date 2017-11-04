@@ -4,15 +4,8 @@ declare(strict_types=1);
 
 namespace DI\Definition\Source;
 
-use DI\Definition\ArrayDefinition;
-use DI\Definition\AutowireDefinition;
-use DI\Definition\DecoratorDefinition;
 use DI\Definition\Definition;
-use DI\Definition\Exception\InvalidDefinition;
-use DI\Definition\FactoryDefinition;
-use DI\Definition\Helper\DefinitionHelper;
 use DI\Definition\ObjectDefinition;
-use DI\Definition\ValueDefinition;
 
 /**
  * Reads DI definitions from a PHP array.
@@ -40,9 +33,9 @@ class DefinitionArray implements DefinitionSource, MutableDefinitionSource
     private $wildcardDefinitions;
 
     /**
-     * @var Autowiring
+     * @var DefinitionNormalizer
      */
-    private $autowiring;
+    private $normalizer;
 
     /**
      * @param array $definitions
@@ -54,7 +47,9 @@ class DefinitionArray implements DefinitionSource, MutableDefinitionSource
         }
 
         $this->definitions = $definitions;
-        $this->autowiring = $autowiring ?: new NoAutowiring;
+
+        $autowiring = $autowiring ?: new NoAutowiring;
+        $this->normalizer = new DefinitionNormalizer($autowiring);
     }
 
     /**
@@ -89,7 +84,9 @@ class DefinitionArray implements DefinitionSource, MutableDefinitionSource
     {
         // Look for the definition by name
         if (array_key_exists($name, $this->definitions)) {
-            return $this->castDefinition($this->definitions[$name], $name);
+            $definition = $this->definitions[$name];
+            $definition = $this->normalizer->normalizeRootDefinition($definition, $name);
+            return $definition;
         }
 
         // Build the cache of wildcard definitions
@@ -108,7 +105,7 @@ class DefinitionArray implements DefinitionSource, MutableDefinitionSource
             $key = preg_quote($key);
             $key = '#' . str_replace('\\' . self::WILDCARD, self::WILDCARD_PATTERN, $key) . '#';
             if (preg_match($key, $name, $matches) === 1) {
-                $definition = $this->castDefinition($definition, $name);
+                $definition = $this->normalizer->normalizeRootDefinition($definition, $name);
 
                 // For a class definition, we replace * in the class name with the matches
                 // *Interface -> *Impl => FooInterface -> FooImpl
@@ -137,70 +134,6 @@ class DefinitionArray implements DefinitionSource, MutableDefinitionSource
         }
 
         return $definitions;
-    }
-
-    /**
-     * @param mixed $definition
-     */
-    private function castDefinition($definition, string $name) : Definition
-    {
-        if ($definition instanceof DefinitionHelper) {
-            $definition = $definition->getDefinition($name);
-        } elseif (is_array($definition)) {
-            $definition = new ArrayDefinition($name, $definition);
-        } elseif ($definition instanceof \Closure) {
-            $definition = new FactoryDefinition($name, $definition);
-        } elseif (! $definition instanceof Definition) {
-            $definition = new ValueDefinition($name, $definition);
-        }
-
-        if ($definition instanceof AutowireDefinition) {
-            $definition = $this->autowiring->autowire($name, $definition);
-        }
-
-        try {
-            $definition->replaceNestedDefinitions([$this, 'castNestedDefinition']);
-        } catch (InvalidDefinition $e) {
-            throw InvalidDefinition::create($definition, sprintf(
-                'Definition "%s" contains an error: %s',
-                $definition->getName(),
-                $e->getMessage()
-            ), $e);
-        }
-
-        return $definition;
-    }
-
-    /**
-     * @param mixed $definition
-     * @return mixed
-     */
-    public function castNestedDefinition($definition)
-    {
-        $name = '<nested definition>';
-
-        if ($definition instanceof DefinitionHelper) {
-            $definition = $definition->getDefinition($name);
-        } elseif (is_array($definition)) {
-            $definition = new ArrayDefinition($name, $definition);
-        } elseif ($definition instanceof \Closure) {
-            $definition = new FactoryDefinition($name, $definition);
-        }
-
-        if ($definition instanceof DecoratorDefinition) {
-            throw new InvalidDefinition('Decorators cannot be nested in another definition');
-        }
-
-        if ($definition instanceof AutowireDefinition) {
-            $definition = $this->autowiring->autowire($name, $definition);
-        }
-
-        if ($definition instanceof Definition) {
-            // Recursively traverse nested definitions
-            $definition->replaceNestedDefinitions([$this, 'castNestedDefinition']);
-        }
-
-        return $definition;
     }
 
     /**
