@@ -202,6 +202,37 @@ class NestedDefinitionsTest extends BaseContainerTest
 
         $this->assertEquals($expected, $container->get('array'));
     }
+
+    /**
+     * @dataProvider provideContainer
+     */
+    public function test_anonymous_functions_can_be_nested_in_other_definitions(ContainerBuilder $builder)
+    {
+        $builder->addDefinitions([
+            'array' => [
+                function () { return 'hello'; },
+            ],
+            'env' => \DI\env('PHP_DI_DO_NOT_DEFINE_THIS', function () {
+                return 'hello';
+            }),
+            'factory' => \DI\factory(function ($entry) {
+                return $entry;
+            })->parameter('entry', function () { return 'hello'; }),
+            'object' => create(AllKindsOfInjections::class)
+                ->constructor(function () { return 'hello'; })
+                ->property('property', function () { return 'hello'; })
+                ->method('method', function () { return 'hello'; }),
+        ]);
+
+        $container = $builder->build();
+
+        self::assertEquals('hello', $container->get('array')[0]);
+        self::assertEquals('hello', $container->get('env'));
+        self::assertEquals('hello', $container->get('factory'));
+        self::assertEquals('hello', $container->get('object')->property);
+        self::assertEquals('hello', $container->get('object')->constructorParameter);
+        self::assertEquals('hello', $container->get('object')->methodParameter);
+    }
 }
 
 namespace DI\Test\IntegrationTest\Definitions\NestedDefinitionsTest;
