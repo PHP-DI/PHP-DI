@@ -6,7 +6,6 @@ namespace DI\Definition\Resolver;
 
 use DI\Definition\ArrayDefinition;
 use DI\Definition\Definition;
-use DI\Definition\Helper\DefinitionHelper;
 use DI\DependencyException;
 use Exception;
 
@@ -46,10 +45,6 @@ class ArrayResolver implements DefinitionResolver
 
         // Resolve nested definitions
         array_walk_recursive($values, function (&$value, $key) use ($definition) {
-            if ($value instanceof DefinitionHelper) {
-                // TODO remove
-                $value = $value->getDefinition('<nested definition>');
-            }
             if ($value instanceof Definition) {
                 $value = $this->resolveDefinition($value, $definition, $key);
             }

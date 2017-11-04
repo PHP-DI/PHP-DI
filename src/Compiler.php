@@ -12,7 +12,6 @@ use DI\Definition\Definition;
 use DI\Definition\EnvironmentVariableDefinition;
 use DI\Definition\Exception\InvalidDefinition;
 use DI\Definition\FactoryDefinition;
-use DI\Definition\Helper\DefinitionHelper;
 use DI\Definition\ObjectDefinition;
 use DI\Definition\Source\DefinitionSource;
 use DI\Definition\StringDefinition;
@@ -190,10 +189,6 @@ PHP;
 
     public function compileValue($value) : string
     {
-        if ($value instanceof DefinitionHelper) {
-            $value = $value->getDefinition('');
-        }
-
         // Check that the value can be compiled
         $errorMessage = $this->isCompilable($value);
         if ($errorMessage !== true) {
