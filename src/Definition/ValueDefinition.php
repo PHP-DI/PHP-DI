@@ -57,6 +57,11 @@ class ValueDefinition implements Definition, SelfResolvingDefinition
         return true;
     }
 
+    public function replaceNestedDefinitions(callable $replacer)
+    {
+        // no nested definitions
+    }
+
     public function __toString()
     {
         return sprintf('Value (%s)', var_export($this->value, true));

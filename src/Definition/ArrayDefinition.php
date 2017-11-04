@@ -44,6 +44,11 @@ class ArrayDefinition implements Definition
         return $this->values;
     }
 
+    public function replaceNestedDefinitions(callable $replacer)
+    {
+        $this->values = array_map($replacer, $this->values);
+    }
+
     public function __toString()
     {
         $str = '[' . PHP_EOL;
@@ -56,7 +61,11 @@ class ArrayDefinition implements Definition
             $str .= '    ' . $key . ' => ';
 
             if ($value instanceof DefinitionHelper) {
-                $str .= str_replace(PHP_EOL, PHP_EOL . '    ', $value->getDefinition(''));
+                $value = $value->getDefinition('<nested definition>');
+            }
+
+            if ($value instanceof Definition) {
+                $str .= str_replace(PHP_EOL, PHP_EOL . '    ', $value);
             } else {
                 $str .= var_export($value, true);
             }

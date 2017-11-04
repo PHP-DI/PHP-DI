@@ -25,7 +25,7 @@ class FactoryDefinition implements Definition
 
     /**
      * Factory parameters.
-     * @var array
+     * @var mixed[]
      */
     private $parameters = [];
 
@@ -60,6 +60,11 @@ class FactoryDefinition implements Definition
     public function getParameters() : array
     {
         return $this->parameters;
+    }
+
+    public function replaceNestedDefinitions(callable $replacer)
+    {
+        $this->parameters = array_map($replacer, $this->parameters);
     }
 
     public function __toString()

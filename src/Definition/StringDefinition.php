@@ -56,6 +56,11 @@ class StringDefinition implements Definition, SelfResolvingDefinition
         return true;
     }
 
+    public function replaceNestedDefinitions(callable $replacer)
+    {
+        // no nested definitions
+    }
+
     public function __toString()
     {
         return $this->expression;

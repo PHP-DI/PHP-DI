@@ -56,7 +56,7 @@ class NestedDefinitionsTest extends BaseContainerTest
         $factory = $builder->build()->get('factory');
 
         $this->assertEquals(new \stdClass, $factory[0]);
-        $this->assertEquals(new Autowireable(new AutowireableDependency), $factory[0]);
+        $this->assertEquals(new Autowireable(new AutowireableDependency), $factory[1]);
     }
 
     /**

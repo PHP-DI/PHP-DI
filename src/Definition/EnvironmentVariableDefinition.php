@@ -85,6 +85,11 @@ class EnvironmentVariableDefinition implements Definition
         return $this->defaultValue;
     }
 
+    public function replaceNestedDefinitions(callable $replacer)
+    {
+        $this->defaultValue = $replacer($this->defaultValue);
+    }
+
     public function __toString()
     {
         $str = '    variable = ' . $this->variableName . PHP_EOL

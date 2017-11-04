@@ -6,7 +6,9 @@ namespace DI\Definition\Source;
 
 use DI\Definition\ArrayDefinition;
 use DI\Definition\AutowireDefinition;
+use DI\Definition\DecoratorDefinition;
 use DI\Definition\Definition;
+use DI\Definition\Exception\InvalidDefinition;
 use DI\Definition\FactoryDefinition;
 use DI\Definition\Helper\DefinitionHelper;
 use DI\Definition\ObjectDefinition;
@@ -154,6 +156,48 @@ class DefinitionArray implements DefinitionSource, MutableDefinitionSource
 
         if ($definition instanceof AutowireDefinition) {
             $definition = $this->autowiring->autowire($name, $definition);
+        }
+
+        try {
+            $definition->replaceNestedDefinitions([$this, 'castNestedDefinition']);
+        } catch (InvalidDefinition $e) {
+            throw InvalidDefinition::create($definition, sprintf(
+                'Definition "%s" contains an error: %s',
+                $definition->getName(),
+                $e->getMessage()
+            ), $e);
+        }
+
+        return $definition;
+    }
+
+    /**
+     * @param mixed $definition
+     * @return mixed
+     */
+    public function castNestedDefinition($definition)
+    {
+        $name = '<nested definition>';
+
+        if ($definition instanceof DefinitionHelper) {
+            $definition = $definition->getDefinition($name);
+        } elseif (is_array($definition)) {
+            $definition = new ArrayDefinition($name, $definition);
+        } elseif ($definition instanceof \Closure) {
+            $definition = new FactoryDefinition($name, $definition);
+        }
+
+        if ($definition instanceof DecoratorDefinition) {
+            throw new InvalidDefinition('Decorators cannot be nested in another definition');
+        }
+
+        if ($definition instanceof AutowireDefinition) {
+            $definition = $this->autowiring->autowire($name, $definition);
+        }
+
+        if ($definition instanceof Definition) {
+            // Recursively traverse nested definitions
+            $definition->replaceNestedDefinitions([$this, 'castNestedDefinition']);
         }
 
         return $definition;

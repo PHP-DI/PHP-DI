@@ -7,6 +7,8 @@ namespace DI\Definition;
 /**
  * A definition that has a sub-definition.
  *
+ * TODO Rename to `ExtendsAnotherDefinition`.
+ *
  * @author Matthieu Napoli <matthieu@mnapoli.fr>
  */
 interface HasSubDefinition extends Definition

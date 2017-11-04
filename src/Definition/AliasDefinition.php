@@ -55,6 +55,11 @@ class AliasDefinition implements Definition, SelfResolvingDefinition
         return $container->has($this->getTargetEntryName());
     }
 
+    public function replaceNestedDefinitions(callable $replacer)
+    {
+        // no nested definitions
+    }
+
     public function __toString()
     {
         return sprintf(
