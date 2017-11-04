@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace DI\Definition\Source;
 
-use DI\Definition\EntryReference;
+use DI\Definition\AliasDefinition;
 use DI\Definition\ObjectDefinition;
 use DI\Definition\ObjectDefinition\MethodInjection;
 
@@ -65,7 +65,7 @@ class ReflectionBasedAutowiring implements DefinitionSource, Autowiring
             $parameterClass = $parameter->getClass();
 
             if ($parameterClass) {
-                $parameters[$index] = new EntryReference($parameterClass->getName());
+                $parameters[$index] = new AliasDefinition($parameterClass->getName());
             }
         }
 

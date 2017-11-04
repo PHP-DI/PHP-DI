@@ -79,6 +79,11 @@ class ObjectDefinition implements Definition
         return $this->name;
     }
 
+    public function setName(string $name)
+    {
+        $this->name = $name;
+    }
+
     public function setClassName(string $className = null)
     {
         $this->className = $className;

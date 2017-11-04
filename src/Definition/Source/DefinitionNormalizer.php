@@ -57,6 +57,8 @@ class DefinitionNormalizer
             $definition = $this->autowiring->autowire($name, $definition);
         }
 
+        $definition->setName($name);
+
         try {
             $definition->replaceNestedDefinitions([$this, 'normalizeNestedDefinition']);
         } catch (InvalidDefinition $e) {

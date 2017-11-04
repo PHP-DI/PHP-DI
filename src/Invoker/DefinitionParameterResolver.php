@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace DI\Invoker;
 
+use DI\Definition\Definition;
 use DI\Definition\Helper\DefinitionHelper;
 use DI\Definition\Resolver\DefinitionResolver;
 use Invoker\ParameterResolver\ParameterResolver;
@@ -38,12 +39,15 @@ class DefinitionParameterResolver implements ParameterResolver
         }
 
         foreach ($providedParameters as $key => $value) {
-            if (! $value instanceof DefinitionHelper) {
+            if ($value instanceof DefinitionHelper) {
+                $value = $value->getDefinition('');
+            }
+
+            if (! $value instanceof Definition) {
                 continue;
             }
 
-            $definition = $value->getDefinition('');
-            $value = $this->definitionResolver->resolve($definition);
+            $value = $this->definitionResolver->resolve($value);
 
             if (is_int($key)) {
                 // Indexed by position

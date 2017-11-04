@@ -46,6 +46,11 @@ class FactoryDefinition implements Definition
         return $this->name;
     }
 
+    public function setName(string $name)
+    {
+        $this->name = $name;
+    }
+
     /**
      * @return callable Callable that returns the value associated to the entry name.
      */

@@ -72,6 +72,6 @@ class EnvironmentVariableDefinitionTest extends \PHPUnit_Framework_TestCase
         optional = no
     )
 )';
-        $this->assertEquals($str, (string) new EnvironmentVariableDefinition('', 'bar', true, \DI\env('foo')));
+        $this->assertEquals($str, (string) new EnvironmentVariableDefinition('', 'bar', true, new EnvironmentVariableDefinition('', 'foo')));
     }
 }

@@ -39,6 +39,11 @@ class ArrayDefinition implements Definition
         return $this->name;
     }
 
+    public function setName(string $name)
+    {
+        $this->name = $name;
+    }
+
     public function getValues() : array
     {
         return $this->values;

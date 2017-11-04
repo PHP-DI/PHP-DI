@@ -66,6 +66,11 @@ class MethodInjection implements Definition
         return '';
     }
 
+    public function setName(string $name)
+    {
+        // The name does not matter for method injections
+    }
+
     public function replaceNestedDefinitions(callable $replacer)
     {
         $this->parameters = array_map($replacer, $this->parameters);

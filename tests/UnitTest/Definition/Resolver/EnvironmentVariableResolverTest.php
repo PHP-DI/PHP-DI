@@ -78,7 +78,7 @@ class EnvironmentVariableResolverTest extends \PHPUnit_Framework_TestCase
     {
         $this->parentResolver->expects($this->once())
             ->method('resolve')
-            ->with(new AliasDefinition('', 'foo'))
+            ->with(\DI\get('foo'))
             ->will($this->returnValue('bar'));
 
         $value = $this->resolver->resolve($this->nestedDefinition);

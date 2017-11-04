@@ -17,7 +17,7 @@ class AliasDefinition implements Definition, SelfResolvingDefinition
      * Entry name.
      * @var string
      */
-    private $name;
+    private $name = '';
 
     /**
      * Name of the target entry.
@@ -29,15 +29,19 @@ class AliasDefinition implements Definition, SelfResolvingDefinition
      * @param string $name            Entry name
      * @param string $targetEntryName Name of the target entry
      */
-    public function __construct($name, $targetEntryName)
+    public function __construct(string $targetEntryName)
     {
-        $this->name = $name;
         $this->targetEntryName = $targetEntryName;
     }
 
     public function getName() : string
     {
         return $this->name;
+    }
+
+    public function setName(string $name)
+    {
+        $this->name = $name;
     }
 
     public function getTargetEntryName() : string

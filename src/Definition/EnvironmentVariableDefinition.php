@@ -61,6 +61,11 @@ class EnvironmentVariableDefinition implements Definition
         return $this->name;
     }
 
+    public function setName(string $name)
+    {
+        $this->name = $name;
+    }
+
     /**
      * @return string The name of the environment variable
      */
@@ -96,8 +101,8 @@ class EnvironmentVariableDefinition implements Definition
             . '    optional = ' . ($this->isOptional ? 'yes' : 'no');
 
         if ($this->isOptional) {
-            if ($this->defaultValue instanceof DefinitionHelper) {
-                $nestedDefinition = (string) $this->defaultValue->getDefinition('');
+            if ($this->defaultValue instanceof Definition) {
+                $nestedDefinition = (string) $this->defaultValue;
                 $defaultValueStr = str_replace(PHP_EOL, PHP_EOL . '    ', $nestedDefinition);
             } else {
                 $defaultValueStr = var_export($this->defaultValue, true);

@@ -20,6 +20,12 @@ interface Definition extends RequestedEntry
      */
     public function getName() : string;
 
+
+    /**
+     * Set the name of the entry in the container.
+     */
+    public function setName(string $name);
+
     /**
      * Apply a callable that replaces the definitions nested in this definition.
      */

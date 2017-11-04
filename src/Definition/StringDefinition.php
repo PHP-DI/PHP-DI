@@ -41,6 +41,11 @@ class StringDefinition implements Definition, SelfResolvingDefinition
         return $this->name;
     }
 
+    public function setName(string $name)
+    {
+        $this->name = $name;
+    }
+
     public function getExpression() : string
     {
         return $this->expression;

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace DI;
 
-use DI\Definition\EntryReference;
+use DI\Definition\AliasDefinition;
 use DI\Definition\Helper\ArrayDefinitionExtensionHelper;
 use DI\Definition\Helper\AutowireDefinitionHelper;
 use DI\Definition\Helper\CreateDefinitionHelper;
@@ -87,9 +87,9 @@ if (! function_exists('DI\get')) {
     /**
      * Helper for referencing another container entry in an object definition.
      */
-    function get(string $entryName) : EntryReference
+    function get(string $entryName) : AliasDefinition
     {
-        return new EntryReference($entryName);
+        return new AliasDefinition($entryName);
     }
 }
 
