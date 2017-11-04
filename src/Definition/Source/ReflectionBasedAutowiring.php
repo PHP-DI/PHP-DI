@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace DI\Definition\Source;
 
-use DI\Definition\Reference;
 use DI\Definition\ObjectDefinition;
 use DI\Definition\ObjectDefinition\MethodInjection;
+use DI\Definition\Reference;
 
 /**
  * Reads DI class definitions using reflection.

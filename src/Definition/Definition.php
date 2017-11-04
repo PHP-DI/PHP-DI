@@ -20,7 +20,6 @@ interface Definition extends RequestedEntry
      */
     public function getName() : string;
 
-
     /**
      * Set the name of the entry in the container.
      */

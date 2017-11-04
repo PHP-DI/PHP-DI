@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace DI;
 
 use DI\Compiler\ObjectCreationCompiler;
-use DI\Definition\Reference;
 use DI\Definition\ArrayDefinition;
 use DI\Definition\DecoratorDefinition;
 use DI\Definition\Definition;
@@ -13,6 +12,7 @@ use DI\Definition\EnvironmentVariableDefinition;
 use DI\Definition\Exception\InvalidDefinition;
 use DI\Definition\FactoryDefinition;
 use DI\Definition\ObjectDefinition;
+use DI\Definition\Reference;
 use DI\Definition\Source\DefinitionSource;
 use DI\Definition\StringDefinition;
 use DI\Definition\ValueDefinition;

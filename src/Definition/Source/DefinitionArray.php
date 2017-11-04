@@ -86,6 +86,7 @@ class DefinitionArray implements DefinitionSource, MutableDefinitionSource
         if (array_key_exists($name, $this->definitions)) {
             $definition = $this->definitions[$name];
             $definition = $this->normalizer->normalizeRootDefinition($definition, $name);
+
             return $definition;
         }
 

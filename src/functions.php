@@ -6,10 +6,10 @@ namespace DI;
 
 use DI\Definition\ArrayDefinitionExtension;
 use DI\Definition\EnvironmentVariableDefinition;
-use DI\Definition\Reference;
 use DI\Definition\Helper\AutowireDefinitionHelper;
 use DI\Definition\Helper\CreateDefinitionHelper;
 use DI\Definition\Helper\FactoryDefinitionHelper;
+use DI\Definition\Reference;
 use DI\Definition\StringDefinition;
 use DI\Definition\ValueDefinition;
 
