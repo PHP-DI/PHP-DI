@@ -20,19 +20,15 @@ class StringDefinition implements Definition, SelfResolvingDefinition
      * Entry name.
      * @var string
      */
-    private $name;
+    private $name = '';
 
     /**
      * @var string
      */
     private $expression;
 
-    /**
-     * @param string $name Entry name
-     */
-    public function __construct(string $name, string $expression)
+    public function __construct(string $expression)
     {
-        $this->name = $name;
         $this->expression = $expression;
     }
 

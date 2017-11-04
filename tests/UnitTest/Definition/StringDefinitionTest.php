@@ -18,7 +18,8 @@ class StringDefinitionTest extends \PHPUnit_Framework_TestCase
 
     public function test_getters()
     {
-        $definition = new StringDefinition('foo', 'bar');
+        $definition = new StringDefinition('bar');
+        $definition->setName('foo');
 
         $this->assertEquals('foo', $definition->getName());
         $this->assertEquals('bar', $definition->getExpression());
@@ -31,7 +32,7 @@ class StringDefinitionTest extends \PHPUnit_Framework_TestCase
     {
         $container = $this->easyMock(ContainerInterface::class);
 
-        $definition = new StringDefinition('foo', 'bar');
+        $definition = new StringDefinition('foo');
 
         $this->assertTrue($definition->isResolvable($container));
     }
@@ -43,7 +44,7 @@ class StringDefinitionTest extends \PHPUnit_Framework_TestCase
     {
         $container = $this->easyMock(ContainerInterface::class);
 
-        $definition = new StringDefinition('foo', 'bar');
+        $definition = new StringDefinition('bar');
 
         $this->assertEquals('bar', $definition->resolve($container));
     }
@@ -57,7 +58,7 @@ class StringDefinitionTest extends \PHPUnit_Framework_TestCase
             'get' => 'bar',
         ]);
 
-        $definition = new StringDefinition('foo', '{test}');
+        $definition = new StringDefinition('{test}');
 
         $this->assertEquals('bar', $definition->resolve($container));
     }
@@ -73,7 +74,7 @@ class StringDefinitionTest extends \PHPUnit_Framework_TestCase
             ->withConsecutive(['tmp'], ['logs'])
             ->willReturnOnConsecutiveCalls('/private/tmp', 'myapp-logs');
 
-        $definition = new StringDefinition('foo', '{tmp}/{logs}/app.log');
+        $definition = new StringDefinition('{tmp}/{logs}/app.log');
 
         $value = $definition->resolve($container);
 
@@ -91,7 +92,8 @@ class StringDefinitionTest extends \PHPUnit_Framework_TestCase
             'get' => new NotFoundException("No entry or class found for 'test'"),
         ]);
 
-        $definition = new StringDefinition('foo', '{test}');
+        $definition = new StringDefinition('{test}');
+        $definition->setName('foo');
         $definition->resolve($container);
     }
 
@@ -100,6 +102,6 @@ class StringDefinitionTest extends \PHPUnit_Framework_TestCase
      */
     public function should_cast_to_string()
     {
-        $this->assertEquals('foo/{bar}', (string) new StringDefinition('', 'foo/{bar}'));
+        $this->assertEquals('foo/{bar}', (string) new StringDefinition('foo/{bar}'));
     }
 }

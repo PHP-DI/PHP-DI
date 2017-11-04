@@ -14,7 +14,6 @@ use DI\Definition\Helper\ArrayDefinitionExtensionHelper;
 use DI\Definition\Helper\AutowireDefinitionHelper;
 use DI\Definition\Helper\CreateDefinitionHelper;
 use DI\Definition\Helper\FactoryDefinitionHelper;
-use DI\Definition\Helper\StringDefinitionHelper;
 use DI\Definition\Helper\ValueDefinitionHelper;
 use DI\Definition\ObjectDefinition;
 use DI\Definition\StringDefinition;
@@ -197,14 +196,9 @@ class FunctionsTest extends \PHPUnit_Framework_TestCase
      */
     public function test_string()
     {
-        $helper = \DI\string('bar');
-
-        $this->assertInstanceOf(StringDefinitionHelper::class, $helper);
-
-        $definition = $helper->getDefinition('foo');
+        $definition = \DI\string('bar');
 
         $this->assertInstanceOf(StringDefinition::class, $definition);
-        $this->assertEquals('foo', $definition->getName());
         $this->assertEquals('bar', $definition->getExpression());
     }
 }

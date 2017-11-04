@@ -39,7 +39,7 @@ class ResolverDispatcherTest extends \PHPUnit_Framework_TestCase
     public function should_resolve_using_sub_resolvers()
     {
         $this->assertEquals('foo', $this->resolver->resolve(new ValueDefinition('name', 'foo')));
-        $this->assertEquals('bar', $this->resolver->resolve(new StringDefinition('name', 'bar')));
+        $this->assertEquals('bar', $this->resolver->resolve(new StringDefinition('bar')));
     }
 
     /**
@@ -48,7 +48,7 @@ class ResolverDispatcherTest extends \PHPUnit_Framework_TestCase
     public function should_test_if_resolvable_using_sub_resolvers()
     {
         $this->assertTrue($this->resolver->isResolvable(new ValueDefinition('name', 'value')));
-        $this->assertTrue($this->resolver->isResolvable(new StringDefinition('name', 'value')));
+        $this->assertTrue($this->resolver->isResolvable(new StringDefinition('value')));
     }
 
     /**

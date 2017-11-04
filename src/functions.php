@@ -10,8 +10,8 @@ use DI\Definition\Helper\ArrayDefinitionExtensionHelper;
 use DI\Definition\Helper\AutowireDefinitionHelper;
 use DI\Definition\Helper\CreateDefinitionHelper;
 use DI\Definition\Helper\FactoryDefinitionHelper;
-use DI\Definition\Helper\StringDefinitionHelper;
 use DI\Definition\Helper\ValueDefinitionHelper;
+use DI\Definition\StringDefinition;
 
 if (! function_exists('DI\value')) {
     /**
@@ -147,12 +147,10 @@ if (! function_exists('DI\string')) {
      *
      * @param string $expression A string expression. Use the `{}` placeholders to reference other container entries.
      *
-     * @return StringDefinitionHelper
-     *
      * @since 5.0
      */
-    function string(string $expression) : StringDefinitionHelper
+    function string(string $expression) : StringDefinition
     {
-        return new StringDefinitionHelper($expression);
+        return new StringDefinition($expression);
     }
 }
