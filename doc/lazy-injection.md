@@ -5,6 +5,10 @@ current_menu: lazy-injection
 
 # Lazy injection
 
+With PHP-DI all objects that you define in the container are lazily created, i.e. they are created once they are requested or injected somewhere. However that is sometimes not "lazy" enough and you would like the objects to be created only when they are actually used (e.g. when we call a method on them). This is what this section is about.
+
+Please understand that this is an advanced use case and that, unless you are certain of what you are doing, you probably don't need to use this technique.
+
 Consider the following example:
 
 ```php

@@ -77,7 +77,6 @@ Currently PHP-DI does not traverse directories to find autowired or annotated cl
 
 Please note that the following definitions are not compiled (yet):
 
-- [decorator definitions](php-definitions.md#decoration)
 - [wildcard definitions](php-definitions.md#wildcards)
 
 Those definitions will still work perfectly, they will simply not get a performance boost when using a compiled container.

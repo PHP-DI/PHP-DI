@@ -34,6 +34,11 @@ class Compiler
     private $containerClass;
 
     /**
+     * @var string
+     */
+    private $containerParentClass;
+
+    /**
      * Map of entry names to method names.
      *
      * @var string[]
@@ -55,8 +60,13 @@ class Compiler
      *
      * @return string The compiled container file name.
      */
-    public function compile(DefinitionSource $definitionSource, string $directory, string $className, bool $autowiringEnabled) : string
-    {
+    public function compile(
+        DefinitionSource $definitionSource,
+        string $directory,
+        string $className,
+        string $parentClassName,
+        bool $autowiringEnabled
+    ) : string {
         $fileName = rtrim($directory, '/') . '/' . $className . '.php';
 
         if (file_exists($fileName)) {
@@ -84,6 +94,7 @@ class Compiler
         }
 
         $this->containerClass = $className;
+        $this->containerParentClass = $parentClassName;
 
         ob_start();
         require __DIR__ . '/Compiler/Template.php';
@@ -106,7 +117,7 @@ class Compiler
     private function compileDefinition(string $entryName, Definition $definition) : string
     {
         // Generate a unique method name
-        $methodName = uniqid('get');
+        $methodName = str_replace('.', '', uniqid('get', true));
         $this->entryToMethodMapping[$entryName] = $methodName;
 
         switch (true) {
@@ -151,6 +162,23 @@ PHP;
                 $compiler = new ObjectCreationCompiler($this);
                 $code = $compiler->compile($definition);
                 $code .= "\n        return \$object;";
+                break;
+            case $definition instanceof DecoratorDefinition:
+                $decoratedDefinition = $definition->getDecoratedDefinition();
+                if (! $decoratedDefinition instanceof Definition) {
+                    if (! $definition->getName()) {
+                        throw new InvalidDefinition('Decorators cannot be nested in another definition');
+                    }
+                    throw new InvalidDefinition(sprintf(
+                        'Entry "%s" decorates nothing: no previous definition with the same name was found',
+                        $definition->getName()
+                    ));
+                }
+                $code = sprintf(
+                    'return call_user_func(%s, %s, $this->delegateContainer);',
+                    $this->compileValue($definition->getCallable()),
+                    $this->compileValue($decoratedDefinition)
+                );
                 break;
             case $definition instanceof FactoryDefinition:
                 $value = $definition->getCallable();
@@ -245,8 +273,6 @@ PHP;
             if (empty($value->getName())) {
                 return 'Decorators cannot be nested in another definition';
             }
-
-            return 'A decorator definition was found but decorators cannot be compiled';
         }
         // All other definitions are compilable
         if ($value instanceof Definition) {

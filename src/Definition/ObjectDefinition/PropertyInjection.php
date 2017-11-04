@@ -67,9 +67,4 @@ class PropertyInjection
     {
         $this->value = $replacer($this->value);
     }
-
-    public function __toString()
-    {
-        return sprintf('property(%s)', $this->propertyName);
-    }
 }

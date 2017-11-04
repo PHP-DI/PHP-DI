@@ -195,6 +195,7 @@ PHP;
                     $definition->getName()
                 ));
             }
+
             throw InvalidDefinition::create($definition, sprintf(
                 'Entry "%s" cannot be compiled: the class is not instantiable',
                 $definition->getName()

@@ -20,6 +20,7 @@ use DI\Proxy\ProxyFactory;
 use Exception;
 use InvalidArgumentException;
 use Invoker\Invoker;
+use Invoker\InvokerInterface;
 use Invoker\ParameterResolver\AssociativeArrayResolver;
 use Invoker\ParameterResolver\Container\TypeHintContainerResolver;
 use Invoker\ParameterResolver\DefaultValueResolver;
@@ -34,7 +35,7 @@ use Psr\Container\ContainerInterface;
  *
  * @author Matthieu Napoli <matthieu@mnapoli.fr>
  */
-class Container implements ContainerInterface, FactoryInterface, \DI\InvokerInterface
+class Container implements ContainerInterface, FactoryInterface, InvokerInterface
 {
     /**
      * Map of entries that are already resolved.
@@ -59,7 +60,7 @@ class Container implements ContainerInterface, FactoryInterface, \DI\InvokerInte
     protected $entriesBeingResolved = [];
 
     /**
-     * @var \Invoker\InvokerInterface|null
+     * @var InvokerInterface|null
      */
     private $invoker;
 
@@ -270,7 +271,7 @@ class Container implements ContainerInterface, FactoryInterface, \DI\InvokerInte
     /**
      * Get defined container entries.
      */
-    public function getKnownEntryNames(): array
+    public function getKnownEntryNames() : array
     {
         $entries = array_unique(array_merge(
             array_keys($this->definitionSource->getDefinitions()),
@@ -289,7 +290,7 @@ class Container implements ContainerInterface, FactoryInterface, \DI\InvokerInte
      * @throws InvalidDefinition
      * @throws NotFoundException
      */
-    public function debugEntry(string $name): string
+    public function debugEntry(string $name) : string
     {
         $definition = $this->definitionSource->getDefinition($name);
         if ($definition instanceof Definition) {
@@ -308,7 +309,7 @@ class Container implements ContainerInterface, FactoryInterface, \DI\InvokerInte
      *
      * @param mixed $entry
      */
-    private function getEntryType($entry): string
+    private function getEntryType($entry) : string
     {
         if (is_object($entry)) {
             return sprintf("Object (\n    class = %s\n)", get_class($entry));
@@ -352,6 +353,7 @@ class Container implements ContainerInterface, FactoryInterface, \DI\InvokerInte
             $value = $this->definitionResolver->resolve($definition, $parameters);
         } catch (Exception $exception) {
             unset($this->entriesBeingResolved[$entryName]);
+
             throw $exception;
         }
 
@@ -370,7 +372,7 @@ class Container implements ContainerInterface, FactoryInterface, \DI\InvokerInte
         $this->definitionSource->addDefinition($definition);
     }
 
-    private function getInvoker() : \Invoker\InvokerInterface
+    private function getInvoker() : InvokerInterface
     {
         if (! $this->invoker) {
             $parameterResolver = new ResolverChain([

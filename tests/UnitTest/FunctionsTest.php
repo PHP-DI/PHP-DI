@@ -164,8 +164,7 @@ class FunctionsTest extends \PHPUnit_Framework_TestCase
 
         $this->assertTrue($definition instanceof ArrayDefinitionExtension);
         $this->assertEquals('foo', $definition->getName());
-        $this->assertEquals('foo', $definition->getSubDefinitionName());
-        $definition->setSubDefinition(new ArrayDefinition([]));
+        $definition->setExtendedDefinition(new ArrayDefinition([]));
         $this->assertEquals(['hello'], $definition->getValues());
     }
 
@@ -179,8 +178,7 @@ class FunctionsTest extends \PHPUnit_Framework_TestCase
 
         $this->assertTrue($definition instanceof ArrayDefinitionExtension);
         $this->assertEquals('foo', $definition->getName());
-        $this->assertEquals('foo', $definition->getSubDefinitionName());
-        $definition->setSubDefinition(new ArrayDefinition([]));
+        $definition->setExtendedDefinition(new ArrayDefinition([]));
         $this->assertEquals(['hello', 'world'], $definition->getValues());
     }
 

@@ -2,7 +2,7 @@
     "name": "php-di/php-di",
     "type": "library",
     "description": "The dependency injection container for humans",
-    "keywords": ["di", "dependency injection", "container"],
+    "keywords": ["di", "dependency injection", "container", "ioc", "psr-11", "psr11", "container-interop"],
     "homepage": "http://php-di.org/",
     "license": "MIT",
     "autoload": {
@@ -35,7 +35,8 @@
         "phpunit/phpunit": "~5.7",
         "mnapoli/phpunit-easymock": "~0.2.3",
         "doctrine/annotations": "~1.2",
-        "ocramius/proxy-manager": "~2.0.2"
+        "ocramius/proxy-manager": "~2.0.2",
+        "friendsofphp/php-cs-fixer": "^2.4"
     },
     "provide": {
         "psr/container-implementation": "^1.0"

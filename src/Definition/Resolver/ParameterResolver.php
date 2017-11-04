@@ -58,7 +58,7 @@ class ParameterResolver
                 $value = &$definitionParameters[$index];
             } else {
                 // If the parameter is optional and wasn't specified, we take its default value
-                if ($parameter->isOptional()) {
+                if ($parameter->isDefaultValueAvailable() || $parameter->isOptional()) {
                     $args[] = $this->getParameterDefaultValue($parameter, $method);
                     continue;
                 }

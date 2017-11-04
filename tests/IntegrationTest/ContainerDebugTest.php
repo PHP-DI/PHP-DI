@@ -17,7 +17,7 @@ class ContainerDebugTest extends BaseContainerTest
         $expectedEntries = [
             'DI\Container',
             'DI\FactoryInterface',
-            'DI\InvokerInterface',
+            'Invoker\InvokerInterface',
             'Psr\Container\ContainerInterface',
             'bar',
             'foo',
@@ -80,8 +80,8 @@ class ContainerDebugTest extends BaseContainerTest
             $container->debugEntry('DI\FactoryInterface')
         );
         $this->assertRegExp(
-            '/^Object \(\n {4}class = #NOT INSTANTIABLE# DI\\\InvokerInterface\n/',
-            $container->debugEntry('DI\InvokerInterface')
+            '/^Object \(\n {4}class = #NOT INSTANTIABLE# Invoker\\\InvokerInterface\n/',
+            $container->debugEntry('Invoker\InvokerInterface')
         );
         $this->assertRegExp(
             '/^Object \(\n {4}class = #NOT INSTANTIABLE# Psr\\\Container\\\ContainerInterface\n/',

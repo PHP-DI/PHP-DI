@@ -47,7 +47,7 @@ class DecoratorResolverTest extends \PHPUnit_Framework_TestCase
             return $previous . 'baz';
         };
         $definition = new DecoratorDefinition('foo', $callable);
-        $definition->setSubDefinition($previousDefinition);
+        $definition->setExtendedDefinition($previousDefinition);
 
         $this->parentResolver->expects($this->once())
             ->method('resolve')

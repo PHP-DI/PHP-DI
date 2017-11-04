@@ -34,6 +34,7 @@ class InstanceInjector extends ObjectCreator
                 get_class($definition->getInstance()),
                 $e->getMessage()
             );
+
             throw new DependencyException($message, 0, $e);
         }
     }

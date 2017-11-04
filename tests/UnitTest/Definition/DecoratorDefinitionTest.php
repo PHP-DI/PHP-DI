@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace DI\Test\UnitTest\Definition;
 
 use DI\Definition\DecoratorDefinition;
-use DI\Definition\HasSubDefinition;
+use DI\Definition\ExtendsPreviousDefinition;
 use DI\Definition\ValueDefinition;
 
 /**
@@ -42,11 +42,10 @@ class DecoratorDefinitionTest extends \PHPUnit_Framework_TestCase
     {
         $definition = new DecoratorDefinition('foo', function () {
         });
-        $this->assertInstanceOf(HasSubDefinition::class, $definition);
-        $this->assertEquals($definition->getName(), $definition->getSubDefinitionName());
+        $this->assertInstanceOf(ExtendsPreviousDefinition::class, $definition);
 
         $subDefinition = new ValueDefinition('bar');
-        $definition->setSubDefinition($subDefinition);
+        $definition->setExtendedDefinition($subDefinition);
         $this->assertSame($subDefinition, $definition->getDecoratedDefinition());
     }
 
