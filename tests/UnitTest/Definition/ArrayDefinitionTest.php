@@ -16,7 +16,8 @@ class ArrayDefinitionTest extends \PHPUnit_Framework_TestCase
      */
     public function should_contain_values()
     {
-        $definition = new ArrayDefinition('foo', ['bar']);
+        $definition = new ArrayDefinition(['bar']);
+        $definition->setName('foo');
 
         $this->assertEquals('foo', $definition->getName());
         $this->assertEquals(['bar'], $definition->getValues());
@@ -27,7 +28,7 @@ class ArrayDefinitionTest extends \PHPUnit_Framework_TestCase
      */
     public function should_cast_to_string()
     {
-        $definition = new ArrayDefinition('foo', [
+        $definition = new ArrayDefinition([
             'hello',
             'world',
         ]);
@@ -46,7 +47,7 @@ class ArrayDefinitionTest extends \PHPUnit_Framework_TestCase
         $str = "[
     'test' => 'hello',
 ]";
-        $this->assertEquals($str, (string) new ArrayDefinition('foo', ['test' => 'hello']));
+        $this->assertEquals($str, (string) new ArrayDefinition(['test' => 'hello']));
     }
 
     /**
@@ -54,7 +55,7 @@ class ArrayDefinitionTest extends \PHPUnit_Framework_TestCase
      */
     public function should_cast_to_string_with_nested_definitions()
     {
-        $definition = new ArrayDefinition('foo', [
+        $definition = new ArrayDefinition([
             \DI\get('foo'),
             \DI\env('foo'),
         ]);

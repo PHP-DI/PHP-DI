@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace DI;
 
+use DI\Definition\ArrayDefinitionExtension;
 use DI\Definition\EnvironmentVariableDefinition;
 use DI\Definition\Reference;
-use DI\Definition\Helper\ArrayDefinitionExtensionHelper;
 use DI\Definition\Helper\AutowireDefinitionHelper;
 use DI\Definition\Helper\CreateDefinitionHelper;
 use DI\Definition\Helper\FactoryDefinitionHelper;
@@ -127,13 +127,13 @@ if (! function_exists('DI\add')) {
      *
      * @since 5.0
      */
-    function add($values) : ArrayDefinitionExtensionHelper
+    function add($values) : ArrayDefinitionExtension
     {
         if (! is_array($values)) {
             $values = [$values];
         }
 
-        return new ArrayDefinitionExtensionHelper($values);
+        return new ArrayDefinitionExtension($values);
     }
 }
 

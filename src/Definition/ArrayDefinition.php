@@ -18,19 +18,15 @@ class ArrayDefinition implements Definition
      * Entry name.
      * @var string
      */
-    private $name;
+    private $name = '';
 
     /**
      * @var array
      */
     private $values;
 
-    /**
-     * @param string $name Entry name
-     */
-    public function __construct(string $name, array $values)
+    public function __construct(array $values)
     {
-        $this->name = $name;
         $this->values = $values;
     }
 

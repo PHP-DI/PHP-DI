@@ -46,7 +46,7 @@ class DefinitionNormalizer
         if ($definition instanceof DefinitionHelper) {
             $definition = $definition->getDefinition($name);
         } elseif (is_array($definition)) {
-            $definition = new ArrayDefinition($name, $definition);
+            $definition = new ArrayDefinition($definition);
         } elseif ($definition instanceof \Closure) {
             $definition = new FactoryDefinition($name, $definition);
         } elseif (! $definition instanceof Definition) {
@@ -87,7 +87,7 @@ class DefinitionNormalizer
         if ($definition instanceof DefinitionHelper) {
             $definition = $definition->getDefinition($name);
         } elseif (is_array($definition)) {
-            $definition = new ArrayDefinition($name, $definition);
+            $definition = new ArrayDefinition($definition);
         } elseif ($definition instanceof \Closure) {
             $definition = new FactoryDefinition($name, $definition);
         }
@@ -101,6 +101,8 @@ class DefinitionNormalizer
         }
 
         if ($definition instanceof Definition) {
+            $definition->setName($name);
+
             // Recursively traverse nested definitions
             $definition->replaceNestedDefinitions([$this, 'normalizeNestedDefinition']);
         }

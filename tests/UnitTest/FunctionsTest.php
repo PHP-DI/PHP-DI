@@ -10,7 +10,6 @@ use DI\Definition\ArrayDefinition;
 use DI\Definition\ArrayDefinitionExtension;
 use DI\Definition\DecoratorDefinition;
 use DI\Definition\FactoryDefinition;
-use DI\Definition\Helper\ArrayDefinitionExtensionHelper;
 use DI\Definition\Helper\AutowireDefinitionHelper;
 use DI\Definition\Helper\CreateDefinitionHelper;
 use DI\Definition\Helper\FactoryDefinitionHelper;
@@ -160,16 +159,13 @@ class FunctionsTest extends \PHPUnit_Framework_TestCase
      */
     public function test_add_value()
     {
-        $helper = \DI\add('hello');
-
-        $this->assertTrue($helper instanceof ArrayDefinitionExtensionHelper);
-
-        $definition = $helper->getDefinition('foo');
+        $definition = \DI\add('hello');
+        $definition->setName('foo');
 
         $this->assertTrue($definition instanceof ArrayDefinitionExtension);
         $this->assertEquals('foo', $definition->getName());
         $this->assertEquals('foo', $definition->getSubDefinitionName());
-        $definition->setSubDefinition(new ArrayDefinition('foo', []));
+        $definition->setSubDefinition(new ArrayDefinition([]));
         $this->assertEquals(['hello'], $definition->getValues());
     }
 
@@ -178,16 +174,13 @@ class FunctionsTest extends \PHPUnit_Framework_TestCase
      */
     public function test_add_array()
     {
-        $helper = \DI\add(['hello', 'world']);
-
-        $this->assertTrue($helper instanceof ArrayDefinitionExtensionHelper);
-
-        $definition = $helper->getDefinition('foo');
+        $definition = \DI\add(['hello', 'world']);
+        $definition->setName('foo');
 
         $this->assertTrue($definition instanceof ArrayDefinitionExtension);
         $this->assertEquals('foo', $definition->getName());
         $this->assertEquals('foo', $definition->getSubDefinitionName());
-        $definition->setSubDefinition(new ArrayDefinition('foo', []));
+        $definition->setSubDefinition(new ArrayDefinition([]));
         $this->assertEquals(['hello', 'world'], $definition->getValues());
     }
 
