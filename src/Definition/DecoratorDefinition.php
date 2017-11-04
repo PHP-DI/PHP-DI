@@ -10,17 +10,12 @@ namespace DI\Definition;
  * @since 5.0
  * @author Matthieu Napoli <matthieu@mnapoli.fr>
  */
-class DecoratorDefinition extends FactoryDefinition implements Definition, ExtendsAnotherDefinition
+class DecoratorDefinition extends FactoryDefinition implements Definition, ExtendsPreviousDefinition
 {
     /**
      * @var Definition|null
      */
     private $decorated;
-
-    public function getExtendedDefinitionName() : string
-    {
-        return $this->getName();
-    }
 
     public function setExtendedDefinition(Definition $definition)
     {
@@ -37,6 +32,6 @@ class DecoratorDefinition extends FactoryDefinition implements Definition, Exten
 
     public function __toString()
     {
-        return 'Decorate(' . $this->getExtendedDefinitionName() . ')';
+        return 'Decorate(' . $this->getName() . ')';
     }
 }

@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace DI\Test\UnitTest\Definition;
 
 use DI\Definition\DecoratorDefinition;
-use DI\Definition\ExtendsAnotherDefinition;
+use DI\Definition\ExtendsPreviousDefinition;
 use DI\Definition\ValueDefinition;
 
 /**
@@ -42,8 +42,7 @@ class DecoratorDefinitionTest extends \PHPUnit_Framework_TestCase
     {
         $definition = new DecoratorDefinition('foo', function () {
         });
-        $this->assertInstanceOf(ExtendsAnotherDefinition::class, $definition);
-        $this->assertEquals($definition->getName(), $definition->getExtendedDefinitionName());
+        $this->assertInstanceOf(ExtendsPreviousDefinition::class, $definition);
 
         $subDefinition = new ValueDefinition('foo', 'bar');
         $definition->setExtendedDefinition($subDefinition);

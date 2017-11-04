@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace DI\Definition\Source;
 
 use DI\Definition\Definition;
-use DI\Definition\ExtendsAnotherDefinition;
+use DI\Definition\ExtendsPreviousDefinition;
 
 /**
  * Manages a chain of other definition sources.
@@ -53,7 +53,7 @@ class SourceChain implements DefinitionSource, MutableDefinitionSource
             $definition = $source->getDefinition($name);
 
             if ($definition) {
-                if ($definition instanceof ExtendsAnotherDefinition) {
+                if ($definition instanceof ExtendsPreviousDefinition) {
                     $this->resolveExtendedDefinition($definition, $i);
                 }
 
@@ -88,17 +88,12 @@ class SourceChain implements DefinitionSource, MutableDefinitionSource
         $this->mutableSource->addDefinition($definition);
     }
 
-    private function resolveExtendedDefinition(ExtendsAnotherDefinition $definition, int $currentIndex)
+    private function resolveExtendedDefinition(ExtendsPreviousDefinition $definition, int $currentIndex)
     {
-        $extendedDefinitionName = $definition->getExtendedDefinitionName();
-
-        if ($extendedDefinitionName === $definition->getName()) {
-            // Extending itself: look in the next sources only (else infinite recursion)
-            $subDefinition = $this->getDefinition($extendedDefinitionName, $currentIndex + 1);
-        } else {
-            // Extending another definition: look from the root
-            $subDefinition = $this->rootSource->getDefinition($extendedDefinitionName);
-        }
+        // Look in the next sources only (else infinite recursion, and we can only extend
+        // entries defined in the previous definition files - a previous == next here because
+        // the array was reversed ;) )
+        $subDefinition = $this->getDefinition($definition->getName(), $currentIndex + 1);
 
         if ($subDefinition) {
             $definition->setExtendedDefinition($subDefinition);

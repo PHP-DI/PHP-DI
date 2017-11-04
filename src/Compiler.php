@@ -167,7 +167,7 @@ PHP;
             case $definition instanceof DecoratorDefinition:
                 $decoratedDefinition = $definition->getDecoratedDefinition();
                 if (! $decoratedDefinition instanceof Definition) {
-                    if (! $definition->getExtendedDefinitionName()) {
+                    if (! $definition->getName()) {
                         throw new InvalidDefinition('Decorators cannot be nested in another definition');
                     }
                     throw new InvalidDefinition(sprintf(
