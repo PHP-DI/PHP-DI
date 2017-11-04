@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace DI\Definition;
 
-use DI\Definition\Helper\DefinitionHelper;
-
 /**
  * Definition of an array containing values or references.
  *
@@ -60,10 +58,6 @@ class ArrayDefinition implements Definition
             }
 
             $str .= '    ' . $key . ' => ';
-
-            if ($value instanceof DefinitionHelper) {
-                $value = $value->getDefinition('<nested definition>');
-            }
 
             if ($value instanceof Definition) {
                 $str .= str_replace(PHP_EOL, PHP_EOL . '    ', $value);
