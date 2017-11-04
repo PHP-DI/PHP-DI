@@ -10,19 +10,19 @@ namespace DI\Definition;
  * @since 5.0
  * @author Matthieu Napoli <matthieu@mnapoli.fr>
  */
-class DecoratorDefinition extends FactoryDefinition implements Definition, HasSubDefinition
+class DecoratorDefinition extends FactoryDefinition implements Definition, ExtendsAnotherDefinition
 {
     /**
      * @var Definition|null
      */
     private $decorated;
 
-    public function getSubDefinitionName() : string
+    public function getExtendedDefinitionName() : string
     {
         return $this->getName();
     }
 
-    public function setSubDefinition(Definition $definition)
+    public function setExtendedDefinition(Definition $definition)
     {
         $this->decorated = $definition;
     }
@@ -37,6 +37,6 @@ class DecoratorDefinition extends FactoryDefinition implements Definition, HasSu
 
     public function __toString()
     {
-        return 'Decorate(' . $this->getSubDefinitionName() . ')';
+        return 'Decorate(' . $this->getExtendedDefinitionName() . ')';
     }
 }

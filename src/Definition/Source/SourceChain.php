@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace DI\Definition\Source;
 
 use DI\Definition\Definition;
-use DI\Definition\HasSubDefinition;
+use DI\Definition\ExtendsAnotherDefinition;
 
 /**
  * Manages a chain of other definition sources.
@@ -53,8 +53,8 @@ class SourceChain implements DefinitionSource, MutableDefinitionSource
             $definition = $source->getDefinition($name);
 
             if ($definition) {
-                if ($definition instanceof HasSubDefinition) {
-                    $this->resolveSubDefinition($definition, $i);
+                if ($definition instanceof ExtendsAnotherDefinition) {
+                    $this->resolveExtendedDefinition($definition, $i);
                 }
 
                 return $definition;
@@ -88,20 +88,20 @@ class SourceChain implements DefinitionSource, MutableDefinitionSource
         $this->mutableSource->addDefinition($definition);
     }
 
-    private function resolveSubDefinition(HasSubDefinition $definition, int $currentIndex)
+    private function resolveExtendedDefinition(ExtendsAnotherDefinition $definition, int $currentIndex)
     {
-        $subDefinitionName = $definition->getSubDefinitionName();
+        $extendedDefinitionName = $definition->getExtendedDefinitionName();
 
-        if ($subDefinitionName === $definition->getName()) {
+        if ($extendedDefinitionName === $definition->getName()) {
             // Extending itself: look in the next sources only (else infinite recursion)
-            $subDefinition = $this->getDefinition($subDefinitionName, $currentIndex + 1);
+            $subDefinition = $this->getDefinition($extendedDefinitionName, $currentIndex + 1);
         } else {
             // Extending another definition: look from the root
-            $subDefinition = $this->rootSource->getDefinition($subDefinitionName);
+            $subDefinition = $this->rootSource->getDefinition($extendedDefinitionName);
         }
 
         if ($subDefinition) {
-            $definition->setSubDefinition($subDefinition);
+            $definition->setExtendedDefinition($subDefinition);
         }
     }
 

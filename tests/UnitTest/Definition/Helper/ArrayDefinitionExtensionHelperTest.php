@@ -25,7 +25,7 @@ class ArrayDefinitionExtensionHelperTest extends \PHPUnit_Framework_TestCase
 
         $this->assertTrue($definition instanceof ArrayDefinitionExtension);
         $this->assertSame('foo', $definition->getName());
-        $this->assertSame('foo', $definition->getSubDefinitionName());
+        $this->assertSame('foo', $definition->getExtendedDefinitionName());
         $this->assertEquals(['hello'], $definition->getValues());
     }
 }
