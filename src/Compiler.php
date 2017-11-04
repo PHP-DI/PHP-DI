@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace DI;
 
 use DI\Compiler\ObjectCreationCompiler;
-use DI\Definition\AliasDefinition;
+use DI\Definition\Reference;
 use DI\Definition\ArrayDefinition;
 use DI\Definition\DecoratorDefinition;
 use DI\Definition\Definition;
@@ -115,7 +115,7 @@ class Compiler
                 $value = $definition->getValue();
                 $code = 'return ' . $this->compileValue($value) . ';';
                 break;
-            case $definition instanceof AliasDefinition:
+            case $definition instanceof Reference:
                 $targetEntryName = $definition->getTargetEntryName();
                 $code = 'return $this->delegateContainer->get(' . $this->compileValue($targetEntryName) . ');';
                 break;

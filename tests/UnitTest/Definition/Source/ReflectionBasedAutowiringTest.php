@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace DI\Test\UnitTest\Definition\Source;
 
-use DI\Definition\AliasDefinition;
+use DI\Definition\Reference;
 use DI\Definition\ObjectDefinition;
 use DI\Definition\ObjectDefinition\MethodInjection;
 use DI\Definition\Source\ReflectionBasedAutowiring;
@@ -34,7 +34,7 @@ class ReflectionBasedAutowiringTest extends \PHPUnit_Framework_TestCase
         $this->assertCount(1, $parameters);
 
         $param1 = $parameters[0];
-        $this->assertEquals(new AliasDefinition(AutowiringFixture::class), $param1);
+        $this->assertEquals(new Reference(AutowiringFixture::class), $param1);
     }
 
     public function testConstructorInParentClass()
@@ -49,6 +49,6 @@ class ReflectionBasedAutowiringTest extends \PHPUnit_Framework_TestCase
         $this->assertCount(1, $parameters);
 
         $param1 = $parameters[0];
-        $this->assertEquals(new AliasDefinition(AutowiringFixture::class), $param1);
+        $this->assertEquals(new Reference(AutowiringFixture::class), $param1);
     }
 }

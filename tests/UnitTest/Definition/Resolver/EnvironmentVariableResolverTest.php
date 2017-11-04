@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace DI\Test\UnitTest\Definition\Resolver;
 
-use DI\Definition\AliasDefinition;
+use DI\Definition\Reference;
 use DI\Definition\EnvironmentVariableDefinition;
 use DI\Definition\Resolver\DefinitionResolver;
 use DI\Definition\Resolver\EnvironmentVariableResolver;

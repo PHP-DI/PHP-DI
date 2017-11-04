@@ -6,7 +6,7 @@ namespace DI\Definition\Source;
 
 use DI\Annotation\Inject;
 use DI\Annotation\Injectable;
-use DI\Definition\AliasDefinition;
+use DI\Definition\Reference;
 use DI\Definition\Exception\AnnotationException;
 use DI\Definition\ObjectDefinition;
 use DI\Definition\ObjectDefinition\MethodInjection;
@@ -138,7 +138,7 @@ class AnnotationBasedAutowiring implements DefinitionSource, Autowiring
         }
 
         $definition->addPropertyInjection(
-            new PropertyInjection($property->getName(), new AliasDefinition($entryName), $classname)
+            new PropertyInjection($property->getName(), new Reference($entryName), $classname)
         );
     }
 
@@ -193,7 +193,7 @@ class AnnotationBasedAutowiring implements DefinitionSource, Autowiring
             $entryName = $this->getMethodParameter($index, $parameter, $annotationParameters);
 
             if ($entryName !== null) {
-                $parameters[$index] = new AliasDefinition($entryName);
+                $parameters[$index] = new Reference($entryName);
             }
         }
 

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace DI\Test\UnitTest\Definition\Resolver;
 
-use DI\Definition\AliasDefinition;
+use DI\Definition\Reference;
 use DI\Definition\ArrayDefinition;
 use DI\Definition\ObjectDefinition;
 use DI\Definition\Resolver\ArrayResolver;
@@ -58,7 +58,7 @@ class ArrayResolverTest extends \PHPUnit_Framework_TestCase
         $this->parentResolver->expects($this->exactly(2))
             ->method('resolve')
             ->withConsecutive(
-                $this->isInstanceOf(AliasDefinition::class),
+                $this->isInstanceOf(Reference::class),
                 $this->isInstanceOf(ObjectDefinition::class)
             )
             ->willReturnOnConsecutiveCalls(42, new \stdClass());

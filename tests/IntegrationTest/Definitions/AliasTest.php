@@ -10,7 +10,7 @@ use DI\Test\IntegrationTest\BaseContainerTest;
 /**
  * Test alias definitions.
  */
-class AliasDefinitionTest extends BaseContainerTest
+class AliasTest extends BaseContainerTest
 {
     /**
      * @dataProvider provideContainer

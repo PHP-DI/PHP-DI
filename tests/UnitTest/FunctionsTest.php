@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace DI\Test\UnitTest;
 
-use DI\Definition\AliasDefinition;
+use DI\Definition\Reference;
 use DI\Definition\ArrayDefinition;
 use DI\Definition\ArrayDefinitionExtension;
 use DI\Definition\DecoratorDefinition;
@@ -114,7 +114,7 @@ class FunctionsTest extends \PHPUnit_Framework_TestCase
     {
         $reference = \DI\get('foo');
 
-        $this->assertInstanceOf(AliasDefinition::class, $reference);
+        $this->assertInstanceOf(Reference::class, $reference);
         $this->assertEquals('foo', $reference->getTargetEntryName());
     }
 

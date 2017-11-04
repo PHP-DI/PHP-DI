@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace DI\Test\UnitTest\Definition\Source;
 
-use DI\Definition\AliasDefinition;
+use DI\Definition\Reference;
 use DI\Definition\ArrayDefinition;
 use DI\Definition\FactoryDefinition;
 use DI\Definition\ObjectDefinition;
@@ -84,7 +84,7 @@ class DefinitionArrayTest extends \PHPUnit_Framework_TestCase
 
         $definition = $source->getDefinition('links');
         $this->assertTrue($definition instanceof ArrayDefinition);
-        $this->assertInstanceOf(AliasDefinition::class, $definition->getValues()['a']);
+        $this->assertInstanceOf(Reference::class, $definition->getValues()['a']);
         $this->assertEquals('b', $definition->getValues()['a']->getTargetEntryName());
         $this->assertInternalType('array', $definition->getValues());
     }

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace DI\Test\UnitTest\Definition\Source;
 
-use DI\Definition\AliasDefinition;
+use DI\Definition\Reference;
 use DI\Definition\Definition;
 use DI\Definition\ObjectDefinition;
 use DI\Definition\ObjectDefinition\MethodInjection;
@@ -38,7 +38,7 @@ class AnnotationBasedAutowiringTest extends \PHPUnit_Framework_TestCase
 
         $property = $properties['property1'];
         $this->assertEquals('property1', $property->getPropertyName());
-        $this->assertEquals(new AliasDefinition('foo'), $property->getValue());
+        $this->assertEquals(new Reference('foo'), $property->getValue());
     }
 
     public function testUnannotatedProperty()
@@ -74,8 +74,8 @@ class AnnotationBasedAutowiringTest extends \PHPUnit_Framework_TestCase
 
         $parameters = $constructorInjection->getParameters();
         $this->assertCount(2, $parameters);
-        $this->assertEquals(new AliasDefinition('foo'), $parameters[0]);
-        $this->assertEquals(new AliasDefinition('bar'), $parameters[1]);
+        $this->assertEquals(new Reference('foo'), $parameters[0]);
+        $this->assertEquals(new Reference('bar'), $parameters[1]);
     }
 
     public function testMethod1()
@@ -99,8 +99,8 @@ class AnnotationBasedAutowiringTest extends \PHPUnit_Framework_TestCase
 
         $parameters = $methodInjection->getParameters();
         $this->assertCount(2, $parameters);
-        $this->assertEquals(new AliasDefinition('foo'), $parameters[0]);
-        $this->assertEquals(new AliasDefinition('bar'), $parameters[1]);
+        $this->assertEquals(new Reference('foo'), $parameters[0]);
+        $this->assertEquals(new Reference('bar'), $parameters[1]);
     }
 
     public function testMethod3()
@@ -114,7 +114,7 @@ class AnnotationBasedAutowiringTest extends \PHPUnit_Framework_TestCase
         $parameters = $methodInjection->getParameters();
         $this->assertCount(2, $parameters);
 
-        $reference = new AliasDefinition(AnnotationFixture2::class);
+        $reference = new Reference(AnnotationFixture2::class);
         $this->assertEquals($reference, $parameters[0]);
         $this->assertEquals($reference, $parameters[1]);
     }
@@ -129,8 +129,8 @@ class AnnotationBasedAutowiringTest extends \PHPUnit_Framework_TestCase
 
         $parameters = $methodInjection->getParameters();
         $this->assertCount(2, $parameters);
-        $this->assertEquals(new AliasDefinition('foo'), $parameters[0]);
-        $this->assertEquals(new AliasDefinition('bar'), $parameters[1]);
+        $this->assertEquals(new Reference('foo'), $parameters[0]);
+        $this->assertEquals(new Reference('bar'), $parameters[1]);
     }
 
     public function testMethod5()
@@ -145,7 +145,7 @@ class AnnotationBasedAutowiringTest extends \PHPUnit_Framework_TestCase
         $this->assertCount(1, $parameters);
 
         // Offset is 1, not 0, because parameter 0 wasn't defined
-        $this->assertEquals(new AliasDefinition('bar'), $parameters[1]);
+        $this->assertEquals(new Reference('bar'), $parameters[1]);
     }
 
     public function testUnannotatedMethod()
@@ -167,7 +167,7 @@ class AnnotationBasedAutowiringTest extends \PHPUnit_Framework_TestCase
         $parameters = $methodInjection->getParameters();
         $this->assertCount(1, $parameters);
 
-        $this->assertEquals(new AliasDefinition('foo'), $parameters[0]);
+        $this->assertEquals(new Reference('foo'), $parameters[0]);
         $this->assertArrayNotHasKey(1, $parameters);
     }
 
@@ -199,7 +199,7 @@ class AnnotationBasedAutowiringTest extends \PHPUnit_Framework_TestCase
         $parameters = $methodInjection->getParameters();
         $this->assertCount(1, $parameters);
         $this->assertEquals(
-            new AliasDefinition(AnnotationFixture2::class),
+            new Reference(AnnotationFixture2::class),
             $parameters[0]
         );
     }

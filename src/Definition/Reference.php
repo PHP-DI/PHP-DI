@@ -7,11 +7,11 @@ namespace DI\Definition;
 use Psr\Container\ContainerInterface;
 
 /**
- * Defines an alias from an entry to another.
+ * Represents a reference to another entry.
  *
  * @author Matthieu Napoli <matthieu@mnapoli.fr>
  */
-class AliasDefinition implements Definition, SelfResolvingDefinition
+class Reference implements Definition, SelfResolvingDefinition
 {
     /**
      * Entry name.
@@ -26,7 +26,6 @@ class AliasDefinition implements Definition, SelfResolvingDefinition
     private $targetEntryName;
 
     /**
-     * @param string $name            Entry name
      * @param string $targetEntryName Name of the target entry
      */
     public function __construct(string $targetEntryName)
