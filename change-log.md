@@ -11,7 +11,10 @@ Improvements:
     - `DI\autowire()` autowires an object and allows to override specific constructor and method parameters
 - [#494](https://github.com/PHP-DI/PHP-DI/pull/494) The container can now be compiled for optimum performances in production
 - The container can now be built without parameters: `new Container()`
-- [#490](https://github.com/PHP-DI/PHP-DI/issues/490) Support definitions in nested arrays (by [@yuloh](https://github.com/yuloh))
+- Definitions can be nested:
+    - [#490](https://github.com/PHP-DI/PHP-DI/issues/490) Definitions can be nested in arrays (by [@yuloh](https://github.com/yuloh))
+    - [#501](https://github.com/PHP-DI/PHP-DI/issues/501) & [#540](https://github.com/PHP-DI/PHP-DI/issues/540) Autowire definitions can be nested in other definitions
+    - [#487](https://github.com/PHP-DI/PHP-DI/issues/487) & [#540](https://github.com/PHP-DI/PHP-DI/issues/540) Closures are now handled as factories when they are nested in other definitions
 - [#242](https://github.com/PHP-DI/PHP-DI/issues/242) Error in case a definition is not indexed by a string
 - [#505](https://github.com/PHP-DI/PHP-DI/pull/505) Debug container entries
 
