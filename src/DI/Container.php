@@ -49,11 +49,11 @@ class Container implements ContainerInterface, InteropContainerInterface, Factor
     private $definitionResolver;
 
     /**
-     * Map of definitions that are already fetched / looked up.
+     * Map of definitions that are already looked up.
      *
      * @var array
      */
-    private $fetchedDefinitions = [];
+    private $definitionCache = [];
 
     /**
      * Array of entries being resolved. Used to avoid circular dependencies and infinite loops.
@@ -140,11 +140,11 @@ class Container implements ContainerInterface, InteropContainerInterface, Factor
 
     private function getDefinition($name)
     {
-        if(!array_key_exists($name, $this->fetchedDefinitions)){
-            $this->fetchedDefinitions[$name] = $this->definitionSource->getDefinition($name);
+        if(!array_key_exists($name, $this->definitionCache)){
+            $this->definitionCache[$name] = $this->definitionSource->getDefinition($name);
         }
 
-        return $this->fetchedDefinitions[$name];
+        return $this->definitionCache[$name];
     }
 
     /**
@@ -323,8 +323,8 @@ class Container implements ContainerInterface, InteropContainerInterface, Factor
         }
 
         // Clear existing entries if it exists
-        if (array_key_exists($name, $this->fetchedDefinitions)) {
-            unset($this->fetchedDefinitions[$name]);
+        if (array_key_exists($name, $this->definitionCache)) {
+            unset($this->definitionCache[$name]);
         }
         if (array_key_exists($name, $this->singletonEntries)) {
             unset($this->singletonEntries[$name]);
