@@ -322,10 +322,9 @@ class Container implements ContainerInterface, InteropContainerInterface, Factor
             throw new \LogicException('The container has not been initialized correctly');
         }
 
+        $this->definitionCache = []; //Completely clear definitionCache
+
         // Clear existing entries if it exists
-        if (array_key_exists($name, $this->definitionCache)) {
-            unset($this->definitionCache[$name]);
-        }
         if (array_key_exists($name, $this->singletonEntries)) {
             unset($this->singletonEntries[$name]);
         }
