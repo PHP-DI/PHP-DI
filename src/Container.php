@@ -17,7 +17,6 @@ use DI\Definition\Source\ReflectionBasedAutowiring;
 use DI\Definition\Source\SourceChain;
 use DI\Invoker\DefinitionParameterResolver;
 use DI\Proxy\ProxyFactory;
-use Exception;
 use InvalidArgumentException;
 use Invoker\Invoker;
 use Invoker\InvokerInterface;
@@ -351,10 +350,8 @@ class Container implements ContainerInterface, FactoryInterface, InvokerInterfac
         // Resolve the definition
         try {
             $value = $this->definitionResolver->resolve($definition, $parameters);
-        } catch (Exception $exception) {
+        } finally {
             unset($this->entriesBeingResolved[$entryName]);
-
-            throw $exception;
         }
 
         unset($this->entriesBeingResolved[$entryName]);
