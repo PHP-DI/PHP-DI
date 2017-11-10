@@ -17,7 +17,6 @@ use DI\Definition\Source\ReflectionBasedAutowiring;
 use DI\Definition\Source\SourceChain;
 use DI\Invoker\DefinitionParameterResolver;
 use DI\Proxy\ProxyFactory;
-use Exception;
 use InvalidArgumentException;
 use Invoker\Invoker;
 use Invoker\InvokerInterface;
