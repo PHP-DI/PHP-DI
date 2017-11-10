@@ -122,4 +122,35 @@ class ContainerMakeTest extends BaseContainerTest
         ]);
         $this->assertEquals('bar', $object->foo);
     }
+
+    /**
+     * Test that PHP-7 non-exceptions are correctly handled when resolving definitions.
+     * @dataProvider provideContainer
+     */
+    public function testThrowableDuringResolve(ContainerBuilder $builder)
+    {
+      $builder->addDefinitions([
+        'tomorrow' => \DI\factory(function() {
+          // Cause a TypeError to be thrown in PHP 7 when this gets resolved
+          return (new \DateTime())->add('tomorrow');
+        })
+      ]);
+      $container = $builder->build();
+      $exception = null;
+      try {
+        // First resolve should throw the TypeError
+        $container->make('tomorrow');
+      } catch (\Throwable $e) {
+        $exception = $e;
+      }
+      $this->assertInstanceOf('TypeError', $exception);
+      $exception = null;
+      try {
+        // Second error must ALSO throw the TypeError, not a circular exception
+        $container->make('tomorrow');
+      } catch (\Throwable $e) {
+        $exception = $e;
+      }
+      $this->assertInstanceOf('TypeError', $exception);
+    }
 }
