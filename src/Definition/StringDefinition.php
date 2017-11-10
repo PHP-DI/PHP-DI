@@ -20,25 +20,26 @@ class StringDefinition implements Definition, SelfResolvingDefinition
      * Entry name.
      * @var string
      */
-    private $name;
+    private $name = '';
 
     /**
      * @var string
      */
     private $expression;
 
-    /**
-     * @param string $name Entry name
-     */
-    public function __construct(string $name, string $expression)
+    public function __construct(string $expression)
     {
-        $this->name = $name;
         $this->expression = $expression;
     }
 
     public function getName() : string
     {
         return $this->name;
+    }
+
+    public function setName(string $name)
+    {
+        $this->name = $name;
     }
 
     public function getExpression() : string
@@ -54,6 +55,11 @@ class StringDefinition implements Definition, SelfResolvingDefinition
     public function isResolvable(ContainerInterface $container) : bool
     {
         return true;
+    }
+
+    public function replaceNestedDefinitions(callable $replacer)
+    {
+        // no nested definitions
     }
 
     public function __toString()

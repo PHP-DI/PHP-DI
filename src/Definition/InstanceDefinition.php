@@ -39,6 +39,11 @@ class InstanceDefinition implements Definition
         return '';
     }
 
+    public function setName(string $name)
+    {
+        // Name are superfluous for instance definitions
+    }
+
     /**
      * @return object
      */
@@ -50,6 +55,11 @@ class InstanceDefinition implements Definition
     public function getObjectDefinition() : ObjectDefinition
     {
         return $this->objectDefinition;
+    }
+
+    public function replaceNestedDefinitions(callable $replacer)
+    {
+        $this->objectDefinition->replaceNestedDefinitions($replacer);
     }
 
     public function __toString()

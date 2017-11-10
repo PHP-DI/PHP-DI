@@ -44,7 +44,7 @@ class DecoratorDefinitionTest extends \PHPUnit_Framework_TestCase
         });
         $this->assertInstanceOf(ExtendsPreviousDefinition::class, $definition);
 
-        $subDefinition = new ValueDefinition('foo', 'bar');
+        $subDefinition = new ValueDefinition('bar');
         $definition->setExtendedDefinition($subDefinition);
         $this->assertSame($subDefinition, $definition->getDecoratedDefinition());
     }

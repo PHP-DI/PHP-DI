@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace DI\Test\UnitTest\Definition\Source;
 
+use DI\Definition\Reference;
 use DI\Definition\ArrayDefinition;
 use DI\Definition\FactoryDefinition;
 use DI\Definition\ObjectDefinition;
@@ -83,7 +84,8 @@ class DefinitionArrayTest extends \PHPUnit_Framework_TestCase
 
         $definition = $source->getDefinition('links');
         $this->assertTrue($definition instanceof ArrayDefinition);
-        $this->assertEquals(['a' => \DI\get('b')], $definition->getValues());
+        $this->assertInstanceOf(Reference::class, $definition->getValues()['a']);
+        $this->assertEquals('b', $definition->getValues()['a']->getTargetEntryName());
         $this->assertInternalType('array', $definition->getValues());
     }
 
@@ -134,7 +136,8 @@ class DefinitionArrayTest extends \PHPUnit_Framework_TestCase
     public function testAddDefinition()
     {
         $source = new DefinitionArray();
-        $definition = new ValueDefinition('foo', 'bar');
+        $definition = new ValueDefinition('bar');
+        $definition->setName('foo');
 
         $source->addDefinition($definition);
         $this->assertSame($definition, $source->getDefinition('foo'));
@@ -143,7 +146,7 @@ class DefinitionArrayTest extends \PHPUnit_Framework_TestCase
     public function testAddDefinitions()
     {
         $source = new DefinitionArray();
-        $definition = new ValueDefinition('foo', 'bar');
+        $definition = new ValueDefinition('bar');
 
         $source->addDefinitions(['foo' => $definition]);
         $this->assertSame($definition, $source->getDefinition('foo'));
@@ -151,7 +154,7 @@ class DefinitionArrayTest extends \PHPUnit_Framework_TestCase
 
     public function testAddDefinitionsInConstructor()
     {
-        $definition = new ValueDefinition('foo', 'bar');
+        $definition = new ValueDefinition('bar');
 
         $source = new DefinitionArray(['foo' => $definition]);
         $this->assertSame($definition, $source->getDefinition('foo'));
@@ -160,8 +163,8 @@ class DefinitionArrayTest extends \PHPUnit_Framework_TestCase
     public function testAddDefinitionsOverrideExisting()
     {
         $source = new DefinitionArray();
-        $definition1 = new ValueDefinition('foo', 'bar');
-        $definition2 = new ValueDefinition('foo', 'bar');
+        $definition1 = new ValueDefinition('bar');
+        $definition2 = new ValueDefinition('bar');
 
         $source->addDefinitions(['foo' => $definition1]);
         $source->addDefinitions(['foo' => $definition2]);

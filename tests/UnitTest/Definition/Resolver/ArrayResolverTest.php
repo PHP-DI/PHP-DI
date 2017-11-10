@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace DI\Test\UnitTest\Definition\Resolver;
 
-use DI\Definition\AliasDefinition;
+use DI\Definition\Reference;
 use DI\Definition\ArrayDefinition;
 use DI\Definition\ObjectDefinition;
 use DI\Definition\Resolver\ArrayResolver;
@@ -40,7 +40,7 @@ class ArrayResolverTest extends \PHPUnit_Framework_TestCase
      */
     public function should_resolve_array_of_values()
     {
-        $definition = new ArrayDefinition('foo', [
+        $definition = new ArrayDefinition([
             'bar',
             42,
         ]);
@@ -58,15 +58,15 @@ class ArrayResolverTest extends \PHPUnit_Framework_TestCase
         $this->parentResolver->expects($this->exactly(2))
             ->method('resolve')
             ->withConsecutive(
-                $this->isInstanceOf(AliasDefinition::class),
+                $this->isInstanceOf(Reference::class),
                 $this->isInstanceOf(ObjectDefinition::class)
             )
             ->willReturnOnConsecutiveCalls(42, new \stdClass());
 
-        $definition = new ArrayDefinition('foo', [
+        $definition = new ArrayDefinition([
             'bar',
-            \DI\get('bar'),
-            \DI\create('bar'),
+            new Reference('bar'),
+            new ObjectDefinition('', 'bar'),
         ]);
 
         $value = $this->resolver->resolve($definition);
@@ -79,7 +79,7 @@ class ArrayResolverTest extends \PHPUnit_Framework_TestCase
      */
     public function resolve_should_preserve_keys()
     {
-        $definition = new ArrayDefinition('foo', [
+        $definition = new ArrayDefinition([
             'hello' => 'world',
         ]);
 
@@ -99,8 +99,11 @@ class ArrayResolverTest extends \PHPUnit_Framework_TestCase
             ->method('resolve')
             ->willThrowException(new \Exception('This is a message'));
 
-        $this->resolver->resolve(new ArrayDefinition('foo', [
-            \DI\get('bar'),
-        ]));
+        $definition = new ArrayDefinition([
+            new Reference('bar'),
+        ]);
+        $definition->setName('foo');
+
+        $this->resolver->resolve($definition);
     }
 }

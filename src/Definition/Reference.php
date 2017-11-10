@@ -7,17 +7,17 @@ namespace DI\Definition;
 use Psr\Container\ContainerInterface;
 
 /**
- * Defines an alias from an entry to another.
+ * Represents a reference to another entry.
  *
  * @author Matthieu Napoli <matthieu@mnapoli.fr>
  */
-class AliasDefinition implements Definition, SelfResolvingDefinition
+class Reference implements Definition, SelfResolvingDefinition
 {
     /**
      * Entry name.
      * @var string
      */
-    private $name;
+    private $name = '';
 
     /**
      * Name of the target entry.
@@ -26,18 +26,21 @@ class AliasDefinition implements Definition, SelfResolvingDefinition
     private $targetEntryName;
 
     /**
-     * @param string $name            Entry name
      * @param string $targetEntryName Name of the target entry
      */
-    public function __construct($name, $targetEntryName)
+    public function __construct(string $targetEntryName)
     {
-        $this->name = $name;
         $this->targetEntryName = $targetEntryName;
     }
 
     public function getName() : string
     {
         return $this->name;
+    }
+
+    public function setName(string $name)
+    {
+        $this->name = $name;
     }
 
     public function getTargetEntryName() : string
@@ -53,6 +56,11 @@ class AliasDefinition implements Definition, SelfResolvingDefinition
     public function isResolvable(ContainerInterface $container) : bool
     {
         return $container->has($this->getTargetEntryName());
+    }
+
+    public function replaceNestedDefinitions(callable $replacer)
+    {
+        // no nested definitions
     }
 
     public function __toString()

@@ -30,6 +30,11 @@ class DecoratorDefinition extends FactoryDefinition implements Definition, Exten
         return $this->decorated;
     }
 
+    public function replaceNestedDefinitions(callable $replacer)
+    {
+        // no nested definitions
+    }
+
     public function __toString()
     {
         return 'Decorate(' . $this->getName() . ')';

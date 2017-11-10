@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace DI\Definition\Dumper;
 
-use DI\Definition\EntryReference;
+use DI\Definition\Definition;
 use DI\Definition\ObjectDefinition;
 use DI\Definition\ObjectDefinition\MethodInjection;
 use ReflectionException;
@@ -72,8 +72,8 @@ class ObjectDefinitionDumper
 
         foreach ($definition->getPropertyInjections() as $propertyInjection) {
             $value = $propertyInjection->getValue();
-            if ($value instanceof EntryReference) {
-                $valueStr = sprintf('get(%s)', $value->getName());
+            if ($value instanceof Definition) {
+                $valueStr = (string) $value;
             } else {
                 $valueStr = var_export($value, true);
             }
@@ -109,11 +109,13 @@ class ObjectDefinitionDumper
             if (array_key_exists($index, $definitionParameters)) {
                 $value = $definitionParameters[$index];
 
-                if ($value instanceof EntryReference) {
-                    $args[] = sprintf('$%s = get(%s)', $parameter->getName(), $value->getName());
+                if ($value instanceof Definition) {
+                    $valueStr = (string) $value;
                 } else {
-                    $args[] = sprintf('$%s = %s', $parameter->getName(), var_export($value, true));
+                    $valueStr = var_export($value, true);
                 }
+                $args[] = sprintf('$%s = %s', $parameter->getName(), $valueStr);
+
                 continue;
             }
 

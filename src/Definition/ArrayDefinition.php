@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace DI\Definition;
 
-use DI\Definition\Helper\DefinitionHelper;
-
 /**
  * Definition of an array containing values or references.
  *
@@ -18,19 +16,15 @@ class ArrayDefinition implements Definition
      * Entry name.
      * @var string
      */
-    private $name;
+    private $name = '';
 
     /**
      * @var array
      */
     private $values;
 
-    /**
-     * @param string $name Entry name
-     */
-    public function __construct(string $name, array $values)
+    public function __construct(array $values)
     {
-        $this->name = $name;
         $this->values = $values;
     }
 
@@ -39,9 +33,19 @@ class ArrayDefinition implements Definition
         return $this->name;
     }
 
+    public function setName(string $name)
+    {
+        $this->name = $name;
+    }
+
     public function getValues() : array
     {
         return $this->values;
+    }
+
+    public function replaceNestedDefinitions(callable $replacer)
+    {
+        $this->values = array_map($replacer, $this->values);
     }
 
     public function __toString()
@@ -55,8 +59,8 @@ class ArrayDefinition implements Definition
 
             $str .= '    ' . $key . ' => ';
 
-            if ($value instanceof DefinitionHelper) {
-                $str .= str_replace(PHP_EOL, PHP_EOL . '    ', $value->getDefinition(''));
+            if ($value instanceof Definition) {
+                $str .= str_replace(PHP_EOL, PHP_EOL . '    ', $value);
             } else {
                 $str .= var_export($value, true);
             }

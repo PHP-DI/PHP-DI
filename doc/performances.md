@@ -56,7 +56,7 @@ As a side note, do not confuse "development environment" with your automated tes
 
 ### Optimizing for compilation
 
-As you can read in the "*How it works*" section, PHP-DI will take all the definitions it can find and compile them. That means that definitions like autowired classes that are not listed in the configuration cannot be compiled since PHP-DI doesn't know about them.
+As you can read in the "*How it works*" section, PHP-DI will take all the definitions it can find and compile them. That means that definitions like **autowired classes that are not listed in the configuration cannot be compiled** since PHP-DI doesn't know about them.
 
 If you want to optimize performances to a maximum in exchange for more verbosity, you can let PHP-DI know about all the autowired classes by listing them in definition files:
 

@@ -6,11 +6,11 @@ namespace DI\Definition\Source;
 
 use DI\Annotation\Inject;
 use DI\Annotation\Injectable;
-use DI\Definition\EntryReference;
 use DI\Definition\Exception\AnnotationException;
 use DI\Definition\ObjectDefinition;
 use DI\Definition\ObjectDefinition\MethodInjection;
 use DI\Definition\ObjectDefinition\PropertyInjection;
+use DI\Definition\Reference;
 use Doctrine\Common\Annotations\AnnotationRegistry;
 use Doctrine\Common\Annotations\Reader;
 use Doctrine\Common\Annotations\SimpleAnnotationReader;
@@ -138,7 +138,7 @@ class AnnotationBasedAutowiring implements DefinitionSource, Autowiring
         }
 
         $definition->addPropertyInjection(
-            new PropertyInjection($property->getName(), new EntryReference($entryName), $classname)
+            new PropertyInjection($property->getName(), new Reference($entryName), $classname)
         );
     }
 
@@ -193,7 +193,7 @@ class AnnotationBasedAutowiring implements DefinitionSource, Autowiring
             $entryName = $this->getMethodParameter($index, $parameter, $annotationParameters);
 
             if ($entryName !== null) {
-                $parameters[$index] = new EntryReference($entryName);
+                $parameters[$index] = new Reference($entryName);
             }
         }
 

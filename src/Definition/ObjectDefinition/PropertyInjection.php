@@ -62,4 +62,9 @@ class PropertyInjection
     {
         return $this->className;
     }
+
+    public function replaceNestedDefinition(callable $replacer)
+    {
+        $this->value = $replacer($this->value);
+    }
 }

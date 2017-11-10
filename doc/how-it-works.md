@@ -30,7 +30,7 @@ A definition defines what an entry is:
 
 - **a simple value** (string, number, object instance…): `ValueDefinition`
 - **a factory/callable returning the value**: `FactoryDefinition`
-- **a definition of an entry alias**: `AliasDefinition`
+- **a definition of an entry alias**: `Reference`
 - **a definition of a class**: `ObjectDefinition`
 - **a definition of an environment variable**: `EnvironmentVariableDefinition`
 

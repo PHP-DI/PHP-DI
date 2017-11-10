@@ -19,7 +19,7 @@ class MethodInjection implements Definition
     private $methodName;
 
     /**
-     * @var array
+     * @var mixed[]
      */
     private $parameters = [];
 
@@ -39,6 +39,9 @@ class MethodInjection implements Definition
         return $this->methodName;
     }
 
+    /**
+     * @return mixed[]
+     */
     public function getParameters() : array
     {
         return $this->parameters;
@@ -61,6 +64,16 @@ class MethodInjection implements Definition
     public function getName() : string
     {
         return '';
+    }
+
+    public function setName(string $name)
+    {
+        // The name does not matter for method injections
+    }
+
+    public function replaceNestedDefinitions(callable $replacer)
+    {
+        $this->parameters = array_map($replacer, $this->parameters);
     }
 
     /**

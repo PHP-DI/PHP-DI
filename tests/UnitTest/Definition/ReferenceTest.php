@@ -4,14 +4,14 @@ declare(strict_types=1);
 
 namespace DI\Test\UnitTest\Definition;
 
-use DI\Definition\AliasDefinition;
+use DI\Definition\Reference;
 use EasyMock\EasyMock;
 use Psr\Container\ContainerInterface;
 
 /**
- * @covers \DI\Definition\AliasDefinition
+ * @covers \DI\Definition\Reference
  */
-class AliasDefinitionTest extends \PHPUnit_Framework_TestCase
+class ReferenceTest extends \PHPUnit_Framework_TestCase
 {
     use EasyMock;
 
@@ -20,8 +20,9 @@ class AliasDefinitionTest extends \PHPUnit_Framework_TestCase
      */
     public function should_have_a_name()
     {
-        $definition = new AliasDefinition('foo', 'bar');
-
+        $definition = new Reference('bar');
+        $this->assertEquals('', $definition->getName());
+        $definition->setName('foo');
         $this->assertEquals('foo', $definition->getName());
     }
 
@@ -30,7 +31,7 @@ class AliasDefinitionTest extends \PHPUnit_Framework_TestCase
      */
     public function should_have_a_target_entry_name()
     {
-        $definition = new AliasDefinition('foo', 'bar');
+        $definition = new Reference('bar');
 
         $this->assertEquals('bar', $definition->getTargetEntryName());
     }
@@ -44,7 +45,7 @@ class AliasDefinitionTest extends \PHPUnit_Framework_TestCase
             'get' => 42,
         ]);
 
-        $definition = new AliasDefinition('foo', 'bar');
+        $definition = new Reference('bar');
 
         $this->assertEquals(42, $definition->resolve($container));
     }
@@ -58,7 +59,7 @@ class AliasDefinitionTest extends \PHPUnit_Framework_TestCase
             'has' => true,
         ]);
 
-        $definition = new AliasDefinition('foo', 'bar');
+        $definition = new Reference('foo');
 
         $this->assertTrue($definition->isResolvable($container));
     }
@@ -68,6 +69,6 @@ class AliasDefinitionTest extends \PHPUnit_Framework_TestCase
      */
     public function should_cast_to_string()
     {
-        $this->assertEquals('get(bar)', (string) new AliasDefinition('', 'bar'));
+        $this->assertEquals('get(bar)', (string) new Reference('bar'));
     }
 }

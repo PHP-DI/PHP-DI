@@ -17,7 +17,7 @@ class ValueDefinition implements Definition, SelfResolvingDefinition
      * Entry name.
      * @var string
      */
-    private $name;
+    private $name = '';
 
     /**
      * @var mixed
@@ -25,18 +25,21 @@ class ValueDefinition implements Definition, SelfResolvingDefinition
     private $value;
 
     /**
-     * @param string $name Entry name
      * @param mixed $value
      */
-    public function __construct($name, $value)
+    public function __construct($value)
     {
-        $this->name = $name;
         $this->value = $value;
     }
 
     public function getName() : string
     {
         return $this->name;
+    }
+
+    public function setName(string $name)
+    {
+        $this->name = $name;
     }
 
     /**
@@ -55,6 +58,11 @@ class ValueDefinition implements Definition, SelfResolvingDefinition
     public function isResolvable(ContainerInterface $container) : bool
     {
         return true;
+    }
+
+    public function replaceNestedDefinitions(callable $replacer)
+    {
+        // no nested definitions
     }
 
     public function __toString()

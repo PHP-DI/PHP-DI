@@ -4,11 +4,9 @@ declare(strict_types=1);
 
 namespace DI\Definition\Resolver;
 
-use DI\Definition\ArrayDefinition;
 use DI\Definition\Definition;
 use DI\Definition\EnvironmentVariableDefinition;
 use DI\Definition\Exception\InvalidDefinition;
-use DI\Definition\Helper\DefinitionHelper;
 
 /**
  * Resolves a environment variable definition to a value.
@@ -58,13 +56,6 @@ class EnvironmentVariableResolver implements DefinitionResolver
         $value = $definition->getDefaultValue();
 
         // Nested definition
-        if ($value instanceof DefinitionHelper) {
-            // As per ObjectCreator::injectProperty, use '' for an anonymous sub-definition
-            $value = $value->getDefinition('');
-        } elseif (is_array($value)) {
-            // Cast arrays into array definitions to allow resolution of nested definitions
-            $value = new ArrayDefinition('', $value);
-        }
         if ($value instanceof Definition) {
             return $this->definitionResolver->resolve($value);
         }

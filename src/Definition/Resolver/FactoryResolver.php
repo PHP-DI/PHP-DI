@@ -4,11 +4,9 @@ declare(strict_types=1);
 
 namespace DI\Definition\Resolver;
 
-use DI\Definition\ArrayDefinition;
 use DI\Definition\Definition;
 use DI\Definition\Exception\InvalidDefinition;
 use DI\Definition\FactoryDefinition;
-use DI\Definition\Helper\DefinitionHelper;
 use DI\Invoker\FactoryParameterResolver;
 use Invoker\Exception\NotCallableException;
 use Invoker\Exception\NotEnoughParametersException;
@@ -113,18 +111,11 @@ class FactoryResolver implements DefinitionResolver
     {
         $resolved = [];
         foreach ($params as $key => $value) {
-            if ($value instanceof DefinitionHelper) {
-                // As per ObjectCreator::injectProperty, use '' for an anonymous sub-definition
-                $value = $value->getDefinition('');
-            } elseif (is_array($value)) {
-                // Cast arrays into array definitions to allow resolution of nested definitions
-                $value = new ArrayDefinition('', $value);
+            // Nested definitions
+            if ($value instanceof Definition) {
+                $value = $this->resolver->resolve($value);
             }
-            if (!$value instanceof Definition) {
-                $resolved[$key] = $value;
-            } else {
-                $resolved[$key] = $this->resolver->resolve($value);
-            }
+            $resolved[$key] = $value;
         }
 
         return $resolved;

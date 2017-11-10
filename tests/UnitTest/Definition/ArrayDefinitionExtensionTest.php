@@ -18,7 +18,8 @@ class ArrayDefinitionExtensionTest extends \PHPUnit_Framework_TestCase
      */
     public function test_getters()
     {
-        $definition = new ArrayDefinitionExtension('foo', ['hello']);
+        $definition = new ArrayDefinitionExtension(['hello']);
+        $definition->setName('foo');
 
         $this->assertEquals('foo', $definition->getName());
         $this->assertEquals(['hello'], $definition->getValues());
@@ -29,8 +30,8 @@ class ArrayDefinitionExtensionTest extends \PHPUnit_Framework_TestCase
      */
     public function should_append_values_after_sub_definitions_values()
     {
-        $definition = new ArrayDefinitionExtension('name', ['foo']);
-        $definition->setExtendedDefinition(new ArrayDefinition('name', ['bar']));
+        $definition = new ArrayDefinitionExtension(['foo']);
+        $definition->setExtendedDefinition(new ArrayDefinition(['bar']));
 
         $expected = [
             'bar',
@@ -47,7 +48,8 @@ class ArrayDefinitionExtensionTest extends \PHPUnit_Framework_TestCase
      */
     public function should_error_if_not_extending_an_array()
     {
-        $definition = new ArrayDefinitionExtension('name', ['foo']);
-        $definition->setExtendedDefinition(new ValueDefinition('name', 'value'));
+        $definition = new ArrayDefinitionExtension(['foo']);
+        $definition->setName('name');
+        $definition->setExtendedDefinition(new ValueDefinition('value'));
     }
 }

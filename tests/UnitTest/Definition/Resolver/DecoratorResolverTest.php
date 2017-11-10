@@ -41,7 +41,7 @@ class DecoratorResolverTest extends \PHPUnit_Framework_TestCase
      */
     public function should_resolve_decorators()
     {
-        $previousDefinition = new ValueDefinition('foo', 'bar');
+        $previousDefinition = new ValueDefinition('bar');
 
         $callable = function ($previous, ContainerInterface $container) {
             return $previous . 'baz';

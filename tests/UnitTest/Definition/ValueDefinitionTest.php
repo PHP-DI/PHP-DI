@@ -17,7 +17,8 @@ class ValueDefinitionTest extends \PHPUnit_Framework_TestCase
 
     public function test_getters()
     {
-        $definition = new ValueDefinition('foo', 1);
+        $definition = new ValueDefinition(1);
+        $definition->setName('foo');
 
         $this->assertEquals('foo', $definition->getName());
         $this->assertEquals(1, $definition->getValue());
@@ -28,7 +29,7 @@ class ValueDefinitionTest extends \PHPUnit_Framework_TestCase
      */
     public function should_be_resolvable()
     {
-        $definition = new ValueDefinition('foo', 'bar');
+        $definition = new ValueDefinition('foo');
         $container = $this->easyMock(ContainerInterface::class);
         $this->assertTrue($definition->isResolvable($container));
     }
@@ -38,14 +39,14 @@ class ValueDefinitionTest extends \PHPUnit_Framework_TestCase
      */
     public function should_resolve()
     {
-        $definition = new ValueDefinition('foo', 'bar');
+        $definition = new ValueDefinition('bar');
         $container = $this->easyMock(ContainerInterface::class);
         $this->assertEquals('bar', $definition->resolve($container));
     }
 
     public function should_cast_to_string()
     {
-        $this->assertEquals("Value ('bar')", (string) new ValueDefinition('', 'bar'));
-        $this->assertEquals('Value (3306)', (string) new ValueDefinition('', 3306));
+        $this->assertEquals("Value ('bar')", (string) new ValueDefinition('bar'));
+        $this->assertEquals('Value (3306)', (string) new ValueDefinition(3306));
     }
 }

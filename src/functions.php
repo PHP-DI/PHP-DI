@@ -4,14 +4,14 @@ declare(strict_types=1);
 
 namespace DI;
 
-use DI\Definition\EntryReference;
-use DI\Definition\Helper\ArrayDefinitionExtensionHelper;
+use DI\Definition\ArrayDefinitionExtension;
+use DI\Definition\EnvironmentVariableDefinition;
 use DI\Definition\Helper\AutowireDefinitionHelper;
 use DI\Definition\Helper\CreateDefinitionHelper;
-use DI\Definition\Helper\EnvironmentVariableDefinitionHelper;
 use DI\Definition\Helper\FactoryDefinitionHelper;
-use DI\Definition\Helper\StringDefinitionHelper;
-use DI\Definition\Helper\ValueDefinitionHelper;
+use DI\Definition\Reference;
+use DI\Definition\StringDefinition;
+use DI\Definition\ValueDefinition;
 
 if (! function_exists('DI\value')) {
     /**
@@ -19,9 +19,9 @@ if (! function_exists('DI\value')) {
      *
      * @param mixed $value
      */
-    function value($value) : ValueDefinitionHelper
+    function value($value) : ValueDefinition
     {
-        return new ValueDefinitionHelper($value);
+        return new ValueDefinition($value);
     }
 }
 
@@ -87,9 +87,9 @@ if (! function_exists('DI\get')) {
     /**
      * Helper for referencing another container entry in an object definition.
      */
-    function get(string $entryName) : EntryReference
+    function get(string $entryName) : Reference
     {
-        return new EntryReference($entryName);
+        return new Reference($entryName);
     }
 }
 
@@ -100,12 +100,12 @@ if (! function_exists('DI\env')) {
      * @param string $variableName The name of the environment variable.
      * @param mixed $defaultValue The default value to be used if the environment variable is not defined.
      */
-    function env(string $variableName, $defaultValue = null) : EnvironmentVariableDefinitionHelper
+    function env(string $variableName, $defaultValue = null) : EnvironmentVariableDefinition
     {
         // Only mark as optional if the default value was *explicitly* provided.
         $isOptional = 2 === func_num_args();
 
-        return new EnvironmentVariableDefinitionHelper($variableName, $isOptional, $defaultValue);
+        return new EnvironmentVariableDefinition($variableName, $isOptional, $defaultValue);
     }
 }
 
@@ -127,13 +127,13 @@ if (! function_exists('DI\add')) {
      *
      * @since 5.0
      */
-    function add($values) : ArrayDefinitionExtensionHelper
+    function add($values) : ArrayDefinitionExtension
     {
         if (! is_array($values)) {
             $values = [$values];
         }
 
-        return new ArrayDefinitionExtensionHelper($values);
+        return new ArrayDefinitionExtension($values);
     }
 }
 
@@ -147,12 +147,10 @@ if (! function_exists('DI\string')) {
      *
      * @param string $expression A string expression. Use the `{}` placeholders to reference other container entries.
      *
-     * @return StringDefinitionHelper
-     *
      * @since 5.0
      */
-    function string(string $expression) : StringDefinitionHelper
+    function string(string $expression) : StringDefinition
     {
-        return new StringDefinitionHelper($expression);
+        return new StringDefinition($expression);
     }
 }

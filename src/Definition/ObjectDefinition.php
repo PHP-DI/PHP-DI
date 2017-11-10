@@ -79,6 +79,11 @@ class ObjectDefinition implements Definition
         return $this->name;
     }
 
+    public function setName(string $name)
+    {
+        $this->name = $name;
+    }
+
     public function setClassName(string $className = null)
     {
         $this->className = $className;
@@ -199,6 +204,23 @@ class ObjectDefinition implements Definition
     public function isInstantiable() : bool
     {
         return $this->isInstantiable;
+    }
+
+    public function replaceNestedDefinitions(callable $replacer)
+    {
+        array_walk($this->propertyInjections, function (PropertyInjection $propertyInjection) use ($replacer) {
+            $propertyInjection->replaceNestedDefinition($replacer);
+        });
+
+        if ($this->constructorInjection) {
+            $this->constructorInjection->replaceNestedDefinitions($replacer);
+        }
+
+        array_walk($this->methodInjections, function ($injectionArray) use ($replacer) {
+            array_walk($injectionArray, function (MethodInjection $methodInjection) use ($replacer) {
+                $methodInjection->replaceNestedDefinitions($replacer);
+            });
+        });
     }
 
     public function __toString()

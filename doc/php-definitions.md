@@ -210,6 +210,7 @@ Please note:
 - `factory([FooFactory::class, 'build'])`: if `build()` is a **static** method then the object will not be created: `FooFactory::build()` will be called statically (as one would expect)
 - you can set any container entry name in the array, e.g. `DI\factory(['foo_bar_baz', 'build'])` (or alternatively: `DI\factory('foo_bar_baz::build')`), allowing you to configure `foo_bar_baz` and its dependencies like any other object
 - as a factory can be any PHP callable, you can use invokable objects, too: `DI\factory(InvokableFooFactory::class)` (or alternatively: `DI\factory('invokable_foo_factory')`, if it's defined in the container)
+- all closures will be considered by PHP-DI as *factories*, even if they are nested into other definitions like `create()`, `env()`, etc.
 
 #### Retrieving the name of the requested entry
 
