@@ -9,12 +9,13 @@ use DI\Factory\RequestedEntry;
 use DI\Invoker\FactoryParameterResolver;
 use DI\Test\UnitTest\Definition\Resolver\Fixture\NoConstructor;
 use EasyMock\EasyMock;
+use PHPUnit\Framework\TestCase;
 use Psr\Container\ContainerInterface;
 
 /**
  * @covers \DI\Invoker\FactoryParameterResolver
  */
-class FactoryParameterResolverTest extends \PHPUnit_Framework_TestCase
+class FactoryParameterResolverTest extends TestCase
 {
     use EasyMock;
 

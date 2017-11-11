@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace DI\Test\IntegrationTest;
 
-class FunctionsTest extends \PHPUnit_Framework_TestCase
+use PHPUnit\Framework\TestCase;
+
+class FunctionsTest extends TestCase
 {
     /**
      * @test

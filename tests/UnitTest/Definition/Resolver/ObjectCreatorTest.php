@@ -16,13 +16,14 @@ use DI\Test\UnitTest\Definition\Resolver\Fixture\FixtureClass;
 use DI\Test\UnitTest\Definition\Resolver\Fixture\FixtureInterface;
 use DI\Test\UnitTest\Definition\Resolver\Fixture\NoConstructor;
 use EasyMock\EasyMock;
+use PHPUnit\Framework\TestCase;
 use PHPUnit_Framework_MockObject_MockObject;
 
 /**
  * @covers \DI\Definition\Resolver\ObjectCreator
  * @covers \DI\Definition\Resolver\ParameterResolver
  */
-class ObjectCreatorTest extends \PHPUnit_Framework_TestCase
+class ObjectCreatorTest extends TestCase
 {
     use EasyMock;
 

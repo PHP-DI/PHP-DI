@@ -5,11 +5,12 @@ declare(strict_types=1);
 namespace DI\Test\UnitTest\Definition\ObjectDefinition;
 
 use DI\Definition\ObjectDefinition\MethodInjection;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \DI\Definition\ObjectDefinition\MethodInjection
  */
-class MethodInjectionTest extends \PHPUnit_Framework_TestCase
+class MethodInjectionTest extends TestCase
 {
     public function testBasicMethods()
     {

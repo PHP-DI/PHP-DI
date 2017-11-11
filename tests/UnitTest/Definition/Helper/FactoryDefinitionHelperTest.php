@@ -7,11 +7,12 @@ namespace DI\Test\UnitTest\Definition\Helper;
 use DI\Definition\DecoratorDefinition;
 use DI\Definition\FactoryDefinition;
 use DI\Definition\Helper\FactoryDefinitionHelper;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \DI\Definition\Helper\FactoryDefinitionHelper
  */
-class FactoryDefinitionHelperTest extends \PHPUnit_Framework_TestCase
+class FactoryDefinitionHelperTest extends TestCase
 {
     /**
      * @test

@@ -5,11 +5,12 @@ declare(strict_types=1);
 namespace DI\Test\UnitTest;
 
 use DI\Container;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test class for DI\Container.
  */
-class ContainerTest extends \PHPUnit_Framework_TestCase
+class ContainerTest extends TestCase
 {
     /**
      * @test

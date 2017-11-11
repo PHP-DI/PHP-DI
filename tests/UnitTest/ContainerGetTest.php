@@ -6,6 +6,7 @@ namespace DI\Test\UnitTest;
 
 use DI\ContainerBuilder;
 use DI\Test\UnitTest\Fixtures\PassByReferenceDependency;
+use PHPUnit\Framework\TestCase;
 use stdClass;
 
 /**
@@ -13,7 +14,7 @@ use stdClass;
  *
  * @covers \DI\Container
  */
-class ContainerGetTest extends \PHPUnit_Framework_TestCase
+class ContainerGetTest extends TestCase
 {
     public function testSetGet()
     {

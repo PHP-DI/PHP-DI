@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace DI\Test\UnitTest\Definition\Source;
 
 use DI\Definition\Reference;
+use PHPUnit\Framework\TestCase;
 use DI\Definition\ObjectDefinition;
 use DI\Definition\ObjectDefinition\MethodInjection;
 use DI\Definition\Source\ReflectionBasedAutowiring;
@@ -14,7 +15,7 @@ use DI\Test\UnitTest\Definition\Source\Fixtures\AutowiringFixtureChild;
 /**
  * @covers \DI\Definition\Source\ReflectionBasedAutowiring
  */
-class ReflectionBasedAutowiringTest extends \PHPUnit_Framework_TestCase
+class ReflectionBasedAutowiringTest extends TestCase
 {
     public function testUnknownClass()
     {

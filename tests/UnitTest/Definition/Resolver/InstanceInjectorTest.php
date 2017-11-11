@@ -13,11 +13,12 @@ use DI\Definition\Resolver\ResolverDispatcher;
 use DI\Proxy\ProxyFactory;
 use DI\Test\UnitTest\Definition\Resolver\Fixture\FixtureClass;
 use EasyMock\EasyMock;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \DI\Definition\Resolver\InstanceInjector
  */
-class InstanceInjectorTest extends \PHPUnit_Framework_TestCase
+class InstanceInjectorTest extends TestCase
 {
     use EasyMock;
 

@@ -7,11 +7,12 @@ namespace DI\Test\UnitTest\Definition;
 use DI\Definition\InstanceDefinition;
 use DI\Definition\ObjectDefinition;
 use EasyMock\EasyMock;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \DI\Definition\InstanceDefinition
  */
-class InstanceDefinitionTest extends \PHPUnit_Framework_TestCase
+class InstanceDefinitionTest extends TestCase
 {
     use EasyMock;
 

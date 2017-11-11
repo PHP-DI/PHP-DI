@@ -10,11 +10,12 @@ use DI\Definition\FactoryDefinition;
 use DI\Definition\ObjectDefinition;
 use DI\Definition\Source\DefinitionArray;
 use DI\Definition\ValueDefinition;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \DI\Definition\Source\DefinitionArray
  */
-class DefinitionArrayTest extends \PHPUnit_Framework_TestCase
+class DefinitionArrayTest extends TestCase
 {
     public function testEntryNotFound()
     {

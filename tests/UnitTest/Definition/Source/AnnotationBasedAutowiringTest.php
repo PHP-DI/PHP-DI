@@ -17,11 +17,12 @@ use DI\Test\UnitTest\Definition\Source\Fixtures\AnnotationFixture4;
 use DI\Test\UnitTest\Definition\Source\Fixtures\AnnotationFixture5;
 use DI\Test\UnitTest\Definition\Source\Fixtures\AnnotationFixtureChild;
 use DI\Test\UnitTest\Definition\Source\Fixtures\AnnotationInjectableFixture;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \DI\Definition\Source\AnnotationBasedAutowiring
  */
-class AnnotationBasedAutowiringTest extends \PHPUnit_Framework_TestCase
+class AnnotationBasedAutowiringTest extends TestCase
 {
     public function testUnknownClass()
     {

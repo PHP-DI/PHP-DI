@@ -9,12 +9,13 @@ use DI\Definition\EnvironmentVariableDefinition;
 use DI\Definition\Resolver\DefinitionResolver;
 use DI\Definition\Resolver\EnvironmentVariableResolver;
 use EasyMock\EasyMock;
+use PHPUnit\Framework\TestCase;
 use PHPUnit_Framework_MockObject_MockObject;
 
 /**
  * @covers \DI\Definition\Resolver\EnvironmentVariableResolver
  */
-class EnvironmentVariableResolverTest extends \PHPUnit_Framework_TestCase
+class EnvironmentVariableResolverTest extends TestCase
 {
     use EasyMock;
 

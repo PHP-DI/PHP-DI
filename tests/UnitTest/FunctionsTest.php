@@ -16,11 +16,12 @@ use DI\Definition\Helper\FactoryDefinitionHelper;
 use DI\Definition\ObjectDefinition;
 use DI\Definition\StringDefinition;
 use DI\Definition\ValueDefinition;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Tests the helper functions.
  */
-class FunctionsTest extends \PHPUnit_Framework_TestCase
+class FunctionsTest extends TestCase
 {
     /**
      * @covers ::\DI\value

@@ -7,11 +7,12 @@ namespace DI\Test\UnitTest\Definition\Source;
 use DI\Definition\ObjectDefinition;
 use DI\Definition\Source\DefinitionFile;
 use DI\Definition\ValueDefinition;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \DI\Definition\Source\DefinitionFile
  */
-class DefinitionFileTest extends \PHPUnit_Framework_TestCase
+class DefinitionFileTest extends TestCase
 {
     /**
      * @test
