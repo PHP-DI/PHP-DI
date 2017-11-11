@@ -143,7 +143,7 @@ class Container implements ContainerInterface, FactoryInterface, InvokerInterfac
 
     private function getDefinition($name)
     {
-        if(!array_key_exists($name, $this->definitionCache)){
+        if (!array_key_exists($name, $this->definitionCache)) {
             $this->definitionCache[$name] = $this->definitionSource->getDefinition($name);
         }
 
