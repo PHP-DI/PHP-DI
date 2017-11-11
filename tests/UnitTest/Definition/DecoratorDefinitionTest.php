@@ -7,11 +7,12 @@ namespace DI\Test\UnitTest\Definition;
 use DI\Definition\DecoratorDefinition;
 use DI\Definition\ExtendsPreviousDefinition;
 use DI\Definition\ValueDefinition;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \DI\Definition\DecoratorDefinition
  */
-class DecoratorDefinitionTest extends \PHPUnit_Framework_TestCase
+class DecoratorDefinitionTest extends TestCase
 {
     public function test_getters()
     {

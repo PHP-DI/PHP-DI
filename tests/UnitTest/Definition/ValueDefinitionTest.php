@@ -6,12 +6,13 @@ namespace DI\Test\UnitTest\Definition;
 
 use DI\Definition\ValueDefinition;
 use EasyMock\EasyMock;
+use PHPUnit\Framework\TestCase;
 use Psr\Container\ContainerInterface;
 
 /**
  * @covers \DI\Definition\ValueDefinition
  */
-class ValueDefinitionTest extends \PHPUnit_Framework_TestCase
+class ValueDefinitionTest extends TestCase
 {
     use EasyMock;
 

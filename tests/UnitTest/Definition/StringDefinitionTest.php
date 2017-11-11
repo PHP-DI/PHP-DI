@@ -7,12 +7,13 @@ namespace DI\Test\UnitTest\Definition;
 use DI\Definition\StringDefinition;
 use DI\NotFoundException;
 use EasyMock\EasyMock;
+use PHPUnit\Framework\TestCase;
 use Psr\Container\ContainerInterface;
 
 /**
  * @covers \DI\Definition\StringDefinition
  */
-class StringDefinitionTest extends \PHPUnit_Framework_TestCase
+class StringDefinitionTest extends TestCase
 {
     use EasyMock;
 

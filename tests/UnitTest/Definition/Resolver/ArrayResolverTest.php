@@ -10,12 +10,13 @@ use DI\Definition\ObjectDefinition;
 use DI\Definition\Resolver\ArrayResolver;
 use DI\Definition\Resolver\DefinitionResolver;
 use EasyMock\EasyMock;
+use PHPUnit\Framework\TestCase;
 use PHPUnit_Framework_MockObject_MockObject;
 
 /**
  * @covers \DI\Definition\Resolver\ArrayResolver
  */
-class ArrayResolverTest extends \PHPUnit_Framework_TestCase
+class ArrayResolverTest extends TestCase
 {
     use EasyMock;
 

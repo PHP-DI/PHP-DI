@@ -8,11 +8,12 @@ use DI\Definition\ObjectDefinition;
 use DI\Definition\ObjectDefinition\MethodInjection;
 use DI\Definition\ObjectDefinition\PropertyInjection;
 use DI\Test\UnitTest\Definition\Fixture\NonInstantiableClass;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \DI\Definition\ObjectDefinition
  */
-class ObjectDefinitionTest extends \PHPUnit_Framework_TestCase
+class ObjectDefinitionTest extends TestCase
 {
     public function test_getters_setters()
     {

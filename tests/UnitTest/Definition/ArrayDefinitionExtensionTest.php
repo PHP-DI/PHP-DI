@@ -7,11 +7,12 @@ namespace DI\Test\UnitTest\Definition;
 use DI\Definition\ArrayDefinition;
 use DI\Definition\ArrayDefinitionExtension;
 use DI\Definition\ValueDefinition;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \DI\Definition\ArrayDefinitionExtension
  */
-class ArrayDefinitionExtensionTest extends \PHPUnit_Framework_TestCase
+class ArrayDefinitionExtensionTest extends TestCase
 {
     /**
      * @test

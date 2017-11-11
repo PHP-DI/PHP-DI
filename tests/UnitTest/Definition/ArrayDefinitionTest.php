@@ -5,11 +5,12 @@ declare(strict_types=1);
 namespace DI\Test\UnitTest\Definition;
 
 use DI\Definition\ArrayDefinition;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \DI\Definition\ArrayDefinition
  */
-class ArrayDefinitionTest extends \PHPUnit_Framework_TestCase
+class ArrayDefinitionTest extends TestCase
 {
     /**
      * @test

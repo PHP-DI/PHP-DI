@@ -6,11 +6,12 @@ namespace DI\Test\UnitTest\Proxy;
 
 use DI\Proxy\ProxyFactory;
 use DI\Test\UnitTest\Proxy\Fixtures\ClassToProxy;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \DI\Proxy\ProxyFactory
  */
-class ProxyFactoryTest extends \PHPUnit_Framework_TestCase
+class ProxyFactoryTest extends TestCase
 {
     /**
      * @test

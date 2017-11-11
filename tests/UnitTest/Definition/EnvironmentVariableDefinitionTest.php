@@ -5,11 +5,12 @@ declare(strict_types=1);
 namespace DI\Test\UnitTest\Definition;
 
 use DI\Definition\EnvironmentVariableDefinition;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \DI\Definition\EnvironmentVariableDefinition
  */
-class EnvironmentVariableDefinitionTest extends \PHPUnit_Framework_TestCase
+class EnvironmentVariableDefinitionTest extends TestCase
 {
     public function test_getters()
     {

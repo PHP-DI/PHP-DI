@@ -8,11 +8,12 @@ use DI\Definition\Definition;
 use DI\Definition\Source\DefinitionArray;
 use DI\Definition\Source\SourceChain;
 use DI\Definition\ValueDefinition;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \DI\Definition\Source\SourceChain
  */
-class SourceChainTest extends \PHPUnit_Framework_TestCase
+class SourceChainTest extends TestCase
 {
     /**
      * @test

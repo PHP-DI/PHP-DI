@@ -10,12 +10,13 @@ use DI\Definition\StringDefinition;
 use DI\Definition\ValueDefinition;
 use DI\Proxy\ProxyFactory;
 use EasyMock\EasyMock;
+use PHPUnit\Framework\TestCase;
 use Psr\Container\ContainerInterface;
 
 /**
  * @covers \DI\Definition\Resolver\ResolverDispatcher
  */
-class ResolverDispatcherTest extends \PHPUnit_Framework_TestCase
+class ResolverDispatcherTest extends TestCase
 {
     use EasyMock;
 

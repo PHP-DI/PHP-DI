@@ -5,11 +5,12 @@ declare(strict_types=1);
 namespace DI\Test\UnitTest\Definition\ObjectDefinition;
 
 use DI\Definition\ObjectDefinition\PropertyInjection;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \DI\Definition\ObjectDefinition\PropertyInjection
  */
-class PropertyInjectionTest extends \PHPUnit_Framework_TestCase
+class PropertyInjectionTest extends TestCase
 {
     public function testGetters()
     {

@@ -10,6 +10,7 @@ use DI\Test\UnitTest\Annotation\Fixtures\InjectFixture;
 use DI\Test\UnitTest\Annotation\Fixtures\MixedAnnotationsFixture;
 use DI\Test\UnitTest\Annotation\Fixtures\NonImportedInjectFixture;
 use Doctrine\Common\Annotations\AnnotationReader as DoctrineAnnotationReader;
+use PHPUnit\Framework\TestCase;
 use ReflectionClass;
 
 /**
@@ -17,7 +18,7 @@ use ReflectionClass;
  *
  * @covers \DI\Annotation\Inject
  */
-class InjectTest extends \PHPUnit_Framework_TestCase
+class InjectTest extends TestCase
 {
     /**
      * @var DoctrineAnnotationReader

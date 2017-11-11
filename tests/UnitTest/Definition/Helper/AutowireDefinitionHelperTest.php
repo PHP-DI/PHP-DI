@@ -8,11 +8,12 @@ use DI\Definition\Exception\InvalidDefinition;
 use DI\Definition\Helper\AutowireDefinitionHelper;
 use DI\Definition\ObjectDefinition\MethodInjection;
 use DI\Test\UnitTest\Definition\Helper\Fixtures\Class1;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \DI\Definition\Helper\AutowireDefinitionHelper
  */
-class AutowireDefinitionHelperTest extends \PHPUnit_Framework_TestCase
+class AutowireDefinitionHelperTest extends TestCase
 {
     /**
      * @test

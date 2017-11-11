@@ -5,11 +5,12 @@ declare(strict_types=1);
 namespace DI\Test\UnitTest\Definition\Dumper;
 
 use DI\Definition\Dumper\ObjectDefinitionDumper;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \DI\Definition\Dumper\ObjectDefinitionDumper
  */
-class ObjectDefinitionDumperTest extends \PHPUnit_Framework_TestCase
+class ObjectDefinitionDumperTest extends TestCase
 {
     public function testAll()
     {

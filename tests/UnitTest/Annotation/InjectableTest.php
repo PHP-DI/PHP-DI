@@ -9,6 +9,7 @@ use DI\Definition\Source\AnnotationBasedAutowiring;
 use DI\Test\UnitTest\Annotation\Fixtures\Injectable1;
 use DI\Test\UnitTest\Annotation\Fixtures\Injectable2;
 use Doctrine\Common\Annotations\AnnotationReader as DoctrineAnnotationReader;
+use PHPUnit\Framework\TestCase;
 use ReflectionClass;
 
 /**
@@ -16,7 +17,7 @@ use ReflectionClass;
  *
  * @covers \DI\Annotation\Injectable
  */
-class InjectableTest extends \PHPUnit_Framework_TestCase
+class InjectableTest extends TestCase
 {
     /**
      * @var DoctrineAnnotationReader

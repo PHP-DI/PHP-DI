@@ -6,12 +6,13 @@ namespace DI\Test\UnitTest\Definition;
 
 use DI\Definition\Reference;
 use EasyMock\EasyMock;
+use PHPUnit\Framework\TestCase;
 use Psr\Container\ContainerInterface;
 
 /**
  * @covers \DI\Definition\Reference
  */
-class ReferenceTest extends \PHPUnit_Framework_TestCase
+class ReferenceTest extends TestCase
 {
     use EasyMock;
 
