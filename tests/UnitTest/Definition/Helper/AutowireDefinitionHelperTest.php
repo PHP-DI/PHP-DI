@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace DI\Test\UnitTest\Definition\Helper;
 
-use DI\Definition\Exception\InvalidDefinition;
 use DI\Definition\Helper\AutowireDefinitionHelper;
 use DI\Definition\ObjectDefinition\MethodInjection;
 use DI\Test\UnitTest\Definition\Helper\Fixtures\Class1;
@@ -175,6 +174,10 @@ class AutowireDefinitionHelperTest extends TestCase
         $this->assertEquals([42], $definition->getConstructorInjection()->getParameters());
     }
 
+    /**
+     * @expectedException \DI\Definition\Exception\InvalidDefinition
+     * @expectedExceptionMessage Parameter with name 'wrongName' could not be found
+     */
     public function test_error_message_on_unknown_parameter()
     {
         if (defined('HHVM_VERSION')) {
@@ -182,7 +185,6 @@ class AutowireDefinitionHelperTest extends TestCase
         }
         $helper = new AutowireDefinitionHelper();
         $helper->methodParameter('__construct', 'wrongName', 42);
-        $this->setExpectedException(InvalidDefinition::class, "Parameter with name 'wrongName' could not be found");
         $helper->getDefinition(Class1::class);
     }
 }
