@@ -180,9 +180,6 @@ class AutowireDefinitionHelperTest extends TestCase
      */
     public function test_error_message_on_unknown_parameter()
     {
-        if (defined('HHVM_VERSION')) {
-            $this->markTestSkipped('This test fails on HHVM 3.5 (version currently used by Travis)');
-        }
         $helper = new AutowireDefinitionHelper();
         $helper->methodParameter('__construct', 'wrongName', 42);
         $helper->getDefinition(Class1::class);
