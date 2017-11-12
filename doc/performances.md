@@ -113,3 +113,7 @@ return $object;
 All the compiled definitions will be dumped into a PHP class (the compiled container) which will be written to a file (for example `CompiledContainer.php`).
 
 At runtime, the container builder will see that the file `CompiledContainer.php` exists and will load it (instead of loading the definition files). That PHP file may contain a lot of code but PHP's opcode cache will cache that class in memory (remember to use opcache in production). When a definition needs to be resolved, PHP-DI will simply execute the compiled code and return the created instance.
+
+## Optimizing lazy injection
+
+If you are using the [Lazy Injection](lazy-injection.md) feature you should read the section ["Optimizing performances" of the guide](lazy-injection.md#optimizing-performances).

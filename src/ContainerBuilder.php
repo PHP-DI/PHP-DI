@@ -178,6 +178,8 @@ class ContainerBuilder
      * - in production you should clear that directory every time you deploy
      * - in development you should not compile the container
      *
+     * @see http://php-di.org/doc/performances.html
+     *
      * @param string $directory Directory in which to put the compiled container.
      * @param string $containerClass Name of the compiled class. Customize only if necessary.
      * @param string $containerParentClass Name of the compiled container parent class. Customize only if necessary.
@@ -245,8 +247,10 @@ class ContainerBuilder
     /**
      * Configure the proxy generation.
      *
-     * For dev environment, use writeProxiesToFile(false) (default configuration)
-     * For production environment, use writeProxiesToFile(true, 'tmp/proxies')
+     * For dev environment, use `writeProxiesToFile(false)` (default configuration)
+     * For production environment, use `writeProxiesToFile(true, 'tmp/proxies')`
+     *
+     * @see http://php-di.org/doc/lazy-injection.html
      *
      * @param bool $writeToFile If true, write the proxies to disk to improve performances
      * @param string|null $proxyDirectory Directory where to write the proxies

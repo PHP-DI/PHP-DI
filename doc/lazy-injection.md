@@ -5,42 +5,45 @@ current_menu: lazy-injection
 
 # Lazy injection
 
-With PHP-DI all objects that you define in the container are lazily created, i.e. they are created once they are requested or injected somewhere. However that is sometimes not "lazy" enough and you would like the objects to be created only when they are actually used (e.g. when we call a method on them). This is what this section is about.
+This feature should not be confused with lazy initialization of objects: **PHP-DI always creates objects only when they are requested or injected somewhere.**
 
-Please understand that this is an advanced use case and that, unless you are certain of what you are doing, you probably don't need to use this technique.
+Lazy injection goes further than this: it allows to defer the creation of an object's dependencies to the moment when they are actually used, not before.
 
-Consider the following example:
+**Warning: this feature should only be used exceptionally, please read the "When to use" section at the end of this page.**
+
+## Example
 
 ```php
 <?php
-class Foo
+class ProductExporter
 {
-    private $a;
-    private $b;
+    private $pdfWriter;
+    private $csvWriter;
 
-    public function __construct(Foo $a, Bar $b)
+    public function __construct(PdfWriter $pdfWriter, CsvWriter $csvWriter)
     {
-        $this->a = $a;
-        $this->b = $b;
+        $this->pdfWriter = $pdfWriter;
+        $this->csvWriter = $csvWriter;
     }
 
-    public function doSomething()
+    public function exportToPdf()
     {
-        $this->a->doStuff();
+        $this->pdfWriter->write(...);
     }
 
-    public function doSomethingElse()
+    public function exportToCsv()
     {
-        $this->b->doStuff();
+        $this->csvWriter->write(...);
     }
 }
+
+$productExporter = $container->get(ProductExporter::class);
+$productExporter->exportToCsv();
 ```
 
-`a` is used only when `doSomething()` is called, and `b` only when `doSomethingElse()` is called.
+In this example the `exportToPdf()` is not called. `PdfWriter` is initialized and injected in the class but it's never used.
 
-You may wonder then: why injecting `a` **and** `b` if they may not be used? Especially if creating those objects is heavy in time or memory.
-
-That's where lazy injection can help.
+**If** `PdfWriter` was costly to initialize (for example if it has a lot of dependencies or if it does expensive things in the constructor) lazy injection can help to avoid instantiating the object **until it is used**.
 
 ## How it works
 
@@ -53,9 +56,7 @@ The proxy is a special kind of object that **looks and behaves exactly like the 
 
 Creating a proxy is complex. For this, PHP-DI relies on [ProxyManager](https://github.com/Ocramius/ProxyManager), the (amazing) library used by Doctrine, Symfony and Zend.
 
-### Example
-
-For the simplicity of the example, we will not inject a lazy object, but we will ask the container to return one:
+Let's illustrate that with an example. For the sake of simplicity we will not inject a lazy object but we will ask the container to return one:
 
 ```php
 class Foo
@@ -84,18 +85,22 @@ You can define an object as "lazy". If it is injected as a dependency, then a pr
 
 ### Installation
 
-Lazy injection requires the [Ocramius/ProxyManager](https://github.com/Ocramius/ProxyManager) library. This library is not installed by default with PHP-DI, you need to require it in your `composer.json`:
+Lazy injection requires the [Ocramius/ProxyManager](https://github.com/Ocramius/ProxyManager) library. This library is not installed by default with PHP-DI, you need to require it:
 
-```json
-{
-    "require": {
-        "php-di/php-di": "*",
-        "ocramius/proxy-manager": "~2.0"
-    }
-}
+````
+composer require ocramius/proxy-manager
+````
+
+### PHP configuration file
+
+```php
+<?php
+
+return [
+    'foo' => DI\create('MyClass')
+        ->lazy(),
+];
 ```
-
-Then run `composer update`.
 
 ### Annotations
 
@@ -115,13 +120,23 @@ class MyClass
 $containerPHP->set('foo', \DI\create('MyClass')->lazy());
 ```
 
-### PHP configuration file
+## When to use
+
+Lazy injection requires to create proxy objects for each object you declare as `lazy`. It is not recommended to use this feature more that a few times in one application.
+
+While proxies are extremely optimized, they are only worth it if the object you define as lazy has a constructor that takes some time (e.g. connects to a database, writes to a file, etc.).
+
+## Optimizing performances
+
+PHP-DI needs to generate proxies of the classes you mark as "*lazy*".
+
+By default those proxies are generated on every HTTP request, this is good for development but not for production.
+
+In production you should generate proxies to file:
 
 ```php
-<?php
-
-return [
-    'foo' => DI\create('MyClass')
-        ->lazy(),
-];
+// Enable writing proxies to file in the tmp/proxies directory
+$containerBuilder->writeProxiesToFile(true, __DIR__ . '/tmp/proxies');
 ```
+
+You will need to clear the directory every time you deploy to avoid keeping outdated proxies.
