@@ -32,8 +32,8 @@
         "nikic/php-parser": "^2.0|^3.0"
     },
     "require-dev": {
-        "phpunit/phpunit": "~5.7",
-        "mnapoli/phpunit-easymock": "~0.2.3",
+        "phpunit/phpunit": "~6.4",
+        "mnapoli/phpunit-easymock": "~1.0",
         "doctrine/annotations": "~1.2",
         "ocramius/proxy-manager": "~2.0.2",
         "friendsofphp/php-cs-fixer": "^2.4"

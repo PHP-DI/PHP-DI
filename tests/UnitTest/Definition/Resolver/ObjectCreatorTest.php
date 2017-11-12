@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace DI\Test\UnitTest\Definition\Resolver;
 
-use DI\Definition\Exception\InvalidDefinition;
 use DI\Definition\ObjectDefinition;
 use DI\Definition\ObjectDefinition\MethodInjection;
 use DI\Definition\ObjectDefinition\PropertyInjection;
@@ -181,6 +180,9 @@ class ObjectCreatorTest extends TestCase
         $this->assertEquals('defaultValue', $object->methodParam2);
     }
 
+    /**
+     * @expectedException \DI\Definition\Exception\InvalidDefinition
+     */
     public function testUnknownClass()
     {
         $message = <<<'MESSAGE'
@@ -191,13 +193,16 @@ Object (
     lazy = false
 )
 MESSAGE;
-        $this->setExpectedException(InvalidDefinition::class, $message);
+        $this->expectExceptionMessage($message);
 
         $definition = new ObjectDefinition('foo', 'bar');
 
         $this->resolver->resolve($definition);
     }
 
+    /**
+     * @expectedException \DI\Definition\Exception\InvalidDefinition
+     */
     public function testNotInstantiable()
     {
         $message = <<<'MESSAGE'
@@ -208,13 +213,16 @@ Object (
     lazy = false
 )
 MESSAGE;
-        $this->setExpectedException(InvalidDefinition::class, $message);
+        $this->expectExceptionMessage($message);
 
         $definition = new ObjectDefinition('ArrayAccess');
 
         $this->resolver->resolve($definition);
     }
 
+    /**
+     * @expectedException \DI\Definition\Exception\InvalidDefinition
+     */
     public function testUndefinedInjection()
     {
         $message = <<<'MESSAGE'
@@ -225,7 +233,7 @@ Object (
     lazy = false
 )
 MESSAGE;
-        $this->setExpectedException(InvalidDefinition::class, $message);
+        $this->expectExceptionMessage($message);
 
         $definition = new ObjectDefinition(FixtureClass::class);
 
