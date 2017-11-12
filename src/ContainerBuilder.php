@@ -178,11 +178,6 @@ class ContainerBuilder
      * - in production you should clear that directory every time you deploy
      * - in development you should not compile the container
      *
-     * If you provide a filename it must be a valid class name! For example:
-     *
-     * - `ContainerProd.php` -> valid since `ContainerProd` is a valid class name
-     * - `Container-Prod.php` -> invalid since `Container-Prod` is NOT a valid class name
-     *
      * @param string $directory Directory in which to put the compiled container.
      * @param string $containerClass Name of the compiled class. Customize only if necessary.
      * @param string $containerParentClass Name of the compiled container parent class. Customize only if necessary.
