@@ -4,8 +4,10 @@ declare(strict_types=1);
 
 namespace DI\Test\IntegrationTest;
 
+use DI\CompiledContainer;
 use DI\ContainerBuilder;
 use function DI\create;
+use DI\Discovery\KnownClasses;
 
 /**
  * Tests specific to the compiled container.
@@ -58,7 +60,7 @@ class CompiledContainerTest extends BaseContainerTest
      * @expectedException \DI\Definition\Exception\InvalidDefinition
      * @expectedExceptionMessage Entry "foo" cannot be compiled: anonymous classes cannot be compiled
      */
-    public function anonymous_classes_cannot_be_compiled()
+    public function values_are_compiled()
     {
         $class = get_class(new class() {
         });
@@ -69,6 +71,45 @@ class CompiledContainerTest extends BaseContainerTest
         ]);
         $builder->enableCompilation(self::COMPILATION_DIR, self::generateCompiledClassName());
         $builder->build();
+    }
+
+    public function test_that_values_are_compiled()
+    {
+        $builder = new ContainerBuilder;
+        $builder->enableCompilation(self::COMPILATION_DIR, self::generateCompiledClassName());
+        $builder->addDefinitions([
+            'foo' => 'bar',
+        ]);
+        /** @var CompiledContainer $container */
+        $container = $builder->build();
+
+        self::assertTrue($container->isEntryCompiled('foo'));
+    }
+
+    public function test_that_autowired_classes_are_not_compiled_by_default()
+    {
+        $builder = new ContainerBuilder;
+        $builder->enableCompilation(self::COMPILATION_DIR, self::generateCompiledClassName());
+        /** @var CompiledContainer $container */
+        $container = $builder->build();
+
+        self::assertFalse($container->isEntryCompiled(CompiledContainerTest\AutowiredClass::class));
+    }
+
+    public function test_that_autowired_classes_can_be_compiled()
+    {
+        $builder = new ContainerBuilder;
+        $builder->enableCompilation(self::COMPILATION_DIR, self::generateCompiledClassName());
+        $builder->compileAllClasses(KnownClasses::fromArray([
+            CompiledContainerTest\AutowiredClass::class,
+        ]));
+//        $builder->compileAllClasses(KnownClasses::fromArray(
+//            array_keys(require __DIR__ . '/../../vendor/composer/autoload_classmap.php')
+//        ));
+        /** @var CompiledContainer $container */
+        $container = $builder->build();
+
+        self::assertTrue($container->isEntryCompiled(CompiledContainerTest\AutowiredClass::class));
     }
 
     /**
@@ -163,5 +204,9 @@ class Property
 }
 
 class CustomParentContainer extends \DI\Container
+{
+}
+
+class AutowiredClass
 {
 }

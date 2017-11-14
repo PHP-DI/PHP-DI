@@ -83,6 +83,11 @@ abstract class CompiledContainer extends Container
         return parent::has($name);
     }
 
+    public function isEntryCompiled(string $name) : bool
+    {
+        return isset(static::METHOD_MAPPING[$name]);
+    }
+
     protected function setDefinition(string $name, Definition $definition)
     {
         // It needs to be forbidden because that would mean get() must go through the definitions

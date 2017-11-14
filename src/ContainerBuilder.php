@@ -11,6 +11,7 @@ use DI\Definition\Source\DefinitionSource;
 use DI\Definition\Source\NoAutowiring;
 use DI\Definition\Source\ReflectionBasedAutowiring;
 use DI\Definition\Source\SourceChain;
+use DI\Discovery\KnownClasses;
 use DI\Proxy\ProxyFactory;
 use InvalidArgumentException;
 use Psr\Container\ContainerInterface;
@@ -94,6 +95,11 @@ class ContainerBuilder
     private $compileToDirectory;
 
     /**
+     * @var KnownClasses|null
+     */
+    private $knownClasses;
+
+    /**
      * Build a container configured for the dev environment.
      */
     public static function buildDevContainer() : Container
@@ -156,7 +162,8 @@ class ContainerBuilder
                 $this->compileToDirectory,
                 $containerClass,
                 $this->containerParentClass,
-                $this->useAutowiring || $this->useAnnotations
+                $this->useAutowiring || $this->useAnnotations,
+                $this->knownClasses
             );
             // Only load the file if it hasn't been already loaded
             // (the container can be created multiple times in the same process)
@@ -311,6 +318,11 @@ class ContainerBuilder
         $this->definitionSources[] = $definitions;
 
         return $this;
+    }
+
+    public function compileAllClasses(KnownClasses $knownClasses)
+    {
+        $this->knownClasses = $knownClasses;
     }
 
     /**

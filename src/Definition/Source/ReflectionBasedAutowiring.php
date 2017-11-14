@@ -7,6 +7,7 @@ namespace DI\Definition\Source;
 use DI\Definition\ObjectDefinition;
 use DI\Definition\ObjectDefinition\MethodInjection;
 use DI\Definition\Reference;
+use DI\Discovery\KnownClasses;
 
 /**
  * Reads DI class definitions using reflection.
@@ -15,6 +16,18 @@ use DI\Definition\Reference;
  */
 class ReflectionBasedAutowiring implements DefinitionSource, Autowiring
 {
+    /**
+     * List of all classes that we know of in the application.
+     *
+     * @var KnownClasses|null
+     */
+    private $knownClasses;
+
+    public function __construct(KnownClasses $knownClasses = null)
+    {
+        $this->knownClasses = $knownClasses;
+    }
+
     public function autowire(string $name, ObjectDefinition $definition = null)
     {
         $className = $definition ? $definition->getClassName() : $name;
@@ -41,12 +54,13 @@ class ReflectionBasedAutowiring implements DefinitionSource, Autowiring
         return $this->autowire($name);
     }
 
-    /**
-     * Autowiring cannot guess all existing definitions.
-     */
     public function getDefinitions() : array
     {
-        return [];
+        if (!$this->knownClasses) {
+            return [];
+        }
+
+        return array_map([$this, 'getDefinition'], $this->knownClasses->getList());
     }
 
     /**

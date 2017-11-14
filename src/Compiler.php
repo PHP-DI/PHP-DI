@@ -16,6 +16,7 @@ use DI\Definition\Reference;
 use DI\Definition\Source\DefinitionSource;
 use DI\Definition\StringDefinition;
 use DI\Definition\ValueDefinition;
+use DI\Discovery\KnownClasses;
 use InvalidArgumentException;
 use PhpParser\Node\Expr\Closure;
 use SuperClosure\Analyzer\AstAnalyzer;
@@ -65,7 +66,8 @@ class Compiler
         string $directory,
         string $className,
         string $parentClassName,
-        bool $autowiringEnabled
+        bool $autowiringEnabled,
+        KnownClasses $knownClasses = null
     ) : string {
         $fileName = rtrim($directory, '/') . '/' . $className . '.php';
 
@@ -82,15 +84,35 @@ class Compiler
             throw new InvalidArgumentException("The container cannot be compiled: `$className` is not a valid PHP class name");
         }
 
-        $definitions = $definitionSource->getDefinitions();
-
-        foreach ($definitions as $entryName => $definition) {
+        // Compile all definitions known to the definition source
+        $allDefinitions = $definitionSource->getDefinitions();
+        foreach ($allDefinitions as $entryName => $definition) {
             // Check that the definition can be compiled
             $errorMessage = $this->isCompilable($definition);
             if ($errorMessage !== true) {
                 continue;
             }
             $this->compileDefinition($entryName, $definition);
+        }
+        if ($knownClasses) {
+            foreach ($knownClasses->getList() as $entryName) {
+                if (! isset($allDefinitions[$entryName])) {
+                    $definition = $definitionSource->getDefinition($entryName);
+                    if (!$definition) {
+                        continue;
+                    }
+                    // Check that the definition can be compiled
+                    $errorMessage = $this->isCompilable($definition);
+                    if ($errorMessage !== true) {
+                        continue;
+                    }
+                    try {
+                        $this->compileDefinition($entryName, $definition);
+                    } catch (InvalidDefinition $e) {
+                        continue;
+                    }
+                }
+            }
         }
 
         $this->containerClass = $className;
