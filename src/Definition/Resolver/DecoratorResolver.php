@@ -72,7 +72,7 @@ class DecoratorResolver implements DefinitionResolver
             ));
         }
 
-        $decorated = $this->definitionResolver->resolve($decoratedDefinition);
+        $decorated = $this->definitionResolver->resolve($decoratedDefinition, $parameters);
 
         return call_user_func($callable, $decorated, $this->container);
     }
