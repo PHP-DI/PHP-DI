@@ -33,7 +33,7 @@ This solution is simple and works great when your container is used rarely.
 
 ### Metadata file
 
-[PhpStorm will load metadata from a `.phpstorm.meta.php` file](https://confluence.jetbrains.com/display/PhpStorm/PhpStorm+Advanced+Metadata) if it exists at the root of your project. Here is an example that adds support for PHP-DI as well as [any PSR-11 container](http://www.php-fig.org/psr/):
+[PhpStorm will load metadata from a `.phpstorm.meta.php` file](https://confluence.jetbrains.com/display/PhpStorm/PhpStorm+Advanced+Metadata) if it exists at the root of your project. Here is an example that adds support for PHP-DI as well as [any PSR-11 container](http://www.php-fig.org/psr/psr-11/):
 
 ```php
 <?php

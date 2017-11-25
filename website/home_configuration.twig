@@ -8,7 +8,10 @@
 
     <div class='row'>
         <div class='col-md-6'>
-            <h4>Object creation</h4>
+            <h4>
+                Object creation
+                <a class="read-more" href="doc/php-definitions.html#objects" title="Creating objects">read more</a>
+            </h4>
 <pre><code class="php">return [
     Foo::class => create()
         ->constructor(
@@ -17,7 +20,10 @@
 ];</code></pre>
         </div>
         <div class='col-md-6'>
-            <h4>Inline factories</h4>
+            <h4>
+                Inline factories
+                <a class="read-more" href="doc/php-definitions.html#factories" title="Writing factories">read more</a>
+            </h4>
 <pre><code class="php">return [
     Foo::class => function ($container) {
         $bar = $container->get(Bar::class);
@@ -29,13 +35,19 @@
 
     <div class="row">
         <div class="col-md-6">
-            <h4>Interface-to-implementation binding</h4>
+            <h4>
+                Interface-to-implementation binding
+                <a class="read-more" href="doc/php-definitions.html#aliases" title="Aliasing entries">read more</a>
+            </h4>
 <pre><code class="php">return [
     NotifierInterface::class => get(EmailNotifier::class)
 ];</code></pre>
         </div>
         <div class="col-md-6">
-            <h4>Environment variables</h4>
+            <h4>
+                Environment variables
+                <a class="read-more" href="doc/php-definitions.html#environment-variables" title="Resolving environment variables">read more</a>
+            </h4>
 <pre><code class="php">return [
     'db.host' => env('DB_HOST', 'default value')
 ];</code></pre>
