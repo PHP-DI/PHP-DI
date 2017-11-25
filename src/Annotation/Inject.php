@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace DI\Annotation;
 
-use DI\Definition\Exception\AnnotationException;
+use DI\Definition\Exception\InvalidAnnotation;
 
 /**
  * "Inject" annotation.
@@ -35,7 +35,7 @@ final class Inject
     private $parameters = [];
 
     /**
-     * @throws AnnotationException
+     * @throws InvalidAnnotation
      */
     public function __construct(array $values)
     {
@@ -64,7 +64,7 @@ final class Inject
         if (is_array($values)) {
             foreach ($values as $key => $value) {
                 if (! is_string($value)) {
-                    throw new AnnotationException(sprintf(
+                    throw new InvalidAnnotation(sprintf(
                         '@Inject({"param" = "value"}) expects "value" to be a string, %s given.',
                         json_encode($value)
                     ));

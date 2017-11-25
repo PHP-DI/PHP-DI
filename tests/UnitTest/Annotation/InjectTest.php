@@ -105,7 +105,7 @@ class InjectTest extends TestCase
     }
 
     /**
-     * @expectedException \DI\Definition\Exception\AnnotationException
+     * @expectedException \DI\Definition\Exception\InvalidAnnotation
      * @expectedExceptionMessage @Inject({"param" = "value"}) expects "value" to be a string, [] given.
      */
     public function testInvalidAnnotation()

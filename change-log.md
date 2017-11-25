@@ -34,6 +34,7 @@ BC breaks:
 - The deprecated `DI\link()` helper was removed, used `DI\get()` instead
 - [#484](https://github.com/PHP-DI/PHP-DI/pull/484) The deprecated `\DI\Debug` class has been removed. Definitions can be cast to string directly
 - The exception `DI\Definition\Exception\DefinitionException` was renamed to `DI\Definition\Exception\InvalidDefinition`
+- The exception `DI\Definition\Exception\AnnotationException` was renamed to `DI\Definition\Exception\InvalidAnnotation`
 - [#516](https://github.com/PHP-DI/PHP-DI/issues/516) `DI\InvokerInterface` was removed in favor of `Invoker\InvokerInterface`.
 
 Be also aware that internal classes or interfaces may have changed.

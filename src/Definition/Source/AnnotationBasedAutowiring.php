@@ -6,7 +6,7 @@ namespace DI\Definition\Source;
 
 use DI\Annotation\Inject;
 use DI\Annotation\Injectable;
-use DI\Definition\Exception\AnnotationException;
+use DI\Definition\Exception\InvalidAnnotation;
 use DI\Definition\ObjectDefinition;
 use DI\Definition\ObjectDefinition\MethodInjection;
 use DI\Definition\ObjectDefinition\PropertyInjection;
@@ -77,7 +77,7 @@ class AnnotationBasedAutowiring implements DefinitionSource, Autowiring
 
     /**
      * {@inheritdoc}
-     * @throws AnnotationException
+     * @throws InvalidAnnotation
      * @throws InvalidArgumentException The class doesn't exist
      */
     public function getDefinition(string $name)
@@ -130,7 +130,7 @@ class AnnotationBasedAutowiring implements DefinitionSource, Autowiring
         $entryName = $annotation->getName() ?: $this->getPhpDocReader()->getPropertyClass($property);
 
         if ($entryName === null) {
-            throw new AnnotationException(sprintf(
+            throw new InvalidAnnotation(sprintf(
                 '@Inject found on property %s::%s but unable to guess what to inject, use a @var annotation',
                 $property->getDeclaringClass()->getName(),
                 $property->getName()
@@ -173,8 +173,8 @@ class AnnotationBasedAutowiring implements DefinitionSource, Autowiring
         /** @var $annotation Inject|null */
         try {
             $annotation = $this->getAnnotationReader()->getMethodAnnotation($method, 'DI\Annotation\Inject');
-        } catch (AnnotationException $e) {
-            throw new AnnotationException(sprintf(
+        } catch (InvalidAnnotation $e) {
+            throw new InvalidAnnotation(sprintf(
                 '@Inject annotation on %s::%s is malformed. %s',
                 $method->getDeclaringClass()->getName(),
                 $method->getName(),
@@ -269,7 +269,7 @@ class AnnotationBasedAutowiring implements DefinitionSource, Autowiring
             $annotation = $this->getAnnotationReader()
                 ->getClassAnnotation($class, 'DI\Annotation\Injectable');
         } catch (UnexpectedValueException $e) {
-            throw new AnnotationException(sprintf(
+            throw new InvalidAnnotation(sprintf(
                 'Error while reading @Injectable on %s: %s',
                 $class->getName(),
                 $e->getMessage()

@@ -57,7 +57,7 @@ class AnnotationBasedAutowiringTest extends TestCase
     }
 
     /**
-     * @expectedException \DI\Definition\Exception\AnnotationException
+     * @expectedException \DI\Definition\Exception\InvalidAnnotation
      * @expectedExceptionMessage @Inject found on property DI\Test\UnitTest\Definition\Source\Fixtures\AnnotationFixture4::property but unable to guess what to inject, use a @var annotation
      */
     public function testUnguessableProperty()
