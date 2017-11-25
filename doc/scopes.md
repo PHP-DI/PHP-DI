@@ -5,9 +5,14 @@ current_menu: scopes
 
 # Scopes
 
-**Scopes have been removed in PHP-DI 6.** Read below for more explanations. From now on, all definitions are resolved once and their result is kept during the life of the container.
+**Scopes have been removed in PHP-DI 6.** Read below for more explanations. From now on, all definitions are resolved once and their result is kept during the life of the container (i.e. what was called the `singleton` scope).
 
-Scopes were used to make the container work as a factory: instead of using scopes you should rather inject a proper factory and create the objects you need on demand.
+Scopes were used to make the container work as a factory: instead of using scopes you can either:
+
+- use the [`Container::make()` method](container.md#make),
+- or inject a proper factory object and create the objects you need on demand.
+
+Below is an example of writing a factory object and injecting it.
 
 Before:
 
