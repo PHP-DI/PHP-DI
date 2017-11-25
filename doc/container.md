@@ -50,16 +50,19 @@ $container->make('GithubProfile', [
 ]);
 ```
 
-The `make()` method works like `get()` except *it will create a new instance every time it is called*.
+The `make()` method works like `get()` except *it will resolve the entry every time it is called*. Depending on the type of the entry this means:
 
-It will use the parameters provided for the constructor, and the missing parameters will be
-resolved from the container.
+- if the entry is an object, an new instance will be created every time
+- if the entry is a factory, the factory will be called every time
+- if the entry is an alias, the alias will be resolved every time
 
-It is useful to create objects that do not belong *inside* the container (i.e. that are not services, or that are not [**stateless**](https://igor.io/2013/03/31/stateless-services.html)), but that have dependencies. It is also useful if you want to override some parameters in the constructor.
+Please note that only the entry you ask for will be resolved every time: all the dependencies of the entry will not! That means that if the entry is an alias, the entry the alias points to *will be resolved only once*.
 
-If you need to use the `make()` method inside a service, or a controller, or whatever, it is
-recommended that you type-hint against `FactoryInterface`. That avoids coupling your code to the container.
-`DI\FactoryInterface` is automatically bound to `DI\Container` so you can inject it without any configuration.
+If you provide parameters to `Container::make()` in the second argument, and if the entry to resolve is an object to create, the parameters provided will be used for the constructor of the object, and the missing parameters will be resolved from the container.
+
+`Container::make()` is useful for creating objects that should not be stored *inside* the container (i.e. that are not services, or that are not [**stateless**](https://igor.io/2013/03/31/stateless-services.html)), but that have dependencies. It is also useful if you want to override some parameters of an object's constructor.
+
+If you need to use the `make()` method inside a service, or a controller, or whatever, it is recommended that you type-hint against `FactoryInterface`. That avoids coupling your code to the container. `DI\FactoryInterface` is automatically bound to `DI\Container` so you can inject it without any configuration.
 
 ## call()
 
