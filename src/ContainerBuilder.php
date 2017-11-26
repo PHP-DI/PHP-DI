@@ -318,17 +318,16 @@ class ContainerBuilder
      */
     public function isCompiled() : bool
     {
-        if(null === $this->compileToDirectory){
+        if (null === $this->compileToDirectory) {
             return false;
         }
 
-        if(class_exists($this->containerClass)){
+        if (class_exists($this->containerClass)) {
             return true;
-        }else{
-            $fileName = rtrim($this->compileToDirectory, '/') . '/' . $this->containerClass . '.php';
-            if (file_exists($fileName)) {
-                return true;
-            }
+        } else {
+            $fileName = rtrim($this->compileToDirectory, DIRECTORY_SEPARATOR);
+            $fileName .= DIRECTORY_SEPARATOR . $this->containerClass . '.php';
+            return file_exists($fileName);
         }
 
         return false;
