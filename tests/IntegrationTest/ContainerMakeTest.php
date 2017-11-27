@@ -2,10 +2,9 @@
 
 declare(strict_types=1);
 
-namespace DI\Test\UnitTest;
+namespace DI\Test\IntegrationTest;
 
 use DI\ContainerBuilder;
-use DI\Test\IntegrationTest\BaseContainerTest;
 use DI\Test\UnitTest\Fixtures\Class1CircularDependencies;
 use DI\Test\UnitTest\Fixtures\PassByReferenceDependency;
 use DI\Test\UnitTest\Fixtures\Singleton;
@@ -152,5 +151,35 @@ class ContainerMakeTest extends BaseContainerTest
         $exception = $e;
       }
       $this->assertInstanceOf('TypeError', $exception);
+    }
+
+    /**
+     * @see https://github.com/PHP-DI/PHP-DI/issues/554
+     * @dataProvider provideContainer
+     */
+    public function testMakeWithDecorator(ContainerBuilder $builder)
+    {
+        $builder->addDefinitions([
+            Fixture\Foo::class => \DI\decorate(function ($previous) {
+                return $previous;
+            }),
+        ]);
+        $container = $builder->build();
+        $result = $container->make(Fixture\Foo::class, [
+            'bar' => 'baz',
+        ]);
+        $this->assertEquals('baz', $result->bar);
+    }
+}
+
+namespace DI\Test\IntegrationTest\Fixture;
+
+class Foo
+{
+    public $bar;
+
+    public function __construct($bar = null)
+    {
+        $this->bar = $bar;
     }
 }
