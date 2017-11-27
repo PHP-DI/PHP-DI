@@ -4,6 +4,7 @@ namespace DI\Test\UnitTest;
 
 use DI\ContainerBuilder;
 use DI\Test\UnitTest\Fixtures\Class1CircularDependencies;
+use DI\Test\UnitTest\Fixtures\Foo;
 use DI\Test\UnitTest\Fixtures\InvalidScope;
 use DI\Test\UnitTest\Fixtures\PassByReferenceDependency;
 use DI\Test\UnitTest\Fixtures\Prototype;
@@ -143,4 +144,23 @@ class ContainerMakeTest extends \PHPUnit_Framework_TestCase
         ]);
         $this->assertEquals('bar', $object->foo);
     }
+
+    /**
+     * @see https://github.com/PHP-DI/PHP-DI/issues/554
+     */
+    public function testMakeWithDecorator()
+    {
+        $builder = new ContainerBuilder;
+        $builder->addDefinitions([
+            Foo::class => \DI\decorate(function ($previous) {
+                return $previous;
+            }),
+        ]);
+        $container = $builder->build();
+        $result = $container->make(Foo::class, [
+            'bar' => 'baz',
+        ]);
+        $this->assertEquals('baz', $result->bar);
+    }
+
 }
