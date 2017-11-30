@@ -152,7 +152,7 @@ class FunctionsTest extends TestCase
         $this->assertTrue($definition instanceof EnvironmentVariableDefinition);
         $this->assertEquals('foo', $definition->getVariableName());
         $this->assertTrue($definition->isOptional());
-        $this->assertSame(null, $definition->getDefaultValue());
+        $this->assertNull($definition->getDefaultValue());
     }
 
     /**
