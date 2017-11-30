@@ -162,7 +162,7 @@ class CreateDefinitionTest extends BaseContainerTest
         $container = $builder->build();
 
         $foo = $container->get('foo');
-        self::assertEquals(null, $foo->bar, 'The "bar" property is not set');
+        self::assertNull($foo->bar, 'The "bar" property is not set');
         self::assertEquals(456, $foo->bim, 'The "bim" property is set');
     }
 
@@ -267,7 +267,7 @@ class CreateDefinitionTest extends BaseContainerTest
         $object = $container->get(PrivatePropertyInjectionSubClass::class);
 
         // For now it's not possible to define private properties in parent classes using array config
-        self::assertEquals(null, $object->getPrivate());
+        self::assertNull($object->getPrivate());
         self::assertEquals('overloaded', $object->getProtected());
         self::assertEquals('child', $object->getSubClassPrivate());
     }

@@ -177,7 +177,7 @@ class AutowireDefinitionTest extends BaseContainerTest
         ])->build();
 
         $foo = $container->get('foo');
-        self::assertEquals(null, $foo->bar, 'The "bar" property is not set');
+        self::assertNull($foo->bar, 'The "bar" property is not set');
         self::assertEquals(456, $foo->bim, 'The "bim" property is set');
     }
 
