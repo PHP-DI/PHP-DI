@@ -39,6 +39,30 @@ BC breaks:
 
 Be also aware that internal classes or interfaces may have changed.
 
+## 5.4.6
+
+- Fix [#554](https://github.com/PHP-DI/PHP-DI/issues/554): `Container::make()` fails when combined with `decorate()`.
+
+## 5.4.5
+
+Fixup of 5.4.4.
+
+- [#531](https://github.com/PHP-DI/PHP-DI/issues/531): performance improvement.
+
+## 5.4.4
+
+This release was broken because it was tagged against the wrong branch.
+
+- [#531](https://github.com/PHP-DI/PHP-DI/issues/531): performance improvement.
+
+## 5.4.3
+
+- [#467](https://github.com/PHP-DI/PHP-DI/issues/467): register the container against the PSR ContainerInterface
+
+## 5.4.2
+
+- Minor patch to add the `provide: psr/container-implementation` to `composer.json`.
+
 ## 5.4.1
 
 - [PSR-11](http://www.php-fig.org/psr/) compliance
