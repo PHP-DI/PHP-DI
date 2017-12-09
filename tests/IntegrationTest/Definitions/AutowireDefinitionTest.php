@@ -7,6 +7,7 @@ namespace DI\Test\IntegrationTest\Definitions;
 use DI\ContainerBuilder;
 use DI\Test\IntegrationTest\BaseContainerTest;
 use DI\Test\IntegrationTest\Definitions\AutowireDefinition\OptionalParameterFollowedByRequiredParameter;
+use DI\Test\IntegrationTest\Definitions\AutowireDefinition\Php71;
 use DI\Test\IntegrationTest\Definitions\AutowireDefinitionTest\ConstructorInjection;
 use DI\Test\IntegrationTest\Definitions\AutowireDefinitionTest\LazyService;
 use DI\Test\IntegrationTest\Definitions\AutowireDefinitionTest\NullableConstructorParameter;
@@ -320,6 +321,22 @@ class AutowireDefinitionTest extends BaseContainerTest
 
         self::assertNull($object->first);
         self::assertInstanceOf(\stdClass::class, $object->second);
+    }
+
+    /**
+     * @dataProvider provideContainer
+     */
+    public function test_php71_nullable_typehint(ContainerBuilder $builder)
+    {
+        if (PHP_VERSION_ID < 70100) {
+            $this->markTestSkipped('This test cannot run on PHP 7');
+        }
+
+        $container = $builder->build();
+
+        $object = $container->get(Php71::class);
+
+        self::assertEquals(new \stdClass, $object->param);
     }
 }
 
