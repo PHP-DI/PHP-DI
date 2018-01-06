@@ -5,12 +5,12 @@ declare(strict_types=1);
 namespace DI;
 
 use DI\Definition\Source\AnnotationBasedAutowiring;
-use DI\Definition\Source\SourceCache;
 use DI\Definition\Source\DefinitionArray;
 use DI\Definition\Source\DefinitionFile;
 use DI\Definition\Source\DefinitionSource;
 use DI\Definition\Source\NoAutowiring;
 use DI\Definition\Source\ReflectionBasedAutowiring;
+use DI\Definition\Source\SourceCache;
 use DI\Definition\Source\SourceChain;
 use DI\Proxy\ProxyFactory;
 use InvalidArgumentException;

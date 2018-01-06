@@ -85,7 +85,6 @@ class SourceCache implements DefinitionSource, MutableDefinitionSource
             // Object definitions are used with `make()`
             || ($definition instanceof ObjectDefinition)
             // Autowired definitions cannot be all compiled and are used with `make()`
-            || ($definition instanceof AutowireDefinition)
-        ;
+            || ($definition instanceof AutowireDefinition);
     }
 }
