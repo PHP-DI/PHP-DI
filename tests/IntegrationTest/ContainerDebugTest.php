@@ -12,27 +12,6 @@ use DI\ContainerBuilder;
  */
 class ContainerDebugTest extends BaseContainerTest
 {
-    public function testKnownEntries()
-    {
-        $expectedEntries = [
-            'DI\Container',
-            'DI\FactoryInterface',
-            'Invoker\InvokerInterface',
-            'Psr\Container\ContainerInterface',
-            'bar',
-            'foo',
-        ];
-
-        $builder = new ContainerBuilder();
-        $builder->addDefinitions(['foo' => 'bar']);
-
-        /** @var \DI\Container $container */
-        $container = $builder->build();
-        $container->set('bar', 'baz');
-
-        $this->assertEquals($expectedEntries, $container->getKnownEntryNames());
-    }
-
     public function testEntriesDefinitions()
     {
         $builder = new ContainerBuilder();
