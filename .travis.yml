@@ -20,6 +20,10 @@ matrix:
     - php: 7.0
       env: dependencies=lowest
 
+cache:
+  directories:
+    - $HOME/.composer/cache
+
 before_script:
   - if [[ $(phpenv version-name) == '7.1' ]]; then composer require satooshi/php-coveralls '~1.0' -n ; fi
   - if [[ $(phpenv version-name) != '7.1' ]]; then composer install -n ; fi
