@@ -7,7 +7,7 @@ current_menu: performances
 
 ## A note about caching
 
-Since PHP-DI 6.0 there is no caching system anymore. Instead the container can be compiled (see below), which allows for even better performances than caching.
+PHP-DI 4 and 5 relied a lot on caching. With PHP-DI 6 the main vector for optimization is now to compile the container into highly optimized code (see below). Compiling the container is simpler and faster.
 
 ## Compiling the container
 
@@ -52,8 +52,6 @@ if (/* is production */) {
 }
 ```
 
-As a side note, do not confuse "development environment" with your automated tests. You are encouraged to run your automated tests (PHPUnit, Behat, etc.) on a system as close to your production setup (which means with the container compiled).
-
 ### Optimizing for compilation
 
 As you can read in the "*How it works*" section, PHP-DI will take all the definitions it can find and compile them. That means that definitions like **autowired classes that are not listed in the configuration cannot be compiled** since PHP-DI doesn't know about them.
@@ -73,13 +71,9 @@ return [
 
 You do not need to configure them (autowiring will still take care of that) but at least now PHP-DI will know about those classes and will compile their definitions.
 
-Currently PHP-DI does not traverse directories to find autowired or annotated classes automatically. It also does not resolve [wildcard definitions](php-definitions.md#wildcards) when it is compiled.
+Currently PHP-DI does not traverse directories to find autowired or annotated classes automatically.
 
-Please note that the following definitions are not compiled (yet):
-
-- [wildcard definitions](php-definitions.md#wildcards)
-
-Those definitions will still work perfectly, they will simply not get a performance boost when using a compiled container.
+It also does not resolve [wildcard definitions](php-definitions.md#wildcards) during the compilation process. Those definitions will still work perfectly, they will simply not get a performance boost when using a compiled container.
 
 On the other hand factory definitions (either defined with closures or with class factories) are supported in the compiled container. However please note that if you are using closures as factories:
 
@@ -117,3 +111,29 @@ At runtime, the container builder will see that the file `CompiledContainer.php`
 ## Optimizing lazy injection
 
 If you are using the [Lazy Injection](lazy-injection.md) feature you should read the section ["Optimizing performances" of the guide](lazy-injection.md#optimizing-performances).
+
+## Caching
+
+Compiling the container is the most efficient solution, but it has some limits. The following cases are not optimized:
+
+- autowired (or annotated) classes that are not declared in the configuration
+- wildcard definitions
+- usage of `Container::make()` or `Container::injectOn()` (because those are not using the compiled code)
+
+If you make heavy use of those features, and if it slows down your application you can enable the caching system. The cache will ensure annotations or the reflection is not read again on every request.
+
+The cache relies on APCu directly because it is the only cache system that makes sense (very fast to write and read). Other caches are not good options, this is why PHP-DI does not use PSR-6 or PSR-16 for this cache.
+
+To enable the cache:
+
+```php
+$containerBuilder = new \DI\ContainerBuilder();
+if (/* is production */) {
+    $containerBuilder->enableDefinitionCache();
+}
+```
+
+Heads up:
+
+- do not use a cache in a development environment, else changes you make to the definitions (annotations, configuration files, etc.) may not be taken into account
+- clear the APCu cache on each deployment in production (to avoid using a stale cache)

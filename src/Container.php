@@ -13,6 +13,7 @@ use DI\Definition\ObjectDefinition;
 use DI\Definition\Resolver\DefinitionResolver;
 use DI\Definition\Resolver\ResolverDispatcher;
 use DI\Definition\Source\DefinitionArray;
+use DI\Definition\Source\MutableDefinitionSource;
 use DI\Definition\Source\ReflectionBasedAutowiring;
 use DI\Definition\Source\SourceChain;
 use DI\Invoker\DefinitionParameterResolver;
@@ -43,7 +44,7 @@ class Container implements ContainerInterface, FactoryInterface, InvokerInterfac
     protected $resolvedEntries = [];
 
     /**
-     * @var SourceChain
+     * @var MutableDefinitionSource
      */
     private $definitionSource;
 
@@ -53,11 +54,11 @@ class Container implements ContainerInterface, FactoryInterface, InvokerInterfac
     private $definitionResolver;
 
     /**
-     * Map of definitions that are already looked up.
+     * Map of definitions that are already fetched (local cache).
      *
      * @var array
      */
-    private $definitionCache = [];
+    private $fetchedDefinitions = [];
 
     /**
      * Array of entries being resolved. Used to avoid circular dependencies and infinite loops.
@@ -93,7 +94,7 @@ class Container implements ContainerInterface, FactoryInterface, InvokerInterfac
      * @param ContainerInterface $wrapperContainer If the container is wrapped by another container.
      */
     public function __construct(
-        SourceChain $definitionSource = null,
+        MutableDefinitionSource $definitionSource = null,
         ProxyFactory $proxyFactory = null,
         ContainerInterface $wrapperContainer = null
     ) {
@@ -143,11 +144,12 @@ class Container implements ContainerInterface, FactoryInterface, InvokerInterfac
 
     private function getDefinition($name)
     {
-        if (!array_key_exists($name, $this->definitionCache)) {
-            $this->definitionCache[$name] = $this->definitionSource->getDefinition($name);
+        // Local cache that avoids fetching the same definition twice
+        if (!array_key_exists($name, $this->fetchedDefinitions)) {
+            $this->fetchedDefinitions[$name] = $this->definitionSource->getDefinition($name);
         }
 
-        return $this->definitionCache[$name];
+        return $this->fetchedDefinitions[$name];
     }
 
     /**
@@ -365,7 +367,7 @@ class Container implements ContainerInterface, FactoryInterface, InvokerInterfac
         if (array_key_exists($name, $this->resolvedEntries)) {
             unset($this->resolvedEntries[$name]);
         }
-        $this->definitionCache = []; //Completely clear definitionCache
+        $this->fetchedDefinitions = []; // Completely clear this local cache
 
         $this->definitionSource->addDefinition($definition);
     }

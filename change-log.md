@@ -6,10 +6,10 @@ This is the complete change log. You can also read the [migration guide](doc/mig
 
 Improvements:
 
+- [#494](https://github.com/PHP-DI/PHP-DI/pull/494) The container can now be compiled for optimum performances in production
 - [#294](https://github.com/PHP-DI/PHP-DI/issues/294), [#349](https://github.com/PHP-DI/PHP-DI/issues/349), [#449](https://github.com/PHP-DI/PHP-DI/pull/449): `DI\object()` has been replaced by more specific and less ambiguous helpers:
     - `DI\create()` creates an object, overrides autowiring and previous definitions
     - `DI\autowire()` autowires an object and allows to override specific constructor and method parameters
-- [#494](https://github.com/PHP-DI/PHP-DI/pull/494) The container can now be compiled for optimum performances in production
 - The container can now be built without parameters: `new Container()`
 - Definitions can be nested:
     - [#490](https://github.com/PHP-DI/PHP-DI/issues/490) Definitions can be nested in arrays (by [@yuloh](https://github.com/yuloh))
@@ -17,6 +17,7 @@ Improvements:
     - [#487](https://github.com/PHP-DI/PHP-DI/issues/487) & [#540](https://github.com/PHP-DI/PHP-DI/issues/540) Closures are now handled as factories when they are nested in other definitions
 - [#242](https://github.com/PHP-DI/PHP-DI/issues/242) Error in case a definition is not indexed by a string
 - [#505](https://github.com/PHP-DI/PHP-DI/pull/505) Debug container entries
+- Caching was made almost entirely obsolete by the container compilation, however there is still a caching system entirely rebuilt over APCu for covering the last cases that compilation could not address (see [php-di.org/doc/performances.html](http://php-di.org/doc/performances.html))
 
 Fixes:
 
@@ -30,6 +31,7 @@ BC breaks:
 - PHP 7 or greater is required and HHVM is no longer supported
 - `DI\object()` has been removed, use `DI\create()` or `DI\autowire()` instead
 - [#409](https://github.com/PHP-DI/PHP-DI/issues/409): Scopes are removed, read more in the [scopes](doc/scopes.md) documentation.
+- Caching was replaced by compiling the container: `ContainerBuilder::setDefinitionCache()` was removed, use `ContainerBuilder::enableCompilation()` instead.
 - [#463](https://github.com/PHP-DI/PHP-DI/issues/463) & [#485](https://github.com/PHP-DI/PHP-DI/issues/485): Container-interop support was removed, PSR-11 is used instead (by [@juliangut](https://github.com/juliangut))
 - The deprecated `DI\link()` helper was removed, used `DI\get()` instead
 - [#484](https://github.com/PHP-DI/PHP-DI/pull/484) The deprecated `\DI\Debug` class has been removed. Definitions can be cast to string directly
