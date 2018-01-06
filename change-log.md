@@ -17,7 +17,7 @@ Improvements:
     - [#487](https://github.com/PHP-DI/PHP-DI/issues/487) & [#540](https://github.com/PHP-DI/PHP-DI/issues/540) Closures are now handled as factories when they are nested in other definitions
 - [#242](https://github.com/PHP-DI/PHP-DI/issues/242) Error in case a definition is not indexed by a string
 - [#505](https://github.com/PHP-DI/PHP-DI/pull/505) Debug container entries
-- Caching was made almost entirely obsolete by the container compilation, however there is still a caching system entirely rebuilt over APCu for covering the last cases that compilation could not address (see [php-di.org/doc/performances.html](http://php-di.org/doc/performances.html))
+- [#564](https://github.com/PHP-DI/PHP-DI/pull/564) Caching was made almost entirely obsolete by the container compilation, however there is still a caching system entirely rebuilt over APCu for covering the last cases that compilation could not address (see [php-di.org/doc/performances.html](http://php-di.org/doc/performances.html))
 
 Fixes:
 
