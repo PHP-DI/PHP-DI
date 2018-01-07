@@ -44,5 +44,6 @@ return PhpCsFixer\Config::create()
         'semicolon_after_instruction' => true,
         'strict_comparison' => true,
         'strict_param' => true,
+        'yoda_style' => false,
     ])
     ->setFinder($finder);
