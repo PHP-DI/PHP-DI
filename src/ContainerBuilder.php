@@ -346,7 +346,7 @@ class ContainerBuilder
      *
      * @return $this
      */
-    public function enableDefinitionCache() : ContainerBuilder
+    public function enableDefinitionCache() : self
     {
         $this->ensureNotLocked();
 
