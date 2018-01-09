@@ -55,7 +55,7 @@ class MethodInjection implements Definition
         $this->parameters = $parameters;
     }
 
-    public function merge(MethodInjection $definition)
+    public function merge(self $definition)
     {
         // In case of conflicts, the current definition prevails.
         $this->parameters = $this->parameters + $definition->parameters;
