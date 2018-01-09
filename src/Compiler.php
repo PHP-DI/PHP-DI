@@ -56,6 +56,11 @@ class Compiler
     private $autowiringEnabled;
 
     /**
+     * @var string[]
+     */
+    private $foundReferences = [];
+
+    /**
      * Compile the container.
      *
      * @return string The compiled container file name.
@@ -85,6 +90,21 @@ class Compiler
         $definitions = $definitionSource->getDefinitions();
 
         foreach ($definitions as $entryName => $definition) {
+            // Check that the definition can be compiled
+            $errorMessage = $this->isCompilable($definition);
+            if ($errorMessage !== true) {
+                continue;
+            }
+            $this->compileDefinition($entryName, $definition);
+        }
+
+        foreach ($this->foundReferences as $entryName) {
+            $definition = $definitionSource->getDefinition($entryName);
+            if (!$definition) {
+                // We do not throw a `NotFound` exception here because the dependency
+                // could be defined at runtime
+                continue;
+            }
             // Check that the definition can be compiled
             $errorMessage = $this->isCompilable($definition);
             if ($errorMessage !== true) {
@@ -128,6 +148,7 @@ class Compiler
             case $definition instanceof Reference:
                 $targetEntryName = $definition->getTargetEntryName();
                 $code = 'return $this->delegateContainer->get(' . $this->compileValue($targetEntryName) . ');';
+                $this->foundReferences[$targetEntryName] = $targetEntryName;
                 break;
             case $definition instanceof StringDefinition:
                 $entryName = $this->compileValue($definition->getName());
