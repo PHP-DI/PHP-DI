@@ -202,7 +202,7 @@ class ContainerBuilder
         string $directory,
         string $containerClass = 'CompiledContainer',
         string $containerParentClass = CompiledContainer::class
-    ) : ContainerBuilder {
+    ) : self {
         $this->ensureNotLocked();
 
         $this->compileToDirectory = $directory;
@@ -219,7 +219,7 @@ class ContainerBuilder
      *
      * @return $this
      */
-    public function useAutowiring(bool $bool) : ContainerBuilder
+    public function useAutowiring(bool $bool) : self
     {
         $this->ensureNotLocked();
 
@@ -235,7 +235,7 @@ class ContainerBuilder
      *
      * @return $this
      */
-    public function useAnnotations(bool $bool) : ContainerBuilder
+    public function useAnnotations(bool $bool) : self
     {
         $this->ensureNotLocked();
 
@@ -249,7 +249,7 @@ class ContainerBuilder
      *
      * @return $this
      */
-    public function ignorePhpDocErrors(bool $bool) : ContainerBuilder
+    public function ignorePhpDocErrors(bool $bool) : self
     {
         $this->ensureNotLocked();
 
@@ -271,7 +271,7 @@ class ContainerBuilder
      * @throws InvalidArgumentException when writeToFile is set to true and the proxy directory is null
      * @return $this
      */
-    public function writeProxiesToFile(bool $writeToFile, string $proxyDirectory = null) : ContainerBuilder
+    public function writeProxiesToFile(bool $writeToFile, string $proxyDirectory = null) : self
     {
         $this->ensureNotLocked();
 
@@ -293,7 +293,7 @@ class ContainerBuilder
      *
      * @return $this
      */
-    public function wrapContainer(ContainerInterface $otherContainer) : ContainerBuilder
+    public function wrapContainer(ContainerInterface $otherContainer) : self
     {
         $this->ensureNotLocked();
 
@@ -310,7 +310,7 @@ class ContainerBuilder
      *                                                   or a DefinitionSource object.
      * @return $this
      */
-    public function addDefinitions($definitions) : ContainerBuilder
+    public function addDefinitions($definitions) : self
     {
         $this->ensureNotLocked();
 
@@ -346,7 +346,7 @@ class ContainerBuilder
      *
      * @return $this
      */
-    public function enableDefinitionCache() : ContainerBuilder
+    public function enableDefinitionCache() : self
     {
         $this->ensureNotLocked();
 

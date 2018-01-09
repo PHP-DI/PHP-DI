@@ -16,19 +16,12 @@ class SourceCache implements DefinitionSource, MutableDefinitionSource
     /**
      * @var string
      */
-    const CACHE_KEY = 'php-di.definitions';
+    const CACHE_KEY = 'php-di.definitions.';
 
     /**
      * @var DefinitionSource
      */
     private $cachedSource;
-
-    /**
-     * Definitions loaded from the cache (or null if not loaded yet).
-     *
-     * @var Definition[]|null
-     */
-    private $cachedDefinitions;
 
     public function __construct(DefinitionSource $cachedSource)
     {
@@ -37,20 +30,14 @@ class SourceCache implements DefinitionSource, MutableDefinitionSource
 
     public function getDefinition(string $name)
     {
-        if ($this->cachedDefinitions === null) {
-            $this->cachedDefinitions = apcu_fetch(self::CACHE_KEY) ?: [];
-        }
-
-        // Look in cache
-        $definition = $this->cachedDefinitions[$name] ?? false;
+        $definition = apcu_fetch(self::CACHE_KEY . $name);
 
         if ($definition === false) {
             $definition = $this->cachedSource->getDefinition($name);
 
             // Update the cache
             if ($this->shouldBeCached($definition)) {
-                $this->cachedDefinitions[$name] = $definition;
-                apcu_store(self::CACHE_KEY, $this->cachedDefinitions);
+                apcu_store(self::CACHE_KEY . $name, $definition);
             }
         }
 
