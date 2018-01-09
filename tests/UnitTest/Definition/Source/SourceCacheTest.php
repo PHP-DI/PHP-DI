@@ -8,7 +8,6 @@ use DI\Definition\Reference;
 use DI\Definition\Source\DefinitionArray;
 use DI\Definition\Source\DefinitionSource;
 use DI\Definition\Source\SourceCache;
-use EasyMock\EasyMock;
 use PHPUnit\Framework\TestCase;
 
 class SourceCacheTest extends TestCase
@@ -39,8 +38,8 @@ class SourceCacheTest extends TestCase
 
         $source = new SourceCache($wrappedSource);
 
-        self::assertSame($definition, $source->getDefinition('foo'));
-        self::assertSame($definition, $source->getDefinition('foo'));
+        self::assertEquals($definition, $source->getDefinition('foo'));
+        self::assertEquals($definition, $source->getDefinition('foo'));
     }
 
     /**
@@ -94,7 +93,7 @@ class SourceCacheTest extends TestCase
 
     private static function assertSavedInCache(string $definitionName, $expectedValue)
     {
-        $definitions = apcu_fetch(SourceCache::CACHE_KEY);
-        self::assertEquals($expectedValue, $definitions[$definitionName]);
+        $definition = apcu_fetch(SourceCache::CACHE_KEY . $definitionName);
+        self::assertEquals($expectedValue, $definition);
     }
 }
