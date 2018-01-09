@@ -19,7 +19,6 @@ class SourceCacheTest extends TestCase
         if (! SourceCache::isSupported()) {
             $this->markTestSkipped('APCu extension is required');
         }
-
         apcu_clear_cache();
     }
 

@@ -4,10 +4,11 @@ declare(strict_types=1);
 namespace DI\Test\IntegrationTest;
 
 use DI\ContainerBuilder;
+use function DI\create;
+use DI\Definition\ObjectDefinition;
 use DI\Definition\Source\SourceCache;
-use PHPUnit\Framework\TestCase;
 
-class CacheTest extends TestCase
+class CacheTest extends BaseContainerTest
 {
     public function setUp()
     {
@@ -33,5 +34,38 @@ class CacheTest extends TestCase
         $this->assertEquals('bar', $container->get('foo'));
         $container->set('foo', 'hello');
         $this->assertEquals('hello', $container->get('foo'));
+    }
+
+    /**
+     * @test
+     */
+    public function compiled_entries_should_not_be_put_in_cache()
+    {
+        $builder = new ContainerBuilder();
+        $builder->enableCompilation(self::COMPILATION_DIR, self::generateCompiledClassName());
+        $builder->enableDefinitionCache();
+        $builder->addDefinitions([
+            'foo' => create(\stdClass::class),
+        ]);
+        $container = $builder->build();
+        $container->get('foo');
+
+        $cachedDefinition = apcu_fetch(SourceCache::CACHE_KEY . 'foo');
+        self::assertFalse($cachedDefinition);
+    }
+
+    /**
+     * @test
+     */
+    public function non_compiled_entries_should_be_put_in_cache()
+    {
+        $builder = new ContainerBuilder();
+        $builder->enableCompilation(self::COMPILATION_DIR, self::generateCompiledClassName());
+        $builder->enableDefinitionCache();
+        $container = $builder->build();
+        $container->get(\stdClass::class);
+
+        $cachedDefinition = apcu_fetch(SourceCache::CACHE_KEY . \stdClass::class);
+        self::assertInstanceOf(ObjectDefinition::class, $cachedDefinition);
     }
 }
