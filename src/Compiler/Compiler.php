@@ -2,9 +2,8 @@
 
 declare(strict_types=1);
 
-namespace DI;
+namespace DI\Compiler;
 
-use DI\Compiler\ObjectCreationCompiler;
 use DI\Definition\ArrayDefinition;
 use DI\Definition\DecoratorDefinition;
 use DI\Definition\Definition;
@@ -16,6 +15,7 @@ use DI\Definition\Reference;
 use DI\Definition\Source\DefinitionSource;
 use DI\Definition\StringDefinition;
 use DI\Definition\ValueDefinition;
+use DI\DependencyException;
 use InvalidArgumentException;
 use PhpParser\Node\Expr\Closure;
 use SuperClosure\Analyzer\AstAnalyzer;
@@ -117,7 +117,7 @@ class Compiler
         $this->containerParentClass = $parentClassName;
 
         ob_start();
-        require __DIR__ . '/Compiler/Template.php';
+        require __DIR__ . '/Template.php';
         $fileContent = ob_get_contents();
         ob_end_clean();
 
