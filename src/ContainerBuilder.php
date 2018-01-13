@@ -10,6 +10,7 @@ use DI\Definition\Source\DefinitionFile;
 use DI\Definition\Source\DefinitionSource;
 use DI\Definition\Source\NoAutowiring;
 use DI\Definition\Source\ReflectionBasedAutowiring;
+use DI\Definition\Source\SourceCache;
 use DI\Definition\Source\SourceChain;
 use DI\Proxy\ProxyFactory;
 use InvalidArgumentException;
@@ -94,6 +95,11 @@ class ContainerBuilder
     private $compileToDirectory;
 
     /**
+     * @var bool
+     */
+    private $sourceCache = false;
+
+    /**
      * Build a container configured for the dev environment.
      */
     public static function buildDevContainer() : Container
@@ -142,6 +148,14 @@ class ContainerBuilder
 
         // Mutable definition source
         $source->setMutableDefinitionSource(new DefinitionArray([], $autowiring));
+
+        if ($this->sourceCache) {
+            if (!SourceCache::isSupported()) {
+                throw new \Exception('APCu is not enabled, PHP-DI cannot use it as a cache');
+            }
+            // Wrap the source with the cache decorator
+            $source = new SourceCache($source);
+        }
 
         $proxyFactory = new ProxyFactory($this->writeProxiesToFile, $this->proxyDirectory);
 
@@ -309,6 +323,34 @@ class ContainerBuilder
         }
 
         $this->definitionSources[] = $definitions;
+
+        return $this;
+    }
+
+    /**
+     * Enables the use of APCu to cache definitions.
+     *
+     * You must have APCu enabled to use it.
+     *
+     * Before using this feature, you should try these steps first:
+     * - enable compilation if not already done (see `enableCompilation()`)
+     * - if you use autowiring or annotations, add all the classes you are using into your configuration so that
+     *   PHP-DI knows about them and compiles them
+     * Once this is done, you can try to optimize performances further with APCu. It can also be useful if you use
+     * `Container::make()` instead of `get()` (`make()` calls cannot be compiled so they are not optimized).
+     *
+     * Remember to clear APCu on each deploy else your application will have a stale cache. Do not enable the cache
+     * in development environment: any change you will make to the code will be ignored because of the cache.
+     *
+     * @see http://php-di.org/doc/performances.html
+     *
+     * @return $this
+     */
+    public function enableDefinitionCache() : self
+    {
+        $this->ensureNotLocked();
+
+        $this->sourceCache = true;
 
         return $this;
     }

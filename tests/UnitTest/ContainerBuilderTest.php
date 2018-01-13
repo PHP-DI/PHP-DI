@@ -8,6 +8,7 @@ use DI\CompiledContainer;
 use DI\Container;
 use DI\ContainerBuilder;
 use DI\Definition\Source\DefinitionArray;
+use DI\Definition\Source\SourceCache;
 use DI\Definition\ValueDefinition;
 use DI\Test\IntegrationTest\BaseContainerTest;
 use DI\Test\UnitTest\Fixtures\FakeContainer;
@@ -36,6 +37,25 @@ class ContainerBuilderTest extends TestCase
         $this->assertFalse($container instanceof CompiledContainer);
         // Proxies evaluated in memory
         $this->assertFalse($this->getObjectAttribute($container->proxyFactory, 'writeProxiesToFile'));
+    }
+
+    /**
+     * @test
+     */
+    public function should_allow_to_configure_a_cache()
+    {
+        if (! SourceCache::isSupported()) {
+            $this->markTestSkipped('APCu extension is required');
+            return;
+        }
+
+        $builder = new ContainerBuilder(FakeContainer::class);
+        $builder->enableDefinitionCache();
+
+        /** @var FakeContainer $container */
+        $container = $builder->build();
+
+        $this->assertTrue($container->definitionSource instanceof SourceCache);
     }
 
     /**
@@ -193,6 +213,9 @@ class ContainerBuilderTest extends TestCase
         $this->assertSame($builder, $result);
 
         $result = $builder->enableCompilation('foo');
+        $this->assertSame($builder, $result);
+
+        $result = $builder->enableDefinitionCache();
         $this->assertSame($builder, $result);
 
         $result = $builder->wrapContainer($this->easyMock(ContainerInterface::class));
