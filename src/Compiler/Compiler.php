@@ -39,6 +39,15 @@ class Compiler
     private $containerParentClass;
 
     /**
+     * Definitions indexed by the entry name. The value can be null if the definition needs to be fetched.
+     *
+     * Keys are strings, values are `Definition` objects or null.
+     *
+     * @var \ArrayIterator
+     */
+    private $entriesToCompile;
+
+    /**
      * Map of entry names to method names.
      *
      * @var string[]
@@ -54,11 +63,6 @@ class Compiler
      * @var bool
      */
     private $autowiringEnabled;
-
-    /**
-     * @var string[]
-     */
-    private $foundReferences = [];
 
     /**
      * Compile the container.
@@ -87,19 +91,13 @@ class Compiler
             throw new InvalidArgumentException("The container cannot be compiled: `$className` is not a valid PHP class name");
         }
 
-        $definitions = $definitionSource->getDefinitions();
+        $this->entriesToCompile = new \ArrayIterator($definitionSource->getDefinitions());
 
-        foreach ($definitions as $entryName => $definition) {
-            // Check that the definition can be compiled
-            $errorMessage = $this->isCompilable($definition);
-            if ($errorMessage !== true) {
-                continue;
+        // We use an ArrayIterator so that we can keep adding new items to the list while we compile entries
+        foreach ($this->entriesToCompile as $entryName => $definition) {
+            if (!$definition) {
+                $definition = $definitionSource->getDefinition($entryName);
             }
-            $this->compileDefinition($entryName, $definition);
-        }
-
-        foreach ($this->foundReferences as $entryName) {
-            $definition = $definitionSource->getDefinition($entryName);
             if (!$definition) {
                 // We do not throw a `NotFound` exception here because the dependency
                 // could be defined at runtime
@@ -148,7 +146,10 @@ class Compiler
             case $definition instanceof Reference:
                 $targetEntryName = $definition->getTargetEntryName();
                 $code = 'return $this->delegateContainer->get(' . $this->compileValue($targetEntryName) . ');';
-                $this->foundReferences[$targetEntryName] = $targetEntryName;
+                // If this method is not yet compiled we store it for compilation
+                if (!isset($this->entryToMethodMapping[$targetEntryName])) {
+                    $this->entriesToCompile[$targetEntryName] = null;
+                }
                 break;
             case $definition instanceof StringDefinition:
                 $entryName = $this->compileValue($definition->getName());

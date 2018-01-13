@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace DI\Test\IntegrationTest;
 
+use DI\CompiledContainer;
+use DI\Container;
 use DI\ContainerBuilder;
 use PHPUnit\Framework\TestCase;
 
@@ -51,5 +53,19 @@ abstract class BaseContainerTest extends TestCase
     protected static function generateCompiledClassName()
     {
         return 'Container' . uniqid();
+    }
+
+    /**
+     * Assert that the given entry is compiled when we are testing the compiled container.
+     */
+    protected function assertEntryIsCompiled(Container $container, string $entry)
+    {
+        if (!$container instanceof CompiledContainer) {
+            return;
+        }
+
+        /** @noinspection PhpUndefinedFieldInspection */
+        $compiledEntries = $container::METHOD_MAPPING;
+        self::assertArrayHasKey($entry, $compiledEntries, "Entry $entry is not compiled");
     }
 }

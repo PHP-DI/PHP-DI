@@ -6,6 +6,7 @@ namespace DI\Test\IntegrationTest;
 
 use DI\ContainerBuilder;
 use function DI\create;
+use function DI\get;
 
 /**
  * Tests specific to the compiled container.
@@ -153,6 +154,23 @@ class CompiledContainerTest extends BaseContainerTest
 
         self::assertInstanceOf(CompiledContainerTest\CustomParentContainer::class, $container);
     }
+
+    /**
+     * @test
+     * @see https://github.com/PHP-DI/PHP-DI/issues/565
+     */
+    public function recursively_compiles_referenced_definitions_found()
+    {
+        $builder = new ContainerBuilder;
+        $builder->addDefinitions([
+            'foo' => create(CompiledContainerTest\Property::class)
+                ->property('foo', get(CompiledContainerTest\ConstructorWithTypehint::class)),
+        ]);
+        $builder->enableCompilation(self::COMPILATION_DIR, self::generateCompiledClassName());
+        $this->assertEntryIsCompiled($builder->build(), CompiledContainerTest\ConstructorWithTypehint::class);
+        // Dependency of a dependency
+        $this->assertEntryIsCompiled($builder->build(), CompiledContainerTest\ConstructorWithAnotherTypehint::class);
+    }
 }
 
 namespace DI\Test\IntegrationTest\CompiledContainerTest;
@@ -164,4 +182,20 @@ class Property
 
 class CustomParentContainer extends \DI\Container
 {
+}
+
+class ConstructorWithTypehint
+{
+    public function __construct(ConstructorWithAnotherTypehint $param)
+    {
+
+    }
+}
+
+class ConstructorWithAnotherTypehint
+{
+    public function __construct(\stdClass $param)
+    {
+
+    }
 }
