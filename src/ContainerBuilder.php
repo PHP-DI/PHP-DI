@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace DI;
 
+use DI\Compiler\Compiler;
 use DI\Definition\Source\AnnotationBasedAutowiring;
 use DI\Definition\Source\DefinitionArray;
 use DI\Definition\Source\DefinitionFile;

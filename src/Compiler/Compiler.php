@@ -2,9 +2,8 @@
 
 declare(strict_types=1);
 
-namespace DI;
+namespace DI\Compiler;
 
-use DI\Compiler\ObjectCreationCompiler;
 use DI\Definition\ArrayDefinition;
 use DI\Definition\DecoratorDefinition;
 use DI\Definition\Definition;
@@ -16,6 +15,7 @@ use DI\Definition\Reference;
 use DI\Definition\Source\DefinitionSource;
 use DI\Definition\StringDefinition;
 use DI\Definition\ValueDefinition;
+use DI\DependencyException;
 use InvalidArgumentException;
 use PhpParser\Node\Expr\Closure;
 use SuperClosure\Analyzer\AstAnalyzer;
@@ -37,6 +37,15 @@ class Compiler
      * @var string
      */
     private $containerParentClass;
+
+    /**
+     * Definitions indexed by the entry name. The value can be null if the definition needs to be fetched.
+     *
+     * Keys are strings, values are `Definition` objects or null.
+     *
+     * @var \ArrayIterator
+     */
+    private $entriesToCompile;
 
     /**
      * Map of entry names to method names.
@@ -82,9 +91,18 @@ class Compiler
             throw new InvalidArgumentException("The container cannot be compiled: `$className` is not a valid PHP class name");
         }
 
-        $definitions = $definitionSource->getDefinitions();
+        $this->entriesToCompile = new \ArrayIterator($definitionSource->getDefinitions());
 
-        foreach ($definitions as $entryName => $definition) {
+        // We use an ArrayIterator so that we can keep adding new items to the list while we compile entries
+        foreach ($this->entriesToCompile as $entryName => $definition) {
+            if (!$definition) {
+                $definition = $definitionSource->getDefinition($entryName);
+            }
+            if (!$definition) {
+                // We do not throw a `NotFound` exception here because the dependency
+                // could be defined at runtime
+                continue;
+            }
             // Check that the definition can be compiled
             $errorMessage = $this->isCompilable($definition);
             if ($errorMessage !== true) {
@@ -97,7 +115,7 @@ class Compiler
         $this->containerParentClass = $parentClassName;
 
         ob_start();
-        require __DIR__ . '/Compiler/Template.php';
+        require __DIR__ . '/Template.php';
         $fileContent = ob_get_contents();
         ob_end_clean();
 
@@ -128,6 +146,10 @@ class Compiler
             case $definition instanceof Reference:
                 $targetEntryName = $definition->getTargetEntryName();
                 $code = 'return $this->delegateContainer->get(' . $this->compileValue($targetEntryName) . ');';
+                // If this method is not yet compiled we store it for compilation
+                if (!isset($this->entryToMethodMapping[$targetEntryName])) {
+                    $this->entriesToCompile[$targetEntryName] = null;
+                }
                 break;
             case $definition instanceof StringDefinition:
                 $entryName = $this->compileValue($definition->getName());
