@@ -58,7 +58,7 @@ abstract class BaseContainerTest extends TestCase
     /**
      * Assert that the given entry is compiled when we are testing the compiled container.
      */
-    protected function assertEntryIsCompiled(Container $container, string $entry)
+    protected static function assertEntryIsCompiled(Container $container, string $entry)
     {
         if (!$container instanceof CompiledContainer) {
             return;
@@ -67,5 +67,19 @@ abstract class BaseContainerTest extends TestCase
         /** @noinspection PhpUndefinedFieldInspection */
         $compiledEntries = $container::METHOD_MAPPING;
         self::assertArrayHasKey($entry, $compiledEntries, "Entry $entry is not compiled");
+    }
+
+    /**
+     * Assert that the given entry is not compiled when we are testing the compiled container.
+     */
+    protected static function assertEntryIsNotCompiled(Container $container, string $entry)
+    {
+        if (!$container instanceof CompiledContainer) {
+            return;
+        }
+
+        /** @noinspection PhpUndefinedFieldInspection */
+        $compiledEntries = $container::METHOD_MAPPING;
+        self::assertArrayNotHasKey($entry, $compiledEntries, "Entry $entry is compiled");
     }
 }

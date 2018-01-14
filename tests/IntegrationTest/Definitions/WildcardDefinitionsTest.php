@@ -30,6 +30,11 @@ class WildcardDefinitionsTest extends BaseContainerTest
 
         $object = $container->get(Interface1::class);
         $this->assertInstanceOf(Implementation1::class, $object);
+
+        self::assertEntryIsNotCompiled($container, 'foo*');
+        self::assertEntryIsNotCompiled($container, 'foo1');
+        self::assertEntryIsNotCompiled($container, 'DI\Test\IntegrationTest\*\Interface*');
+        self::assertEntryIsNotCompiled($container, Interface1::class);
     }
 
     /**

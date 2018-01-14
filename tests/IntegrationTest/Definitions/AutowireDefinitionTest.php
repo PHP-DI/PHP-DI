@@ -37,7 +37,9 @@ class AutowireDefinitionTest extends BaseContainerTest
             'object' => autowire(Class1::class), // with a different name
         ])->build();
 
+        self::assertEntryIsCompiled($container, 'stdClass');
         self::assertInstanceOf('stdClass', $container->get('stdClass'));
+        self::assertEntryIsCompiled($container, 'object');
         self::assertInstanceOf(Class1::class, $container->get('object'));
     }
 
@@ -178,6 +180,8 @@ class AutowireDefinitionTest extends BaseContainerTest
         ])->build();
 
         $foo = $container->get('foo');
+
+        self::assertEntryIsCompiled($container, 'foo');
         self::assertNull($foo->bar, 'The "bar" property is not set');
         self::assertEquals(456, $foo->bim, 'The "bim" property is set');
     }
@@ -303,6 +307,7 @@ class AutowireDefinitionTest extends BaseContainerTest
 
         $object = $container->get(NullableConstructorParameter::class);
 
+        $this->assertEntryIsCompiled($container, NullableConstructorParameter::class);
         self::assertInstanceOf(NullableConstructorParameter::class, $object);
         self::assertInstanceOf(LazyLoadingInterface::class, $object);
         self::assertFalse($object->isProxyInitialized());

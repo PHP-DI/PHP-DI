@@ -29,10 +29,19 @@ class ValueDefinitionTest extends BaseContainerTest
         ]);
         $container = $builder->build();
 
+        self::assertEntryIsCompiled($container, 'string');
         $this->assertEquals('foo', $container->get('string'));
+
+        self::assertEntryIsCompiled($container, 'int');
         $this->assertEquals(123, $container->get('int'));
+
+        self::assertEntryIsNotCompiled($container, 'object');
         $this->assertEquals(new \stdClass(), $container->get('object'));
+
+        self::assertEntryIsCompiled($container, 'helper');
         $this->assertEquals('foo', $container->get('helper'));
+
+        self::assertEntryIsCompiled($container, 'closure');
         $this->assertEquals('foo', call_user_func($container->get('closure')));
     }
 }

@@ -26,7 +26,9 @@ class FactoryDefinitionTest extends BaseContainerTest
             },
         ]);
 
-        $this->assertEquals('bar', $builder->build()->get('factory'));
+        $container = $builder->build();
+        self::assertEntryIsCompiled($container, 'factory');
+        $this->assertEquals('bar', $container->get('factory'));
     }
 
     public function provideCallables()
@@ -72,7 +74,9 @@ class FactoryDefinitionTest extends BaseContainerTest
             'factory' => \DI\factory($callable),
         ]);
 
-        $this->assertSame('bar', $builder->build()->get('factory'));
+        $container = $builder->build();
+        self::assertEntryIsCompiled($container, 'factory');
+        self::assertSame('bar', $container->get('factory'));
     }
 
     /**
@@ -85,7 +89,9 @@ class FactoryDefinitionTest extends BaseContainerTest
             'factory' => \DI\factory(['bar_baz', 'foo']),
         ]);
 
-        $this->assertSame('bar', $builder->build()->get('factory'));
+        $container = $builder->build();
+        self::assertEntryIsCompiled($container, 'factory');
+        self::assertSame('bar', $container->get('factory'));
     }
 
     /**
@@ -98,7 +104,9 @@ class FactoryDefinitionTest extends BaseContainerTest
             'factory' => \DI\factory('bar_baz::foo'),
         ]);
 
-        $this->assertSame('bar', $builder->build()->get('factory'));
+        $container = $builder->build();
+        self::assertEntryIsCompiled($container, 'factory');
+        self::assertSame('bar', $container->get('factory'));
     }
 
     /**
@@ -111,7 +119,9 @@ class FactoryDefinitionTest extends BaseContainerTest
             'factory' => \DI\factory('bar_baz'),
         ]);
 
-        $this->assertSame('bar', $builder->build()->get('factory'));
+        $container = $builder->build();
+        self::assertEntryIsCompiled($container, 'factory');
+        self::assertSame('bar', $container->get('factory'));
     }
 
     /**
@@ -507,7 +517,10 @@ class FactoryDefinitionTest extends BaseContainerTest
                 return new \stdClass;
             },
         ]);
-        $this->assertEquals(new \stdClass, $builder->build()->get('factory'));
+        $container = $builder->build();
+
+        self::assertEntryIsCompiled($container, 'factory');
+        self::assertEquals(new \stdClass, $container->get('factory'));
     }
 
     /**
@@ -522,7 +535,10 @@ class FactoryDefinitionTest extends BaseContainerTest
                 return $i;
             },
         ]);
-        $this->assertEquals(0, $builder->build()->get('factory'));
+        $container = $builder->build();
+
+        self::assertEntryIsCompiled($container, 'factory');
+        self::assertSame(0, $container->get('factory'));
     }
 
     /**

@@ -27,6 +27,7 @@ class ArrayDefinitionTest extends BaseContainerTest
 
         $array = $container->get('values');
 
+        $this->assertEntryIsCompiled($container, 'values');
         $this->assertEquals('value 1', $array[0]);
         $this->assertEquals('value 2', $array[1]);
     }
@@ -52,6 +53,7 @@ class ArrayDefinitionTest extends BaseContainerTest
 
         $array = $container->get('values');
 
+        $this->assertEntryIsCompiled($container, 'values');
         $this->assertEquals('value 1', $array[0][0]);
         $this->assertEquals('value 2', $array[0][1]);
         $this->assertEquals('value 1', $array[1][0]);
@@ -75,6 +77,7 @@ class ArrayDefinitionTest extends BaseContainerTest
 
         $array = $container->get('links');
 
+        $this->assertEntryIsCompiled($container, 'links');
         $this->assertTrue($array[0] instanceof \stdClass);
         $this->assertTrue($array[1] instanceof \stdClass);
         $this->assertSame($container->get('dependency1'), $array[0]);
@@ -96,6 +99,7 @@ class ArrayDefinitionTest extends BaseContainerTest
 
         $array = $container->get('array');
 
+        $this->assertEntryIsCompiled($container, 'array');
         $this->assertEquals('env', $array[0]);
         $this->assertEquals(new \stdClass, $array[1]);
     }
@@ -117,6 +121,7 @@ class ArrayDefinitionTest extends BaseContainerTest
 
         $array = $container->get('array');
 
+        $this->assertEntryIsCompiled($container, 'array');
         $this->assertEquals('env', $array['array'][0]);
         $this->assertEquals(new \stdClass, $array['array'][1]);
     }
@@ -138,6 +143,7 @@ class ArrayDefinitionTest extends BaseContainerTest
 
         $array = $container->get('array');
 
+        $this->assertEntryIsCompiled($container, 'array');
         $this->assertEquals('foo', $array['array'][0]);
         $this->assertEquals('bar', $array['array'][1]);
     }
@@ -164,6 +170,7 @@ class ArrayDefinitionTest extends BaseContainerTest
 
         $array = $container->get('values');
 
+        $this->assertEntryIsCompiled($container, 'values');
         $this->assertCount(4, $array);
         $this->assertEquals('value 1', $array[0]);
         $this->assertEquals('value 2', $array[1]);
@@ -192,6 +199,7 @@ class ArrayDefinitionTest extends BaseContainerTest
 
         $array = $container->get('array');
 
+        $this->assertEntryIsCompiled($container, 'array');
         $this->assertEquals('env', $array[0]);
         $this->assertEquals(new \stdClass, $array[1]);
         $this->assertEquals('foo', $array[2]);
@@ -212,6 +220,7 @@ class ArrayDefinitionTest extends BaseContainerTest
 
         $array = $container->get('values');
 
+        $this->assertEntryIsCompiled($container, 'values');
         $this->assertCount(1, $array);
         $this->assertEquals('value 1', $array[0]);
     }

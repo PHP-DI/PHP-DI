@@ -22,6 +22,7 @@ class StringDefinitionTest extends BaseContainerTest
         ]);
         $container = $builder->build();
 
+        self::assertEntryIsCompiled($container, 'foo');
         $this->assertEquals('bar', $container->get('foo'));
     }
 

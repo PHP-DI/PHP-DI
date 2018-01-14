@@ -39,8 +39,11 @@ class CreateDefinitionTest extends BaseContainerTest
         ]);
         $container = $builder->build();
 
+        self::assertEntryIsCompiled($container, 'stdClass');
         $this->assertInstanceOf('stdClass', $container->get('stdClass'));
+        self::assertEntryIsCompiled($container, Class1::class);
         $this->assertInstanceOf(Class1::class, $container->get(Class1::class));
+        self::assertEntryIsCompiled($container, 'object');
         $this->assertInstanceOf(Class1::class, $container->get('object'));
     }
 
@@ -224,6 +227,7 @@ class CreateDefinitionTest extends BaseContainerTest
 
         $object = $container->get(Property::class);
 
+        self::assertEntryIsCompiled($container, Property::class);
         self::assertInstanceOf(Property::class, $object);
         self::assertInstanceOf(LazyLoadingInterface::class, $object);
         self::assertFalse($object->isProxyInitialized());
@@ -266,6 +270,8 @@ class CreateDefinitionTest extends BaseContainerTest
 
         $object = $container->get(PrivatePropertyInjectionSubClass::class);
 
+        self::assertEntryIsCompiled($container, PrivatePropertyInjection::class);
+        self::assertEntryIsCompiled($container, PrivatePropertyInjectionSubClass::class);
         // For now it's not possible to define private properties in parent classes using array config
         self::assertNull($object->getPrivate());
         self::assertEquals('overloaded', $object->getProtected());
@@ -298,6 +304,7 @@ class CreateDefinitionTest extends BaseContainerTest
             ],
         ])->build();
 
+        self::assertEntryIsCompiled($container, 'foo');
         self::assertInstanceOf(Property::class, $container->get('foo')['bar']);
     }
 }

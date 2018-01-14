@@ -28,7 +28,8 @@ class DecoratorDefinitionTest extends BaseContainerTest
         ]);
         $container = $builder->build();
 
-        $this->assertEquals('barbaz', $container->get('foo'));
+        self::assertEntryIsCompiled($container, 'foo');
+        self::assertEquals('barbaz', $container->get('foo'));
     }
 
     /**
@@ -111,7 +112,8 @@ class DecoratorDefinitionTest extends BaseContainerTest
         ]);
         $container = $builder->build();
 
-        $this->assertEquals('barbazbam', $container->get('foo'));
+        self::assertEntryIsCompiled($container, 'foo');
+        self::assertEquals('barbazbam', $container->get('foo'));
     }
 
     /**

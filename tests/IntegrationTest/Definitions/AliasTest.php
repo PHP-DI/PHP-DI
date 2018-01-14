@@ -23,6 +23,7 @@ class AliasTest extends BaseContainerTest
         ]);
         $container = $builder->build();
 
+        self::assertEntryIsCompiled($container, 'bar');
         self::assertEquals('Hello', $container->get('bar'));
     }
 }

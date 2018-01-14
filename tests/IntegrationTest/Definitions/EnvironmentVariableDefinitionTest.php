@@ -29,7 +29,8 @@ class EnvironmentVariableDefinitionTest extends BaseContainerTest
         ]);
         $container = $builder->build();
 
-        $this->assertEquals($expectedValue, $container->get('var'));
+        self::assertEntryIsCompiled($container, 'var');
+        self::assertEquals($expectedValue, $container->get('var'));
     }
 
     /**
@@ -57,6 +58,7 @@ class EnvironmentVariableDefinitionTest extends BaseContainerTest
         ]);
         $container = $builder->build();
 
+        self::assertEntryIsCompiled($container, 'var');
         $this->assertEquals('<default>', $container->get('var'));
     }
 
@@ -70,6 +72,7 @@ class EnvironmentVariableDefinitionTest extends BaseContainerTest
         ]);
         $container = $builder->build();
 
+        self::assertEntryIsCompiled($container, 'var');
         $this->assertNull($container->get('var'));
     }
 
@@ -84,6 +87,7 @@ class EnvironmentVariableDefinitionTest extends BaseContainerTest
         ]);
         $container = $builder->build();
 
+        self::assertEntryIsCompiled($container, 'var');
         $this->assertEquals('bar', $container->get('var'));
     }
 }
