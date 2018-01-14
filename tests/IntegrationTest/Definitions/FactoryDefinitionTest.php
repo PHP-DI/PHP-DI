@@ -64,7 +64,7 @@ class FactoryDefinitionTest extends BaseContainerTest
     {
         $isClosure = $callable instanceof \Closure;
         $containsAnObject = is_object($callable) || is_object($callable[0]);
-        if ($builder->isCompiled() && $containsAnObject && !$isClosure) {
+        if ($builder->isCompilationEnabled() && $containsAnObject && !$isClosure) {
             // Invokable objects are not compilable
             $this->expectException(\DI\Definition\Exception\InvalidDefinition::class);
             $this->expectExceptionMessage('An object was found but objects cannot be compiled');

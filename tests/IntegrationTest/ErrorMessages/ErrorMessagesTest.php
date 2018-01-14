@@ -19,7 +19,7 @@ class ErrorMessagesTest extends BaseContainerTest
      */
     public function test_non_instantiable_class(ContainerBuilder $builder)
     {
-        $word = $builder->isCompiled() ? 'compiled' : 'resolved';
+        $word = $builder->isCompilationEnabled() ? 'compiled' : 'resolved';
         $message = <<<MESSAGE
 Entry "DI\Test\IntegrationTest\ErrorMessages\InterfaceFixture" cannot be $word: the class is not instantiable
 Full definition:
@@ -42,7 +42,7 @@ MESSAGE;
      */
     public function test_non_existent_class(ContainerBuilder $builder)
     {
-        $word = $builder->isCompiled() ? 'compiled' : 'resolved';
+        $word = $builder->isCompilationEnabled() ? 'compiled' : 'resolved';
         $message = <<<MESSAGE
 Entry "Acme\Foo\Bar\Bar" cannot be $word: the class doesn't exist
 Full definition:
@@ -66,7 +66,7 @@ MESSAGE;
      */
     public function test_undefined_constructor_parameter(ContainerBuilder $builder)
     {
-        $word = $builder->isCompiled() ? 'compiled' : 'resolved';
+        $word = $builder->isCompilationEnabled() ? 'compiled' : 'resolved';
         $message = <<<MESSAGE
 Entry "DI\Test\IntegrationTest\ErrorMessages\Buggy1" cannot be $word: Parameter \$bar of __construct() has no value defined or guessable
 Full definition:
@@ -129,7 +129,7 @@ MESSAGE;
      */
     public function test_setter_injection_not_type_hinted(ContainerBuilder $builder)
     {
-        $word = $builder->isCompiled() ? 'compiled' : 'resolved';
+        $word = $builder->isCompilationEnabled() ? 'compiled' : 'resolved';
         $message = <<<MESSAGE
 Entry "DI\Test\IntegrationTest\ErrorMessages\Buggy5" cannot be $word: Parameter \$dependency of setDependency() has no value defined or guessable
 Full definition:

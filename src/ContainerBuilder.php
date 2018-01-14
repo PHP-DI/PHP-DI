@@ -359,7 +359,7 @@ class ContainerBuilder
     /**
      * Are we building a compiled container?
      */
-    public function isCompiled() : bool
+    public function isCompilationEnabled() : bool
     {
         return (bool) $this->compileToDirectory;
     }

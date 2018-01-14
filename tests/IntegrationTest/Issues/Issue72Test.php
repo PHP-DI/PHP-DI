@@ -103,7 +103,7 @@ class Issue72Test extends BaseContainerTest
      */
     public function phpDefinitionShouldOverrideArrayDefinition(ContainerBuilder $builder)
     {
-        if ($builder->isCompiled()) {
+        if ($builder->isCompilationEnabled()) {
             // This behavior is not allowed on the compiled container
             return;
         }

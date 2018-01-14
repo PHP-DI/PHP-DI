@@ -63,7 +63,7 @@ class ContainerSetTest extends BaseContainerTest
      */
     public function array_entries_can_be_overridden_by_definitions(ContainerBuilder $builder)
     {
-        if ($builder->isCompiled()) {
+        if ($builder->isCompilationEnabled()) {
             // This behavior is not allowed on the compiled container
             return;
         }
