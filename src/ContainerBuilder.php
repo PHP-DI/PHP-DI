@@ -361,7 +361,19 @@ class ContainerBuilder
      */
     public function isCompiled() : bool
     {
-        return (bool) $this->compileToDirectory;
+        if (null === $this->compileToDirectory) {
+            return false;
+        }
+
+        if (class_exists($this->containerClass)) {
+            return true;
+        } else {
+            $fileName = rtrim($this->compileToDirectory, '\\/');
+            $fileName .= DIRECTORY_SEPARATOR . $this->containerClass . '.php';
+            return file_exists($fileName);
+        }
+
+        return false;
     }
 
     private function ensureNotLocked()
