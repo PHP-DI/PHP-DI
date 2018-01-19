@@ -88,7 +88,7 @@ class SourceChainTest extends TestCase
 
     private function assertValueDefinition(Definition $definition, $value)
     {
-        $this->assertTrue($definition instanceof ValueDefinition);
+        $this->assertInstanceOf(ValueDefinition::class, $definition);
         /** @var ValueDefinition $definition */
         $this->assertEquals($value, $definition->getValue());
     }
