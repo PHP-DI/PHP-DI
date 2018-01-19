@@ -41,16 +41,16 @@ class FunctionsTest extends TestCase
     {
         $helper = \DI\create();
 
-        $this->assertTrue($helper instanceof CreateDefinitionHelper);
+        $this->assertInstanceOf(CreateDefinitionHelper::class, $helper);
         $definition = $helper->getDefinition('entry');
-        $this->assertTrue($definition instanceof ObjectDefinition);
+        $this->assertInstanceOf(ObjectDefinition::class, $definition);
         $this->assertEquals('entry', $definition->getClassName());
 
         $helper = \DI\create('foo');
 
-        $this->assertTrue($helper instanceof CreateDefinitionHelper);
+        $this->assertInstanceOf(CreateDefinitionHelper::class, $helper);
         $definition = $helper->getDefinition('entry');
-        $this->assertTrue($definition instanceof ObjectDefinition);
+        $this->assertInstanceOf(ObjectDefinition::class, $definition);
         $this->assertEquals('foo', $definition->getClassName());
     }
 
@@ -61,16 +61,16 @@ class FunctionsTest extends TestCase
     {
         $helper = \DI\autowire();
 
-        $this->assertTrue($helper instanceof AutowireDefinitionHelper);
+        $this->assertInstanceOf(AutowireDefinitionHelper::class, $helper);
         $definition = $helper->getDefinition('entry');
-        $this->assertTrue($definition instanceof ObjectDefinition);
+        $this->assertInstanceOf(ObjectDefinition::class, $definition);
         $this->assertEquals('entry', $definition->getClassName());
 
         $helper = \DI\autowire('foo');
 
-        $this->assertTrue($helper instanceof AutowireDefinitionHelper);
+        $this->assertInstanceOf(AutowireDefinitionHelper::class, $helper);
         $definition = $helper->getDefinition('entry');
-        $this->assertTrue($definition instanceof ObjectDefinition);
+        $this->assertInstanceOf(ObjectDefinition::class, $definition);
         $this->assertEquals('foo', $definition->getClassName());
     }
 
@@ -124,7 +124,7 @@ class FunctionsTest extends TestCase
     {
         $definition = \DI\env('foo');
 
-        $this->assertTrue($definition instanceof EnvironmentVariableDefinition);
+        $this->assertInstanceOf(EnvironmentVariableDefinition::class, $definition);
         $this->assertEquals('foo', $definition->getVariableName());
         $this->assertFalse($definition->isOptional());
     }
@@ -136,7 +136,7 @@ class FunctionsTest extends TestCase
     {
         $definition = \DI\env('foo', 'default');
 
-        $this->assertTrue($definition instanceof EnvironmentVariableDefinition);
+        $this->assertInstanceOf(EnvironmentVariableDefinition::class, $definition);
         $this->assertEquals('foo', $definition->getVariableName());
         $this->assertTrue($definition->isOptional());
         $this->assertEquals('default', $definition->getDefaultValue());
@@ -149,7 +149,7 @@ class FunctionsTest extends TestCase
     {
         $definition = \DI\env('foo', null);
 
-        $this->assertTrue($definition instanceof EnvironmentVariableDefinition);
+        $this->assertInstanceOf(EnvironmentVariableDefinition::class, $definition);
         $this->assertEquals('foo', $definition->getVariableName());
         $this->assertTrue($definition->isOptional());
         $this->assertNull($definition->getDefaultValue());
@@ -163,7 +163,7 @@ class FunctionsTest extends TestCase
         $definition = \DI\add('hello');
         $definition->setName('foo');
 
-        $this->assertTrue($definition instanceof ArrayDefinitionExtension);
+        $this->assertInstanceOf(ArrayDefinitionExtension::class, $definition);
         $this->assertEquals('foo', $definition->getName());
         $definition->setExtendedDefinition(new ArrayDefinition([]));
         $this->assertEquals(['hello'], $definition->getValues());
@@ -177,7 +177,7 @@ class FunctionsTest extends TestCase
         $definition = \DI\add(['hello', 'world']);
         $definition->setName('foo');
 
-        $this->assertTrue($definition instanceof ArrayDefinitionExtension);
+        $this->assertInstanceOf(ArrayDefinitionExtension::class, $definition);
         $this->assertEquals('foo', $definition->getName());
         $definition->setExtendedDefinition(new ArrayDefinition([]));
         $this->assertEquals(['hello', 'world'], $definition->getValues());

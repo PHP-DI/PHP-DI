@@ -24,9 +24,9 @@ class AnnotationsTest extends BaseContainerTest
         /** @var B $object */
         $object = $builder->build()->get(B::class);
 
-        $this->assertTrue($object->public instanceof A);
-        $this->assertTrue($object->getProtected() instanceof A);
-        $this->assertTrue($object->getPrivate() instanceof A);
+        $this->assertInstanceOf(A::class, $object->public);
+        $this->assertInstanceOf(A::class, $object->getProtected());
+        $this->assertInstanceOf(A::class, $object->getPrivate());
     }
 
     /**
@@ -42,15 +42,15 @@ class AnnotationsTest extends BaseContainerTest
 
         /** @var C $object */
         $object = $container->get(C::class);
-        $this->assertTrue($object->public instanceof A);
-        $this->assertTrue($object->getProtected() instanceof A);
-        $this->assertTrue($object->getPrivate() instanceof A);
+        $this->assertInstanceOf(A::class, $object->public);
+        $this->assertInstanceOf(A::class, $object->getProtected());
+        $this->assertInstanceOf(A::class, $object->getPrivate());
 
         /** @var D $object */
         $object = $container->get(D::class);
-        $this->assertTrue($object->public instanceof A);
-        $this->assertTrue($object->getProtected() instanceof A);
-        $this->assertTrue($object->getPrivate() instanceof A);
+        $this->assertInstanceOf(A::class, $object->public);
+        $this->assertInstanceOf(A::class, $object->getProtected());
+        $this->assertInstanceOf(A::class, $object->getPrivate());
     }
 
     /**
@@ -66,10 +66,10 @@ class AnnotationsTest extends BaseContainerTest
 
         /** @var Child $object */
         $object = $container->get(Child::class);
-        $this->assertTrue($object->public instanceof A);
-        $this->assertTrue($object->getProtected() instanceof A);
-        $this->assertTrue($object->getPrivate() instanceof A);
-        $this->assertTrue($object->getChildPrivate() instanceof A);
+        $this->assertInstanceOf(A::class, $object->public);
+        $this->assertInstanceOf(A::class, $object->getProtected());
+        $this->assertInstanceOf(A::class, $object->getPrivate());
+        $this->assertInstanceOf(A::class, $object->getChildPrivate());
     }
 
     /**
@@ -116,13 +116,13 @@ class AnnotationsTest extends BaseContainerTest
 
         /** @var $object InjectWithUseStatements */
         $object = $container->get(InjectWithUseStatements::class);
-        $this->assertTrue($object->a instanceof A);
-        $this->assertTrue($object->alias instanceof A);
-        $this->assertTrue($object->namespaceAlias instanceof A);
+        $this->assertInstanceOf(A::class, $object->a);
+        $this->assertInstanceOf(A::class, $object->alias);
+        $this->assertInstanceOf(A::class, $object->namespaceAlias);
 
         /** @var $object InjectWithUseStatements2 */
         $object = $container->get(InjectWithUseStatements2::class);
-        $this->assertTrue($object->dependency instanceof InjectWithUseStatements);
+        $this->assertInstanceOf(InjectWithUseStatements::class, $object->dependency);
     }
 
     /**

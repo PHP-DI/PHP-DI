@@ -78,8 +78,8 @@ class ArrayDefinitionTest extends BaseContainerTest
         $array = $container->get('links');
 
         $this->assertEntryIsCompiled($container, 'links');
-        $this->assertTrue($array[0] instanceof \stdClass);
-        $this->assertTrue($array[1] instanceof \stdClass);
+        $this->assertInstanceOf(\stdClass::class, $array[0]);
+        $this->assertInstanceOf(\stdClass::class, $array[1]);
         $this->assertSame($container->get('dependency1'), $array[0]);
         $this->assertSame($container->get('dependency2'), $array[1]);
     }
@@ -175,7 +175,7 @@ class ArrayDefinitionTest extends BaseContainerTest
         $this->assertEquals('value 1', $array[0]);
         $this->assertEquals('value 2', $array[1]);
         $this->assertEquals('another value', $array[2]);
-        $this->assertTrue($array[3] instanceof \stdClass);
+        $this->assertInstanceOf(\stdClass::class, $array[3]);
     }
 
     /**

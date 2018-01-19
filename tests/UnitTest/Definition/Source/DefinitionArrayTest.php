@@ -47,17 +47,17 @@ class DefinitionArrayTest extends TestCase
 
         /** @var ValueDefinition $definition */
         $definition = $source->getDefinition('integer');
-        $this->assertTrue($definition instanceof ValueDefinition);
+        $this->assertInstanceOf(ValueDefinition::class, $definition);
         $this->assertEquals(1, $definition->getValue());
         $this->assertInternalType('integer', $definition->getValue());
 
         $definition = $source->getDefinition('string');
-        $this->assertTrue($definition instanceof ValueDefinition);
+        $this->assertInstanceOf(ValueDefinition::class, $definition);
         $this->assertEquals('test', $definition->getValue());
         $this->assertInternalType('string', $definition->getValue());
 
         $definition = $source->getDefinition('float');
-        $this->assertTrue($definition instanceof ValueDefinition);
+        $this->assertInstanceOf(ValueDefinition::class, $definition);
         $this->assertEquals(1.0, $definition->getValue());
         $this->assertInternalType('float', $definition->getValue());
     }
@@ -74,17 +74,17 @@ class DefinitionArrayTest extends TestCase
 
         /** @var ArrayDefinition $definition */
         $definition = $source->getDefinition('array');
-        $this->assertTrue($definition instanceof ArrayDefinition);
+        $this->assertInstanceOf(ArrayDefinition::class, $definition);
         $this->assertEquals(['a', 'b', 'c'], $definition->getValues());
         $this->assertInternalType('array', $definition->getValues());
 
         $definition = $source->getDefinition('assoc');
-        $this->assertTrue($definition instanceof ArrayDefinition);
+        $this->assertInstanceOf(ArrayDefinition::class, $definition);
         $this->assertEquals(['a' => 'b'], $definition->getValues());
         $this->assertInternalType('array', $definition->getValues());
 
         $definition = $source->getDefinition('links');
-        $this->assertTrue($definition instanceof ArrayDefinition);
+        $this->assertInstanceOf(ArrayDefinition::class, $definition);
         $this->assertInstanceOf(Reference::class, $definition->getValues()['a']);
         $this->assertEquals('b', $definition->getValues()['a']->getTargetEntryName());
         $this->assertInternalType('array', $definition->getValues());

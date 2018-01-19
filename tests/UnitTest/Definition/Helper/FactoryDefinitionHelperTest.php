@@ -24,7 +24,7 @@ class FactoryDefinitionHelperTest extends TestCase
         $helper = new FactoryDefinitionHelper($callable);
         $definition = $helper->getDefinition('foo');
 
-        $this->assertTrue($definition instanceof FactoryDefinition);
+        $this->assertInstanceOf(FactoryDefinition::class, $definition);
         $this->assertSame('foo', $definition->getName());
         $this->assertSame($callable, $definition->getCallable());
     }
@@ -39,7 +39,7 @@ class FactoryDefinitionHelperTest extends TestCase
         $helper = new FactoryDefinitionHelper($callable, true);
         $definition = $helper->getDefinition('foo');
 
-        $this->assertTrue($definition instanceof DecoratorDefinition);
+        $this->assertInstanceOf(DecoratorDefinition::class, $definition);
         $this->assertSame('foo', $definition->getName());
         $this->assertSame($callable, $definition->getCallable());
     }
