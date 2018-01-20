@@ -161,7 +161,7 @@ class Compiler
                 $targetEntryName = $definition->getTargetEntryName();
                 $code = 'return $this->delegateContainer->get(' . $this->compileValue($targetEntryName) . ');';
                 // If this method is not yet compiled we store it for compilation
-                if (!isset($this->entryToMethodMapping[$targetEntryName])) {
+                if (!isset($this->entriesToCompile[$targetEntryName])) {
                     $this->entriesToCompile[$targetEntryName] = null;
                 }
                 break;
