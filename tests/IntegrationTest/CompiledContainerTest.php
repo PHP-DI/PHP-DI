@@ -7,6 +7,7 @@ namespace DI\Test\IntegrationTest;
 use function DI\autowire;
 use DI\ContainerBuilder;
 use function DI\create;
+use DI\Definition\Exception\InvalidDefinition;
 use function DI\get;
 
 /**
@@ -179,6 +180,16 @@ class CompiledContainerTest extends BaseContainerTest
      */
     public function invalid_definitions_referenced_in_the_configuration_throw_an_error()
     {
+        $message = <<<MESSAGE
+Entry "DI\Test\IntegrationTest\CompiledContainerTest\AbstractClass" cannot be compiled: the class is not instantiable
+Full definition:
+Object (
+    class = #NOT INSTANTIABLE# DI\Test\IntegrationTest\CompiledContainerTest\AbstractClass
+    lazy = false
+)
+MESSAGE;
+        $this->expectException(InvalidDefinition::class);
+        $this->expectExceptionMessage($message);
         $builder = new ContainerBuilder;
         $builder->addDefinitions([
             CompiledContainerTest\ConstructorWithAbstractClassTypehint::class => autowire(),
