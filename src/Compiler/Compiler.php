@@ -95,8 +95,13 @@ class Compiler
 
         // We use an ArrayIterator so that we can keep adding new items to the list while we compile entries
         foreach ($this->entriesToCompile as $entryName => $definition) {
+            $silenceErrors = false;
+            // This is an entry found by reference during autowiring
             if (!$definition) {
                 $definition = $definitionSource->getDefinition($entryName);
+                // We silence errors for those entries because type-hints may reference interfaces/abstract classes
+                // which could later be defined, or even not used (we don't want to block the compilation for those)
+                $silenceErrors = true;
             }
             if (!$definition) {
                 // We do not throw a `NotFound` exception here because the dependency
@@ -108,7 +113,16 @@ class Compiler
             if ($errorMessage !== true) {
                 continue;
             }
-            $this->compileDefinition($entryName, $definition);
+            try {
+                $this->compileDefinition($entryName, $definition);
+            } catch (InvalidDefinition $e) {
+                if ($silenceErrors) {
+                    // forget the entry
+                    unset($this->entryToMethodMapping[$entryName]);
+                } else {
+                    throw $e;
+                }
+            }
         }
 
         $this->containerClass = $className;
@@ -147,7 +161,7 @@ class Compiler
                 $targetEntryName = $definition->getTargetEntryName();
                 $code = 'return $this->delegateContainer->get(' . $this->compileValue($targetEntryName) . ');';
                 // If this method is not yet compiled we store it for compilation
-                if (!isset($this->entryToMethodMapping[$targetEntryName])) {
+                if (!isset($this->entriesToCompile[$targetEntryName])) {
                     $this->entriesToCompile[$targetEntryName] = null;
                 }
                 break;

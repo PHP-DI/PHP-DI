@@ -4,8 +4,10 @@ declare(strict_types=1);
 
 namespace DI\Test\IntegrationTest;
 
+use function DI\autowire;
 use DI\ContainerBuilder;
 use function DI\create;
+use DI\Definition\Exception\InvalidDefinition;
 use function DI\get;
 
 /**
@@ -171,6 +173,46 @@ class CompiledContainerTest extends BaseContainerTest
         // Dependency of a dependency
         $this->assertEntryIsCompiled($builder->build(), CompiledContainerTest\ConstructorWithAnotherTypehint::class);
     }
+
+    /**
+     * @test
+     * @see https://github.com/PHP-DI/PHP-DI/issues/567
+     */
+    public function invalid_definitions_referenced_in_the_configuration_throw_an_error()
+    {
+        $message = <<<MESSAGE
+Entry "DI\Test\IntegrationTest\CompiledContainerTest\AbstractClass" cannot be compiled: the class is not instantiable
+Full definition:
+Object (
+    class = #NOT INSTANTIABLE# DI\Test\IntegrationTest\CompiledContainerTest\AbstractClass
+    lazy = false
+)
+MESSAGE;
+        $this->expectException(InvalidDefinition::class);
+        $this->expectExceptionMessage($message);
+        $builder = new ContainerBuilder;
+        $builder->addDefinitions([
+            CompiledContainerTest\ConstructorWithAbstractClassTypehint::class => autowire(),
+            CompiledContainerTest\AbstractClass::class => autowire(),
+        ]);
+        $builder->enableCompilation(self::COMPILATION_DIR, self::generateCompiledClassName());
+        $builder->build();
+    }
+
+    /**
+     * @test
+     * @see https://github.com/PHP-DI/PHP-DI/issues/567
+     */
+    public function invalid_definitions_transitively_referenced_are_skipped_and_do_not_throw_an_error()
+    {
+        $builder = new ContainerBuilder;
+        $builder->addDefinitions([
+            CompiledContainerTest\ConstructorWithAbstractClassTypehint::class => autowire(),
+        ]);
+        $builder->enableCompilation(self::COMPILATION_DIR, self::generateCompiledClassName());
+        $builder->build();
+        $this->assertEntryIsNotCompiled($builder->build(), CompiledContainerTest\AbstractClass::class);
+    }
 }
 
 namespace DI\Test\IntegrationTest\CompiledContainerTest;
@@ -198,4 +240,16 @@ class ConstructorWithAnotherTypehint
     {
 
     }
+}
+
+class ConstructorWithAbstractClassTypehint
+{
+    public function __construct(AbstractClass $param)
+    {
+
+    }
+}
+
+abstract class AbstractClass
+{
 }
