@@ -28,7 +28,7 @@ class DefinitionArray implements DefinitionSource, MutableDefinitionSource
 
     /**
      * Cache of wildcard definitions.
-     * @var array
+     * @var array|null
      */
     private $wildcardDefinitions;
 
@@ -80,6 +80,9 @@ class DefinitionArray implements DefinitionSource, MutableDefinitionSource
         $this->wildcardDefinitions = null;
     }
 
+    /**
+     * @return null|Definition
+     */
     public function getDefinition(string $name)
     {
         // Look for the definition by name

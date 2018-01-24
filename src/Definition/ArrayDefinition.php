@@ -60,7 +60,7 @@ class ArrayDefinition implements Definition
             $str .= '    ' . $key . ' => ';
 
             if ($value instanceof Definition) {
-                $str .= str_replace(PHP_EOL, PHP_EOL . '    ', $value);
+                $str .= str_replace(PHP_EOL, PHP_EOL . '    ', (string) $value);
             } else {
                 $str .= var_export($value, true);
             }

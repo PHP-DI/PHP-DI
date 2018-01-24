@@ -33,7 +33,7 @@ class FactoryParameterResolver implements ParameterResolver
         ReflectionFunctionAbstract $reflection,
         array $providedParameters,
         array $resolvedParameters
-    ) {
+    ): array {
         $parameters = $reflection->getParameters();
 
         // Skip parameters already resolved

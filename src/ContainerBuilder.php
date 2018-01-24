@@ -69,7 +69,7 @@ class ContainerBuilder
 
     /**
      * Directory where to write the proxies (if $writeProxiesToFile is enabled).
-     * @var string
+     * @var string|null
      */
     private $proxyDirectory;
 

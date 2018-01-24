@@ -52,6 +52,9 @@ class AnnotationBasedAutowiring implements DefinitionSource, Autowiring
         $this->ignorePhpDocErrors = (bool) $ignorePhpDocErrors;
     }
 
+    /**
+     * @return ObjectDefinition|null
+     */
     public function autowire(string $name, ObjectDefinition $definition = null)
     {
         $className = $definition ? $definition->getClassName() : $name;
@@ -120,7 +123,7 @@ class AnnotationBasedAutowiring implements DefinitionSource, Autowiring
     private function readProperty(ReflectionProperty $property, ObjectDefinition $definition, $classname = null)
     {
         // Look for @Inject annotation
-        /** @var $annotation Inject */
+        /** @var Inject $annotation */
         $annotation = $this->getAnnotationReader()->getPropertyAnnotation($property, 'DI\Annotation\Inject');
         if ($annotation === null) {
             return null;
@@ -265,7 +268,7 @@ class AnnotationBasedAutowiring implements DefinitionSource, Autowiring
     private function readInjectableAnnotation(ReflectionClass $class, ObjectDefinition $definition)
     {
         try {
-            /** @var $annotation Injectable|null */
+            /** @var Injectable|null $annotation */
             $annotation = $this->getAnnotationReader()
                 ->getClassAnnotation($class, 'DI\Annotation\Injectable');
         } catch (UnexpectedValueException $e) {
