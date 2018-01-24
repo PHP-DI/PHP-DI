@@ -62,6 +62,33 @@
 
             <article class="container">
             <h1 id="change-log">Change log</h1>
+<h2 id="546">5.4.6</h2>
+<ul>
+<li>Fix <a href="https://github.com/PHP-DI/PHP-DI/issues/554">#554</a>: <code>Container::make()</code> fails when combined with <code>decorate()</code>.</li>
+</ul>
+<h2 id="545">5.4.5</h2>
+<p>Fixup of 5.4.4.</p>
+<ul>
+<li><a href="https://github.com/PHP-DI/PHP-DI/issues/531">#531</a>: performance improvement.</li>
+</ul>
+<h2 id="544">5.4.4</h2>
+<p>This release was broken because it was tagged against the wrong branch.</p>
+<ul>
+<li><a href="https://github.com/PHP-DI/PHP-DI/issues/531">#531</a>: performance improvement.</li>
+</ul>
+<h2 id="543">5.4.3</h2>
+<ul>
+<li><a href="https://github.com/PHP-DI/PHP-DI/issues/467">#467</a>: register the container against the PSR ContainerInterface</li>
+</ul>
+<h2 id="542">5.4.2</h2>
+<ul>
+<li>Minor patch to add the <code>provide: psr/container-implementation</code> to <code>composer.json</code>.</li>
+</ul>
+<h2 id="541">5.4.1</h2>
+<ul>
+<li><a href="http://www.php-fig.org/psr/">PSR-11</a> compliance</li>
+</ul>
+<p>Note that PHP-DI was already compliant with PSR-11 because it was implementing container-interop, and container-interop 1.2 extends PSR-11. This new version just makes it more explicit and will allow to drop container-interop support in the next major versions.</p>
 <h2 id="54">5.4</h2>
 <p>Read the <a href="news/20-php-di-5-4-released.html">news entry</a>.</p>
 <p>New features:</p>

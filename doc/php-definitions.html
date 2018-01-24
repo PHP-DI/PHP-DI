@@ -332,7 +332,7 @@ return [
 <h3 id="factories">Factories</h3>
 <p>Factories are <strong>PHP callables</strong> that return the instance. They allow to define objects <em>lazily</em>, i.e. they will be created only when actually used.</p>
 <p>Here is an example using a closure:</p>
-<pre><code class="language-php">use Interop\Container\ContainerInterface;
+<pre><code class="language-php">use Psr\Container\ContainerInterface;
 
 return [
     'Foo' =&gt; function (ContainerInterface $c) {
@@ -352,7 +352,7 @@ return [
     'Database' =&gt; DI\factory(function ($host) {...})
         -&gt;parameter('host', DI\get('db.host')),
 ];</code></pre>
-<p>This can also be done by injecting the container itself, as seen in the first example. When injecting the container, you should type-hint against the interface <code>Interop\Container\ContainerInterface</code> instead of the implementation <code>DI\Container</code>.</p>
+<p>This can also be done by injecting the container itself, as seen in the first example. When injecting the container, you should type-hint against the interface <code>Psr\Container\ContainerInterface</code> instead of the implementation <code>DI\Container</code>.</p>
 <p>Factories can be any PHP callable, so they can also be class methods:</p>
 <pre><code class="language-php">class FooFactory
 {

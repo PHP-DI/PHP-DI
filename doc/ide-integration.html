@@ -288,12 +288,12 @@ $repository-&gt;</code></pre>
 <p>This solution is simple and works great when your container is used rarely.</p>
 <h2 id="phpstorm-integration">PhpStorm integration</h2>
 <h3 id="metadata-file">Metadata file</h3>
-<p><a href="https://confluence.jetbrains.com/display/PhpStorm/PhpStorm+Advanced+Metadata">PhpStorm will load metadata from a <code>.phpstorm.meta.php</code> file</a> if it exists at the root of your project. Here is an example that adds support for PHP-DI as well as <a href="https://github.com/container-interop/container-interop#compatible-projects">any container-interop container</a>:</p>
+<p><a href="https://confluence.jetbrains.com/display/PhpStorm/PhpStorm+Advanced+Metadata">PhpStorm will load metadata from a <code>.phpstorm.meta.php</code> file</a> if it exists at the root of your project. Here is an example that adds support for PHP-DI as well as <a href="http://www.php-fig.org/psr/">any PSR-11 container</a>:</p>
 <pre><code class="language-php">&lt;?php
 namespace PHPSTORM_META
 {
     $STATIC_METHOD_TYPES = [
-        \Interop\Container\ContainerInterface::get('') =&gt; [
+        \Psr\Container\ContainerInterface::get('') =&gt; [
             "" == "@",
         ],
         \DI\Container::get('') =&gt; [

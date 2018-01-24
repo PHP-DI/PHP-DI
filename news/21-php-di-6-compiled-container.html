@@ -12,7 +12,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>PHP-DI 4.3 released - The Dependency Injection Container for humans</title>
+    <title>PHP-DI 6: turning into a compiled container for maximum performances - The Dependency Injection Container for humans</title>
     <meta name="description" content="PHP-DI is a Dependency Injection Container for PHP that intends to be practical and powerful">
 
     <link rel="canonical" href="http://php-di.org" />
@@ -67,61 +67,139 @@
 
                 
     <article>
-        <h1>PHP-DI 4.3 released</h1>
+        <h1>PHP-DI 6: turning into a compiled container for maximum performances</h1>
 
         <p class="article-information">
-            Posted by Matthieu Napoli on August 12th 2014
+            Posted by Matthieu Napoli on January 24th, 2018
         </p>
 
-        <p>I am happy to announce that PHP-DI version 4.3 has been released. This version contains features that have all been
-implemented by contributors other than me, this is very encouraging :) This is also the quickest release,
-since 4.2 was released only 14 days ago.</p>
-<p>It comes without any BC break, and with a new main feature: <code>DI\env()</code> to import <strong>environment variables</strong>.</p>
-<h2 id="dienv">DI\env()</h2>
-<p><em>contributed by <a href="https://github.com/jmalloc">@jmalloc</a></em></p>
-<p>If you use environment variables, you might end up creating several container definitions looking like this:</p>
+        <p>PHP-DI's motto is &quot;The dependency injection container for humans&quot;.</p>
+<p>This is very important because it defines what PHP-DI tries to be: practical to use, consistent, predictable, with a configuration format that is easy to read and write and a great documentation.</p>
+<p>It also defines what PHP-DI does not try to be, and that is as much important. PHP-DI does not try to be the smallest, or the fastest container out there. And PHP-DI 5 is by far not one of the fastest containers.</p>
+<p>But the good thing is that, after 6 years of existence, the project has matured and is now quite stable. The original objectives are met, even though there is of course always room for improvements and innovation. There is room to push the container to be better on other levels. And the most obvious one is <strong>performances</strong>.</p>
+<p>PHP-DI 6 will be much, much faster because it is a compiled container.</p>
+<h2 id="what-does-quotcompilingquot-mean">What does &quot;compiling&quot; mean?</h2>
+<p>Imagine the following class:</p>
+<pre><code class="language-php">class Foo
+{
+    public function __construct(Bar $bar) { … }
+}</code></pre>
+<p>And the following configuration file:</p>
 <pre><code class="language-php">return [
 
-    'db.url' =&gt; DI\factory(
-        function (DI\Container $container) {
-            return isset($_SERVER['DATABASE_URL'])
-                ? $_SERVER['DATABASE_URL']
-                : 'postgresql://user:pass@localhost/db';
-        }
-    )
+    Foo::class =&gt; create()
+        -&gt;constructor(get(Bar::class)),
+
+    // Let's use a closure just for the sake of the example
+    Bar::class =&gt; function() {
+        return new Bar('Hello world');
+    },
 
 ];</code></pre>
-<p>This might be a common situation for some developers, especially those deploying their applications to
-systems like Heroku, or otherwise following the principles of <a href="http://12factor.net/config">12-factor applications</a>.</p>
-<p>Since 4.3, this can be written like this:</p>
+<p>If we were to implement this without any containers, here is how we would instantiate <code>Foo</code> and <code>Bar</code>:</p>
+<pre><code class="language-php">$bar = new Bar('Hello world');
+$foo = new Foo($bar);</code></pre>
+<p>In a container, things go differently because the container is generic: it can handle 0 or many parameters, with references to a lot of entries, etc. To do that, the container constructs <em>definition objects</em>. A definition explains <em>how</em> to create an instance. More concretely, it is a class that stores the number of parameters of the constructor, which parameters need to be injected, etc.</p>
+<p>If you are curious, you can read <a href="https://github.com/PHP-DI/PHP-DI/blob/b6ff39dd7eb3a67485af7992274367acc2d04b6e/src/Definition/Resolver/ObjectCreator.php#L114-L162">PHP-DI's <code>ObjectCreator</code> class</a>: it takes a definition object and creates an object.</p>
+<p>This process involves using PHP's Reflection API and a lot of logic (especially if the container is quite smart). And of course, this takes time. This is actually where PHP-DI spends most of its time. This is also the reason why &quot;simple&quot; containers like Pimple are faster that more complex ones: they have very simple (and limited) logic for creating objects.</p>
+<p><strong>Compiling the container means bypassing all that</strong>. The idea is to take all the definitions and turn them into optimized PHP code, close to the code we would write ourselves (except we don't have to write it ourselves).</p>
+<p>Here is an theoretical example of a compiled container (not actual PHP-DI generated code):</p>
+<pre><code class="language-php">// The class has a random number in there because it's auto-generated
+class CompiledContainer123456 extends BaseCompiledContainer
+{
+    public function get($id)
+    {
+        // Method implemented in the parent class.
+        // Basically it calls `$this-&gt;create{$id}()`
+    }
+
+    protected function createFoo()
+    {
+        return new Foo($this-&gt;get('bar'));
+    }
+
+    protected function createBar()
+    {
+        return new Bar('Hello world');
+    }
+}</code></pre>
+<p>Compiling the container means generating that class. Instead of manipulating definitions, the compiled container simply calls code that is optimized for your objects and your project.</p>
+<h3 id="compiling-closures">Compiling closures</h3>
+<p>PHP-DI is not the first compiled container. <a href="https://symfony.com/doc/current/components/dependency_injection.html">Symfony's approach</a> was a huge inspiration on how to tackle this problem.</p>
+<p>However one thing specific to PHP-DI 6 is that even closures are compiled. For example:</p>
 <pre><code class="language-php">return [
-    'db.url' =&gt; DI\env('DATABASE_URL', 'postgresql://user:pass@localhost/db'),
+    Foo::class =&gt; function() {
+        return new Foo();
+    },
 ];</code></pre>
-<p>The first parameter to <code>DI\env()</code> is the name of the environment variable to read,
-the second parameter is the default value to use if the environment variable is not defined.</p>
-<p>If the environment variable is not defined and no default is provided, a <code>DefinitionException</code>
-is thrown when attempting to resolve the value.</p>
-<p>Finally, default values can reference other definitions using <code>DI\link()</code>:</p>
-<pre><code class="language-php">return [
-    'default-dsn' =&gt; 'postgresql://user:pass@localhost/db',
-    'dsn' =&gt; DI\env('DATABASE_URL', DI\link('default-dsn')),
-];</code></pre>
-<h2 id="containercall-resolves-array-callable-using-class-name">Container::call() resolves array callable using class name</h2>
-<p><em>contributed by <a href="https://github.com/thispagecannotbefound">@thispagecannotbefound</a></em></p>
-<p>This change will allow you to call an array callable using a class name, like so:</p>
-<pre><code class="language-php">$container-&gt;call(['MyClass', 'method']);</code></pre>
-<p>If the method is not static, <code>MyClass</code> will be resolved using the container.</p>
-<p>Don't know what <code>Container::call()</code> is? <a href="http://php-di.org/doc/container.html">Check out the &quot;Container API&quot; documentation</a>.</p>
-<h2 id="factoryinterface-and-invokerinterface-are-auto-registered">FactoryInterface and InvokerInterface are auto-registered</h2>
-<p><em>contributed by <a href="https://github.com/drealecs">@drealecs</a></em></p>
-<p>Before 4.3, if you wanted to inject <code>DI\FactoryInterface</code> or <code>DI\InvokerInterface</code>, you needed to bind
-them in the configuration to <code>DI\Container</code>.</p>
-<p>They are now auto-registered (just like <code>DI\ContainerInterface</code>) as links to <code>DI\Container</code> so that
-you can inject them without any configuration.</p>
-<p>If you had previously defined them, there is no problem: your definitions always override the internal ones.</p>
-<p>Don't know what these interfaces are for? <a href="http://php-di.org/doc/container.html">Check out the &quot;Container API&quot; documentation</a>.</p>
-<h2 id="change-log">Change log</h2>
-<p>You can read the complete <a href="../change-log.html">change log</a>.</p>
+<p>The <code>Foo</code> entry will be compiled and will benefit from the performance improvements. This will work even if the closure takes parameters, uses type-hinting, etc. This is made possible thanks to the awesome <a href="https://github.com/jeremeamia/super_closure">SuperClosure</a> and <a href="https://github.com/nikic/PHP-Parser">PHP-Parser</a> projects. The only other container that I know of that can compile closures is <a href="https://github.com/thecodingmachine/yaco">Yaco</a>.</p>
+<h3 id="usage">Usage</h3>
+<p>Compiling the container is very simple, you simply have to call <code>enableCompilation()</code>:</p>
+<pre><code class="language-php">$containerBuilder = new \DI\ContainerBuilder();
+
+$containerBuilder-&gt;addDefinitions([
+    Foo::class =&gt; create()
+]);
+
+$containerBuilder-&gt;enableCompilation(__DIR__ . '/var/cache');
+$container = $containerBuilder-&gt;build();</code></pre>
+<p>The first time this code is run, the container will be compiled into a PHP file in the <code>var/cache</code> directory. On all future executions the compiled container will be used directly.</p>
+<p>Integrating that with your deployment script should be easy too: simply clear the directory on every deploy and PHP-DI will recompile the container. You can also pre-generate the container in advance in your deploy script, just run the code above once.</p>
+<h2 id="performances">Performances</h2>
+<h3 id="externalsio">Externals.io</h3>
+<p>Here is a comparison running PHP-DI 6 on <a href="https://externals.io">externals.io</a> (measuring the load time of the home page):</p>
+<ul>
+<li>with cache enabled: 37ms</li>
+<li>with cache <strong>and compilation</strong> enabled: 28ms</li>
+</ul>
+<p>That means a <strong>23% improvement in the total loading time</strong>, and 6% less memory used.</p>
+<p><a href="https://blackfire.io/profiles/compare/68d775b5-39bb-4cd8-87b3-51b75a297377/graph"><img src="https://i.imgur.com/O1Wddn6.png" alt="" /></a></p>
+<p>(<a href="https://blackfire.io/profiles/compare/68d775b5-39bb-4cd8-87b3-51b75a297377/graph">Blackfire comparison</a>)</p>
+<p>Of course in a more complex application the time spent in the container will be lower so the gains will probably be lower.</p>
+<p>On a side note, we can also compare v6 with v5 (<a href="https://blackfire.io/profiles/compare/3b8775f6-35e9-458f-882b-31ede384ab28/graph">Blackfire profile</a>):</p>
+<ul>
+<li>PHP-DI 5 with cache: 42ms</li>
+<li>PHP-DI 6 with cache: 37ms</li>
+</ul>
+<p>Even without compilation, <a href="https://externals.io">externals.io</a> runs 12% faster on v6 than on v5. This is thanks to many optimizations added during the development of version 6.</p>
+<p>In total, with compilation enabled, <strong>migrating from PHP-DI 5 to PHP-DI 6 gives <a href="https://blackfire.io/profiles/compare/647ec5b4-08f4-4a82-821f-f1ef7be9cad8/graph">a 32% performance improvement</a> on externals.io</strong>.</p>
+<p><a href="https://blackfire.io/profiles/compare/647ec5b4-08f4-4a82-821f-f1ef7be9cad8/graph"><img src="https://i.imgur.com/AdIVPuL.png" alt="" /></a></p>
+<h3 id="di-container-benchmark">DI container benchmark</h3>
+<p>The gains shown above can also be seen in the <a href="https://github.com/kocsismate/php-di-container-benchmarks">kocsismate di-container-benchmarks</a>.
+Here is a comparison of the results for PHP-DI 5 and PHP-DI 6. The left column is v5, the right is v6, and higher in the list is better:</p>
+<ul>
+<li>Test suite 1</li>
+</ul>
+<div class="row">
+    <div class="col-sm-6"><img src="https://i.imgur.com/xPSb2Sd.png"></div>
+    <div class="col-sm-6"><img src="https://i.imgur.com/HAm4cQS.png"></div>
+</div>
+<ul>
+<li>Test suite 2</li>
+</ul>
+<div class="row">
+    <div class="col-sm-6"><img src="https://i.imgur.com/W20UJMT.png"></div>
+    <div class="col-sm-6"><img src="https://i.imgur.com/Ekj5WgC.png"></div>
+</div>
+<ul>
+<li>Test suite 5</li>
+</ul>
+<div class="row">
+    <div class="col-sm-6"><img src="https://i.imgur.com/5l6Xn87.png"></div>
+    <div class="col-sm-6"><img src="https://i.imgur.com/b1vls8Y.png"></div>
+</div>
+<ul>
+<li>Test suite 6</li>
+</ul>
+<div class="row">
+    <div class="col-sm-6"><img src="https://i.imgur.com/gxN7lJT.png"></div>
+    <div class="col-sm-6"><img src="https://i.imgur.com/evEQGHh.png"></div>
+</div>
+<p>PHP-DI now ranks in the fastest containers. Needless to say I am very happy with the results, especially since it is one of the most feature-rich containers.</p>
+<h2 id="conclusion">Conclusion</h2>
+<p>Compiling the container brings massive performance improvements for the container and finally makes PHP-DI one of the fastest DI containers out there.</p>
+<p>Let's keep in mind however that DI containers usually represents a small part of most application's run time. While I'm very happy to report all these improvements, do not expect your application to run twice faster in production ;)</p>
+<p>Want to try this out? PHP-DI 6.0 will be released in the next weeks, in the meantime give the latest beta a try: <a href="https://github.com/PHP-DI/PHP-DI/releases">https://github.com/PHP-DI/PHP-DI/releases</a></p>
     </article>
 
     <h3>
