@@ -80,9 +80,6 @@ class DefinitionArray implements DefinitionSource, MutableDefinitionSource
         $this->wildcardDefinitions = null;
     }
 
-    /**
-     * @return null|Definition
-     */
     public function getDefinition(string $name)
     {
         // Look for the definition by name

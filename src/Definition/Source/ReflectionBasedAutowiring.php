@@ -15,9 +15,6 @@ use DI\Definition\Reference;
  */
 class ReflectionBasedAutowiring implements DefinitionSource, Autowiring
 {
-    /**
-     * @return ObjectDefinition|null
-     */
     public function autowire(string $name, ObjectDefinition $definition = null)
     {
         $className = $definition ? $definition->getClassName() : $name;

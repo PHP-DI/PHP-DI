@@ -44,8 +44,6 @@ class SourceChain implements DefinitionSource, MutableDefinitionSource
      *
      * @param int $startIndex Use this parameter to start looking from a specific
      *                        point in the source chain.
-     *
-     * @return null|Definition
      */
     public function getDefinition(string $name, int $startIndex = 0)
     {

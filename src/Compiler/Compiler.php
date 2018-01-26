@@ -298,7 +298,7 @@ PHP;
     }
 
     /**
-     * @return string|null|true If null is returned that means that the value is compilable.
+     * @return string|true If null is returned that means that the value is compilable.
      */
     private function isCompilable($value)
     {
