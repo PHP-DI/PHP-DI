@@ -58,6 +58,9 @@ class ArrayResolver implements DefinitionResolver
         return true;
     }
 
+    /**
+     * @return mixed
+     */
     private function resolveDefinition(Definition $value, ArrayDefinition $definition, $key)
     {
         try {

@@ -123,7 +123,7 @@ class AnnotationBasedAutowiring implements DefinitionSource, Autowiring
         /** @var Inject $annotation */
         $annotation = $this->getAnnotationReader()->getPropertyAnnotation($property, 'DI\Annotation\Inject');
         if ($annotation === null) {
-            return null;
+            return;
         }
 
         // @Inject("name") or look for @var content
@@ -167,6 +167,11 @@ class AnnotationBasedAutowiring implements DefinitionSource, Autowiring
         }
     }
 
+    /**
+     * @param  ReflectionMethod $method
+     *
+     * @return MethodInjection|null
+     */
     private function getMethodInjection(ReflectionMethod $method)
     {
         // Look for @Inject annotation

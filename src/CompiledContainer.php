@@ -92,6 +92,8 @@ abstract class CompiledContainer extends Container
 
     /**
      * Invoke the given callable.
+     *
+     * @return mixed
      */
     protected function resolveFactory($callable, $entryName, array $extraParameters = [])
     {
