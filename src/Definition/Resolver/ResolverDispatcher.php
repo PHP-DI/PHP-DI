@@ -29,34 +29,16 @@ class ResolverDispatcher implements DefinitionResolver
      */
     private $proxyFactory;
 
-    /**
-     * @var ArrayResolver|null
-     */
     private $arrayResolver;
 
-    /**
-     * @var FactoryResolver|null
-     */
     private $factoryResolver;
 
-    /**
-     * @var DecoratorResolver|null
-     */
     private $decoratorResolver;
 
-    /**
-     * @var ObjectCreator|null
-     */
     private $objectResolver;
 
-    /**
-     * @var InstanceInjector|null
-     */
     private $instanceResolver;
 
-    /**
-     * @var EnvironmentVariableResolver|null
-     */
     private $envVariableResolver;
 
     public function __construct(ContainerInterface $container, ProxyFactory $proxyFactory)
