@@ -32,7 +32,7 @@ class DefinitionParameterResolver implements ParameterResolver
         ReflectionFunctionAbstract $reflection,
         array $providedParameters,
         array $resolvedParameters
-    ) {
+    ): array {
         // Skip parameters already resolved
         if (! empty($resolvedParameters)) {
             $providedParameters = array_diff_key($providedParameters, $resolvedParameters);

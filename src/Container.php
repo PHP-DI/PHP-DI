@@ -56,7 +56,7 @@ class Container implements ContainerInterface, FactoryInterface, InvokerInterfac
     /**
      * Map of definitions that are already fetched (local cache).
      *
-     * @var array
+     * @var (Definition|null)[]
      */
     private $fetchedDefinitions = [];
 
@@ -142,6 +142,11 @@ class Container implements ContainerInterface, FactoryInterface, InvokerInterfac
         return $value;
     }
 
+    /**
+     * @param string $name
+     *
+     * @return Definition|null
+     */
     private function getDefinition($name)
     {
         // Local cache that avoids fetching the same definition twice

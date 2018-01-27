@@ -57,9 +57,11 @@ class ObjectCreator implements DefinitionResolver
      *
      * This will create a new instance of the class using the injections points defined.
      *
+     * {@inheritdoc}
+     *
      * @param ObjectDefinition $definition
      *
-     * {@inheritdoc}
+     * @return object|null
      */
     public function resolve(Definition $definition, array $parameters = [])
     {

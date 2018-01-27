@@ -28,7 +28,7 @@ class DefinitionArray implements DefinitionSource, MutableDefinitionSource
 
     /**
      * Cache of wildcard definitions.
-     * @var array
+     * @var array|null
      */
     private $wildcardDefinitions;
 

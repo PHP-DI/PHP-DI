@@ -35,11 +35,11 @@ class ArrayResolver implements DefinitionResolver
      *
      * An array definition can contain simple values or references to other entries.
      *
-     * @param ArrayDefinition $definition
-     *
      * {@inheritdoc}
+     *
+     * @param ArrayDefinition $definition
      */
-    public function resolve(Definition $definition, array $parameters = [])
+    public function resolve(Definition $definition, array $parameters = []): array
     {
         $values = $definition->getValues();
 

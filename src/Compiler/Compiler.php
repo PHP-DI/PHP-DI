@@ -256,7 +256,7 @@ PHP;
         // Check that the value can be compiled
         $errorMessage = $this->isCompilable($value);
         if ($errorMessage !== true) {
-            throw new InvalidDefinition($errorMessage);
+            throw new InvalidDefinition((string) $errorMessage);
         }
 
         if ($value instanceof Definition) {
@@ -298,7 +298,7 @@ PHP;
     }
 
     /**
-     * @return string|null If null is returned that means that the value is compilable.
+     * @return string|true If null is returned that means that the value is compilable.
      */
     private function isCompilable($value)
     {
