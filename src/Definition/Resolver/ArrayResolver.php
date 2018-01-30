@@ -39,7 +39,7 @@ class ArrayResolver implements DefinitionResolver
      *
      * @param ArrayDefinition $definition
      */
-    public function resolve(Definition $definition, array $parameters = []): array
+    public function resolve(Definition $definition, array $parameters = []) : array
     {
         $values = $definition->getValues();
 

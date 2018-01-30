@@ -29,7 +29,7 @@ class ObjectCreationCompiler
         $this->compiler = $compiler;
     }
 
-    public function compile(ObjectDefinition $definition): string
+    public function compile(ObjectDefinition $definition) : string
     {
         $this->assertClassIsNotAnonymous($definition);
         $this->assertClassIsInstantiable($definition);
@@ -99,7 +99,7 @@ class ObjectCreationCompiler
         return implode("\n        ", $code);
     }
 
-    public function resolveParameters(MethodInjection $definition = null, ReflectionMethod $method = null): array
+    public function resolveParameters(MethodInjection $definition = null, ReflectionMethod $method = null) : array
     {
         $args = [];
 

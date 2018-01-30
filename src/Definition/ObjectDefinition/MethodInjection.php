@@ -29,7 +29,7 @@ class MethodInjection implements Definition
         $this->parameters = $parameters;
     }
 
-    public static function constructor(array $parameters = []): self
+    public static function constructor(array $parameters = []) : self
     {
         return new self('__construct', $parameters);
     }
