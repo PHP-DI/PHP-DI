@@ -53,7 +53,7 @@ In a container, things go differently because the container is generic: it can h
 
 If you are curious, you can read [PHP-DI's `ObjectCreator` class](https://github.com/PHP-DI/PHP-DI/blob/b6ff39dd7eb3a67485af7992274367acc2d04b6e/src/Definition/Resolver/ObjectCreator.php#L114-L162): it takes a definition object and creates an object.
 
-This process involves using PHP's Reflection API and a lot of logic (especially if the container is quite smart). And of course, this takes time. This is actually where PHP-DI spends most of its time. This is also the reason why "simple" containers like Pimple are faster that more complex ones: they have very simple (and limited) logic for creating objects.
+This process involves using PHP's Reflection API and a lot of logic (especially if the container is quite smart). And of course, this takes time. This is actually where PHP-DI spends most of its time. This is also the reason why "simple" containers like Pimple are faster than more complex ones: they have very simple (and limited) logic for creating objects.
 
 **Compiling the container means bypassing all that**. The idea is to take all the definitions and turn them into optimized PHP code, close to the code we would write ourselves (except we don't have to write it ourselves).
 
