@@ -291,6 +291,22 @@ class Container implements ContainerInterface, FactoryInterface, InvokerInterfac
     }
 
     /**
+     * Get defined container entries.
+     *
+     * @return string[]
+     */
+    public function getKnownEntryNames() : array
+    {
+        $entries = array_unique(array_merge(
+            array_keys($this->definitionSource->getDefinitions()),
+            array_keys($this->resolvedEntries)
+        ));
+        sort($entries);
+
+        return $entries;
+    }
+
+    /**
      * Get entry debug information.
      *
      * @param string $name Entry name
