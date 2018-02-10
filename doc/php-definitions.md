@@ -113,15 +113,21 @@ Factories are **PHP callables** that return the instance. They allow to easily d
 
 Just like any other definition, factories are called once and the same result is returned every time the factory needs to be resolved.
 
-Here is an example using a closure:
+Factories can be defined using the `DI\factory()` helper, however it is possible to use a closure as a shortcut:
 
 ```php
 use Psr\Container\ContainerInterface;
+use function DI\factory;
 
 return [
     'Foo' => function (ContainerInterface $c) {
         return new Foo($c->get('db.host'));
     },
+    
+    // Same as
+    'Foo' => factory(function (ContainerInterface $c) {
+        return new Foo($c->get('db.host'));
+    }),
 ];
 ```
 
@@ -210,7 +216,7 @@ Please note:
 - `factory([FooFactory::class, 'build'])`: if `build()` is a **static** method then the object will not be created: `FooFactory::build()` will be called statically (as one would expect)
 - you can set any container entry name in the array, e.g. `DI\factory(['foo_bar_baz', 'build'])` (or alternatively: `DI\factory('foo_bar_baz::build')`), allowing you to configure `foo_bar_baz` and its dependencies like any other object
 - as a factory can be any PHP callable, you can use invokable objects, too: `DI\factory(InvokableFooFactory::class)` (or alternatively: `DI\factory('invokable_foo_factory')`, if it's defined in the container)
-- all closures will be considered by PHP-DI as *factories*, even if they are nested into other definitions like `create()`, `env()`, etc.
+- all closures will be considered by PHP-DI as *factories*, even if they are nested into other definitions like `create()`, `env()`, etc. (read more in the [Nesting definitions](#nesting-definitions) section)
 
 #### Retrieving the name of the requested entry
 
@@ -436,7 +442,20 @@ return [
 ];
 ```
 
-## Setting in the container directly
+Keep in mind that closures are equivalent to "factory" definitions. As such, **closures are always interpreted as factories, even when nested inside other definitions.** If you use anonymous functions for something else than factories you need to wrap them in the `DI\value()` helper:
+
+```php
+return [
+    'router' => create(Router::class)
+        ->method('setErrorHandler', value(function () {
+            ...
+        })),
+];
+```
+
+Of course this applies only to closures that are inside your configuration files.
+
+## Setting definitions in the container directly
 
 In addition to defining entries in an array, you can set them directly in the container as shown below.
 
