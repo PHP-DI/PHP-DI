@@ -118,12 +118,15 @@ menu:
         versions:
             section: Old documentation
             items:
-                v3:
+                docv3:
                     text: PHP-DI 3.x
                     absoluteUrl: https://github.com/PHP-DI/PHP-DI/tree/3.x/doc
-                v4:
+                docv4:
                     text: PHP-DI 4.x
                     absoluteUrl: https://github.com/PHP-DI/PHP-DI/tree/4.x/doc
+                docv5:
+                    text: PHP-DI 5.x
+                    absoluteUrl: https://github.com/PHP-DI/PHP-DI/tree/5.4/doc
 
 frameworks:
     zf1: Zend Framework 1
