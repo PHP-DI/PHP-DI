@@ -2,7 +2,7 @@
 
 ## 6.0
 
-This is the complete change log. You can also read the [migration guide](doc/migration/6.0.md) for upgrading.
+This is the complete change log. You can also read the [migration guide](doc/migration/6.0.md) for upgrading or the [blog article](news/22-php-di-6-0-released.md) to see what's new.
 
 Improvements:
 
