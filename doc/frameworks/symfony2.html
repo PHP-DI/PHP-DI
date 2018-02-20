@@ -137,14 +137,14 @@
                         <span class="section-title">Frameworks</span>
 
                         <ul>
+                                                            <li class="">
+                                    <a href="http://php-di.org/doc/frameworks/slim.html">
+                                        Slim
+                                    </a>
+                                </li>
                                                             <li class="active">
                                     <a href="http://php-di.org/doc/frameworks/symfony2.html">
                                         Symfony
-                                    </a>
-                                </li>
-                                                            <li class="">
-                                    <a href="http://php-di.org/doc/frameworks/silex.html">
-                                        Silex
                                     </a>
                                 </li>
                                                             <li class="">
@@ -158,13 +158,13 @@
                                     </a>
                                 </li>
                                                             <li class="">
-                                    <a href="http://php-di.org/doc/frameworks/slim.html">
-                                        Slim
+                                    <a href="http://php-di.org/doc/frameworks/silly.html">
+                                        Silly
                                     </a>
                                 </li>
                                                             <li class="">
-                                    <a href="http://php-di.org/doc/frameworks/silly.html">
-                                        Silly
+                                    <a href="http://php-di.org/doc/frameworks/silex.html">
+                                        Silex
                                     </a>
                                 </li>
                                                             <li class="">
@@ -181,11 +181,6 @@
                                                             <li class="">
                                     <a href="http://php-di.org/doc/performances.html">
                                         Performances
-                                    </a>
-                                </li>
-                                                            <li class="">
-                                    <a href="http://php-di.org/doc/scopes.html">
-                                        Scopes
                                     </a>
                                 </li>
                                                             <li class="">
@@ -224,6 +219,22 @@
                                         From PHP-DI 4.x to 5.0
                                     </a>
                                 </li>
+                                                            <li class="">
+                                    <a href="http://php-di.org/doc/migration/6.0.html">
+                                        From PHP-DI 5.x to 6.0
+                                    </a>
+                                </li>
+                                                    </ul>
+                    </li>
+                                    <li>
+                        <span class="section-title">Support</span>
+
+                        <ul>
+                                                            <li class="">
+                                    <a href="http://php-di.org/support.html">
+                                        Enterprise support
+                                    </a>
+                                </li>
                                                     </ul>
                     </li>
                                     <li>
@@ -254,6 +265,11 @@
                                                             <li class="">
                                     <a href="https://github.com/PHP-DI/PHP-DI/tree/4.x/doc">
                                         PHP-DI 4.x
+                                    </a>
+                                </li>
+                                                            <li class="">
+                                    <a href="https://github.com/PHP-DI/PHP-DI/tree/5.4/doc">
+                                        PHP-DI 5.x
                                     </a>
                                 </li>
                                                     </ul>
@@ -356,7 +372,7 @@ class TestController extends Controller
 in Symfony's container, and the controller is resolved by PHP-DI.</p>
 <p><strong>You can reference services that are in Symfony's container in PHP-DI's configuration</strong>:</p>
 <pre><code class="language-php">return [
-    'AppBundle\Controller\ProductController' =&gt; DI\object()
+    'AppBundle\Controller\ProductController' =&gt; DI\create()
         -&gt;constructor(DI\get('doctrine.orm.entity_manager')),
 ];</code></pre>
 <p><strong>You can also inject PHP-DI services in a Symfony service</strong>:</p>

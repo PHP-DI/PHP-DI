@@ -138,13 +138,13 @@
 
                         <ul>
                                                             <li class="">
-                                    <a href="http://php-di.org/doc/frameworks/symfony2.html">
-                                        Symfony
+                                    <a href="http://php-di.org/doc/frameworks/slim.html">
+                                        Slim
                                     </a>
                                 </li>
                                                             <li class="">
-                                    <a href="http://php-di.org/doc/frameworks/silex.html">
-                                        Silex
+                                    <a href="http://php-di.org/doc/frameworks/symfony2.html">
+                                        Symfony
                                     </a>
                                 </li>
                                                             <li class="">
@@ -158,13 +158,13 @@
                                     </a>
                                 </li>
                                                             <li class="">
-                                    <a href="http://php-di.org/doc/frameworks/slim.html">
-                                        Slim
+                                    <a href="http://php-di.org/doc/frameworks/silly.html">
+                                        Silly
                                     </a>
                                 </li>
                                                             <li class="">
-                                    <a href="http://php-di.org/doc/frameworks/silly.html">
-                                        Silly
+                                    <a href="http://php-di.org/doc/frameworks/silex.html">
+                                        Silex
                                     </a>
                                 </li>
                                                             <li class="">
@@ -181,11 +181,6 @@
                                                             <li class="">
                                     <a href="http://php-di.org/doc/performances.html">
                                         Performances
-                                    </a>
-                                </li>
-                                                            <li class="">
-                                    <a href="http://php-di.org/doc/scopes.html">
-                                        Scopes
                                     </a>
                                 </li>
                                                             <li class="">
@@ -224,6 +219,22 @@
                                         From PHP-DI 4.x to 5.0
                                     </a>
                                 </li>
+                                                            <li class="">
+                                    <a href="http://php-di.org/doc/migration/6.0.html">
+                                        From PHP-DI 5.x to 6.0
+                                    </a>
+                                </li>
+                                                    </ul>
+                    </li>
+                                    <li>
+                        <span class="section-title">Support</span>
+
+                        <ul>
+                                                            <li class="">
+                                    <a href="http://php-di.org/support.html">
+                                        Enterprise support
+                                    </a>
+                                </li>
                                                     </ul>
                     </li>
                                     <li>
@@ -256,6 +267,11 @@
                                         PHP-DI 4.x
                                     </a>
                                 </li>
+                                                            <li class="">
+                                    <a href="https://github.com/PHP-DI/PHP-DI/tree/5.4/doc">
+                                        PHP-DI 5.x
+                                    </a>
+                                </li>
                                                     </ul>
                     </li>
                             </ul>
@@ -270,17 +286,20 @@
 
             <h1 id="configuring-the-container">Configuring the container</h1>
 <h2 id="development-environment">Development environment</h2>
-<p>PHP-DI's container is preconfigured for &quot;plug'n'play&quot;, i.e. development environment. You can start using it simply like so:</p>
-<pre><code class="language-php">$container = ContainerBuilder::buildDevContainer();</code></pre>
-<p>By default, PHP-DI will have <a href="definition.html">Autowiring</a> enabled (annotations are disabled by default).</p>
+<p>PHP-DI's container is preconfigured for &quot;plug and play&quot;, i.e. development environment. You can start using it simply like so:</p>
+<pre><code class="language-php">$container = new Container();</code></pre>
+<p>By default, PHP-DI will have <a href="definition.html">Autowiring</a> enabled (<a href="annotations.html">annotations</a> are disabled by default).</p>
+<p>To change options on the container you can use the <code>ContainerBuilder</code> class:</p>
+<pre><code class="language-php">$builder = new \DI\ContainerBuilder();
+$container = $builder-&gt;build();</code></pre>
 <h2 id="production-environment">Production environment</h2>
 <p>In production environment, you will of course favor speed:</p>
 <pre><code class="language-php">$builder = new \DI\ContainerBuilder();
-$builder-&gt;setDefinitionCache(new Doctrine\Common\Cache\ApcCache());
-$builder-&gt;writeProxiesToFile(true, 'tmp/proxies');
+$builder-&gt;enableCompilation(__DIR__ . '/tmp');
+$builder-&gt;writeProxiesToFile(true, __DIR__ . '/tmp/proxies');
 
 $container = $builder-&gt;build();</code></pre>
-<p>To choose a cache, read <a href="performances.html">the performances documentation</a>.</p>
+<p>Read <a href="performances.html">the performances documentation</a> to learn more.</p>
 <h2 id="lightweight-container">Lightweight container</h2>
 <p>If you want to use PHP-DI's container as a simple container (no autowiring or annotation support), you will want to disable all extra features.</p>
 <pre><code class="language-php">$builder = new \DI\ContainerBuilder();

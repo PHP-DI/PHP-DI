@@ -138,13 +138,13 @@
 
                         <ul>
                                                             <li class="">
-                                    <a href="http://php-di.org/doc/frameworks/symfony2.html">
-                                        Symfony
+                                    <a href="http://php-di.org/doc/frameworks/slim.html">
+                                        Slim
                                     </a>
                                 </li>
                                                             <li class="">
-                                    <a href="http://php-di.org/doc/frameworks/silex.html">
-                                        Silex
+                                    <a href="http://php-di.org/doc/frameworks/symfony2.html">
+                                        Symfony
                                     </a>
                                 </li>
                                                             <li class="">
@@ -158,13 +158,13 @@
                                     </a>
                                 </li>
                                                             <li class="">
-                                    <a href="http://php-di.org/doc/frameworks/slim.html">
-                                        Slim
+                                    <a href="http://php-di.org/doc/frameworks/silly.html">
+                                        Silly
                                     </a>
                                 </li>
                                                             <li class="">
-                                    <a href="http://php-di.org/doc/frameworks/silly.html">
-                                        Silly
+                                    <a href="http://php-di.org/doc/frameworks/silex.html">
+                                        Silex
                                     </a>
                                 </li>
                                                             <li class="">
@@ -181,11 +181,6 @@
                                                             <li class="">
                                     <a href="http://php-di.org/doc/performances.html">
                                         Performances
-                                    </a>
-                                </li>
-                                                            <li class="">
-                                    <a href="http://php-di.org/doc/scopes.html">
-                                        Scopes
                                     </a>
                                 </li>
                                                             <li class="">
@@ -224,6 +219,22 @@
                                         From PHP-DI 4.x to 5.0
                                     </a>
                                 </li>
+                                                            <li class="">
+                                    <a href="http://php-di.org/doc/migration/6.0.html">
+                                        From PHP-DI 5.x to 6.0
+                                    </a>
+                                </li>
+                                                    </ul>
+                    </li>
+                                    <li>
+                        <span class="section-title">Support</span>
+
+                        <ul>
+                                                            <li class="">
+                                    <a href="http://php-di.org/support.html">
+                                        Enterprise support
+                                    </a>
+                                </li>
                                                     </ul>
                     </li>
                                     <li>
@@ -256,6 +267,11 @@
                                         PHP-DI 4.x
                                     </a>
                                 </li>
+                                                            <li class="">
+                                    <a href="https://github.com/PHP-DI/PHP-DI/tree/5.4/doc">
+                                        PHP-DI 5.x
+                                    </a>
+                                </li>
                                                     </ul>
                     </li>
                             </ul>
@@ -276,7 +292,7 @@ return [
     'db.host' =&gt; 'localhost',
     'db.port' =&gt; 3336,
 
-    'DbAdapter' =&gt; DI\object()
+    'DbAdapter' =&gt; DI\create()
         -&gt;constructor(DI\get('db.host'), DI\get('db.port')),
 ];</code></pre>
 <p>To achieve this, you can create a main <code>config.php</code> file and have small configuration files for each environment:</p>
@@ -295,7 +311,7 @@ return [
 <pre><code class="language-php">&lt;?php
 // config.php
 return [
-    'DbAdapter' =&gt; DI\object()
+    'DbAdapter' =&gt; DI\create()
         -&gt;constructor(DI\get('db.host'), DI\get('db.port')),
 ];</code></pre>
 <p>Then you can configure your container to including the correct files:</p>
@@ -308,8 +324,9 @@ $builder-&gt;addDefinitions("config.php");
 $builder-&gt;addDefinitions("config.$environment.php");
 
 $container = $builder-&gt;build();</code></pre>
-<h2 id="caches">Caches</h2>
-<p>If you configure PHP-DI to use a cache, you need to make sure that different environments don't share the same cache. To solve that problem, it is recommended to use a <strong>cache prefix</strong>: read about this in the <a href="performances.html">Performances</a> documentation.</p>
+<h2 id="compilation">Compilation</h2>
+<p>If you configure PHP-DI to be compiled you need to compile each environment into a separate file to avoid mixups.</p>
+<p>Read the <a href="performances.html">Performances</a> documentation to learn about compiling the container.</p>
         </article>
 
     </div>

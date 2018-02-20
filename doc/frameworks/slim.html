@@ -137,14 +137,14 @@
                         <span class="section-title">Frameworks</span>
 
                         <ul>
-                                                            <li class="">
-                                    <a href="http://php-di.org/doc/frameworks/symfony2.html">
-                                        Symfony
+                                                            <li class="active">
+                                    <a href="http://php-di.org/doc/frameworks/slim.html">
+                                        Slim
                                     </a>
                                 </li>
                                                             <li class="">
-                                    <a href="http://php-di.org/doc/frameworks/silex.html">
-                                        Silex
+                                    <a href="http://php-di.org/doc/frameworks/symfony2.html">
+                                        Symfony
                                     </a>
                                 </li>
                                                             <li class="">
@@ -157,14 +157,14 @@
                                         Zend Framework 1
                                     </a>
                                 </li>
-                                                            <li class="active">
-                                    <a href="http://php-di.org/doc/frameworks/slim.html">
-                                        Slim
-                                    </a>
-                                </li>
                                                             <li class="">
                                     <a href="http://php-di.org/doc/frameworks/silly.html">
                                         Silly
+                                    </a>
+                                </li>
+                                                            <li class="">
+                                    <a href="http://php-di.org/doc/frameworks/silex.html">
+                                        Silex
                                     </a>
                                 </li>
                                                             <li class="">
@@ -181,11 +181,6 @@
                                                             <li class="">
                                     <a href="http://php-di.org/doc/performances.html">
                                         Performances
-                                    </a>
-                                </li>
-                                                            <li class="">
-                                    <a href="http://php-di.org/doc/scopes.html">
-                                        Scopes
                                     </a>
                                 </li>
                                                             <li class="">
@@ -224,6 +219,22 @@
                                         From PHP-DI 4.x to 5.0
                                     </a>
                                 </li>
+                                                            <li class="">
+                                    <a href="http://php-di.org/doc/migration/6.0.html">
+                                        From PHP-DI 5.x to 6.0
+                                    </a>
+                                </li>
+                                                    </ul>
+                    </li>
+                                    <li>
+                        <span class="section-title">Support</span>
+
+                        <ul>
+                                                            <li class="">
+                                    <a href="http://php-di.org/support.html">
+                                        Enterprise support
+                                    </a>
+                                </li>
                                                     </ul>
                     </li>
                                     <li>
@@ -254,6 +265,11 @@
                                                             <li class="">
                                     <a href="https://github.com/PHP-DI/PHP-DI/tree/4.x/doc">
                                         PHP-DI 4.x
+                                    </a>
+                                </li>
+                                                            <li class="">
+                                    <a href="https://github.com/PHP-DI/PHP-DI/tree/5.4/doc">
+                                        PHP-DI 5.x
                                     </a>
                                 </li>
                                                     </ul>
@@ -301,9 +317,10 @@ $app-&gt;delete('/user/{id}', ['UserController', 'delete']);</code></pre>
 <p>By default, Slim controllers have a strict signature: <code>$request, $response, $args</code>. The PHP-DI bridge offers a more flexible and developer friendly alternative.</p>
 <p>Controller parameters can be any of these things:</p>
 <ul>
-<li>request or response injection (parameters must be named <code>$request</code> or <code>$response</code>)</li>
-<li>request attribute injection</li>
-<li>service injection (by type-hint)</li>
+<li>the request or response (parameters must be named <code>$request</code> or <code>$response</code>)</li>
+<li>route placeholders</li>
+<li>request attributes</li>
+<li>services (injected by type-hint)</li>
 </ul>
 <p>You can mix all these types of parameters together too. They will be matched by priority in the order of the list above.</p>
 <h4 id="request-or-response-injection">Request or response injection</h4>
@@ -312,12 +329,23 @@ $app-&gt;delete('/user/{id}', ['UserController', 'delete']);</code></pre>
     // ...
 });</code></pre>
 <p>As you can see, the order of the parameters doesn't matter. That allows to skip injecting the <code>$request</code> if it's not needed for example.</p>
-<h4 id="request-attribute-injection">Request attribute injection</h4>
+<h4 id="route-placeholder-injection">Route placeholder injection</h4>
 <pre><code class="language-php">$app-&gt;get('/hello/{name}', function ($name, ResponseInterface $response) {
     $response-&gt;getBody()-&gt;write('Hello ' . $name);
     return $response;
 });</code></pre>
 <p>As you can see above, the route's URL contains a <code>name</code> placeholder. By simply adding a parameter <strong>with the same name</strong> to the controller, PHP-DI will directly inject it.</p>
+<h4 id="request-attribute-injection">Request attribute injection</h4>
+<pre><code class="language-php">$app-&gt;add(function ($request, $response, $next) {
+    $request = $request-&gt;withAttribute('name', 'Bob');
+    return $next($request, $response);
+});
+
+$app-&gt;get('/', function ($name, ResponseInterface $response) {
+    $response-&gt;getBody()-&gt;write('Hello ' . $name);
+    return $response;
+});</code></pre>
+<p>As you can see above, a middleware sets a <code>name</code> attribute. By simply adding a parameter <strong>with the same name</strong> to the controller, PHP-DI will directly inject it.</p>
 <h4 id="service-injection">Service injection</h4>
 <p>To inject services into your controllers, you can write them as classes. But if you want to write a micro-application using closures, you don't have to give up dependency injection either.</p>
 <p>You can inject services by type-hinting them:</p>

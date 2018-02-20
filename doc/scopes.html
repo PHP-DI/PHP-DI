@@ -138,13 +138,13 @@
 
                         <ul>
                                                             <li class="">
-                                    <a href="http://php-di.org/doc/frameworks/symfony2.html">
-                                        Symfony
+                                    <a href="http://php-di.org/doc/frameworks/slim.html">
+                                        Slim
                                     </a>
                                 </li>
                                                             <li class="">
-                                    <a href="http://php-di.org/doc/frameworks/silex.html">
-                                        Silex
+                                    <a href="http://php-di.org/doc/frameworks/symfony2.html">
+                                        Symfony
                                     </a>
                                 </li>
                                                             <li class="">
@@ -158,13 +158,13 @@
                                     </a>
                                 </li>
                                                             <li class="">
-                                    <a href="http://php-di.org/doc/frameworks/slim.html">
-                                        Slim
+                                    <a href="http://php-di.org/doc/frameworks/silly.html">
+                                        Silly
                                     </a>
                                 </li>
                                                             <li class="">
-                                    <a href="http://php-di.org/doc/frameworks/silly.html">
-                                        Silly
+                                    <a href="http://php-di.org/doc/frameworks/silex.html">
+                                        Silex
                                     </a>
                                 </li>
                                                             <li class="">
@@ -181,11 +181,6 @@
                                                             <li class="">
                                     <a href="http://php-di.org/doc/performances.html">
                                         Performances
-                                    </a>
-                                </li>
-                                                            <li class="active">
-                                    <a href="http://php-di.org/doc/scopes.html">
-                                        Scopes
                                     </a>
                                 </li>
                                                             <li class="">
@@ -224,6 +219,22 @@
                                         From PHP-DI 4.x to 5.0
                                     </a>
                                 </li>
+                                                            <li class="">
+                                    <a href="http://php-di.org/doc/migration/6.0.html">
+                                        From PHP-DI 5.x to 6.0
+                                    </a>
+                                </li>
+                                                    </ul>
+                    </li>
+                                    <li>
+                        <span class="section-title">Support</span>
+
+                        <ul>
+                                                            <li class="">
+                                    <a href="http://php-di.org/support.html">
+                                        Enterprise support
+                                    </a>
+                                </li>
                                                     </ul>
                     </li>
                                     <li>
@@ -256,6 +267,11 @@
                                         PHP-DI 4.x
                                     </a>
                                 </li>
+                                                            <li class="">
+                                    <a href="https://github.com/PHP-DI/PHP-DI/tree/5.4/doc">
+                                        PHP-DI 5.x
+                                    </a>
+                                </li>
                                                     </ul>
                     </li>
                             </ul>
@@ -269,74 +285,66 @@
             </div>
 
             <h1 id="scopes">Scopes</h1>
-<p>By default, PHP-DI will inject <strong>the same instance of an object</strong> everywhere.</p>
-<pre><code>class UserManager
-{
-    public function __construct(Database $db) {
-        // ...
-    }
-}
+<p><strong>Scopes have been removed in PHP-DI 6.</strong> Read below for more explanations. From now on, all definitions are resolved once and their result is kept during the life of the container (i.e. what was called the <code>singleton</code> scope).</p>
+<p>Scopes were used to make the container work as a factory: instead of using scopes you can either:</p>
+<ul>
+<li>use the <a href="container.html#make"><code>Container::make()</code> method</a>,</li>
+<li>or inject a proper factory object and create the objects you need on demand.</li>
+</ul>
+<p>Below is an example of writing a factory object and injecting it.</p>
+<p>Before:</p>
+<pre><code class="language-php">return [
+    Form::class =&gt; create()
+        -&gt;scope(Scope::PROTOTYPE), // a new form is created everytime it is injected
+];
 
-class ArticleManager
+class Service
 {
-    public function __construct(Database $db) {
-        // ...
+    public function __construct(Form $form)
+    {
+        $this-&gt;form = $form;
     }
 }</code></pre>
-<p>In the example above the same <code>Database</code> object will be injected if both <code>UserManager</code> and <code>ArticleManager</code> are instantiated (or injected).</p>
-<p>The same rule apply when getting twice the same entry from the container:</p>
-<pre><code class="language-php">$object1 = $container-&gt;get('Database');
-$object2 = $container-&gt;get('Database');
-
-// $object1 === $object2</code></pre>
-<p>The reason for this behavior is:</p>
-<ul>
-<li>we sometimes need to ensure that only one instance of a class exist (because for example we want to share the same database connection between classes)</li>
-<li>more generally there is no reason to create a new instance every time we want to use a class</li>
-</ul>
-<p>If injectable classes (aka services) are correctly designed, they should be <a href="https://igor.io/2013/03/31/stateless-services.html"><strong>stateless</strong></a>. That means that reusing the same instance in several places of the application doesn't have any side effect.</p>
-<p>This behavior is however configurable using <strong>scopes</strong>.</p>
-<h2 id="available-scopes">Available scopes</h2>
-<p>Container entries can have the following scopes:</p>
-<ul>
-<li>
-<p><strong>singleton</strong> (applied by default for every container entry)</p>
-<p>The object instance is unique (shared) during the container's lifecycle - each injection by the container or explicit call of <code>get()</code> returns the same instance.</p>
-<p>Please note that while this scope is named &quot;singleton&quot;, it is not related to <a href="http://en.wikipedia.org/wiki/Singleton_pattern">the Singleton design pattern</a>.</p>
-</li>
-<li>
-<p><strong>prototype</strong></p>
-<p>The object instance is not unique - each injection or call of the container's <code>get()</code> method returns a new instance.</p>
-</li>
-</ul>
-<h2 id="configuring-the-scope">Configuring the scope</h2>
-<p>Scopes are part of the <a href="definition.html">definitions</a> of injections, so you can define them using annotations or PHP configuration.</p>
-<h3 id="php-configuration">PHP configuration</h3>
-<p>You can specify the scope by using the <code>scope</code> method:</p>
+<p>After:</p>
 <pre><code class="language-php">return [
-    // A new object will be created every time it is used
-    'MyClass1' =&gt; DI\object()
-        -&gt;scope(Scope::PROTOTYPE),
+    FormFactory::class =&gt; create(),
+];
 
-    // The closure will be called every time MyClass2 is used (and return a new object every time)
-    'MyClass2' =&gt; DI\factory(function () {
-        return new MyClass2();
+class Service
+{
+    public function __construct(FormFactory $formFactory)
+    {
+        $this-&gt;form = $formFactory-&gt;createForm();
+    }
+}</code></pre>
+<p>or:</p>
+<pre><code class="language-php">class Service
+{
+    public function __construct()
+    {
+        $this-&gt;form = new Form(/* parameters */);
+    }
+}</code></pre>
+<p>or you can also inject the container and use it explicitly as a factory (type-hint against <code>DI\FactoryInterface</code> to avoid being coupled to the container):</p>
+<pre><code class="language-php">class Service
+{
+    public function __construct(\DI\FactoryInterface $factory)
+    {
+        $this-&gt;form = $factory-&gt;make(Form::class, /* parameters */);
+    }
+}</code></pre>
+<p>Scopes also created an illusion that some values could be recalculated on demand. For example you could imagine a factory that returns the current value of an environment variable:</p>
+<pre><code class="language-php">return [
+    'config' =&gt; factory(function () {
+        return getenv('CONFIG_VAR');
     })-&gt;scope(Scope::PROTOTYPE),
+
+    Service1::class =&gt; create()
+        -&gt;constructor(get('config')),
+    Service2::class =&gt; create()
+        -&gt;constructor(get('config')),
 ];</code></pre>
-<p>Remember singleton is the default scope. The only exception is when aliasing an entry to another:</p>
-<pre><code class="language-php">return [
-    'Foo' =&gt; DI\get('Bar'),
-];</code></pre>
-<p>The alias will be cached, instead it will be resolved every time because the target entry (<code>Bar</code>) could have the &quot;prototype&quot; scope.</p>
-<h3 id="annotation">Annotation</h3>
-<p>You can specify the scope by using the <code>@Injectable</code> annotation on the target class. Remember singleton is the default scope.</p>
-<pre><code class="language-php">/**
- * @Injectable(scope="prototype")
- */
-class MyService
-{
-    // ...
-}</code></pre>
+<p>Contrary to what one could think, if the <code>CONFIG_VAR</code> changes it will not be updated in places were it has already been injected before the change. Scopes are not a solution for values that can change during execution, yet they could be misinterpreted as such a solution.</p>
         </article>
 
     </div>

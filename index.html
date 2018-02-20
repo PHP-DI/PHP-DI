@@ -65,7 +65,7 @@
         <section class="jumbotron">
             <div class="container">
                 <h1>
-                    PHP-DI <strong>5</strong>
+                    PHP-DI <strong>6</strong>
                 </h1>
                 <p>
                     The dependency injection container for humans
@@ -130,16 +130,22 @@
 
     <div class='row'>
         <div class='col-md-6'>
-            <h4>Object creation</h4>
+            <h4>
+                Object creation
+                <a class="read-more" href="doc/php-definitions.html#objects" title="Creating objects">read more</a>
+            </h4>
 <pre><code class="php">return [
-    Foo::class => object()
+    Foo::class => create()
         ->constructor(
             get(Bar::class)
         )
 ];</code></pre>
         </div>
         <div class='col-md-6'>
-            <h4>Inline factories</h4>
+            <h4>
+                Inline factories
+                <a class="read-more" href="doc/php-definitions.html#factories" title="Writing factories">read more</a>
+            </h4>
 <pre><code class="php">return [
     Foo::class => function ($container) {
         $bar = $container->get(Bar::class);
@@ -151,13 +157,19 @@
 
     <div class="row">
         <div class="col-md-6">
-            <h4>Interface-to-implementation binding</h4>
+            <h4>
+                Interface-to-implementation binding
+                <a class="read-more" href="doc/php-definitions.html#aliases" title="Aliasing entries">read more</a>
+            </h4>
 <pre><code class="php">return [
     NotifierInterface::class => get(EmailNotifier::class)
 ];</code></pre>
         </div>
         <div class="col-md-6">
-            <h4>Environment variables</h4>
+            <h4>
+                Environment variables
+                <a class="read-more" href="doc/php-definitions.html#environment-variables" title="Resolving environment variables">read more</a>
+            </h4>
 <pre><code class="php">return [
     'db.host' => env('DB_HOST', 'default value')
 ];</code></pre>
@@ -181,14 +193,14 @@
         <div class='col-md-4'>
             <h4>PHP 5.5 <code>::class</code> magic constant</h4>
 <pre><code class="php">return [
-    Foo::class => DI\object()
+    Foo::class => DI\create()
       ->constructor(DI\get(Bar::class))
 ];</code></pre>
         </div>
         <div class='col-md-4'>
             <h4>PHP 5.6 <code>use function</code></h4>
 <pre><code class="php">return [
-    Foo::class => object()
+    Foo::class => create()
       ->constructor(get(Bar::class))
 ];</code></pre>
         </div>
@@ -269,6 +281,11 @@ return [
         </div>
 
     </div>
+
+    <p class="text-center">
+        <a href="doc/definition-overriding.html" class="btn btn-default">Learn more</a>
+    </p>
+
 </div>
         </section>
 
@@ -284,17 +301,22 @@ return [
     <div class="row">
 
         <div class="col-md-6">
-            <h4>Get & Has</h4>
+            <h4>
+                Get & Has
+                <a class="read-more" href="doc/container.html#get-amp-has">read more</a>
+            </h4>
             <p>
-                PHP-DI is compliant with <a href="https://github.com/container-interop/container-interop">container-interop</a>
-                and <a href="http://www.php-fig.org/psr/">PSR-11</a>:
+                PHP-DI is compliant with <a href="http://www.php-fig.org/psr/psr-11/">PSR-11</a>:
             </p>
             <pre><code class="php">$container->get($name);
 $container->has($name);</code></pre>
         </div>
 
         <div class="col-md-6">
-            <h4>Make</h4>
+            <h4>
+                Make
+                <a class="read-more" href="doc/container.html#make">read more</a>
+            </h4>
             <p>
                 Use the container as a factory:
             </p>
@@ -306,7 +328,10 @@ $container->make(Foo::class, $parameters);</code></pre>
         </div>
 
         <div class="col-md-12">
-            <h4>Invoke a callable</h4>
+            <h4>
+                Invoke a callable
+                <a class="read-more" href="doc/container.html#call">read more</a>
+            </h4>
             <p>
                 Dependency injection in callables, à la AngularJS:
             </p>

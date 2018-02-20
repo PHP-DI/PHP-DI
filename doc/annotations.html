@@ -138,13 +138,13 @@
 
                         <ul>
                                                             <li class="">
-                                    <a href="http://php-di.org/doc/frameworks/symfony2.html">
-                                        Symfony
+                                    <a href="http://php-di.org/doc/frameworks/slim.html">
+                                        Slim
                                     </a>
                                 </li>
                                                             <li class="">
-                                    <a href="http://php-di.org/doc/frameworks/silex.html">
-                                        Silex
+                                    <a href="http://php-di.org/doc/frameworks/symfony2.html">
+                                        Symfony
                                     </a>
                                 </li>
                                                             <li class="">
@@ -158,13 +158,13 @@
                                     </a>
                                 </li>
                                                             <li class="">
-                                    <a href="http://php-di.org/doc/frameworks/slim.html">
-                                        Slim
+                                    <a href="http://php-di.org/doc/frameworks/silly.html">
+                                        Silly
                                     </a>
                                 </li>
                                                             <li class="">
-                                    <a href="http://php-di.org/doc/frameworks/silly.html">
-                                        Silly
+                                    <a href="http://php-di.org/doc/frameworks/silex.html">
+                                        Silex
                                     </a>
                                 </li>
                                                             <li class="">
@@ -181,11 +181,6 @@
                                                             <li class="">
                                     <a href="http://php-di.org/doc/performances.html">
                                         Performances
-                                    </a>
-                                </li>
-                                                            <li class="">
-                                    <a href="http://php-di.org/doc/scopes.html">
-                                        Scopes
                                     </a>
                                 </li>
                                                             <li class="">
@@ -224,6 +219,22 @@
                                         From PHP-DI 4.x to 5.0
                                     </a>
                                 </li>
+                                                            <li class="">
+                                    <a href="http://php-di.org/doc/migration/6.0.html">
+                                        From PHP-DI 5.x to 6.0
+                                    </a>
+                                </li>
+                                                    </ul>
+                    </li>
+                                    <li>
+                        <span class="section-title">Support</span>
+
+                        <ul>
+                                                            <li class="">
+                                    <a href="http://php-di.org/support.html">
+                                        Enterprise support
+                                    </a>
+                                </li>
                                                     </ul>
                     </li>
                                     <li>
@@ -256,6 +267,11 @@
                                         PHP-DI 4.x
                                     </a>
                                 </li>
+                                                            <li class="">
+                                    <a href="https://github.com/PHP-DI/PHP-DI/tree/5.4/doc">
+                                        PHP-DI 5.x
+                                    </a>
+                                </li>
                                                     </ul>
                     </li>
                             </ul>
@@ -270,6 +286,7 @@
 
             <h1 id="annotations">Annotations</h1>
 <p>On top of <a href="autowiring.html">autowiring</a> and <a href="php-definitions.html">PHP configuration files</a>, you can define injections using annotations.</p>
+<p>Using annotations do not affect performances when <a href="performances.html">compiling the container</a>.</p>
 <h2 id="installation">Installation</h2>
 <p>Annotations <strong>are disabled by default</strong>. To be able to use them, you first need to install the <a href="http://doctrine-common.readthedocs.org/en/latest/reference/annotations.html">Doctrine Annotations</a> library using Composer:</p>
 <pre><code>composer require doctrine/annotations</code></pre>
@@ -351,7 +368,7 @@
 <h2 id="injectable">Injectable</h2>
 <p>The <code>@Injectable</code> annotation lets you set options on injectable classes:</p>
 <pre><code class="language-php">/**
- * @Injectable(scope="prototype", lazy=true)
+ * @Injectable(lazy=true)
  */
 class Example
 {
@@ -366,10 +383,10 @@ class Example
 </ul>
 <p>For that, you can combine annotations with <a href="php-definitions.html">definitions in PHP</a>.</p>
 <h2 id="troubleshooting">Troubleshooting</h2>
-<p>Since annotations are in PHP docblocks, the opcache option <code>opcache.load_comments</code> must be set to <code>1</code>. If it is set to <code>0</code>, comments will be stripped from the source code and annotations will not work.</p>
-<p>The default value for this option is <code>1</code> so everything should work by default. There is also no reason to set this option to <code>0</code> as it brings no performance benefit.</p>
+<p>Since annotations are in PHP docblocks, the opcache option <code>opcache.save_comments</code> must be set to <code>1</code>. If it is set to <code>0</code>, comments will be stripped from the source code and annotations will not work.</p>
+<p>The default value for this option is <code>1</code> so everything should work by default.</p>
 <p>To check the value of this option, you can run the following command:</p>
-<pre><code>$ php -i | grep "opcache.load_comments"</code></pre>
+<pre><code>$ php -i | grep "opcache.save_comments"</code></pre>
 <p>Furthermore, please mind that annotations are case-sensitive. You should write <code>@Inject</code> and <code>@Injectable</code> instead of <code>@inject</code> and <code>@injectable</code> to avoid bugs on certain systems.</p>
         </article>
 

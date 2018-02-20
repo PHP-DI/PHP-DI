@@ -138,13 +138,13 @@
 
                         <ul>
                                                             <li class="">
-                                    <a href="http://php-di.org/doc/frameworks/symfony2.html">
-                                        Symfony
+                                    <a href="http://php-di.org/doc/frameworks/slim.html">
+                                        Slim
                                     </a>
                                 </li>
                                                             <li class="">
-                                    <a href="http://php-di.org/doc/frameworks/silex.html">
-                                        Silex
+                                    <a href="http://php-di.org/doc/frameworks/symfony2.html">
+                                        Symfony
                                     </a>
                                 </li>
                                                             <li class="">
@@ -158,13 +158,13 @@
                                     </a>
                                 </li>
                                                             <li class="">
-                                    <a href="http://php-di.org/doc/frameworks/slim.html">
-                                        Slim
+                                    <a href="http://php-di.org/doc/frameworks/silly.html">
+                                        Silly
                                     </a>
                                 </li>
                                                             <li class="">
-                                    <a href="http://php-di.org/doc/frameworks/silly.html">
-                                        Silly
+                                    <a href="http://php-di.org/doc/frameworks/silex.html">
+                                        Silex
                                     </a>
                                 </li>
                                                             <li class="">
@@ -181,11 +181,6 @@
                                                             <li class="">
                                     <a href="http://php-di.org/doc/performances.html">
                                         Performances
-                                    </a>
-                                </li>
-                                                            <li class="">
-                                    <a href="http://php-di.org/doc/scopes.html">
-                                        Scopes
                                     </a>
                                 </li>
                                                             <li class="">
@@ -224,6 +219,22 @@
                                         From PHP-DI 4.x to 5.0
                                     </a>
                                 </li>
+                                                            <li class="">
+                                    <a href="http://php-di.org/doc/migration/6.0.html">
+                                        From PHP-DI 5.x to 6.0
+                                    </a>
+                                </li>
+                                                    </ul>
+                    </li>
+                                    <li>
+                        <span class="section-title">Support</span>
+
+                        <ul>
+                                                            <li class="">
+                                    <a href="http://php-di.org/support.html">
+                                        Enterprise support
+                                    </a>
+                                </li>
                                                     </ul>
                     </li>
                                     <li>
@@ -256,6 +267,11 @@
                                         PHP-DI 4.x
                                     </a>
                                 </li>
+                                                            <li class="">
+                                    <a href="https://github.com/PHP-DI/PHP-DI/tree/5.4/doc">
+                                        PHP-DI 5.x
+                                    </a>
+                                </li>
                                                     </ul>
                     </li>
                             </ul>
@@ -271,6 +287,7 @@
             <h1 id="autowiring">Autowiring</h1>
 <p><em>Autowiring</em> is an exotic word that represents something very simple: <strong>the ability of the container to automatically create and inject dependencies</strong>.</p>
 <p>In order to achieve that, PHP-DI uses <a href="http://php.net/manual/book.reflection.php">PHP's reflection</a> to detect what parameters a constructor needs.</p>
+<p>Autowiring does not affect performances when <a href="performances.html">compiling the container</a>.</p>
 <p>Let's take this example:</p>
 <pre><code class="language-php">class UserRepository
 {
@@ -284,7 +301,7 @@ class UserRegistrationService
         // ...
     }
 }</code></pre>
-<p>When PHP-DI needs to create the <code>UserRegistrationService</code>, it detects that the constructor takes a <code>UserRepository</code> object (using the <a href="http://www.php.net/manual/en/language.oop5.typehinting.php">type hinting</a>).</p>
+<p>When PHP-DI needs to create the <code>UserRegistrationService</code>, it detects that the constructor takes a <code>UserRepository</code> object (using the <a href="http://www.php.net/manual/en/functions.arguments.php#functions.arguments.type-declaration">type hinting</a>).</p>
 <p><strong>Without any configuration</strong>, PHP-DI will create a <code>UserRepository</code> instance (if it wasn't already created) and pass it as a constructor parameter. The equivalent raw PHP code would be:</p>
 <pre><code class="language-php">$repository = new UserRepository();
 $service = new UserRegistrationService($repository);</code></pre>
@@ -310,7 +327,7 @@ $service = new UserRegistrationService($repository);</code></pre>
 <li>it will not know what parameters to give to the constructor (since there is no type-hinting for an object)</li>
 <li><code>setLogger()</code> will not be called</li>
 </ul>
-<p>For those classes, you will need to use <a href="php-definitions.html">PHP definitions</a> to declare explicitly what to inject.</p>
+<p>For those classes, you will need to use <code>DI\autowire()</code> in <a href="php-definitions.html">PHP definitions</a> to declare explicitly what to inject.</p>
         </article>
 
     </div>

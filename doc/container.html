@@ -138,13 +138,13 @@
 
                         <ul>
                                                             <li class="">
-                                    <a href="http://php-di.org/doc/frameworks/symfony2.html">
-                                        Symfony
+                                    <a href="http://php-di.org/doc/frameworks/slim.html">
+                                        Slim
                                     </a>
                                 </li>
                                                             <li class="">
-                                    <a href="http://php-di.org/doc/frameworks/silex.html">
-                                        Silex
+                                    <a href="http://php-di.org/doc/frameworks/symfony2.html">
+                                        Symfony
                                     </a>
                                 </li>
                                                             <li class="">
@@ -158,13 +158,13 @@
                                     </a>
                                 </li>
                                                             <li class="">
-                                    <a href="http://php-di.org/doc/frameworks/slim.html">
-                                        Slim
+                                    <a href="http://php-di.org/doc/frameworks/silly.html">
+                                        Silly
                                     </a>
                                 </li>
                                                             <li class="">
-                                    <a href="http://php-di.org/doc/frameworks/silly.html">
-                                        Silly
+                                    <a href="http://php-di.org/doc/frameworks/silex.html">
+                                        Silex
                                     </a>
                                 </li>
                                                             <li class="">
@@ -181,11 +181,6 @@
                                                             <li class="">
                                     <a href="http://php-di.org/doc/performances.html">
                                         Performances
-                                    </a>
-                                </li>
-                                                            <li class="">
-                                    <a href="http://php-di.org/doc/scopes.html">
-                                        Scopes
                                     </a>
                                 </li>
                                                             <li class="">
@@ -224,6 +219,22 @@
                                         From PHP-DI 4.x to 5.0
                                     </a>
                                 </li>
+                                                            <li class="">
+                                    <a href="http://php-di.org/doc/migration/6.0.html">
+                                        From PHP-DI 5.x to 6.0
+                                    </a>
+                                </li>
+                                                    </ul>
+                    </li>
+                                    <li>
+                        <span class="section-title">Support</span>
+
+                        <ul>
+                                                            <li class="">
+                                    <a href="http://php-di.org/support.html">
+                                        Enterprise support
+                                    </a>
+                                </li>
                                                     </ul>
                     </li>
                                     <li>
@@ -256,6 +267,11 @@
                                         PHP-DI 4.x
                                     </a>
                                 </li>
+                                                            <li class="">
+                                    <a href="https://github.com/PHP-DI/PHP-DI/tree/5.4/doc">
+                                        PHP-DI 5.x
+                                    </a>
+                                </li>
                                                     </ul>
                     </li>
                             </ul>
@@ -271,7 +287,7 @@
             <h1 id="using-the-container">Using the container</h1>
 <p>This documentation describes the API of the container object itself.</p>
 <h2 id="get-amp-has">get() &amp; has()</h2>
-<p>The container implements the <a href="http://www.php-fig.org/psr/">PSR-11</a> standard. That means it implements <a href="https://github.com/php-fig/container/blob/master/src/ContainerInterface.php"><code>Psr\Container\ContainerInterface</code></a>:</p>
+<p>The container implements the <a href="http://www.php-fig.org/psr/psr-11/">PSR-11</a> standard. That means it implements <a href="https://github.com/php-fig/container/blob/master/src/ContainerInterface.php"><code>Psr\Container\ContainerInterface</code></a>:</p>
 <pre><code class="language-php">namespace Psr\Container;
 
 interface ContainerInterface
@@ -283,10 +299,10 @@ interface ContainerInterface
 <h2 id="set">set()</h2>
 <p>You can set entries directly on the container:</p>
 <pre><code class="language-php">$container-&gt;set('foo', 'bar');
-$container-&gt;set('MyInterface', \DI\object('MyClass'));</code></pre>
+$container-&gt;set('MyInterface', \DI\create('MyClass'));</code></pre>
 <p>However it is recommended to use definition files. See the <a href="definition.html">definition documentation</a>.</p>
 <h2 id="make">make()</h2>
-<p>The container also offers a <code>make()</code> method. This method is defined in <a href="https://github.com/PHP-DI/PHP-DI/blob/master/src/DI/FactoryInterface.php"><code>DI\FactoryInterface</code></a>.</p>
+<p>The container also offers a <code>make()</code> method. This method is defined in <a href="https://github.com/PHP-DI/PHP-DI/blob/master/src/FactoryInterface.php"><code>DI\FactoryInterface</code></a>.</p>
 <pre><code class="language-php">class GithubProfile
 {
     public function __construct(ApiClient $client, $user)
@@ -296,13 +312,16 @@ $container-&gt;set('MyInterface', \DI\object('MyClass'));</code></pre>
 $container-&gt;make('GithubProfile', [
     'user' =&gt; 'torvalds',
 ]);</code></pre>
-<p>The <code>make()</code> method works like <code>get()</code> except <em>it will create a new instance every time it is called</em>.</p>
-<p>It will use the parameters provided for the constructor, and the missing parameters will be
-resolved from the container.</p>
-<p>It is useful to create objects that do not belong <em>inside</em> the container (i.e. that are not services, or that are not <a href="https://igor.io/2013/03/31/stateless-services.html"><strong>stateless</strong></a>), but that have dependencies. It is also useful if you want to override some parameters in the constructor.</p>
-<p>If you need to use the <code>make()</code> method inside a service, or a controller, or whatever, it is
-recommended that you type-hint against <code>FactoryInterface</code>. That avoids coupling your code to the container.
-<code>DI\FactoryInterface</code> is automatically bound to <code>DI\Container</code> so you can inject it without any configuration.</p>
+<p>The <code>make()</code> method works like <code>get()</code> except <em>it will resolve the entry every time it is called</em>. Depending on the type of the entry this means:</p>
+<ul>
+<li>if the entry is an object, an new instance will be created every time</li>
+<li>if the entry is a factory, the factory will be called every time</li>
+<li>if the entry is an alias, the alias will be resolved every time</li>
+</ul>
+<p>Please note that only the entry you ask for will be resolved every time: all the dependencies of the entry will not! That means that if the entry is an alias, the entry the alias points to <em>will be resolved only once</em>.</p>
+<p>If you provide parameters to <code>Container::make()</code> in the second argument, and if the entry to resolve is an object to create, the parameters provided will be used for the constructor of the object, and the missing parameters will be resolved from the container.</p>
+<p><code>Container::make()</code> is useful for creating objects that should not be stored <em>inside</em> the container (i.e. that are not services, or that are not <a href="https://igor.io/2013/03/31/stateless-services.html"><strong>stateless</strong></a>), but that have dependencies. It is also useful if you want to override some parameters of an object's constructor.</p>
+<p>If you need to use the <code>make()</code> method inside a service, or a controller, or whatever, it is recommended that you type-hint against <code>FactoryInterface</code>. That avoids coupling your code to the container. <code>DI\FactoryInterface</code> is automatically bound to <code>DI\Container</code> so you can inject it without any configuration.</p>
 <h2 id="call">call()</h2>
 <p>The container exposes a <code>call()</code> method that can invoke any PHP callable.</p>
 <p>It offers the following additional features over using <code>call_user_func()</code>:</p>
@@ -357,10 +376,8 @@ $container-&gt;call(function ($dbHost) {
 $container-&gt;call($controller, $_GET); // $_GET contains ['name' =&gt; 'John']</code></pre>
 <p>This leaves the liberty to the developer writing controllers to get request parameters
 <em>and</em> services using dependency injection.</p>
-<p>As with <code>make()</code>, <code>call()</code> is defined in <code>DI\InvokerInterface</code> so that you can type-hint
-against that interface without coupling yourself to the container.
-<code>DI\InvokerInterface</code> is automatically bound to <code>DI\Container</code> so you can inject it without any configuration.</p>
-<pre><code class="language-php">namespace DI;
+<p>As with <code>make()</code>, <code>call()</code> is defined in <code>Invoker\InvokerInterface</code> (in the <a href="https://github.com/PHP-DI/Invoker">PHP-DI/Invoker package</a>) so that you can type-hint against that interface without coupling yourself to the container. <code>Invoker\InvokerInterface</code> is automatically bound to <code>DI\Container</code> so you can inject it without any configuration.</p>
+<pre><code class="language-php">namespace Invoker;
 
 interface InvokerInterface
 {
@@ -414,6 +431,9 @@ use it only where you really have to.</p>
 <p>As you might have guessed, you can't use constructor injection with this method.
 But other kind of injections (property or setter) will work, whether you use annotations
 or whether you configured your object in a definition file.</p>
+<h2 id="extending-the-container">Extending the container</h2>
+<p>If you wish to delve into the container's internals, be aware that only the classes and interfaces tagged with the <code>@api</code> annotation are meant to be used by PHP-DI users.</p>
+<p>All other classes and interfaces are internal classes, you may try to use them but backward compatibility is not guaranteed, even between minor versions.</p>
         </article>
 
     </div>

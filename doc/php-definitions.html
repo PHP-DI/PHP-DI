@@ -138,13 +138,13 @@
 
                         <ul>
                                                             <li class="">
-                                    <a href="http://php-di.org/doc/frameworks/symfony2.html">
-                                        Symfony
+                                    <a href="http://php-di.org/doc/frameworks/slim.html">
+                                        Slim
                                     </a>
                                 </li>
                                                             <li class="">
-                                    <a href="http://php-di.org/doc/frameworks/silex.html">
-                                        Silex
+                                    <a href="http://php-di.org/doc/frameworks/symfony2.html">
+                                        Symfony
                                     </a>
                                 </li>
                                                             <li class="">
@@ -158,13 +158,13 @@
                                     </a>
                                 </li>
                                                             <li class="">
-                                    <a href="http://php-di.org/doc/frameworks/slim.html">
-                                        Slim
+                                    <a href="http://php-di.org/doc/frameworks/silly.html">
+                                        Silly
                                     </a>
                                 </li>
                                                             <li class="">
-                                    <a href="http://php-di.org/doc/frameworks/silly.html">
-                                        Silly
+                                    <a href="http://php-di.org/doc/frameworks/silex.html">
+                                        Silex
                                     </a>
                                 </li>
                                                             <li class="">
@@ -181,11 +181,6 @@
                                                             <li class="">
                                     <a href="http://php-di.org/doc/performances.html">
                                         Performances
-                                    </a>
-                                </li>
-                                                            <li class="">
-                                    <a href="http://php-di.org/doc/scopes.html">
-                                        Scopes
                                     </a>
                                 </li>
                                                             <li class="">
@@ -224,6 +219,22 @@
                                         From PHP-DI 4.x to 5.0
                                     </a>
                                 </li>
+                                                            <li class="">
+                                    <a href="http://php-di.org/doc/migration/6.0.html">
+                                        From PHP-DI 5.x to 6.0
+                                    </a>
+                                </li>
+                                                    </ul>
+                    </li>
+                                    <li>
+                        <span class="section-title">Support</span>
+
+                        <ul>
+                                                            <li class="">
+                                    <a href="http://php-di.org/support.html">
+                                        Enterprise support
+                                    </a>
+                                </li>
                                                     </ul>
                     </li>
                                     <li>
@@ -256,6 +267,11 @@
                                         PHP-DI 4.x
                                     </a>
                                 </li>
+                                                            <li class="">
+                                    <a href="https://github.com/PHP-DI/PHP-DI/tree/5.4/doc">
+                                        PHP-DI 5.x
+                                    </a>
+                                </li>
                                                     </ul>
                     </li>
                             </ul>
@@ -280,9 +296,13 @@ return [
     // place your definitions here
 ];</code></pre>
 <pre><code class="language-php">$containerBuilder-&gt;addDefinitions('config.php');</code></pre>
+<h2 id="a-word-about-lazy-loading">A word about lazy loading</h2>
+<p>PHP-DI loads the definitions you have written and uses them like instructions on how to create objects.</p>
+<p>However those objects are only created when/if they are requested from the container, for example through <code>$container-&gt;get(…)</code> or when they need to be injected in another object. That means you can have a large amount of definitions, PHP-DI will not create all the objects unless asked to.</p>
+<p>The only exception to that behavior is if you define <em>objects</em> as <a href="#values">values</a> but this is not recommended (this is explained in the <a href="#values">&quot;Values&quot; section</a>).</p>
 <h2 id="syntax">Syntax</h2>
 <p>PHP-DI's definitions are written using a <em>DSL</em> (Domain Specific Language) written in PHP and based on helper functions.</p>
-<p>All the examples shown in this page are using a PHP 5.5 compatible syntax. If you are using PHP 5.5 or 5.6, you are encouraged to use the following features:</p>
+<p>All the examples shown in this page are using a PHP 7.0 compatible syntax. You are encouraged to use the following features:</p>
 <ul>
 <li>
 <p>PHP 5.5 <code>::class</code> magic constant:</p>
@@ -290,32 +310,36 @@ return [
 use Monolog\Logger;
 
 return [
-    LoggerInterface::class =&gt; DI\object(Logger::class)
+    LoggerInterface::class =&gt; DI\create(Logger::class)
 ];</code></pre>
 </li>
 <li>
 <p>PHP 5.6 function import:</p>
-<pre><code class="language-php">use function DI\object;
+<pre><code class="language-php">use function DI\create;
 use function DI\get;
 
 return [
-    'Foo' =&gt; object()
+    'Foo' =&gt; create()
         -&gt;constructor(get('Bar')),
 ];</code></pre>
 </li>
 </ul>
-<p><em>Watch out:</em> remember the helper functions (<code>DI\object()</code> for example) are namespaced functions, not classes. Do not use <code>new</code> (e.g. <code>new DI\object()</code>) or you will get a fatal error &quot;Class 'DI\object' not found&quot;.</p>
+<p><em>Watch out:</em> remember the helper functions (<code>DI\create()</code> for example) are namespaced functions, not classes. Do not use <code>new</code> (e.g. <code>new DI\create()</code>) or you will get a fatal error &quot;Class 'DI\create' not found&quot;.</p>
 <h2 id="definition-types">Definition types</h2>
 <p>This definition format is the most powerful of all. There are several kind of <strong>entries</strong> you can define:</p>
 <ul>
-<li><strong>values</strong></li>
-<li><strong>factories</strong></li>
-<li><strong>objects</strong></li>
-<li><strong>aliases</strong></li>
-<li>...</li>
+<li><strong><a href="#values">values</a></strong></li>
+<li><strong><a href="#factories">factories</a></strong></li>
+<li><strong><a href="#objects">objects</a></strong></li>
+<li><strong><a href="#autowired-objects">autowired objects</a></strong></li>
+<li><strong><a href="#aliases">aliases</a></strong></li>
+<li><strong><a href="#environment-variables">environment variables</a></strong></li>
+<li><strong><a href="#string-expressions">string expressions</a></strong></li>
+<li><strong><a href="#arrays">arrays</a></strong></li>
+<li><strong><a href="#wildcards">wildcards</a></strong></li>
 </ul>
 <h3 id="values">Values</h3>
-<p>Values (aka parameters in Symfony) are simple PHP values.</p>
+<p>Values (aka <em>parameters</em> in Symfony) are simple PHP values.</p>
 <pre><code class="language-php">return [
     'database.host'     =&gt; 'localhost',
     'database.port'     =&gt; 5000,
@@ -328,20 +352,28 @@ return [
 <pre><code class="language-php">return [
     'Foo' =&gt; new Foo(),
 ];</code></pre>
-<p>However <strong>this is not recommended</strong> as that object will be created <em>for every PHP request</em>, even if not used. You should instead use one of the methods documented below.</p>
+<p>However <strong>this is not recommended</strong> as that object will be created <em>for every PHP request</em>, even if not used (it will not be lazy loaded like explained at the top of this section). It will also prevent the container from being compiled.</p>
+<p>You should instead use one of the methods documented below.</p>
 <h3 id="factories">Factories</h3>
-<p>Factories are <strong>PHP callables</strong> that return the instance. They allow to define objects <em>lazily</em>, i.e. they will be created only when actually used.</p>
-<p>Here is an example using a closure:</p>
+<p>Factories are <strong>PHP callables</strong> that return the instance. They allow to easily define objects <em>lazily</em>, i.e. each object will be created only when actually needed (because the callable will be called when actually needed).</p>
+<p>Just like any other definition, factories are called once and the same result is returned every time the factory needs to be resolved.</p>
+<p>Factories can be defined using the <code>DI\factory()</code> helper, however it is possible to use a closure as a shortcut:</p>
 <pre><code class="language-php">use Psr\Container\ContainerInterface;
+use function DI\factory;
 
 return [
     'Foo' =&gt; function (ContainerInterface $c) {
         return new Foo($c-&gt;get('db.host'));
     },
+
+    // Same as
+    'Foo' =&gt; factory(function (ContainerInterface $c) {
+        return new Foo($c-&gt;get('db.host'));
+    }),
 ];</code></pre>
 <p>Other services can be injected via type-hinting (as long as they are registered in the container or autowiring is enabled):</p>
 <pre><code class="language-php">return [
-    'LoggerInterface' =&gt; DI\object('MyLogger'),
+    'LoggerInterface' =&gt; DI\create('MyLogger'),
 
     'Foo' =&gt; function (LoggerInterface $logger) {
         return new Foo($logger);
@@ -390,9 +422,10 @@ return [
 ];</code></pre>
 <p>Please note:</p>
 <ul>
-<li><code>factory([FooFactory::class, 'create'])</code>: if <code>create()</code> is a <strong>static</strong> method then the object will not be created: <code>FooFactory::create()</code> will be called statically (as one would expect)</li>
-<li>you can set any container entry name in the array, e.g. <code>DI\factory(['foo_bar_baz', 'create'])</code> (or alternatively: <code>DI\factory('foo_bar_baz::create')</code>), allowing you to configure <code>foo_bar_baz</code> and its dependencies like any other object</li>
-<li>as a factory can be any PHP callable, you can use invocable objects, too: <code>DI\factory(InvocableFooFactory::class)</code> (or alternatively: <code>DI\factory('invocable_foo_factory')</code>, if it's defined in the container)</li>
+<li><code>factory([FooFactory::class, 'build'])</code>: if <code>build()</code> is a <strong>static</strong> method then the object will not be created: <code>FooFactory::build()</code> will be called statically (as one would expect)</li>
+<li>you can set any container entry name in the array, e.g. <code>DI\factory(['foo_bar_baz', 'build'])</code> (or alternatively: <code>DI\factory('foo_bar_baz::build')</code>), allowing you to configure <code>foo_bar_baz</code> and its dependencies like any other object</li>
+<li>as a factory can be any PHP callable, you can use invokable objects, too: <code>DI\factory(InvokableFooFactory::class)</code> (or alternatively: <code>DI\factory('invokable_foo_factory')</code>, if it's defined in the container)</li>
+<li>all closures will be considered by PHP-DI as <em>factories</em>, even if they are nested into other definitions like <code>create()</code>, <code>env()</code>, etc. (read more in the <a href="#nesting-definitions">Nesting definitions</a> section)</li>
 </ul>
 <h4 id="retrieving-the-name-of-the-requested-entry">Retrieving the name of the requested entry</h4>
 <p>If you want to reuse the same factory for creating different entries, you might want to retrieve the name of the entry that is currently being resolved. You can do this by injecting the <code>DI\Factory\RequestedEntry</code> object using a type-hint:</p>
@@ -416,45 +449,70 @@ return [
 ];</code></pre>
 <p>Please read the <a href="definition-overriding.html">definition overriding guide</a> to learn more about this.</p>
 <h3 id="objects">Objects</h3>
-<p>Using factories to create object is very powerful (as we can do anything using PHP), but the <code>DI\object()</code> helper can sometimes be simpler.</p>
-<p>Simple examples:</p>
+<p>Using factories to create object is very powerful (as we can do anything using PHP), but the <code>DI\create()</code> helper can sometimes be simpler. Some examples:</p>
 <pre><code class="language-php">return [
-    // definition of an object (unnecessary if you use autowiring)
-    'Logger' =&gt; DI\object(),
+    // instantiate the Logger class to create the object
+    'Logger' =&gt; DI\create(),
     // mapping an interface to an implementation
-    'LoggerInterface' =&gt; DI\object('MyLogger'),
+    'LoggerInterface' =&gt; DI\create('MyLogger'),
     // using an arbitrary name for the entry
-    'logger.for.backend' =&gt; DI\object('Logger'),
+    'logger.for.backend' =&gt; DI\create('Logger'),
 ];</code></pre>
-<p>The <code>DI\object()</code> helper lets you define constructor parameters:</p>
+<p>The <code>DI\create()</code> helper lets you define constructor parameters:</p>
 <pre><code class="language-php">return [
-    'Logger' =&gt; DI\object()
+    'Logger' =&gt; DI\create()
         -&gt;constructor('app.log', DI\get('log.level'), DI\get('FileWriter')),
 ];</code></pre>
 <p>As well as setter/method injections:</p>
 <pre><code class="language-php">return [
-    'Database' =&gt; DI\object()
+    'Database' =&gt; DI\create()
         -&gt;method('setLogger', DI\get('Logger')),
     // you can call a method twice
-    'Logger' =&gt; DI\object()
+    'Logger' =&gt; DI\create()
         -&gt;method('addBackend', 'file')
         -&gt;method('addBackend', 'syslog'),
 ];</code></pre>
 <p>And property injections:</p>
 <pre><code class="language-php">return [
-    'Foo' =&gt; DI\object()
+    'Foo' =&gt; DI\create()
         -&gt;property('bar', DI\get('Bar')),
 ];</code></pre>
-<p>You can also define only specific parameters. This is useful when combined with autowiring: it allows to define the parameters that couldn't be guessed using type-hints.</p>
+<p>Each entry will be resolved once and the same instance will be injected everywhere it is used. Just like with other definitions, objects defined with the <code>create()</code> helper are created only when needed (lazy-loading).</p>
+<h3 id="autowired-objects">Autowired objects</h3>
+<p><strong>If you have enabled <a href="autowiring.html">autowiring</a></strong> you can use the <code>DI\autowire()</code> helper to customize how objects will be autowired.</p>
+<p><code>DI\autowire()</code> behaves like <code>DI\create()</code> excepts instead of configuring from scratch how the object will be built, we only override what we need from the autowiring.</p>
 <pre><code class="language-php">return [
-    'Logger' =&gt; DI\object()
-        -&gt;constructorParameter('filename', 'app.log')
-        -&gt;methodParameter('setHandler', 'handler', DI\get('SyslogHandler')),
+    // when using no option it is not necessary to write it in the config file
+    'MyLogger' =&gt; DI\autowire(),
+
+    // mapping an interface to an implementation (autowire the MyLogger class)
+    'LoggerInterface' =&gt; DI\autowire('MyLogger'),
+
+    // using an arbitrary name for the entry
+    'logger.for.backend' =&gt; DI\autowire('MyLogger'),
 ];</code></pre>
-<p>By default each entry will be created once and the same instance will be injected everywhere it is used (singleton instance). You can use the &quot;prototype&quot; <a href="scopes.html">scope</a> if you want a new instance to be created every time it is injected:</p>
+<p>Like <code>DI\create()</code>, you can explicitly set constructor parameters:</p>
 <pre><code class="language-php">return [
-    'FormBuilder' =&gt; DI\object()
-        -&gt;scope(Scope::PROTOTYPE),
+    'Logger' =&gt; DI\autowire()
+        -&gt;constructor('app.log', DI\get('log.level'), DI\get('FileWriter')),
+];</code></pre>
+<p>As well as setter/method injections:</p>
+<pre><code class="language-php">return [
+    'Database' =&gt; DI\autowire()
+        -&gt;method('setLogger', DI\get('Logger')),
+];</code></pre>
+<p>And property injections:</p>
+<pre><code class="language-php">return [
+    'Foo' =&gt; DI\autowire()
+        -&gt;property('bar', DI\get('Bar')),
+];</code></pre>
+<p>You can also define only specific parameters: it allows to define the parameters that couldn't be guessed by the autowiring using type-hints.</p>
+<pre><code class="language-php">return [
+    'Logger' =&gt; DI\autowire()
+        // set the $filename parameter
+        -&gt;constructorParameter('filename', 'app.log')
+        // set the $handler parameter
+        -&gt;methodParameter('setHandler', 'handler', DI\get('SyslogHandler')),
 ];</code></pre>
 <h3 id="aliases">Aliases</h3>
 <p>You can alias an entry to another using the <code>DI\get()</code> helper:</p>
@@ -492,7 +550,7 @@ return [
 <h3 id="wildcards">Wildcards</h3>
 <p>You can use wildcards to define a batch of entries. It can be very useful to bind interfaces to implementations:</p>
 <pre><code class="language-php">return [
-    'Blog\Domain\*RepositoryInterface' =&gt; DI\object('Blog\Architecture\*DoctrineRepository'),
+    'Blog\Domain\*RepositoryInterface' =&gt; DI\create('Blog\Architecture\*DoctrineRepository'),
 ];</code></pre>
 <p>In our example, the wildcard will match <code>Blog\Domain\UserRepositoryInterface</code>, and it will map it to
 <code>Blog\Architecture\UserDoctrineRepository</code>.</p>
@@ -506,16 +564,24 @@ return [
 <h3 id="nesting-definitions">Nesting definitions</h3>
 <p>You can nest definitions inside others to avoid polluting the container with unnecessary entries. For example:</p>
 <pre><code class="language-php">return [
-    'Foo' =&gt; DI\object()
-        -&gt;constructor(DI\string('{root_directory}/test.json'), DI\object('Bar')),
+    'Foo' =&gt; DI\create()
+        -&gt;constructor(DI\string('{root_directory}/test.json'), DI\create('Bar')),
 ];</code></pre>
-<h2 id="setting-in-the-container-directly">Setting in the container directly</h2>
+<p>Keep in mind that closures are equivalent to &quot;factory&quot; definitions. As such, <strong>closures are always interpreted as factories, even when nested inside other definitions.</strong> If you use anonymous functions for something else than factories you need to wrap them in the <code>DI\value()</code> helper:</p>
+<pre><code class="language-php">return [
+    'router' =&gt; create(Router::class)
+        -&gt;method('setErrorHandler', value(function () {
+            ...
+        })),
+];</code></pre>
+<p>Of course this applies only to closures that are inside your configuration files.</p>
+<h2 id="setting-definitions-in-the-container-directly">Setting definitions in the container directly</h2>
 <p>In addition to defining entries in an array, you can set them directly in the container as shown below.</p>
 <pre><code class="language-php">$container-&gt;set('db.host', 'localhost');
-$container-&gt;set('My\Class', \DI\object()
+$container-&gt;set('My\Class', \DI\create()
     -&gt;constructor('some raw value')));</code></pre>
-<p><strong>Using array definitions is however recommended since it allows to cache the definitions.</strong></p>
-<p>Be also aware that it isn't possible to add definitions to a container on the fly <strong>when using a cache</strong>:</p>
+<p><strong>Using array definitions is however recommended since it allows to <a href="performances.html">compile the container</a>.</strong> All entries configured with <code>Container::set()</code> will <strong>not</strong> be compiled.</p>
+<p>Be also aware that it isn't possible to add definitions to a container on the fly <strong>when using a compiled container</strong>:</p>
 <pre><code class="language-php">$builder = new ContainerBuilder();
 $builder-&gt;setDefinitionCache(new ApcCache());
 $container = $builder-&gt;build();
@@ -525,7 +591,7 @@ $container-&gt;set('foo', 'hello');
 $container-&gt;set('bar', new MyClass());
 
 // Error: you can't set definitions using -&gt;set() when using a cache
-$container-&gt;set('foo', DI\object('MyClass'));</code></pre>
+$container-&gt;set('foo', DI\create('MyClass'));</code></pre>
 <p>The reason for this is that definitions are cached (not values). If you set a definition dynamically, then it will be cached, which could lead to very weird bugs (because dynamic definitions should of course not be cached since they are… dynamic).</p>
 <p>In that case, put your definitions in an array or file as shown above in this article.</p>
         </article>

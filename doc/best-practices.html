@@ -138,13 +138,13 @@
 
                         <ul>
                                                             <li class="">
-                                    <a href="http://php-di.org/doc/frameworks/symfony2.html">
-                                        Symfony
+                                    <a href="http://php-di.org/doc/frameworks/slim.html">
+                                        Slim
                                     </a>
                                 </li>
                                                             <li class="">
-                                    <a href="http://php-di.org/doc/frameworks/silex.html">
-                                        Silex
+                                    <a href="http://php-di.org/doc/frameworks/symfony2.html">
+                                        Symfony
                                     </a>
                                 </li>
                                                             <li class="">
@@ -158,13 +158,13 @@
                                     </a>
                                 </li>
                                                             <li class="">
-                                    <a href="http://php-di.org/doc/frameworks/slim.html">
-                                        Slim
+                                    <a href="http://php-di.org/doc/frameworks/silly.html">
+                                        Silly
                                     </a>
                                 </li>
                                                             <li class="">
-                                    <a href="http://php-di.org/doc/frameworks/silly.html">
-                                        Silly
+                                    <a href="http://php-di.org/doc/frameworks/silex.html">
+                                        Silex
                                     </a>
                                 </li>
                                                             <li class="">
@@ -181,11 +181,6 @@
                                                             <li class="">
                                     <a href="http://php-di.org/doc/performances.html">
                                         Performances
-                                    </a>
-                                </li>
-                                                            <li class="">
-                                    <a href="http://php-di.org/doc/scopes.html">
-                                        Scopes
                                     </a>
                                 </li>
                                                             <li class="">
@@ -224,6 +219,22 @@
                                         From PHP-DI 4.x to 5.0
                                     </a>
                                 </li>
+                                                            <li class="">
+                                    <a href="http://php-di.org/doc/migration/6.0.html">
+                                        From PHP-DI 5.x to 6.0
+                                    </a>
+                                </li>
+                                                    </ul>
+                    </li>
+                                    <li>
+                        <span class="section-title">Support</span>
+
+                        <ul>
+                                                            <li class="">
+                                    <a href="http://php-di.org/support.html">
+                                        Enterprise support
+                                    </a>
+                                </li>
                                                     </ul>
                     </li>
                                     <li>
@@ -254,6 +265,11 @@
                                                             <li class="">
                                     <a href="https://github.com/PHP-DI/PHP-DI/tree/4.x/doc">
                                         PHP-DI 4.x
+                                    </a>
+                                </li>
+                                                            <li class="">
+                                    <a href="https://github.com/PHP-DI/PHP-DI/tree/5.4/doc">
+                                        PHP-DI 5.x
                                     </a>
                                 </li>
                                                     </ul>
@@ -356,35 +372,35 @@ the types of your parameters.</p>
 <p>In some cases, autowiring will not be enough because some parameter will be a scalar (string, int, …).
 At that point, you will need to define explicitly what to inject in that scalar parameter, and for this you can either:</p>
 <ul>
-<li>define the whole injection of the method/class (i.e. every parameters).</li>
+<li>define the whole injection of the method/class (i.e. every parameters) using <code>DI\create()</code>.</li>
 </ul>
 <p>Example:</p>
 <pre><code class="language-php">&lt;?php
 // config.php
 return [
     // ...
-    OrderService::class =&gt; DI\object()
+    OrderService::class =&gt; DI\create()
         -&gt;constructor(DI\get(SomeOtherService::class), 'a value'),
 ];</code></pre>
 <ul>
-<li>or define <em>just the scalar parameter</em> and let PHP-DI use autowiring for the rest.</li>
+<li>or define <em>just the scalar parameter</em> using <code>DI\autowire()</code> and let PHP-DI autowire the rest.</li>
 </ul>
 <p>Example:</p>
 <pre><code class="language-php">&lt;?php
 // config.php
 return [
     // ...
-    OrderService::class =&gt; DI\object()
+    OrderService::class =&gt; DI\autowire()
         -&gt;constructorParameter('paramName', 'a value'),
 ];</code></pre>
-<p>This solution is generally preferred give it avoids redefining everything.</p>
+<p>This solution is generally preferred given it avoids redefining everything.</p>
 <p><em>Side note:</em> as explained in rule n°3, we recommend <strong>type-hinting against interfaces</strong>. In that case,
 you will need to map interfaces to the implementation the container should use in the configuration:</p>
 <pre><code class="language-php">&lt;?php
 // config.php
 return [
     // ...
-    OrderServiceInterface::class =&gt; DI\object(OrderService::class),
+    OrderServiceInterface::class =&gt; DI\get(OrderService::class),
 ];</code></pre>
 <h2 id="using-libraries">Using libraries</h2>
 <p>When using libraries, like loggers, ORMs, … you sometimes need to configure them.</p>

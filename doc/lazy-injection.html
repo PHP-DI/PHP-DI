@@ -138,13 +138,13 @@
 
                         <ul>
                                                             <li class="">
-                                    <a href="http://php-di.org/doc/frameworks/symfony2.html">
-                                        Symfony
+                                    <a href="http://php-di.org/doc/frameworks/slim.html">
+                                        Slim
                                     </a>
                                 </li>
                                                             <li class="">
-                                    <a href="http://php-di.org/doc/frameworks/silex.html">
-                                        Silex
+                                    <a href="http://php-di.org/doc/frameworks/symfony2.html">
+                                        Symfony
                                     </a>
                                 </li>
                                                             <li class="">
@@ -158,13 +158,13 @@
                                     </a>
                                 </li>
                                                             <li class="">
-                                    <a href="http://php-di.org/doc/frameworks/slim.html">
-                                        Slim
+                                    <a href="http://php-di.org/doc/frameworks/silly.html">
+                                        Silly
                                     </a>
                                 </li>
                                                             <li class="">
-                                    <a href="http://php-di.org/doc/frameworks/silly.html">
-                                        Silly
+                                    <a href="http://php-di.org/doc/frameworks/silex.html">
+                                        Silex
                                     </a>
                                 </li>
                                                             <li class="">
@@ -181,11 +181,6 @@
                                                             <li class="">
                                     <a href="http://php-di.org/doc/performances.html">
                                         Performances
-                                    </a>
-                                </li>
-                                                            <li class="">
-                                    <a href="http://php-di.org/doc/scopes.html">
-                                        Scopes
                                     </a>
                                 </li>
                                                             <li class="active">
@@ -224,6 +219,22 @@
                                         From PHP-DI 4.x to 5.0
                                     </a>
                                 </li>
+                                                            <li class="">
+                                    <a href="http://php-di.org/doc/migration/6.0.html">
+                                        From PHP-DI 5.x to 6.0
+                                    </a>
+                                </li>
+                                                    </ul>
+                    </li>
+                                    <li>
+                        <span class="section-title">Support</span>
+
+                        <ul>
+                                                            <li class="">
+                                    <a href="http://php-di.org/support.html">
+                                        Enterprise support
+                                    </a>
+                                </li>
                                                     </ul>
                     </li>
                                     <li>
@@ -256,6 +267,11 @@
                                         PHP-DI 4.x
                                     </a>
                                 </li>
+                                                            <li class="">
+                                    <a href="https://github.com/PHP-DI/PHP-DI/tree/5.4/doc">
+                                        PHP-DI 5.x
+                                    </a>
+                                </li>
                                                     </ul>
                     </li>
                             </ul>
@@ -269,32 +285,37 @@
             </div>
 
             <h1 id="lazy-injection">Lazy injection</h1>
-<p>Consider the following example:</p>
+<p>This feature should not be confused with lazy initialization of objects: <strong>PHP-DI always creates objects only when they are requested or injected somewhere.</strong></p>
+<p>Lazy injection goes further than this: it allows to defer the creation of an object's dependencies to the moment when they are actually used, not before.</p>
+<p><strong>Warning: this feature should only be used exceptionally, please read the &quot;When to use&quot; section at the end of this page.</strong></p>
+<h2 id="example">Example</h2>
 <pre><code class="language-php">&lt;?php
-class Foo
+class ProductExporter
 {
-    private $a;
-    private $b;
+    private $pdfWriter;
+    private $csvWriter;
 
-    public function __construct(Foo $a, Bar $b)
+    public function __construct(PdfWriter $pdfWriter, CsvWriter $csvWriter)
     {
-        $this-&gt;a = $a;
-        $this-&gt;b = $b;
+        $this-&gt;pdfWriter = $pdfWriter;
+        $this-&gt;csvWriter = $csvWriter;
     }
 
-    public function doSomething()
+    public function exportToPdf()
     {
-        $this-&gt;a-&gt;doStuff();
+        $this-&gt;pdfWriter-&gt;write(...);
     }
 
-    public function doSomethingElse()
+    public function exportToCsv()
     {
-        $this-&gt;b-&gt;doStuff();
+        $this-&gt;csvWriter-&gt;write(...);
     }
-}</code></pre>
-<p><code>a</code> is used only when <code>doSomething()</code> is called, and <code>b</code> only when <code>doSomethingElse()</code> is called.</p>
-<p>You may wonder then: why injecting <code>a</code> <strong>and</strong> <code>b</code> if they may not be used? Especially if creating those objects is heavy in time or memory.</p>
-<p>That's where lazy injection can help.</p>
+}
+
+$productExporter = $container-&gt;get(ProductExporter::class);
+$productExporter-&gt;exportToCsv();</code></pre>
+<p>In this example the <code>exportToPdf()</code> is not called. <code>PdfWriter</code> is initialized and injected in the class but it's never used.</p>
+<p><strong>If</strong> <code>PdfWriter</code> was costly to initialize (for example if it has a lot of dependencies or if it does expensive things in the constructor) lazy injection can help to avoid instantiating the object <strong>until it is used</strong>.</p>
 <h2 id="how-it-works">How it works</h2>
 <p>If you define an object as &quot;lazy&quot;, PHP-DI will inject:</p>
 <ul>
@@ -303,8 +324,7 @@ class Foo
 </ul>
 <p>The proxy is a special kind of object that <strong>looks and behaves exactly like the original object</strong>, so you can't tell the difference. The proxy will instantiate the original object only when needed.</p>
 <p>Creating a proxy is complex. For this, PHP-DI relies on <a href="https://github.com/Ocramius/ProxyManager">ProxyManager</a>, the (amazing) library used by Doctrine, Symfony and Zend.</p>
-<h3 id="example">Example</h3>
-<p>For the simplicity of the example, we will not inject a lazy object, but we will ask the container to return one:</p>
+<p>Let's illustrate that with an example. For the sake of simplicity we will not inject a lazy object but we will ask the container to return one:</p>
 <pre><code class="language-php">class Foo
 {
     public function doSomething()
@@ -312,7 +332,7 @@ class Foo
     }
 }
 
-$container-&gt;set('Foo', \DI\object()-&gt;lazy());
+$container-&gt;set('Foo', \DI\create()-&gt;lazy());
 
 // $proxy is a Proxy object, it is not initialized
 // It is very lightweight in memory
@@ -326,14 +346,15 @@ $proxy-&gt;doSomething();
 <h2 id="how-to-use">How to use</h2>
 <p>You can define an object as &quot;lazy&quot;. If it is injected as a dependency, then a proxy will be injected instead.</p>
 <h3 id="installation">Installation</h3>
-<p>Lazy injection requires the <a href="https://github.com/Ocramius/ProxyManager">Ocramius/ProxyManager</a> library. This library is not installed by default with PHP-DI, you need to require it in your <code>composer.json</code>:</p>
-<pre><code class="language-json">{
-    "require": {
-        "php-di/php-di": "*",
-        "ocramius/proxy-manager": "~1.0|~2.0"
-    }
-}</code></pre>
-<p>Then run <code>composer update</code>.</p>
+<p>Lazy injection requires the <a href="https://github.com/Ocramius/ProxyManager">Ocramius/ProxyManager</a> library. This library is not installed by default with PHP-DI, you need to require it:</p>
+<pre><code>composer require ocramius/proxy-manager</code></pre>
+<h3 id="php-configuration-file">PHP configuration file</h3>
+<pre><code class="language-php">&lt;?php
+
+return [
+    'foo' =&gt; DI\create('MyClass')
+        -&gt;lazy(),
+];</code></pre>
 <h3 id="annotations">Annotations</h3>
 <pre><code class="language-php">/**
  * @Injectable(lazy=true)
@@ -343,14 +364,17 @@ class MyClass
 }</code></pre>
 <h3 id="php-code">PHP code</h3>
 <pre><code class="language-php">&lt;?php
-$containerPHP-&gt;set('foo', \DI\object('MyClass')-&gt;lazy());</code></pre>
-<h3 id="php-configuration-file">PHP configuration file</h3>
-<pre><code class="language-php">&lt;?php
-
-return [
-    'foo' =&gt; DI\object('MyClass')
-        -&gt;lazy(),
-];</code></pre>
+$containerPHP-&gt;set('foo', \DI\create('MyClass')-&gt;lazy());</code></pre>
+<h2 id="when-to-use">When to use</h2>
+<p>Lazy injection requires to create proxy objects for each object you declare as <code>lazy</code>. It is not recommended to use this feature more that a few times in one application.</p>
+<p>While proxies are extremely optimized, they are only worth it if the object you define as lazy has a constructor that takes some time (e.g. connects to a database, writes to a file, etc.).</p>
+<h2 id="optimizing-performances">Optimizing performances</h2>
+<p>PHP-DI needs to generate proxies of the classes you mark as &quot;<em>lazy</em>&quot;.</p>
+<p>By default those proxies are generated on every HTTP request, this is good for development but not for production.</p>
+<p>In production you should generate proxies to file:</p>
+<pre><code class="language-php">// Enable writing proxies to file in the tmp/proxies directory
+$containerBuilder-&gt;writeProxiesToFile(true, __DIR__ . '/tmp/proxies');</code></pre>
+<p>You will need to clear the directory every time you deploy to avoid keeping outdated proxies.</p>
         </article>
 
     </div>

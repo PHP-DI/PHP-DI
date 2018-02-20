@@ -138,13 +138,13 @@
 
                         <ul>
                                                             <li class="">
-                                    <a href="http://php-di.org/doc/frameworks/symfony2.html">
-                                        Symfony
+                                    <a href="http://php-di.org/doc/frameworks/slim.html">
+                                        Slim
                                     </a>
                                 </li>
                                                             <li class="">
-                                    <a href="http://php-di.org/doc/frameworks/silex.html">
-                                        Silex
+                                    <a href="http://php-di.org/doc/frameworks/symfony2.html">
+                                        Symfony
                                     </a>
                                 </li>
                                                             <li class="">
@@ -158,13 +158,13 @@
                                     </a>
                                 </li>
                                                             <li class="">
-                                    <a href="http://php-di.org/doc/frameworks/slim.html">
-                                        Slim
+                                    <a href="http://php-di.org/doc/frameworks/silly.html">
+                                        Silly
                                     </a>
                                 </li>
                                                             <li class="">
-                                    <a href="http://php-di.org/doc/frameworks/silly.html">
-                                        Silly
+                                    <a href="http://php-di.org/doc/frameworks/silex.html">
+                                        Silex
                                     </a>
                                 </li>
                                                             <li class="">
@@ -181,11 +181,6 @@
                                                             <li class="">
                                     <a href="http://php-di.org/doc/performances.html">
                                         Performances
-                                    </a>
-                                </li>
-                                                            <li class="">
-                                    <a href="http://php-di.org/doc/scopes.html">
-                                        Scopes
                                     </a>
                                 </li>
                                                             <li class="">
@@ -224,6 +219,22 @@
                                         From PHP-DI 4.x to 5.0
                                     </a>
                                 </li>
+                                                            <li class="">
+                                    <a href="http://php-di.org/doc/migration/6.0.html">
+                                        From PHP-DI 5.x to 6.0
+                                    </a>
+                                </li>
+                                                    </ul>
+                    </li>
+                                    <li>
+                        <span class="section-title">Support</span>
+
+                        <ul>
+                                                            <li class="">
+                                    <a href="http://php-di.org/support.html">
+                                        Enterprise support
+                                    </a>
+                                </li>
                                                     </ul>
                     </li>
                                     <li>
@@ -256,6 +267,11 @@
                                         PHP-DI 4.x
                                     </a>
                                 </li>
+                                                            <li class="">
+                                    <a href="https://github.com/PHP-DI/PHP-DI/tree/5.4/doc">
+                                        PHP-DI 5.x
+                                    </a>
+                                </li>
                                                     </ul>
                     </li>
                             </ul>
@@ -274,7 +290,7 @@
 <h2 id="installation">Installation</h2>
 <p>Install PHP-DI with <a href="http://getcomposer.org/doc/00-intro.html">Composer</a>:</p>
 <pre><code>composer require php-di/php-di</code></pre>
-<p>PHP-DI requires PHP 5.5 or above.</p>
+<p>PHP-DI requires PHP 7.0 or above.</p>
 <h2 id="basic-usage">Basic usage</h2>
 <h3 id="1-use-dependency-injection">1. Use dependency injection</h3>
 <p>First, let's write code using dependency injection without thinking about PHP-DI:</p>
@@ -305,9 +321,9 @@
 }</code></pre>
 <p>As we can see, the <code>UserManager</code> takes the <code>Mailer</code> as a constructor parameter: this is dependency injection!</p>
 <h3 id="2-create-the-container">2. Create the container</h3>
-<p>You can create a container instance preconfigured for development very easily:</p>
-<pre><code class="language-php">$container = DI\ContainerBuilder::buildDevContainer();</code></pre>
-<p>If you want to register definition files (explained below) or tweak some options, you can use the container builder:</p>
+<p>You can create a container instance pre-configured for development very easily:</p>
+<pre><code class="language-php">$container = new Container();</code></pre>
+<p>If you want to register definition files (explained in <a href="php-definitions.html">PHP definitions</a>) or tweak some options, you can use the <a href="container-configuration.html">container builder</a>:</p>
 <pre><code class="language-php">$builder = new DI\ContainerBuilder();
 $builder-&gt;...
 $container = $builder-&gt;build();</code></pre>
@@ -340,7 +356,7 @@ $userManager = new UserManager($mailer);</code></pre>
     'Webservice' =&gt; function (Container $c) {
         return new Webservice($c-&gt;get('api.url'));
     },
-    'Controller' =&gt; DI\object()
+    'Controller' =&gt; DI\create()
         -&gt;constructor(DI\get('Webservice')),
 ];</code></pre>
 <p>Please read the <a href="definition.html">Defining injections</a> documentation to learn about autowiring, annotations and PHP definitions.</p>
@@ -355,8 +371,8 @@ $userManager = new UserManager($mailer);</code></pre>
 <p>For this reason, PHP-DI integrates with some frameworks so that you don't have to call the container (dependencies are injected in controllers):</p>
 <ul>
 <li><a href="frameworks/symfony2.html">Symfony</a></li>
+<li><a href="frameworks/slim.html">Slim</a></li>
 <li><a href="frameworks/silex.html">Silex</a></li>
-<li><a href="frameworks/zf1.html">Zend Framework 1</a></li>
 <li><a href="frameworks/zf2.html">Zend Framework 2</a></li>
 <li><a href="frameworks/silly.html">Silly</a></li>
 </ul>

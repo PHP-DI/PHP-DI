@@ -138,13 +138,13 @@
 
                         <ul>
                                                             <li class="">
-                                    <a href="http://php-di.org/doc/frameworks/symfony2.html">
-                                        Symfony
+                                    <a href="http://php-di.org/doc/frameworks/slim.html">
+                                        Slim
                                     </a>
                                 </li>
                                                             <li class="">
-                                    <a href="http://php-di.org/doc/frameworks/silex.html">
-                                        Silex
+                                    <a href="http://php-di.org/doc/frameworks/symfony2.html">
+                                        Symfony
                                     </a>
                                 </li>
                                                             <li class="">
@@ -158,13 +158,13 @@
                                     </a>
                                 </li>
                                                             <li class="">
-                                    <a href="http://php-di.org/doc/frameworks/slim.html">
-                                        Slim
+                                    <a href="http://php-di.org/doc/frameworks/silly.html">
+                                        Silly
                                     </a>
                                 </li>
                                                             <li class="">
-                                    <a href="http://php-di.org/doc/frameworks/silly.html">
-                                        Silly
+                                    <a href="http://php-di.org/doc/frameworks/silex.html">
+                                        Silex
                                     </a>
                                 </li>
                                                             <li class="">
@@ -181,11 +181,6 @@
                                                             <li class="active">
                                     <a href="http://php-di.org/doc/performances.html">
                                         Performances
-                                    </a>
-                                </li>
-                                                            <li class="">
-                                    <a href="http://php-di.org/doc/scopes.html">
-                                        Scopes
                                     </a>
                                 </li>
                                                             <li class="">
@@ -224,6 +219,22 @@
                                         From PHP-DI 4.x to 5.0
                                     </a>
                                 </li>
+                                                            <li class="">
+                                    <a href="http://php-di.org/doc/migration/6.0.html">
+                                        From PHP-DI 5.x to 6.0
+                                    </a>
+                                </li>
+                                                    </ul>
+                    </li>
+                                    <li>
+                        <span class="section-title">Support</span>
+
+                        <ul>
+                                                            <li class="">
+                                    <a href="http://php-di.org/support.html">
+                                        Enterprise support
+                                    </a>
+                                </li>
                                                     </ul>
                     </li>
                                     <li>
@@ -256,6 +267,11 @@
                                         PHP-DI 4.x
                                     </a>
                                 </li>
+                                                            <li class="">
+                                    <a href="https://github.com/PHP-DI/PHP-DI/tree/5.4/doc">
+                                        PHP-DI 5.x
+                                    </a>
+                                </li>
                                                     </ul>
                     </li>
                             </ul>
@@ -269,44 +285,89 @@
             </div>
 
             <h1 id="performances">Performances</h1>
-<h2 id="cache">Cache</h2>
-<p>PHP-DI uses the <a href="definition.html">definitions</a> you configured to instantiate classes.</p>
-<p>Reading those definitions (and, if enabled, reading annotations or autowiring) on each request can be avoided by using a cache. The caching system PHP-DI uses is the <a href="http://doctrine-common.readthedocs.org/en/latest/reference/caching.html">Doctrine Cache</a> library.</p>
-<h3 id="setup">Setup</h3>
-<p>The Doctrine Cache library is not installed by default with PHP-DI, you need to install it with Composer:</p>
-<pre><code class="language-json">{
-    "require": {
-        ...
-        "doctrine/cache": "~1.4"
-    }
-}</code></pre>
-<p>Then you can then pass a cache instance to the container builder:</p>
-<pre><code class="language-php">$containerBuilder-&gt;setDefinitionCache(new Doctrine\Common\Cache\ApcCache());</code></pre>
-<p>Heads up: do not use a cache in a development environment, else changes you make to the definitions (annotations, configuration files, etc.) may not be taken into account. The only cache you might use in development is the <code>ArrayCache</code> because it doesn't persist data between requests.</p>
-<h3 id="cache-types">Cache types</h3>
-<p>The cache implementation is provided by Doctrine (because it works very well) and supports the following adapters:</p>
+<h2 id="a-note-about-caching">A note about caching</h2>
+<p>PHP-DI 4 and 5 relied a lot on caching. With PHP-DI 6 the main vector for optimization is now to compile the container into highly optimized code (see below). Compiling the container is simpler and faster.</p>
+<h2 id="compiling-the-container">Compiling the container</h2>
+<p>PHP-DI performs two tasks that can be expensive:</p>
 <ul>
-<li><code>ArrayCache</code> (in memory, lifetime of the request)</li>
-<li><code>ApcCache</code> (requires the APC or APCu extension)</li>
-<li><code>MemcacheCache</code> (requires the memcache extension)</li>
-<li><code>MemcachedCache</code> (requires the memcached extension)</li>
-<li><code>RedisCache</code> (requires the phpredis extension)</li>
-<li><code>FilesystemCache</code> (not optimal for high concurrency)</li>
-<li><code>PhpFileCache</code>: incompatible with data stored by PHP-DI</li>
-<li><code>WinCacheCache</code> (requires the wincache extension)</li>
-<li><code>XcacheCache</code> (requires the xcache extension)</li>
-<li><code>ZendDataCache</code> (requires Zend Server Platform)</li>
+<li>reading definitions from your <a href="php-definitions.html">configuration</a>, from <a href="autowiring.html">autowiring</a> or from <a href="annotations.html">annotations</a></li>
+<li>resolving those definitions to create your services</li>
 </ul>
-<p>Read the <a href="http://docs.doctrine-project.org/projects/doctrine-common/en/latest/reference/caching.html">Doctrine documentation</a> for more details.</p>
-<p>The recommended cache is the <code>ApcCache</code>.</p>
-<h3 id="cache-prefixes">Cache prefixes</h3>
-<p>If you run the same application twice on the same machine, both installs will use the same cache which can cause conflicts.</p>
-<p>Conflicts can also happen if an application runs on different &quot;environments&quot; (e.g. production, development…) on the same machine (see the <a href="environments.html">environments documentation</a>).</p>
-<p>To avoid this situation, you should use a cache &quot;prefix&quot;: each installation of your app has a unique ID, and this ID is used to prefix cache keys
-to avoid collisions.</p>
-<pre><code class="language-php">$cache = new Doctrine\Common\Cache\ApcCache();
-$cache-&gt;setNamespace('MyApplication');
-$containerBuilder-&gt;setDefinitionCache($cache);</code></pre>
+<p>In order to avoid those two tasks, the container can be compiled into PHP code optimized especially for your configuration and your classes.</p>
+<h3 id="setup">Setup</h3>
+<p>Compiling the container is as easy as calling the <code>enableCompilation()</code> method on the container builder:</p>
+<pre><code class="language-php">$containerBuilder = new \DI\ContainerBuilder();
+$containerBuilder-&gt;enableCompilation(__DIR__ . '/var/cache');
+
+// […]
+
+$container = $containerBuilder-&gt;build();</code></pre>
+<p>The <code>enableCompilation()</code> method takes the path of the directory in which to store the compiled container.</p>
+<h3 id="deployment-in-production">Deployment in production</h3>
+<p>When a container is configured to be compiled, <strong>it will be compiled once and never be regenerated again</strong>. That allows for maximum performances in production.</p>
+<p>When you deploy new versions of your code to production <strong>you must delete the generated file</strong> (or the directory that contains it) to ensure that the container is re-compiled.</p>
+<p>If your production handles a lot of traffic you may also want to generate the compiled container <em>before</em> the new version of your code goes live. That phase is known as the &quot;warmup&quot; phase. To do this, simply create the container (call <code>$containerBuilder-&gt;build()</code>) during your deployment step and the compiled container will be created.</p>
+<h3 id="development-environment">Development environment</h3>
+<p><strong>Do not compile the container in a development environment</strong>, else all the changes you make to the definitions (annotations, configuration files, etc.) will not be taken into account. Here is an example of what you can do:</p>
+<pre><code class="language-php">$containerBuilder = new \DI\ContainerBuilder();
+if (/* is production */) {
+    $containerBuilder-&gt;enableCompilation(__DIR__ . '/var/cache');
+}</code></pre>
+<h3 id="optimizing-for-compilation">Optimizing for compilation</h3>
+<p>As you can read in the &quot;<em>How it works</em>&quot; section, PHP-DI will take all the definitions it can find and compile them. That means that definitions like <strong>autowired classes that are not listed in the configuration cannot be compiled</strong> since PHP-DI doesn't know about them.</p>
+<p>If you want to optimize performances to a maximum in exchange for more verbosity, you can let PHP-DI know about all the autowired classes by listing them in definition files:</p>
+<pre><code class="language-php">return [
+    // ... (your definitions)
+
+    UserController::class =&gt; autowire(),
+    BlogController::class =&gt; autowire(),
+    ProductController::class =&gt; autowire(),
+    // ...
+];</code></pre>
+<p>You do not need to configure them (autowiring will still take care of that) but at least now PHP-DI will know about those classes and will compile their definitions.</p>
+<p>Currently PHP-DI does not traverse directories to find autowired or annotated classes automatically.</p>
+<p>It also does not resolve <a href="php-definitions.html#wildcards">wildcard definitions</a> during the compilation process. Those definitions will still work perfectly, they will simply not get a performance boost when using a compiled container.</p>
+<p>On the other hand factory definitions (either defined with closures or with class factories) are supported in the compiled container. However please note that if you are using closures as factories:</p>
+<ul>
+<li>you should not use <code>$this</code> inside closures</li>
+<li>you should not import variables inside the closure using the <code>use</code> keyword, like in <code>function () use ($foo) { ...</code></li>
+</ul>
+<p>These limitations exist because the code of each closure is copied into the compiled container. It is safe to say that you should probably not do these things even if you do not compile the container.</p>
+<h3 id="how-it-works">How it works</h3>
+<p>PHP-DI will read definitions from your <a href="php-definitions.html">configuration</a>. When the container is compiled, PHP code will be generated based on those definitions.</p>
+<p>For example let's take the definition for creating an object:</p>
+<pre><code class="language-php">return [
+    'Logger' =&gt; DI\create()
+        -&gt;constructor('/tmp/app.log')
+        -&gt;method('setLevel', 'warning'),
+];</code></pre>
+<p>This definition will be compiled to PHP code similar to this:</p>
+<pre><code class="language-php">$object = new Logger('/tmp/app.log');
+$object-&gt;setLevel('warning');
+return $object;</code></pre>
+<p>All the compiled definitions will be dumped into a PHP class (the compiled container) which will be written to a file (for example <code>CompiledContainer.php</code>).</p>
+<p>At runtime, the container builder will see that the file <code>CompiledContainer.php</code> exists and will load it (instead of loading the definition files). That PHP file may contain a lot of code but PHP's opcode cache will cache that class in memory (remember to use opcache in production). When a definition needs to be resolved, PHP-DI will simply execute the compiled code and return the created instance.</p>
+<h2 id="optimizing-lazy-injection">Optimizing lazy injection</h2>
+<p>If you are using the <a href="lazy-injection.html">Lazy Injection</a> feature you should read the section <a href="lazy-injection.html#optimizing-performances">&quot;Optimizing performances&quot; of the guide</a>.</p>
+<h2 id="caching">Caching</h2>
+<p>Compiling the container is the most efficient solution, but it has some limits. The following cases are not optimized:</p>
+<ul>
+<li>autowired (or annotated) classes that are not declared in the configuration</li>
+<li>wildcard definitions</li>
+<li>usage of <code>Container::make()</code> or <code>Container::injectOn()</code> (because those are not using the compiled code)</li>
+</ul>
+<p>If you make heavy use of those features, and if it slows down your application you can enable the caching system. The cache will ensure annotations or the reflection is not read again on every request.</p>
+<p>The cache relies on APCu directly because it is the only cache system that makes sense (very fast to write and read). Other caches are not good options, this is why PHP-DI does not use PSR-6 or PSR-16 for this cache.</p>
+<p>To enable the cache:</p>
+<pre><code class="language-php">$containerBuilder = new \DI\ContainerBuilder();
+if (/* is production */) {
+    $containerBuilder-&gt;enableDefinitionCache();
+}</code></pre>
+<p>Heads up:</p>
+<ul>
+<li>do not use a cache in a development environment, else changes you make to the definitions (annotations, configuration files, etc.) may not be taken into account</li>
+<li>clear the APCu cache on each deployment in production (to avoid using a stale cache)</li>
+</ul>
         </article>
 
     </div>
