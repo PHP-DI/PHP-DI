@@ -7,7 +7,7 @@ date: February 20th 2018
 
 I am very happy to announce that PHP-DI 6.0 has been released!
 
-**If you have never heard of PHP-DI before visit [the home page](../) first** to get an overview of what PHP-DI can do for you.
+**If you have never heard of PHP-DI visit [the home page](../) first** to get an overview of what PHP-DI can do for you.
 
 This new major version focuses on two goals:
 - **performances**
@@ -69,7 +69,7 @@ Unsure how to upgrade? Don't worry it is easy, the [upgrade guide](../doc/migrat
 
 ### Nested definitions
 
-Another big problem with PHP-DI 5 was how it handled nested definitions. Some were supported, some weren't, and it wasn't always consistent.
+Another problem with PHP-DI 5 was how it handled nested definitions. Some were supported, some weren't, and it wasn't always consistent.
 
 PHP-DI 6 makes it simpler and consistent: **all definitions can now be nested**. On top of that, closures are now always interpreted as factories. This makes a lot of use cases more practical, for example:
 
@@ -132,5 +132,7 @@ It's a very small change but it should make it a bit more pleasant to use in sma
 I hope you enjoy this new release as much as I enjoyed working on it for the last year. Thank you for showing more and more support for the project, this new release got code contributions from 8 contributors as well as ideas and support from even more. Thank you.
 
 As always, if you want the complete list of changes head over to [the change log](../change-log.md). If you are migrating from a 5.x version have a look at the detailed [migration guide](../doc/migration/6.0.md).
+
+The documentation shown on [php-di.org](http://php-di.org) is now for the 6.0 version, the 5.x documentation can be found [here](https://github.com/PHP-DI/PHP-DI/tree/5.4/doc).
 
 If something isn't right in the package or the documentation, please [open an issue](https://github.com/PHP-DI/PHP-DI/issues/new) or a pull request. You can also find support in the [Gitter chatroom](https://gitter.im/PHP-DI/PHP-DI).
