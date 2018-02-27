@@ -256,7 +256,7 @@ PHP;
         // Check that the value can be compiled
         $errorMessage = $this->isCompilable($value);
         if ($errorMessage !== true) {
-            throw new InvalidDefinition((string) $errorMessage);
+            throw new InvalidDefinition($errorMessage);
         }
 
         if ($value instanceof Definition) {

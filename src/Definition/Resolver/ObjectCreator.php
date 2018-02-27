@@ -57,8 +57,6 @@ class ObjectCreator implements DefinitionResolver
      *
      * This will create a new instance of the class using the injections points defined.
      *
-     * {@inheritdoc}
-     *
      * @param ObjectDefinition $definition
      *
      * @return object|null
@@ -78,8 +76,6 @@ class ObjectCreator implements DefinitionResolver
      * or if the class doesn't exist.
      *
      * @param ObjectDefinition $definition
-     *
-     * {@inheritdoc}
      */
     public function isResolvable(Definition $definition, array $parameters = []) : bool
     {

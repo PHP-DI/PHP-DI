@@ -25,7 +25,7 @@ class MethodInjection implements Definition
 
     public function __construct(string $methodName, array $parameters = [])
     {
-        $this->methodName = (string) $methodName;
+        $this->methodName = $methodName;
         $this->parameters = $parameters;
     }
 
