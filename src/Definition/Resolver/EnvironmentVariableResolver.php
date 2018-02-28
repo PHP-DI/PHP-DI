@@ -35,8 +35,6 @@ class EnvironmentVariableResolver implements DefinitionResolver
      * Resolve an environment variable definition to a value.
      *
      * @param EnvironmentVariableDefinition $definition
-     *
-     * {@inheritdoc}
      */
     public function resolve(Definition $definition, array $parameters = [])
     {

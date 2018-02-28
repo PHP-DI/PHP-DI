@@ -55,8 +55,6 @@ class FactoryResolver implements DefinitionResolver
      * This will call the callable of the definition.
      *
      * @param FactoryDefinition $definition
-     *
-     * {@inheritdoc}
      */
     public function resolve(Definition $definition, array $parameters = [])
     {
