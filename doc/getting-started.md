@@ -64,7 +64,7 @@ As we can see, the `UserManager` takes the `Mailer` as a constructor parameter: 
 You can create a container instance pre-configured for development very easily:
 
 ```php
-$container = new Container();
+$container = new DI\Container();
 ```
 
 If you want to register definition files (explained in [PHP definitions](php-definitions.md)) or tweak some options, you can use the [container builder](container-configuration.md):
