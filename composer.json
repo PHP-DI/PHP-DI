@@ -30,7 +30,7 @@
         "php-di/invoker": "^2.0",
         "php-di/phpdoc-reader": "^2.0.1",
         "jeremeamia/superclosure": "^2.0",
-        "nikic/php-parser": "^2.0|^3.0"
+        "nikic/php-parser": "^2.0|^3.0|^4.0"
     },
     "require-dev": {
         "phpunit/phpunit": "~6.4",
