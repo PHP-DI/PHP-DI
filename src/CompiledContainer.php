@@ -13,6 +13,7 @@ use Invoker\Exception\NotEnoughParametersException;
 use Invoker\Invoker;
 use Invoker\InvokerInterface;
 use Invoker\ParameterResolver\AssociativeArrayResolver;
+use Invoker\ParameterResolver\DefaultValueResolver;
 use Invoker\ParameterResolver\NumericArrayResolver;
 use Invoker\ParameterResolver\ResolverChain;
 
@@ -101,6 +102,7 @@ abstract class CompiledContainer extends Container
                 new AssociativeArrayResolver,
                 new FactoryParameterResolver($this->delegateContainer),
                 new NumericArrayResolver,
+                new DefaultValueResolver,
             ]);
 
             $this->factoryInvoker = new Invoker($parameterResolver, $this->delegateContainer);

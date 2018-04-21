@@ -12,6 +12,7 @@ use Invoker\Exception\NotCallableException;
 use Invoker\Exception\NotEnoughParametersException;
 use Invoker\Invoker;
 use Invoker\ParameterResolver\AssociativeArrayResolver;
+use Invoker\ParameterResolver\DefaultValueResolver;
 use Invoker\ParameterResolver\NumericArrayResolver;
 use Invoker\ParameterResolver\ResolverChain;
 use Psr\Container\ContainerInterface;
@@ -60,9 +61,10 @@ class FactoryResolver implements DefinitionResolver
     {
         if (! $this->invoker) {
             $parameterResolver = new ResolverChain([
-               new AssociativeArrayResolver,
-               new FactoryParameterResolver($this->container),
-               new NumericArrayResolver,
+                new AssociativeArrayResolver,
+                new FactoryParameterResolver($this->container),
+                new NumericArrayResolver,
+                new DefaultValueResolver,
             ]);
 
             $this->invoker = new Invoker($parameterResolver, $this->container);
