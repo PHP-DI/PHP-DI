@@ -59,4 +59,20 @@ class DefaultEntriesTest extends BaseContainerTest
 
         $this->assertSame($container, $container->get(ContainerInterface::class));
     }
+
+    /**
+     * @dataProvider provideContainer
+     */
+    public function testWithAWrapperContainer(ContainerBuilder $builder)
+    {
+        $wrapperContainer = new Container;
+
+        $builder->wrapContainer($wrapperContainer);
+        $container = $builder->build();
+
+        $this->assertSame($wrapperContainer, $container->get(Container::class));
+        $this->assertSame($wrapperContainer, $container->get(ContainerInterface::class));
+        $this->assertSame($container, $container->get(InvokerInterface::class));
+        $this->assertSame($container, $container->get(FactoryInterface::class));
+    }
 }

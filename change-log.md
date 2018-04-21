@@ -4,6 +4,7 @@
 
 - Fix [#526](https://github.com/PHP-DI/PHP-DI/issues/526): Support optional parameters in factories
 - [#585](https://github.com/PHP-DI/PHP-DI/issues/585) Add support for PHP-Parser 4.0
+- [#582](https://github.com/PHP-DI/PHP-DI/issues/582) Register `ContainerInterface` to point to the wrapper container if it was defined
 
 ## 6.0
 
