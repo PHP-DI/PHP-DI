@@ -1,5 +1,9 @@
 # Change log
 
+## 6.0.2
+
+- Fix potential regression introduced when fixing [#582](https://github.com/PHP-DI/PHP-DI/issues/582)
+
 ## 6.0.1
 
 - Fix [#526](https://github.com/PHP-DI/PHP-DI/issues/526): Support optional parameters in factories

@@ -106,7 +106,7 @@ class Container implements ContainerInterface, FactoryInterface, InvokerInterfac
 
         // Auto-register the container
         $this->resolvedEntries = [
-            self::class => $this->delegateContainer,
+            self::class => $this,
             ContainerInterface::class => $this->delegateContainer,
             FactoryInterface::class => $this,
             InvokerInterface::class => $this,
