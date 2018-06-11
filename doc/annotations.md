@@ -35,6 +35,10 @@ It can be used on:
 - methods (setter/method injection)
 - properties (property injection)
 
+
+> **Warning:** property injections only occours after `__construct`'s execution, so any injectable property will be null inside this method.
+
+
 Here is an example of all possible uses of the `@Inject` annotation:
 
 ```php
@@ -64,6 +68,7 @@ class Example
      */
     public function __construct($param1, $param2)
     {
+        // $this->property1 === null
     }
 
     /**
@@ -73,6 +78,7 @@ class Example
      */
     public function method1(Foo $param)
     {
+        // $this->property1 === {Foo instance}
     }
 
     /**
