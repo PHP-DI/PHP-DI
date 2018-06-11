@@ -322,7 +322,7 @@
 <p>As we can see, the <code>UserManager</code> takes the <code>Mailer</code> as a constructor parameter: this is dependency injection!</p>
 <h3 id="2-create-the-container">2. Create the container</h3>
 <p>You can create a container instance pre-configured for development very easily:</p>
-<pre><code class="language-php">$container = new Container();</code></pre>
+<pre><code class="language-php">$container = new DI\Container();</code></pre>
 <p>If you want to register definition files (explained in <a href="php-definitions.html">PHP definitions</a>) or tweak some options, you can use the <a href="container-configuration.html">container builder</a>:</p>
 <pre><code class="language-php">$builder = new DI\ContainerBuilder();
 $builder-&gt;...

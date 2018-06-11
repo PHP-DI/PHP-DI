@@ -301,6 +301,7 @@
 <li>methods (setter/method injection)</li>
 <li>properties (property injection)</li>
 </ul>
+<p><em>Note: property injections occur after the constructor is executed, so any injectable property will be null inside <code>__construct</code>.</em></p>
 <p>Here is an example of all possible uses of the <code>@Inject</code> annotation:</p>
 <pre><code class="language-php">class Example
 {
