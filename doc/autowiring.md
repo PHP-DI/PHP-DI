@@ -24,8 +24,6 @@ class UserRegistrationService
     public function __construct(UserRepository $repository)
     {
         // ...
-        // Note that no property injections where executed yet.
-        // So `$this->injectableProperty` will be `null`.
     }
 }
 ```
