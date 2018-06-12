@@ -142,14 +142,26 @@ class Compiler
     }
 
     /**
+     * Use a hash to ensure that the used method names in the CompiledContainer are both unique and idempotent.
+     *
+     * @param string $prefix
+     * @param string $value
+     *
+     * @return string
+     */
+    private function getHashedValue(string $prefix, string $value): string
+    {
+        return sprintf('%s%s', $prefix, md5($value));
+    }
+
+    /**
      * @throws DependencyException
      * @throws InvalidDefinition
      * @return string The method name
      */
     private function compileDefinition(string $entryName, Definition $definition) : string
     {
-        // Generate a unique method name
-        $methodName = str_replace('.', '', uniqid('get', true));
+        $methodName = $this->getHashedValue('get', $entryName . $definition);
         $this->entryToMethodMapping[$entryName] = $methodName;
 
         switch (true) {
@@ -260,8 +272,8 @@ PHP;
         }
 
         if ($value instanceof Definition) {
-            // Give it an arbitrary unique name
-            $subEntryName = uniqid('SubEntry');
+            $subEntryName = $this->getHashedValue('SubEntry', $value->getName() . $value);
+
             // Compile the sub-definition in another method
             $methodName = $this->compileDefinition($subEntryName, $value);
             // The value is now a method call to that method (which returns the value)
