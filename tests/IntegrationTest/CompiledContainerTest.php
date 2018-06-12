@@ -9,6 +9,8 @@ use DI\ContainerBuilder;
 use function DI\create;
 use DI\Definition\Exception\InvalidDefinition;
 use function DI\get;
+use DI\Test\IntegrationTest\Definitions\NestedDefinitionsTest\AllKindsOfInjections;
+use DI\Test\IntegrationTest\Definitions\NestedDefinitionsTest\Autowireable;
 
 /**
  * Tests specific to the compiled container.
@@ -54,6 +56,38 @@ class CompiledContainerTest extends BaseContainerTest
         // (the compiled file already existed so the second container did not recompile into it)
         // This behavior is obvious for performance reasons.
         self::assertEquals('bar', $container->get('foo'));
+    }
+
+    /** @test */
+    public function the_compiled_container_is_idempotent()
+    {
+        $compiledContainerClass1 = self::generateCompiledClassName();
+        $compiledContainerClass2 = self::generateCompiledClassName();
+
+        $definitions = [
+            'foo' => 'bar',
+            AllKindsOfInjections::class => create()
+                ->constructor(create('stdClass'))
+                ->property('property', autowire(Autowireable::class))
+                ->method('method', \DI\factory(function () {
+                    return new \stdClass;
+                })),
+        ];
+
+        // Create a compiled container in a specific file
+        $builder1 = new ContainerBuilder;
+        $builder1->addDefinitions($definitions);
+        $builder1->enableCompilation(self::COMPILATION_DIR, $compiledContainerClass1);
+        $builder1->build();
+
+        // Create a second compiled container with the same configuration but in a different file
+        $builder2 = new ContainerBuilder;
+        $builder2->addDefinitions($definitions);
+        $builder2->enableCompilation(self::COMPILATION_DIR, $compiledContainerClass2);
+        $builder2->build();
+
+        // The method mapping of the resulting CompiledContainers should be equal
+        self::assertEquals($compiledContainerClass1::METHOD_MAPPING, $compiledContainerClass2::METHOD_MAPPING);
     }
 
     /**
