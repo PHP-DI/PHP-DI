@@ -157,6 +157,17 @@ class Compiler
     private function compileDefinition(string $entryName, Definition $definition) : string
     {
         $methodName = $this->getHashedValue('get', $entryName);
+
+        //In case an Entry is already added, the used method should be equal
+        if(isset($this->entryToMethodMapping[$entryName]) && $this->entryToMethodMapping[$entryName] !== $methodName){
+            throw new InvalidDefinition(sprintf(
+                'Entry "%s" cannot be compiled. An Entry with the same name already exists pointing to method %s(), while this one points to method %s().',
+                $entryName,
+                $this->entryToMethodMapping[$entryName],
+                $methodName
+            ));
+        }
+
         $this->entryToMethodMapping[$entryName] = $methodName;
 
         switch (true) {
