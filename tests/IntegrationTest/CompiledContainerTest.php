@@ -63,19 +63,35 @@ class CompiledContainerTest extends BaseContainerTest
         $compiledContainerClass2 = self::generateCompiledClassName();
 
         $definitions = [
-            'foo' => 'bar',
+            'foo' => 'barFromFoo',
+            'fooReference' => \DI\get('foo'),
+            'factory' => function () {
+                return 'barFromFactory';
+            },
+            'factoryReference' => \DI\get('factory'),
+            'array' => [
+                1,
+                2,
+                3,
+                'fooBar',
+            ],
+            'arrayValue' => \DI\value('array'),
             CompiledContainerTest\AllKindsOfInjections::class => create()
                 ->constructor(create('stdClass'))
                 ->property('property', autowire(CompiledContainerTest\Autowireable::class))
-                ->method('method', \DI\factory(function () {
-                    return new \stdClass;
-                })),
+                ->method('method', \DI\factory(
+                        function () {
+                            return new \stdClass;
+                        }
+                    )
+                ),
+            CompiledContainerTest\Autowireable::class  => \DI\autowire(),
         ];
 
         // Create a compiled container in a specific file
         $builder1 = new ContainerBuilder;
         $builder1->addDefinitions($definitions);
-        $builder1->enableCompilation(self::COMPILATION_DIR, $compiledContainerClass1);
+        $builder1->enableCompilation(__DIR__, $compiledContainerClass1);
         $builder1->build();
 
         // Create a second compiled container with the same configuration but in a different file
