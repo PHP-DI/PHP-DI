@@ -91,7 +91,7 @@ class CompiledContainerTest extends BaseContainerTest
         // Create a compiled container in a specific file
         $builder1 = new ContainerBuilder;
         $builder1->addDefinitions($definitions);
-        $builder1->enableCompilation(__DIR__, $compiledContainerClass1);
+        $builder1->enableCompilation(self::COMPILATION_DIR, $compiledContainerClass1);
         $builder1->build();
 
         // Create a second compiled container with the same configuration but in a different file
