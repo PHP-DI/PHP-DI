@@ -143,15 +143,10 @@ class Compiler
 
     /**
      * Use a hash to ensure that the used method names in the CompiledContainer are both unique and idempotent.
-     *
-     * @param string $prefix
-     * @param string $value
-     *
-     * @return string
      */
     private function getHashedValue(string $prefix, string $value): string
     {
-        return sprintf('%s%s', $prefix, md5($value));
+        return $prefix . md5($value);
     }
 
     /**
@@ -161,7 +156,7 @@ class Compiler
      */
     private function compileDefinition(string $entryName, Definition $definition) : string
     {
-        $methodName = $this->getHashedValue('get', $entryName . $definition);
+        $methodName = $this->getHashedValue('get', $entryName);
         $this->entryToMethodMapping[$entryName] = $methodName;
 
         switch (true) {

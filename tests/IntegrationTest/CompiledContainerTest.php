@@ -9,8 +9,6 @@ use DI\ContainerBuilder;
 use function DI\create;
 use DI\Definition\Exception\InvalidDefinition;
 use function DI\get;
-use DI\Test\IntegrationTest\Definitions\NestedDefinitionsTest\AllKindsOfInjections;
-use DI\Test\IntegrationTest\Definitions\NestedDefinitionsTest\Autowireable;
 
 /**
  * Tests specific to the compiled container.
@@ -66,9 +64,9 @@ class CompiledContainerTest extends BaseContainerTest
 
         $definitions = [
             'foo' => 'bar',
-            AllKindsOfInjections::class => create()
+            CompiledContainerTest\AllKindsOfInjections::class => create()
                 ->constructor(create('stdClass'))
-                ->property('property', autowire(Autowireable::class))
+                ->property('property', autowire(CompiledContainerTest\Autowireable::class))
                 ->method('method', \DI\factory(function () {
                     return new \stdClass;
                 })),
@@ -285,5 +283,31 @@ class ConstructorWithAbstractClassTypehint
 }
 
 abstract class AbstractClass
+{
+}
+
+class AllKindsOfInjections
+{
+    public $property;
+    public $constructorParameter;
+    public $methodParameter;
+    public function __construct($constructorParameter)
+    {
+        $this->constructorParameter = $constructorParameter;
+    }
+    public function method($methodParameter)
+    {
+        $this->methodParameter = $methodParameter;
+    }
+}
+class Autowireable
+{
+    private $dependency;
+    public function __construct(AutowireableDependency $dependency)
+    {
+        $this->dependency = $dependency;
+    }
+}
+class AutowireableDependency
 {
 }
