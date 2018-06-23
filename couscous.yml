@@ -67,6 +67,9 @@ menu:
                 zf1:
                     text: Zend Framework 1
                     url: doc/frameworks/zf1.html
+                ze:
+                    text: Zend Expressive
+                    absoluteUrl: https://github.com/elie29/zend-di-config
                 slim:
                     text: Slim
                     url: doc/frameworks/slim.html
@@ -128,6 +131,7 @@ menu:
 frameworks:
     zf1: Zend Framework 1
     zf2: Zend Framework 2
+    ze: Zend Expressive
     symfony2: Symfony
     silex: Silex
     slim: Slim
