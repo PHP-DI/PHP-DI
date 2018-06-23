@@ -1,0 +1,6 @@
+parameters:
+	excludes_analyse:
+		- %rootDir%/../../../src/Compiler/Template.php
+	ignoreErrors:
+		- '#Access to undefined constant DI\\CompiledContainer::METHOD_MAPPING.#'
+		- '#Function apcu_.* not found.#'

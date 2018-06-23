@@ -120,9 +120,8 @@ class AnnotationBasedAutowiring implements DefinitionSource, Autowiring
     private function readProperty(ReflectionProperty $property, ObjectDefinition $definition, $classname = null)
     {
         // Look for @Inject annotation
-        /** @var Inject $annotation */
         $annotation = $this->getAnnotationReader()->getPropertyAnnotation($property, 'DI\Annotation\Inject');
-        if ($annotation === null) {
+        if (!$annotation instanceof Inject) {
             return;
         }
 
@@ -175,7 +174,6 @@ class AnnotationBasedAutowiring implements DefinitionSource, Autowiring
     private function getMethodInjection(ReflectionMethod $method)
     {
         // Look for @Inject annotation
-        /** @var $annotation Inject|null */
         try {
             $annotation = $this->getAnnotationReader()->getMethodAnnotation($method, 'DI\Annotation\Inject');
         } catch (InvalidAnnotation $e) {
@@ -186,12 +184,13 @@ class AnnotationBasedAutowiring implements DefinitionSource, Autowiring
                 $e->getMessage()
             ), 0, $e);
         }
-        $annotationParameters = $annotation ? $annotation->getParameters() : [];
 
         // @Inject on constructor is implicit
         if (! ($annotation || $method->isConstructor())) {
             return null;
         }
+
+        $annotationParameters = $annotation instanceof Inject ? $annotation->getParameters() : [];
 
         $parameters = [];
         foreach ($method->getParameters() as $index => $parameter) {

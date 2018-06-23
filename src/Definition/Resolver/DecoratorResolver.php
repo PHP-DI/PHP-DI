@@ -45,8 +45,6 @@ class DecoratorResolver implements DefinitionResolver
      * This will call the callable of the definition and pass it the decorated entry.
      *
      * @param DecoratorDefinition $definition
-     *
-     * {@inheritdoc}
      */
     public function resolve(Definition $definition, array $parameters = [])
     {

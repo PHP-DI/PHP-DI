@@ -21,8 +21,6 @@ class InstanceInjector extends ObjectCreator
      * Injects dependencies on an existing instance.
      *
      * @param InstanceDefinition $definition
-     *
-     * {@inheritdoc}
      */
     public function resolve(Definition $definition, array $parameters = [])
     {

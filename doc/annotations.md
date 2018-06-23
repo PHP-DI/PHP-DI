@@ -35,6 +35,8 @@ It can be used on:
 - methods (setter/method injection)
 - properties (property injection)
 
+*Note: property injections occur after the constructor is executed, so any injectable property will be null inside `__construct`.*
+
 Here is an example of all possible uses of the `@Inject` annotation:
 
 ```php

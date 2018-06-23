@@ -59,4 +59,21 @@ class DefaultEntriesTest extends BaseContainerTest
 
         $this->assertSame($container, $container->get(ContainerInterface::class));
     }
+
+    /**
+     * @dataProvider provideContainer
+     */
+    public function testWithAWrapperContainer(ContainerBuilder $builder)
+    {
+        $wrapperContainer = new Container;
+
+        $builder->wrapContainer($wrapperContainer);
+        $container = $builder->build();
+
+        $this->assertSame($wrapperContainer, $container->get(ContainerInterface::class));
+        // These entries must point to the PHP-DI instance because the wrapper container is type-hinted as `ContainerInterface` only
+        $this->assertSame($container, $container->get(Container::class));
+        $this->assertSame($container, $container->get(InvokerInterface::class));
+        $this->assertSame($container, $container->get(FactoryInterface::class));
+    }
 }

@@ -551,6 +551,21 @@ class FactoryDefinitionTest extends BaseContainerTest
         $builder->addDefinitions(__DIR__ . '/FactoryDefinition/config.inc');
         $this->assertEquals('foo', $builder->build()->get('factory'));
     }
+
+    /**
+     * @dataProvider provideContainer
+     */
+    public function test_optional_parameters_can_be_omitted(ContainerBuilder $builder)
+    {
+        $builder->addDefinitions([
+            'factory' => function ($c, $entry, $a = 'foo') {
+                return $a;
+            },
+        ]);
+        $container = $builder->build();
+
+        self::assertEquals('foo', $container->get('factory'));
+    }
 }
 
 class FactoryDefinitionTestClass
