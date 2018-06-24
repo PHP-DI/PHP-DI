@@ -69,7 +69,7 @@ menu:
                     url: doc/frameworks/zf1.html
                 ze:
                     text: Zend Expressive
-                    absoluteUrl: https://github.com/elie29/zend-di-config
+                    url: doc/frameworks/zend-expressive.html
                 slim:
                     text: Slim
                     url: doc/frameworks/slim.html
