@@ -70,9 +70,6 @@ menu:
                 ze:
                     text: Zend Expressive
                     url: doc/frameworks/zend-expressive.html
-                slim:
-                    text: Slim
-                    url: doc/frameworks/slim.html
                 silly:
                     text: Silly
                     url: doc/frameworks/silly.html
