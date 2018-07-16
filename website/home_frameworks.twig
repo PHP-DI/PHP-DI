@@ -11,12 +11,12 @@
         {% for id, name in frameworks %}
             <div class="col-sm-3 col-md-2">
                 <div class="thumbnail">
-                    <a href="{{ baseUrl }}/doc/frameworks/{{ id }}.html" title="{{ name }}">
+                    <a href="{{ baseUrl }}/doc/frameworks/{{ id }}.html" title="{{ name }} integration with PHP-DI">
                         <img class="framework-logo" src="{{ baseUrl }}/img/frameworks/{{ id }}.png" alt="{{ name }}">
                     </a>
                     <div class="caption">
                         <h4>
-                            <a href="{{ baseUrl }}/doc/frameworks/{{ id }}.html" title="{{ name }} integration guide">{{ name }}</a>
+                            <a href="{{ baseUrl }}/doc/frameworks/{{ id }}.html" title="{{ name }} integration with PHP-DI">{{ name }}</a>
                         </h4>
                     </div>
                 </div>
@@ -26,7 +26,7 @@
     </div>
 
     <p>
-        No framework? It works too, have a look at this <a href="https://github.com/PHP-DI/demo">demo application</a>.
+        No framework? It works too, have a look at this <a href="https://github.com/PHP-DI/demo" title="PHP-DI demo application">demo application</a>.
     </p>
 
     <p class="text-center">

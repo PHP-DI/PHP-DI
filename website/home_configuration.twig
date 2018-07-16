@@ -10,7 +10,7 @@
         <div class='col-md-6'>
             <h4>
                 Object creation
-                <a class="read-more" href="doc/php-definitions.html#objects" title="Creating objects">read more</a>
+                <a class="read-more" href="doc/php-definitions.html#objects" title="Creating objects with PHP-DI">read more</a>
             </h4>
 <pre><code class="php">return [
     Foo::class => create()
@@ -22,7 +22,7 @@
         <div class='col-md-6'>
             <h4>
                 Inline factories
-                <a class="read-more" href="doc/php-definitions.html#factories" title="Writing factories">read more</a>
+                <a class="read-more" href="doc/php-definitions.html#factories" title="Writing factories using closures or classes">read more</a>
             </h4>
 <pre><code class="php">return [
     Foo::class => function ($container) {
@@ -37,7 +37,7 @@
         <div class="col-md-6">
             <h4>
                 Interface-to-implementation binding
-                <a class="read-more" href="doc/php-definitions.html#aliases" title="Aliasing entries">read more</a>
+                <a class="read-more" href="doc/php-definitions.html#aliases" title="Aliasing container entries">read more</a>
             </h4>
 <pre><code class="php">return [
     NotifierInterface::class => get(EmailNotifier::class)
@@ -57,7 +57,7 @@
     <hr>
 
     <p>
-        The configuration format <a href="{{ baseUrl }}/news/06-php-di-4-0-new-definitions.html">has been imagined</a> as a successor of XML and YAML, taking advantages of all the latest features of PHP:
+        The configuration format <a href="{{ baseUrl }}/news/06-php-di-4-0-new-definitions.html" title="PHP-DI's new definition format">has been imagined</a> as a successor of XML and YAML, taking advantages of all the latest features of PHP:
     </p>
 
     <div class="row">
@@ -85,7 +85,7 @@
     </div>
 
     <p class="text-center">
-        <a href="doc/php-definitions.html" class="btn btn-default">Learn more</a>
+        <a href="doc/php-definitions.html" class="btn btn-default" title="PHP-DI configuration reference">Learn more</a>
     </p>
 
 </div>
