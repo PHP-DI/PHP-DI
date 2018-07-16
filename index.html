@@ -13,7 +13,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <title>PHP-DI - The Dependency Injection Container for humans</title>
-    <meta name="description" content="PHP-DI is a Dependency Injection Container for PHP that intends to be practical and powerful">
+    <meta name="description" content="PHP-DI is a Dependency Injection Container for PHP that intends to be practical and powerful.">
 
     <link rel="canonical" href="http://php-di.org" />
 
@@ -42,18 +42,18 @@
                         <span class="icon-bar"></span>
                         <span class="icon-bar"></span>
                     </button>
-                    <a class="navbar-brand" href="http://php-di.org/">PHP-DI</a>
+                    <a class="navbar-brand" href="http://php-di.org/" title="Dependency injection container for PHP">PHP-DI</a>
                 </div>
                 <div class="navbar-form navbar-left hidden-xs hidden-sm">
                     <input id="search-input" type="text" class="form-control" placeholder="Search...">
                 </div>
                 <div class="collapse navbar-collapse" id="top-navigation">
                     <ul class="nav navbar-nav navbar-right">
-                        <li><a href="http://php-di.org/doc/getting-started.html">Getting started</a></li>
-                        <li><a href="http://php-di.org/doc/">Documentation</a></li>
-                        <li><a href="http://php-di.org/news/">News</a></li>
-                        <li><a href="http://php-di.org/change-log.html">Change log</a></li>
-                        <li><a class="github" href="https://github.com/PHP-DI/PHP-DI"><i class="fa fa-github"></i></a></li>
+                        <li><a href="http://php-di.org/doc/getting-started.html" title="Getting started with PHP-DI">Getting started</a></li>
+                        <li><a href="http://php-di.org/doc/" title="PHP-DI documentation">Documentation</a></li>
+                        <li><a href="http://php-di.org/news/" title="News about PHP-DI">News</a></li>
+                        <li><a href="http://php-di.org/change-log.html" title="PHP-DI's changelog">Change log</a></li>
+                        <li><a class="github" href="https://github.com/PHP-DI/PHP-DI" title="PHP-DI on GitHub"><i class="fa fa-github"></i></a></li>
                     </ul>
                 </div>
             </div>
@@ -71,10 +71,10 @@
                     The dependency injection container for humans
                 </p>
                 <p>
-                    <a href="http://php-di.org/doc/getting-started.html" class="btn btn-lg btn-primary">
+                    <a href="http://php-di.org/doc/getting-started.html" class="btn btn-lg btn-primary" title="Get started with dependency injection and PHP-DI">
                         Get started
                     </a>
-                    <a href="http://php-di.org/doc/" class="btn btn-lg btn-default">
+                    <a href="http://php-di.org/doc/" class="btn btn-lg btn-default" title="Read the PHP-DI documentation">
                         Documentation
                     </a>
                 </p>
@@ -113,7 +113,7 @@
     </div>
 
     <p class="text-center">
-        <a href="doc/autowiring.html" class="btn btn-default">Learn more</a>
+        <a href="doc/autowiring.html" class="btn btn-default" title="Learn more about dependency injection autowiring">Learn more</a>
     </p>
 
 </div>
@@ -132,7 +132,7 @@
         <div class='col-md-6'>
             <h4>
                 Object creation
-                <a class="read-more" href="doc/php-definitions.html#objects" title="Creating objects">read more</a>
+                <a class="read-more" href="doc/php-definitions.html#objects" title="Creating objects with PHP-DI">read more</a>
             </h4>
 <pre><code class="php">return [
     Foo::class => create()
@@ -144,7 +144,7 @@
         <div class='col-md-6'>
             <h4>
                 Inline factories
-                <a class="read-more" href="doc/php-definitions.html#factories" title="Writing factories">read more</a>
+                <a class="read-more" href="doc/php-definitions.html#factories" title="Writing factories using closures or classes">read more</a>
             </h4>
 <pre><code class="php">return [
     Foo::class => function ($container) {
@@ -159,7 +159,7 @@
         <div class="col-md-6">
             <h4>
                 Interface-to-implementation binding
-                <a class="read-more" href="doc/php-definitions.html#aliases" title="Aliasing entries">read more</a>
+                <a class="read-more" href="doc/php-definitions.html#aliases" title="Aliasing container entries">read more</a>
             </h4>
 <pre><code class="php">return [
     NotifierInterface::class => get(EmailNotifier::class)
@@ -179,7 +179,7 @@
     <hr>
 
     <p>
-        The configuration format <a href="http://php-di.org/news/06-php-di-4-0-new-definitions.html">has been imagined</a> as a successor of XML and YAML, taking advantages of all the latest features of PHP:
+        The configuration format <a href="http://php-di.org/news/06-php-di-4-0-new-definitions.html" title="PHP-DI's new definition format">has been imagined</a> as a successor of XML and YAML, taking advantages of all the latest features of PHP:
     </p>
 
     <div class="row">
@@ -207,7 +207,7 @@
     </div>
 
     <p class="text-center">
-        <a href="doc/php-definitions.html" class="btn btn-default">Learn more</a>
+        <a href="doc/php-definitions.html" class="btn btn-default" title="PHP-DI configuration reference">Learn more</a>
     </p>
 
 </div>
@@ -283,7 +283,7 @@ return [
     </div>
 
     <p class="text-center">
-        <a href="doc/definition-overriding.html" class="btn btn-default">Learn more</a>
+        <a href="doc/definition-overriding.html" class="btn btn-default" title="Modular architectures using PHP-DI">Learn more</a>
     </p>
 
 </div>
@@ -303,7 +303,7 @@ return [
         <div class="col-md-6">
             <h4>
                 Get & Has
-                <a class="read-more" href="doc/container.html#get-amp-has">read more</a>
+                <a class="read-more" href="doc/container.html#get-amp-has" title="PSR-11 methods">read more</a>
             </h4>
             <p>
                 PHP-DI is compliant with <a href="http://www.php-fig.org/psr/psr-11/">PSR-11</a>:
@@ -362,84 +362,84 @@ $container->make(Foo::class, $parameters);</code></pre>
 
                     <div class="col-sm-3 col-md-2">
                 <div class="thumbnail">
-                    <a href="http://php-di.org/doc/frameworks/zf1.html" title="Zend Framework 1">
+                    <a href="http://php-di.org/doc/frameworks/zf1.html" title="Zend Framework 1 integration with PHP-DI">
                         <img class="framework-logo" src="http://php-di.org/img/frameworks/zf1.png" alt="Zend Framework 1">
                     </a>
                     <div class="caption">
                         <h4>
-                            <a href="http://php-di.org/doc/frameworks/zf1.html" title="Zend Framework 1 integration guide">Zend Framework 1</a>
+                            <a href="http://php-di.org/doc/frameworks/zf1.html" title="Zend Framework 1 integration with PHP-DI">Zend Framework 1</a>
                         </h4>
                     </div>
                 </div>
             </div>
                     <div class="col-sm-3 col-md-2">
                 <div class="thumbnail">
-                    <a href="http://php-di.org/doc/frameworks/zf2.html" title="Zend Framework 2">
+                    <a href="http://php-di.org/doc/frameworks/zf2.html" title="Zend Framework 2 integration with PHP-DI">
                         <img class="framework-logo" src="http://php-di.org/img/frameworks/zf2.png" alt="Zend Framework 2">
                     </a>
                     <div class="caption">
                         <h4>
-                            <a href="http://php-di.org/doc/frameworks/zf2.html" title="Zend Framework 2 integration guide">Zend Framework 2</a>
+                            <a href="http://php-di.org/doc/frameworks/zf2.html" title="Zend Framework 2 integration with PHP-DI">Zend Framework 2</a>
                         </h4>
                     </div>
                 </div>
             </div>
                     <div class="col-sm-3 col-md-2">
                 <div class="thumbnail">
-                    <a href="http://php-di.org/doc/frameworks/ze.html" title="Zend Expressive">
+                    <a href="http://php-di.org/doc/frameworks/ze.html" title="Zend Expressive integration with PHP-DI">
                         <img class="framework-logo" src="http://php-di.org/img/frameworks/ze.png" alt="Zend Expressive">
                     </a>
                     <div class="caption">
                         <h4>
-                            <a href="http://php-di.org/doc/frameworks/ze.html" title="Zend Expressive integration guide">Zend Expressive</a>
+                            <a href="http://php-di.org/doc/frameworks/ze.html" title="Zend Expressive integration with PHP-DI">Zend Expressive</a>
                         </h4>
                     </div>
                 </div>
             </div>
                     <div class="col-sm-3 col-md-2">
                 <div class="thumbnail">
-                    <a href="http://php-di.org/doc/frameworks/symfony2.html" title="Symfony">
+                    <a href="http://php-di.org/doc/frameworks/symfony2.html" title="Symfony integration with PHP-DI">
                         <img class="framework-logo" src="http://php-di.org/img/frameworks/symfony2.png" alt="Symfony">
                     </a>
                     <div class="caption">
                         <h4>
-                            <a href="http://php-di.org/doc/frameworks/symfony2.html" title="Symfony integration guide">Symfony</a>
+                            <a href="http://php-di.org/doc/frameworks/symfony2.html" title="Symfony integration with PHP-DI">Symfony</a>
                         </h4>
                     </div>
                 </div>
             </div>
                     <div class="col-sm-3 col-md-2">
                 <div class="thumbnail">
-                    <a href="http://php-di.org/doc/frameworks/silex.html" title="Silex">
+                    <a href="http://php-di.org/doc/frameworks/silex.html" title="Silex integration with PHP-DI">
                         <img class="framework-logo" src="http://php-di.org/img/frameworks/silex.png" alt="Silex">
                     </a>
                     <div class="caption">
                         <h4>
-                            <a href="http://php-di.org/doc/frameworks/silex.html" title="Silex integration guide">Silex</a>
+                            <a href="http://php-di.org/doc/frameworks/silex.html" title="Silex integration with PHP-DI">Silex</a>
                         </h4>
                     </div>
                 </div>
             </div>
                     <div class="col-sm-3 col-md-2">
                 <div class="thumbnail">
-                    <a href="http://php-di.org/doc/frameworks/slim.html" title="Slim">
+                    <a href="http://php-di.org/doc/frameworks/slim.html" title="Slim integration with PHP-DI">
                         <img class="framework-logo" src="http://php-di.org/img/frameworks/slim.png" alt="Slim">
                     </a>
                     <div class="caption">
                         <h4>
-                            <a href="http://php-di.org/doc/frameworks/slim.html" title="Slim integration guide">Slim</a>
+                            <a href="http://php-di.org/doc/frameworks/slim.html" title="Slim integration with PHP-DI">Slim</a>
                         </h4>
                     </div>
                 </div>
             </div>
                     <div class="col-sm-3 col-md-2">
                 <div class="thumbnail">
-                    <a href="http://php-di.org/doc/frameworks/silly.html" title="Silly">
+                    <a href="http://php-di.org/doc/frameworks/silly.html" title="Silly integration with PHP-DI">
                         <img class="framework-logo" src="http://php-di.org/img/frameworks/silly.png" alt="Silly">
                     </a>
                     <div class="caption">
                         <h4>
-                            <a href="http://php-di.org/doc/frameworks/silly.html" title="Silly integration guide">Silly</a>
+                            <a href="http://php-di.org/doc/frameworks/silly.html" title="Silly integration with PHP-DI">Silly</a>
                         </h4>
                     </div>
                 </div>
@@ -448,7 +448,7 @@ $container->make(Foo::class, $parameters);</code></pre>
     </div>
 
     <p>
-        No framework? It works too, have a look at this <a href="https://github.com/PHP-DI/demo">demo application</a>.
+        No framework? It works too, have a look at this <a href="https://github.com/PHP-DI/demo" title="PHP-DI demo application">demo application</a>.
     </p>
 
     <p class="text-center">
@@ -467,8 +467,6 @@ $container->make(Foo::class, $parameters);</code></pre>
         Developed with care -
         <a href='https://travis-ci.org/PHP-DI/PHP-DI'>
             <img src="https://img.shields.io/travis/PHP-DI/PHP-DI.svg?style=flat-square"></a>
-        <a href='https://scrutinizer-ci.com/g/PHP-DI/PHP-DI/'>
-            <img src="https://img.shields.io/scrutinizer/g/PHP-DI/PHP-DI.svg?style=flat-square"></a>
         <a href='https://coveralls.io/r/PHP-DI/PHP-DI?branch=master'>
             <img src="https://img.shields.io/coveralls/PHP-DI/PHP-DI/master.svg?style=flat-square" alt='Coverage Status'></a>
     </p>
@@ -477,11 +475,12 @@ $container->make(Foo::class, $parameters);</code></pre>
                     <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
                 </p>
                 <p>
-                    By <a href="http://mnapoli.fr/">Matthieu Napoli</a>
-                    and <a href="https://github.com/PHP-DI/PHP-DI/graphs/contributors">contributors</a>
+                    By <a href="http://mnapoli.fr/" title="Software consulting and PHP news">Matthieu Napoli</a>
+                    and <a href="https://github.com/PHP-DI/PHP-DI/graphs/contributors" title="PHP-DI contributors">contributors</a>
                     |
                     Website generated with
-                    <a href="http://couscous.io" target="_blank">Couscous</a>.
+                    <a href="http://couscous.io" title="Static website generator for software documentation">Couscous</a>,
+                    supported by <a href="https://prettyci.com/" title="Continuous integration for PHP coding standards">PrettyCI.com</a>.
                 </p>
             </div>
         </footer>
