@@ -372,7 +372,7 @@ return [
     },
 
     // Same as
-    'Foo' =&gt; factory(function (ContainerInterface $c) {
+    'Foo' =&gt; DI\factory(function (ContainerInterface $c) {
         return new Foo($c-&gt;get('db.host'));
     }),
 ];</code></pre>
@@ -574,8 +574,8 @@ return [
 ];</code></pre>
 <p>Keep in mind that closures are equivalent to &quot;factory&quot; definitions. As such, <strong>closures are always interpreted as factories, even when nested inside other definitions.</strong> If you use anonymous functions for something else than factories you need to wrap them in the <code>DI\value()</code> helper:</p>
 <pre><code class="language-php">return [
-    'router' =&gt; create(Router::class)
-        -&gt;method('setErrorHandler', value(function () {
+    'router' =&gt; DI\create(Router::class)
+        -&gt;method('setErrorHandler', DI\value(function () {
             ...
         })),
 ];</code></pre>
