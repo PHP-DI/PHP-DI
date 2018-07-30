@@ -125,7 +125,7 @@ return [
     },
     
     // Same as
-    'Foo' => factory(function (ContainerInterface $c) {
+    'Foo' => DI\factory(function (ContainerInterface $c) {
         return new Foo($c->get('db.host'));
     }),
 ];
@@ -446,8 +446,8 @@ Keep in mind that closures are equivalent to "factory" definitions. As such, **c
 
 ```php
 return [
-    'router' => create(Router::class)
-        ->method('setErrorHandler', value(function () {
+    'router' => DI\create(Router::class)
+        ->method('setErrorHandler', DI\value(function () {
             ...
         })),
 ];
