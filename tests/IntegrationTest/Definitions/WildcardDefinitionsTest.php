@@ -38,6 +38,21 @@ class WildcardDefinitionsTest extends BaseContainerTest
         self::assertEntryIsNotCompiled($container, 'DI\Test\IntegrationTest\*\Interface*');
         self::assertEntryIsNotCompiled($container, Interface1::class);
     }
+    /**
+     * @dataProvider provideContainer
+     */
+    public function test_wildcard_with_static_name(ContainerBuilder $builder)
+    {
+        $builder->addDefinitions([
+            'DI\Test\IntegrationTest\*\Interface*' => \DI\create(Implementation1::class),
+        ]);
+        $container = $builder->build();
+
+        $object = $container->get(Interface1::class);
+        $this->assertInstanceOf(Implementation1::class, $object);
+
+        self::assertEntryIsNotCompiled($container, Interface1::class);
+    }
 
     /**
      * @dataProvider provideContainer
