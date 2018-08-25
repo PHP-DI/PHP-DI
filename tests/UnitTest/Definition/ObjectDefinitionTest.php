@@ -82,4 +82,39 @@ class ObjectDefinitionTest extends TestCase
             new MethodInjection('method2'),
         ], $definition->getMethodInjections());
     }
+
+    public function test_replace_wildcards()
+    {
+        $definition = new ObjectDefinition('class', 'Foo*\Bar*\Baz*');
+        $definition->replaceWildcards(['1', '2', '3']);
+        $this->assertEquals('Foo1\Bar2\Baz3', $definition->getClassName());
+    }
+
+    public function test_replace_wildcards_with_no_classname_defined()
+    {
+        $definition = new ObjectDefinition('Foo*\Bar*\Baz*');
+        $definition->replaceWildcards(['1', '2', '3']);
+        $this->assertEquals('Foo1\Bar2\Baz3', $definition->getClassName());
+    }
+
+    public function test_replace_wildcards_with_extra_replacements()
+    {
+        $definition = new ObjectDefinition('Foo*\Bar\Baz');
+        $definition->replaceWildcards(['1', '2', '3']);
+        $this->assertEquals('Foo1\Bar\Baz', $definition->getClassName());
+    }
+
+    public function test_replace_wildcards_with_missing_replacements()
+    {
+        $definition = new ObjectDefinition('Foo*\Bar*\Baz*');
+        $definition->replaceWildcards(['1']);
+        $this->assertEquals('Foo1\Bar*\Baz*', $definition->getClassName());
+    }
+
+    public function test_replace_wildcards_with_no_wildcards()
+    {
+        $definition = new ObjectDefinition('Foo\Bar\Baz');
+        $definition->replaceWildcards(['1', '2', '3']);
+        $this->assertEquals('Foo\Bar\Baz', $definition->getClassName());
+    }
 }

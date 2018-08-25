@@ -106,17 +106,8 @@ class DefinitionArray implements DefinitionSource, MutableDefinitionSource
             $key = preg_quote($key);
             $key = '#' . str_replace('\\' . self::WILDCARD, self::WILDCARD_PATTERN, $key) . '#';
             if (preg_match($key, $name, $matches) === 1) {
-                $definition = $this->normalizer->normalizeRootDefinition($definition, $name);
-
-                // For a class definition, we replace * in the class name with the matches
-                // *Interface -> *Impl => FooInterface -> FooImpl
-                if ($definition instanceof ObjectDefinition) {
-                    array_shift($matches);
-                    $definition->setClassName(
-                        $this->replaceWildcards($definition->getClassName(), $matches)
-                    );
-                    $definition = $this->normalizer->normalizeRootDefinition($definition, $name);
-                }
+                array_shift($matches);
+                $definition = $this->normalizer->normalizeRootDefinition($definition, $name, $matches);
 
                 return $definition;
             }
@@ -136,21 +127,5 @@ class DefinitionArray implements DefinitionSource, MutableDefinitionSource
         }
 
         return $definitions;
-    }
-
-    /**
-     * Replaces all the wildcards in the string with the given replacements.
-     * @param string[] $replacements
-     */
-    private function replaceWildcards(string $string, array $replacements) : string
-    {
-        foreach ($replacements as $replacement) {
-            $pos = strpos($string, self::WILDCARD);
-            if ($pos !== false) {
-                $string = substr_replace($string, $replacement, $pos, 1);
-            }
-        }
-
-        return $string;
     }
 }
