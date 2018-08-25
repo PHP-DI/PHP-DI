@@ -7,6 +7,7 @@ namespace DI\Definition;
 use DI\Definition\Dumper\ObjectDefinitionDumper;
 use DI\Definition\ObjectDefinition\MethodInjection;
 use DI\Definition\ObjectDefinition\PropertyInjection;
+use DI\Definition\Source\DefinitionArray;
 use ReflectionClass;
 
 /**
@@ -221,6 +222,25 @@ class ObjectDefinition implements Definition
                 $methodInjection->replaceNestedDefinitions($replacer);
             });
         });
+    }
+
+    /**
+     * Replaces all the wildcards in the string with the given replacements.
+     *
+     * @param string[] $replacements
+     */
+    public function replaceWildcards(array $replacements)
+    {
+        $className = $this->getClassName();
+
+        foreach ($replacements as $replacement) {
+            $pos = strpos($className, DefinitionArray::WILDCARD);
+            if ($pos !== false) {
+                $className = substr_replace($className, $replacement, $pos, 1);
+            }
+        }
+
+        $this->setClassName($className);
     }
 
     public function __toString()
