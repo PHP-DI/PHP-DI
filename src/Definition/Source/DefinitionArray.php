@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace DI\Definition\Source;
 
 use DI\Definition\Definition;
-use DI\Definition\ObjectDefinition;
 
 /**
  * Reads DI definitions from a PHP array.
