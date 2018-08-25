@@ -11,6 +11,7 @@ use DI\Definition\Definition;
 use DI\Definition\Exception\InvalidDefinition;
 use DI\Definition\FactoryDefinition;
 use DI\Definition\Helper\DefinitionHelper;
+use DI\Definition\ObjectDefinition;
 use DI\Definition\ValueDefinition;
 
 /**
@@ -38,10 +39,11 @@ class DefinitionNormalizer
      *
      * @param mixed $definition
      * @param string $name The definition name.
+     * @param string[] $wildcardsReplacements Replacements for wildcard definitions.
      *
      * @throws InvalidDefinition
      */
-    public function normalizeRootDefinition($definition, string $name) : Definition
+    public function normalizeRootDefinition($definition, string $name, array $wildcardsReplacements = null) : Definition
     {
         if ($definition instanceof DefinitionHelper) {
             $definition = $definition->getDefinition($name);
@@ -51,6 +53,12 @@ class DefinitionNormalizer
             $definition = new FactoryDefinition($name, $definition);
         } elseif (! $definition instanceof Definition) {
             $definition = new ValueDefinition($definition);
+        }
+
+        // For a class definition, we replace * in the class name with the matches
+        // *Interface -> *Impl => FooInterface -> FooImpl
+        if ($wildcardsReplacements && $definition instanceof ObjectDefinition) {
+            $definition->replaceWildcards($wildcardsReplacements);
         }
 
         if ($definition instanceof AutowireDefinition) {
