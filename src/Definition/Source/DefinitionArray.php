@@ -115,6 +115,7 @@ class DefinitionArray implements DefinitionSource, MutableDefinitionSource
                     $definition->setClassName(
                         $this->replaceWildcards($definition->getClassName(), $matches)
                     );
+                    $definition = $this->normalizer->normalizeRootDefinition($definition, $name);
                 }
 
                 return $definition;

@@ -8,7 +8,9 @@ use DI\Annotation\Inject;
 use DI\ContainerBuilder;
 use DI\Test\IntegrationTest\BaseContainerTest;
 use DI\Test\IntegrationTest\Fixtures\Implementation1;
+use DI\Test\IntegrationTest\Fixtures\Implementation2;
 use DI\Test\IntegrationTest\Fixtures\Interface1;
+use DI\Test\IntegrationTest\Fixtures\Interface2;
 
 /**
  * Test definitions using wildcards.
@@ -35,6 +37,28 @@ class WildcardDefinitionsTest extends BaseContainerTest
         self::assertEntryIsNotCompiled($container, 'foo1');
         self::assertEntryIsNotCompiled($container, 'DI\Test\IntegrationTest\*\Interface*');
         self::assertEntryIsNotCompiled($container, Interface1::class);
+    }
+
+    /**
+     * @dataProvider provideContainer
+     */
+    public function test_wildcards_autowire(ContainerBuilder $builder)
+    {
+        $builder->addDefinitions([
+            'DI\Test\IntegrationTest\*\Interface*' => \DI\autowire('DI\Test\IntegrationTest\*\Implementation*'),
+        ]);
+        $container = $builder->build();
+
+        $object = $container->get(Interface1::class);
+        $this->assertInstanceOf(Implementation1::class, $object);
+
+        $object2 = $container->get(Interface2::class);
+        $this->assertInstanceOf(Implementation2::class, $object2);
+        $this->assertInstanceOf(Implementation1::class, $object2->dependency);
+
+        self::assertEntryIsNotCompiled($container, 'DI\Test\IntegrationTest\*\Interface*');
+        self::assertEntryIsNotCompiled($container, Interface1::class);
+        self::assertEntryIsNotCompiled($container, Interface2::class);
     }
 
     /**
