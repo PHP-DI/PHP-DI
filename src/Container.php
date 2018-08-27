@@ -118,7 +118,6 @@ class Container implements ContainerInterface, FactoryInterface, InvokerInterfac
      *
      * @param string $name Entry name or a class name.
      *
-     * @throws InvalidArgumentException The name parameter must be of type string.
      * @throws DependencyException Error while resolving the entry.
      * @throws NotFoundException No entry found for the given name.
      * @return mixed
