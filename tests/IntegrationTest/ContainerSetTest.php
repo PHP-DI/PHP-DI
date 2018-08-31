@@ -80,12 +80,17 @@ class ContainerSetTest extends BaseContainerTest
     }
 
     /**
-     * We should be able to set a interface
      * @see https://github.com/PHP-DI/PHP-DI/issues/614
+     * @test
+     * @dataProvider provideContainer
      */
-    public function testCanResolveInterfaceWhichSetByConcreteClass()
+    public function interfaces_can_be_mapped_to_implementations(ContainerBuilder $builder)
     {
-        $builder = new ContainerBuilder();
+        if ($builder->isCompilationEnabled()) {
+            // This behavior is not allowed on the compiled container
+            return;
+        }
+
         $container = $builder->build();
         $container->set(ContainerSetTest\DummyInterface::class, get(ContainerSetTest\DummyConcrete::class));
 

@@ -284,6 +284,7 @@ class Container implements ContainerInterface, FactoryInterface, InvokerInterfac
         }
 
         if ($value instanceof Definition) {
+            $value->setName($name);
             $this->setDefinition($name, $value);
         } else {
             $this->resolvedEntries[$name] = $value;
