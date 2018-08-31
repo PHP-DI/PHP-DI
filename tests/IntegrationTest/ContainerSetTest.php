@@ -89,7 +89,7 @@ class ContainerSetTest extends BaseContainerTest
         $container = $builder->build();
         $container->set(ContainerSetTest\DummyInterface::class, get(ContainerSetTest\DummyConcrete::class));
 
-        $this->assertNull($container->get(ContainerSetTest\DummyImplementation::class));
+        $this->assertInstanceOf(ContainerSetTest\DummyImplementation::class, $container->get(ContainerSetTest\DummyImplementation::class));
     }
 }
 
