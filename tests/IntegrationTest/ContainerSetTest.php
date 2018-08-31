@@ -6,6 +6,7 @@ namespace DI\Test\IntegrationTest;
 
 use DI\ContainerBuilder;
 use function DI\create;
+use function DI\get;
 
 /**
  * Tests the set() method from the container.
@@ -77,10 +78,43 @@ class ContainerSetTest extends BaseContainerTest
 
         $this->assertInstanceOf(ContainerSetTest\Dummy::class, $container->get('foo'));
     }
+
+    /**
+     * @see https://github.com/PHP-DI/PHP-DI/issues/614
+     * @test
+     * @dataProvider provideContainer
+     */
+    public function interfaces_can_be_mapped_to_implementations(ContainerBuilder $builder)
+    {
+        if ($builder->isCompilationEnabled()) {
+            // This behavior is not allowed on the compiled container
+            return;
+        }
+
+        $container = $builder->build();
+        $container->set(ContainerSetTest\DummyInterface::class, get(ContainerSetTest\DummyConcrete::class));
+
+        $this->assertInstanceOf(ContainerSetTest\DummyImplementation::class, $container->get(ContainerSetTest\DummyImplementation::class));
+    }
 }
 
 namespace DI\Test\IntegrationTest\ContainerSetTest;
 
 class Dummy
 {
+}
+
+interface DummyInterface
+{
+}
+
+class DummyConcrete implements DummyInterface
+{
+}
+
+class DummyImplementation
+{
+    function __construct(DummyInterface $a)
+    {
+    }
 }
