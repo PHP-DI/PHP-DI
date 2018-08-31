@@ -6,6 +6,7 @@ namespace DI\Test\IntegrationTest;
 
 use DI\ContainerBuilder;
 use function DI\create;
+use function DI\get;
 
 /**
  * Tests the set() method from the container.
@@ -77,10 +78,38 @@ class ContainerSetTest extends BaseContainerTest
 
         $this->assertInstanceOf(ContainerSetTest\Dummy::class, $container->get('foo'));
     }
+
+    /**
+     * We should be able to set a interface
+     * @see https://github.com/PHP-DI/PHP-DI/issues/614
+     */
+    public function testCanResolveInterfaceWhichSetByConcreteClass()
+    {
+        $builder = new ContainerBuilder();
+        $container = $builder->build();
+        $container->set(ContainerSetTest\DummyInterface::class, get(ContainerSetTest\DummyConcrete::class));
+
+        $this->assertNull($container->get(ContainerSetTest\DummyImplementation::class));
+    }
 }
 
 namespace DI\Test\IntegrationTest\ContainerSetTest;
 
 class Dummy
 {
+}
+
+interface DummyInterface
+{
+}
+
+class DummyConcrete implements DummyInterface
+{
+}
+
+class DummyImplementation
+{
+    function __construct(DummyInterface $a)
+    {
+    }
 }
