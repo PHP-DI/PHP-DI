@@ -9,6 +9,8 @@ layout: home
 [![Downloads per months](https://img.shields.io/packagist/dm/PHP-DI/PHP-DI.svg?style=flat-square)](https://packagist.org/packages/PHP-DI/PHP-DI)
 [![Total downloads](https://img.shields.io/packagist/dt/PHP-DI/PHP-DI.svg?style=flat-square)](https://packagist.org/packages/PHP-DI/PHP-DI)
 
+[![PrettyCI Status](https://hc4rcprbe1.execute-api.eu-west-1.amazonaws.com/dev?name=php-di/php-di)](https://prettyci.com/)
+
 [![Average time to resolve an issue](http://isitmaintained.com/badge/resolution/PHP-DI/PHP-DI.svg)](http://isitmaintained.com/project/PHP-DI/PHP-DI "Average time to resolve an issue")
 [![Percentage of issues still open](http://isitmaintained.com/badge/open/PHP-DI/PHP-DI.svg)](http://isitmaintained.com/project/PHP-DI/PHP-DI "Percentage of issues still open")
 
