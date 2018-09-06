@@ -8,6 +8,7 @@ use DI\ContainerBuilder;
 use DI\Test\IntegrationTest\BaseContainerTest;
 use DI\Test\IntegrationTest\Definitions\AutowireDefinition\OptionalParameterFollowedByRequiredParameter;
 use DI\Test\IntegrationTest\Definitions\AutowireDefinition\Php71;
+use DI\Test\IntegrationTest\Definitions\AutowireDefinition\Variadic;
 use DI\Test\IntegrationTest\Definitions\AutowireDefinitionTest\ConstructorInjection;
 use DI\Test\IntegrationTest\Definitions\AutowireDefinitionTest\LazyService;
 use DI\Test\IntegrationTest\Definitions\AutowireDefinitionTest\NullableConstructorParameter;
@@ -342,6 +343,24 @@ class AutowireDefinitionTest extends BaseContainerTest
         $object = $container->get(Php71::class);
 
         self::assertEquals(new \stdClass, $object->param);
+    }
+
+    /**
+     * @dataProvider provideContainer
+     */
+    public function test_all_variadic_arguments_are_passed(ContainerBuilder $builder)
+    {
+        $container = $builder
+            ->useAutowiring(true)
+            ->addDefinitions([
+                Variadic::class => autowire()
+                    ->constructor('test1', 'test2', 'test3')
+            ]);
+
+        $object = $container->get(Variadic::class);
+        self::assertEquals('test1', $object->values[0]);
+        self::assertEquals('test2', $object->values[0]);
+        self::assertEquals('test3', $object->values[0]);
     }
 }
 
