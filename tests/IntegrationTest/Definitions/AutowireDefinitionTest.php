@@ -350,18 +350,23 @@ class AutowireDefinitionTest extends BaseContainerTest
      */
     public function test_all_variadic_arguments_are_passed(ContainerBuilder $builder)
     {
+        $arguments = ['test1', 'test2', 'test3'];
+
         $container = $builder
             ->useAutowiring(true)
             ->addDefinitions([
                 Variadic::class => autowire()
-                    ->constructor('test1', 'test2', 'test3')
+                    ->constructor(...$arguments)
             ])
             ->build();
 
         $object = $container->get(Variadic::class);
-        self::assertEquals('test1', $object->values[0]);
-        self::assertEquals('test2', $object->values[0]);
-        self::assertEquals('test3', $object->values[0]);
+
+        self::assertEquals(count($arguments), count($object->values));
+
+        foreach($object->values as $index => $value) {
+            self::assertEquals($value, $arguments[$index]);
+        }
     }
 }
 
