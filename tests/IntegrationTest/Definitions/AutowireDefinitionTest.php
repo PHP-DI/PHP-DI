@@ -355,7 +355,8 @@ class AutowireDefinitionTest extends BaseContainerTest
             ->addDefinitions([
                 Variadic::class => autowire()
                     ->constructor('test1', 'test2', 'test3')
-            ]);
+            ])
+            ->build();
 
         $object = $container->get(Variadic::class);
         self::assertEquals('test1', $object->values[0]);
