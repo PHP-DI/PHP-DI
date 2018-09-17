@@ -306,24 +306,26 @@ class ContainerBuilder
     /**
      * Add definitions to the container.
      *
-     * @param string|array|DefinitionSource $definitions Can be an array of definitions, the
+     * @param string[]|array[]|DefinitionSource[] $definitions Can be an array of definitions, the
      *                                                   name of a file containing definitions
      *                                                   or a DefinitionSource object.
      * @return $this
      */
-    public function addDefinitions($definitions) : self
+    public function addDefinitions(...$definitions) : self
     {
         $this->ensureNotLocked();
 
-        if (!is_string($definitions) && !is_array($definitions) && !($definitions instanceof DefinitionSource)) {
-            throw new InvalidArgumentException(sprintf(
-                '%s parameter must be a string, an array or a DefinitionSource object, %s given',
-                'ContainerBuilder::addDefinitions()',
-                is_object($definitions) ? get_class($definitions) : gettype($definitions)
-            ));
-        }
+        foreach ($definitions as $definition) {
+            if (!is_string($definition) && !is_array($definition) && !($definition instanceof DefinitionSource)) {
+                throw new InvalidArgumentException(sprintf(
+                    '%s parameter must be a string, an array or a DefinitionSource object, %s given',
+                    'ContainerBuilder::addDefinitions()',
+                    is_object($definition) ? get_class($definition) : gettype($definition)
+                ));
+            }
 
-        $this->definitionSources[] = $definitions;
+            $this->definitionSources[] = $definition;
+        }
 
         return $this;
     }
