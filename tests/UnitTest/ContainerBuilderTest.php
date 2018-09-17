@@ -94,8 +94,7 @@ class ContainerBuilderTest extends TestCase
         $builder = new ContainerBuilder(FakeContainer::class);
 
         // Custom definition sources should be chained correctly
-        $builder->addDefinitions(new DefinitionArray(['foo' => 'bar']));
-        $builder->addDefinitions(new DefinitionArray(['foofoo' => 'barbar']));
+        $builder->addDefinitions(new DefinitionArray(['foo' => 'bar']), new DefinitionArray(['foofoo' => 'barbar']));
 
         /** @var FakeContainer $container */
         $container = $builder->build();
@@ -117,8 +116,7 @@ class ContainerBuilderTest extends TestCase
     {
         $builder = new ContainerBuilder(FakeContainer::class);
 
-        $builder->addDefinitions(new DefinitionArray(['foo' => 'bar']));
-        $builder->addDefinitions(new DefinitionArray(['foo' => 'bim']));
+        $builder->addDefinitions(new DefinitionArray(['foo' => 'bar']), new DefinitionArray(['foo' => 'bim']));
 
         /** @var FakeContainer $container */
         $container = $builder->build();
@@ -136,8 +134,7 @@ class ContainerBuilderTest extends TestCase
         $builder = new ContainerBuilder(FakeContainer::class);
 
         // Custom definition sources should be chained correctly
-        $builder->addDefinitions(['foo' => 'bar']);
-        $builder->addDefinitions(['foofoo' => 'barbar']);
+        $builder->addDefinitions(['foo' => 'bar'], ['foofoo' => 'barbar']);
 
         /** @var FakeContainer $container */
         $container = $builder->build();
