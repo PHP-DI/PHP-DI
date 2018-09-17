@@ -306,7 +306,7 @@ class ContainerBuilder
     /**
      * Add definitions to the container.
      *
-     * @param string[]|array[]|DefinitionSource[] $definitions Can be an array of definitions, the
+     * @param string|array|DefinitionSource $definitions Can be an array of definitions, the
      *                                                   name of a file containing definitions
      *                                                   or a DefinitionSource object.
      * @return $this
