@@ -71,9 +71,11 @@ class ParameterResolver
 
             // Nested definitions
             if ($value instanceof Definition) {
-                $value = $parameter->isOptional() && ! $this->definitionResolver->isResolvable($value)
-                    ? $this->getParameterDefaultValue($parameter, $method)
-                    : $this->definitionResolver->resolve($value);
+                if ($parameter->isOptional() && ! $this->definitionResolver->isResolvable($value)) {
+                    $value = $this->getParameterDefaultValue($parameter, $method);
+                } else {
+                    $value = $this->definitionResolver->resolve($value);
+                }
             }
 
             $args[] = &$value;
