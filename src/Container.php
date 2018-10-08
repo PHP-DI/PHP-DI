@@ -120,6 +120,7 @@ class Container implements ContainerInterface, FactoryInterface, InvokerInterfac
      *
      * @throws DependencyException Error while resolving the entry.
      * @throws NotFoundException No entry found for the given name.
+     * @throws InvalidDefinition
      * @return mixed
      */
     public function get($name)
@@ -145,6 +146,7 @@ class Container implements ContainerInterface, FactoryInterface, InvokerInterfac
      * @param string $name
      *
      * @return Definition|null
+     * @throws InvalidDefinition
      */
     private function getDefinition($name)
     {
@@ -172,6 +174,7 @@ class Container implements ContainerInterface, FactoryInterface, InvokerInterfac
      * @throws InvalidArgumentException The name parameter must be of type string.
      * @throws DependencyException Error while resolving the entry.
      * @throws NotFoundException No entry found for the given name.
+     * @throws InvalidDefinition
      * @return mixed
      */
     public function make($name, array $parameters = [])
@@ -202,6 +205,7 @@ class Container implements ContainerInterface, FactoryInterface, InvokerInterfac
      * @param string $name Entry name or a class name.
      *
      * @throws InvalidArgumentException The name parameter must be of type string.
+     * @throws InvalidDefinition
      * @return bool
      */
     public function has($name)
@@ -230,7 +234,7 @@ class Container implements ContainerInterface, FactoryInterface, InvokerInterfac
      *
      * @param object $instance Object to perform injection upon
      * @throws InvalidArgumentException
-     * @throws DependencyException Error while injecting dependencies
+     * @throws InvalidDefinition
      * @return object $instance Returns the same instance
      */
     public function injectOn($instance)
@@ -262,6 +266,9 @@ class Container implements ContainerInterface, FactoryInterface, InvokerInterfac
      *                             The array can also contain DI definitions, e.g. DI\get().
      *
      * @return mixed Result of the function.
+     * @throws \Invoker\Exception\InvocationException
+     * @throws \Invoker\Exception\NotCallableException
+     * @throws \Invoker\Exception\NotEnoughParametersException
      */
     public function call($callable, array $parameters = [])
     {
@@ -311,6 +318,7 @@ class Container implements ContainerInterface, FactoryInterface, InvokerInterfac
      *
      * @param string $name Entry name
      *
+     * @return string
      * @throws InvalidDefinition
      * @throws NotFoundException
      */
@@ -332,6 +340,7 @@ class Container implements ContainerInterface, FactoryInterface, InvokerInterfac
      * Get formatted entry type.
      *
      * @param mixed $entry
+     * @return string
      */
     private function getEntryType($entry) : string
     {
@@ -359,8 +368,11 @@ class Container implements ContainerInterface, FactoryInterface, InvokerInterfac
      *
      * Checks for circular dependencies while resolving the definition.
      *
-     * @throws DependencyException Error while resolving the entry.
+     * @param Definition $definition
+     * @param array $parameters
      * @return mixed
+     * @throws DependencyException Error while resolving the entry.
+     * @throws InvalidDefinition
      */
     private function resolveDefinition(Definition $definition, array $parameters = [])
     {
