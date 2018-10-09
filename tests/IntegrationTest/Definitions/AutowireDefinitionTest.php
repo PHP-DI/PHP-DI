@@ -8,7 +8,8 @@ use DI\ContainerBuilder;
 use DI\Test\IntegrationTest\BaseContainerTest;
 use DI\Test\IntegrationTest\Definitions\AutowireDefinition\OptionalParameterFollowedByRequiredParameter;
 use DI\Test\IntegrationTest\Definitions\AutowireDefinition\Php71;
-use DI\Test\IntegrationTest\Definitions\AutowireDefinition\Variadic;
+use DI\Test\IntegrationTest\Definitions\AutowireDefinition\VariadicConstructorInjection;
+use DI\Test\IntegrationTest\Definitions\AutowireDefinition\VariadicMethodInjection;
 use DI\Test\IntegrationTest\Definitions\AutowireDefinitionTest\ConstructorInjection;
 use DI\Test\IntegrationTest\Definitions\AutowireDefinitionTest\LazyService;
 use DI\Test\IntegrationTest\Definitions\AutowireDefinitionTest\NullableConstructorParameter;
@@ -355,12 +356,36 @@ class AutowireDefinitionTest extends BaseContainerTest
         $container = $builder
             ->useAutowiring(true)
             ->addDefinitions([
-                Variadic::class => autowire()
+                VariadicConstructorInjection::class => autowire()
                     ->constructor(...$arguments)
             ])
             ->build();
 
-        $object = $container->get(Variadic::class);
+        $object = $container->get(VariadicConstructorInjection::class);
+
+        self::assertEquals(count($arguments), count($object->values));
+
+        foreach($object->values as $index => $value) {
+            self::assertEquals($value, $arguments[$index]);
+        }
+    }
+
+    /**
+     * @dataProvider provideContainer
+     */
+    public function test_all_variadic_arguments_are_set(ContainerBuilder $builder)
+    {
+        $arguments = ['set1', 'set2', 'set3'];
+
+        $container = $builder
+            ->useAutowiring(true)
+            ->addDefinitions([
+                VariadicMethodInjection::class => autowire()
+                    ->method('set', ...$arguments)
+            ])
+            ->build();
+
+        $object = $container->get(VariadicMethodInjection::class);
 
         self::assertEquals(count($arguments), count($object->values));
 
