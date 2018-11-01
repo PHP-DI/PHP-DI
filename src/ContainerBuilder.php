@@ -111,7 +111,7 @@ class ContainerBuilder
     /**
      * @param string $containerClass Name of the container class, used to create the container.
      */
-    public function __construct(string $containerClass = 'DI\Container')
+    public function __construct(string $containerClass = Container::class)
     {
         $this->containerClass = $containerClass;
     }
