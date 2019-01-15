@@ -10,29 +10,49 @@ php:
   - 7.0
   - 7.1
   - 7.2
+  - 7.3
   - nightly
 
-matrix:
-  fast_finish: true
-  allow_failures:
-    - php: nightly
-  include:
-    - php: 7.0
-      env: dependencies=lowest
+env:
+  - COMPOSER_FLAGS="--prefer-lowest"
+  - COMPOSER_FLAGS=""
+
+stages:
+  - static code analysis
+  - test
+  - test with coverage
 
 cache:
   directories:
     - $HOME/.composer/cache
 
-before_script:
-  - if [[ $(phpenv version-name) == '7.1' ]]; then composer require satooshi/php-coveralls '~1.0' -n ; fi
-  - if [[ $(phpenv version-name) != '7.1' ]]; then composer install -n ; fi
-  - if [ "$dependencies" = "lowest" ]; then composer update --prefer-lowest --prefer-stable -n; fi;
+before_install:
+  - phpenv config-rm xdebug.ini || echo "xdebug not available"
+  - composer self-update
 
-script:
-  - if [[ $(phpenv version-name) == '7.1' ]]; then vendor/bin/phpunit --coverage-clover clover.xml ; fi
-  - if [[ $(phpenv version-name) != '7.1' ]]; then vendor/bin/phpunit ; fi
-  - if [[ $(phpenv version-name) != '7.1' ]]; then vendor/bin/phpstan analyse -l 6 -c phpstan.neon src ; fi
+install: travis_retry composer update --optimize-autoloader --prefer-dist --prefer-stable --no-progress --no-interaction --no-suggest $COMPOSER_FLAGS -vv
 
-after_script:
-  - if [[ $(phpenv version-name) == '7.1' ]]; then php vendor/bin/coveralls -v ; fi
+script: vendor/bin/phpunit --colors --columns 117 --no-coverage
+
+jobs:
+  allow_failures:
+    - php: 7.3
+    - php: nightly
+  include:
+    - php: nightly
+      env: COMPOSER_FLAGS="--ignore-platform-reqs"
+
+    - stage: test with coverage
+      os: linux
+      php: 7.1
+      env: COMPOSER_FLAGS=""
+      before_install: composer self-update
+      script: vendor/bin/phpunit --colors --coverage-clover=clover.xml --coverage-text
+      after_success:
+        - wget https://github.com/php-coveralls/php-coveralls/releases/download/v2.1.0/php-coveralls.phar && php -n php-coveralls.phar --verbose --coverage_clover=clover.xml
+
+    - stage: static code analysis
+      os: linux
+      php: 7.0
+      env: COMPOSER_FLAGS=""
+      script: vendor/bin/phpstan analyse -l 6 -c phpstan.neon --no-progress src
