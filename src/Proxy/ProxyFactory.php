@@ -35,7 +35,7 @@ class ProxyFactory
     private $proxyDirectory;
 
     /**
-     * If true, write the proxies to disk on compile
+     * If true, write the proxies to disk on compile.
      * @var bool
      */
     private $pregenerateProxyClasses;
@@ -70,7 +70,7 @@ class ProxyFactory
     }
 
     /**
-     * Generates and writes proxy class to file
+     * Generates and writes proxy class to file.
      *
      * @param string $className name of the class to be proxied
      */
