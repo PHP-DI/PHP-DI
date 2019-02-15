@@ -68,6 +68,11 @@ class ContainerBuilder
     private $writeProxiesToFile = false;
 
     /**
+     * @var bool
+     */
+    private $pregenerateProxyClasses = false;
+
+    /**
      * Directory where to write the proxies (if $writeProxiesToFile is enabled).
      * @var string|null
      */
@@ -158,14 +163,18 @@ class ContainerBuilder
             $source = new SourceCache($source);
         }
 
-        $proxyFactory = new ProxyFactory($this->writeProxiesToFile, $this->proxyDirectory);
+        $proxyFactory = new ProxyFactory(
+            $this->writeProxiesToFile,
+            $this->proxyDirectory,
+            $this->pregenerateProxyClasses
+        );
 
         $this->locked = true;
 
         $containerClass = $this->containerClass;
 
         if ($this->compileToDirectory) {
-            $compiler = new Compiler;
+            $compiler = new Compiler($proxyFactory);
             $compiledContainerFile = $compiler->compile(
                 $source,
                 $this->compileToDirectory,
@@ -286,6 +295,14 @@ class ContainerBuilder
         $this->proxyDirectory = $proxyDirectory;
 
         return $this;
+    }
+
+    /**
+     * @param bool $pregenerateProxyClasses
+     */
+    public function pregenerateProxiesToFile(bool $pregenerateProxyClasses = false)
+    {
+        $this->pregenerateProxyClasses = $pregenerateProxyClasses;
     }
 
     /**

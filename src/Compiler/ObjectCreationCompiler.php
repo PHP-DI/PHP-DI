@@ -137,16 +137,17 @@ class ObjectCreationCompiler
         $subDefinition->setLazy(false);
         $subDefinition = $this->compiler->compileValue($subDefinition);
 
-        return <<<PHP
-        \$object = \$this->proxyFactory->createProxy(
-            '{$definition->getClassName()}',
-            function (&\$wrappedObject, \$proxy, \$method, \$params, &\$initializer) {
-                \$wrappedObject = $subDefinition;
-                \$initializer = null; // turning off further lazy initialization
+        $this->compiler->getProxyFactory()->generateProxy($definition->getClassName());
+
+        return
+        '$object = $this->proxyFactory->createProxy(
+            ' . $definition->getClassName() . ',
+            function (&$wrappedObject, $proxy, $method, $params, &$initializer) {
+                $wrappedObject = ' . $subDefinition . ';
+                $initializer = null; // turning off further lazy initialization
                 return true;
             }
-        );
-PHP;
+        );';
     }
 
     /**
