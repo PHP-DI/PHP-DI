@@ -160,12 +160,11 @@ class CompiledContainerTest extends BaseContainerTest
     /**
      * @test
      */
-    public function compilation_generates_proxy_classes()
+    public function proxy_classes_can_be_pregenerated_at_compile_time()
     {
         $builder = new ContainerBuilder;
         $builder->enableCompilation(self::COMPILATION_DIR, self::generateCompiledClassName());
         $builder->writeProxiesToFile(true, self::COMPILATION_DIR);
-        $builder->pregenerateProxiesToFile(true);
         $builder->addDefinitions([
           'foo' => create(\stdClass::class)->lazy(),
           'bar' => autowire(CompiledContainerTest\ConstructorWithAbstractClassTypehint::class)->lazy(),

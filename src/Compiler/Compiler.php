@@ -70,18 +70,11 @@ class Compiler
      */
     private $proxyFactory;
 
-    /**
-     * Compiler constructor.
-     * @param ProxyFactory $proxyFactory
-     */
     public function __construct(ProxyFactory $proxyFactory)
     {
         $this->proxyFactory = $proxyFactory;
     }
 
-    /**
-     * @return ProxyFactory
-     */
     public function getProxyFactory() : ProxyFactory
     {
         return $this->proxyFactory;

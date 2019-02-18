@@ -35,24 +35,16 @@ class ProxyFactory
     private $proxyDirectory;
 
     /**
-     * If true, write the proxies to disk on compile.
-     * @var bool
-     */
-    private $pregenerateProxyClasses;
-
-    /**
      * @var LazyLoadingValueHolderFactory|null
      */
     private $proxyManager;
 
     public function __construct(
         bool $writeProxiesToFile = false,
-        string $proxyDirectory = null,
-        bool $pregenerateProxyClasses = false
+        string $proxyDirectory = null
     ) {
         $this->writeProxiesToFile = $writeProxiesToFile;
         $this->proxyDirectory = $proxyDirectory;
-        $this->pregenerateProxyClasses = $pregenerateProxyClasses;
     }
 
     /**
@@ -76,10 +68,6 @@ class ProxyFactory
      */
     public function generateProxy(string $className) : string
     {
-        if (!$this->writeProxiesToFile || !$this->pregenerateProxyClasses) {
-            return '';
-        }
-
         $this->createProxyManager();
 
         return $this->proxyManager->generateProxyClassToFile($className);

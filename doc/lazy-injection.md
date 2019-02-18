@@ -146,9 +146,9 @@ You will need to clear the directory every time you deploy to avoid keeping outd
 By default the proxies are written to disk the first time they are required. Enabling pre-generation will write the proxy classes to disk when the container is built.
 
 ```php
-// Enable writing proxies to file in the tmp/proxies directory on contaier build
-$containerBuilder->writeProxiesToFile(true, __DIR__ . '/tmp/proxies');
-$containerBuilder->pregenerateProxiesToFile(true);
+// Enable writing proxies to file in the var/cache directory at container compile time
+$containerBuilder->enableCompilation(__DIR__ . '/var/cache');
+$containerBuilder->writeProxiesToFile(true, __DIR__ . '/var/cache');
 ``` 
 
 For this functionality to work, both configuration options have to be set. 
