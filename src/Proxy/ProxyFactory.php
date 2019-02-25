@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace DI\Proxy;
 
 use ProxyManager\Configuration;
+use ProxyManager\Factory\LazyLoadingValueHolderFactory;
 use ProxyManager\FileLocator\FileLocator;
 use ProxyManager\GeneratorStrategy\EvaluatingGeneratorStrategy;
 use ProxyManager\GeneratorStrategy\FileWriterGeneratorStrategy;
@@ -39,10 +40,8 @@ class ProxyFactory
      */
     private $proxyManager;
 
-    public function __construct(
-        bool $writeProxiesToFile = false,
-        string $proxyDirectory = null
-    ) {
+    public function __construct(bool $writeProxiesToFile = false, string $proxyDirectory = null)
+    {
         $this->writeProxiesToFile = $writeProxiesToFile;
         $this->proxyDirectory = $proxyDirectory;
     }
@@ -62,15 +61,18 @@ class ProxyFactory
     }
 
     /**
-     * Generates and writes proxy class to file.
+     * Generates and writes the proxy class to file.
      *
      * @param string $className name of the class to be proxied
      */
-    public function generateProxy(string $className) : string
+    public function generateProxyClass(string $className)
     {
-        $this->createProxyManager();
-
-        return $this->proxyManager->generateProxyClassToFile($className);
+        // If proxy classes a written to file then we pre-generate the class
+        // If they are not written to file then there is no point to do this
+        if ($this->writeProxiesToFile) {
+            $this->createProxyManager();
+            $this->createProxy($className, function () {});
+        }
     }
 
     private function createProxyManager()

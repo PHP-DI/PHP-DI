@@ -137,7 +137,7 @@ class ObjectCreationCompiler
         $subDefinition->setLazy(false);
         $subDefinition = $this->compiler->compileValue($subDefinition);
 
-        $this->compiler->getProxyFactory()->generateProxy($definition->getClassName());
+        $this->compiler->getProxyFactory()->generateProxyClass($definition->getClassName());
 
         return <<<PHP
         \$object = \$this->proxyFactory->createProxy(
