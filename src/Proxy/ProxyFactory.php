@@ -60,6 +60,21 @@ class ProxyFactory
         return $this->proxyManager->createProxy($className, $initializer);
     }
 
+    /**
+     * Generates and writes the proxy class to file.
+     *
+     * @param string $className name of the class to be proxied
+     */
+    public function generateProxyClass(string $className)
+    {
+        // If proxy classes a written to file then we pre-generate the class
+        // If they are not written to file then there is no point to do this
+        if ($this->writeProxiesToFile) {
+            $this->createProxyManager();
+            $this->createProxy($className, function () {});
+        }
+    }
+
     private function createProxyManager()
     {
         if ($this->proxyManager !== null) {
