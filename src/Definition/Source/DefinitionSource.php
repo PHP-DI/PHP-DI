@@ -17,6 +17,7 @@ interface DefinitionSource
     /**
      * Returns the DI definition for the entry name.
      *
+     * @param string $name The name of the definition to get
      * @throws InvalidDefinition An invalid definition was found.
      * @return Definition|null
      */
