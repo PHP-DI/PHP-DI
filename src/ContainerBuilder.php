@@ -6,16 +6,18 @@ namespace DI;
 
 use DI\Compiler\Compiler;
 use DI\Definition\Source\AnnotationBasedAutowiring;
+use DI\Definition\Source\Cache\ApcuCache;
+use DI\Definition\Source\Cache\Cache;
 use DI\Definition\Source\DefinitionArray;
 use DI\Definition\Source\DefinitionFile;
 use DI\Definition\Source\DefinitionSource;
 use DI\Definition\Source\NoAutowiring;
 use DI\Definition\Source\ReflectionBasedAutowiring;
-use DI\Definition\Source\SourceCache;
 use DI\Definition\Source\SourceChain;
 use DI\Proxy\ProxyFactory;
 use InvalidArgumentException;
 use Psr\Container\ContainerInterface;
+use RuntimeException;
 
 /**
  * Helper to create and configure a Container.
@@ -96,9 +98,9 @@ class ContainerBuilder
     private $compileToDirectory;
 
     /**
-     * @var bool
+     * @var string|null
      */
-    private $sourceCache = false;
+    private $sourceCache;
 
     /**
      * Build a container configured for the dev environment.
@@ -150,12 +152,18 @@ class ContainerBuilder
         // Mutable definition source
         $source->setMutableDefinitionSource(new DefinitionArray([], $autowiring));
 
-        if ($this->sourceCache) {
-            if (!SourceCache::isSupported()) {
-                throw new \Exception('APCu is not enabled, PHP-DI cannot use it as a cache');
+        if ($this->sourceCache !== null) {
+            $isSupported = [$this->sourceCache, 'isSupported'];
+            $createInstance = [$this->sourceCache, 'create'];
+
+            if (!$isSupported()) {
+                throw new RuntimeException(sprintf(
+                    'Cache backend "%s" is not supported, PHP-DI cannot use it as a cache',
+                    $this->sourceCache
+                ));
             }
             // Wrap the source with the cache decorator
-            $source = new SourceCache($source);
+            $source = $createInstance($source);
         }
 
         $proxyFactory = new ProxyFactory(
@@ -350,13 +358,20 @@ class ContainerBuilder
      *
      * @see http://php-di.org/doc/performances.html
      *
+     * @param string $cacheBackend
      * @return $this
      */
-    public function enableDefinitionCache() : self
+    public function enableDefinitionCache(string $cacheBackend = ApcuCache::class) : self
     {
         $this->ensureNotLocked();
 
-        $this->sourceCache = true;
+        if (!in_array(Cache::class, class_implements($cacheBackend), true)) {
+            throw new InvalidArgumentException(
+                'The passed cache-backend hs to implement the ' . Cache::class . ' interface'
+            );
+        }
+
+        $this->sourceCache = $cacheBackend;
 
         return $this;
     }
