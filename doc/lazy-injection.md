@@ -140,3 +140,17 @@ $containerBuilder->writeProxiesToFile(true, __DIR__ . '/tmp/proxies');
 ```
 
 You will need to clear the directory every time you deploy to avoid keeping outdated proxies.
+
+### Generating proxy classes when compiling the container
+
+By default proxies are written to disk the first time they are used.
+
+Proxy classes can be pre-generated (for example before deploying) by enabling [container compilation](performances.md):
+
+```php
+// Enable writing proxies to file in the var/cache directory at container compile time
+$containerBuilder->enableCompilation(__DIR__ . '/var/cache');
+$containerBuilder->writeProxiesToFile(true, __DIR__ . '/var/cache');
+``` 
+
+For this functionality to work, both configuration options have to be set. 

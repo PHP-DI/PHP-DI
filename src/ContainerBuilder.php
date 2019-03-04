@@ -111,7 +111,7 @@ class ContainerBuilder
     /**
      * @param string $containerClass Name of the container class, used to create the container.
      */
-    public function __construct(string $containerClass = 'DI\Container')
+    public function __construct(string $containerClass = Container::class)
     {
         $this->containerClass = $containerClass;
     }
@@ -158,14 +158,17 @@ class ContainerBuilder
             $source = new SourceCache($source);
         }
 
-        $proxyFactory = new ProxyFactory($this->writeProxiesToFile, $this->proxyDirectory);
+        $proxyFactory = new ProxyFactory(
+            $this->writeProxiesToFile,
+            $this->proxyDirectory
+        );
 
         $this->locked = true;
 
         $containerClass = $this->containerClass;
 
         if ($this->compileToDirectory) {
-            $compiler = new Compiler;
+            $compiler = new Compiler($proxyFactory);
             $compiledContainerFile = $compiler->compile(
                 $source,
                 $this->compileToDirectory,

@@ -16,6 +16,7 @@ use DI\Definition\Source\DefinitionSource;
 use DI\Definition\StringDefinition;
 use DI\Definition\ValueDefinition;
 use DI\DependencyException;
+use DI\Proxy\ProxyFactory;
 use InvalidArgumentException;
 use PhpParser\Node\Expr\Closure;
 use SuperClosure\Analyzer\AstAnalyzer;
@@ -63,6 +64,21 @@ class Compiler
      * @var bool
      */
     private $autowiringEnabled;
+
+    /**
+     * @var ProxyFactory
+     */
+    private $proxyFactory;
+
+    public function __construct(ProxyFactory $proxyFactory)
+    {
+        $this->proxyFactory = $proxyFactory;
+    }
+
+    public function getProxyFactory() : ProxyFactory
+    {
+        return $this->proxyFactory;
+    }
 
     /**
      * Compile the container.

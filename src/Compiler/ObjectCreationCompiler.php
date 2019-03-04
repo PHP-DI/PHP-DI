@@ -137,6 +137,8 @@ class ObjectCreationCompiler
         $subDefinition->setLazy(false);
         $subDefinition = $this->compiler->compileValue($subDefinition);
 
+        $this->compiler->getProxyFactory()->generateProxyClass($definition->getClassName());
+
         return <<<PHP
         \$object = \$this->proxyFactory->createProxy(
             '{$definition->getClassName()}',
@@ -186,19 +188,14 @@ PHP;
 
     private function assertClassIsInstantiable(ObjectDefinition $definition)
     {
-        if (! $definition->isInstantiable()) {
-            // Check that the class exists
-            if (! $definition->classExists()) {
-                throw InvalidDefinition::create($definition, sprintf(
-                    'Entry "%s" cannot be compiled: the class doesn\'t exist',
-                    $definition->getName()
-                ));
-            }
-
-            throw InvalidDefinition::create($definition, sprintf(
-                'Entry "%s" cannot be compiled: the class is not instantiable',
-                $definition->getName()
-            ));
+        if ($definition->isInstantiable()) {
+            return;
         }
+
+        $message = ! $definition->classExists()
+            ? 'Entry "%s" cannot be compiled: the class doesn\'t exist'
+            : 'Entry "%s" cannot be compiled: the class is not instantiable';
+
+        throw InvalidDefinition::create($definition, sprintf($message, $definition->getName()));
     }
 }
