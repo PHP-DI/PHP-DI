@@ -102,6 +102,8 @@ class CompiledContainerTest extends BaseContainerTest
         $builder1->addDefinitions($definitions);
         $builder1->enableCompilation(self::COMPILATION_DIR, $compiledContainerClass1);
         $container1 = $builder1->build();
+        $this->assertEquals('barFromFactory', $container1->get('factory'));
+        $this->assertEquals('barFromFactory', $container1->get('factoryReference'));
         $this->assertInstanceOf(CompiledContainerTest\AllKindsOfInjections::class, $container1->get(CompiledContainerTest\AllKindsOfInjections::class));
         $this->assertInstanceOf(CompiledContainerTest\Autowireable::class, $container1->get(CompiledContainerTest\Autowireable::class));
         $this->assertInstanceOf(CompiledContainerTest\Autowireable2::class, $container1->get(CompiledContainerTest\Autowireable2::class));
