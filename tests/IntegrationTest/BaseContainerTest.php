@@ -66,7 +66,7 @@ abstract class BaseContainerTest extends TestCase
 
         /** @noinspection PhpUndefinedFieldInspection */
         $compiledEntries = $container::METHOD_MAPPING;
-        self::assertArrayHasKey($entry, $compiledEntries, "Entry $entry is not compiled");
+        self::assertArrayHasKey($entry, $compiledEntries, sprintf('Entry "%s" is not compiled, it should exist as key in associative array: %s', $entry, print_r($compiledEntries, true)));
     }
 
     /**
