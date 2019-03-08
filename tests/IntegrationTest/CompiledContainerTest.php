@@ -79,16 +79,22 @@ class CompiledContainerTest extends BaseContainerTest
             CompiledContainerTest\AllKindsOfInjections::class => create()
                 ->constructor(create('stdClass'))
                 ->property('property', autowire(CompiledContainerTest\Autowireable::class))
-                ->method('method', \DI\factory(
+                ->method('methodWhichRequiresStdClass', \DI\factory(
                         function () {
                             return new \stdClass;
+                        }
+                    )
+                )
+                ->method('methodWhichRequiresDateTimeImmutable', \DI\factory(
+                        function () {
+                            return new \DateTimeImmutable();
                         }
                     )
                 ),
             CompiledContainerTest\Autowireable::class  => \DI\autowire(),
             CompiledContainerTest\Autowireable2::class  => \DI\autowire()
                 ->constructorParameter('dependencyA', \Di\factory([CompiledContainerTest\AutowireableDependencyA::class, 'create']))
-                ->constructorParameter('dependencyB', \Di\factory([CompiledContainerTest\AutowireableDependencyB::class, 'create'])),
+                ->constructorParameter('dependencyB', \Di\factory([CompiledContainerTest\AutowireableDependencyB::class, 'createWithParameters', 10, 'someStringParameter'])),
         ];
 
         // Create a compiled container in a specific file
@@ -96,6 +102,8 @@ class CompiledContainerTest extends BaseContainerTest
         $builder1->addDefinitions($definitions);
         $builder1->enableCompilation(self::COMPILATION_DIR, $compiledContainerClass1);
         $container1 = $builder1->build();
+        $this->assertInstanceOf($container1->get(CompiledContainerTest\AllKindsOfInjections::class), CompiledContainerTest\AllKindsOfInjections::class);
+        $this->assertInstanceOf($container1->get(CompiledContainerTest\Autowireable::class), CompiledContainerTest\Autowireable::class);
         $this->assertInstanceOf($container1->get(CompiledContainerTest\Autowireable2::class), CompiledContainerTest\Autowireable2::class);
 
         // Create a second compiled container with the same configuration but in a different file
@@ -103,6 +111,8 @@ class CompiledContainerTest extends BaseContainerTest
         $builder2->addDefinitions($definitions);
         $builder2->enableCompilation(self::COMPILATION_DIR, $compiledContainerClass2);
         $container2 = $builder2->build();
+        $this->assertInstanceOf($container2->get(CompiledContainerTest\AllKindsOfInjections::class), CompiledContainerTest\AllKindsOfInjections::class);
+        $this->assertInstanceOf($container2->get(CompiledContainerTest\Autowireable::class), CompiledContainerTest\Autowireable::class);
         $this->assertInstanceOf($container2->get(CompiledContainerTest\Autowireable2::class), CompiledContainerTest\Autowireable2::class);
 
         // The method mapping of the resulting CompiledContainers should be equal
@@ -335,7 +345,12 @@ class AllKindsOfInjections
     {
         $this->constructorParameter = $constructorParameter;
     }
-    public function method($methodParameter)
+    public function methodWhichRequiresStdClass(\stdClass $methodParameter)
+    {
+        $this->methodParameter = $methodParameter;
+    }
+
+    public function methodWhichRequiresDateTimeImmutable(\DateTimeImmutable $methodParameter)
     {
         $this->methodParameter = $methodParameter;
     }
@@ -375,7 +390,7 @@ class AutowireableDependencyA
 }
 class AutowireableDependencyB
 {
-    public function create(): self
+    public function createWithParameters(int $integer, string $string): self
     {
         return new static();
     }
