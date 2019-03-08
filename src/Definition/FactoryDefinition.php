@@ -74,6 +74,8 @@ class FactoryDefinition implements Definition
 
     public function __toString()
     {
-        return 'Factory';
+        $suffix = is_array($this->getCallable()) ? md5(implode('_', $this->getCallable())) : '';
+
+        return 'Factory' .$suffix ;
     }
 }

@@ -262,6 +262,10 @@ PHP;
                     ));
                 }
 
+                if($value instanceof \Closure){
+                    $methodName .= '_closure_' . \md5($this->compileClosure($value));
+                }
+
                 $definitionParameters = '';
                 if (!empty($definition->getParameters())) {
                     $definitionParameters = ', ' . $this->compileValue($definition->getParameters());

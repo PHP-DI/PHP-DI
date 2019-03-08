@@ -94,7 +94,7 @@ class CompiledContainerTest extends BaseContainerTest
             CompiledContainerTest\Autowireable::class  => \DI\autowire(),
             CompiledContainerTest\Autowireable2::class  => \DI\autowire()
                 ->constructorParameter('dependencyA', \Di\factory([CompiledContainerTest\AutowireableDependencyA::class, 'create']))
-                ->constructorParameter('dependencyB', \Di\factory([CompiledContainerTest\AutowireableDependencyB::class, 'createWithParameters', 10, 'someStringParameter'])),
+                ->constructorParameter('dependencyB', \Di\factory([CompiledContainerTest\AutowireableDependencyB::class, 'create'])),
         ];
 
         // Create a compiled container in a specific file
@@ -387,7 +387,7 @@ class AutowireableDependencyA
 }
 class AutowireableDependencyB
 {
-    public function createWithParameters(int $integer, string $string): self
+    public function create(): self
     {
         return new static();
     }
