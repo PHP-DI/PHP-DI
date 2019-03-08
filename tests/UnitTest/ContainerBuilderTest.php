@@ -177,7 +177,7 @@ class ContainerBuilderTest extends TestCase
     public function should_allow_to_customize_the_class_name_of_the_compiled_container()
     {
         $builder = new ContainerBuilder();
-        $className = 'Container' . uniqid();
+        $className = uniqid('Container', false);
         $builder->enableCompilation(BaseContainerTest::COMPILATION_DIR, $className);
 
         $this->assertInstanceOf(CompiledContainer::class, $builder->build());

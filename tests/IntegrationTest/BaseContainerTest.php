@@ -52,7 +52,7 @@ abstract class BaseContainerTest extends TestCase
 
     protected static function generateCompiledClassName()
     {
-        return 'Container' . uniqid();
+        return uniqid('Container', false);
     }
 
     /**
