@@ -102,18 +102,15 @@ class CompiledContainerTest extends BaseContainerTest
         $builder1->addDefinitions($definitions);
         $builder1->enableCompilation(self::COMPILATION_DIR, $compiledContainerClass1);
         $container1 = $builder1->build();
-        $this->assertInstanceOf($container1->get(CompiledContainerTest\AllKindsOfInjections::class), CompiledContainerTest\AllKindsOfInjections::class);
-        $this->assertInstanceOf($container1->get(CompiledContainerTest\Autowireable::class), CompiledContainerTest\Autowireable::class);
-        $this->assertInstanceOf($container1->get(CompiledContainerTest\Autowireable2::class), CompiledContainerTest\Autowireable2::class);
+        $this->assertInstanceOf(CompiledContainerTest\AllKindsOfInjections::class, $container1->get(CompiledContainerTest\AllKindsOfInjections::class));
+        $this->assertInstanceOf(CompiledContainerTest\Autowireable::class, $container1->get(CompiledContainerTest\Autowireable::class));
+        $this->assertInstanceOf(CompiledContainerTest\Autowireable2::class, $container1->get(CompiledContainerTest\Autowireable2::class));
 
         // Create a second compiled container with the same configuration but in a different file
         $builder2 = new ContainerBuilder;
         $builder2->addDefinitions($definitions);
         $builder2->enableCompilation(self::COMPILATION_DIR, $compiledContainerClass2);
         $container2 = $builder2->build();
-        $this->assertInstanceOf($container2->get(CompiledContainerTest\AllKindsOfInjections::class), CompiledContainerTest\AllKindsOfInjections::class);
-        $this->assertInstanceOf($container2->get(CompiledContainerTest\Autowireable::class), CompiledContainerTest\Autowireable::class);
-        $this->assertInstanceOf($container2->get(CompiledContainerTest\Autowireable2::class), CompiledContainerTest\Autowireable2::class);
 
         // The method mapping of the resulting CompiledContainers should be equal
         self::assertEquals($compiledContainerClass1::METHOD_MAPPING, $compiledContainerClass2::METHOD_MAPPING);
