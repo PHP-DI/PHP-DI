@@ -76,6 +76,6 @@ class FactoryDefinition implements Definition
     {
         $suffix = is_array($this->getCallable()) ? md5(implode('_', $this->getCallable())) : '';
 
-        return 'Factory' .$suffix ;
+        return 'Factory' . $suffix;
     }
 }

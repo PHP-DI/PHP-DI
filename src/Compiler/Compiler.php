@@ -174,18 +174,6 @@ class Compiler
     {
         $methodName = $this->getHashedValue('get', $entryName);
 
-        //In case an Entry is already added, the used method should be equal
-        if (isset($this->entryToMethodMapping[$entryName]) && $this->entryToMethodMapping[$entryName] !== $methodName) {
-            throw new InvalidDefinition(sprintf(
-                'Entry "%s" cannot be compiled. An Entry with the same name already exists pointing to method %s(), while this one points to method %s().',
-                $entryName,
-                $this->entryToMethodMapping[$entryName],
-                $methodName
-            ));
-        }
-
-        $this->entryToMethodMapping[$entryName] = $methodName;
-
         switch (true) {
             case $definition instanceof ValueDefinition:
                 $value = $definition->getValue();
@@ -262,7 +250,7 @@ PHP;
                     ));
                 }
 
-                if($value instanceof \Closure){
+                if ($value instanceof \Closure) {
                     $methodName .= '_closure_' . \md5($this->compileClosure($value));
                 }
 
@@ -284,6 +272,17 @@ PHP;
                 throw new \Exception('Cannot compile definition of type ' . get_class($definition));
         }
 
+        //In case an Entry is already added, the used method should be equal
+        if (isset($this->entryToMethodMapping[$entryName]) && $this->entryToMethodMapping[$entryName] !== $methodName) {
+            throw new InvalidDefinition(sprintf(
+                'Entry "%s" cannot be compiled. An Entry with the same name already exists pointing to method %s(), while this one points to method %s().',
+                $entryName,
+                $this->entryToMethodMapping[$entryName],
+                $methodName
+            ));
+        }
+
+        $this->entryToMethodMapping[$entryName] = $methodName;
         $this->methods[$methodName] = $code;
 
         return $methodName;
@@ -298,7 +297,11 @@ PHP;
         }
 
         if ($value instanceof Definition) {
-            $subEntryName = $this->getHashedValue('SubEntry', $value->getName() . $value);
+            $suffix = $value instanceof FactoryDefinition && $value->getCallable() instanceof \Closure
+                ? '_withClosure_' . \md5($this->compileClosure($value->getCallable()))
+                : '';
+
+            $subEntryName = $this->getHashedValue('SubEntry' . $suffix, $value->getName() . $value);
 
             // Compile the sub-definition in another method
             $methodName = $this->compileDefinition($subEntryName, $value);
