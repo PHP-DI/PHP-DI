@@ -86,19 +86,24 @@ class CompiledContainerTest extends BaseContainerTest
                     )
                 ),
             CompiledContainerTest\Autowireable::class  => \DI\autowire(),
+            CompiledContainerTest\Autowireable2::class  => \DI\autowire()
+                ->constructorParameter('dependencyA', \Di\factory([CompiledContainerTest\AutowireableDependencyA::class, 'create']))
+                ->constructorParameter('dependencyB', \Di\factory([CompiledContainerTest\AutowireableDependencyB::class, 'create'])),
         ];
 
         // Create a compiled container in a specific file
         $builder1 = new ContainerBuilder;
         $builder1->addDefinitions($definitions);
         $builder1->enableCompilation(self::COMPILATION_DIR, $compiledContainerClass1);
-        $builder1->build();
+        $container1 = $builder1->build();
+        $this->assertInstanceOf($container1->get(CompiledContainerTest\Autowireable2::class), CompiledContainerTest\Autowireable2::class);
 
         // Create a second compiled container with the same configuration but in a different file
         $builder2 = new ContainerBuilder;
         $builder2->addDefinitions($definitions);
         $builder2->enableCompilation(self::COMPILATION_DIR, $compiledContainerClass2);
-        $builder2->build();
+        $container2 = $builder2->build();
+        $this->assertInstanceOf($container2->get(CompiledContainerTest\Autowireable2::class), CompiledContainerTest\Autowireable2::class);
 
         // The method mapping of the resulting CompiledContainers should be equal
         self::assertEquals($compiledContainerClass1::METHOD_MAPPING, $compiledContainerClass2::METHOD_MAPPING);
@@ -345,4 +350,33 @@ class Autowireable
 }
 class AutowireableDependency
 {
+}
+
+
+
+
+class Autowireable2
+{
+    private $dependencyA;
+    private $dependencyB;
+
+    public function __construct(AutowireableDependencyA $dependencyA, AutowireableDependencyB $dependencyB)
+    {
+        $this->dependencyA = $dependencyA;
+        $this->dependencyB = $dependencyB;
+    }
+}
+class AutowireableDependencyA
+{
+    public function create(): self
+    {
+        return new static();
+    }
+}
+class AutowireableDependencyB
+{
+    public function create(): self
+    {
+        return new static();
+    }
 }
