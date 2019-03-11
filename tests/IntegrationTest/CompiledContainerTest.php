@@ -4,11 +4,15 @@ declare(strict_types=1);
 
 namespace DI\Test\IntegrationTest;
 
-use function DI\autowire;
+
 use DI\ContainerBuilder;
-use function DI\create;
 use DI\Definition\Exception\InvalidDefinition;
+
+use function DI\autowire;
+use function DI\create;
+use function DI\factory;
 use function DI\get;
+use function DI\value;
 
 /**
  * Tests specific to the compiled container.
@@ -64,35 +68,35 @@ class CompiledContainerTest extends BaseContainerTest
 
         $definitions = [
             'foo' => 'barFromFoo',
-            'fooReference' => \DI\get('foo'),
+            'fooReference' => get('foo'),
             'factory' => function () {
                 return 'barFromFactory';
             },
-            'factoryReference' => \DI\get('factory'),
+            'factoryReference' => get('factory'),
             'array' => [
                 1,
                 2,
                 3,
                 'fooBar',
             ],
-            'arrayValue' => \DI\value('array'),
+            'arrayValue' => value('array'),
             CompiledContainerTest\AllKindsOfInjections::class => create()
                 ->constructor(create('stdClass'))
                 ->property('property', autowire(CompiledContainerTest\Autowireable::class))
-                ->method('methodWhichRequiresStdClass', \DI\factory(
+                ->method('methodWhichRequiresStdClass', factory(
                         function () {
                             return new \stdClass;
                         }
                     )
                 )
-                ->method('methodWhichRequiresDateTimeImmutable', \DI\factory(
+                ->method('methodWhichRequiresDateTimeImmutable', factory(
                         function () {
                             return new \DateTimeImmutable();
                         }
                     )
                 ),
-            CompiledContainerTest\Autowireable::class  => \DI\autowire(),
-            CompiledContainerTest\Autowireable2::class  => \DI\autowire()
+            CompiledContainerTest\Autowireable::class  => autowire(),
+            CompiledContainerTest\Autowireable2::class  => autowire()
                 ->constructorParameter('dependencyA', \Di\factory([CompiledContainerTest\AutowireableDependencyA::class, 'create']))
                 ->constructorParameter('dependencyB', \Di\factory([CompiledContainerTest\AutowireableDependencyB::class, 'create'])),
         ];
@@ -101,21 +105,62 @@ class CompiledContainerTest extends BaseContainerTest
         $builder1 = new ContainerBuilder;
         $builder1->addDefinitions($definitions);
         $builder1->enableCompilation(self::COMPILATION_DIR, $compiledContainerClass1);
-        $container1 = $builder1->build();
-        $this->assertEquals('barFromFactory', $container1->get('factory'));
-        $this->assertEquals('barFromFactory', $container1->get('factoryReference'));
-        $this->assertInstanceOf(CompiledContainerTest\AllKindsOfInjections::class, $container1->get(CompiledContainerTest\AllKindsOfInjections::class));
-        $this->assertInstanceOf(CompiledContainerTest\Autowireable::class, $container1->get(CompiledContainerTest\Autowireable::class));
-        $this->assertInstanceOf(CompiledContainerTest\Autowireable2::class, $container1->get(CompiledContainerTest\Autowireable2::class));
+        $builder1->build();
 
         // Create a second compiled container with the same configuration but in a different file
         $builder2 = new ContainerBuilder;
         $builder2->addDefinitions($definitions);
         $builder2->enableCompilation(self::COMPILATION_DIR, $compiledContainerClass2);
-        $container2 = $builder2->build();
+        $builder2->build();
 
         // The method mapping of the resulting CompiledContainers should be equal
         self::assertEquals($compiledContainerClass1::METHOD_MAPPING, $compiledContainerClass2::METHOD_MAPPING);
+    }
+
+    /** @test */
+    public function the_compiled_container_can_deal_with_constructor_parameters_that_involve_factories()
+    {
+        $definitions = [
+            CompiledContainerTest\Autowireable2::class  => autowire()
+                ->constructorParameter('dependencyA', \Di\factory([CompiledContainerTest\AutowireableDependencyA::class, 'create']))
+                ->constructorParameter('dependencyB', \Di\factory([CompiledContainerTest\AutowireableDependencyB::class, 'create'])),
+        ];
+
+        // Create a compiled container in a specific file
+        $builder = new ContainerBuilder;
+        $builder->addDefinitions($definitions);
+        $builder->enableCompilation(self::COMPILATION_DIR, self::generateCompiledClassName());
+        $container = $builder->build();
+        $this->assertInstanceOf(CompiledContainerTest\Autowireable::class, $container->get(CompiledContainerTest\Autowireable::class));
+        $this->assertInstanceOf(CompiledContainerTest\Autowireable2::class, $container->get(CompiledContainerTest\Autowireable2::class));
+    }
+
+    /** @test */
+    public function the_compiled_container_can_deal_with_methods_that_involve_closures()
+    {
+        $definitions = [
+            CompiledContainerTest\AllKindsOfInjections::class => create()
+                ->constructor('someConstructorParameter')
+                ->method('methodWhichRequiresStdClass', factory(
+                        function () {
+                            return new \stdClass;
+                        }
+                    )
+                )
+                ->method('methodWhichRequiresDateTimeImmutable', factory(
+                        function () {
+                            return new \DateTimeImmutable();
+                        }
+                    )
+                ),
+        ];
+
+        // Create a compiled container in a specific file
+        $builder = new ContainerBuilder;
+        $builder->addDefinitions($definitions);
+        $builder->enableCompilation(self::COMPILATION_DIR, self::generateCompiledClassName());
+        $container = $builder->build();
+        $this->assertInstanceOf(CompiledContainerTest\AllKindsOfInjections::class, $container->get(CompiledContainerTest\AllKindsOfInjections::class));
     }
 
     /**
