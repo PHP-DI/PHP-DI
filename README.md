@@ -18,4 +18,4 @@ PHP-DI is a dependency injection container meant to be practical, powerful, and 
 
 Read more on the website: **[php-di.org](http://php-di.org)**
 
-Join us in the Gitter chat room: [![Gitter chat](https://badges.gitter.im/PHP-DI/PHP-DI.png)](https://gitter.im/PHP-DI/PHP-DI)
+Get community support in the Gitter chat room: [![Gitter chat](https://badges.gitter.im/PHP-DI/PHP-DI.png)](https://gitter.im/PHP-DI/PHP-DI)
