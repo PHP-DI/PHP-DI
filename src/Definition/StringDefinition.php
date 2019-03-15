@@ -94,4 +94,9 @@ class StringDefinition implements Definition, SelfResolvingDefinition
 
         return $result;
     }
+
+    public function getCompilationHash() : string
+    {
+        return md5($this->expression);
+    }
 }

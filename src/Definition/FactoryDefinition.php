@@ -78,4 +78,15 @@ class FactoryDefinition implements Definition
 
         return 'Factory' . $suffix;
     }
+
+    public function getCompilationHash() : string
+    {
+        $value = $this->factory;
+        if ($this->factory instanceof \Closure) {
+            $reflectionFunction = new \ReflectionFunction($this->factory);
+            $value = $reflectionFunction->getFileName() . ':' . $reflectionFunction->getStartLine();
+        }
+
+        return md5(serialize($value));
+    }
 }

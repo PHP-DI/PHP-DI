@@ -70,4 +70,9 @@ class Reference implements Definition, SelfResolvingDefinition
             $this->targetEntryName
         );
     }
+
+    public function getCompilationHash() : string
+    {
+        return md5(__CLASS__ . $this->targetEntryName);
+    }
 }

@@ -20,6 +20,17 @@ class DecoratorDefinition extends FactoryDefinition implements Definition, Exten
     public function setExtendedDefinition(Definition $definition)
     {
         $this->decorated = $definition;
+        // Replace the name of the extended definition to avoid having 2 definitions with the same name
+        $this->decorated->setName($this->decorated->getName() . '___decorated');
+    }
+
+    public function setName(string $name)
+    {
+        parent::setName($name);
+        if ($this->decorated) {
+            // Replace the name of the extended definition to avoid having 2 definitions with the same name
+            $this->decorated->setName($this->decorated->getName() . '___decorated');
+        }
     }
 
     /**
@@ -38,5 +49,12 @@ class DecoratorDefinition extends FactoryDefinition implements Definition, Exten
     public function __toString()
     {
         return 'Decorate(' . $this->getName() . ')';
+    }
+
+    public function getCompilationHash() : string
+    {
+        $decoratedHash = $this->decorated ? $this->decorated->getCompilationHash() : '';
+
+        return md5(__CLASS__ . parent::getCompilationHash() . $decoratedHash);
     }
 }

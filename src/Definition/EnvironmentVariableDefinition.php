@@ -109,4 +109,15 @@ class EnvironmentVariableDefinition implements Definition
 
         return sprintf('Environment variable (' . PHP_EOL . '%s' . PHP_EOL . ')', $str);
     }
+
+    public function getCompilationHash() : string
+    {
+        if ($this->defaultValue instanceof Definition) {
+            $defaultValueStr = $this->defaultValue->getCompilationHash();
+        } else {
+            $defaultValueStr = serialize($this->defaultValue);
+        }
+
+        return md5(__CLASS__ . $this->variableName . $this->isOptional . $defaultValueStr);
+    }
 }

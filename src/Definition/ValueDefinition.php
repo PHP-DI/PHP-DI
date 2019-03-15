@@ -69,4 +69,9 @@ class ValueDefinition implements Definition, SelfResolvingDefinition
     {
         return sprintf('Value (%s)', var_export($this->value, true));
     }
+
+    public function getCompilationHash() : string
+    {
+        return md5(serialize($this->value));
+    }
 }

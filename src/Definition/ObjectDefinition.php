@@ -24,8 +24,8 @@ class ObjectDefinition implements Definition
     private $name;
 
     /**
-     * Class name (if null, then the class name is $name).
-     * @var string|null
+     * Class name.
+     * @var string
      */
     protected $className;
 
@@ -71,8 +71,10 @@ class ObjectDefinition implements Definition
      */
     public function __construct(string $name, string $className = null)
     {
-        $this->name = $name;
-        $this->setClassName($className);
+        if ($className !== null) {
+            $this->setClassName($className);
+        }
+        $this->setName($name);
     }
 
     public function getName() : string
@@ -83,6 +85,9 @@ class ObjectDefinition implements Definition
     public function setName(string $name)
     {
         $this->name = $name;
+        if ($this->className === null) {
+            $this->setClassName($name);
+        }
     }
 
     public function setClassName(string $className = null)
@@ -94,11 +99,7 @@ class ObjectDefinition implements Definition
 
     public function getClassName() : string
     {
-        if ($this->className !== null) {
-            return $this->className;
-        }
-
-        return $this->name;
+        return $this->className;
     }
 
     /**
@@ -262,5 +263,14 @@ class ObjectDefinition implements Definition
 
         $class = new ReflectionClass($className);
         $this->isInstantiable = $class->isInstantiable();
+    }
+
+    public function getCompilationHash() : string
+    {
+        if ($this->getName()) {
+            return md5($this->getName());
+        }
+
+        return md5($this->__toString());
     }
 }

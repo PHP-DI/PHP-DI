@@ -66,4 +66,9 @@ class InstanceDefinition implements Definition
     {
         return 'Instance';
     }
+
+    public function getCompilationHash() : string
+    {
+        throw new \RuntimeException('Instance definitions cannot be compiled');
+    }
 }

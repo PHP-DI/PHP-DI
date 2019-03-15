@@ -90,7 +90,8 @@ class DefinitionNormalizer
      */
     public function normalizeNestedDefinition($definition)
     {
-        $name = '<nested definition>';
+        // Nested definitions don't have a name
+        $name = '';
 
         if ($definition instanceof DefinitionHelper) {
             $definition = $definition->getDefinition($name);

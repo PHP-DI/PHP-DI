@@ -34,4 +34,9 @@ interface Definition extends RequestedEntry
      * Definitions can be cast to string for debugging information.
      */
     public function __toString();
+
+    /**
+     * Returns a unique hash that identifies this definition.
+     */
+    public function getCompilationHash() : string;
 }

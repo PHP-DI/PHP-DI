@@ -41,7 +41,7 @@ class ValueDefinitionTest extends BaseContainerTest
         self::assertEntryIsCompiled($container, 'helper');
         $this->assertEquals('foo', $container->get('helper'));
 
-        self::assertEntryIsCompiled($container, 'closure');
+        self::assertEntryIsNotCompiled($container, 'closure');
         $this->assertEquals('foo', call_user_func($container->get('closure')));
     }
 }

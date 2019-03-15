@@ -38,5 +38,23 @@ class ArrayDefinitionExtension extends ArrayDefinition implements ExtendsPreviou
         }
 
         $this->subDefinition = $definition;
+        // Replace the name of the extended definition to avoid having 2 definitions with the same name
+        $this->subDefinition->setName($this->subDefinition->getName() . '___extended');
+    }
+
+    public function setName(string $name)
+    {
+        parent::setName($name);
+        if ($this->subDefinition) {
+            // Replace the name of the extended definition to avoid having 2 definitions with the same name
+            $this->subDefinition->setName($this->subDefinition->getName() . '___extended');
+        }
+    }
+
+    public function getCompilationHash() : string
+    {
+        $subDefinitionHash = $this->subDefinition ? $this->subDefinition->getCompilationHash() : '';
+
+        return md5(__CLASS__ . parent::getCompilationHash() . $subDefinitionHash);
     }
 }

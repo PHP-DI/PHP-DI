@@ -83,4 +83,10 @@ class MethodInjection implements Definition
     {
         return sprintf('method(%s)', $this->methodName);
     }
+
+    public function getCompilationHash() : string
+    {
+        // Method calls are not compiled as a separate entry so we don't care
+        return '';
+    }
 }

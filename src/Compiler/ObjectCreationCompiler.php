@@ -134,6 +134,8 @@ class ObjectCreationCompiler
     private function compileLazyDefinition(ObjectDefinition $definition) : string
     {
         $subDefinition = clone $definition;
+        // We don't want 2 definitions with the same name in the compiled container
+        $subDefinition->setName($subDefinition->getName() . '__inner');
         $subDefinition->setLazy(false);
         $subDefinition = $this->compiler->compileValue($subDefinition);
 

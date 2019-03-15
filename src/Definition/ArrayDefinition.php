@@ -70,4 +70,18 @@ class ArrayDefinition implements Definition
 
         return $str . ']';
     }
+
+    public function getCompilationHash() : string
+    {
+        // Cast values to something serializable
+        $hashedValues = array_map(function ($value) {
+            if ($value instanceof Definition) {
+                return $value->getCompilationHash();
+            }
+
+            return $value;
+        }, $this->values);
+
+        return md5(serialize($hashedValues));
+    }
 }

@@ -130,7 +130,7 @@ class Compiler
                 continue;
             }
             try {
-                $this->compileDefinition($entryName, $definition);
+                $this->compileDefinition($definition);
             } catch (InvalidDefinition $e) {
                 if ($silenceErrors) {
                     // forget the entry
@@ -158,21 +158,15 @@ class Compiler
     }
 
     /**
-     * Use a hash to ensure that the used method names in the CompiledContainer are both unique and idempotent.
-     */
-    private function getHashedValue(string $prefix, string $value) : string
-    {
-        return $prefix . md5($value);
-    }
-
-    /**
      * @throws DependencyException
      * @throws InvalidDefinition
      * @return string The method name
      */
-    private function compileDefinition(string $entryName, Definition $definition) : string
+    private function compileDefinition(Definition $definition) : string
     {
-        $methodName = $this->getHashedValue('get', $entryName);
+        $entryName = $definition->getName();
+        // Use a hash to ensure that the used method names in the CompiledContainer are both unique and idempotent.
+        $methodName = 'get' . $definition->getCompilationHash();
 
         switch (true) {
             case $definition instanceof ValueDefinition:
@@ -211,7 +205,7 @@ PHP;
                 } catch (\Exception $e) {
                     throw new DependencyException(sprintf(
                         'Error while compiling %s. %s',
-                        $definition->getName(),
+                        $definition->getName() ?: '<nested definition>',
                         $e->getMessage()
                     ), 0, $e);
                 }
@@ -272,17 +266,31 @@ PHP;
                 throw new \Exception('Cannot compile definition of type ' . get_class($definition));
         }
 
-        //In case an Entry is already added, the used method should be equal
-        if (isset($this->entryToMethodMapping[$entryName]) && $this->entryToMethodMapping[$entryName] !== $methodName) {
-            throw new InvalidDefinition(sprintf(
-                'Entry "%s" cannot be compiled. An Entry with the same name already exists pointing to method %s(), while this one points to method %s().',
-                $entryName,
-                $this->entryToMethodMapping[$entryName],
-                $methodName
-            ));
+        // Entries without names are nested definitions: they don't need to appear in the map because
+        // we never `->get()` them directly
+        if ($entryName) {
+            // Sanity check
+            if (isset($this->entryToMethodMapping[$entryName]) && $this->entryToMethodMapping[$entryName] !== $methodName) {
+                throw new InvalidDefinition(sprintf(
+                    'Internal PHP-DI error (please report this): Entry "%s" cannot be compiled. An entry with the same name already exists pointing to method %s(), while this one points to method %s().',
+                    $entryName,
+                    $this->entryToMethodMapping[$entryName],
+                    $methodName
+                ));
+            }
+            $this->entryToMethodMapping[$entryName] = $methodName;
         }
 
-        $this->entryToMethodMapping[$entryName] = $methodName;
+        // Sanity check
+        if (isset($this->methods[$methodName]) && $this->methods[$methodName] !== $code) {
+            throw new InvalidDefinition(sprintf(
+                'Internal PHP-DI error (please report this): Entry "%s" cannot be compiled. A method with the same name (%s) already exists pointing to code `%s`, while this one points to code `%s`.',
+                $entryName,
+                $methodName,
+                $this->methods[$methodName],
+                $code
+            ));
+        }
         $this->methods[$methodName] = $code;
 
         return $methodName;
@@ -297,14 +305,8 @@ PHP;
         }
 
         if ($value instanceof Definition) {
-            $suffix = $value instanceof FactoryDefinition && $value->getCallable() instanceof \Closure
-                ? '_withClosure_' . \md5($this->compileClosure($value->getCallable()))
-                : '';
-
-            $subEntryName = $this->getHashedValue('SubEntry' . $suffix, $value->getName() . $value);
-
             // Compile the sub-definition in another method
-            $methodName = $this->compileDefinition($subEntryName, $value);
+            $methodName = $this->compileDefinition($value);
             // The value is now a method call to that method (which returns the value)
             return "\$this->$methodName()";
         }
@@ -344,6 +346,10 @@ PHP;
     private function isCompilable($value)
     {
         if ($value instanceof ValueDefinition) {
+            if ($value->getValue() instanceof \Closure) {
+                return 'Cannot compile closures in DI\value()';
+            }
+
             return $this->isCompilable($value->getValue());
         }
         if ($value instanceof DecoratorDefinition) {
