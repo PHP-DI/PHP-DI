@@ -99,14 +99,15 @@ class FactoryResolverTest extends TestCase
         $resolver = new FactoryResolver($container, $this->easyMock(DefinitionResolver::class));
 
         $testCase = $this;
-        $definition = new FactoryDefinition('foo', function ($c, $par1, $par2) use ($testCase) {
+        $definition = new FactoryDefinition('foo', function ($c, $par1, $par2, $baz) use ($testCase) {
             $testCase->assertEquals('Parameter 1', $par1);
             $testCase->assertEquals(2, $par2);
+            $testCase->assertEquals('bar', $baz);
 
             return $c;
         }, ['par1' => 'Parameter 1', 'par2' => 2]);
 
-        $value = $resolver->resolve($definition);
+        $value = $resolver->resolve($definition, ['baz' => 'bar']);
 
         $this->assertInstanceOf(ContainerInterface::class, $value);
     }
