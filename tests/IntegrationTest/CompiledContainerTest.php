@@ -56,54 +56,6 @@ class CompiledContainerTest extends BaseContainerTest
         self::assertEquals('bar', $container->get('foo'));
     }
 
-    /** @test */
-    public function the_compiled_container_is_idempotent()
-    {
-        $compiledContainerClass1 = self::generateCompiledClassName();
-        $compiledContainerClass2 = self::generateCompiledClassName();
-
-        $definitions = [
-            'foo' => 'barFromFoo',
-            'fooReference' => \DI\get('foo'),
-            'factory' => function () {
-                return 'barFromFactory';
-            },
-            'factoryReference' => \DI\get('factory'),
-            'array' => [
-                1,
-                2,
-                3,
-                'fooBar',
-            ],
-            'arrayValue' => \DI\value('array'),
-            CompiledContainerTest\AllKindsOfInjections::class => create()
-                ->constructor(create('stdClass'))
-                ->property('property', autowire(CompiledContainerTest\Autowireable::class))
-                ->method('method', \DI\factory(
-                        function () {
-                            return new \stdClass;
-                        }
-                    )
-                ),
-            CompiledContainerTest\Autowireable::class  => \DI\autowire(),
-        ];
-
-        // Create a compiled container in a specific file
-        $builder1 = new ContainerBuilder;
-        $builder1->addDefinitions($definitions);
-        $builder1->enableCompilation(self::COMPILATION_DIR, $compiledContainerClass1);
-        $builder1->build();
-
-        // Create a second compiled container with the same configuration but in a different file
-        $builder2 = new ContainerBuilder;
-        $builder2->addDefinitions($definitions);
-        $builder2->enableCompilation(self::COMPILATION_DIR, $compiledContainerClass2);
-        $builder2->build();
-
-        // The method mapping of the resulting CompiledContainers should be equal
-        self::assertEquals($compiledContainerClass1::METHOD_MAPPING, $compiledContainerClass2::METHOD_MAPPING);
-    }
-
     /**
      * @test
      * @expectedException \DI\Definition\Exception\InvalidDefinition
@@ -318,31 +270,5 @@ class ConstructorWithAbstractClassTypehint
 }
 
 abstract class AbstractClass
-{
-}
-
-class AllKindsOfInjections
-{
-    public $property;
-    public $constructorParameter;
-    public $methodParameter;
-    public function __construct($constructorParameter)
-    {
-        $this->constructorParameter = $constructorParameter;
-    }
-    public function method($methodParameter)
-    {
-        $this->methodParameter = $methodParameter;
-    }
-}
-class Autowireable
-{
-    private $dependency;
-    public function __construct(AutowireableDependency $dependency)
-    {
-        $this->dependency = $dependency;
-    }
-}
-class AutowireableDependency
 {
 }
