@@ -160,7 +160,7 @@ class Compiler
     /**
      * Use a hash to ensure that the used method names in the CompiledContainer are both unique and idempotent.
      */
-    private function getHashedValue(string $prefix, string $value) : string
+    private function getHashedValue(string $prefix, string $value): string
     {
         return $prefix . md5($value);
     }
@@ -175,7 +175,7 @@ class Compiler
         $methodName = $this->getHashedValue('get', $entryName);
 
         //In case an Entry is already added, the used method should be equal
-        if (isset($this->entryToMethodMapping[$entryName]) && $this->entryToMethodMapping[$entryName] !== $methodName) {
+        if(isset($this->entryToMethodMapping[$entryName]) && $this->entryToMethodMapping[$entryName] !== $methodName){
             throw new InvalidDefinition(sprintf(
                 'Entry "%s" cannot be compiled. An Entry with the same name already exists pointing to method %s(), while this one points to method %s().',
                 $entryName,
