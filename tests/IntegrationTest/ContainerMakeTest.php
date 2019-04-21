@@ -170,6 +170,25 @@ class ContainerMakeTest extends BaseContainerTest
         ]);
         $this->assertEquals('baz', $result->bar);
     }
+
+    /**
+     * Test that factory method can access to the values provided to the make call
+     * @dataProvider provideContainer
+     */
+    public function testFactoryFunctionForwardsPassedParameters(ContainerBuilder $builder)
+    {
+        $builder->addDefinitions([
+            'some_alias' => function ($bar) {
+                return new Fixture\Foo($bar . ' + local_manipulation');
+            },
+        ]);
+        $container = $builder->build();
+
+        $result = $container->make('some_alias', [
+            'bar' => 'baz'
+        ]);
+        $this->assertEquals('baz + local_manipulation', $result->bar);
+    }
 }
 
 namespace DI\Test\IntegrationTest\Fixture;
