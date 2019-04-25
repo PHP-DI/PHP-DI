@@ -17,7 +17,7 @@ class SourceChain implements DefinitionSource, MutableDefinitionSource
     /**
      * @var DefinitionSource[]
      */
-    private $sources;
+    protected $sources;
 
     /**
      * @var DefinitionSource
