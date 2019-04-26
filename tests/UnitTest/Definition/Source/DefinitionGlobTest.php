@@ -23,11 +23,11 @@ class DefinitionGlobTest extends TestCase
         $source = new DefinitionGlob($pattern);
 
         $class = new ReflectionClass(DefinitionGlob::class);
-        $property = $class->getProperty('sources');
+        $property = $class->getProperty('sourceChain');
         $property->setAccessible(true);
-        $definitions = $property->getValue($source);
+        $sourceChain = $property->getValue($source);
         // sources are not initialized (and files are not read) before getting definitions
-        $this->assertCount(0, $definitions);
+        $this->assertNull($sourceChain);
 
         $definitions = $source->getDefinitions();
         $this->assertCount(2, $definitions);

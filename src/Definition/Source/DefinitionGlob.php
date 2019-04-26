@@ -6,9 +6,8 @@ namespace DI\Definition\Source;
 
 /**
  * Reads DI definitions from files matching glob pattern.
- *
  */
-class DefinitionGlob extends SourceChain
+class DefinitionGlob implements DefinitionSource
 {
     /**
      * @var bool
@@ -16,8 +15,8 @@ class DefinitionGlob extends SourceChain
     private $initialized = false;
 
     /**
-     * Glob pattern to files containing definitions
-     * @var string|null
+     * Glob pattern to files containing definitions.
+     * @var string
      */
     private $pattern;
 
@@ -27,14 +26,16 @@ class DefinitionGlob extends SourceChain
     private $autowiring;
 
     /**
+     * @var SourceChain
+     */
+    private $sourceChain;
+
+    /**
      * @param string $pattern Glob pattern to files containing definitions
      */
-    public function __construct($pattern)
+    public function __construct(string $pattern)
     {
-        // Lazy-loading to improve performances
         $this->pattern = $pattern;
-
-        parent::__construct([]);
     }
 
     public function setAutowiring(Autowiring $autowiring)
@@ -46,14 +47,14 @@ class DefinitionGlob extends SourceChain
     {
         $this->initialize();
 
-        return parent::getDefinition($name, $startIndex);
+        return $this->sourceChain->getDefinition($name, $startIndex);
     }
 
     public function getDefinitions() : array
     {
         $this->initialize();
 
-        return parent::getDefinitions();
+        return $this->sourceChain->getDefinitions();
     }
 
     /**
@@ -66,10 +67,10 @@ class DefinitionGlob extends SourceChain
         }
 
         $paths = glob($this->pattern, GLOB_BRACE);
-        foreach ($paths as $path)
-        {
-            $this->sources[] = new DefinitionFile($path, $this->autowiring);
-        }
+        $sources = array_map(function ($path) {
+            return new DefinitionFile($path, $this->autowiring);
+        }, $paths);
+        $this->sourceChain = new SourceChain($sources);
 
         $this->initialized = true;
     }
