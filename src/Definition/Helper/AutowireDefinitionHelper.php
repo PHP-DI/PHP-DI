@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace DI\Definition\Helper;
 
 use DI\Definition\AutowireDefinition;
+use DI\Definition\Definition;
 
 /**
  * Helps defining how to create an instance of a class using autowiring.
@@ -14,6 +15,8 @@ use DI\Definition\AutowireDefinition;
 class AutowireDefinitionHelper extends CreateDefinitionHelper
 {
     const DEFINITION_CLASS = AutowireDefinition::class;
+
+    protected $useAnnotations;
 
     /**
      * Defines a value for a specific argument of the constructor.
@@ -68,5 +71,32 @@ class AutowireDefinitionHelper extends CreateDefinitionHelper
         $this->methods[$method][0][$parameter] = $value;
 
         return $this;
+    }
+
+    /**
+     * Define if entry should use annotation reader for reading dependencies.
+     * This is turned off by default if autowire() helper is used, and turned on if entry is not defined explicitly in the di config.
+     * @param bool $useAnnotations
+     * @return $this
+     */
+    public function useAnnotations(bool $useAnnotations = true)
+    {
+        $this->useAnnotations = $useAnnotations;
+
+        return $this;
+    }
+
+    /**
+     * @return AutowireDefinition
+     */
+    public function getDefinition(string $entryName) : Definition
+    {
+        /** @var AutowireDefinition $definition */
+        $definition = parent::getDefinition($entryName);
+        if ($this->useAnnotations !== null) {
+            $definition->useAnnotations($this->useAnnotations);
+        }
+
+        return $definition;
     }
 }
