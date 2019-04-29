@@ -35,7 +35,7 @@ class ReflectionBasedAutowiringTest extends TestCase
         $this->assertCount(1, $parameters);
 
         $param1 = $parameters[0];
-        $this->assertEquals(new Reference(AutowiringFixture::class), $param1);
+        $this->assertEquals(new Reference(AutowiringFixture::class, AutowiringFixture::class), $param1);
     }
 
     public function testConstructorInParentClass()
@@ -50,6 +50,6 @@ class ReflectionBasedAutowiringTest extends TestCase
         $this->assertCount(1, $parameters);
 
         $param1 = $parameters[0];
-        $this->assertEquals(new Reference(AutowiringFixture::class), $param1);
+        $this->assertEquals(new Reference(AutowiringFixture::class, AutowiringFixtureChild::class), $param1);
     }
 }

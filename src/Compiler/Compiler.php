@@ -12,6 +12,7 @@ use DI\Definition\Exception\InvalidDefinition;
 use DI\Definition\FactoryDefinition;
 use DI\Definition\ObjectDefinition;
 use DI\Definition\Reference;
+use DI\Definition\ServiceLocatorDefinition;
 use DI\Definition\Source\DefinitionSource;
 use DI\Definition\StringDefinition;
 use DI\Definition\ValueDefinition;
@@ -174,6 +175,17 @@ class Compiler
                 $code = 'return ' . $this->compileValue($value) . ';';
                 break;
             case $definition instanceof Reference:
+                if ($definition->isServiceLocatorEntry()) {
+                    $requestingEntry = $definition->getRequestingName();
+                    $serviceLocatorDefinition = $definition->getServiceLocatorDefinition();
+                    // compiled ServiceLocatorDefinition::resolve
+                    $code = '$repository = $this->delegateContainer->get(' . $this->compileValue($serviceLocatorDefinition::$serviceLocatorRepositoryClass) . ');
+        $services = ' . $requestingEntry . '::getSubscribedServices();
+        $serviceLocator = $repository->create(' . $this->compileValue($requestingEntry) . ', $services);
+        return $serviceLocator;';
+                    break;
+                }
+
                 $targetEntryName = $definition->getTargetEntryName();
                 $code = 'return $this->delegateContainer->get(' . $this->compileValue($targetEntryName) . ');';
                 // If this method is not yet compiled we store it for compilation

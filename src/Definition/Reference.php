@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace DI\Definition;
 
+use DI\Definition\Exception\InvalidDefinition;
+use DI\ServiceLocator;
 use Psr\Container\ContainerInterface;
 
 /**
@@ -13,6 +15,8 @@ use Psr\Container\ContainerInterface;
  */
 class Reference implements Definition, SelfResolvingDefinition
 {
+    public static $serviceLocatorClass = ServiceLocator::class;
+
     /**
      * Entry name.
      * @var string
@@ -26,11 +30,29 @@ class Reference implements Definition, SelfResolvingDefinition
     private $targetEntryName;
 
     /**
-     * @param string $targetEntryName Name of the target entry
+     * @var string
      */
-    public function __construct(string $targetEntryName)
+    private $requestingName;
+
+    /**
+     * @var bool
+     */
+    private $isServiceLocatorEntry;
+
+    /**
+     * @var ServiceLocatorDefinition
+     */
+    private $serviceLocatorDefinition;
+
+    /**
+     * @param string $targetEntryName Name of the target entry
+     * @param string $requestingName name of an entry - holder of a definition requesting this entry
+     */
+    public function __construct(string $targetEntryName, $requestingName = null)
     {
         $this->targetEntryName = $targetEntryName;
+        $this->requestingName = $requestingName;
+        $this->isServiceLocatorEntry = $targetEntryName === self::$serviceLocatorClass;
     }
 
     public function getName() : string
@@ -48,13 +70,49 @@ class Reference implements Definition, SelfResolvingDefinition
         return $this->targetEntryName;
     }
 
+    // added
+
+    /**
+     * Returns the name of the entity requesting this entry.
+     * @return string
+     */
+    public function getRequestingName() : string
+    {
+        return $this->requestingName;
+    }
+
+    public function isServiceLocatorEntry() : bool
+    {
+        return $this->isServiceLocatorEntry;
+    }
+
+    public function getServiceLocatorDefinition() : ServiceLocatorDefinition
+    {
+        if (!$this->isServiceLocatorEntry) {
+            throw new InvalidDefinition('Invalid service locator definition');
+        }
+        if (!$this->serviceLocatorDefinition) {
+            $this->serviceLocatorDefinition = new ServiceLocatorDefinition($this->getTargetEntryName(), $this->requestingName);
+        }
+
+        return $this->serviceLocatorDefinition;
+    }
+
     public function resolve(ContainerInterface $container)
     {
+        if ($this->isServiceLocatorEntry) {
+            return $this->getServiceLocatorDefinition()->resolve($container);
+        }
+
         return $container->get($this->getTargetEntryName());
     }
 
     public function isResolvable(ContainerInterface $container) : bool
     {
+        if ($this->isServiceLocatorEntry) {
+            return $this->getServiceLocatorDefinition()->isResolvable($container);
+        }
+
         return $container->has($this->getTargetEntryName());
     }
 

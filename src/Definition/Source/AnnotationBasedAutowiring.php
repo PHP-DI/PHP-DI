@@ -177,7 +177,7 @@ class AnnotationBasedAutowiring implements DefinitionSource, Autowiring
         }
 
         $definition->addPropertyInjection(
-            new PropertyInjection($property->getName(), new Reference($entryName), $classname)
+            new PropertyInjection($property->getName(), new Reference($entryName, $classname), $classname)
         );
     }
 
@@ -220,7 +220,7 @@ class AnnotationBasedAutowiring implements DefinitionSource, Autowiring
             $entryName = $this->getMethodParameter($index, $parameter, []);
 
             if ($entryName !== null) {
-                $parameters[$index] = new Reference($entryName);
+                $parameters[$index] = new Reference($entryName, $class->getName());
             }
         }
 
