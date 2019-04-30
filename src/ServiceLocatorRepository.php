@@ -49,21 +49,6 @@ class ServiceLocatorRepository implements ContainerInterface
     }
 
     /**
-     * Inject service locator on an ServiceSubscriber instance.
-     * @param ServiceSubscriberInterface $instance
-     * @param null $entry
-     * @return $this
-     */
-    public function injectOn(ServiceSubscriberInterface $instance, $entry = null)
-    {
-        $entry = $entry ?? get_class($instance);
-        $serviceLocator = $this->create($entry, $instance->getSubscribedServices());
-        $instance->setServiceLocator($serviceLocator);
-
-        return $this;
-    }
-
-    /**
      * Modify a single entry for a service locator.
      *
      * @param string $entry
