@@ -19,29 +19,29 @@ class ServiceLocator implements ContainerInterface
     /**
      * @var ContainerInterface
      */
-    protected $container;
-
-    /**
-     * Name of an entry to which this service locator instance belongs to.
-     * @var string
-     */
-    protected $entry;
+    private $container;
 
     /**
      * @var array
      */
-    protected $services = [];
+    private $services = [];
+
+    /**
+     * Name of a class to which this service locator instance belongs to.
+     * @var string|null
+     */
+    private $subscriber;
 
     /**
      * Constructor.
      * @param ContainerInterface $container
      * @param array $services
-     * @param string|null $entry Name of an entry to which this service locator instance belongs to
+     * @param string|null $subscriber className of a ServiceSubscriber to which this service locator instance belongs to
      */
-    public function __construct(ContainerInterface $container, array $services, string $entry = null)
+    public function __construct(ContainerInterface $container, array $services, string $subscriber = null)
     {
         $this->container = $container;
-        $this->entry = $entry;
+        $this->subscriber = $subscriber;
         $this->setServices($services);
     }
 
@@ -62,9 +62,18 @@ class ServiceLocator implements ContainerInterface
      * Get defined services.
      * @return array
      */
-    public function getServices()
+    public function getServices() : array
     {
         return $this->services;
+    }
+
+    /**
+     * Get name of a class to which this service locator instance belongs to.
+     * @return string
+     */
+    public function getSubscriber() : string
+    {
+        return $this->subscriber;
     }
 
     /**
