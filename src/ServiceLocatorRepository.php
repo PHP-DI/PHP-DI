@@ -11,12 +11,18 @@ class ServiceLocatorRepository implements ContainerInterface
     /**
      * @var ServiceLocator[]
      */
-    protected $locators = [];
+    private $locators = [];
+
+    /**
+     * Overrides for ServiceLocators
+     * @var array
+     */
+    private $overrides = [];
 
     /**
      * @var ContainerInterface
      */
-    protected $container;
+    private $container;
 
     /**
      * Constructor.
@@ -32,35 +38,56 @@ class ServiceLocatorRepository implements ContainerInterface
      *
      * @param string $entry
      * @param array $services
-     * @param bool $overwrite if service locator for an entry already exists, should its services be overwritten?
      * @return ServiceLocator
      */
-    public function create(string $entry, array $services = [], $overwrite = false) : ServiceLocator
+    public function create(string $entry, array $services = []) : ServiceLocator
     {
-        if (isset($this->locators[$entry]) && !$overwrite) {
-            $services = $overwrite
-                ? array_merge($this->locators[$entry]->getServices(), $services)
-                : array_merge($services, $this->locators[$entry]->getServices());
+        if (isset($this->overrides[$entry])) {
+            $services = array_merge($services, $this->overrides[$entry]);
         }
-
-        $this->locators[$entry] = new ServiceLocator($this->container, $services, $entry);
+        if (!isset($this->locators[$entry])) {
+            $this->locators[$entry] = new ServiceLocator($this->container, $services, $entry);
+        } else {
+            // the service locator cannot be re-created - the existing locator may be returned only if expected services are identical
+            // compare passed services and those in the already created ServiceLocator
+            $locatorServices = $this->locators[$entry]->getServices();
+            foreach ($services as $key => $value) {
+                if (is_numeric($key)) {
+                    $key = $value;
+                }
+                if (!array_key_exists($key, $locatorServices) || $locatorServices[$key] !== $value) {
+                    throw new \LogicException(sprintf(
+                        "ServiceLocator for '%s' cannot be recreated with different services.",
+                        $entry
+                    ));
+                }
+            }
+        }
 
         return $this->locators[$entry];
     }
 
     /**
-     * Modify a single entry for a service locator.
+     * Override a single service for a service locator.
+     * This can be only used before the service locator for the given entry is created.
      *
      * @param string $entry
      * @param string $serviceId
      * @param string|null $serviceEntry
      * @return $this
      */
-    public function setService(string $entry, string $serviceId, string $serviceEntry = null)
+    public function override(string $entry, string $serviceId, string $serviceEntry = null)
     {
-        $serviceEntry = $serviceEntry ?? $serviceId;
-        $this->create($entry, [$serviceId => $serviceEntry], true);
+        if (isset($this->locators[$entry])) {
+            throw new \LogicException(sprintf(
+                "Service '%s' for '%s' cannot be overridden - ServiceLocator is already created.",
+                $serviceId,
+                $entry
+            ));
+        }
 
+        $serviceEntry = $serviceEntry ?? $serviceId;
+        $this->overrides[$entry][$serviceId] = $serviceEntry;
         return $this;
     }
 
