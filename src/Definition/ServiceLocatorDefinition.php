@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace DI\Definition;
 
+use DI\ServiceLocator;
 use DI\ServiceLocatorRepository;
+use DI\ServiceSubscriberException;
 use Psr\Container\ContainerInterface;
 
 class ServiceLocatorDefinition implements Definition, SelfResolvingDefinition
@@ -57,16 +59,20 @@ class ServiceLocatorDefinition implements Definition, SelfResolvingDefinition
      * Resolve the definition and return the resulting value.
      *
      * @param ContainerInterface $container
-     * @return mixed
+     * @return ServiceLocator
+     * @throws ServiceSubscriberException
      */
     public function resolve(ContainerInterface $container)
     {
+        if (!method_exists($this->requestingName, 'getSubscribedServices')) {
+            throw new ServiceSubscriberException(sprintf('The class %s does not implement ServiceSubscriberInterface.', $this->requestingName));
+        }
+
         /** @var ServiceLocatorRepository $repository */
         $repository = $container->get(self::$serviceLocatorRepositoryClass);
         $services = $this->requestingName::getSubscribedServices();
-        $serviceLocator = $repository->create($this->requestingName, $services);
 
-        return $serviceLocator;
+        return $repository->create($this->requestingName, $services);
     }
 
     /**
@@ -76,7 +82,7 @@ class ServiceLocatorDefinition implements Definition, SelfResolvingDefinition
      */
     public function isResolvable(ContainerInterface $container) : bool
     {
-        return true;
+        return method_exists($this->requestingName, 'getSubscribedServices');
     }
 
     public function replaceNestedDefinitions(callable $replacer)
@@ -90,8 +96,9 @@ class ServiceLocatorDefinition implements Definition, SelfResolvingDefinition
     public function __toString()
     {
         return sprintf(
-            'get(%s)',
-            $this->name
+            'get(%s) for \'%s\'',
+            $this->name,
+            $this->requestingName
         );
     }
 }

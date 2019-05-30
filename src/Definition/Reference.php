@@ -70,8 +70,6 @@ class Reference implements Definition, SelfResolvingDefinition
         return $this->targetEntryName;
     }
 
-    // added
-
     /**
      * Returns the name of the entity requesting this entry.
      * @return string
@@ -88,8 +86,12 @@ class Reference implements Definition, SelfResolvingDefinition
 
     public function getServiceLocatorDefinition() : ServiceLocatorDefinition
     {
-        if (!$this->isServiceLocatorEntry) {
-            throw new InvalidDefinition('Invalid service locator definition');
+        if (!$this->isServiceLocatorEntry || $this->requestingName === null) {
+            throw new InvalidDefinition(sprintf(
+                "Invalid service locator definition ('%s' for '%s')",
+                $this->targetEntryName,
+                $this->requestingName
+            ));
         }
         if (!$this->serviceLocatorDefinition) {
             $this->serviceLocatorDefinition = new ServiceLocatorDefinition($this->getTargetEntryName(), $this->requestingName);
