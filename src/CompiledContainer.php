@@ -122,14 +122,15 @@ abstract class CompiledContainer extends Container
     }
 
     /**
-     * Resolve ServiceLocator for given subscriber class (based on \DI\Definition\ServiceLocatorDefinition::resolve)
+     * Resolve ServiceLocator for given subscriber class (based on \DI\Definition\ServiceLocatorDefinition::resolve).
      *
      * @param string $requestingName class name of a subscriber, implementing ServiceSubscriberInterface
      * @param string $repositoryClass ServiceLocatorRepository
      * @return ServiceLocator
      * @throws ServiceSubscriberException
      */
-    protected function resolveServiceLocator($requestingName, $repositoryClass) {
+    protected function resolveServiceLocator($requestingName, $repositoryClass)
+    {
         if (!method_exists($requestingName, 'getSubscribedServices')) {
             throw new ServiceSubscriberException(sprintf('The class %s does not implement ServiceSubscriberInterface.', $requestingName));
         }

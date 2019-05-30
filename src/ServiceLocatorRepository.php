@@ -14,7 +14,7 @@ class ServiceLocatorRepository implements ContainerInterface
     private $locators = [];
 
     /**
-     * Overrides for ServiceLocators
+     * Overrides for ServiceLocators.
      * @var array
      */
     private $overrides = [];
@@ -88,6 +88,7 @@ class ServiceLocatorRepository implements ContainerInterface
 
         $serviceEntry = $serviceEntry ?? $serviceId;
         $this->overrides[$entry][$serviceId] = $serviceEntry;
+
         return $this;
     }
 
