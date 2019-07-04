@@ -7,6 +7,7 @@ namespace DI\Test\IntegrationTest;
 use DI\ContainerBuilder;
 use function DI\create;
 use function DI\get;
+use function DI\value;
 
 /**
  * Tests the set() method from the container.
@@ -56,6 +57,28 @@ class ContainerSetTest extends BaseContainerTest
         $container->set('foo', 'hello');
 
         $this->assertSame('hello', $container->get('foo'));
+    }
+
+    /**
+     * @see https://github.com/PHP-DI/PHP-DI/issues/674
+     * @test
+     * @dataProvider provideContainer
+     */
+    public function value_definitions_are_interpreted_as_raw_values(ContainerBuilder $builder)
+    {
+        $container = $builder->build();
+
+        $foo = 'foo';
+        $bar = new ContainerSetTest\Dummy();
+        $baz = function() {};
+
+        $container->set('foo', value($foo));
+        $container->set('bar', value($bar));
+        $container->set('baz', value($baz));
+
+        $this->assertSame($foo, $container->get('foo'));
+        $this->assertSame($bar, $container->get('bar'));
+        $this->assertSame($baz, $container->get('baz'));
     }
 
     /**
