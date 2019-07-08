@@ -30,6 +30,10 @@ You can set entries directly on the container:
 ```php
 $container->set('foo', 'bar');
 $container->set('MyInterface', \DI\create('MyClass'));
+
+// Use \DI\value if you need to set a closure as raw value,
+// because closures are interpreted as factories by default
+$container->set('myClosure', \DI\value(function() { /* ... */ }));
 ```
 
 However it is recommended to use definition files. See the [definition documentation](definition.md).
