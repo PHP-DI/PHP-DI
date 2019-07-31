@@ -406,7 +406,7 @@ class OpenStreetMap implements GeolocationService { ...</code></pre>
 having to rewrite the <code>StoreService</code>.</p>
 <p><strong>The <code>StoreService</code> is no longer tightly coupled to its dependency.</strong></p>
 <h2 id="with-php-di">With PHP-DI</h2>
-<p>You may see that dependency injection will leave with one drawback: you now have to handle injecting dependencies.</p>
+<p>You may see that dependency injection has one drawback: you now have to handle injecting dependencies.</p>
 <p>That's where a container, and specifically PHP-DI, can help you.</p>
 <p>Instead of writing:</p>
 <pre><code class="language-php">$geolocationService = new GoogleMaps();

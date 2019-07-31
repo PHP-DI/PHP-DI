@@ -304,7 +304,11 @@ interface ContainerInterface
 <h2 id="set">set()</h2>
 <p>You can set entries directly on the container:</p>
 <pre><code class="language-php">$container-&gt;set('foo', 'bar');
-$container-&gt;set('MyInterface', \DI\create('MyClass'));</code></pre>
+$container-&gt;set('MyInterface', \DI\create('MyClass'));
+
+// Use \DI\value if you need to set a closure as raw value,
+// because closures are interpreted as factories by default
+$container-&gt;set('myClosure', \DI\value(function() { /* ... */ }));</code></pre>
 <p>However it is recommended to use definition files. See the <a href="definition.html">definition documentation</a>.</p>
 <h2 id="make">make()</h2>
 <p>The container also offers a <code>make()</code> method. This method is defined in <a href="https://github.com/PHP-DI/PHP-DI/blob/master/src/FactoryInterface.php"><code>DI\FactoryInterface</code></a>.</p>
