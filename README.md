@@ -19,3 +19,5 @@ PHP-DI is a dependency injection container meant to be practical, powerful, and 
 Read more on the website: **[php-di.org](http://php-di.org)**
 
 Get community support in the Gitter chat room: [![Gitter chat](https://badges.gitter.im/PHP-DI/PHP-DI.png)](https://gitter.im/PHP-DI/PHP-DI)
+
+Professional support for PHP-DI [is available via Tidelift](https://tidelift.com/subscription/pkg/packagist-php-di-php-di?utm_source=packagist-php-di-php-di&utm_medium=referral&utm_campaign=readme).
