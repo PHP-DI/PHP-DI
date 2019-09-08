@@ -289,13 +289,38 @@
                 </a>
             </div>
 
-            <h1 id="php-di-in-slim-3">PHP-DI in Slim 3</h1>
-<p><a href="http://www.slimframework.com/">Slim 3</a> is a micro-framework for web applications and APIs. This framework has been one of the first to integrate <a href="https://github.com/container-interop/container-interop">container-interop</a> in its core. That means that <em>Slim can work with any container</em> out of the box.</p>
-<p>Replacing Slim's default container with PHP-DI is thus easy. However this bridge provides several additional features <em>on top of that</em>:</p>
+            <h1 id="php-di-in-slim">PHP-DI in Slim</h1>
+<p><a href="http://www.slimframework.com/">Slim</a> is a micro-framework for web applications and APIs. Given the framework is compatible with PSR-11, <em>Slim can work with any container</em> out of the box. Using PHP-DI with Slim is then easy.</p>
+<p>However <strong>the PHP-DI bridge provides several additional features</strong>:</p>
 <ul>
 <li>controllers as services, allowing dependency injection in controllers</li>
 <li>intelligent parameter injections in controller</li>
 </ul>
+<h2 id="setup">Setup</h2>
+<p>The latest version of the bridge is compatible with Slim v4.2 and up.</p>
+<pre><code>composer require php-di/slim-bridge</code></pre>
+<p>Once installed, instead of using the official <code>Slim\Factory\AppFactory</code>, instead use PHP-DI's <code>Bridge</code> class to create your application:</p>
+<pre><code class="language-php">&lt;?php
+require 'vendor/autoload.php';
+
+$app = \DI\Bridge\Slim\Bridge::create();</code></pre>
+<p>If you want to configure PHP-DI, pass your configured container to the method:</p>
+<pre><code class="language-php">$container = /* create your container */;
+
+$app = \DI\Bridge\Slim\Bridge::create($container);</code></pre>
+<p>Have a look at <a href="../container-configuration.html">configuring PHP-DI</a> for details on how to create and configure the container.</p>
+<p>You can then use the application <a href="http://www.slimframework.com/">just like a classic Slim application</a>, for example:</p>
+<pre><code class="language-php">use Psr\Http\Message\ServerRequestInterface as Request;
+use Psr\Http\Message\ResponseInterface as Response;
+
+$app-&gt;get('/hello/{name}', function (Request $request, Response $response) {
+    $response-&gt;getBody()-&gt;write('Hello!');
+    return $response;
+});
+
+$app-&gt;run();</code></pre>
+<p>On top of that, extra features from PHP-DI are automatically available. Read the rest of the page to learn more.</p>
+<h2 id="why-use-php-dis-bridge">Why use PHP-DI's bridge?</h2>
 <h3 id="controllers-as-services">Controllers as services</h3>
 <p>While your controllers can be simple closures, you can also <strong>write them as classes and have PHP-DI instantiate them only when they are called</strong>:</p>
 <pre><code class="language-php">class UserController
@@ -316,7 +341,9 @@
     }
 }
 
-$app-&gt;delete('/user/{id}', ['UserController', 'delete']);</code></pre>
+// Notice how we register the controller using the class name?
+// PHP-DI will instantiate the class for us only when it's actually necessary
+$app-&gt;delete('/user/{id}', [UserController::class, 'delete']);</code></pre>
 <p>Dependencies can then be injected in your controller using <a href="../definition.html">autowiring, PHP-DI config files or even annotations</a>.</p>
 <h3 id="controller-parameters">Controller parameters</h3>
 <p>By default, Slim controllers have a strict signature: <code>$request, $response, $args</code>. The PHP-DI bridge offers a more flexible and developer friendly alternative.</p>
@@ -360,93 +387,6 @@ $app-&gt;get('/', function ($name, ResponseInterface $response) {
 <blockquote>
 <p>Note: you can only inject services that you can type-hint and that PHP-DI can provide. Type-hint injection is simple, it simply injects the result of <code>$container-&gt;get(/* the type-hinted class */)</code>.</p>
 </blockquote>
-<h2 id="installation">Installation</h2>
-<pre><code>composer require php-di/slim-bridge</code></pre>
-<h2 id="usage">Usage</h2>
-<p>Instead of using <code>Slim\App</code>, simply use <code>DI\Bridge\Slim\App</code>:</p>
-<pre><code class="language-php">&lt;?php
-require 'vendor/autoload.php';
-
-$app = new \DI\Bridge\Slim\App;</code></pre>
-<p>You can then use the application <a href="http://www.slimframework.com/">just like a classic Slim application</a>:</p>
-<pre><code class="language-php">use Psr\Http\Message\ServerRequestInterface as Request;
-use Psr\Http\Message\ResponseInterface as Response;
-
-$app-&gt;get('/hello/{name}', function (Request $request, Response $response) {
-    $response-&gt;getBody()-&gt;write('Hello!');
-    return $response;
-});
-
-$app-&gt;run();</code></pre>
-<p>You may notice the <code>DI\Bridge\Slim\App</code> class is very simple. You can very well create the container yourself and pass it to the constructor of <code>Slim\App</code>. Just don't forget to register the <a href="https://github.com/PHP-DI/Slim-Bridge/blob/master/src/config.php"><code>src/config.php</code></a> file in the container.</p>
-<h3 id="configuring-php-di">Configuring PHP-DI</h3>
-<p>If you want to configure PHP-DI, simply extend the <code>DI\Bridge\Slim\App</code> class and override the <code>configureContainer()</code> method:</p>
-<pre><code class="language-php">class MyApp extends \DI\Bridge\Slim\App
-{
-    protected function configureContainer(ContainerBuilder $builder)
-    {
-        $builder-&gt;addDefinitions(__DIR__ . 'my-config-file.php');
-    }
-}
-
-$app = new MyApp;</code></pre>
-<p>Or if you are using PHP 7 you can use anonymous classes:</p>
-<pre><code class="language-php">$app = new class() extends \DI\Bridge\Slim\App {
-    protected function configureContainer(ContainerBuilder $builder)
-    {
-        $builder-&gt;addDefinitions(__DIR__ . 'my-config-file.php');
-    }
-};</code></pre>
-<p>Have a look at <a href="../container-configuration.html">configuring PHP-DI</a> for more details.</p>
-<h3 id="configuring-slim">Configuring Slim</h3>
-<pre><code class="language-php">// my-config-file.php
-
-return [
-    'settings.responseChunkSize' =&gt; 4096,
-    'settings.outputBuffering' =&gt; 'append',
-    'settings.determineRouteBeforeAppMiddleware' =&gt; false,
-    'settings.displayErrorDetails' =&gt; false,
-    // ...
-];</code></pre>
-<h3 id="twig">Twig</h3>
-<p>In order to get you started easily, here is how you can install the Twig extension for Slim:</p>
-<ul>
-<li>
-<p>install the <a href="https://github.com/slimphp/Twig-View">Twig-View</a> package:</p>
-<pre><code>composer require slim/twig-view</code></pre>
-</li>
-<li>
-<p>configure the <code>Twig</code> class in PHP-DI (taken from <a href="https://github.com/slimphp/Twig-View#usage">the package's documentation</a>):</p>
-<pre><code class="language-php">class MyApp extends \DI\Bridge\Slim\App
-{
-    protected function configureContainer(ContainerBuilder $builder)
-    {
-        $definitions = [
-
-            \Slim\Views\Twig::class =&gt; function (ContainerInterface $c) {
-                $twig = new \Slim\Views\Twig('path/to/templates', [
-                    'cache' =&gt; 'path/to/cache'
-                ]);
-
-                $twig-&gt;addExtension(new \Slim\Views\TwigExtension(
-                    $c-&gt;get('router'),
-                    $c-&gt;get('request')-&gt;getUri()
-                ));
-
-                return $twig;
-            },
-
-        ];
-
-        $builder-&gt;addDefinitions($definitions);
-    }
-}</code></pre>
-</li>
-</ul>
-<p>You can now inject the service in your controllers and render templates:</p>
-<pre><code class="language-php">$app-&gt;get('/', function ($response, Twig $twig) {
-    return $twig-&gt;render($response, 'home.twig');
-});</code></pre>
 <h2 id="more">More</h2>
 <p>Read more on the <a href="https://github.com/PHP-DI/Slim-Bridge">Slim-Bridge project on GitHub</a>.</p>
         </article>

@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>
+<html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>
+<html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>
+<html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!-->
+<html class="no-js"> <!--<![endif]-->
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>PHP-DI - The Dependency Injection Container for humans</title>
+    <meta name="description" content="PHP-DI is a Dependency Injection Container for PHP that intends to be practical and powerful.">
+
+    <link rel="canonical" href="http://php-di.org" />
+
+    <meta name="application-name" content="PHP-DI"/>
+    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="http://php-di.org/img/apple-touch-icon-144x144.png" />
+    <link rel="apple-touch-icon-precomposed" sizes="152x152" href="http://php-di.org/img/apple-touch-icon-152x152.png" />
+    <link rel="icon" type="image/png" href="http://php-di.org/img/favicon-32x32.png" sizes="32x32" />
+    <link rel="icon" type="image/png" href="http://php-di.org/img/favicon-16x16.png" sizes="16x16" />
+    <meta name="msapplication-TileColor" content="#484949" />
+    <meta name="msapplication-TileImage" content="http://php-di.org/img/mstile-144x144.png" />
+
+            <link href="http://fonts.googleapis.com/css?family=Abel:400|Oswald:300,400,700" media="all" rel="stylesheet" type="text/css">
+        <link href="https://cdn.jsdelivr.net/docsearch.js/1/docsearch.min.css" rel="stylesheet">
+        <link href="http://php-di.org/css/highlight.github.css" rel="stylesheet">
+        <link href="http://php-di.org/css/all.min.css" rel="stylesheet">
+    </head>
+<body>
+
+    <header>
+        <div class="navbar navbar-default navbar-fixed-top">
+            <div class="container">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#top-navigation">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand" href="http://php-di.org/" title="Dependency injection container for PHP">PHP-DI</a>
+                </div>
+                <div class="navbar-form navbar-left hidden-xs hidden-sm">
+                    <input id="search-input" type="text" class="form-control" placeholder="Search...">
+                </div>
+                <div class="collapse navbar-collapse" id="top-navigation">
+                    <ul class="nav navbar-nav navbar-right">
+                        <li><a href="http://php-di.org/doc/getting-started.html" title="Getting started with PHP-DI">Getting started</a></li>
+                        <li><a href="http://php-di.org/doc/" title="PHP-DI documentation">Documentation</a></li>
+                        <li><a href="http://php-di.org/news/" title="News about PHP-DI">News</a></li>
+                        <li><a href="http://php-di.org/change-log.html" title="PHP-DI's changelog">Change log</a></li>
+                        <li><a class="github" href="https://github.com/PHP-DI/PHP-DI" title="PHP-DI on GitHub"><i class="fa fa-github"></i></a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </header>
+
+            <article class="container">
+            <h1 id="security-policy">Security Policy</h1>
+<h2 id="supported-versions">Supported Versions</h2>
+<p>Only the latest stable release is supported.</p>
+<h2 id="reporting-a-vulnerability">Reporting a Vulnerability</h2>
+<p>To report a security vulnerability, please use the <a href="https://tidelift.com/security">Tidelift security contact</a>.</p>
+<p>Tidelift will coordinate the fix and disclosure.</p>
+        </article>
+    
+            <footer>
+            <div class='container'>
+                                    <p>
+                        A question? Unsatisfied with the documentation?
+                        Please <a href="https://github.com/PHP-DI/PHP-DI/issues/new">create an issue</a>
+                        or chat on
+                        <a href="https://gitter.im/PHP-DI/PHP-DI" title="PHP-DI chat room">Gitter</a> or
+                        <a href="https://twitter.com/phpdi" title="PHP-DI on Twitter">Twitter</a>.
+                    </p>
+                                <p>
+                    <a href="https://twitter.com/share" class="twitter-share-button" data-related="PHPDI" data-dnt="true">Tweet</a>
+                    <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+                </p>
+                <p>
+                    By <a href="http://mnapoli.fr/" title="Software consulting and PHP news">Matthieu Napoli</a>
+                    and <a href="https://github.com/PHP-DI/PHP-DI/graphs/contributors" title="PHP-DI contributors">contributors</a>
+                    |
+                    Website generated with
+                    <a href="http://couscous.io" title="Static website generator for software documentation">Couscous</a>,
+                    supported by <a href="https://prettyci.com/" title="Continuous integration for PHP coding standards">PrettyCI.com</a>.
+                </p>
+            </div>
+        </footer>
+    
+            <script src="http://php-di.org/bower_components/jquery/dist/jquery.min.js"></script>
+        <script src="http://php-di.org/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+        <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.5/highlight.min.js"></script>
+
+        <script>
+            $(function() {
+                hljs.initHighlightingOnLoad();
+
+                // Add anchors to headers
+                $('article h2, article h3, article h4, article h5').each(function () {
+                    var url = document.URL.replace(/#.*$/, "") + '#' + $(this).attr('id');
+                    $(this).append(' <a class="anchor" href="' + url + '">#</a>');
+                });
+            });
+        </script>
+    
+    <script>
+        var _gaq = _gaq || [];
+        _gaq.push(['_setAccount', 'UA-15584647-13']);
+        _gaq.push(['_trackPageview']);
+        (function() {
+            var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+            ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+            var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+        })();
+    </script>
+
+    <!-- Gitter -->
+    <script>
+        ((window.gitter = {}).chat = {}).options = {
+            room: 'PHP-DI/PHP-DI'
+        };
+    </script>
+    <script src="https://sidecar.gitter.im/dist/sidecar.v1.js" async defer></script>
+
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/docsearch.js/1/docsearch.min.js"></script>
+    <script type="text/javascript">
+        $(function () {
+            var search = docsearch({
+                apiKey: 'ef6af24cbacae1f85d3c44741df49167',
+                indexName: 'php-di',
+                inputSelector: '#search-input'
+            });
+            var delay = (function () {
+                var timer = 0;
+                return function (callback, ms) {
+                    clearTimeout(timer);
+                    timer = setTimeout(callback, ms);
+                };
+            })();
+            search.autocomplete.on('autocomplete:selected', function (e, suggestion) {
+                var articleTitle = suggestion.subcategory;
+                // Strip HTML tags
+                var div = document.createElement("div");
+                div.innerHTML = articleTitle;
+                articleTitle = div.textContent || div.innerText || "";
+                _gaq.push(['_trackEvent', 'search', 'click', articleTitle]);
+            });
+            $('#search-input').bind('input', function () {
+                var search = $(this).val();
+                if (search.length < 3) {
+                    return;
+                }
+                delay(function () {
+                    _gaq.push(['_trackPageview', '/search?q=' + search]);
+                }, 600);
+            });
+        });
+    </script>
+
+</body>
+</html>
