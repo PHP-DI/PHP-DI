@@ -52,12 +52,12 @@ class Compiler
      * @var int
      */
     private $subEntryCounter;
-    
+
     /**
      * @var int
      */
     private $methodMappingCounter;
-    
+
     /**
      * Map of entry names to method names.
      *
