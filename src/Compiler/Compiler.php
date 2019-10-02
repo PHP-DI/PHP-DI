@@ -175,7 +175,7 @@ class Compiler
     private function compileDefinition(string $entryName, Definition $definition) : string
     {
         // Generate a unique method name
-        $methodName = 'get' . sprintf('%022d', ++$this->$methodMappingCounter);
+        $methodName = 'get' . sprintf('%022d', ++$this->methodMappingCounter);
         $this->entryToMethodMapping[$entryName] = $methodName;
 
         switch (true) {
@@ -287,7 +287,7 @@ PHP;
 
         if ($value instanceof Definition) {
             // Give it an arbitrary unique name
-            $subEntryName = 'subEntry' . sprintf('%013d', ++$this->$subEntryCounter);
+            $subEntryName = 'subEntry' . sprintf('%013d', ++$this->subEntryCounter);
             // Compile the sub-definition in another method
             $methodName = $this->compileDefinition($subEntryName, $value);
             // The value is now a method call to that method (which returns the value)
