@@ -51,8 +51,9 @@
                     <ul class="nav navbar-nav navbar-right">
                         <li><a href="http://php-di.org/doc/getting-started.html" title="Getting started with PHP-DI">Getting started</a></li>
                         <li><a href="http://php-di.org/doc/" title="PHP-DI documentation">Documentation</a></li>
+                        <li><a href="http://php-di.org/support.html" title="Enterprise support for PHP-DI">For Enterprise</a></li>
                         <li><a href="http://php-di.org/news/" title="News about PHP-DI">News</a></li>
-                        <li><a href="http://php-di.org/change-log.html" title="PHP-DI's changelog">Change log</a></li>
+                        <li><a href="http://php-di.org/change-log.html" title="PHP-DI's changelog">Changelog</a></li>
                         <li><a class="github" href="https://github.com/PHP-DI/PHP-DI" title="PHP-DI on GitHub"><i class="fa fa-github"></i></a></li>
                     </ul>
                 </div>
@@ -313,14 +314,12 @@ $repository-&gt;</code></pre>
 <pre><code class="language-php">&lt;?php
 namespace PHPSTORM_META
 {
-    $STATIC_METHOD_TYPES = [
-        \Psr\Container\ContainerInterface::get('') =&gt; [
-            "" == "@",
-        ],
-        \DI\Container::get('') =&gt; [
-            "" == "@",
-        ],
-    ];
+    override(\Psr\Container\ContainerInterface::get(0), map([
+        '' =&gt; '@',
+    ]));
+    override(\DI\Container::get(0), map([
+        '' =&gt; '@',
+    ]));
 }</code></pre>
 <p>That configuration will make PhpStorm assume that anything returned by <code>-&gt;get('...')</code> is an instance of the first argument. For example <code>-&gt;get('DateTime')</code> (or <code>-&gt;get(DateTime::class)</code>) will be recognized to return a <code>DateTime</code> object.</p>
 <p>This however will not work if your service name is not a class or interface, for example <code>-&gt;get('foo.bar')</code> will not be understood by PhpStorm.</p>
