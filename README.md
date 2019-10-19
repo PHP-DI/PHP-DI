@@ -20,4 +20,8 @@ Read more on the website: **[php-di.org](http://php-di.org)**
 
 Get community support in the Gitter chat room: [![Gitter chat](https://badges.gitter.im/PHP-DI/PHP-DI.png)](https://gitter.im/PHP-DI/PHP-DI)
 
-Professional support for PHP-DI [is available via Tidelift](https://tidelift.com/subscription/pkg/packagist-php-di-php-di?utm_source=packagist-php-di-php-di&utm_medium=referral&utm_campaign=readme).
+## For Enterprise
+
+*Available as part of the Tidelift Subscription*
+
+The maintainers of php-di/php-di and thousands of other packages are working with Tidelift to deliver commercial support and maintenance for the open source dependencies you use to build your applications. Save time, reduce risk, and improve code health, while paying the maintainers of the exact dependencies you use. [Learn more.](https://tidelift.com/subscription/pkg/packagist-php-di-php-di?utm_source=packagist-php-di-php-di&utm_medium=referral&utm_campaign=enterprise&utm_term=repo)
