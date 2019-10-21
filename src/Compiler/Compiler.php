@@ -49,6 +49,28 @@ class Compiler
     private $entriesToCompile;
 
     /**
+     * Progressive counter for definitions.
+     *
+     * Each key in $entriesToCompile is defined as 'SubEntry' + counter
+     * and each definition has always the same key in the CompiledContainer
+     * if PHP-DI configuration does not change.
+     *
+     * @var int
+     */
+    private $subEntryCounter;
+
+    /**
+     * Progressive counter for CompiledContainer get methods.
+     *
+     * Each CompiledContainer method name is defined as 'get' + counter
+     * and remains the same after each recompilation
+     * if PHP-DI configuration does not change.
+     *
+     * @var int
+     */
+    private $methodMappingCounter;
+
+    /**
      * Map of entry names to method names.
      *
      * @var string[]
@@ -165,7 +187,7 @@ class Compiler
     private function compileDefinition(string $entryName, Definition $definition) : string
     {
         // Generate a unique method name
-        $methodName = str_replace('.', '', uniqid('get', true));
+        $methodName = 'get' . (++$this->methodMappingCounter);
         $this->entryToMethodMapping[$entryName] = $methodName;
 
         switch (true) {
@@ -277,7 +299,7 @@ PHP;
 
         if ($value instanceof Definition) {
             // Give it an arbitrary unique name
-            $subEntryName = uniqid('SubEntry');
+            $subEntryName = 'subEntry' . (++$this->subEntryCounter);
             // Compile the sub-definition in another method
             $methodName = $this->compileDefinition($subEntryName, $value);
             // The value is now a method call to that method (which returns the value)
