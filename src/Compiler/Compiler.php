@@ -53,18 +53,18 @@ class Compiler
      *
      * Each key in $entriesToCompile is defined as 'SubEntry' + counter
      * and each definition has always the same key in the CompiledContainer
-     * if PHP-DI configuration does not change
+     * if PHP-DI configuration does not change.
      *
      * @var int
      */
     private $subEntryCounter;
 
     /**
-     * Progressive counter for CompiledContainer get methods
+     * Progressive counter for CompiledContainer get methods.
      *
      * Each CompiledContainer method name is defined as 'get' + counter
      * and remains the same after each recompilation
-     * if PHP-DI configuration does not change
+     * if PHP-DI configuration does not change.
      *
      * @var int
      */
