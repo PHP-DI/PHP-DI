@@ -321,18 +321,18 @@ use a tool like <a href="https://github.com/jeremeamia/acclimate">Acclimate</a>.
 <p>You will just need to tell PHP-DI to look into the composite container, else PHP-DI will be unaware
 of Symfony's container entries.</p>
 <p>Example with Acclimate:</p>
-<pre><code class="language-php">$container = new CompositeContainer();
+<pre><code class="language-php">$container = new Acclimate\Container\CompositeContainer();
 
 // Add Symfony's container
 $container-&gt;addContainer($acclimate-&gt;adaptContainer($symfonyContainer));
 
 // Configure PHP-DI container
-$builder = new ContainerBuilder();
+$builder = new \DI\ContainerBuilder();
 $builder-&gt;wrapContainer($container);
 
 // Add PHP-DI container
 $phpdiContainer = $builder-&gt;build();
-$container-&gt;addContainer($acclimate-&gt;adaptContainer($phpdiContainer));
+$container-&gt;addContainer($phpdiContainer);
 
 // Good to go!
 $foo = $container-&gt;get('foo');</code></pre>
