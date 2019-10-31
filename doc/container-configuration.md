@@ -62,18 +62,18 @@ of Symfony's container entries.
 Example with Acclimate:
 
 ```php
-$container = new CompositeContainer();
+$container = new Acclimate\Container\CompositeContainer();
 
 // Add Symfony's container
 $container->addContainer($acclimate->adaptContainer($symfonyContainer));
 
 // Configure PHP-DI container
-$builder = new ContainerBuilder();
+$builder = new \DI\ContainerBuilder();
 $builder->wrapContainer($container);
 
 // Add PHP-DI container
 $phpdiContainer = $builder->build();
-$container->addContainer($acclimate->adaptContainer($phpdiContainer));
+$container->addContainer($phpdiContainer);
 
 // Good to go!
 $foo = $container->get('foo');
