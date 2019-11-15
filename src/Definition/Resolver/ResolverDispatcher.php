@@ -121,7 +121,7 @@ class ResolverDispatcher implements DefinitionResolver
 
                 return $this->instanceResolver;
             default:
-                throw new \RuntimeException('No definition resolver was configured for definition of type ' . get_class($definition));
+                throw new \RuntimeException('No definition resolver was configured for definition of type ' . \get_class($definition));
         }
     }
 }

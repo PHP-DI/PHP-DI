@@ -35,7 +35,7 @@ abstract class CompiledContainer extends Container
     public function get($name)
     {
         // Try to find the entry in the singleton map
-        if (isset($this->resolvedEntries[$name]) || array_key_exists($name, $this->resolvedEntries)) {
+        if (isset($this->resolvedEntries[$name]) || \array_key_exists($name, $this->resolvedEntries)) {
             return $this->resolvedEntries[$name];
         }
 
@@ -69,10 +69,10 @@ abstract class CompiledContainer extends Container
      */
     public function has($name)
     {
-        if (! is_string($name)) {
-            throw new \InvalidArgumentException(sprintf(
+        if (! \is_string($name)) {
+            throw new \InvalidArgumentException(\sprintf(
                 'The name parameter must be of type string, %s given',
-                is_object($name) ? get_class($name) : gettype($name)
+                \is_object($name) ? \get_class($name) : \gettype($name)
             ));
         }
 
@@ -110,7 +110,7 @@ abstract class CompiledContainer extends Container
 
         $parameters = [$this->delegateContainer, new RequestedEntryHolder($entryName)];
 
-        $parameters = array_merge($parameters, $extraParameters);
+        $parameters = \array_merge($parameters, $extraParameters);
 
         try {
             return $this->factoryInvoker->call($callable, $parameters);

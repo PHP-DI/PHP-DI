@@ -69,7 +69,7 @@ class FactoryDefinition implements Definition
 
     public function replaceNestedDefinitions(callable $replacer)
     {
-        $this->parameters = array_map($replacer, $this->parameters);
+        $this->parameters = \array_map($replacer, $this->parameters);
     }
 
     public function __toString()

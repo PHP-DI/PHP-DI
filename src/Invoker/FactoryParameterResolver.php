@@ -38,7 +38,7 @@ class FactoryParameterResolver implements ParameterResolver
 
         // Skip parameters already resolved
         if (! empty($resolvedParameters)) {
-            $parameters = array_diff_key($parameters, $resolvedParameters);
+            $parameters = \array_diff_key($parameters, $resolvedParameters);
         }
 
         foreach ($parameters as $index => $parameter) {

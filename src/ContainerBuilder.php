@@ -123,7 +123,7 @@ class ContainerBuilder
      */
     public function build()
     {
-        $sources = array_reverse($this->definitionSources);
+        $sources = \array_reverse($this->definitionSources);
 
         if ($this->useAnnotations) {
             $autowiring = new AnnotationBasedAutowiring($this->ignorePhpDocErrors);
@@ -135,11 +135,11 @@ class ContainerBuilder
             $autowiring = new NoAutowiring;
         }
 
-        $sources = array_map(function ($definitions) use ($autowiring) {
-            if (is_string($definitions)) {
+        $sources = \array_map(function ($definitions) use ($autowiring) {
+            if (\is_string($definitions)) {
                 // File
                 return new DefinitionFile($definitions, $autowiring);
-            } elseif (is_array($definitions)) {
+            } elseif (\is_array($definitions)) {
                 return new DefinitionArray($definitions, $autowiring);
             }
 
@@ -178,7 +178,7 @@ class ContainerBuilder
             );
             // Only load the file if it hasn't been already loaded
             // (the container can be created multiple times in the same process)
-            if (!class_exists($containerClass, false)) {
+            if (!\class_exists($containerClass, false)) {
                 require $compiledContainerFile;
             }
         }
@@ -319,11 +319,11 @@ class ContainerBuilder
         $this->ensureNotLocked();
 
         foreach ($definitions as $definition) {
-            if (!is_string($definition) && !is_array($definition) && !($definition instanceof DefinitionSource)) {
-                throw new InvalidArgumentException(sprintf(
+            if (!\is_string($definition) && !\is_array($definition) && !($definition instanceof DefinitionSource)) {
+                throw new InvalidArgumentException(\sprintf(
                     '%s parameter must be a string, an array or a DefinitionSource object, %s given',
                     'ContainerBuilder::addDefinitions()',
-                    is_object($definition) ? get_class($definition) : gettype($definition)
+                    \is_object($definition) ? \get_class($definition) : \gettype($definition)
                 ));
             }
 

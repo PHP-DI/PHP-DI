@@ -13,7 +13,7 @@ use DI\Definition\Reference;
 use DI\Definition\StringDefinition;
 use DI\Definition\ValueDefinition;
 
-if (! function_exists('DI\value')) {
+if (! \function_exists('DI\value')) {
     /**
      * Helper for defining a value.
      *
@@ -25,7 +25,7 @@ if (! function_exists('DI\value')) {
     }
 }
 
-if (! function_exists('DI\create')) {
+if (! \function_exists('DI\create')) {
     /**
      * Helper for defining an object.
      *
@@ -38,7 +38,7 @@ if (! function_exists('DI\create')) {
     }
 }
 
-if (! function_exists('DI\autowire')) {
+if (! \function_exists('DI\autowire')) {
     /**
      * Helper for autowiring an object.
      *
@@ -51,7 +51,7 @@ if (! function_exists('DI\autowire')) {
     }
 }
 
-if (! function_exists('DI\factory')) {
+if (! \function_exists('DI\factory')) {
     /**
      * Helper for defining a container entry using a factory function/callable.
      *
@@ -64,7 +64,7 @@ if (! function_exists('DI\factory')) {
     }
 }
 
-if (! function_exists('DI\decorate')) {
+if (! \function_exists('DI\decorate')) {
     /**
      * Decorate the previous definition using a callable.
      *
@@ -83,7 +83,7 @@ if (! function_exists('DI\decorate')) {
     }
 }
 
-if (! function_exists('DI\get')) {
+if (! \function_exists('DI\get')) {
     /**
      * Helper for referencing another container entry in an object definition.
      */
@@ -93,7 +93,7 @@ if (! function_exists('DI\get')) {
     }
 }
 
-if (! function_exists('DI\env')) {
+if (! \function_exists('DI\env')) {
     /**
      * Helper for referencing environment variables.
      *
@@ -103,13 +103,13 @@ if (! function_exists('DI\env')) {
     function env(string $variableName, $defaultValue = null) : EnvironmentVariableDefinition
     {
         // Only mark as optional if the default value was *explicitly* provided.
-        $isOptional = 2 === func_num_args();
+        $isOptional = 2 === \func_num_args();
 
         return new EnvironmentVariableDefinition($variableName, $isOptional, $defaultValue);
     }
 }
 
-if (! function_exists('DI\add')) {
+if (! \function_exists('DI\add')) {
     /**
      * Helper for extending another definition.
      *
@@ -129,7 +129,7 @@ if (! function_exists('DI\add')) {
      */
     function add($values) : ArrayDefinitionExtension
     {
-        if (! is_array($values)) {
+        if (! \is_array($values)) {
             $values = [$values];
         }
 
@@ -137,7 +137,7 @@ if (! function_exists('DI\add')) {
     }
 }
 
-if (! function_exists('DI\string')) {
+if (! \function_exists('DI\string')) {
     /**
      * Helper for concatenating strings.
      *

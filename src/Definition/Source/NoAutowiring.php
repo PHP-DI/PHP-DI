@@ -16,7 +16,7 @@ class NoAutowiring implements Autowiring
 {
     public function autowire(string $name, ObjectDefinition $definition = null)
     {
-        throw new InvalidDefinition(sprintf(
+        throw new InvalidDefinition(\sprintf(
             'Cannot autowire entry "%s" because autowiring is disabled',
             $name
         ));

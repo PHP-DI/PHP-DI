@@ -182,13 +182,13 @@ class CreateDefinitionHelper implements DefinitionHelper
 
         foreach ($parameters as $index => $parameter) {
             // Parameter indexed by the parameter name, we reindex it with its position
-            if (is_string($index)) {
+            if (\is_string($index)) {
                 $callable = [$definition->getClassName(), $method];
 
                 try {
                     $reflectionParameter = new \ReflectionParameter($callable, $index);
                 } catch (\ReflectionException $e) {
-                    throw InvalidDefinition::create($definition, sprintf("Parameter with name '%s' could not be found. %s.", $index, $e->getMessage()));
+                    throw InvalidDefinition::create($definition, \sprintf("Parameter with name '%s' could not be found. %s.", $index, $e->getMessage()));
                 }
 
                 $index = $reflectionParameter->getPosition();

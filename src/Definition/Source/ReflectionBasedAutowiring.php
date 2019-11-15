@@ -19,7 +19,7 @@ class ReflectionBasedAutowiring implements DefinitionSource, Autowiring
     {
         $className = $definition ? $definition->getClassName() : $name;
 
-        if (!class_exists($className) && !interface_exists($className)) {
+        if (!\class_exists($className) && !\interface_exists($className)) {
             return $definition;
         }
 

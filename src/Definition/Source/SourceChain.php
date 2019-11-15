@@ -35,7 +35,7 @@ class SourceChain implements DefinitionSource, MutableDefinitionSource
     public function __construct(array $sources)
     {
         // We want a numerically indexed array to ease the traversal later
-        $this->sources = array_values($sources);
+        $this->sources = \array_values($sources);
         $this->rootSource = $this;
     }
 
@@ -47,7 +47,7 @@ class SourceChain implements DefinitionSource, MutableDefinitionSource
      */
     public function getDefinition(string $name, int $startIndex = 0)
     {
-        $count = count($this->sources);
+        $count = \count($this->sources);
         for ($i = $startIndex; $i < $count; ++$i) {
             $source = $this->sources[$i];
 
@@ -69,11 +69,11 @@ class SourceChain implements DefinitionSource, MutableDefinitionSource
     {
         $names = [];
         foreach ($this->sources as $source) {
-            $names = array_merge($names, $source->getDefinitions());
+            $names = \array_merge($names, $source->getDefinitions());
         }
-        $names = array_keys($names);
+        $names = \array_keys($names);
 
-        $definitions = array_combine($names, array_map(function (string $name) {
+        $definitions = \array_combine($names, \array_map(function (string $name) {
             return $this->getDefinition($name);
         }, $names));
 
@@ -105,6 +105,6 @@ class SourceChain implements DefinitionSource, MutableDefinitionSource
     {
         $this->mutableSource = $mutableSource;
 
-        array_unshift($this->sources, $mutableSource);
+        \array_unshift($this->sources, $mutableSource);
     }
 }

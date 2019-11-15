@@ -27,9 +27,9 @@ class InstanceInjector extends ObjectCreator
         try {
             $this->injectMethodsAndProperties($definition->getInstance(), $definition->getObjectDefinition());
         } catch (NotFoundExceptionInterface $e) {
-            $message = sprintf(
+            $message = \sprintf(
                 'Error while injecting dependencies into %s: %s',
-                get_class($definition->getInstance()),
+                \get_class($definition->getInstance()),
                 $e->getMessage()
             );
 

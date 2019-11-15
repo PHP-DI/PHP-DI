@@ -56,7 +56,7 @@ class AnnotationBasedAutowiring implements DefinitionSource, Autowiring
     {
         $className = $definition ? $definition->getClassName() : $name;
 
-        if (!class_exists($className) && !interface_exists($className)) {
+        if (!\class_exists($className) && !\interface_exists($className)) {
             return $definition;
         }
 
@@ -129,7 +129,7 @@ class AnnotationBasedAutowiring implements DefinitionSource, Autowiring
         $entryName = $annotation->getName() ?: $this->getPhpDocReader()->getPropertyClass($property);
 
         if ($entryName === null) {
-            throw new InvalidAnnotation(sprintf(
+            throw new InvalidAnnotation(\sprintf(
                 '@Inject found on property %s::%s but unable to guess what to inject, use a @var annotation',
                 $property->getDeclaringClass()->getName(),
                 $property->getName()
@@ -177,7 +177,7 @@ class AnnotationBasedAutowiring implements DefinitionSource, Autowiring
         try {
             $annotation = $this->getAnnotationReader()->getMethodAnnotation($method, 'DI\Annotation\Inject');
         } catch (InvalidAnnotation $e) {
-            throw new InvalidAnnotation(sprintf(
+            throw new InvalidAnnotation(\sprintf(
                 '@Inject annotation on %s::%s is malformed. %s',
                 $method->getDeclaringClass()->getName(),
                 $method->getName(),
@@ -273,7 +273,7 @@ class AnnotationBasedAutowiring implements DefinitionSource, Autowiring
             $annotation = $this->getAnnotationReader()
                 ->getClassAnnotation($class, 'DI\Annotation\Injectable');
         } catch (UnexpectedValueException $e) {
-            throw new InvalidAnnotation(sprintf(
+            throw new InvalidAnnotation(\sprintf(
                 'Error while reading @Injectable on %s: %s',
                 $class->getName(),
                 $e->getMessage()

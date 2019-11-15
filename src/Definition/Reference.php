@@ -65,7 +65,7 @@ class Reference implements Definition, SelfResolvingDefinition
 
     public function __toString()
     {
-        return sprintf(
+        return \sprintf(
             'get(%s)',
             $this->targetEntryName
         );

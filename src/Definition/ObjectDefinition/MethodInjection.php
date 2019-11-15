@@ -73,7 +73,7 @@ class MethodInjection implements Definition
 
     public function replaceNestedDefinitions(callable $replacer)
     {
-        $this->parameters = array_map($replacer, $this->parameters);
+        $this->parameters = \array_map($replacer, $this->parameters);
     }
 
     /**
@@ -81,6 +81,6 @@ class MethodInjection implements Definition
      */
     public function __toString()
     {
-        return sprintf('method(%s)', $this->methodName);
+        return \sprintf('method(%s)', $this->methodName);
     }
 }

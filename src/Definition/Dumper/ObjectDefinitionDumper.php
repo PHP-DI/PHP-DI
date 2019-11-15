@@ -23,7 +23,7 @@ class ObjectDefinitionDumper
     public function dump(ObjectDefinition $definition) : string
     {
         $className = $definition->getClassName();
-        $classExist = class_exists($className) || interface_exists($className);
+        $classExist = \class_exists($className) || \interface_exists($className);
 
         // Class
         if (! $classExist) {
@@ -32,10 +32,10 @@ class ObjectDefinitionDumper
             $class = new \ReflectionClass($className);
             $warning = $class->isInstantiable() ? '' : '#NOT INSTANTIABLE# ';
         }
-        $str = sprintf('    class = %s%s', $warning, $className);
+        $str = \sprintf('    class = %s%s', $warning, $className);
 
         // Lazy
-        $str .= PHP_EOL . '    lazy = ' . var_export($definition->isLazy(), true);
+        $str .= PHP_EOL . '    lazy = ' . \var_export($definition->isLazy(), true);
 
         if ($classExist) {
             // Constructor
@@ -48,7 +48,7 @@ class ObjectDefinitionDumper
             $str .= $this->dumpMethods($className, $definition);
         }
 
-        return sprintf('Object (' . PHP_EOL . '%s' . PHP_EOL . ')', $str);
+        return \sprintf('Object (' . PHP_EOL . '%s' . PHP_EOL . ')', $str);
     }
 
     private function dumpConstructor(string $className, ObjectDefinition $definition) : string
@@ -60,7 +60,7 @@ class ObjectDefinitionDumper
         if ($constructorInjection !== null) {
             $parameters = $this->dumpMethodParameters($className, $constructorInjection);
 
-            $str .= sprintf(PHP_EOL . '    __construct(' . PHP_EOL . '        %s' . PHP_EOL . '    )', $parameters);
+            $str .= \sprintf(PHP_EOL . '    __construct(' . PHP_EOL . '        %s' . PHP_EOL . '    )', $parameters);
         }
 
         return $str;
@@ -72,9 +72,9 @@ class ObjectDefinitionDumper
 
         foreach ($definition->getPropertyInjections() as $propertyInjection) {
             $value = $propertyInjection->getValue();
-            $valueStr = $value instanceof Definition ? (string) $value : var_export($value, true);
+            $valueStr = $value instanceof Definition ? (string) $value : \var_export($value, true);
 
-            $str .= sprintf(PHP_EOL . '    $%s = %s', $propertyInjection->getPropertyName(), $valueStr);
+            $str .= \sprintf(PHP_EOL . '    $%s = %s', $propertyInjection->getPropertyName(), $valueStr);
         }
 
         return $str;
@@ -87,7 +87,7 @@ class ObjectDefinitionDumper
         foreach ($definition->getMethodInjections() as $methodInjection) {
             $parameters = $this->dumpMethodParameters($className, $methodInjection);
 
-            $str .= sprintf(PHP_EOL . '    %s(' . PHP_EOL . '        %s' . PHP_EOL . '    )', $methodInjection->getMethodName(), $parameters);
+            $str .= \sprintf(PHP_EOL . '    %s(' . PHP_EOL . '        %s' . PHP_EOL . '    )', $methodInjection->getMethodName(), $parameters);
         }
 
         return $str;
@@ -102,11 +102,11 @@ class ObjectDefinitionDumper
         $definitionParameters = $methodInjection->getParameters();
 
         foreach ($methodReflection->getParameters() as $index => $parameter) {
-            if (array_key_exists($index, $definitionParameters)) {
+            if (\array_key_exists($index, $definitionParameters)) {
                 $value = $definitionParameters[$index];
-                $valueStr = $value instanceof Definition ? (string) $value : var_export($value, true);
+                $valueStr = $value instanceof Definition ? (string) $value : \var_export($value, true);
 
-                $args[] = sprintf('$%s = %s', $parameter->getName(), $valueStr);
+                $args[] = \sprintf('$%s = %s', $parameter->getName(), $valueStr);
 
                 continue;
             }
@@ -116,10 +116,10 @@ class ObjectDefinitionDumper
                 try {
                     $value = $parameter->getDefaultValue();
 
-                    $args[] = sprintf(
+                    $args[] = \sprintf(
                         '$%s = (default value) %s',
                         $parameter->getName(),
-                        var_export($value, true)
+                        \var_export($value, true)
                     );
                     continue;
                 } catch (ReflectionException $e) {
@@ -127,9 +127,9 @@ class ObjectDefinitionDumper
                 }
             }
 
-            $args[] = sprintf('$%s = #UNDEFINED#', $parameter->getName());
+            $args[] = \sprintf('$%s = #UNDEFINED#', $parameter->getName());
         }
 
-        return implode(PHP_EOL . '        ', $args);
+        return \implode(PHP_EOL . '        ', $args);
     }
 }

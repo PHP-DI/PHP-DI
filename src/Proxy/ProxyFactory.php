@@ -81,7 +81,7 @@ class ProxyFactory
             return;
         }
 
-        if (! class_exists(Configuration::class)) {
+        if (! \class_exists(Configuration::class)) {
             throw new \RuntimeException('The ocramius/proxy-manager library is not installed. Lazy injection requires that library to be installed with Composer in order to work. Run "composer require ocramius/proxy-manager:~2.0".');
         }
 
@@ -90,7 +90,7 @@ class ProxyFactory
         if ($this->writeProxiesToFile) {
             $config->setProxiesTargetDir($this->proxyDirectory);
             $config->setGeneratorStrategy(new FileWriterGeneratorStrategy(new FileLocator($this->proxyDirectory)));
-            spl_autoload_register($config->getProxyAutoloader());
+            \spl_autoload_register($config->getProxyAutoloader());
         } else {
             $config->setGeneratorStrategy(new EvaluatingGeneratorStrategy());
         }

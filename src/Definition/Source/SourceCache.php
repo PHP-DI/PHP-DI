@@ -54,9 +54,9 @@ class SourceCache implements DefinitionSource, MutableDefinitionSource
 
     public static function isSupported() : bool
     {
-        return function_exists('apcu_fetch')
-            && ini_get('apc.enabled')
-            && ! ('cli' === \PHP_SAPI && ! ini_get('apc.enable_cli'));
+        return \function_exists('apcu_fetch')
+            && \ini_get('apc.enabled')
+            && ! ('cli' === \PHP_SAPI && ! \ini_get('apc.enable_cli'));
     }
 
     public function addDefinition(Definition $definition)

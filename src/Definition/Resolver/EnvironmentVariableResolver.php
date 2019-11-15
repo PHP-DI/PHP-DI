@@ -38,14 +38,14 @@ class EnvironmentVariableResolver implements DefinitionResolver
      */
     public function resolve(Definition $definition, array $parameters = [])
     {
-        $value = call_user_func($this->variableReader, $definition->getVariableName());
+        $value = \call_user_func($this->variableReader, $definition->getVariableName());
 
         if (false !== $value) {
             return $value;
         }
 
         if (!$definition->isOptional()) {
-            throw new InvalidDefinition(sprintf(
+            throw new InvalidDefinition(\sprintf(
                 "The environment variable '%s' has not been defined",
                 $definition->getVariableName()
             ));

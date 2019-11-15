@@ -67,6 +67,6 @@ class ValueDefinition implements Definition, SelfResolvingDefinition
 
     public function __toString()
     {
-        return sprintf('Value (%s)', var_export($this->value, true));
+        return \sprintf('Value (%s)', \var_export($this->value, true));
     }
 }

@@ -42,7 +42,7 @@ final class Inject
         // Process the parameters as a list AND as a parameter array (we don't know on what the annotation is)
 
         // @Inject(name="foo")
-        if (isset($values['name']) && is_string($values['name'])) {
+        if (isset($values['name']) && \is_string($values['name'])) {
             $this->name = $values['name'];
 
             return;
@@ -56,17 +56,17 @@ final class Inject
         $values = $values['value'];
 
         // @Inject("foo")
-        if (is_string($values)) {
+        if (\is_string($values)) {
             $this->name = $values;
         }
 
         // @Inject({...}) on a method
-        if (is_array($values)) {
+        if (\is_array($values)) {
             foreach ($values as $key => $value) {
-                if (! is_string($value)) {
-                    throw new InvalidAnnotation(sprintf(
+                if (! \is_string($value)) {
+                    throw new InvalidAnnotation(\sprintf(
                         '@Inject({"param" = "value"}) expects "value" to be a string, %s given.',
-                        json_encode($value)
+                        \json_encode($value)
                     ));
                 }
 

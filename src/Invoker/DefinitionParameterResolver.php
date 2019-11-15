@@ -35,7 +35,7 @@ class DefinitionParameterResolver implements ParameterResolver
     ) : array {
         // Skip parameters already resolved
         if (! empty($resolvedParameters)) {
-            $providedParameters = array_diff_key($providedParameters, $resolvedParameters);
+            $providedParameters = \array_diff_key($providedParameters, $resolvedParameters);
         }
 
         foreach ($providedParameters as $key => $value) {
@@ -49,7 +49,7 @@ class DefinitionParameterResolver implements ParameterResolver
 
             $value = $this->definitionResolver->resolve($value);
 
-            if (is_int($key)) {
+            if (\is_int($key)) {
                 // Indexed by position
                 $resolvedParameters[$key] = $value;
             } else {

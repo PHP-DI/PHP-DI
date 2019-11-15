@@ -49,10 +49,10 @@ class ParameterResolver
         $definitionParameters = $definition ? $definition->getParameters() : [];
 
         foreach ($method->getParameters() as $index => $parameter) {
-            if (array_key_exists($parameter->getName(), $parameters)) {
+            if (\array_key_exists($parameter->getName(), $parameters)) {
                 // Look in the $parameters array
                 $value = &$parameters[$parameter->getName()];
-            } elseif (array_key_exists($index, $definitionParameters)) {
+            } elseif (\array_key_exists($index, $definitionParameters)) {
                 // Look in the definition
                 $value = &$definitionParameters[$index];
             } else {
@@ -62,7 +62,7 @@ class ParameterResolver
                     continue;
                 }
 
-                throw new InvalidDefinition(sprintf(
+                throw new InvalidDefinition(\sprintf(
                     'Parameter $%s of %s has no value defined or guessable',
                     $parameter->getName(),
                     $this->getFunctionName($method)
@@ -96,7 +96,7 @@ class ParameterResolver
         try {
             return $parameter->getDefaultValue();
         } catch (\ReflectionException $e) {
-            throw new InvalidDefinition(sprintf(
+            throw new InvalidDefinition(\sprintf(
                 'The parameter "%s" of %s has no type defined or guessable. It has a default value, '
                 . 'but the default value can\'t be read through Reflection because it is a PHP internal class.',
                 $parameter->getName(),

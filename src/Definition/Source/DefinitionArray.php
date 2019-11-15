@@ -82,7 +82,7 @@ class DefinitionArray implements DefinitionSource, MutableDefinitionSource
     public function getDefinition(string $name)
     {
         // Look for the definition by name
-        if (array_key_exists($name, $this->definitions)) {
+        if (\array_key_exists($name, $this->definitions)) {
             $definition = $this->definitions[$name];
             $definition = $this->normalizer->normalizeRootDefinition($definition, $name);
 
@@ -93,7 +93,7 @@ class DefinitionArray implements DefinitionSource, MutableDefinitionSource
         if ($this->wildcardDefinitions === null) {
             $this->wildcardDefinitions = [];
             foreach ($this->definitions as $key => $definition) {
-                if (strpos($key, self::WILDCARD) !== false) {
+                if (\strpos($key, self::WILDCARD) !== false) {
                     $this->wildcardDefinitions[$key] = $definition;
                 }
             }
@@ -102,10 +102,10 @@ class DefinitionArray implements DefinitionSource, MutableDefinitionSource
         // Look in wildcards definitions
         foreach ($this->wildcardDefinitions as $key => $definition) {
             // Turn the pattern into a regex
-            $key = preg_quote($key);
-            $key = '#' . str_replace('\\' . self::WILDCARD, self::WILDCARD_PATTERN, $key) . '#';
-            if (preg_match($key, $name, $matches) === 1) {
-                array_shift($matches);
+            $key = \preg_quote($key);
+            $key = '#' . \str_replace('\\' . self::WILDCARD, self::WILDCARD_PATTERN, $key) . '#';
+            if (\preg_match($key, $name, $matches) === 1) {
+                \array_shift($matches);
                 $definition = $this->normalizer->normalizeRootDefinition($definition, $name, $matches);
 
                 return $definition;
@@ -120,7 +120,7 @@ class DefinitionArray implements DefinitionSource, MutableDefinitionSource
         // Return all definitions except wildcard definitions
         $definitions = [];
         foreach ($this->definitions as $key => $definition) {
-            if (strpos($key, self::WILDCARD) === false) {
+            if (\strpos($key, self::WILDCARD) === false) {
                 $definitions[$key] = $definition;
             }
         }

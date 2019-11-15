@@ -75,26 +75,26 @@ class FactoryResolver implements DefinitionResolver
         try {
             $providedParams = [$this->container, $definition];
             $extraParams = $this->resolveExtraParams($definition->getParameters());
-            $providedParams = array_merge($providedParams, $extraParams, $parameters);
+            $providedParams = \array_merge($providedParams, $extraParams, $parameters);
 
             return $this->invoker->call($callable, $providedParams);
         } catch (NotCallableException $e) {
             // Custom error message to help debugging
-            if (is_string($callable) && class_exists($callable) && method_exists($callable, '__invoke')) {
-                throw new InvalidDefinition(sprintf(
+            if (\is_string($callable) && \class_exists($callable) && \method_exists($callable, '__invoke')) {
+                throw new InvalidDefinition(\sprintf(
                     'Entry "%s" cannot be resolved: factory %s. Invokable classes cannot be automatically resolved if autowiring is disabled on the container, you need to enable autowiring or define the entry manually.',
                     $definition->getName(),
                     $e->getMessage()
                 ));
             }
 
-            throw new InvalidDefinition(sprintf(
+            throw new InvalidDefinition(\sprintf(
                 'Entry "%s" cannot be resolved: factory %s',
                 $definition->getName(),
                 $e->getMessage()
             ));
         } catch (NotEnoughParametersException $e) {
-            throw new InvalidDefinition(sprintf(
+            throw new InvalidDefinition(\sprintf(
                 'Entry "%s" cannot be resolved: %s',
                 $definition->getName(),
                 $e->getMessage()

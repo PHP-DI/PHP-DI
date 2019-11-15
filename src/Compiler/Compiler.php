@@ -114,9 +114,9 @@ class Compiler
         string $parentClassName,
         bool $autowiringEnabled
     ) : string {
-        $fileName = rtrim($directory, '/') . '/' . $className . '.php';
+        $fileName = \rtrim($directory, '/') . '/' . $className . '.php';
 
-        if (file_exists($fileName)) {
+        if (\file_exists($fileName)) {
             // The container is already compiled
             return $fileName;
         }
@@ -124,7 +124,7 @@ class Compiler
         $this->autowiringEnabled = $autowiringEnabled;
 
         // Validate that a valid class name was provided
-        $validClassName = preg_match('/^[a-zA-Z_][a-zA-Z0-9_]*$/', $className);
+        $validClassName = \preg_match('/^[a-zA-Z_][a-zA-Z0-9_]*$/', $className);
         if (!$validClassName) {
             throw new InvalidArgumentException("The container cannot be compiled: `$className` is not a valid PHP class name");
         }
@@ -166,15 +166,15 @@ class Compiler
         $this->containerClass = $className;
         $this->containerParentClass = $parentClassName;
 
-        ob_start();
+        \ob_start();
         require __DIR__ . '/Template.php';
-        $fileContent = ob_get_contents();
-        ob_end_clean();
+        $fileContent = \ob_get_contents();
+        \ob_end_clean();
 
         $fileContent = "<?php\n" . $fileContent;
 
-        $this->createCompilationDirectory(dirname($fileName));
-        file_put_contents($fileName, $fileContent);
+        $this->createCompilationDirectory(\dirname($fileName));
+        \file_put_contents($fileName, $fileContent);
 
         return $fileName;
     }
@@ -225,7 +225,7 @@ PHP;
                 try {
                     $code = 'return ' . $this->compileValue($definition->getValues()) . ';';
                 } catch (\Exception $e) {
-                    throw new DependencyException(sprintf(
+                    throw new DependencyException(\sprintf(
                         'Error while compiling %s. %s',
                         $definition->getName(),
                         $e->getMessage()
@@ -243,12 +243,12 @@ PHP;
                     if (! $definition->getName()) {
                         throw new InvalidDefinition('Decorators cannot be nested in another definition');
                     }
-                    throw new InvalidDefinition(sprintf(
+                    throw new InvalidDefinition(\sprintf(
                         'Entry "%s" decorates nothing: no previous definition with the same name was found',
                         $definition->getName()
                     ));
                 }
-                $code = sprintf(
+                $code = \sprintf(
                     'return call_user_func(%s, %s, $this->delegateContainer);',
                     $this->compileValue($definition->getCallable()),
                     $this->compileValue($decoratedDefinition)
@@ -258,9 +258,9 @@ PHP;
                 $value = $definition->getCallable();
 
                 // Custom error message to help debugging
-                $isInvokableClass = is_string($value) && class_exists($value) && method_exists($value, '__invoke');
+                $isInvokableClass = \is_string($value) && \class_exists($value) && \method_exists($value, '__invoke');
                 if ($isInvokableClass && !$this->autowiringEnabled) {
-                    throw new InvalidDefinition(sprintf(
+                    throw new InvalidDefinition(\sprintf(
                         'Entry "%s" cannot be compiled. Invokable classes cannot be automatically resolved if autowiring is disabled on the container, you need to enable autowiring or define the entry manually.',
                         $entryName
                     ));
@@ -271,17 +271,17 @@ PHP;
                     $definitionParameters = ', ' . $this->compileValue($definition->getParameters());
                 }
 
-                $code = sprintf(
+                $code = \sprintf(
                     'return $this->resolveFactory(%s, %s%s);',
                     $this->compileValue($value),
-                    var_export($entryName, true),
+                    \var_export($entryName, true),
                     $definitionParameters
                 );
 
                 break;
             default:
                 // This case should not happen (so it cannot be tested)
-                throw new \Exception('Cannot compile definition of type ' . get_class($definition));
+                throw new \Exception('Cannot compile definition of type ' . \get_class($definition));
         }
 
         $this->methods[$methodName] = $code;
@@ -306,14 +306,14 @@ PHP;
             return "\$this->$methodName()";
         }
 
-        if (is_array($value)) {
-            $value = array_map(function ($value, $key) {
+        if (\is_array($value)) {
+            $value = \array_map(function ($value, $key) {
                 $compiledValue = $this->compileValue($value);
-                $key = var_export($key, true);
+                $key = \var_export($key, true);
 
                 return "            $key => $compiledValue,\n";
-            }, $value, array_keys($value));
-            $value = implode('', $value);
+            }, $value, \array_keys($value));
+            $value = \implode('', $value);
 
             return "[\n$value        ]";
         }
@@ -322,16 +322,16 @@ PHP;
             return $this->compileClosure($value);
         }
 
-        return var_export($value, true);
+        return \var_export($value, true);
     }
 
     private function createCompilationDirectory(string $directory)
     {
-        if (!is_dir($directory) && !@mkdir($directory, 0777, true)) {
-            throw new InvalidArgumentException(sprintf('Compilation directory does not exist and cannot be created: %s.', $directory));
+        if (!\is_dir($directory) && !@\mkdir($directory, 0777, true)) {
+            throw new InvalidArgumentException(\sprintf('Compilation directory does not exist and cannot be created: %s.', $directory));
         }
-        if (!is_writable($directory)) {
-            throw new InvalidArgumentException(sprintf('Compilation directory is not writable: %s.', $directory));
+        if (!\is_writable($directory)) {
+            throw new InvalidArgumentException(\sprintf('Compilation directory is not writable: %s.', $directory));
         }
     }
 
@@ -355,10 +355,10 @@ PHP;
         if ($value instanceof \Closure) {
             return true;
         }
-        if (is_object($value)) {
+        if (\is_object($value)) {
             return 'An object was found but objects cannot be compiled';
         }
-        if (is_resource($value)) {
+        if (\is_resource($value)) {
             return 'A resource was found but resources cannot be compiled';
         }
 
@@ -372,7 +372,7 @@ PHP;
         try {
             $closureData = $closureAnalyzer->analyze($closure);
         } catch (ClosureAnalysisException $e) {
-            if (stripos($e->getMessage(), 'Two closures were declared on the same line') !== false) {
+            if (\stripos($e->getMessage(), 'Two closures were declared on the same line') !== false) {
                 throw new InvalidDefinition('Cannot compile closures when two closures are defined on the same line', 0, $e);
             }
 
@@ -394,7 +394,7 @@ PHP;
         $code = (new \PhpParser\PrettyPrinter\Standard)->prettyPrint([$ast]);
 
         // Trim spaces and the last `;`
-        $code = trim($code, "\t\n\r;");
+        $code = \trim($code, "\t\n\r;");
 
         return $code;
     }

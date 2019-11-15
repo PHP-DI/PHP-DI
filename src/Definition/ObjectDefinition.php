@@ -154,7 +154,7 @@ class ObjectDefinition implements Definition
     {
         // Return array leafs
         $injections = [];
-        array_walk_recursive($this->methodInjections, function ($injection) use (&$injections) {
+        \array_walk_recursive($this->methodInjections, function ($injection) use (&$injections) {
             $injections[] = $injection;
         });
 
@@ -209,7 +209,7 @@ class ObjectDefinition implements Definition
 
     public function replaceNestedDefinitions(callable $replacer)
     {
-        array_walk($this->propertyInjections, function (PropertyInjection $propertyInjection) use ($replacer) {
+        \array_walk($this->propertyInjections, function (PropertyInjection $propertyInjection) use ($replacer) {
             $propertyInjection->replaceNestedDefinition($replacer);
         });
 
@@ -217,8 +217,8 @@ class ObjectDefinition implements Definition
             $this->constructorInjection->replaceNestedDefinitions($replacer);
         }
 
-        array_walk($this->methodInjections, function ($injectionArray) use ($replacer) {
-            array_walk($injectionArray, function (MethodInjection $methodInjection) use ($replacer) {
+        \array_walk($this->methodInjections, function ($injectionArray) use ($replacer) {
+            \array_walk($injectionArray, function (MethodInjection $methodInjection) use ($replacer) {
                 $methodInjection->replaceNestedDefinitions($replacer);
             });
         });
@@ -234,9 +234,9 @@ class ObjectDefinition implements Definition
         $className = $this->getClassName();
 
         foreach ($replacements as $replacement) {
-            $pos = strpos($className, DefinitionArray::WILDCARD);
+            $pos = \strpos($className, DefinitionArray::WILDCARD);
             if ($pos !== false) {
-                $className = substr_replace($className, $replacement, $pos, 1);
+                $className = \substr_replace($className, $replacement, $pos, 1);
             }
         }
 
@@ -252,7 +252,7 @@ class ObjectDefinition implements Definition
     {
         $className = $this->getClassName();
 
-        $this->classExists = class_exists($className) || interface_exists($className);
+        $this->classExists = \class_exists($className) || \interface_exists($className);
 
         if (! $this->classExists) {
             $this->isInstantiable = false;

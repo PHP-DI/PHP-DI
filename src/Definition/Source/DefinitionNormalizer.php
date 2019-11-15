@@ -47,7 +47,7 @@ class DefinitionNormalizer
     {
         if ($definition instanceof DefinitionHelper) {
             $definition = $definition->getDefinition($name);
-        } elseif (is_array($definition)) {
+        } elseif (\is_array($definition)) {
             $definition = new ArrayDefinition($definition);
         } elseif ($definition instanceof \Closure) {
             $definition = new FactoryDefinition($name, $definition);
@@ -70,7 +70,7 @@ class DefinitionNormalizer
         try {
             $definition->replaceNestedDefinitions([$this, 'normalizeNestedDefinition']);
         } catch (InvalidDefinition $e) {
-            throw InvalidDefinition::create($definition, sprintf(
+            throw InvalidDefinition::create($definition, \sprintf(
                 'Definition "%s" contains an error: %s',
                 $definition->getName(),
                 $e->getMessage()
@@ -94,7 +94,7 @@ class DefinitionNormalizer
 
         if ($definition instanceof DefinitionHelper) {
             $definition = $definition->getDefinition($name);
-        } elseif (is_array($definition)) {
+        } elseif (\is_array($definition)) {
             $definition = new ArrayDefinition($definition);
         } elseif ($definition instanceof \Closure) {
             $definition = new FactoryDefinition($name, $definition);

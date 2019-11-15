@@ -50,8 +50,8 @@ class DecoratorResolver implements DefinitionResolver
     {
         $callable = $definition->getCallable();
 
-        if (! is_callable($callable)) {
-            throw new InvalidDefinition(sprintf(
+        if (! \is_callable($callable)) {
+            throw new InvalidDefinition(\sprintf(
                 'The decorator "%s" is not callable',
                 $definition->getName()
             ));
@@ -64,7 +64,7 @@ class DecoratorResolver implements DefinitionResolver
                 throw new InvalidDefinition('Decorators cannot be nested in another definition');
             }
 
-            throw new InvalidDefinition(sprintf(
+            throw new InvalidDefinition(\sprintf(
                 'Entry "%s" decorates nothing: no previous definition with the same name was found',
                 $definition->getName()
             ));
@@ -72,7 +72,7 @@ class DecoratorResolver implements DefinitionResolver
 
         $decorated = $this->definitionResolver->resolve($decoratedDefinition, $parameters);
 
-        return call_user_func($callable, $decorated, $this->container);
+        return \call_user_func($callable, $decorated, $this->container);
     }
 
     public function isResolvable(Definition $definition, array $parameters = []) : bool

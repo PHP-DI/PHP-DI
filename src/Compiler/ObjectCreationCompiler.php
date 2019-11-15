@@ -42,15 +42,15 @@ class ObjectCreationCompiler
         try {
             $classReflection = new ReflectionClass($definition->getClassName());
             $constructorArguments = $this->resolveParameters($definition->getConstructorInjection(), $classReflection->getConstructor());
-            $dumpedConstructorArguments = array_map(function ($value) {
+            $dumpedConstructorArguments = \array_map(function ($value) {
                 return $this->compiler->compileValue($value);
             }, $constructorArguments);
 
             $code = [];
-            $code[] = sprintf(
+            $code[] = \sprintf(
                 '$object = new %s(%s);',
                 $definition->getClassName(),
-                implode(', ', $dumpedConstructorArguments)
+                \implode(', ', $dumpedConstructorArguments)
             );
 
             // Property injections
@@ -61,12 +61,12 @@ class ObjectCreationCompiler
                 $className = $propertyInjection->getClassName() ?: $definition->getClassName();
                 $property = new ReflectionProperty($className, $propertyInjection->getPropertyName());
                 if ($property->isPublic()) {
-                    $code[] = sprintf('$object->%s = %s;', $propertyInjection->getPropertyName(), $value);
+                    $code[] = \sprintf('$object->%s = %s;', $propertyInjection->getPropertyName(), $value);
                 } else {
                     // Private/protected property
-                    $code[] = sprintf(
+                    $code[] = \sprintf(
                         '\DI\Definition\Resolver\ObjectCreator::setPrivatePropertyValue(%s, $object, \'%s\', %s);',
-                        var_export($propertyInjection->getClassName(), true),
+                        \var_export($propertyInjection->getClassName(), true),
                         $propertyInjection->getPropertyName(),
                         $value
                     );
@@ -78,25 +78,25 @@ class ObjectCreationCompiler
                 $methodReflection = new \ReflectionMethod($definition->getClassName(), $methodInjection->getMethodName());
                 $parameters = $this->resolveParameters($methodInjection, $methodReflection);
 
-                $dumpedParameters = array_map(function ($value) {
+                $dumpedParameters = \array_map(function ($value) {
                     return $this->compiler->compileValue($value);
                 }, $parameters);
 
-                $code[] = sprintf(
+                $code[] = \sprintf(
                     '$object->%s(%s);',
                     $methodInjection->getMethodName(),
-                    implode(', ', $dumpedParameters)
+                    \implode(', ', $dumpedParameters)
                 );
             }
         } catch (InvalidDefinition $e) {
-            throw InvalidDefinition::create($definition, sprintf(
+            throw InvalidDefinition::create($definition, \sprintf(
                 'Entry "%s" cannot be compiled: %s',
                 $definition->getName(),
                 $e->getMessage()
             ));
         }
 
-        return implode("\n        ", $code);
+        return \implode("\n        ", $code);
     }
 
     public function resolveParameters(MethodInjection $definition = null, ReflectionMethod $method = null) : array
@@ -110,7 +110,7 @@ class ObjectCreationCompiler
         $definitionParameters = $definition ? $definition->getParameters() : [];
 
         foreach ($method->getParameters() as $index => $parameter) {
-            if (array_key_exists($index, $definitionParameters)) {
+            if (\array_key_exists($index, $definitionParameters)) {
                 // Look in the definition
                 $value = &$definitionParameters[$index];
             } elseif ($parameter->isOptional()) {
@@ -118,7 +118,7 @@ class ObjectCreationCompiler
                 $args[] = $this->getParameterDefaultValue($parameter, $method);
                 continue;
             } else {
-                throw new InvalidDefinition(sprintf(
+                throw new InvalidDefinition(\sprintf(
                     'Parameter $%s of %s has no value defined or guessable',
                     $parameter->getName(),
                     $this->getFunctionName($method)
@@ -162,7 +162,7 @@ PHP;
         try {
             return $parameter->getDefaultValue();
         } catch (\ReflectionException $e) {
-            throw new InvalidDefinition(sprintf(
+            throw new InvalidDefinition(\sprintf(
                 'The parameter "%s" of %s has no type defined or guessable. It has a default value, '
                 . 'but the default value can\'t be read through Reflection because it is a PHP internal class.',
                 $parameter->getName(),
@@ -178,8 +178,8 @@ PHP;
 
     private function assertClassIsNotAnonymous(ObjectDefinition $definition)
     {
-        if (strpos($definition->getClassName(), '@') !== false) {
-            throw InvalidDefinition::create($definition, sprintf(
+        if (\strpos($definition->getClassName(), '@') !== false) {
+            throw InvalidDefinition::create($definition, \sprintf(
                 'Entry "%s" cannot be compiled: anonymous classes cannot be compiled',
                 $definition->getName()
             ));
@@ -196,6 +196,6 @@ PHP;
             ? 'Entry "%s" cannot be compiled: the class doesn\'t exist'
             : 'Entry "%s" cannot be compiled: the class is not instantiable';
 
-        throw InvalidDefinition::create($definition, sprintf($message, $definition->getName()));
+        throw InvalidDefinition::create($definition, \sprintf($message, $definition->getName()));
     }
 }

@@ -115,13 +115,13 @@ class ObjectCreator implements DefinitionResolver
         if (! $definition->isInstantiable()) {
             // Check that the class exists
             if (! $definition->classExists()) {
-                throw InvalidDefinition::create($definition, sprintf(
+                throw InvalidDefinition::create($definition, \sprintf(
                     'Entry "%s" cannot be resolved: the class doesn\'t exist',
                     $definition->getName()
                 ));
             }
 
-            throw InvalidDefinition::create($definition, sprintf(
+            throw InvalidDefinition::create($definition, \sprintf(
                 'Entry "%s" cannot be resolved: the class is not instantiable',
                 $definition->getName()
             ));
@@ -143,13 +143,13 @@ class ObjectCreator implements DefinitionResolver
 
             $this->injectMethodsAndProperties($object, $definition);
         } catch (NotFoundExceptionInterface $e) {
-            throw new DependencyException(sprintf(
+            throw new DependencyException(\sprintf(
                 'Error while injecting dependencies into %s: %s',
                 $classReflection->getName(),
                 $e->getMessage()
             ), 0, $e);
         } catch (InvalidDefinition $e) {
-            throw InvalidDefinition::create($definition, sprintf(
+            throw InvalidDefinition::create($definition, \sprintf(
                 'Entry "%s" cannot be resolved: %s',
                 $definition->getName(),
                 $e->getMessage()
@@ -196,9 +196,9 @@ class ObjectCreator implements DefinitionResolver
             } catch (DependencyException $e) {
                 throw $e;
             } catch (Exception $e) {
-                throw new DependencyException(sprintf(
+                throw new DependencyException(\sprintf(
                     'Error while injecting in %s::%s. %s',
-                    get_class($object),
+                    \get_class($object),
                     $propertyName,
                     $e->getMessage()
                 ), 0, $e);
@@ -210,7 +210,7 @@ class ObjectCreator implements DefinitionResolver
 
     public static function setPrivatePropertyValue(string $className = null, $object, string $propertyName, $propertyValue)
     {
-        $className = $className ?: get_class($object);
+        $className = $className ?: \get_class($object);
 
         $property = new ReflectionProperty($className, $propertyName);
         if (! $property->isPublic()) {

@@ -79,7 +79,7 @@ class StringDefinition implements Definition, SelfResolvingDefinition
             try {
                 return $container->get($matches[1]);
             } catch (NotFoundExceptionInterface $e) {
-                throw new DependencyException(sprintf(
+                throw new DependencyException(\sprintf(
                     "Error while parsing string expression for entry '%s': %s",
                     $entryName,
                     $e->getMessage()
@@ -87,9 +87,9 @@ class StringDefinition implements Definition, SelfResolvingDefinition
             }
         };
 
-        $result = preg_replace_callback('#\{([^\{\}]+)\}#', $callback, $expression);
+        $result = \preg_replace_callback('#\{([^\{\}]+)\}#', $callback, $expression);
         if ($result === null) {
-            throw new \RuntimeException(sprintf('An unknown error occurred while parsing the string definition: \'%s\'', $expression));
+            throw new \RuntimeException(\sprintf('An unknown error occurred while parsing the string definition: \'%s\'', $expression));
         }
 
         return $result;
