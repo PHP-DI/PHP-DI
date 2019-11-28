@@ -61,6 +61,28 @@ class ContainerBuilderTest extends TestCase
     /**
      * @test
      */
+    public function should_allow_to_configure_a_cache_with_a_namespace()
+    {
+        if (! SourceCache::isSupported()) {
+            $this->markTestSkipped('APCu extension is required');
+            return;
+        }
+
+        $namespace = 'staging';
+        $builder = new ContainerBuilder(FakeContainer::class);
+        $builder->enableDefinitionCache($namespace);
+
+        /** @var FakeContainer $container */
+        $container = $builder->build();
+        $source = $container->definitionSource;
+
+        $this->assertInstanceOf(SourceCache::class, $source);
+        $this->assertSame($source->getCacheKey('foo'), SourceCache::CACHE_KEY . $namespace . 'foo');
+    }
+
+    /**
+     * @test
+     */
     public function the_container_should_not_be_wrapped_by_default()
     {
         $builder = new ContainerBuilder(FakeContainer::class);
