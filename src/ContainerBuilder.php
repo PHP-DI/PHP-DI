@@ -101,6 +101,11 @@ class ContainerBuilder
     private $sourceCache = false;
 
     /**
+     * @var string
+     */
+    protected $sourceCacheNamespace;
+
+    /**
      * Build a container configured for the dev environment.
      */
     public static function buildDevContainer() : Container
@@ -155,7 +160,7 @@ class ContainerBuilder
                 throw new \Exception('APCu is not enabled, PHP-DI cannot use it as a cache');
             }
             // Wrap the source with the cache decorator
-            $source = new SourceCache($source);
+            $source = new SourceCache($source, $this->sourceCacheNamespace);
         }
 
         $proxyFactory = new ProxyFactory(
@@ -350,13 +355,15 @@ class ContainerBuilder
      *
      * @see http://php-di.org/doc/performances.html
      *
+     * @param string $cacheNamespace use unique namespace per container when sharing a single APC memory pool to prevent cache collisions
      * @return $this
      */
-    public function enableDefinitionCache() : self
+    public function enableDefinitionCache(string $cacheNamespace = '') : self
     {
         $this->ensureNotLocked();
 
         $this->sourceCache = true;
+        $this->sourceCacheNamespace = $cacheNamespace;
 
         return $this;
     }
