@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace DI\Test\UnitTest;
+namespace DI\Test\IntegrationTest;
 
 use DI\ContainerBuilder;
 use DI\Test\IntegrationTest\BaseContainerTest;
