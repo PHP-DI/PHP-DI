@@ -95,10 +95,10 @@ class AnnotationsTest extends BaseContainerTest
     /**
      * @test
      * @dataProvider provideContainer
-     * @expectedException \DI\DependencyException
      */
     public function errors_if_dependency_by_name_not_found(ContainerBuilder $builder)
     {
+        $this->expectException('DI\DependencyException');
         $builder->useAnnotations(true);
         $builder->build()->get(NamedInjection::class);
     }
@@ -128,10 +128,10 @@ class AnnotationsTest extends BaseContainerTest
     /**
      * @test
      * @dataProvider provideContainer
-     * @expectedException \PhpDocReader\AnnotationException
      */
     public function testNotFoundVarAnnotation(ContainerBuilder $builder)
     {
+        $this->expectException('PhpDocReader\AnnotationException');
         $builder->useAnnotations(true);
         $builder->build()->get(NotFoundVarAnnotation::class);
     }

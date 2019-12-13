@@ -72,11 +72,11 @@ class StringDefinitionTest extends BaseContainerTest
 
     /**
      * @dataProvider provideContainer
-     * @expectedException \DI\DependencyException
-     * @expectedExceptionMessage Error while parsing string expression for entry 'test-string': No entry or class found for 'foo'
      */
     public function test_string_with_nonexistent_placeholder(ContainerBuilder $builder)
     {
+        $this->expectException('DI\DependencyException');
+        $this->expectExceptionMessage('Error while parsing string expression for entry \'test-string\': No entry or class found for \'foo\'');
         $builder->addDefinitions([
             'test-string' => \DI\string('Hello {foo}'),
         ]);

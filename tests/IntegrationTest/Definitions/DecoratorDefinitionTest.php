@@ -118,11 +118,11 @@ class DecoratorDefinitionTest extends BaseContainerTest
 
     /**
      * @dataProvider provideContainer
-     * @expectedException \DI\Definition\Exception\InvalidDefinition
-     * @expectedExceptionMessage Entry "foo" decorates nothing: no previous definition with the same name was found
      */
     public function test_decorate_must_have_previous_definition(ContainerBuilder $builder)
     {
+        $this->expectException('DI\Definition\Exception\InvalidDefinition');
+        $this->expectExceptionMessage('Entry "foo" decorates nothing: no previous definition with the same name was found');
         $builder->addDefinitions([
             'foo' => \DI\decorate(function ($previous) {
                 return $previous;
@@ -134,11 +134,11 @@ class DecoratorDefinitionTest extends BaseContainerTest
 
     /**
      * @dataProvider provideContainer
-     * @expectedException \DI\Definition\Exception\InvalidDefinition
-     * @expectedExceptionMessage Definition "foo" contains an error: Decorators cannot be nested in another definition
      */
     public function test_decorator_cannot_be_nested_in_another_definition(ContainerBuilder $builder)
     {
+        $this->expectException('DI\Definition\Exception\InvalidDefinition');
+        $this->expectExceptionMessage('Definition "foo" contains an error: Decorators cannot be nested in another definition');
         $builder->addDefinitions([
             'foo' => [
                 \DI\decorate(function ($previous) {

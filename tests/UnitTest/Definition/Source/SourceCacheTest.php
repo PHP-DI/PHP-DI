@@ -12,7 +12,7 @@ use PHPUnit\Framework\TestCase;
 
 class SourceCacheTest extends TestCase
 {
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 

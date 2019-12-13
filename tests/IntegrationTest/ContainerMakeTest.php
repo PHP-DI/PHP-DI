@@ -28,10 +28,10 @@ class ContainerMakeTest extends BaseContainerTest
 
     /**
      * @dataProvider provideContainer
-     * @expectedException \DI\NotFoundException
      */
     public function testMakeNotFound(ContainerBuilder $builder)
     {
+        $this->expectException('DI\NotFoundException');
         $builder->build()->make('key');
     }
 
@@ -65,11 +65,11 @@ class ContainerMakeTest extends BaseContainerTest
 
     /**
      * @dataProvider provideContainer
-     * @expectedException \DI\DependencyException
-     * @expectedExceptionMessage Circular dependency detected while trying to resolve entry 'DI\Test\UnitTest\Fixtures\Class1CircularDependencies'
      */
     public function testCircularDependencyException(ContainerBuilder $builder)
     {
+        $this->expectException('DI\DependencyException');
+        $this->expectExceptionMessage('Circular dependency detected while trying to resolve entry \'DI\Test\UnitTest\Fixtures\Class1CircularDependencies\'');
         $builder->useAnnotations(true);
         $container = $builder->build();
         $container->make(Class1CircularDependencies::class);
@@ -77,11 +77,11 @@ class ContainerMakeTest extends BaseContainerTest
 
     /**
      * @dataProvider provideContainer
-     * @expectedException \DI\DependencyException
-     * @expectedExceptionMessage Circular dependency detected while trying to resolve entry 'foo'
      */
     public function testCircularDependencyExceptionWithAlias(ContainerBuilder $builder)
     {
+        $this->expectException('DI\DependencyException');
+        $this->expectExceptionMessage('Circular dependency detected while trying to resolve entry \'foo\'');
         $builder->addDefinitions([
             // Alias to itself -> infinite recursive loop
             'foo' => \DI\get('foo'),
@@ -92,11 +92,11 @@ class ContainerMakeTest extends BaseContainerTest
 
     /**
      * @dataProvider provideContainer
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage The name parameter must be of type string
      */
     public function testNonStringParameter(ContainerBuilder $builder)
     {
+        $this->expectException('InvalidArgumentException');
+        $this->expectExceptionMessage('The name parameter must be of type string');
         $builder->build()->make(new stdClass);
     }
 

@@ -126,11 +126,11 @@ class FactoryDefinitionTest extends BaseContainerTest
 
     /**
      * @dataProvider provideContainer
-     * @expectedException \DI\Definition\Exception\InvalidDefinition
-     * @expectedExceptionMessage Invokable classes cannot be automatically resolved if autowiring is disabled on the container, you need to enable autowiring or define the entry manually.
      */
     public function test_error_message_on_invokable_class_without_autowiring(ContainerBuilder $builder)
     {
+        $this->expectException('DI\Definition\Exception\InvalidDefinition');
+        $this->expectExceptionMessage('Invokable classes cannot be automatically resolved if autowiring is disabled on the container, you need to enable autowiring or define the entry manually.');
         $builder->addDefinitions([
             'factory' => \DI\factory(FactoryDefinitionInvokableTestClass::class),
         ]);
@@ -402,11 +402,11 @@ class FactoryDefinitionTest extends BaseContainerTest
 
     /**
      * @dataProvider provideContainer
-     * @expectedException \DI\NotFoundException
-     * @expectedExceptionMessage No entry or class found for 'missing'
      */
     public function test_resolve_failure_on_parameter(ContainerBuilder $builder)
     {
+        $this->expectException('DI\NotFoundException');
+        $this->expectExceptionMessage('No entry or class found for \'missing\'');
         $builder->addDefinitions([
             'factory' => \DI\factory(function ($foo) {
                 return $foo;
@@ -417,11 +417,11 @@ class FactoryDefinitionTest extends BaseContainerTest
 
     /**
      * @dataProvider provideContainer
-     * @expectedException \DI\Definition\Exception\InvalidDefinition
-     * @expectedExceptionMessage Entry "foo" cannot be resolved: factory 'Hello World' is neither a callable nor a valid container entry
      */
     public function test_not_callable_factory_definition(ContainerBuilder $builder)
     {
+        $this->expectException('DI\Definition\Exception\InvalidDefinition');
+        $this->expectExceptionMessage('Entry "foo" cannot be resolved: factory \'Hello World\' is neither a callable nor a valid container entry');
         $builder->addDefinitions([
             'foo' => \DI\factory('Hello World'),
         ]);
@@ -470,12 +470,10 @@ class FactoryDefinitionTest extends BaseContainerTest
         $this->assertEquals(new \stdClass, $builder->build()->get('factory'));
     }
 
-    /**
-     * @expectedException \DI\Definition\Exception\InvalidDefinition
-     * @expectedExceptionMessage Cannot compile closures which import variables using the `use` keyword
-     */
     public function test_closure_which_use_variables_cannot_be_compiled()
     {
+        $this->expectException('DI\Definition\Exception\InvalidDefinition');
+        $this->expectExceptionMessage('Cannot compile closures which import variables using the `use` keyword');
         $builder = (new ContainerBuilder)->enableCompilation(self::COMPILATION_DIR, self::generateCompiledClassName());
         $foo = 'hello';
         $builder->addDefinitions([
@@ -488,11 +486,11 @@ class FactoryDefinitionTest extends BaseContainerTest
 
     /**
      * TODO would be better to have an error at compilation.
-     * @expectedException \Error
-     * @expectedExceptionMessage Using $this when not in object context
      */
     public function test_closure_which_use_this_cannot_be_compiled()
     {
+        $this->expectException('Error');
+        $this->expectExceptionMessage('Using $this when not in object context');
         $builder = (new ContainerBuilder)->enableCompilation(self::COMPILATION_DIR, self::generateCompiledClassName());
         $builder->addDefinitions([
             'factory' => function () {
@@ -541,12 +539,10 @@ class FactoryDefinitionTest extends BaseContainerTest
         self::assertSame(0, $container->get('factory'));
     }
 
-    /**
-     * @expectedException \DI\Definition\Exception\InvalidDefinition
-     * @expectedExceptionMessage Cannot compile closures when two closures are defined on the same line
-     */
     public function test_multiple_closures_on_the_same_line_cannot_be_compiled()
     {
+        $this->expectException('DI\Definition\Exception\InvalidDefinition');
+        $this->expectExceptionMessage('Cannot compile closures when two closures are defined on the same line');
         $builder = (new ContainerBuilder)->enableCompilation(self::COMPILATION_DIR, self::generateCompiledClassName());
         $builder->addDefinitions(__DIR__ . '/FactoryDefinition/config.inc');
         $this->assertEquals('foo', $builder->build()->get('factory'));

@@ -46,11 +46,11 @@ class ContainerHasTest extends BaseContainerTest
     /**
      * @test
      * @dataProvider provideContainer
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage The name parameter must be of type string
      */
     public function fails_with_non_string_parameter(ContainerBuilder $builder)
     {
+        $this->expectException('InvalidArgumentException');
+        $this->expectExceptionMessage('The name parameter must be of type string');
         $builder->build()->has(new stdClass);
     }
 }

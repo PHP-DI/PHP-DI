@@ -30,7 +30,7 @@ class InjectTest extends TestCase
      */
     private $reflectionClass;
 
-    public function setUp()
+    public function setUp(): void
     {
         $definitionReader = new AnnotationBasedAutowiring();
         $this->annotationReader = $definitionReader->getAnnotationReader();
@@ -104,12 +104,10 @@ class InjectTest extends TestCase
         $this->assertEquals('foo', $parameters['str1']);
     }
 
-    /**
-     * @expectedException \DI\Definition\Exception\InvalidAnnotation
-     * @expectedExceptionMessage @Inject({"param" = "value"}) expects "value" to be a string, [] given.
-     */
     public function testInvalidAnnotation()
     {
+        $this->expectException('DI\Definition\Exception\InvalidAnnotation');
+        $this->expectExceptionMessage('@Inject({"param" = "value"}) expects "value" to be a string, [] given.');
         $method = $this->reflectionClass->getMethod('method4');
         $this->annotationReader->getMethodAnnotation($method, Inject::class);
     }
