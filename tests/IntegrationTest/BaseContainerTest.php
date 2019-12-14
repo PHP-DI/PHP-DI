@@ -16,7 +16,7 @@ abstract class BaseContainerTest extends TestCase
 {
     const COMPILATION_DIR = __DIR__ . '/tmp';
 
-    public static function setUpBeforeClass()
+    public static function setUpBeforeClass(): void
     {
         // Clear all files
         array_map('unlink', glob(self::COMPILATION_DIR . '/*'));
@@ -24,7 +24,7 @@ abstract class BaseContainerTest extends TestCase
         parent::setUpBeforeClass();
     }
 
-    public function setUp()
+    public function setUp(): void
     {
         // Clear all files
         array_map('unlink', glob(self::COMPILATION_DIR . '/*'));

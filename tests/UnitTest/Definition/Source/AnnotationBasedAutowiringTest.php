@@ -56,12 +56,10 @@ class AnnotationBasedAutowiringTest extends TestCase
         $this->assertNotHasPropertyInjection($definition, 'staticProperty');
     }
 
-    /**
-     * @expectedException \DI\Definition\Exception\InvalidAnnotation
-     * @expectedExceptionMessage @Inject found on property DI\Test\UnitTest\Definition\Source\Fixtures\AnnotationFixture4::property but unable to guess what to inject, use a @var annotation
-     */
     public function testUnguessableProperty()
     {
+        $this->expectException('DI\Definition\Exception\InvalidAnnotation');
+        $this->expectExceptionMessage('@Inject found on property DI\Test\UnitTest\Definition\Source\Fixtures\AnnotationFixture4::property but unable to guess what to inject, use a @var annotation');
         (new AnnotationBasedAutowiring)->autowire(AnnotationFixture4::class);
     }
 
@@ -207,10 +205,10 @@ class AnnotationBasedAutowiringTest extends TestCase
 
     /**
      * @see https://github.com/mnapoli/PHP-DI/issues/184
-     * @expectedException \PhpDocReader\AnnotationException
      */
     public function testFailWithPhpDocErrors()
     {
+        $this->expectException('PhpDocReader\AnnotationException');
         (new AnnotationBasedAutowiring)->autowire(AnnotationFixture5::class);
     }
 

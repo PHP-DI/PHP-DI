@@ -200,22 +200,22 @@ class ContainerCallTest extends BaseContainerTest
 
     /**
      * @dataProvider provideContainer
-     * @expectedException \Invoker\Exception\NotEnoughParametersException
-     * @expectedExceptionMessage Unable to invoke the callable because no value was given for parameter 1 ($foo)
      */
     public function test_not_enough_parameters(ContainerBuilder $builder)
     {
+        $this->expectException('Invoker\Exception\NotEnoughParametersException');
+        $this->expectExceptionMessage('Unable to invoke the callable because no value was given for parameter 1 ($foo)');
         $builder->build()->call(function ($foo) {
         });
     }
 
     /**
      * @dataProvider provideContainer
-     * @expectedException \Invoker\Exception\NotCallableException
-     * @expectedExceptionMessage 'foo' is neither a callable nor a valid container entry
      */
     public function test_not_callable(ContainerBuilder $builder)
     {
+        $this->expectException('Invoker\Exception\NotCallableException');
+        $this->expectExceptionMessage('\'foo\' is neither a callable nor a valid container entry');
         $builder->build()->call('foo');
     }
 }

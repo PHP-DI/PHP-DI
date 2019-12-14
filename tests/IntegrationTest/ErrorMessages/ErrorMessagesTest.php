@@ -93,33 +93,33 @@ MESSAGE;
 
     /**
      * @dataProvider provideContainer
-     * @expectedException \DI\DependencyException
-     * @expectedExceptionMessage Error while injecting dependencies into DI\Test\IntegrationTest\ErrorMessages\Buggy2: No entry or class found for 'nonExistentEntry'
      */
     public function test_constructor_injection_of_non_existent_container_entry(ContainerBuilder $builder)
     {
+        $this->expectException('DI\DependencyException');
+        $this->expectExceptionMessage('Error while injecting dependencies into DI\Test\IntegrationTest\ErrorMessages\Buggy2: No entry or class found for \'nonExistentEntry\'');
         $builder->useAnnotations(true);
         $builder->build()->get(Buggy2::class);
     }
 
     /**
      * @dataProvider provideContainer
-     * @expectedException \DI\DependencyException
-     * @expectedExceptionMessage Error while injecting in DI\Test\IntegrationTest\ErrorMessages\Buggy3::dependency. No entry or class found for 'namedDependency'
      */
     public function test_property_injection_of_non_existent_container_entry(ContainerBuilder $builder)
     {
+        $this->expectException('DI\DependencyException');
+        $this->expectExceptionMessage('Error while injecting in DI\Test\IntegrationTest\ErrorMessages\Buggy3::dependency. No entry or class found for \'namedDependency\'');
         $builder->useAnnotations(true);
         $builder->build()->get(Buggy3::class);
     }
 
     /**
      * @dataProvider provideContainer
-     * @expectedException \DI\DependencyException
-     * @expectedExceptionMessage Error while injecting dependencies into DI\Test\IntegrationTest\ErrorMessages\Buggy4: No entry or class found for 'nonExistentBean'
      */
     public function test_setter_injection_of_non_existent_container_entry(ContainerBuilder $builder)
     {
+        $this->expectException('DI\DependencyException');
+        $this->expectExceptionMessage('Error while injecting dependencies into DI\Test\IntegrationTest\ErrorMessages\Buggy4: No entry or class found for \'nonExistentBean\'');
         $builder->useAnnotations(true);
         $builder->build()->get(Buggy4::class);
     }
@@ -154,11 +154,11 @@ MESSAGE;
 
     /**
      * @dataProvider provideContainer
-     * @expectedException \DI\Definition\Exception\InvalidDefinition
-     * @expectedExceptionMessage Entry "foo" cannot be resolved: factory 'bar' is neither a callable nor a valid container entry
      */
     public function test_factory_not_callable(ContainerBuilder $builder)
     {
+        $this->expectException('DI\Definition\Exception\InvalidDefinition');
+        $this->expectExceptionMessage('Entry "foo" cannot be resolved: factory \'bar\' is neither a callable nor a valid container entry');
         $builder->addDefinitions([
             'foo' => \DI\factory('bar'),
         ]);
@@ -167,11 +167,11 @@ MESSAGE;
 
     /**
      * @dataProvider provideContainer
-     * @expectedException \DI\Definition\Exception\InvalidDefinition
-     * @expectedExceptionMessage The parameter "time" of __construct() has no type defined or guessable. It has a default value, but the default value can't be read through Reflection because it is a PHP internal class.
      */
     public function test_internal_class_default_parameter_value(ContainerBuilder $builder)
     {
+        $this->expectException('DI\Definition\Exception\InvalidDefinition');
+        $this->expectExceptionMessage('The parameter "time" of __construct() has no type defined or guessable. It has a default value, but the default value can\'t be read through Reflection because it is a PHP internal class.');
         $builder->addDefinitions([
             \DateTime::class => autowire(),
         ]);

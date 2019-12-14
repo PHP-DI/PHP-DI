@@ -28,6 +28,12 @@ class ContainerBuilderTest extends TestCase
      */
     public function should_configure_for_development_by_default()
     {
+        $getProperty = function (object $object, string $propertyName) {
+            return (function (string $propertyName) {
+                return $this->$propertyName;
+            })->bindTo($object, $object)($propertyName);
+        };
+
         // Make the ContainerBuilder use our fake class to catch constructor parameters
         $builder = new ContainerBuilder(FakeContainer::class);
         /** @var FakeContainer $container */
@@ -36,7 +42,7 @@ class ContainerBuilderTest extends TestCase
         // Not compiled
         $this->assertNotInstanceOf(CompiledContainer::class, $container);
         // Proxies evaluated in memory
-        $this->assertFalse($this->getObjectAttribute($container->proxyFactory, 'writeProxiesToFile'));
+        $this->assertFalse($getProperty($container->proxyFactory, 'writeProxiesToFile'));
     }
 
     /**
@@ -172,11 +178,11 @@ class ContainerBuilderTest extends TestCase
 
     /**
      * @test
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage ContainerBuilder::addDefinitions() parameter must be a string, an array or a DefinitionSource object, integer given
      */
     public function errors_when_adding_invalid_definitions()
     {
+        $this->expectException('InvalidArgumentException');
+        $this->expectExceptionMessage('ContainerBuilder::addDefinitions() parameter must be a string, an array or a DefinitionSource object, integer given');
         $builder = new ContainerBuilder(FakeContainer::class);
         $builder->addDefinitions(123);
     }
@@ -244,11 +250,11 @@ class ContainerBuilderTest extends TestCase
     /**
      * Ensure the ContainerBuilder cannot be modified after the container has been built.
      * @test
-     * @expectedException \LogicException
-     * @expectedExceptionMessage The ContainerBuilder cannot be modified after the container has been built
      */
     public function should_throw_if_modified_after_building_a_container()
     {
+        $this->expectException('LogicException');
+        $this->expectExceptionMessage('The ContainerBuilder cannot be modified after the container has been built');
         $builder = new ContainerBuilder();
         $builder->build();
 
