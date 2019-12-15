@@ -22,7 +22,7 @@
     "scripts": {
         "test": "phpunit",
         "format-code": "php-cs-fixer fix --allow-risky=yes",
-        "phpstan": "phpstan analyse -l 6 -c phpstan.neon src"
+        "phpstan": "phpstan analyse -l 5 -c phpstan.neon src"
     },
     "require": {
         "php": ">=7.2.0",
@@ -38,7 +38,7 @@
         "doctrine/annotations": "~1.2",
         "ocramius/proxy-manager": "~2.0.2",
         "friendsofphp/php-cs-fixer": "^2.4",
-        "phpstan/phpstan": "^0.9.2"
+        "phpstan/phpstan": "^0.12"
     },
     "provide": {
         "psr/container-implementation": "^1.0"
