@@ -46,6 +46,7 @@ return PhpCsFixer\Config::create()
         'strict_param' => true,
         'yoda_style' => false,
         'native_function_invocation' => false,
+        'single_line_throw' => false,
     ])
     ->setRiskyAllowed(true)
     ->setFinder($finder);
