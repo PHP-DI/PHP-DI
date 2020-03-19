@@ -167,8 +167,6 @@ class AnnotationBasedAutowiring implements DefinitionSource, Autowiring
     }
 
     /**
-     * @param  ReflectionMethod $method
-     *
      * @return MethodInjection|null
      */
     private function getMethodInjection(ReflectionMethod $method)
@@ -210,8 +208,6 @@ class AnnotationBasedAutowiring implements DefinitionSource, Autowiring
 
     /**
      * @param int                 $parameterIndex
-     * @param ReflectionParameter $parameter
-     * @param array               $annotationParameters
      *
      * @return string|null Entry name or null if not found.
      */

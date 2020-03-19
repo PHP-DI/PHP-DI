@@ -36,9 +36,6 @@ class DefinitionArray implements DefinitionSource, MutableDefinitionSource
      */
     private $normalizer;
 
-    /**
-     * @param array $definitions
-     */
     public function __construct(array $definitions = [], Autowiring $autowiring = null)
     {
         if (isset($definitions[0])) {
