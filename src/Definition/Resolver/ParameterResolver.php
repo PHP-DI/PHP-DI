@@ -9,6 +9,7 @@ use DI\Definition\Exception\InvalidDefinition;
 use DI\Definition\ObjectDefinition\MethodInjection;
 use ReflectionMethod;
 use ReflectionParameter;
+use function DI\get;
 
 /**
  * Resolves parameters for a function call.
@@ -94,6 +95,13 @@ class ParameterResolver
     private function getParameterDefaultValue(ReflectionParameter $parameter, ReflectionMethod $function)
     {
         try {
+            if (
+                $parameter->hasType()
+                && (($class = $parameter->getClass())) !== null
+                && $this->definitionResolver->isResolvable($ref = get($class->getName()))
+            ) {
+                return $this->definitionResolver->resolve($ref);
+            }
             return $parameter->getDefaultValue();
         } catch (\ReflectionException $e) {
             throw new InvalidDefinition(sprintf(
