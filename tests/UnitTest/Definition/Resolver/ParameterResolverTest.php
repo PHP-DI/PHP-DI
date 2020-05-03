@@ -30,14 +30,10 @@ class ParameterResolverTest extends TestCase
      */
     private $definitionMock;
 
-    private $definitionMethod;
-
     /**
      * @var MockObject
      */
     private $reflectionMethodMock;
-
-    private $reflectionMethod;
 
     function setUp(): void
     {
