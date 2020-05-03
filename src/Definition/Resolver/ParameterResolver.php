@@ -7,9 +7,9 @@ namespace DI\Definition\Resolver;
 use DI\Definition\Definition;
 use DI\Definition\Exception\InvalidDefinition;
 use DI\Definition\ObjectDefinition\MethodInjection;
+use function DI\get;
 use ReflectionMethod;
 use ReflectionParameter;
-use function DI\get;
 
 /**
  * Resolves parameters for a function call.
@@ -102,6 +102,7 @@ class ParameterResolver
             ) {
                 return $this->definitionResolver->resolve($ref);
             }
+
             return $parameter->getDefaultValue();
         } catch (\ReflectionException $e) {
             throw new InvalidDefinition(sprintf(
