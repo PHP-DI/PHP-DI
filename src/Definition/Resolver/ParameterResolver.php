@@ -87,7 +87,9 @@ class ParameterResolver
     }
 
     /**
-     * Returns the default value of a function parameter.
+     * Returns the default value of a function parameter when it has no type. If the parameter is typed, it tries to
+     * return the instance of the typed parameter if it is resolvable by the container. If not, it returns its default
+     * value.
      *
      * @throws InvalidDefinition Can't get default values from PHP internal classes and functions
      * @return mixed
@@ -95,12 +97,8 @@ class ParameterResolver
     private function getParameterDefaultValue(ReflectionParameter $parameter, ReflectionMethod $function)
     {
         try {
-            if (
-                $parameter->hasType()
-                && (($class = $parameter->getClass())) !== null
-                && $this->definitionResolver->isResolvable($ref = get($class->getName()))
-            ) {
-                return $this->definitionResolver->resolve($ref);
+            if ($parameter->hasType()) {
+                return $this->tryResolveInstance($parameter);
             }
 
             return $parameter->getDefaultValue();
@@ -111,6 +109,30 @@ class ParameterResolver
                 $parameter->getName(),
                 $this->getFunctionName($function)
             ));
+        }
+    }
+
+    /**
+     * Returns the instance of the typed parameter from the container or the default value when the type is unknown or
+     * not resolvable
+     *
+     * @param ReflectionParameter $parameter
+     * @return mixed
+     * @throws InvalidDefinition
+     * @throws \ReflectionException
+     */
+    private function tryResolveInstance(ReflectionParameter $parameter)
+    {
+        try {
+            if (
+                (($class = $parameter->getClass())) !== null
+                && $this->definitionResolver->isResolvable($ref = get($class->getName()))
+            ) {
+                return $this->definitionResolver->resolve($ref);
+            }
+            return $parameter->getDefaultValue();
+        } catch (\ReflectionException $e) {
+            return $parameter->getDefaultValue();
         }
     }
 
