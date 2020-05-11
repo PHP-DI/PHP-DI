@@ -2,7 +2,7 @@
 layout: home
 ---
 
-[![](doc/img.png)](http://php-di.org/)
+[![](doc/img.png)](https://php-di.org/)
 
 [![Build Status](https://img.shields.io/travis/PHP-DI/PHP-DI/master.svg?style=flat-square)](https://travis-ci.org/PHP-DI/PHP-DI)
 [![Coverage Status](https://img.shields.io/coveralls/PHP-DI/PHP-DI/master.svg?style=flat-square)](https://coveralls.io/r/PHP-DI/PHP-DI?branch=master)
@@ -16,7 +16,7 @@ layout: home
 
 PHP-DI is a dependency injection container meant to be practical, powerful, and framework-agnostic.
 
-Read more on the website: **[php-di.org](http://php-di.org)**
+Read more on the website: **[php-di.org](https://php-di.org)**
 
 Get community support in the Gitter chat room: [![Gitter chat](https://badges.gitter.im/PHP-DI/PHP-DI.png)](https://gitter.im/PHP-DI/PHP-DI)
 

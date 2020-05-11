@@ -201,7 +201,7 @@ class ContainerBuilder
      * - in production you should clear that directory every time you deploy
      * - in development you should not compile the container
      *
-     * @see http://php-di.org/doc/performances.html
+     * @see https://php-di.org/doc/performances.html
      *
      * @param string $directory Directory in which to put the compiled container.
      * @param string $containerClass Name of the compiled class. Customize only if necessary.
@@ -273,7 +273,7 @@ class ContainerBuilder
      * For dev environment, use `writeProxiesToFile(false)` (default configuration)
      * For production environment, use `writeProxiesToFile(true, 'tmp/proxies')`
      *
-     * @see http://php-di.org/doc/lazy-injection.html
+     * @see https://php-di.org/doc/lazy-injection.html
      *
      * @param bool $writeToFile If true, write the proxies to disk to improve performances
      * @param string|null $proxyDirectory Directory where to write the proxies
@@ -353,7 +353,7 @@ class ContainerBuilder
      * Remember to clear APCu on each deploy else your application will have a stale cache. Do not enable the cache
      * in development environment: any change you will make to the code will be ignored because of the cache.
      *
-     * @see http://php-di.org/doc/performances.html
+     * @see https://php-di.org/doc/performances.html
      *
      * @param string $cacheNamespace use unique namespace per container when sharing a single APC memory pool to prevent cache collisions
      * @return $this

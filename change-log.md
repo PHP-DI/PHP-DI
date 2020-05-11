@@ -28,7 +28,7 @@ Improvements:
 - [#487](https://github.com/PHP-DI/PHP-DI/issues/487) Closures in the config are now always interpreted as factories, even when nested inside other definitions
 - [#242](https://github.com/PHP-DI/PHP-DI/issues/242) Error in case a definition is not indexed by a string
 - [#505](https://github.com/PHP-DI/PHP-DI/pull/505) Debug container entries
-- [#564](https://github.com/PHP-DI/PHP-DI/pull/564) Caching was made almost entirely obsolete by the container compilation, however there is still a caching system entirely rebuilt over APCu for covering the last cases that compilation could not address (see [php-di.org/doc/performances.html](http://php-di.org/doc/performances.html))
+- [#564](https://github.com/PHP-DI/PHP-DI/pull/564) Caching was made almost entirely obsolete by the container compilation, however there is still a caching system entirely rebuilt over APCu for covering the last cases that compilation could not address (see [php-di.org/doc/performances.html](https://php-di.org/doc/performances.html))
 
 Fixes:
 
@@ -95,7 +95,7 @@ New features:
             ->parameter('host', DI\get('db.host')),
     ];
     ```
-    Read the [factories documentation](http://php-di.org/doc/php-definitions.html#factories) to learn more. Feature implemented by [@predakanga](https://github.com/predakanga).
+    Read the [factories documentation](https://php-di.org/doc/php-definitions.html#factories) to learn more. Feature implemented by [@predakanga](https://github.com/predakanga).
 
 Improvements:
 
@@ -263,7 +263,7 @@ BC-breaks: None.
 * [#138](https://github.com/PHP-DI/PHP-DI/issues/138) [Container-interop](https://github.com/container-interop/container-interop) compliance
 * [#143](https://github.com/PHP-DI/PHP-DI/issues/143) Much more explicit exception messages
 * [#157](https://github.com/PHP-DI/PHP-DI/issues/157) HHVM support
-* [#158](https://github.com/PHP-DI/PHP-DI/issues/158) Improved the documentation for [Symfony 2 integration](http://php-di.org/doc/frameworks/symfony2.html)
+* [#158](https://github.com/PHP-DI/PHP-DI/issues/158) Improved the documentation for [Symfony 2 integration](https://php-di.org/doc/frameworks/symfony2.html)
 
 ## 4.0
 
