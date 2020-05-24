@@ -7,6 +7,8 @@ namespace DI;
 use DI\Compiler\RequestedEntryHolder;
 use DI\Definition\Definition;
 use DI\Definition\Exception\InvalidDefinition;
+use DI\Factory\RequestedEntry;
+use DI\Invoker\BaseFactoryParameterResolver;
 use DI\Invoker\FactoryParameterResolver;
 use Invoker\Exception\NotCallableException;
 use Invoker\Exception\NotEnoughParametersException;
@@ -103,12 +105,15 @@ abstract class CompiledContainer extends Container
                 new FactoryParameterResolver($this->delegateContainer),
                 new NumericArrayResolver,
                 new DefaultValueResolver,
+                new BaseFactoryParameterResolver($this->delegateContainer),
             ]);
 
             $this->factoryInvoker = new Invoker($parameterResolver, $this->delegateContainer);
         }
 
-        $parameters = [$this->delegateContainer, new RequestedEntryHolder($entryName)];
+        $parameters = [
+            RequestedEntry::class => new RequestedEntryHolder($entryName),
+        ];
 
         $parameters = array_merge($parameters, $extraParameters);
 

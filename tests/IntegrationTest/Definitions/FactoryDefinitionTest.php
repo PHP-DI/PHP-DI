@@ -9,6 +9,7 @@ use DI\Factory\RequestedEntry;
 use DI\Test\IntegrationTest\BaseContainerTest;
 use DI\Test\UnitTest\Definition\Resolver\Fixture\NoConstructor;
 use Psr\Container\ContainerInterface;
+use function DI\factory;
 
 /**
  * Test factory definitions.
@@ -561,6 +562,21 @@ class FactoryDefinitionTest extends BaseContainerTest
         $container = $builder->build();
 
         self::assertEquals('foo', $container->get('factory'));
+    }
+
+    /**
+     * @dataProvider provideContainer
+     */
+    public function test_issue_628(ContainerBuilder $builder)
+    {
+        $builder->addDefinitions([
+            'factory' => factory(function ($foo, $bar = 123, $baz = 456) {
+                return [$foo, $bar, $baz];
+            })->parameter('foo', 'bar'),
+        ]);
+        $container = $builder->build();
+
+        self::assertEquals(['bar', 123, 456], $container->get('factory'));
     }
 }
 

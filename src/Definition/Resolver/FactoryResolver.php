@@ -7,6 +7,7 @@ namespace DI\Definition\Resolver;
 use DI\Definition\Definition;
 use DI\Definition\Exception\InvalidDefinition;
 use DI\Definition\FactoryDefinition;
+use DI\Invoker\BaseFactoryParameterResolver;
 use DI\Invoker\FactoryParameterResolver;
 use Invoker\Exception\NotCallableException;
 use Invoker\Exception\NotEnoughParametersException;
@@ -16,6 +17,7 @@ use Invoker\ParameterResolver\DefaultValueResolver;
 use Invoker\ParameterResolver\NumericArrayResolver;
 use Invoker\ParameterResolver\ResolverChain;
 use Psr\Container\ContainerInterface;
+use DI\Factory\RequestedEntry;
 
 /**
  * Resolves a factory definition to a value.
@@ -65,6 +67,7 @@ class FactoryResolver implements DefinitionResolver
                 new FactoryParameterResolver($this->container),
                 new NumericArrayResolver,
                 new DefaultValueResolver,
+                new BaseFactoryParameterResolver($this->container),
             ]);
 
             $this->invoker = new Invoker($parameterResolver, $this->container);
@@ -73,7 +76,9 @@ class FactoryResolver implements DefinitionResolver
         $callable = $definition->getCallable();
 
         try {
-            $providedParams = [$this->container, $definition];
+            $providedParams = [
+                RequestedEntry::class => $definition,
+            ];
             $extraParams = $this->resolveExtraParams($definition->getParameters());
             $providedParams = array_merge($providedParams, $extraParams, $parameters);
 

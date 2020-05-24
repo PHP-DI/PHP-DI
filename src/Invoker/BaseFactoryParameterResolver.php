@@ -15,10 +15,9 @@ use ReflectionFunctionAbstract;
  * {@internal This class is similar to TypeHintingResolver and TypeHintingContainerResolver,
  *            we use this instead for performance reasons}
  *
- * @author Quim Calpe <quim@kalpe.com>
  * @author Matthieu Napoli <matthieu@mnapoli.fr>
  */
-class FactoryParameterResolver implements ParameterResolver
+class BaseFactoryParameterResolver implements ParameterResolver
 {
     /**
      * @var ContainerInterface
@@ -42,20 +41,13 @@ class FactoryParameterResolver implements ParameterResolver
             $parameters = array_diff_key($parameters, $resolvedParameters);
         }
 
-        foreach ($parameters as $index => $parameter) {
-            $parameterClass = $parameter->getClass();
+        $parameterIndexes = array_keys($parameters);
 
-            if (!$parameterClass) {
-                continue;
-            }
-
-            if ($parameterClass->name === ContainerInterface::class) {
-                $resolvedParameters[$index] = $this->container;
-            } elseif ($parameterClass->name === RequestedEntry::class) {
-                $resolvedParameters[$index] = $providedParameters[RequestedEntry::class];
-            } elseif ($this->container->has($parameterClass->name)) {
-                $resolvedParameters[$index] = $this->container->get($parameterClass->name);
-            }
+        if ($parameterIndexes === [0]) {
+            $resolvedParameters[0] = $this->container;
+        } elseif (isset($parameters[0], $parameters[1])) {
+            $resolvedParameters[0] = $this->container;
+            $resolvedParameters[1] = $providedParameters[RequestedEntry::class];
         }
 
         return $resolvedParameters;
