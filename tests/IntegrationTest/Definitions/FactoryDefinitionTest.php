@@ -524,8 +524,6 @@ class FactoryDefinitionTest extends BaseContainerTest
      */
     public function test_closure_with_static_variables_are_supported(ContainerBuilder $builder)
     {
-        $this->markTestSkipped('There is a bug in opis/closure isScopeRequired(). See https://github.com/opis/closure/issues/52');
-
         $builder->addDefinitions([
             'factory' => function () {
                 static $i = 0;
