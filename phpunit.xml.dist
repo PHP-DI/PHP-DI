@@ -8,7 +8,6 @@
          convertErrorsToExceptions="true"
          convertNoticesToExceptions="true"
          convertWarningsToExceptions="true"
-         syntaxCheck="true"
          beStrictAboutTestsThatDoNotTestAnything="false"
          bootstrap="./vendor/autoload.php">
 

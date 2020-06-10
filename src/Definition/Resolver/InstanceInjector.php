@@ -24,21 +24,19 @@ class InstanceInjector extends ObjectCreator
      */
     public function resolve(Definition $definition, array $parameters = [])
     {
-        $instance = $definition->getInstance();
-
         try {
-            $this->injectMethodsAndProperties($instance, $definition->getObjectDefinition());
+            $this->injectMethodsAndProperties($definition->getInstance(), $definition->getObjectDefinition());
         } catch (NotFoundExceptionInterface $e) {
             $message = sprintf(
                 'Error while injecting dependencies into %s: %s',
-                get_class($instance),
+                get_class($definition->getInstance()),
                 $e->getMessage()
             );
 
             throw new DependencyException($message, 0, $e);
         }
 
-        return $instance;
+        return $definition;
     }
 
     public function isResolvable(Definition $definition, array $parameters = []) : bool
