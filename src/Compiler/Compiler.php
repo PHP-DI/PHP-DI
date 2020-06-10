@@ -375,16 +375,14 @@ PHP;
             throw new InvalidDefinition('Cannot compile closures which import variables using the `use` keyword');
         }
 
-        if (
-            $reflector->isBindingRequired()
-            // todo: there is a bug in opis/closure isScopeRequired()
-            // https://github.com/opis/closure/issues/52
-            || ($reflector->isScopeRequired() && $reflector->getClosureScopeClass())
-        ) {
+        if ($reflector->isBindingRequired() || $reflector->isScopeRequired()) {
             throw new InvalidDefinition('Cannot compile closures which use $this or self/static/parent references');
         }
 
+        // Force all closures to be static (add the `static` keyword), i.e. they can't use
+        // $this, which makes sense since their code is copied into another class.
         $code = ($reflector->isStatic() ? '' : 'static ') . $reflector->getCode();
+
         $code = trim($code, "\t\n\r;");
 
         return $code;

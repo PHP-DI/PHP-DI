@@ -498,6 +498,32 @@ class FactoryDefinitionTest extends BaseContainerTest
         $builder->build();
     }
 
+    public function test_closure_which_use_self_cannot_be_compiled()
+    {
+        $this->expectException(InvalidDefinition::class);
+        $this->expectExceptionMessage('Cannot compile closures which use $this or self/static/parent references');
+        $builder = (new ContainerBuilder)->enableCompilation(self::COMPILATION_DIR, self::generateCompiledClassName());
+        $builder->addDefinitions([
+            'factory' => function () {
+                return self::foo();
+            },
+        ]);
+        $builder->build();
+    }
+
+    public function test_closure_which_use_static_reference_cannot_be_compiled()
+    {
+        $this->expectException(InvalidDefinition::class);
+        $this->expectExceptionMessage('Cannot compile closures which use $this or self/static/parent references');
+        $builder = (new ContainerBuilder)->enableCompilation(self::COMPILATION_DIR, self::generateCompiledClassName());
+        $builder->addDefinitions([
+            'factory' => function () {
+                return static::foo();
+            },
+        ]);
+        $builder->build();
+    }
+
     private function foo()
     {
         return 'hello';
