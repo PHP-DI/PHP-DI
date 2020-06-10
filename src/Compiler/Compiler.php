@@ -18,9 +18,7 @@ use DI\Definition\ValueDefinition;
 use DI\DependencyException;
 use DI\Proxy\ProxyFactory;
 use InvalidArgumentException;
-use PhpParser\Node\Expr\Closure;
-use SuperClosure\Analyzer\AstAnalyzer;
-use SuperClosure\Exception\ClosureAnalysisException;
+use Opis\Closure\SerializableClosure;
 
 /**
  * Compiles the container into PHP code much more optimized for performances.
@@ -365,35 +363,26 @@ PHP;
         return true;
     }
 
+    /**
+     * @throws \DI\Definition\Exception\InvalidDefinition
+     */
     private function compileClosure(\Closure $closure) : string
     {
-        $closureAnalyzer = new AstAnalyzer;
+        $wrapper = new SerializableClosure($closure);
+        $reflector = $wrapper->getReflector();
 
-        try {
-            $closureData = $closureAnalyzer->analyze($closure);
-        } catch (ClosureAnalysisException $e) {
-            if (stripos($e->getMessage(), 'Two closures were declared on the same line') !== false) {
-                throw new InvalidDefinition('Cannot compile closures when two closures are defined on the same line', 0, $e);
-            }
-
-            throw $e;
-        }
-
-        /** @var Closure $ast */
-        $ast = $closureData['ast'];
-
-        // Force all closures to be static (add the `static` keyword), i.e. they can't use
-        // $this, which makes sense since their code is copied into another class.
-        $ast->static = true;
-
-        // Check if the closure imports variables with `use`
-        if (! empty($ast->uses)) {
+        if ($reflector->getUseVariables()) {
             throw new InvalidDefinition('Cannot compile closures which import variables using the `use` keyword');
         }
 
-        $code = (new \PhpParser\PrettyPrinter\Standard)->prettyPrint([$ast]);
+        if ($reflector->isBindingRequired() || $reflector->isScopeRequired()) {
+            throw new InvalidDefinition('Cannot compile closures which use $this or self/static/parent references');
+        }
 
-        // Trim spaces and the last `;`
+        // Force all closures to be static (add the `static` keyword), i.e. they can't use
+        // $this, which makes sense since their code is copied into another class.
+        $code = ($reflector->isStatic() ? '' : 'static ') . $reflector->getCode();
+
         $code = trim($code, "\t\n\r;");
 
         return $code;
