@@ -11,9 +11,9 @@ use DI\Definition\ObjectDefinition;
 use DI\Definition\ObjectDefinition\MethodInjection;
 use DI\Definition\ObjectDefinition\PropertyInjection;
 use DI\Definition\Reference;
-use Doctrine\Common\Annotations\AnnotationRegistry;
+use Doctrine\Common\Annotations\AnnotationReader;
+use Doctrine\Common\Annotations\DocParser;
 use Doctrine\Common\Annotations\Reader;
-use Doctrine\Common\Annotations\SimpleAnnotationReader;
 use InvalidArgumentException;
 use PhpDocReader\PhpDocReader;
 use ReflectionClass;
@@ -252,9 +252,9 @@ class AnnotationBasedAutowiring implements DefinitionSource, Autowiring
     public function getAnnotationReader()
     {
         if ($this->annotationReader === null) {
-            AnnotationRegistry::registerLoader('class_exists');
-            $this->annotationReader = new SimpleAnnotationReader();
-            $this->annotationReader->addNamespace('DI\Annotation');
+            $docParser = new DocParser();
+            $docParser->setIgnoreNotImportedAnnotations(true);
+            $this->annotationReader = new AnnotationReader($docParser);
         }
 
         return $this->annotationReader;

@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace DI\Test\UnitTest\Definition\Source\Fixtures;
 
+use DI\Annotation\Inject;
+
 class AnnotationFixtureTypedProperties
 {
     protected AnnotationFixture2 $typedButNoInject;
