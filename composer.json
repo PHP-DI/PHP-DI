@@ -34,7 +34,7 @@
     "require-dev": {
         "phpunit/phpunit": "^8.5",
         "mnapoli/phpunit-easymock": "^1.2",
-        "doctrine/annotations": "~1.2",
+        "doctrine/annotations": "^1.10",
         "ocramius/proxy-manager": "~2.0.2",
         "friendsofphp/php-cs-fixer": "^2.4",
         "phpstan/phpstan": "^0.12"
@@ -43,7 +43,7 @@
         "psr/container-implementation": "^1.0"
     },
     "suggest": {
-        "doctrine/annotations": "Install it if you want to use annotations (version ~1.2)",
+        "doctrine/annotations": "Install it if you want to use annotations (version ^1.10)",
         "ocramius/proxy-manager": "Install it if you want to use lazy injection (version ~2.0)"
     }
 }
