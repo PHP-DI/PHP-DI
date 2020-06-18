@@ -555,6 +555,24 @@ class FactoryDefinitionTest extends BaseContainerTest
     /**
      * @dataProvider provideContainer
      */
+    public function test_static_closures_inside_closures_are_supported(ContainerBuilder $builder)
+    {
+        $builder->addDefinitions([
+            'factory' => static function () {
+                return static function () {
+                    return new stdClass;
+                };
+            },
+        ]);
+        $container = $builder->build();
+
+        self::assertEntryIsCompiled($container, 'factory');
+        self::assertEquals(new stdClass, $container->get('factory')());
+    }
+
+    /**
+     * @dataProvider provideContainer
+     */
     public function test_closure_with_static_variables_are_supported(ContainerBuilder $builder)
     {
         $builder->addDefinitions([
