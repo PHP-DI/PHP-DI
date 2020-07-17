@@ -4,8 +4,14 @@ declare(strict_types=1);
 
 namespace DI\Definition\Resolver;
 
+use DI\Definition\ArrayDefinition;
+use DI\Definition\DecoratorDefinition;
 use DI\Definition\Definition;
+use DI\Definition\EnvironmentVariableDefinition;
 use DI\Definition\Exception\InvalidDefinition;
+use DI\Definition\FactoryDefinition;
+use DI\Definition\InstanceDefinition;
+use DI\Definition\SelfResolvingDefinition;
 use DI\Proxy\ProxyFactory;
 use Psr\Container\ContainerInterface;
 
@@ -55,7 +61,7 @@ class ResolverDispatcher implements DefinitionResolver
     public function resolve(Definition $definition, array $parameters = [])
     {
         // Special case, tested early for speed
-        if ($definition instanceof \DI\Definition\SelfResolvingDefinition) {
+        if ($definition instanceof SelfResolvingDefinition) {
             return $definition->resolve($this->container);
         }
 
@@ -67,7 +73,7 @@ class ResolverDispatcher implements DefinitionResolver
     public function isResolvable(Definition $definition, array $parameters = []) : bool
     {
         // Special case, tested early for speed
-        if ($definition instanceof \DI\Definition\SelfResolvingDefinition) {
+        if ($definition instanceof SelfResolvingDefinition) {
             return $definition->isResolvable($this->container);
         }
 
@@ -90,31 +96,31 @@ class ResolverDispatcher implements DefinitionResolver
                 }
 
                 return $this->objectResolver;
-            case $definition instanceof \DI\Definition\DecoratorDefinition:
+            case $definition instanceof DecoratorDefinition:
                 if (! $this->decoratorResolver) {
                     $this->decoratorResolver = new DecoratorResolver($this->container, $this);
                 }
 
                 return $this->decoratorResolver;
-            case $definition instanceof \DI\Definition\FactoryDefinition:
+            case $definition instanceof FactoryDefinition:
                 if (! $this->factoryResolver) {
                     $this->factoryResolver = new FactoryResolver($this->container, $this);
                 }
 
                 return $this->factoryResolver;
-            case $definition instanceof \DI\Definition\ArrayDefinition:
+            case $definition instanceof ArrayDefinition:
                 if (! $this->arrayResolver) {
                     $this->arrayResolver = new ArrayResolver($this);
                 }
 
                 return $this->arrayResolver;
-            case $definition instanceof \DI\Definition\EnvironmentVariableDefinition:
+            case $definition instanceof EnvironmentVariableDefinition:
                 if (! $this->envVariableResolver) {
                     $this->envVariableResolver = new EnvironmentVariableResolver($this);
                 }
 
                 return $this->envVariableResolver;
-            case $definition instanceof \DI\Definition\InstanceDefinition:
+            case $definition instanceof InstanceDefinition:
                 if (! $this->instanceResolver) {
                     $this->instanceResolver = new InstanceInjector($this, $this->proxyFactory);
                 }
