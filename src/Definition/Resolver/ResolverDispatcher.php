@@ -11,6 +11,7 @@ use DI\Definition\EnvironmentVariableDefinition;
 use DI\Definition\Exception\InvalidDefinition;
 use DI\Definition\FactoryDefinition;
 use DI\Definition\InstanceDefinition;
+use DI\Definition\ObjectDefinition;
 use DI\Definition\SelfResolvingDefinition;
 use DI\Proxy\ProxyFactory;
 use Psr\Container\ContainerInterface;
@@ -90,7 +91,7 @@ class ResolverDispatcher implements DefinitionResolver
     private function getDefinitionResolver(Definition $definition) : DefinitionResolver
     {
         switch (true) {
-            case $definition instanceof \DI\Definition\ObjectDefinition:
+            case $definition instanceof ObjectDefinition:
                 if (! $this->objectResolver) {
                     $this->objectResolver = new ObjectCreator($this, $this->proxyFactory);
                 }
