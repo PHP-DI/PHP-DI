@@ -19,52 +19,35 @@ class ObjectDefinition implements Definition
 {
     /**
      * Entry name (most of the time, same as $classname).
-     * @var string
      */
-    private $name;
+    private string $name;
 
     /**
      * Class name (if null, then the class name is $name).
-     * @var string|null
      */
-    protected $className;
+    protected ?string $className = null;
 
-    /**
-     * Constructor parameter injection.
-     * @var MethodInjection|null
-     */
-    protected $constructorInjection;
+    protected ?MethodInjection $constructorInjection = null;
 
-    /**
-     * Property injections.
-     * @var PropertyInjection[]
-     */
-    protected $propertyInjections = [];
+    protected array $propertyInjections = [];
 
     /**
      * Method calls.
      * @var MethodInjection[][]
      */
-    protected $methodInjections = [];
+    protected array $methodInjections = [];
 
-    /**
-     * @var bool|null
-     */
-    protected $lazy;
+    protected ?bool $lazy = null;
 
     /**
      * Store if the class exists. Storing it (in cache) avoids recomputing this.
-     *
-     * @var bool
      */
-    private $classExists;
+    private bool $classExists;
 
     /**
      * Store if the class is instantiable. Storing it (in cache) avoids recomputing this.
-     *
-     * @var bool
      */
-    private $isInstantiable;
+    private bool $isInstantiable;
 
     /**
      * @param string $name Entry name
@@ -80,7 +63,7 @@ class ObjectDefinition implements Definition
         return $this->name;
     }
 
-    public function setName(string $name)
+    public function setName(string $name) : void
     {
         $this->name = $name;
     }
@@ -101,20 +84,17 @@ class ObjectDefinition implements Definition
         return $this->name;
     }
 
-    /**
-     * @return MethodInjection|null
-     */
-    public function getConstructorInjection()
+    public function getConstructorInjection() : ?MethodInjection
     {
         return $this->constructorInjection;
     }
 
-    public function setConstructorInjection(MethodInjection $constructorInjection)
+    public function setConstructorInjection(MethodInjection $constructorInjection) : void
     {
         $this->constructorInjection = $constructorInjection;
     }
 
-    public function completeConstructorInjection(MethodInjection $injection)
+    public function completeConstructorInjection(MethodInjection $injection) : void
     {
         if ($this->constructorInjection !== null) {
             // Merge
@@ -133,7 +113,7 @@ class ObjectDefinition implements Definition
         return $this->propertyInjections;
     }
 
-    public function addPropertyInjection(PropertyInjection $propertyInjection)
+    public function addPropertyInjection(PropertyInjection $propertyInjection) : void
     {
         $className = $propertyInjection->getClassName();
         if ($className) {
@@ -161,7 +141,7 @@ class ObjectDefinition implements Definition
         return $injections;
     }
 
-    public function addMethodInjection(MethodInjection $methodInjection)
+    public function addMethodInjection(MethodInjection $methodInjection) : void
     {
         $method = $methodInjection->getMethodName();
         if (! isset($this->methodInjections[$method])) {
@@ -170,7 +150,7 @@ class ObjectDefinition implements Definition
         $this->methodInjections[$method][] = $methodInjection;
     }
 
-    public function completeFirstMethodInjection(MethodInjection $injection)
+    public function completeFirstMethodInjection(MethodInjection $injection) : void
     {
         $method = $injection->getMethodName();
 
@@ -183,7 +163,7 @@ class ObjectDefinition implements Definition
         }
     }
 
-    public function setLazy(bool $lazy = null)
+    public function setLazy(bool $lazy = null) : void
     {
         $this->lazy = $lazy;
     }
@@ -207,7 +187,7 @@ class ObjectDefinition implements Definition
         return $this->isInstantiable;
     }
 
-    public function replaceNestedDefinitions(callable $replacer)
+    public function replaceNestedDefinitions(callable $replacer) : void
     {
         array_walk($this->propertyInjections, function (PropertyInjection $propertyInjection) use ($replacer) {
             $propertyInjection->replaceNestedDefinition($replacer);
@@ -248,7 +228,7 @@ class ObjectDefinition implements Definition
         return (new ObjectDefinitionDumper)->dump($this);
     }
 
-    private function updateCache()
+    private function updateCache() : void
     {
         $className = $this->getClassName();
 

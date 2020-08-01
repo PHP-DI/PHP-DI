@@ -36,69 +36,48 @@ class ContainerBuilder
 {
     /**
      * Name of the container class, used to create the container.
-     * @var string
      */
-    private $containerClass;
+    private string $containerClass;
 
     /**
      * Name of the container parent class, used on compiled container.
-     * @var string
      */
-    private $containerParentClass;
+    private string $containerParentClass;
 
-    /**
-     * @var bool
-     */
-    private $useAutowiring = true;
+    private bool $useAutowiring = true;
 
-    /**
-     * @var bool
-     */
-    private $useAnnotations = false;
+    private bool $useAnnotations = false;
 
     /**
      * If true, write the proxies to disk to improve performances.
-     * @var bool
      */
-    private $writeProxiesToFile = false;
+    private bool $writeProxiesToFile = false;
 
     /**
      * Directory where to write the proxies (if $writeProxiesToFile is enabled).
-     * @var string|null
      */
-    private $proxyDirectory;
+    private ?string $proxyDirectory = null;
 
     /**
      * If PHP-DI is wrapped in another container, this references the wrapper.
-     * @var ContainerInterface
      */
-    private $wrapperContainer;
+    private ?ContainerInterface $wrapperContainer = null;
 
     /**
      * @var DefinitionSource[]|string[]|array[]
      */
-    private $definitionSources = [];
+    private array $definitionSources = [];
 
     /**
      * Whether the container has already been built.
-     * @var bool
      */
-    private $locked = false;
+    private bool $locked = false;
 
-    /**
-     * @var string|null
-     */
-    private $compileToDirectory;
+    private ?string $compileToDirectory = null;
 
-    /**
-     * @var bool
-     */
-    private $sourceCache = false;
+    private bool $sourceCache = false;
 
-    /**
-     * @var string
-     */
-    protected $sourceCacheNamespace;
+    protected string $sourceCacheNamespace = '';
 
     /**
      * Build a container configured for the dev environment.
@@ -139,7 +118,8 @@ class ContainerBuilder
             if (is_string($definitions)) {
                 // File
                 return new DefinitionFile($definitions, $autowiring);
-            } elseif (is_array($definitions)) {
+            }
+            if (is_array($definitions)) {
                 return new DefinitionArray($definitions, $autowiring);
             }
 
@@ -357,7 +337,7 @@ class ContainerBuilder
         return (bool) $this->compileToDirectory;
     }
 
-    private function ensureNotLocked()
+    private function ensureNotLocked(): void
     {
         if ($this->locked) {
             throw new \LogicException('The ContainerBuilder cannot be modified after the container has been built');

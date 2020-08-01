@@ -24,10 +24,7 @@ use Invoker\ParameterResolver\ResolverChain;
  */
 abstract class CompiledContainer extends Container
 {
-    /**
-     * @var InvokerInterface
-     */
-    private $factoryInvoker;
+    private ?InvokerInterface $factoryInvoker = null;
 
     /**
      * {@inheritdoc}
@@ -67,7 +64,7 @@ abstract class CompiledContainer extends Container
     /**
      * {@inheritdoc}
      */
-    public function has($name)
+    public function has($name): bool
     {
         if (! is_string($name)) {
             throw new \InvalidArgumentException(sprintf(
@@ -84,7 +81,7 @@ abstract class CompiledContainer extends Container
         return parent::has($name);
     }
 
-    protected function setDefinition(string $name, Definition $definition)
+    protected function setDefinition(string $name, Definition $definition): void
     {
         // It needs to be forbidden because that would mean get() must go through the definitions
         // every time, which kinds of defeats the performance gains of the compiled container
@@ -93,6 +90,8 @@ abstract class CompiledContainer extends Container
 
     /**
      * Invoke the given callable.
+     *
+     * @return mixed
      */
     protected function resolveFactory($callable, $entryName, array $extraParameters = [])
     {

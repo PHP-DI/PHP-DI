@@ -14,25 +14,21 @@ class EnvironmentVariableDefinition implements Definition
 {
     /**
      * Entry name.
-     * @var string
      */
-    private $name = '';
+    private string $name = '';
 
     /**
      * The name of the environment variable.
-     * @var string
      */
-    private $variableName;
+    private string $variableName;
 
     /**
      * Whether or not the environment variable definition is optional.
      *
      * If true and the environment variable given by $variableName has not been
      * defined, $defaultValue is used.
-     *
-     * @var bool
      */
-    private $isOptional;
+    private bool $isOptional;
 
     /**
      * The default value to use if the environment variable is optional and not provided.
@@ -57,7 +53,7 @@ class EnvironmentVariableDefinition implements Definition
         return $this->name;
     }
 
-    public function setName(string $name)
+    public function setName(string $name) : void
     {
         $this->name = $name;
     }
@@ -86,7 +82,7 @@ class EnvironmentVariableDefinition implements Definition
         return $this->defaultValue;
     }
 
-    public function replaceNestedDefinitions(callable $replacer)
+    public function replaceNestedDefinitions(callable $replacer) : void
     {
         $this->defaultValue = $replacer($this->defaultValue);
     }

@@ -20,15 +20,9 @@ class FactoryDefinitionHelper implements DefinitionHelper
      */
     private $factory;
 
-    /**
-     * @var bool
-     */
-    private $decorate;
+    private bool $decorate;
 
-    /**
-     * @var array
-     */
-    private $parameters = [];
+    private array $parameters = [];
 
     /**
      * @param callable $factory
@@ -40,11 +34,7 @@ class FactoryDefinitionHelper implements DefinitionHelper
         $this->decorate = $decorate;
     }
 
-    /**
-     * @param string $entryName Container entry name
-     * @return FactoryDefinition
-     */
-    public function getDefinition(string $entryName) : Definition
+    public function getDefinition(string $entryName) : FactoryDefinition
     {
         if ($this->decorate) {
             return new DecoratorDefinition($entryName, $this->factory, $this->parameters);
@@ -66,7 +56,7 @@ class FactoryDefinitionHelper implements DefinitionHelper
      *
      * @return $this
      */
-    public function parameter(string $parameter, $value)
+    public function parameter(string $parameter, $value) : self
     {
         $this->parameters[$parameter] = $value;
 

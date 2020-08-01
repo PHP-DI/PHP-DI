@@ -17,10 +17,7 @@ use Exception;
  */
 class ArrayResolver implements DefinitionResolver
 {
-    /**
-     * @var DefinitionResolver
-     */
-    private $definitionResolver;
+    private DefinitionResolver $definitionResolver;
 
     /**
      * @param DefinitionResolver $definitionResolver Used to resolve nested definitions.

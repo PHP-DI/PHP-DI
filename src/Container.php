@@ -40,49 +40,33 @@ class Container implements ContainerInterface, FactoryInterface, InvokerInterfac
 {
     /**
      * Map of entries that are already resolved.
-     * @var array
      */
-    protected $resolvedEntries = [];
+    protected array $resolvedEntries = [];
 
-    /**
-     * @var MutableDefinitionSource
-     */
-    private $definitionSource;
+    private MutableDefinitionSource $definitionSource;
 
-    /**
-     * @var DefinitionResolver
-     */
-    private $definitionResolver;
+    private DefinitionResolver $definitionResolver;
 
     /**
      * Map of definitions that are already fetched (local cache).
      *
-     * @var (Definition|null)[]
+     * @var array<Definition|null>
      */
-    private $fetchedDefinitions = [];
+    private array $fetchedDefinitions = [];
 
     /**
      * Array of entries being resolved. Used to avoid circular dependencies and infinite loops.
-     * @var array
      */
-    protected $entriesBeingResolved = [];
+    protected array $entriesBeingResolved = [];
 
-    /**
-     * @var InvokerInterface|null
-     */
-    private $invoker;
+    private ?InvokerInterface $invoker = null;
 
     /**
      * Container that wraps this container. If none, points to $this.
-     *
-     * @var ContainerInterface
      */
-    protected $delegateContainer;
+    protected ContainerInterface $delegateContainer;
 
-    /**
-     * @var ProxyFactory
-     */
-    protected $proxyFactory;
+    protected ProxyFactory $proxyFactory;
 
     /**
      * Use `$container = new Container()` if you want a container with the default configuration.
@@ -142,12 +126,7 @@ class Container implements ContainerInterface, FactoryInterface, InvokerInterfac
         return $value;
     }
 
-    /**
-     * @param string $name
-     *
-     * @return Definition|null
-     */
-    private function getDefinition($name)
+    private function getDefinition(string $name) : ?Definition
     {
         // Local cache that avoids fetching the same definition twice
         if (!array_key_exists($name, $this->fetchedDefinitions)) {
@@ -175,7 +154,7 @@ class Container implements ContainerInterface, FactoryInterface, InvokerInterfac
      * @throws NotFoundException No entry found for the given name.
      * @return mixed
      */
-    public function make($name, array $parameters = [])
+    public function make(string $name, array $parameters = [])
     {
         if (! is_string($name)) {
             throw new InvalidArgumentException(sprintf(
@@ -203,9 +182,8 @@ class Container implements ContainerInterface, FactoryInterface, InvokerInterfac
      * @param string $name Entry name or a class name.
      *
      * @throws InvalidArgumentException The name parameter must be of type string.
-     * @return bool
      */
-    public function has($name)
+    public function has($name): bool
     {
         if (! is_string($name)) {
             throw new InvalidArgumentException(sprintf(
@@ -234,12 +212,8 @@ class Container implements ContainerInterface, FactoryInterface, InvokerInterfac
      * @throws DependencyException Error while injecting dependencies
      * @return object $instance Returns the same instance
      */
-    public function injectOn($instance)
+    public function injectOn(object $instance): object
     {
-        if (!$instance) {
-            return $instance;
-        }
-
         $className = get_class($instance);
 
         // If the class is anonymous, don't cache its definition
@@ -392,7 +366,7 @@ class Container implements ContainerInterface, FactoryInterface, InvokerInterfac
         return $value;
     }
 
-    protected function setDefinition(string $name, Definition $definition)
+    protected function setDefinition(string $name, Definition $definition) : void
     {
         // Clear existing entry if it exists
         if (array_key_exists($name, $this->resolvedEntries)) {

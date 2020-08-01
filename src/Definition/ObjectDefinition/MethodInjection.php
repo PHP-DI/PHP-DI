@@ -13,15 +13,12 @@ use DI\Definition\Definition;
  */
 class MethodInjection implements Definition
 {
-    /**
-     * @var string
-     */
-    private $methodName;
+    private string $methodName;
 
     /**
      * @var mixed[]
      */
-    private $parameters = [];
+    private array $parameters;
 
     public function __construct(string $methodName, array $parameters = [])
     {
@@ -66,12 +63,12 @@ class MethodInjection implements Definition
         return '';
     }
 
-    public function setName(string $name)
+    public function setName(string $name) : void
     {
         // The name does not matter for method injections
     }
 
-    public function replaceNestedDefinitions(callable $replacer)
+    public function replaceNestedDefinitions(callable $replacer) : void
     {
         $this->parameters = array_map($replacer, $this->parameters);
     }

@@ -91,16 +91,6 @@ class ContainerMakeTest extends BaseContainerTest
     }
 
     /**
-     * @dataProvider provideContainer
-     */
-    public function testNonStringParameter(ContainerBuilder $builder)
-    {
-        $this->expectException('InvalidArgumentException');
-        $this->expectExceptionMessage('The name parameter must be of type string');
-        $builder->build()->make(new stdClass);
-    }
-
-    /**
      * Tests a dependency can be made when a dependency is passed by reference.
      * @dataProvider provideContainer
      */

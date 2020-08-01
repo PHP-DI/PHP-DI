@@ -25,20 +25,11 @@ use Psr\Container\ContainerInterface;
  */
 class FactoryResolver implements DefinitionResolver
 {
-    /**
-     * @var ContainerInterface
-     */
-    private $container;
+    private ContainerInterface $container;
 
-    /**
-     * @var Invoker|null
-     */
-    private $invoker;
+    private ?Invoker $invoker = null;
 
-    /**
-     * @var DefinitionResolver
-     */
-    private $resolver;
+    private DefinitionResolver $resolver;
 
     /**
      * The resolver needs a container. This container will be passed to the factory as a parameter

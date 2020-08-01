@@ -18,14 +18,10 @@ class StringDefinition implements Definition, SelfResolvingDefinition
 {
     /**
      * Entry name.
-     * @var string
      */
-    private $name = '';
+    private string $name = '';
 
-    /**
-     * @var string
-     */
-    private $expression;
+    private string $expression;
 
     public function __construct(string $expression)
     {
@@ -37,7 +33,7 @@ class StringDefinition implements Definition, SelfResolvingDefinition
         return $this->name;
     }
 
-    public function setName(string $name)
+    public function setName(string $name) : void
     {
         $this->name = $name;
     }
@@ -57,7 +53,7 @@ class StringDefinition implements Definition, SelfResolvingDefinition
         return true;
     }
 
-    public function replaceNestedDefinitions(callable $replacer)
+    public function replaceNestedDefinitions(callable $replacer) : void
     {
         // no nested definitions
     }

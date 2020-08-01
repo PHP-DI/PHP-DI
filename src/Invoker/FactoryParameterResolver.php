@@ -20,10 +20,7 @@ use ReflectionNamedType;
  */
 class FactoryParameterResolver implements ParameterResolver
 {
-    /**
-     * @var ContainerInterface
-     */
-    private $container;
+    private ContainerInterface $container;
 
     public function __construct(ContainerInterface $container)
     {

@@ -26,22 +26,16 @@ use Psr\Container\ContainerInterface;
  */
 class ResolverDispatcher implements DefinitionResolver
 {
-    /**
-     * @var ContainerInterface
-     */
-    private $container;
+    private ContainerInterface $container;
 
-    /**
-     * @var ProxyFactory
-     */
-    private $proxyFactory;
+    private ProxyFactory $proxyFactory;
 
-    private $arrayResolver;
-    private $factoryResolver;
-    private $decoratorResolver;
-    private $objectResolver;
-    private $instanceResolver;
-    private $envVariableResolver;
+    private ?ArrayResolver $arrayResolver = null;
+    private ?FactoryResolver $factoryResolver = null;
+    private ?DecoratorResolver $decoratorResolver = null;
+    private ?ObjectCreator $objectResolver = null;
+    private ?InstanceInjector $instanceResolver = null;
+    private ?EnvironmentVariableResolver $envVariableResolver = null;
 
     public function __construct(ContainerInterface $container, ProxyFactory $proxyFactory)
     {

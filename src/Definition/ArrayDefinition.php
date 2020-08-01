@@ -14,14 +14,10 @@ class ArrayDefinition implements Definition
 {
     /**
      * Entry name.
-     * @var string
      */
-    private $name = '';
+    private string $name = '';
 
-    /**
-     * @var array
-     */
-    private $values;
+    private array $values;
 
     public function __construct(array $values)
     {
@@ -33,7 +29,7 @@ class ArrayDefinition implements Definition
         return $this->name;
     }
 
-    public function setName(string $name)
+    public function setName(string $name) : void
     {
         $this->name = $name;
     }
@@ -43,7 +39,7 @@ class ArrayDefinition implements Definition
         return $this->values;
     }
 
-    public function replaceNestedDefinitions(callable $replacer)
+    public function replaceNestedDefinitions(callable $replacer) : void
     {
         $this->values = array_map($replacer, $this->values);
     }

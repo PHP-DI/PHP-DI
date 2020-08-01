@@ -22,17 +22,15 @@ final class Inject
 {
     /**
      * Entry name.
-     * @var string
      */
-    private $name;
+    private ?string $name = null;
 
     /**
      * Parameters, indexed by the parameter number (index) or name.
      *
      * Used if the annotation is set on a method
-     * @var array
      */
-    private $parameters = [];
+    private array $parameters = [];
 
     /**
      * @throws InvalidAnnotation
@@ -78,7 +76,7 @@ final class Inject
     /**
      * @return string|null Name of the entry to inject
      */
-    public function getName()
+    public function getName() : ?string
     {
         return $this->name;
     }

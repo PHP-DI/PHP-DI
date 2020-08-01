@@ -22,7 +22,7 @@ class InstanceInjector extends ObjectCreator
      *
      * @param InstanceDefinition $definition
      */
-    public function resolve(Definition $definition, array $parameters = [])
+    public function resolve(Definition $definition, array $parameters = []) : ?object
     {
         try {
             $this->injectMethodsAndProperties($definition->getInstance(), $definition->getObjectDefinition());

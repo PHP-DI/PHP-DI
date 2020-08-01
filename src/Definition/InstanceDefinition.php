@@ -14,20 +14,12 @@ class InstanceDefinition implements Definition
 {
     /**
      * Instance on which to inject dependencies.
-     *
-     * @var object
      */
-    private $instance;
+    private object $instance;
 
-    /**
-     * @var ObjectDefinition
-     */
-    private $objectDefinition;
+    private ObjectDefinition $objectDefinition;
 
-    /**
-     * @param object $instance
-     */
-    public function __construct($instance, ObjectDefinition $objectDefinition)
+    public function __construct(object $instance, ObjectDefinition $objectDefinition)
     {
         $this->instance = $instance;
         $this->objectDefinition = $objectDefinition;
@@ -39,15 +31,12 @@ class InstanceDefinition implements Definition
         return '';
     }
 
-    public function setName(string $name)
+    public function setName(string $name) : void
     {
         // Name are superfluous for instance definitions
     }
 
-    /**
-     * @return object
-     */
-    public function getInstance()
+    public function getInstance() : object
     {
         return $this->instance;
     }
@@ -57,7 +46,7 @@ class InstanceDefinition implements Definition
         return $this->objectDefinition;
     }
 
-    public function replaceNestedDefinitions(callable $replacer)
+    public function replaceNestedDefinitions(callable $replacer) : void
     {
         $this->objectDefinition->replaceNestedDefinitions($replacer);
     }
