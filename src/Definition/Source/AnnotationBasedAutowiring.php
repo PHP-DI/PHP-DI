@@ -237,9 +237,9 @@ class AnnotationBasedAutowiring implements DefinitionSource, Autowiring
         }
 
         // Try to use the type-hinting
-        $parameterClass = $parameter->getClass();
-        if ($parameterClass) {
-            return $parameterClass->getName();
+        $parameterType = $parameter->getType();
+        if ($parameterType && !$parameterType->isBuiltin() && $parameterType instanceof ReflectionNamedType) {
+            return $parameterType->getName();
         }
 
         // Last resort, look for @param tag
