@@ -170,7 +170,7 @@ class AnnotationBasedAutowiring implements DefinitionSource, Autowiring
     /**
      * @throws InvalidAnnotation
      */
-    private function getMethodInjection(ReflectionMethod $method): ?MethodInjection
+    private function getMethodInjection(ReflectionMethod $method) : ?MethodInjection
     {
         // Look for @Inject annotation
         try {
@@ -236,7 +236,7 @@ class AnnotationBasedAutowiring implements DefinitionSource, Autowiring
         return null;
     }
 
-    public function getAnnotationReader(): Reader
+    public function getAnnotationReader() : Reader
     {
         if ($this->annotationReader === null) {
             AnnotationRegistry::registerLoader('class_exists');
