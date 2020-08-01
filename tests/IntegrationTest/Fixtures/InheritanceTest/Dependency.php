@@ -9,10 +9,7 @@ namespace DI\Test\IntegrationTest\Fixtures\InheritanceTest;
  */
 class Dependency
 {
-    /**
-     * @return bool
-     */
-    public function getBoolean()
+    public function getBoolean(): bool
     {
         return true;
     }

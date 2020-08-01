@@ -54,9 +54,8 @@ class GuestbookController extends Zend_Controller_Action
     /**
      * This dependency will be injected by PHP-DI
      * @Inject
-     * @var Application_Service_GuestbookService
      */
-    private $guestbookService;
+    private Application_Service_GuestbookService $guestbookService;
 
     public function indexAction()
     {

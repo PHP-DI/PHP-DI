@@ -164,9 +164,8 @@ class ContainerInjectOnTest extends BaseContainerTest
         $obj = new class {
             /**
              * @Inject
-             * @var Class2
              */
-            public $property;
+            public Class2 $property;
 
             public $methodParam;
 

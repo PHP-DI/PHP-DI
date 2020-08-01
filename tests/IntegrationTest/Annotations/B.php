@@ -10,21 +10,18 @@ class B
 {
     /**
      * @Inject
-     * @var A
      */
-    public $public;
+    public A $public;
 
     /**
      * @Inject
-     * @var A
      */
-    protected $protected;
+    protected A $protected;
 
     /**
      * @Inject
-     * @var A
      */
-    private $private;
+    private A $private;
 
     public function getProtected()
     {

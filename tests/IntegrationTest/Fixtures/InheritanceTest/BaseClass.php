@@ -13,23 +13,13 @@ abstract class BaseClass
 {
     /**
      * @Inject
-     * @var Dependency
      */
-    public $property1;
+    public Dependency $property1;
 
-    /**
-     * @var Dependency
-     */
-    public $property2;
+    public Dependency $property2;
 
-    /**
-     * @var Dependency
-     */
-    public $property3;
+    public Dependency $property3;
 
-    /**
-     * @param Dependency $param1
-     */
     public function __construct(Dependency $param1)
     {
         $this->property3 = $param1;
@@ -37,7 +27,6 @@ abstract class BaseClass
 
     /**
      * @Inject
-     * @param Dependency $property2
      */
     public function setProperty2(Dependency $property2)
     {

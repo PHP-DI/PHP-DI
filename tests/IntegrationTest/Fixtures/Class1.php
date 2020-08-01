@@ -15,15 +15,13 @@ class Class1
 {
     /**
      * @Inject
-     * @var Class2
      */
-    public $property1;
+    public Class2 $property1;
 
     /**
      * @Inject
-     * @var Interface1
      */
-    public $property2;
+    public Interface1 $property2;
 
     /**
      * @Inject("namedDependency")
@@ -37,9 +35,8 @@ class Class1
 
     /**
      * @Inject
-     * @var LazyDependency
      */
-    public $property5;
+    public LazyDependency $property5;
 
     public $constructorParam1;
     public $constructorParam2;
@@ -55,9 +52,6 @@ class Class1
     public $method4Param1;
 
     /**
-     * @param Class2         $param1
-     * @param Interface1     $param2
-     * @param LazyDependency $param3
      * @throws \Exception
      */
     public function __construct(Class2 $param1, Interface1 $param2, LazyDependency $param3, $optional = true)

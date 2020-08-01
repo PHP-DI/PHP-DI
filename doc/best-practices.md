@@ -50,9 +50,8 @@ class UserController
 {
     /**
      * @Inject
-     * @var FormFactoryInterface
      */
-    private $formFactory;
+    private FormFactoryInterface $formFactory;
 
     public function createForm($type, $data, $options)
     {

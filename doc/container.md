@@ -190,9 +190,8 @@ class UserController extends BaseController
 {
     /**
      * @Inject
-     * @var SomeService
      */
-    private $someService;
+    private SomeService $someService;
 
     public function __construct()
     {

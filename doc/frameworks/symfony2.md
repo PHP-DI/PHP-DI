@@ -80,9 +80,8 @@ class ProductController
 {
     /**
      * @Inject
-     * @var ProductService
      */
-    private $productService;
+    private ProductService $productService;
 
     public function clearAction()
     {

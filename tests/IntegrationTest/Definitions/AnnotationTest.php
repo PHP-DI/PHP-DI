@@ -42,7 +42,6 @@ class AnnotationTest extends BaseContainerTest
         $object = $container->get(ConstructorInjection::class);
 
         self::assertEquals(new \stdClass, $object->typedValue);
-        self::assertEquals(new \stdClass, $object->untypedValue);
         self::assertEquals(new \stdClass, $object->typedOptionalValue);
         self::assertEquals('bar', $object->value);
         self::assertInstanceOf(\stdClass::class, $object->lazyService);
@@ -68,7 +67,6 @@ class AnnotationTest extends BaseContainerTest
         self::assertEquals('bar', $object->value);
         self::assertEquals('bar', $object->value2);
         self::assertInstanceOf(\stdClass::class, $object->entry);
-        self::assertInstanceOf(NamespacedClass::class, $object->importedNamespace);
         self::assertInstanceOf(\stdClass::class, $object->lazyService);
         self::assertInstanceOf(LazyLoadingInterface::class, $object->lazyService);
         self::assertFalse($object->lazyService->isProxyInitialized());
@@ -89,7 +87,6 @@ class AnnotationTest extends BaseContainerTest
         $object = $container->get(ConstructorInjection::class);
 
         self::assertEquals(new \stdClass, $object->typedValue);
-        self::assertEquals(new \stdClass, $object->untypedValue);
         self::assertEquals(new \stdClass, $object->typedOptionalValue);
         self::assertEquals('bar', $object->value);
         self::assertInstanceOf(\stdClass::class, $object->lazyService);
@@ -102,6 +99,7 @@ class AnnotationTest extends BaseContainerTest
 namespace DI\Test\IntegrationTest\Definitions\AnnotationTest;
 
 use DI\Annotation\Inject;
+use stdClass;
 
 class NonAnnotatedClass
 {
@@ -116,7 +114,6 @@ class ConstructorInjection
     public $value;
     public $scalarValue;
     public $typedValue;
-    public $untypedValue;
     public $typedOptionalValue;
     /** @var \ProxyManager\Proxy\LazyLoadingInterface */
     public $lazyService;
@@ -124,13 +121,11 @@ class ConstructorInjection
 
     /**
      * @Inject({"value" = "foo", "scalarValue" = "foo", "lazyService" = "lazyService"})
-     * @param \stdClass $untypedValue
      */
     public function __construct(
         $value,
         string $scalarValue,
         \stdClass $typedValue,
-        $untypedValue,
         \stdClass $typedOptionalValue = null,
         \stdClass $lazyService,
         $optionalValue = 'hello'
@@ -138,7 +133,6 @@ class ConstructorInjection
         $this->value = $value;
         $this->scalarValue = $scalarValue;
         $this->typedValue = $typedValue;
-        $this->untypedValue = $untypedValue;
         $this->typedOptionalValue = $typedOptionalValue;
         $this->lazyService = $lazyService;
         $this->optionalValue = $optionalValue;
@@ -157,14 +151,8 @@ class PropertyInjection
     public $value2;
     /**
      * @Inject
-     * @var \stdClass
      */
-    public $entry;
-    /**
-     * @Inject
-     * @var NamespacedClass
-     */
-    public $importedNamespace;
+    public stdClass $entry;
     /**
      * @Inject("lazyService")
      */
@@ -176,7 +164,6 @@ class MethodInjection
     public $value;
     public $scalarValue;
     public $typedValue;
-    public $untypedValue;
     public $typedOptionalValue;
     /** @var \ProxyManager\Proxy\LazyLoadingInterface */
     public $lazyService;
@@ -184,12 +171,10 @@ class MethodInjection
 
     /**
      * @Inject({"value" = "foo", "scalarValue" = "foo", "lazyService" = "lazyService"})
-     * @param \stdClass $untypedValue
      */
     public function method(
         $value,
         string $scalarValue,
-        \stdClass $typedValue,
         $untypedValue,
         \stdClass $typedOptionalValue = null,
         \stdClass $lazyService,
@@ -197,7 +182,6 @@ class MethodInjection
     ) {
         $this->value = $value;
         $this->scalarValue = $scalarValue;
-        $this->typedValue = $typedValue;
         $this->untypedValue = $untypedValue;
         $this->typedOptionalValue = $typedOptionalValue;
         $this->lazyService = $lazyService;

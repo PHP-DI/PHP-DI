@@ -8,14 +8,10 @@ class AnnotationFixture5
 {
     /**
      * @Inject
-     * @var foobar
      */
-    public $property;
+    public foobar $property;
 
-    /**
-     * @param foobar $foo
-     */
-    public function __construct($foo)
+    public function __construct(foobar $foo)
     {
     }
 }

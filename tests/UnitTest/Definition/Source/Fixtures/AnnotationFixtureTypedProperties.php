@@ -14,12 +14,6 @@ class AnnotationFixtureTypedProperties
     protected AnnotationFixture2 $typedAndInject;
 
     /**
-     * @Inject
-     * @var AnnotationFixture3
-     */
-    protected AnnotationFixture2 $typedAndVar;
-
-    /**
      * @Inject("name")
      */
     protected AnnotationFixture2 $typedAndNamed;
