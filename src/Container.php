@@ -183,7 +183,7 @@ class Container implements ContainerInterface, FactoryInterface, InvokerInterfac
      *
      * @throws InvalidArgumentException The name parameter must be of type string.
      */
-    public function has($name): bool
+    public function has($name) : bool
     {
         if (! is_string($name)) {
             throw new InvalidArgumentException(sprintf(
@@ -212,7 +212,7 @@ class Container implements ContainerInterface, FactoryInterface, InvokerInterfac
      * @throws DependencyException Error while injecting dependencies
      * @return object $instance Returns the same instance
      */
-    public function injectOn(object $instance): object
+    public function injectOn(object $instance) : object
     {
         $className = get_class($instance);
 

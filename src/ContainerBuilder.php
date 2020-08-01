@@ -337,7 +337,7 @@ class ContainerBuilder
         return (bool) $this->compileToDirectory;
     }
 
-    private function ensureNotLocked(): void
+    private function ensureNotLocked() : void
     {
         if ($this->locked) {
             throw new \LogicException('The ContainerBuilder cannot be modified after the container has been built');
