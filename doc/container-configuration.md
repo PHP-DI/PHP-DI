@@ -78,35 +78,3 @@ $container->addContainer($phpdiContainer);
 // Good to go!
 $foo = $container->get('foo');
 ```
-
-## Ignoring phpDoc errors
-
-*Added in v4.4*
-
-If you use annotations and your phpDoc is not always correct, you can set up the container to silently ignore those errors:
-
-```php
-$builder->ignorePhpDocErrors(true);
-```
-
-For example:
-
-```php
-class Foo
-{
-    /**
-     * @param NonExistentClass $param
-     */
-    public function useAutowiring($param)
-    {
-    }
-}
-```
-
-Here, PHP-DI will throw an exception because `NonExistentClass` doesn't exist: this is a phpDoc error.
-
-There has been reports that PHP-FPM might choke on such errors and report it with a message like this:
-
-> Handler for fastcgi-script returned invalid result code 1
-
-In case the errors still occur, make sure your annotations are correct or temporarily disable annotations (`$builder->useAnnotations(false)`) to prevent fatal errors and try to clean up your configuration form there.

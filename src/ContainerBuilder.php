@@ -57,11 +57,6 @@ class ContainerBuilder
     private $useAnnotations = false;
 
     /**
-     * @var bool
-     */
-    private $ignorePhpDocErrors = false;
-
-    /**
      * If true, write the proxies to disk to improve performances.
      * @var bool
      */
@@ -131,7 +126,7 @@ class ContainerBuilder
         $sources = array_reverse($this->definitionSources);
 
         if ($this->useAnnotations) {
-            $autowiring = new AnnotationBasedAutowiring($this->ignorePhpDocErrors);
+            $autowiring = new AnnotationBasedAutowiring;
             $sources[] = $autowiring;
         } elseif ($this->useAutowiring) {
             $autowiring = new ReflectionBasedAutowiring;
@@ -249,20 +244,6 @@ class ContainerBuilder
         $this->ensureNotLocked();
 
         $this->useAnnotations = $bool;
-
-        return $this;
-    }
-
-    /**
-     * Enable or disable ignoring phpdoc errors (non-existent classes in `@param` or `@var`).
-     *
-     * @return $this
-     */
-    public function ignorePhpDocErrors(bool $bool) : self
-    {
-        $this->ensureNotLocked();
-
-        $this->ignorePhpDocErrors = $bool;
 
         return $this;
     }
