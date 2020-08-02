@@ -317,6 +317,7 @@ class AutowireDefinitionTest extends BaseContainerTest
 
     /**
      * @dataProvider provideContainer
+     * @requires PHP < 8
      */
     public function test_optional_parameter_followed_by_required_parameters(ContainerBuilder $builder)
     {
