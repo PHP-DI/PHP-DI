@@ -167,6 +167,7 @@ MESSAGE;
 
     /**
      * @dataProvider provideContainer
+     * @requires PHP < 8
      */
     public function test_internal_class_default_parameter_value(ContainerBuilder $builder)
     {
