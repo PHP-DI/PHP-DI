@@ -166,8 +166,7 @@ class Compiler
 
         ob_start();
         require __DIR__ . '/Template.php';
-        $fileContent = ob_get_contents();
-        ob_end_clean();
+        $fileContent = ob_get_clean();
 
         $fileContent = "<?php\n" . $fileContent;
 
