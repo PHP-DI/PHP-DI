@@ -202,8 +202,8 @@ class Compiler
 
         @chmod($tmpFile, 0666);
         $renamed = @rename($tmpFile, $fileName);
-        @unlink($tmpFile);
         if (!$renamed) {
+            @unlink($tmpFile);
             throw new InvalidArgumentException(sprintf('Error while renaming %s to %s', $tmpFile, $fileName));
         }
 
