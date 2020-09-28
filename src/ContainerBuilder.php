@@ -6,6 +6,7 @@ namespace DI;
 
 use DI\Compiler\Compiler;
 use DI\Definition\Source\AnnotationBasedAutowiring;
+use DI\Definition\Source\AttributeBasedAutowiring;
 use DI\Definition\Source\DefinitionArray;
 use DI\Definition\Source\DefinitionFile;
 use DI\Definition\Source\DefinitionSource;
@@ -47,6 +48,8 @@ class ContainerBuilder
     private bool $useAutowiring = true;
 
     private bool $useAnnotations = false;
+
+    private bool $useAttributes = false;
 
     /**
      * If true, write the proxies to disk to improve performances.
@@ -104,7 +107,10 @@ class ContainerBuilder
     {
         $sources = array_reverse($this->definitionSources);
 
-        if ($this->useAnnotations) {
+        if ($this->useAttributes) {
+            $autowiring = new AttributeBasedAutowiring;
+            $sources[] = $autowiring;
+        } elseif ($this->useAnnotations) {
             $autowiring = new AnnotationBasedAutowiring;
             $sources[] = $autowiring;
         } elseif ($this->useAutowiring) {
@@ -224,6 +230,22 @@ class ContainerBuilder
         $this->ensureNotLocked();
 
         $this->useAnnotations = $bool;
+
+        return $this;
+    }
+
+    /**
+     * Enable or disable the use of PHP 8 attributes to configure injections.
+     *
+     * Disabled by default.
+     *
+     * @return $this
+     */
+    public function useAttributes(bool $bool) : self
+    {
+        $this->ensureNotLocked();
+
+        $this->useAttributes = $bool;
 
         return $this;
     }

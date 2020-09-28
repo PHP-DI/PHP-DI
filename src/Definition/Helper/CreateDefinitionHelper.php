@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace DI\Definition\Helper;
 
-use DI\Definition\Definition;
 use DI\Definition\Exception\InvalidDefinition;
 use DI\Definition\ObjectDefinition;
 use DI\Definition\ObjectDefinition\MethodInjection;
