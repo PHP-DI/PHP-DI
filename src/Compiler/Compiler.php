@@ -185,7 +185,7 @@ class Compiler
 
     private function writeFileAtomic(string $fileName, string $content) : int
     {
-        $tmpFile = tempnam(dirname($fileName), 'swap-compile');
+        $tmpFile = @tempnam(dirname($fileName), 'swap-compile');
         if ($tmpFile === false) {
             throw new InvalidArgumentException(
                 sprintf('Error while creating temporary file in %s', dirname($fileName))
