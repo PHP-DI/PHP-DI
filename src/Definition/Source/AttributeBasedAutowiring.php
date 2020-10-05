@@ -187,11 +187,6 @@ class AttributeBasedAutowiring implements DefinitionSource, Autowiring
         // Look for #[Inject] attribute
         try {
             $attribute = $method->getAttributes(Inject::class)[0] ?? null;
-            if (! $attribute) {
-                return null;
-            }
-            /** @var Inject $inject */
-            $inject = $attribute->newInstance();
         } catch (Throwable $e) {
             throw new InvalidAnnotation(sprintf(
                 '#[Inject] annotation on %s::%s() is malformed. %s',
@@ -201,7 +196,16 @@ class AttributeBasedAutowiring implements DefinitionSource, Autowiring
             ), 0, $e);
         }
 
-        $annotationParameters = $inject->getParameters();
+        if ($attribute) {
+            /** @var Inject $inject */
+            $inject = $attribute->newInstance();
+            $annotationParameters = $inject->getParameters();
+        } elseif ($method->isConstructor()) {
+            // #[Inject] on constructor is implicit, we continue
+            $annotationParameters = [];
+        } else {
+            return null;
+        }
 
         $parameters = [];
         foreach ($method->getParameters() as $index => $parameter) {

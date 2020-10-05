@@ -24,11 +24,9 @@ final class Injectable
      */
     private ?bool $lazy = null;
 
-    public function __construct(array $values)
+    public function __construct(?bool $lazy = null)
     {
-        if (isset($values['lazy'])) {
-            $this->lazy = (bool) $values['lazy'];
-        }
+        $this->lazy = $lazy;
     }
 
     public function isLazy() : ?bool

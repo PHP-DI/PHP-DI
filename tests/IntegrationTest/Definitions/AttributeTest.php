@@ -6,6 +6,7 @@ namespace DI\Test\IntegrationTest\Definitions;
 
 use DI\ContainerBuilder;
 use DI\Test\IntegrationTest\BaseContainerTest;
+use DI\Test\IntegrationTest\Definitions\AttributesTest\AutowiredClass;
 use DI\Test\IntegrationTest\Definitions\AttributesTest\ConstructorInjection;
 use DI\Test\IntegrationTest\Definitions\AttributesTest\NonAnnotatedClass;
 use DI\Test\IntegrationTest\Definitions\AttributesTest\PropertyInjection;
@@ -31,7 +32,7 @@ class AttributeTest extends BaseContainerTest
     /**
      * @dataProvider provideContainer
      */
-    public function test_constructor_injection(ContainerBuilder $builder)
+    public function test_supports_autowiring(ContainerBuilder $builder)
     {
         $builder->useAttributes(true);
         $builder->addDefinitions([
@@ -49,6 +50,19 @@ class AttributeTest extends BaseContainerTest
         self::assertInstanceOf(LazyLoadingInterface::class, $object->lazyService);
         self::assertFalse($object->lazyService->isProxyInitialized());
         self::assertEquals('hello', $object->optionalValue);
+    }
+
+    /**
+     * @dataProvider provideContainer
+     */
+    public function test_constructor_injection(ContainerBuilder $builder)
+    {
+        $builder->useAttributes(true);
+        $container = $builder->build();
+
+        $object = $container->get(AutowiredClass::class);
+
+        self::assertEquals(new \stdClass, $object->entry);
     }
 
     /**
@@ -108,6 +122,15 @@ class NonAnnotatedClass
 
 class NamespacedClass
 {
+}
+
+class AutowiredClass
+{
+    public stdClass $entry;
+    public function __construct(stdClass $entry)
+    {
+        $this->entry = $entry;
+    }
 }
 
 class ConstructorInjection
