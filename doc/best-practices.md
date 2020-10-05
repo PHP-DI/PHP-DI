@@ -46,11 +46,11 @@ This is the solution we recommend.
 Example:
 
 ```php
+
+
 class UserController
 {
-    /**
-     * @Inject
-     */
+    #[Inject]
     private FormFactoryInterface $formFactory;
 
     public function createForm($type, $data, $options)
@@ -67,7 +67,7 @@ Property injection is generally frowned upon, and for good reasons:
 
 - injecting in a private property breaks encapsulation
 - it is not an explicit dependency: there is no contract saying your class need the property to be set to work
-- if you use PHP-DI's annotations to mark the dependency to be injected, your class is dependent on the container (see the 2nd rule above)
+- if you use PHP-DI's attributes to mark the dependency to be injected, your class is dependent on the container (see the 2nd rule above)
 
 BUT
 
@@ -82,13 +82,13 @@ So:
 (because most dependencies like Request, Response, templating system, etc. will have changed)
 
 This solution offers many benefits for no major drawback, so
-**we recommend using annotations in controllers**.
+**we recommend using attributes in controllers**.
 
 
 ## Writing services
 
 Given a service is intended to be reused, tested and independent of your framework, **we do not recommend
-using annotations for injecting dependencies**.
+using attributes for injecting dependencies**.
 
 Instead, we recommend using **constructor injection and autowiring**:
 

@@ -5,6 +5,10 @@ current_menu: annotations
 
 # Annotations
 
+**Since PHP 8, annotations are deprecated in favor of [PHP attributes](attributes.md).**
+
+---
+
 On top of [autowiring](autowiring.md) and [PHP configuration files](php-definitions.md), you can define injections using annotations.
 
 Using annotations do not affect performances when [compiling the container](performances.md).
