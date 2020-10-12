@@ -65,12 +65,12 @@ class AnnotationBasedAutowiringTest extends TestCase
         (new AnnotationBasedAutowiring)->autowire(AnnotationFixture4::class);
     }
 
+    /**
+     * Typed properties support requires PHP 7.4
+     * @requires PHP 7.4
+     */
     public function testTypedProperty()
     {
-        if (PHP_VERSION_ID < 70400) {
-            $this->markTestSkipped('Typed properties support requires PHP7.4');
-        }
-
         $definition = (new AnnotationBasedAutowiring)->autowire(AnnotationFixtureTypedProperties::class);
 
         $this->assertNotHasPropertyInjection($definition, 'typeAndNoInject');
@@ -79,12 +79,12 @@ class AnnotationBasedAutowiringTest extends TestCase
         $this->assertHasPropertyInjection($definition, 'typedAndNamed', 'name');
     }
 
+    /**
+     * Typed properties support requires PHP 7.4
+     * @requires PHP 7.4
+     */
     public function testScalarTypedPropertiesFail()
     {
-        if (PHP_VERSION_ID < 70400) {
-            $this->markTestSkipped('Typed properties support requires PHP7.4');
-        }
-
         $this->expectException(\DI\Definition\Exception\InvalidAnnotation::class);
         (new AnnotationBasedAutowiring)->autowire(AnnotationFixtureScalarTypedProperty::class);
     }

@@ -7,6 +7,7 @@ namespace DI\Definition\Source;
 use DI\Definition\ObjectDefinition;
 use DI\Definition\ObjectDefinition\MethodInjection;
 use DI\Definition\Reference;
+use ReflectionNamedType;
 
 /**
  * Reads DI class definitions using reflection.
@@ -62,11 +63,21 @@ class ReflectionBasedAutowiring implements DefinitionSource, Autowiring
                 continue;
             }
 
-            $parameterClass = $parameter->getClass();
-
-            if ($parameterClass) {
-                $parameters[$index] = new Reference($parameterClass->getName());
+            $parameterType = $parameter->getType();
+            if (!$parameterType) {
+                // No type
+                continue;
             }
+            if ($parameterType->isBuiltin()) {
+                // Primitive types are not supported
+                continue;
+            }
+            if (!$parameterType instanceof ReflectionNamedType) {
+                // Union types are not supported
+                continue;
+            }
+
+            $parameters[$index] = new Reference($parameterType->getName());
         }
 
         return $parameters;

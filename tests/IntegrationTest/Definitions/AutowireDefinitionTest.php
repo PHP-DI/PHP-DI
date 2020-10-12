@@ -317,6 +317,7 @@ class AutowireDefinitionTest extends BaseContainerTest
 
     /**
      * @dataProvider provideContainer
+     * @requires PHP < 8
      */
     public function test_optional_parameter_followed_by_required_parameters(ContainerBuilder $builder)
     {
@@ -333,10 +334,6 @@ class AutowireDefinitionTest extends BaseContainerTest
      */
     public function test_php71_nullable_typehint(ContainerBuilder $builder)
     {
-        if (PHP_VERSION_ID < 70100) {
-            $this->markTestSkipped('This test cannot run on PHP 7');
-        }
-
         $container = $builder->build();
 
         $object = $container->get(Php71::class);
