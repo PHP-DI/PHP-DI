@@ -40,7 +40,7 @@ jobs:
                 if: matrix.php != '8.0'
                 run: composer update ${{ matrix.dependency-version }} --prefer-dist --no-interaction --no-progress --no-suggest
             -   name: 'Install PHP dependencies on PHP 8 (TODO: remove that)'
-                if: matrix.php = '8.0'
+                if: matrix.php == '8.0'
                 run: composer update --ignore-platform-reqs ${{ matrix.dependency-version }} --prefer-dist --no-interaction --no-progress --no-suggest
             -   name: PHPUnit
                 run: vendor/bin/phpunit
