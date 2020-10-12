@@ -62,7 +62,7 @@ jobs:
             -   name: Install PHP dependencies
                 run: composer install --no-interaction --no-progress --no-suggest
             -   name: PHP CS Fixer
-                run: php-cs-fixer --format=checkstyle | vendor/bin/cs2pr
+                run: vendor/bin/php-cs-fixer --format=checkstyle | cs2pr
 
     phpstan:
         name: PHPStan
@@ -85,4 +85,4 @@ jobs:
             -   name: Install PHP dependencies
                 run: composer install --no-interaction --no-progress --no-suggest
             -   name: PHPStan
-                run: phpstan analyse --error-format=checkstyle | vendor/bin/cs2pr
+                run: vendor/bin/phpstan analyse --error-format=checkstyle | cs2pr
