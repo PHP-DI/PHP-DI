@@ -334,10 +334,6 @@ class AutowireDefinitionTest extends BaseContainerTest
      */
     public function test_php71_nullable_typehint(ContainerBuilder $builder)
     {
-        if (PHP_VERSION_ID < 70100) {
-            $this->markTestSkipped('This test cannot run on PHP 7');
-        }
-
         $container = $builder->build();
 
         $object = $container->get(Php71::class);

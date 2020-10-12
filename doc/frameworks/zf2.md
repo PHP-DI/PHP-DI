@@ -89,7 +89,7 @@ Annotations are disabled by default since PHP-DI 5. To enable them, use the foll
 ```php
 return [
     'phpdi-zf2' => [
-        'useAnntotations' => true,
+        'useAnnotations' => true,
     ]
 ];
 ```
