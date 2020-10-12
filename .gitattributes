@@ -1,4 +1,5 @@
 # .gitattributes
+.github/ export-ignore
 tests/ export-ignore
 website/ export-ignore
 doc/ export-ignore
