@@ -7,7 +7,6 @@ namespace DI\Test\UnitTest\Definition\Source\Fixtures;
 class AnnotationFixture5
 {
     /**
-     * @Inject
      * @var foobar
      */
     public $property;

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace DI\Compiler;
 
+use function chmod;
 use DI\Definition\ArrayDefinition;
 use DI\Definition\DecoratorDefinition;
 use DI\Definition\Definition;
@@ -17,8 +18,14 @@ use DI\Definition\StringDefinition;
 use DI\Definition\ValueDefinition;
 use DI\DependencyException;
 use DI\Proxy\ProxyFactory;
+use function dirname;
+use function file_put_contents;
 use InvalidArgumentException;
 use Opis\Closure\SerializableClosure;
+use function rename;
+use function sprintf;
+use function tempnam;
+use function unlink;
 
 /**
  * Compiles the container into PHP code much more optimized for performances.
@@ -166,15 +173,41 @@ class Compiler
 
         ob_start();
         require __DIR__ . '/Template.php';
-        $fileContent = ob_get_contents();
-        ob_end_clean();
+        $fileContent = ob_get_clean();
 
         $fileContent = "<?php\n" . $fileContent;
 
         $this->createCompilationDirectory(dirname($fileName));
-        file_put_contents($fileName, $fileContent);
+        $this->writeFileAtomic($fileName, $fileContent);
 
         return $fileName;
+    }
+
+    private function writeFileAtomic(string $fileName, string $content) : int
+    {
+        $tmpFile = @tempnam(dirname($fileName), 'swap-compile');
+        if ($tmpFile === false) {
+            throw new InvalidArgumentException(
+                sprintf('Error while creating temporary file in %s', dirname($fileName))
+            );
+        }
+        @chmod($tmpFile, 0666);
+
+        $written = file_put_contents($tmpFile, $content);
+        if ($written === false) {
+            @unlink($tmpFile);
+
+            throw new InvalidArgumentException(sprintf('Error while writing to %s', $tmpFile));
+        }
+
+        @chmod($tmpFile, 0666);
+        $renamed = @rename($tmpFile, $fileName);
+        if (!$renamed) {
+            @unlink($tmpFile);
+            throw new InvalidArgumentException(sprintf('Error while renaming %s to %s', $tmpFile, $fileName));
+        }
+
+        return $written;
     }
 
     /**
