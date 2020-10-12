@@ -66,7 +66,8 @@ class AnnotationBasedAutowiringTest extends TestCase
     }
 
     /**
-     * @requires PHP >= 7.4 Typed properties support requires PHP7.4
+     * Typed properties support requires PHP 7.4
+     * @requires PHP 7.4
      */
     public function testTypedProperty()
     {
@@ -79,7 +80,8 @@ class AnnotationBasedAutowiringTest extends TestCase
     }
 
     /**
-     * @requires PHP >= 7.4 Typed properties support requires PHP7.4
+     * Typed properties support requires PHP 7.4
+     * @requires PHP 7.4
      */
     public function testScalarTypedPropertiesFail()
     {
