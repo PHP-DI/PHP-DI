@@ -16,7 +16,7 @@ use DI\Definition\Exception\InvalidAnnotation;
  *
  * @author Matthieu Napoli <matthieu@mnapoli.fr>
  */
-#[Attribute(Attribute::TARGET_PROPERTY | Attribute::TARGET_METHOD)]
+#[Attribute(Attribute::TARGET_PROPERTY | Attribute::TARGET_METHOD | Attribute::TARGET_PARAMETER)]
 final class Inject
 {
     /**

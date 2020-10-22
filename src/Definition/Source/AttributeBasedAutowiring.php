@@ -179,22 +179,10 @@ class AttributeBasedAutowiring implements DefinitionSource, Autowiring
         }
     }
 
-    /**
-     * @throws InvalidAnnotation
-     */
     private function getMethodInjection(ReflectionMethod $method) : ?MethodInjection
     {
         // Look for #[Inject] attribute
-        try {
-            $attribute = $method->getAttributes(Inject::class)[0] ?? null;
-        } catch (Throwable $e) {
-            throw new InvalidAnnotation(sprintf(
-                '#[Inject] annotation on %s::%s() is malformed. %s',
-                $method->getDeclaringClass()->getName(),
-                $method->getName(),
-                $e->getMessage()
-            ), 0, $e);
-        }
+        $attribute = $method->getAttributes(Inject::class)[0] ?? null;
 
         if ($attribute) {
             /** @var Inject $inject */
@@ -228,6 +216,14 @@ class AttributeBasedAutowiring implements DefinitionSource, Autowiring
      */
     private function getMethodParameter(int $parameterIndex, ReflectionParameter $parameter, array $annotationParameters) : ?string
     {
+        // Let's check if this parameter has an #[Inject] attribute
+        $attribute = $parameter->getAttributes(Inject::class)[0] ?? null;
+        if ($attribute) {
+            /** @var Inject $inject */
+            $inject = $attribute->newInstance();
+            return $inject->getName();
+        }
+
         // #[Inject] has definition for this parameter (by index, or by name)
         if (isset($annotationParameters[$parameterIndex])) {
             return $annotationParameters[$parameterIndex];
