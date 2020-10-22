@@ -57,15 +57,17 @@ class Example
     private $property3;
 
     /**
-     * Attribute specifying exactly what to inject on the constructor:
+     * The constructor is of course always called, but the
+     * #[Inject] attribute can be used on a parameter
+     * to specify what to inject.
      */
-    #[Inject(['db.host', 'db.name'])]
-    public function __construct($param1, $param2)
+    public function __construct(Foo $foo, #[Inject('db.host')] $dbHost)
     {
     }
 
     /**
-     * Attribute combined with PHP types:
+     * #[Inject] tells PHP-DI to call the method.
+     * By default, PHP-DI uses the PHP types to find the service to inject:
      */
     #[Inject]
     public function method1(Foo $param)
@@ -73,10 +75,20 @@ class Example
     }
 
     /**
+     * #[Inject] can be used at the parameter level to
+     * specify what to inject.
+     * Note: #[Inject] *must be place* on the function too.
+     */
+    #[Inject]
+    public function method2(#[Inject('db.host')] $param)
+    {
+    }
+
+    /**
      * Explicit definition of the entries to inject:
      */
     #[Inject(['db.host', 'db.name'])]
-    public function method2($param1, $param2)
+    public function method3($param1, $param2)
     {
     }
 
@@ -85,7 +97,7 @@ class Example
      * (types are used for the other parameters):
      */
     #[Inject(['param2' => 'db.host'])]
-    public function method3(Foo $param1, $param2)
+    public function method4(Foo $param1, $param2)
     {
     }
 }

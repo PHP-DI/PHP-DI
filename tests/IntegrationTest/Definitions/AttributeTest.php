@@ -12,6 +12,7 @@ use DI\Test\IntegrationTest\Definitions\AttributesTest\NonAnnotatedClass;
 use DI\Test\IntegrationTest\Definitions\AttributesTest\PropertyInjection;
 use ProxyManager\Proxy\LazyLoadingInterface;
 use function DI\autowire;
+use function DI\create;
 
 /**
  * Test definitions autowired with attributes.
@@ -32,12 +33,13 @@ class AttributeTest extends BaseContainerTest
     /**
      * @dataProvider provideContainer
      */
-    public function test_supports_autowiring(ContainerBuilder $builder)
+    public function test_constructor_injection(ContainerBuilder $builder)
     {
         $builder->useAttributes(true);
         $builder->addDefinitions([
             'foo' => 'bar',
             'lazyService' => autowire(\stdClass::class)->lazy(),
+            'attribute' => create(\stdClass::class),
         ]);
         $container = $builder->build();
 
@@ -49,13 +51,14 @@ class AttributeTest extends BaseContainerTest
         self::assertInstanceOf(\stdClass::class, $object->lazyService);
         self::assertInstanceOf(LazyLoadingInterface::class, $object->lazyService);
         self::assertFalse($object->lazyService->isProxyInitialized());
+        self::assertSame($container->get('attribute'), $object->attribute);
         self::assertEquals('hello', $object->optionalValue);
     }
 
     /**
      * @dataProvider provideContainer
      */
-    public function test_constructor_injection(ContainerBuilder $builder)
+    public function test_supports_autowiring(ContainerBuilder $builder)
     {
         $builder->useAttributes(true);
         $container = $builder->build();
@@ -96,6 +99,7 @@ class AttributeTest extends BaseContainerTest
         $builder->addDefinitions([
             'foo' => 'bar',
             'lazyService' => autowire(\stdClass::class)->lazy(),
+            'attribute' => create(\stdClass::class),
         ]);
         $container = $builder->build();
 
@@ -107,6 +111,7 @@ class AttributeTest extends BaseContainerTest
         self::assertInstanceOf(\stdClass::class, $object->lazyService);
         self::assertInstanceOf(LazyLoadingInterface::class, $object->lazyService);
         self::assertFalse($object->lazyService->isProxyInitialized());
+        self::assertSame($container->get('attribute'), $object->attribute);
         self::assertEquals('hello', $object->optionalValue);
     }
 }
@@ -136,12 +141,13 @@ class AutowiredClass
 class ConstructorInjection
 {
     public $value;
-    public $scalarValue;
-    public $typedValue;
-    public $typedOptionalValue;
-    /** @var \ProxyManager\Proxy\LazyLoadingInterface */
+    public string $scalarValue;
+    public stdClass $typedValue;
+    public ?stdClass $typedOptionalValue;
+    /** @var stdClass&\ProxyManager\Proxy\LazyLoadingInterface */
     public $lazyService;
-    public $optionalValue;
+    public stdClass $attribute;
+    public string $optionalValue;
 
     #[Inject(['value' => 'foo', 'scalarValue' => 'foo', 'lazyService' => 'lazyService'])]
     public function __construct(
@@ -150,13 +156,16 @@ class ConstructorInjection
         \stdClass $typedValue,
         \stdClass $typedOptionalValue = null,
         \stdClass $lazyService,
-        $optionalValue = 'hello'
+        #[Inject('attribute')]
+        \stdClass $attribute,
+        string $optionalValue = 'hello'
     ) {
         $this->value = $value;
         $this->scalarValue = $scalarValue;
         $this->typedValue = $typedValue;
         $this->typedOptionalValue = $typedOptionalValue;
         $this->lazyService = $lazyService;
+        $this->attribute = $attribute;
         $this->optionalValue = $optionalValue;
     }
 }
@@ -181,6 +190,7 @@ class MethodInjection
     public $typedOptionalValue;
     /** @var \ProxyManager\Proxy\LazyLoadingInterface */
     public $lazyService;
+    public stdClass $attribute;
     public $optionalValue;
 
     #[Inject(['value' => 'foo', 'scalarValue' => 'foo', 'lazyService' => 'lazyService'])]
@@ -190,6 +200,8 @@ class MethodInjection
         $untypedValue,
         \stdClass $typedOptionalValue = null,
         \stdClass $lazyService,
+        #[Inject('attribute')]
+        stdClass $attribute,
         $optionalValue = 'hello'
     ) {
         $this->value = $value;
@@ -197,6 +209,7 @@ class MethodInjection
         $this->untypedValue = $untypedValue;
         $this->typedOptionalValue = $typedOptionalValue;
         $this->lazyService = $lazyService;
+        $this->attribute = $attribute;
         $this->optionalValue = $optionalValue;
     }
 }
