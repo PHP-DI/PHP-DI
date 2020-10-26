@@ -28,7 +28,7 @@ jobs:
                 uses: shivammathur/setup-php@v2
                 with:
                     php-version: ${{ matrix.php }}
-                    tools: composer
+                    tools: composer:v1
                     coverage: none
             -   name: Cache Composer dependencies
                 uses: actions/cache@v2
