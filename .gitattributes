@@ -1,6 +1,3 @@
-# Auto detect text files and perform LF normalization
-* text=auto
-
 # .gitattributes
 .github           export-ignore
 tests             export-ignore
@@ -19,3 +16,5 @@ couscous.yml      export-ignore
 phpunit.xml.dist  export-ignore
 SECURITY.md       export-ignore
 
+# Auto detect text files and perform LF normalization
+* text=auto
