@@ -1,9 +1,21 @@
-# .gitattributes
-.github/ export-ignore
-tests/ export-ignore
-website/ export-ignore
-doc/ export-ignore
-news/ export-ignore
-
 # Auto detect text files and perform LF normalization
 * text=auto
+
+# .gitattributes
+.github           export-ignore
+tests             export-ignore
+website           export-ignore
+doc               export-ignore
+news              export-ignore
+.gitattributes    export-ignore
+.gitignore        export-ignore
+.gitstats.yml     export-ignore
+.php_cs           export-ignore
+.phpstorm.meta.php export-ignore
+404.md            export-ignore
+CONTRIBUTING.md   export-ignore
+couscous.yml      export-ignore
+*.neon            export-ignore
+phpunit.xml.dist  export-ignore
+SECURITY.md       export-ignore
+
