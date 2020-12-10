@@ -16,9 +16,9 @@ class ContainerDebugTest extends BaseContainerTest
     {
         $expectedEntries = [
             'DI\Container',
+            'DI\ContainerInterface',
             'DI\FactoryInterface',
             'Invoker\InvokerInterface',
-            'Psr\Container\ContainerInterface',
             'bar',
             'foo',
         ];

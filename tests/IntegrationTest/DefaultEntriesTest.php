@@ -6,10 +6,10 @@ namespace DI\Test\IntegrationTest;
 
 use DI\Container;
 use DI\ContainerBuilder;
+use DI\ContainerInterface;
 use DI\FactoryInterface;
 use DI\Test\IntegrationTest\BaseContainerTest;
 use Invoker\InvokerInterface;
-use Psr\Container\ContainerInterface;
 
 /**
  * Test entries registered by default.

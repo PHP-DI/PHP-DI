@@ -27,7 +27,6 @@ use Invoker\ParameterResolver\Container\TypeHintContainerResolver;
 use Invoker\ParameterResolver\DefaultValueResolver;
 use Invoker\ParameterResolver\NumericArrayResolver;
 use Invoker\ParameterResolver\ResolverChain;
-use Psr\Container\ContainerInterface;
 
 /**
  * Dependency Injection Container.
