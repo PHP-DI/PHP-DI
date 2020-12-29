@@ -33,7 +33,7 @@ class EnvironmentVariableResolver implements DefinitionResolver
 
     protected function getEnvVariable(string $variableName)
     {
-        return $_ENV[$variableName];
+        return isset($_SERVER[$variableName]) ? $_SERVER[$variableName]: false;
     }
 
     /**
