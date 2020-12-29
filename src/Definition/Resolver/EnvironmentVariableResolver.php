@@ -61,13 +61,13 @@ class EnvironmentVariableResolver implements DefinitionResolver
         return $value;
     }
 
-    public function isResolvable(Definition $definition, array $parameters = []): bool
+    public function isResolvable(Definition $definition, array $parameters = []) : bool
     {
         return true;
     }
 
     protected function getEnvVariable(string $variableName)
     {
-        return isset($_SERVER[$variableName]) ? $_SERVER[$variableName] : false;
+        return $_SERVER[$variableName] ?? false;
     }
 }
