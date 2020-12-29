@@ -25,10 +25,15 @@ class EnvironmentVariableResolver implements DefinitionResolver
      */
     private $variableReader;
 
-    public function __construct(DefinitionResolver $definitionResolver, $variableReader = 'getenv')
+    public function __construct(DefinitionResolver $definitionResolver, $variableReader = null)
     {
         $this->definitionResolver = $definitionResolver;
-        $this->variableReader = $variableReader;
+        $this->variableReader = $variableReader || [$this, 'getEnvVariable'];
+    }
+
+    protected function getEnvVariable(string $variableName)
+    {
+        return $_ENV[$variableName];
     }
 
     /**
