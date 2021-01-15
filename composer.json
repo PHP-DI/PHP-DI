@@ -35,7 +35,7 @@
         "phpunit/phpunit": "^8.5|^9.0",
         "mnapoli/phpunit-easymock": "^1.2",
         "doctrine/annotations": "~1.2",
-        "ocramius/proxy-manager": "~2.0.2",
+        "ocramius/proxy-manager": "^2.0.2",
         "friendsofphp/php-cs-fixer": "^2.4",
         "phpstan/phpstan": "^0.12"
     },
