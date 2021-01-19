@@ -74,28 +74,28 @@ class ContainerDebugTest extends BaseContainerTest
         });
 
         // Default definitions
-        $this->assertRegExp('/^Object \(\n {4}class = DI\\\Container\n/', $container->debugEntry('DI\Container'));
-        $this->assertRegExp(
+        $this->assertMatchesRegularExpression('/^Object \(\n {4}class = DI\\\Container\n/', $container->debugEntry('DI\Container'));
+        $this->assertMatchesRegularExpression(
             '/^Object \(\n {4}class = #NOT INSTANTIABLE# DI\\\FactoryInterface\n/',
             $container->debugEntry('DI\FactoryInterface')
         );
-        $this->assertRegExp(
+        $this->assertMatchesRegularExpression(
             '/^Object \(\n {4}class = #NOT INSTANTIABLE# Invoker\\\InvokerInterface\n/',
             $container->debugEntry('Invoker\InvokerInterface')
         );
-        $this->assertRegExp(
+        $this->assertMatchesRegularExpression(
             '/^Object \(\n {4}class = #NOT INSTANTIABLE# Psr\\\Container\\\ContainerInterface\n/',
             $container->debugEntry('Psr\Container\ContainerInterface')
         );
 
         // Container definitions
-        $this->assertRegExp('/^Object \(\n {4}class = DI\\\Container\n/', $container->debugEntry('create'));
-        $this->assertRegExp('/^Object \(\n {4}class = DI\\\Container\n/', $container->debugEntry('autowire'));
+        $this->assertMatchesRegularExpression('/^Object \(\n {4}class = DI\\\Container\n/', $container->debugEntry('create'));
+        $this->assertMatchesRegularExpression('/^Object \(\n {4}class = DI\\\Container\n/', $container->debugEntry('autowire'));
         $this->assertEquals('Factory', $container->debugEntry('factory'));
         $this->assertEquals('Factory', $container->debugEntry('callback'));
         $this->assertEquals('Decorate(decorator)', $container->debugEntry('decorator'));
         $this->assertEquals('get(value)', $container->debugEntry('alias'));
-        $this->assertRegExp('/^Environment variable \(\n {4}variable = foo\n/', $container->debugEntry('environment'));
+        $this->assertMatchesRegularExpression('/^Environment variable \(\n {4}variable = foo\n/', $container->debugEntry('environment'));
         $this->assertEquals("[\n    0 => 'foo',\n    1 => 'bar',\n]", $container->debugEntry('array'));
         $this->assertEquals('foo', $container->debugEntry('string'));
         $this->assertEquals('Value (1.5)', $container->debugEntry('float'));
