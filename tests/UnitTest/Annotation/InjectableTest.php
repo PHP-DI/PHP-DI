@@ -24,7 +24,7 @@ class InjectableTest extends TestCase
      */
     private $annotationReader;
 
-    public function setUp()
+    public function setUp(): void
     {
         $definitionReader = new AnnotationBasedAutowiring();
         $this->annotationReader = $definitionReader->getAnnotationReader();

@@ -15,8 +15,8 @@ use DI\Test\UnitTest\Definition\Resolver\Fixture\FixtureClass;
 use DI\Test\UnitTest\Definition\Resolver\Fixture\FixtureInterface;
 use DI\Test\UnitTest\Definition\Resolver\Fixture\NoConstructor;
 use EasyMock\EasyMock;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use PHPUnit_Framework_MockObject_MockObject;
 
 /**
  * @covers \DI\Definition\Resolver\ObjectCreator
@@ -27,12 +27,12 @@ class ObjectCreatorTest extends TestCase
     use EasyMock;
 
     /**
-     * @var ProxyFactory|PHPUnit_Framework_MockObject_MockObject
+     * @var ProxyFactory|MockObject
      */
     private $proxyFactory;
 
     /**
-     * @var DefinitionResolver|PHPUnit_Framework_MockObject_MockObject
+     * @var DefinitionResolver|MockObject
      */
     private $parentResolver;
 
@@ -41,7 +41,7 @@ class ObjectCreatorTest extends TestCase
      */
     private $resolver;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->proxyFactory = $this->easyMock(ProxyFactory::class);
         $this->parentResolver = $this->easyMock(DefinitionResolver::class);
@@ -123,7 +123,7 @@ class ObjectCreatorTest extends TestCase
         $this->parentResolver->expects($this->once())
             ->method('resolve')
             ->with($this->isInstanceOf(ObjectDefinition::class))
-            ->will($this->returnValue('bar'));
+            ->willReturn('bar');
 
         $object = $this->resolver->resolve($definition);
 
@@ -144,7 +144,7 @@ class ObjectCreatorTest extends TestCase
         $this->parentResolver->expects($this->once())
             ->method('resolve')
             ->with($this->isInstanceOf(ObjectDefinition::class))
-            ->will($this->returnValue('bar'));
+            ->willReturn('bar');
 
         $object = $this->resolver->resolve($definition);
 
@@ -180,11 +180,9 @@ class ObjectCreatorTest extends TestCase
         $this->assertEquals('defaultValue', $object->methodParam2);
     }
 
-    /**
-     * @expectedException \DI\Definition\Exception\InvalidDefinition
-     */
     public function testUnknownClass()
     {
+        $this->expectException('DI\Definition\Exception\InvalidDefinition');
         $message = <<<'MESSAGE'
 Entry "foo" cannot be resolved: the class doesn't exist
 Full definition:
@@ -200,11 +198,9 @@ MESSAGE;
         $this->resolver->resolve($definition);
     }
 
-    /**
-     * @expectedException \DI\Definition\Exception\InvalidDefinition
-     */
     public function testNotInstantiable()
     {
+        $this->expectException('DI\Definition\Exception\InvalidDefinition');
         $message = <<<'MESSAGE'
 Entry "ArrayAccess" cannot be resolved: the class is not instantiable
 Full definition:
@@ -220,11 +216,9 @@ MESSAGE;
         $this->resolver->resolve($definition);
     }
 
-    /**
-     * @expectedException \DI\Definition\Exception\InvalidDefinition
-     */
     public function testUndefinedInjection()
     {
+        $this->expectException('DI\Definition\Exception\InvalidDefinition');
         $message = <<<'MESSAGE'
 Entry "DI\Test\UnitTest\Definition\Resolver\Fixture\FixtureClass" cannot be resolved: Parameter $param1 of __construct() has no value defined or guessable
 Full definition:

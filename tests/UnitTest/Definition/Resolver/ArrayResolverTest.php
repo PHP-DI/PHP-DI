@@ -10,8 +10,8 @@ use DI\Definition\ObjectDefinition;
 use DI\Definition\Resolver\ArrayResolver;
 use DI\Definition\Resolver\DefinitionResolver;
 use EasyMock\EasyMock;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use PHPUnit_Framework_MockObject_MockObject;
 
 /**
  * @covers \DI\Definition\Resolver\ArrayResolver
@@ -21,7 +21,7 @@ class ArrayResolverTest extends TestCase
     use EasyMock;
 
     /**
-     * @var DefinitionResolver|PHPUnit_Framework_MockObject_MockObject
+     * @var DefinitionResolver|MockObject
      */
     private $parentResolver;
 
@@ -30,7 +30,7 @@ class ArrayResolverTest extends TestCase
      */
     private $resolver;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->parentResolver = $this->easyMock(DefinitionResolver::class);
         $this->resolver = new ArrayResolver($this->parentResolver);
@@ -59,8 +59,8 @@ class ArrayResolverTest extends TestCase
         $this->parentResolver->expects($this->exactly(2))
             ->method('resolve')
             ->withConsecutive(
-                $this->isInstanceOf(Reference::class),
-                $this->isInstanceOf(ObjectDefinition::class)
+                [$this->isInstanceOf(Reference::class)],
+                [$this->isInstanceOf(ObjectDefinition::class)]
             )
             ->willReturnOnConsecutiveCalls(42, new \stdClass());
 
@@ -91,11 +91,11 @@ class ArrayResolverTest extends TestCase
 
     /**
      * @test
-     * @expectedException \DI\DependencyException
-     * @expectedExceptionMessage Error while resolving foo[0]. This is a message
      */
     public function should_throw_with_a_nice_message()
     {
+        $this->expectException('DI\DependencyException');
+        $this->expectExceptionMessage('Error while resolving foo[0]. This is a message');
         $this->parentResolver->expects($this->once())
             ->method('resolve')
             ->willThrowException(new \Exception('This is a message'));

@@ -93,6 +93,7 @@ class ObjectCreator implements DefinitionResolver
             function (& $wrappedObject, $proxy, $method, $params, & $initializer) use ($definition, $parameters) {
                 $wrappedObject = $this->createInstance($definition, $parameters);
                 $initializer = null; // turning off further lazy initialization
+
                 return true;
             }
         );

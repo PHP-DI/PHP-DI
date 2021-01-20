@@ -174,12 +174,10 @@ class AutowireDefinitionHelperTest extends TestCase
         $this->assertEquals([42], $definition->getConstructorInjection()->getParameters());
     }
 
-    /**
-     * @expectedException \DI\Definition\Exception\InvalidDefinition
-     * @expectedExceptionMessage Parameter with name 'wrongName' could not be found
-     */
     public function test_error_message_on_unknown_parameter()
     {
+        $this->expectException('DI\Definition\Exception\InvalidDefinition');
+        $this->expectExceptionMessage('Parameter with name \'wrongName\' could not be found');
         $helper = new AutowireDefinitionHelper();
         $helper->methodParameter('__construct', 'wrongName', 42);
         $helper->getDefinition(Class1::class);

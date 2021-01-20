@@ -12,7 +12,7 @@ use PHPUnit\Framework\TestCase;
 
 class SourceCacheTest extends TestCase
 {
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 
@@ -88,6 +88,16 @@ class SourceCacheTest extends TestCase
 
         self::assertSame($definition, $source->getDefinition('foo'));
         self::assertSame($definition, $source->getDefinition('foo'));
+    }
+
+    /**
+     * @test
+     */
+    public function should_use_namespaced_cache_keys()
+    {
+        $namespace = 'staging';
+        $source = new SourceCache(new DefinitionArray, $namespace);
+        self::assertSame($source->getCacheKey('foo'), SourceCache::CACHE_KEY . $namespace . 'foo');
     }
 
     private static function assertSavedInCache(string $definitionName, $expectedValue)

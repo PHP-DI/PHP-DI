@@ -1,4 +1,4 @@
-@import url(http://fonts.googleapis.com/css?family=Source+Sans+Pro:200,400,700,200italic,400italic,700italic);
+@import url(https://fonts.googleapis.com/css?family=Source+Sans+Pro:200,400,700,200italic,400italic,700italic);
 @import "../bower_components/bootstrap/less/bootstrap.less";
 @import "../bower_components/fontawesome/less/font-awesome.less";
 @import "variables.less";
@@ -100,10 +100,13 @@ pre code {
         }
     }
     #search-input {
-        width: 300px;
+        width: 180px;
         margin-left: 30px;
         background-color: #FBFBFB;
         border: 1px solid #E4E4E4;
+        @media (min-width: @screen-lg-min) {
+            width: 300px;
+        }
     }
 }
 

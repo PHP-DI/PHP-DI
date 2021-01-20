@@ -9,6 +9,7 @@ use DI\Factory\RequestedEntry;
 use DI\Invoker\FactoryParameterResolver;
 use DI\Test\UnitTest\Definition\Resolver\Fixture\NoConstructor;
 use EasyMock\EasyMock;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\Container\ContainerInterface;
 
@@ -25,16 +26,16 @@ class FactoryParameterResolverTest extends TestCase
     private $resolver;
 
     /**
-     * @var ContainerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ContainerInterface|MockObject
      */
     private $container;
 
     /**
-     * @var RequestedEntry|\PHPUnit_Framework_MockObject_MockObject
+     * @var RequestedEntry|MockObject
      */
     private $requestedEntry;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->container = $this->easyMock(ContainerInterface::class);
         $this->resolver = new FactoryParameterResolver($this->container);

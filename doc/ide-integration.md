@@ -39,14 +39,12 @@ This solution is simple and works great when your container is used rarely.
 <?php
 namespace PHPSTORM_META
 {
-    $STATIC_METHOD_TYPES = [
-        \Psr\Container\ContainerInterface::get('') => [
-            "" == "@",
-        ],
-        \DI\Container::get('') => [
-            "" == "@",
-        ],
-    ];
+    override(\Psr\Container\ContainerInterface::get(0), map([
+        '' => '@',
+    ]));
+    override(\DI\Container::get(0), map([
+        '' => '@',
+    ]));
 }
 ```
 
