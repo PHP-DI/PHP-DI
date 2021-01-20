@@ -36,7 +36,7 @@ class DefinitionGlobTest extends TestCase
         $definition = $definitions['foo'];
         $this->assertInstanceOf(ValueDefinition::class, $definition);
         $this->assertEquals('bar', $definition->getValue());
-        $this->assertInternalType('string', $definition->getValue());
+        $this->assertIsString($definition->getValue());
     }
 
     /**
