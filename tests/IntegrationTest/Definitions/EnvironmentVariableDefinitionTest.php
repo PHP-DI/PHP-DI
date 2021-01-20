@@ -35,11 +35,11 @@ class EnvironmentVariableDefinitionTest extends BaseContainerTest
 
     /**
      * @dataProvider provideContainer
-     * @expectedException \DI\Definition\Exception\InvalidDefinition
-     * @expectedExceptionMessage The environment variable 'PHP_DI_DO_NOT_DEFINE_THIS' has not been defined
      */
     public function test_nonexistent_env_variable(ContainerBuilder $builder)
     {
+        $this->expectException('DI\Definition\Exception\InvalidDefinition');
+        $this->expectExceptionMessage('The environment variable \'PHP_DI_DO_NOT_DEFINE_THIS\' has not been defined');
         $builder->addDefinitions([
             'var' => \DI\env('PHP_DI_DO_NOT_DEFINE_THIS'),
         ]);

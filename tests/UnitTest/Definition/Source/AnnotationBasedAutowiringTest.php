@@ -16,6 +16,8 @@ use DI\Test\UnitTest\Definition\Source\Fixtures\AnnotationFixture3;
 use DI\Test\UnitTest\Definition\Source\Fixtures\AnnotationFixture4;
 use DI\Test\UnitTest\Definition\Source\Fixtures\AnnotationFixture5;
 use DI\Test\UnitTest\Definition\Source\Fixtures\AnnotationFixtureChild;
+use DI\Test\UnitTest\Definition\Source\Fixtures\AnnotationFixtureScalarTypedProperty;
+use DI\Test\UnitTest\Definition\Source\Fixtures\AnnotationFixtureTypedProperties;
 use DI\Test\UnitTest\Definition\Source\Fixtures\AnnotationInjectableFixture;
 use PHPUnit\Framework\TestCase;
 
@@ -56,13 +58,35 @@ class AnnotationBasedAutowiringTest extends TestCase
         $this->assertNotHasPropertyInjection($definition, 'staticProperty');
     }
 
-    /**
-     * @expectedException \DI\Definition\Exception\InvalidAnnotation
-     * @expectedExceptionMessage @Inject found on property DI\Test\UnitTest\Definition\Source\Fixtures\AnnotationFixture4::property but unable to guess what to inject, use a @var annotation
-     */
     public function testUnguessableProperty()
     {
+        $this->expectException('DI\Definition\Exception\InvalidAnnotation');
+        $this->expectExceptionMessage('@Inject found on property DI\Test\UnitTest\Definition\Source\Fixtures\AnnotationFixture4::property but unable to guess what to inject, use a @var annotation');
         (new AnnotationBasedAutowiring)->autowire(AnnotationFixture4::class);
+    }
+
+    /**
+     * Typed properties support requires PHP 7.4
+     * @requires PHP 7.4
+     */
+    public function testTypedProperty()
+    {
+        $definition = (new AnnotationBasedAutowiring)->autowire(AnnotationFixtureTypedProperties::class);
+
+        $this->assertNotHasPropertyInjection($definition, 'typeAndNoInject');
+        $this->assertHasPropertyInjection($definition, 'typedAndInject', AnnotationFixture2::class);
+        $this->assertHasPropertyInjection($definition, 'typedAndVar', AnnotationFixture3::class);
+        $this->assertHasPropertyInjection($definition, 'typedAndNamed', 'name');
+    }
+
+    /**
+     * Typed properties support requires PHP 7.4
+     * @requires PHP 7.4
+     */
+    public function testScalarTypedPropertiesFail()
+    {
+        $this->expectException(\DI\Definition\Exception\InvalidAnnotation::class);
+        (new AnnotationBasedAutowiring)->autowire(AnnotationFixtureScalarTypedProperty::class);
     }
 
     public function testConstructor()
@@ -207,10 +231,10 @@ class AnnotationBasedAutowiringTest extends TestCase
 
     /**
      * @see https://github.com/mnapoli/PHP-DI/issues/184
-     * @expectedException \PhpDocReader\AnnotationException
      */
     public function testFailWithPhpDocErrors()
     {
+        $this->expectException('PhpDocReader\AnnotationException');
         (new AnnotationBasedAutowiring)->autowire(AnnotationFixture5::class);
     }
 
@@ -256,11 +280,21 @@ class AnnotationBasedAutowiringTest extends TestCase
         return null;
     }
 
-    private function assertHasPropertyInjection(ObjectDefinition $definition, $propertyName)
+    private function assertHasPropertyInjection(ObjectDefinition $definition, $propertyName, ?string $expectedType = null)
     {
         $propertyInjections = $definition->getPropertyInjections();
         foreach ($propertyInjections as $propertyInjection) {
             if ($propertyInjection->getPropertyName() === $propertyName) {
+
+                if ($expectedType !== null) {
+                    $this->assertInstanceOf(Reference::class, $propertyInjection->getValue());
+                    $this->assertEquals(
+                        $expectedType,
+                        $propertyInjection->getValue()->getTargetEntryName(),
+                        'Property injected with the right type'
+                    );
+                }
+
                 return;
             }
         }

@@ -28,7 +28,7 @@ class AppKernel extends \DI\Bridge\Symfony\Kernel
     protected function buildPHPDIContainer(ContainerBuilder $builder)
     {
         // Configure your container here
-        // http://php-di.org/doc/container-configuration.html
+        // https://php-di.org/doc/container-configuration.html
         $builder->addDefinitions(__DIR__ . '/config/config.php');
 
         return $builder->build();

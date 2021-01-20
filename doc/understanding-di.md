@@ -144,7 +144,7 @@ having to rewrite the `StoreService`.
 
 ## With PHP-DI
 
-You may see that dependency injection will leave with one drawback: you now have to handle injecting dependencies.
+You may see that dependency injection has one drawback: you now have to handle injecting dependencies.
 
 That's where a container, and specifically PHP-DI, can help you.
 

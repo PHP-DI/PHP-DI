@@ -4,11 +4,19 @@ declare(strict_types=1);
 
 namespace DI\Test\IntegrationTest\Definitions;
 
+use Closure;
 use DI\ContainerBuilder;
+use DI\Definition\Exception\InvalidDefinition;
 use DI\Factory\RequestedEntry;
 use DI\Test\IntegrationTest\BaseContainerTest;
 use DI\Test\UnitTest\Definition\Resolver\Fixture\NoConstructor;
 use Psr\Container\ContainerInterface;
+use stdClass;
+use function DI\autowire;
+use function DI\create;
+use function DI\factory;
+use function DI\get;
+use DI\NotFoundException;
 
 /**
  * Test factory definitions.
@@ -62,16 +70,16 @@ class FactoryDefinitionTest extends BaseContainerTest
      */
     public function test_factory($callable, ContainerBuilder $builder)
     {
-        $isClosure = $callable instanceof \Closure;
+        $isClosure = $callable instanceof Closure;
         $containsAnObject = is_object($callable) || is_object($callable[0]);
-        if ($builder->isCompilationEnabled() && $containsAnObject && !$isClosure) {
+        if (!$isClosure && $containsAnObject && $builder->isCompilationEnabled()) {
             // Invokable objects are not compilable
-            $this->expectException(\DI\Definition\Exception\InvalidDefinition::class);
+            $this->expectException(InvalidDefinition::class);
             $this->expectExceptionMessage('An object was found but objects cannot be compiled');
         }
 
         $builder->addDefinitions([
-            'factory' => \DI\factory($callable),
+            'factory' => factory($callable),
         ]);
 
         $container = $builder->build();
@@ -85,8 +93,8 @@ class FactoryDefinitionTest extends BaseContainerTest
     public function test_named_container_entry_as_factory(ContainerBuilder $builder)
     {
         $builder->addDefinitions([
-            'bar_baz' => \DI\create(FactoryDefinitionTestClass::class),
-            'factory' => \DI\factory(['bar_baz', 'foo']),
+            'bar_baz' => create(FactoryDefinitionTestClass::class),
+            'factory' => factory(['bar_baz', 'foo']),
         ]);
 
         $container = $builder->build();
@@ -100,8 +108,8 @@ class FactoryDefinitionTest extends BaseContainerTest
     public function test_named_container_entry_as_factory_with_string_callable(ContainerBuilder $builder)
     {
         $builder->addDefinitions([
-            'bar_baz' => \DI\create(FactoryDefinitionTestClass::class),
-            'factory' => \DI\factory('bar_baz::foo'),
+            'bar_baz' => create(FactoryDefinitionTestClass::class),
+            'factory' => factory('bar_baz::foo'),
         ]);
 
         $container = $builder->build();
@@ -115,8 +123,8 @@ class FactoryDefinitionTest extends BaseContainerTest
     public function test_named_invokable_container_entry_as_factory(ContainerBuilder $builder)
     {
         $builder->addDefinitions([
-            'bar_baz' => \DI\create(FactoryDefinitionInvokableTestClass::class),
-            'factory' => \DI\factory('bar_baz'),
+            'bar_baz' => create(FactoryDefinitionInvokableTestClass::class),
+            'factory' => factory('bar_baz'),
         ]);
 
         $container = $builder->build();
@@ -126,13 +134,13 @@ class FactoryDefinitionTest extends BaseContainerTest
 
     /**
      * @dataProvider provideContainer
-     * @expectedException \DI\Definition\Exception\InvalidDefinition
-     * @expectedExceptionMessage Invokable classes cannot be automatically resolved if autowiring is disabled on the container, you need to enable autowiring or define the entry manually.
      */
     public function test_error_message_on_invokable_class_without_autowiring(ContainerBuilder $builder)
     {
+        $this->expectException(InvalidDefinition::class);
+        $this->expectExceptionMessage('Invokable classes cannot be automatically resolved if autowiring is disabled on the container, you need to enable autowiring or define the entry manually.');
         $builder->addDefinitions([
-            'factory' => \DI\factory(FactoryDefinitionInvokableTestClass::class),
+            'factory' => factory(FactoryDefinitionInvokableTestClass::class),
         ]);
         $builder->useAutowiring(false);
         $container = $builder->build();
@@ -193,7 +201,7 @@ class FactoryDefinitionTest extends BaseContainerTest
     public function test_arbitrary_object_gets_injected_via_typehint(ContainerBuilder $builder)
     {
         $builder->addDefinitions([
-            'factory' => function (\stdClass $stdClass) {
+            'factory' => function (stdClass $stdClass) {
                 return $stdClass;
             },
         ]);
@@ -209,7 +217,7 @@ class FactoryDefinitionTest extends BaseContainerTest
     public function test_container_and_requested_entry_get_injected_in_arbitrary_position_via_typehint(ContainerBuilder $builder)
     {
         $builder->addDefinitions([
-            'factory' => function (\stdClass $stdClass, RequestedEntry $e, ContainerInterface $c) {
+            'factory' => function (stdClass $stdClass, RequestedEntry $e, ContainerInterface $c) {
                 return [$stdClass, $e, $c];
             },
         ]);
@@ -227,7 +235,7 @@ class FactoryDefinitionTest extends BaseContainerTest
     public function test_container_get_injected_in_arbitrary_position_via_typehint(ContainerBuilder $builder)
     {
         $builder->addDefinitions([
-            'factory' => function (\stdClass $stdClass, ContainerInterface $c) {
+            'factory' => function (stdClass $stdClass, ContainerInterface $c) {
                 return [$stdClass, $c];
             },
         ]);
@@ -244,7 +252,7 @@ class FactoryDefinitionTest extends BaseContainerTest
     public function test_value_gets_injected_via_parameter(ContainerBuilder $builder)
     {
         $builder->addDefinitions([
-            'factory' => \DI\factory(function ($value) {
+            'factory' => factory(function ($value) {
                 return $value;
             })->parameter('value', 'Foo'),
         ]);
@@ -260,15 +268,15 @@ class FactoryDefinitionTest extends BaseContainerTest
     public function test_named_entry_gets_injected_via_parameter(ContainerBuilder $builder)
     {
         $builder->addDefinitions([
-            'basicClass' => \DI\create(\stdClass::class),
-            'factory' => \DI\factory(function ($entry) {
+            'basicClass' => create(stdClass::class),
+            'factory' => factory(function ($entry) {
                 return $entry;
-            })->parameter('entry', \DI\get('basicClass')),
+            })->parameter('entry', get('basicClass')),
         ]);
 
         $factory = $builder->build()->get('factory');
 
-        $this->assertInstanceOf(\stdClass::class, $factory);
+        $this->assertInstanceOf(stdClass::class, $factory);
     }
 
     /**
@@ -277,14 +285,14 @@ class FactoryDefinitionTest extends BaseContainerTest
     public function test_sub_entry_gets_injected_via_parameter(ContainerBuilder $builder)
     {
         $builder->addDefinitions([
-            'factory' => \DI\factory(function ($entry) {
+            'factory' => factory(function ($entry) {
                 return $entry;
-            })->parameter('entry', \DI\create(\stdClass::class)),
+            })->parameter('entry', create(stdClass::class)),
         ]);
 
         $factory = $builder->build()->get('factory');
 
-        $this->assertInstanceOf(\stdClass::class, $factory);
+        $this->assertInstanceOf(stdClass::class, $factory);
     }
 
     /**
@@ -293,14 +301,14 @@ class FactoryDefinitionTest extends BaseContainerTest
     public function test_class_gets_injected_via_parameter(ContainerBuilder $builder)
     {
         $builder->addDefinitions([
-            'factory' => \DI\factory(function ($entry) {
+            'factory' => factory(function ($entry) {
                 return $entry;
-            })->parameter('entry', \DI\get(\stdClass::class)),
+            })->parameter('entry', get(stdClass::class)),
         ]);
 
         $factory = $builder->build()->get('factory');
 
-        $this->assertInstanceOf(\stdClass::class, $factory);
+        $this->assertInstanceOf(stdClass::class, $factory);
     }
 
     /**
@@ -310,10 +318,10 @@ class FactoryDefinitionTest extends BaseContainerTest
     {
         $builder->addDefinitions([
             'secret' => 'Bar',
-            'factory' => \DI\factory(function ($a, $b, $c) {
+            'factory' => factory(function ($a, $b, $c) {
                 return [$a, $b, $c];
-            })->parameter('a', \DI\get('secret'))
-              ->parameter('b', \DI\create(FactoryDefinitionTestClass::class))
+            })->parameter('a', get('secret'))
+              ->parameter('b', create(FactoryDefinitionTestClass::class))
               ->parameter('c', 'Foo'),
         ]);
 
@@ -331,9 +339,9 @@ class FactoryDefinitionTest extends BaseContainerTest
     {
         $builder->addDefinitions([
             'secret' => 'Bar',
-            'factory' => \DI\factory(function ($container, $requestedEntry, \stdClass $object, $value) {
+            'factory' => factory(function ($container, $requestedEntry, stdClass $object, $value) {
                 return [$container, $requestedEntry, $object, $value];
-            })->parameter('value', \DI\get('secret')),
+            })->parameter('value', get('secret')),
         ]);
 
         $factory = $builder->build()->get('factory');
@@ -351,9 +359,9 @@ class FactoryDefinitionTest extends BaseContainerTest
     {
         $builder->addDefinitions([
             'secret' => 'Bar',
-            'factory' => \DI\factory(function (\stdClass $object, RequestedEntry $requestedEntry, $value, ContainerInterface $container) {
+            'factory' => factory(function (stdClass $object, RequestedEntry $requestedEntry, $value, ContainerInterface $container) {
                 return [$object, $requestedEntry, $value, $container];
-            })->parameter('value', \DI\get('secret')),
+            })->parameter('value', get('secret')),
         ]);
 
         $factory = $builder->build()->get('factory');
@@ -370,11 +378,11 @@ class FactoryDefinitionTest extends BaseContainerTest
     public function test_parameters_take_priority_over_container(ContainerBuilder $builder)
     {
         $builder->addDefinitions([
-            'factory' => \DI\factory(function (NoConstructor $nc) {
+            'factory' => factory(function (NoConstructor $nc) {
                 return $nc;
-            })->parameter('nc', \DI\get('foo')),
-            NoConstructor::class => \DI\autowire(),
-            'foo' => \DI\autowire(NoConstructor::class),
+            })->parameter('nc', get('foo')),
+            NoConstructor::class => autowire(),
+            'foo' => autowire(NoConstructor::class),
         ]);
         $container = $builder->build();
 
@@ -390,7 +398,7 @@ class FactoryDefinitionTest extends BaseContainerTest
     public function test_parameters_take_priority_over_default_value(ContainerBuilder $builder)
     {
         $builder->addDefinitions([
-            'factory' => \DI\factory(function ($foo = 'Foo') {
+            'factory' => factory(function ($foo = 'Foo') {
                 return $foo;
             })->parameter('foo', 'Bar'),
         ]);
@@ -402,28 +410,28 @@ class FactoryDefinitionTest extends BaseContainerTest
 
     /**
      * @dataProvider provideContainer
-     * @expectedException \DI\NotFoundException
-     * @expectedExceptionMessage No entry or class found for 'missing'
      */
     public function test_resolve_failure_on_parameter(ContainerBuilder $builder)
     {
+        $this->expectException(NotFoundException::class);
+        $this->expectExceptionMessage('No entry or class found for \'missing\'');
         $builder->addDefinitions([
-            'factory' => \DI\factory(function ($foo) {
+            'factory' => factory(function ($foo) {
                 return $foo;
-            })->parameter('foo', \DI\get('missing')),
+            })->parameter('foo', get('missing')),
         ]);
         $builder->build()->get('factory');
     }
 
     /**
      * @dataProvider provideContainer
-     * @expectedException \DI\Definition\Exception\InvalidDefinition
-     * @expectedExceptionMessage Entry "foo" cannot be resolved: factory 'Hello World' is neither a callable nor a valid container entry
      */
     public function test_not_callable_factory_definition(ContainerBuilder $builder)
     {
+        $this->expectException(InvalidDefinition::class);
+        $this->expectExceptionMessage('Entry "foo" cannot be resolved: factory \'Hello World\' is neither a callable nor a valid container entry');
         $builder->addDefinitions([
-            'foo' => \DI\factory('Hello World'),
+            'foo' => factory('Hello World'),
         ]);
         $builder->build()->get('foo');
     }
@@ -454,7 +462,7 @@ class FactoryDefinitionTest extends BaseContainerTest
                 return FactoryDefinitionTestClass::class;
             },
         ]);
-        $this->assertEquals('DI\Test\IntegrationTest\Definitions\FactoryDefinitionTestClass', $builder->build()->get('factory'));
+        $this->assertEquals(FactoryDefinitionTestClass::class, $builder->build()->get('factory'));
     }
 
     /**
@@ -463,19 +471,17 @@ class FactoryDefinitionTest extends BaseContainerTest
     public function test_closure_with_return_types_are_supported(ContainerBuilder $builder)
     {
         $builder->addDefinitions([
-            'factory' => function () : \stdClass {
-                return new \stdClass;
+            'factory' => function () : stdClass {
+                return new stdClass;
             },
         ]);
-        $this->assertEquals(new \stdClass, $builder->build()->get('factory'));
+        $this->assertEquals(new stdClass, $builder->build()->get('factory'));
     }
 
-    /**
-     * @expectedException \DI\Definition\Exception\InvalidDefinition
-     * @expectedExceptionMessage Cannot compile closures which import variables using the `use` keyword
-     */
     public function test_closure_which_use_variables_cannot_be_compiled()
     {
+        $this->expectException(InvalidDefinition::class);
+        $this->expectExceptionMessage('Cannot compile closures which import variables using the `use` keyword');
         $builder = (new ContainerBuilder)->enableCompilation(self::COMPILATION_DIR, self::generateCompiledClassName());
         $foo = 'hello';
         $builder->addDefinitions([
@@ -486,20 +492,43 @@ class FactoryDefinitionTest extends BaseContainerTest
         $builder->build();
     }
 
-    /**
-     * TODO would be better to have an error at compilation.
-     * @expectedException \Error
-     * @expectedExceptionMessage Using $this when not in object context
-     */
     public function test_closure_which_use_this_cannot_be_compiled()
     {
+        $this->expectException(InvalidDefinition::class);
+        $this->expectExceptionMessage('Cannot compile closures which use $this or self/static/parent references');
         $builder = (new ContainerBuilder)->enableCompilation(self::COMPILATION_DIR, self::generateCompiledClassName());
         $builder->addDefinitions([
             'factory' => function () {
                 return $this->foo();
             },
         ]);
-        $builder->build()->get('factory');
+        $builder->build();
+    }
+
+    public function test_closure_which_use_self_cannot_be_compiled()
+    {
+        $this->expectException(InvalidDefinition::class);
+        $this->expectExceptionMessage('Cannot compile closures which use $this or self/static/parent references');
+        $builder = (new ContainerBuilder)->enableCompilation(self::COMPILATION_DIR, self::generateCompiledClassName());
+        $builder->addDefinitions([
+            'factory' => function () {
+                return self::foo();
+            },
+        ]);
+        $builder->build();
+    }
+
+    public function test_closure_which_use_static_reference_cannot_be_compiled()
+    {
+        $this->expectException(InvalidDefinition::class);
+        $this->expectExceptionMessage('Cannot compile closures which use $this or self/static/parent references');
+        $builder = (new ContainerBuilder)->enableCompilation(self::COMPILATION_DIR, self::generateCompiledClassName());
+        $builder->addDefinitions([
+            'factory' => function () {
+                return static::foo();
+            },
+        ]);
+        $builder->build();
     }
 
     private function foo()
@@ -514,13 +543,31 @@ class FactoryDefinitionTest extends BaseContainerTest
     {
         $builder->addDefinitions([
             'factory' => static function () {
-                return new \stdClass;
+                return new stdClass;
             },
         ]);
         $container = $builder->build();
 
         self::assertEntryIsCompiled($container, 'factory');
-        self::assertEquals(new \stdClass, $container->get('factory'));
+        self::assertEquals(new stdClass, $container->get('factory'));
+    }
+
+    /**
+     * @dataProvider provideContainer
+     */
+    public function test_static_closures_inside_closures_are_supported(ContainerBuilder $builder)
+    {
+        $builder->addDefinitions([
+            'factory' => static function () {
+                return static function () {
+                    return new stdClass;
+                };
+            },
+        ]);
+        $container = $builder->build();
+
+        self::assertEntryIsCompiled($container, 'factory');
+        self::assertEquals(new stdClass, $container->get('factory')());
     }
 
     /**
@@ -541,12 +588,12 @@ class FactoryDefinitionTest extends BaseContainerTest
         self::assertSame(0, $container->get('factory'));
     }
 
-    /**
-     * @expectedException \DI\Definition\Exception\InvalidDefinition
-     * @expectedExceptionMessage Cannot compile closures when two closures are defined on the same line
-     */
     public function test_multiple_closures_on_the_same_line_cannot_be_compiled()
     {
+        $this->markTestSkipped('Opis/closure doesn\'t throw on multiple closures on the same line');
+
+        $this->expectException(InvalidDefinition::class);
+        $this->expectExceptionMessage('Cannot compile closures when two closures are defined on the same line');
         $builder = (new ContainerBuilder)->enableCompilation(self::COMPILATION_DIR, self::generateCompiledClassName());
         $builder->addDefinitions(__DIR__ . '/FactoryDefinition/config.inc');
         $this->assertEquals('foo', $builder->build()->get('factory'));
@@ -565,6 +612,19 @@ class FactoryDefinitionTest extends BaseContainerTest
         $container = $builder->build();
 
         self::assertEquals('foo', $container->get('factory'));
+    }
+
+    /**
+     * @requires PHP 7.4
+     */
+    public function test_fn_closures_compilation_is_supported()
+    {
+        $builder = (new ContainerBuilder)->enableCompilation(self::COMPILATION_DIR, self::generateCompiledClassName());
+        $builder->addDefinitions(__DIR__ . '/FactoryDefinition/fn.inc');
+        $container = $builder->build();
+
+        self::assertEntryIsCompiled($container, 'factory');
+        self::assertEquals(new stdClass, $container->get('factory'));
     }
 }
 

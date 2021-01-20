@@ -49,17 +49,17 @@ class DefinitionArrayTest extends TestCase
         $definition = $source->getDefinition('integer');
         $this->assertInstanceOf(ValueDefinition::class, $definition);
         $this->assertEquals(1, $definition->getValue());
-        $this->assertInternalType('integer', $definition->getValue());
+        $this->assertIsInt($definition->getValue());
 
         $definition = $source->getDefinition('string');
         $this->assertInstanceOf(ValueDefinition::class, $definition);
         $this->assertEquals('test', $definition->getValue());
-        $this->assertInternalType('string', $definition->getValue());
+        $this->assertIsString($definition->getValue());
 
         $definition = $source->getDefinition('float');
         $this->assertInstanceOf(ValueDefinition::class, $definition);
         $this->assertEquals(1.0, $definition->getValue());
-        $this->assertInternalType('float', $definition->getValue());
+        $this->assertIsFloat($definition->getValue());
     }
 
     public function testArrayDefinitions()
@@ -76,18 +76,18 @@ class DefinitionArrayTest extends TestCase
         $definition = $source->getDefinition('array');
         $this->assertInstanceOf(ArrayDefinition::class, $definition);
         $this->assertEquals(['a', 'b', 'c'], $definition->getValues());
-        $this->assertInternalType('array', $definition->getValues());
+        $this->assertIsArray($definition->getValues());
 
         $definition = $source->getDefinition('assoc');
         $this->assertInstanceOf(ArrayDefinition::class, $definition);
         $this->assertEquals(['a' => 'b'], $definition->getValues());
-        $this->assertInternalType('array', $definition->getValues());
+        $this->assertIsArray($definition->getValues());
 
         $definition = $source->getDefinition('links');
         $this->assertInstanceOf(ArrayDefinition::class, $definition);
         $this->assertInstanceOf(Reference::class, $definition->getValues()['a']);
         $this->assertEquals('b', $definition->getValues()['a']->getTargetEntryName());
-        $this->assertInternalType('array', $definition->getValues());
+        $this->assertIsArray($definition->getValues());
     }
 
     public function testObjectDefinition()
@@ -254,12 +254,11 @@ class DefinitionArrayTest extends TestCase
 
     /**
      * @see https://github.com/PHP-DI/PHP-DI/issues/242
-     *
-     * @expectedException \Exception
-     * @expectedExceptionMessage The PHP-DI definition is not indexed by an entry name in the definition array
      */
     public function testDefinitionsWithoutKeyThrowAnError()
     {
+        $this->expectException('Exception');
+        $this->expectExceptionMessage('The PHP-DI definition is not indexed by an entry name in the definition array');
         new DefinitionArray([
             'foo' => 'bar',
             'baz', // error => this entry is not indexed by a string
@@ -268,12 +267,11 @@ class DefinitionArrayTest extends TestCase
 
     /**
      * @see https://github.com/PHP-DI/PHP-DI/issues/242
-     *
-     * @expectedException \Exception
-     * @expectedExceptionMessage The PHP-DI definition is not indexed by an entry name in the definition array
      */
     public function testDefinitionsWithoutKeyThrowAnError2()
     {
+        $this->expectException('Exception');
+        $this->expectExceptionMessage('The PHP-DI definition is not indexed by an entry name in the definition array');
         $source = new DefinitionArray;
         $source->addDefinitions([
             'foo' => 'bar',

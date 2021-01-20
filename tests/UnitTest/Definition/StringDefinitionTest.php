@@ -84,11 +84,11 @@ class StringDefinitionTest extends TestCase
 
     /**
      * @test
-     * @expectedException \DI\DependencyException
-     * @expectedExceptionMessage Error while parsing string expression for entry 'foo': No entry or class found for 'test'
      */
     public function should_throw_on_unknown_entry_name()
     {
+        $this->expectException('DI\DependencyException');
+        $this->expectExceptionMessage('Error while parsing string expression for entry \'foo\': No entry or class found for \'test\'');
         $container = $this->easyMock(ContainerInterface::class, [
             'get' => new NotFoundException("No entry or class found for 'test'"),
         ]);

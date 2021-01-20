@@ -32,8 +32,6 @@ interface DefinitionResolver
      *
      * @param Definition $definition Object that defines how the value should be obtained.
      * @param array      $parameters Optional parameters to use to build the entry.
-     *
-     * @return bool
      */
     public function isResolvable(Definition $definition, array $parameters = []) : bool;
 }

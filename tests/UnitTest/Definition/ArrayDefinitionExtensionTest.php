@@ -44,11 +44,11 @@ class ArrayDefinitionExtensionTest extends TestCase
 
     /**
      * @test
-     * @expectedException \DI\Definition\Exception\InvalidDefinition
-     * @expectedExceptionMessage Definition name tries to add array entries but the previous definition is not an array
      */
     public function should_error_if_not_extending_an_array()
     {
+        $this->expectException('DI\Definition\Exception\InvalidDefinition');
+        $this->expectExceptionMessage('Definition name tries to add array entries but the previous definition is not an array');
         $definition = new ArrayDefinitionExtension(['foo']);
         $definition->setName('name');
         $definition->setExtendedDefinition(new ValueDefinition('value'));

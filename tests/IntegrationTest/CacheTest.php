@@ -10,7 +10,7 @@ use DI\Definition\Source\SourceCache;
 
 class CacheTest extends BaseContainerTest
 {
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 

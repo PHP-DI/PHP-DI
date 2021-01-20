@@ -9,8 +9,8 @@ use DI\Definition\Resolver\DecoratorResolver;
 use DI\Definition\Resolver\DefinitionResolver;
 use DI\Definition\ValueDefinition;
 use EasyMock\EasyMock;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use PHPUnit_Framework_MockObject_MockObject;
 use Psr\Container\ContainerInterface;
 
 /**
@@ -26,11 +26,11 @@ class DecoratorResolverTest extends TestCase
     private $resolver;
 
     /**
-     * @var DefinitionResolver|PHPUnit_Framework_MockObject_MockObject
+     * @var DefinitionResolver|MockObject
      */
     private $parentResolver;
 
-    public function setUp()
+    public function setUp(): void
     {
         $container = $this->easyMock(ContainerInterface::class);
         $this->parentResolver = $this->easyMock(DefinitionResolver::class);
@@ -53,7 +53,7 @@ class DecoratorResolverTest extends TestCase
         $this->parentResolver->expects($this->once())
             ->method('resolve')
             ->with($previousDefinition)
-            ->will($this->returnValue($previousDefinition->getValue()));
+            ->willReturn($previousDefinition->getValue());
 
         $value = $this->resolver->resolve($definition);
 
@@ -62,11 +62,11 @@ class DecoratorResolverTest extends TestCase
 
     /**
      * @test
-     * @expectedException \DI\Definition\Exception\InvalidDefinition
-     * @expectedExceptionMessage The decorator "foo" is not callable
      */
     public function should_throw_if_the_factory_is_not_callable()
     {
+        $this->expectException('DI\Definition\Exception\InvalidDefinition');
+        $this->expectExceptionMessage('The decorator "foo" is not callable');
         $definition = new DecoratorDefinition('foo', 'Hello world');
 
         $this->resolver->resolve($definition);

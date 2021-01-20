@@ -58,11 +58,11 @@ class FactoryResolverTest extends TestCase
 
     /**
      * @test
-     * @expectedException \DI\Definition\Exception\InvalidDefinition
-     * @expectedExceptionMessage Entry "foo" cannot be resolved: factory 'Hello world' is neither a callable nor a valid container entry
      */
     public function should_throw_if_the_factory_is_not_callable()
     {
+        $this->expectException('DI\Definition\Exception\InvalidDefinition');
+        $this->expectExceptionMessage('Entry "foo" cannot be resolved: factory \'Hello world\' is neither a callable nor a valid container entry');
         $container = $this->easyMock(ContainerInterface::class);
         $resolver = new FactoryResolver($container, $this->easyMock(DefinitionResolver::class));
 
@@ -76,11 +76,11 @@ class FactoryResolverTest extends TestCase
 
     /**
      * @test
-     * @expectedException  \DI\Definition\Exception\InvalidDefinition
-     * @expectedExceptionMessage Entry "foo" cannot be resolved: Unable to invoke the callable because no value was given for parameter 3 ($c)
      */
     public function should_throw_if_not_enough_parameters()
     {
+        $this->expectException('DI\Definition\Exception\InvalidDefinition');
+        $this->expectExceptionMessage('Entry "foo" cannot be resolved: Unable to invoke the callable because no value was given for parameter 3 ($c)');
         $container = $this->easyMock(ContainerInterface::class);
         $resolver = new FactoryResolver($container, $this->easyMock(DefinitionResolver::class));
 
@@ -128,7 +128,7 @@ class FactoryResolverTest extends TestCase
         $parentResolver->expects($this->once())
             ->method('resolve')
             ->with($this->isInstanceOf(ObjectDefinition::class))
-            ->will($this->returnValue('bar'));
+            ->willReturn('bar');
 
         $object = $resolver->resolve($definition);
 

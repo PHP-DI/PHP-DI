@@ -58,11 +58,11 @@ class CompiledContainerTest extends BaseContainerTest
 
     /**
      * @test
-     * @expectedException \DI\Definition\Exception\InvalidDefinition
-     * @expectedExceptionMessage Entry "foo" cannot be compiled: anonymous classes cannot be compiled
      */
     public function anonymous_classes_cannot_be_compiled()
     {
+        $this->expectException('DI\Definition\Exception\InvalidDefinition');
+        $this->expectExceptionMessage('Entry "foo" cannot be compiled: anonymous classes cannot be compiled');
         $class = get_class(new class() {
         });
 
@@ -76,11 +76,11 @@ class CompiledContainerTest extends BaseContainerTest
 
     /**
      * @test
-     * @expectedException \DI\Definition\Exception\InvalidDefinition
-     * @expectedExceptionMessage Entry "stdClass" cannot be compiled: An object was found but objects cannot be compiled
      */
     public function object_nested_in_other_definitions_cannot_be_compiled()
     {
+        $this->expectException('DI\Definition\Exception\InvalidDefinition');
+        $this->expectExceptionMessage('Entry "stdClass" cannot be compiled: An object was found but objects cannot be compiled');
         $builder = new ContainerBuilder;
         $builder->addDefinitions([
             \stdClass::class => create()
@@ -92,11 +92,11 @@ class CompiledContainerTest extends BaseContainerTest
 
     /**
      * @test
-     * @expectedException \DI\DependencyException
-     * @expectedExceptionMessage Error while compiling foo. Error while compiling <nested definition>. Error while compiling <nested definition>. An object was found but objects cannot be compiled
      */
     public function object_nested_in_arrays_cannot_be_compiled()
     {
+        $this->expectException('DI\DependencyException');
+        $this->expectExceptionMessage('Error while compiling foo. Error while compiling <nested definition>. Error while compiling <nested definition>. An object was found but objects cannot be compiled');
         $builder = new ContainerBuilder;
         $builder->addDefinitions([
             'foo' => [
@@ -113,11 +113,11 @@ class CompiledContainerTest extends BaseContainerTest
 
     /**
      * @test
-     * @expectedException \LogicException
-     * @expectedExceptionMessage You cannot set a definition at runtime on a compiled container. You can either put your definitions in a file, disable compilation or ->set() a raw value directly (PHP object, string, int, ...) instead of a PHP-DI definition.
      */
     public function entries_cannot_be_overridden_by_definitions_in_the_compiled_container()
     {
+        $this->expectException('LogicException');
+        $this->expectExceptionMessage('You cannot set a definition at runtime on a compiled container. You can either put your definitions in a file, disable compilation or ->set() a raw value directly (PHP object, string, int, ...) instead of a PHP-DI definition.');
         $builder = new ContainerBuilder;
         $builder->enableCompilation(self::COMPILATION_DIR, self::generateCompiledClassName());
         $builder->addDefinitions([
@@ -130,11 +130,11 @@ class CompiledContainerTest extends BaseContainerTest
 
     /**
      * @test
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage The container cannot be compiled: `123-abc` is not a valid PHP class name
      */
     public function compiling_to_an_invalid_class_name_throws_an_error()
     {
+        $this->expectException('InvalidArgumentException');
+        $this->expectExceptionMessage('The container cannot be compiled: `123-abc` is not a valid PHP class name');
         $builder = new ContainerBuilder;
         $builder->enableCompilation(self::COMPILATION_DIR, '123-abc');
         $builder->build();
