@@ -24,11 +24,9 @@ class ContainerGetTest extends TestCase
         $this->assertSame($dummy, $container->get('key'));
     }
 
-    /**
-     * @expectedException \DI\NotFoundException
-     */
     public function testGetNotFound()
     {
+        $this->expectException('DI\NotFoundException');
         $container = ContainerBuilder::buildDevContainer();
         $container->get('key');
     }

@@ -155,4 +155,35 @@ class ContainerInjectOnTest extends BaseContainerTest
         $proxy = $obj->method4Param1;
         self::assertFalse($proxy->isProxyInitialized());
     }
+
+    /**
+     * @dataProvider provideContainer
+     */
+    public function testInjectOnAnonClass(ContainerBuilder $builder)
+    {
+        $obj = new class {
+            /**
+             * @Inject
+             * @var Class2
+             */
+            public $property;
+
+            public $methodParam;
+
+            /**
+             * @Inject
+             */
+            public function setParam(Class2 $param)
+            {
+                $this->methodParam = $param;
+            }
+        };
+
+        $builder->useAnnotations(true);
+        $container = $builder->build();
+        $container->injectOn($obj);
+
+        $this->assertInstanceOf(Class2::class, $obj->property);
+        $this->assertInstanceOf(Class2::class, $obj->methodParam);
+    }
 }

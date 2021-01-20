@@ -27,7 +27,7 @@ class ResolverDispatcherTest extends TestCase
      */
     private $resolver;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->container = $this->easyMock(ContainerInterface::class);
         $this->proxyFactory = $this->easyMock(ProxyFactory::class);
@@ -54,11 +54,11 @@ class ResolverDispatcherTest extends TestCase
 
     /**
      * @test
-     * @expectedException \RuntimeException
-     * @expectedExceptionMessage No definition resolver was configured for definition of type
      */
     public function should_throw_if_non_handled_definition()
     {
+        $this->expectException('RuntimeException');
+        $this->expectExceptionMessage('No definition resolver was configured for definition of type');
         $this->resolver->resolve($this->easyMock(Definition::class));
     }
 
