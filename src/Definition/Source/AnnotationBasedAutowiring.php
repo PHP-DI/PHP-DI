@@ -18,6 +18,7 @@ use InvalidArgumentException;
 use PhpDocReader\PhpDocReader;
 use ReflectionClass;
 use ReflectionMethod;
+use ReflectionNamedType;
 use ReflectionParameter;
 use ReflectionProperty;
 use UnexpectedValueException;
@@ -125,8 +126,17 @@ class AnnotationBasedAutowiring implements DefinitionSource, Autowiring
             return;
         }
 
-        // @Inject("name") or look for @var content
+        // Try to @Inject("name") or look for @var content
         $entryName = $annotation->getName() ?: $this->getPhpDocReader()->getPropertyClass($property);
+
+        // Try using PHP7.4 typed properties
+        if (\PHP_VERSION_ID > 70400
+            && $entryName === null
+            && $property->getType() instanceof ReflectionNamedType
+            && (class_exists($property->getType()->getName()) || interface_exists($property->getType()->getName()))
+        ) {
+            $entryName = $property->getType()->getName();
+        }
 
         if ($entryName === null) {
             throw new InvalidAnnotation(sprintf(
@@ -167,8 +177,6 @@ class AnnotationBasedAutowiring implements DefinitionSource, Autowiring
     }
 
     /**
-     * @param  ReflectionMethod $method
-     *
      * @return MethodInjection|null
      */
     private function getMethodInjection(ReflectionMethod $method)
@@ -210,8 +218,6 @@ class AnnotationBasedAutowiring implements DefinitionSource, Autowiring
 
     /**
      * @param int                 $parameterIndex
-     * @param ReflectionParameter $parameter
-     * @param array               $annotationParameters
      *
      * @return string|null Entry name or null if not found.
      */
@@ -231,9 +237,9 @@ class AnnotationBasedAutowiring implements DefinitionSource, Autowiring
         }
 
         // Try to use the type-hinting
-        $parameterClass = $parameter->getClass();
-        if ($parameterClass) {
-            return $parameterClass->getName();
+        $parameterType = $parameter->getType();
+        if ($parameterType && !$parameterType->isBuiltin() && $parameterType instanceof ReflectionNamedType) {
+            return $parameterType->getName();
         }
 
         // Last resort, look for @param tag

@@ -263,11 +263,11 @@ class AutowireDefinitionTest extends BaseContainerTest
 
     /**
      * @dataProvider provideContainer
-     * @expectedException \DI\Definition\Exception\InvalidDefinition
-     * @expectedExceptionMessage Cannot autowire entry "DI\Test\IntegrationTest\Definitions\ObjectDefinition\Class3" because autowiring is disabled
      */
     public function test_cannot_use_autowire_if_autowiring_is_disabled(ContainerBuilder $builder)
     {
+        $this->expectException('DI\Definition\Exception\InvalidDefinition');
+        $this->expectExceptionMessage('Cannot autowire entry "DI\Test\IntegrationTest\Definitions\ObjectDefinition\Class3" because autowiring is disabled');
         $container = $builder
             ->useAutowiring(false)
             ->addDefinitions([
@@ -317,6 +317,7 @@ class AutowireDefinitionTest extends BaseContainerTest
 
     /**
      * @dataProvider provideContainer
+     * @requires PHP < 8
      */
     public function test_optional_parameter_followed_by_required_parameters(ContainerBuilder $builder)
     {
@@ -333,10 +334,6 @@ class AutowireDefinitionTest extends BaseContainerTest
      */
     public function test_php71_nullable_typehint(ContainerBuilder $builder)
     {
-        if (PHP_VERSION_ID < 70100) {
-            $this->markTestSkipped('This test cannot run on PHP 7');
-        }
-
         $container = $builder->build();
 
         $object = $container->get(Php71::class);

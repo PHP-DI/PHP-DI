@@ -183,11 +183,11 @@ class CreateDefinitionTest extends BaseContainerTest
     /**
      * It should not inherit the definition from autowiring.
      * @dataProvider provideContainer
-     * @expectedException \DI\Definition\Exception\InvalidDefinition
-     * @expectedExceptionMessage Parameter $parameter of __construct() has no value defined or guessable
      */
     public function test_does_not_trigger_autowiring(ContainerBuilder $builder)
     {
+        $this->expectException('DI\Definition\Exception\InvalidDefinition');
+        $this->expectExceptionMessage('Parameter $parameter of __construct() has no value defined or guessable');
         $builder->useAutowiring(true);
         $builder->addDefinitions([
             Class3::class => create(),
@@ -280,11 +280,11 @@ class CreateDefinitionTest extends BaseContainerTest
 
     /**
      * @dataProvider provideContainer
-     * @expectedException \Exception
-     * @expectedExceptionMessage Property stdClass::$foo does not exist
      */
     public function test_property_injection_in_unknown_property(ContainerBuilder $builder)
     {
+        $this->expectException('Exception');
+        $this->expectExceptionMessage('Property stdClass::$foo does not exist');
         $builder->addDefinitions([
             \stdClass::class => create()
                 ->property('foo', 'bar'),

@@ -25,7 +25,7 @@ class DefinitionFileTest extends TestCase
         $definition = $source->getDefinition('foo');
         $this->assertInstanceOf(ValueDefinition::class, $definition);
         $this->assertEquals('bar', $definition->getValue());
-        $this->assertInternalType('string', $definition->getValue());
+        $this->assertIsString($definition->getValue());
 
         /** @var ObjectDefinition $definition */
         $definition = $source->getDefinition('bim');
@@ -36,12 +36,11 @@ class DefinitionFileTest extends TestCase
 
     /**
      * @see https://github.com/PHP-DI/PHP-DI/issues/242
-     *
-     * @expectedException \Exception
-     * @expectedExceptionMessage The PHP-DI definition is not indexed by an entry name in the definition array
      */
     public function testDefinitionsWithoutKeyThrowAnError()
     {
+        $this->expectException('Exception');
+        $this->expectExceptionMessage('The PHP-DI definition is not indexed by an entry name in the definition array');
         $source = new DefinitionFile(__DIR__ . '/Fixtures/definitions-fail.php');
         $source->getDefinition('foo');
     }

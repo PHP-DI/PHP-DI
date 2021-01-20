@@ -35,6 +35,8 @@ class InstanceInjector extends ObjectCreator
 
             throw new DependencyException($message, 0, $e);
         }
+
+        return $definition;
     }
 
     public function isResolvable(Definition $definition, array $parameters = []) : bool
