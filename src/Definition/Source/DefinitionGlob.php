@@ -66,7 +66,7 @@ class DefinitionGlob implements DefinitionSource
             return;
         }
 
-        $paths = glob($this->pattern, GLOB_BRACE);
+        $paths = glob($this->pattern, \GLOB_BRACE);
         $sources = array_map(function ($path) {
             return new DefinitionFile($path, $this->autowiring);
         }, $paths);
