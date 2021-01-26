@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace DI\Test\IntegrationTest;
 
+use DI\Annotation\Inject;
 use DI\ContainerBuilder;
 use DI\Test\IntegrationTest\Fixtures\Class1;
 use DI\Test\IntegrationTest\Fixtures\Class2;

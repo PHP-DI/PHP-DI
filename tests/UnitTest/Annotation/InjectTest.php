@@ -113,7 +113,7 @@ class InjectTest extends TestCase
     }
 
     /**
-     * Inject annotation should work even if not imported.
+     * Inject annotation without import does not work any more!
      */
     public function testNonImportedAnnotation()
     {
@@ -122,7 +122,7 @@ class InjectTest extends TestCase
         /** @var $annotation Inject */
         $annotation = $this->annotationReader->getPropertyAnnotation($property, Inject::class);
 
-        $this->assertInstanceOf(Inject::class, $annotation);
+        $this->assertNull($annotation);
     }
 
     /**
