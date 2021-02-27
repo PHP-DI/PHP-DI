@@ -71,6 +71,23 @@ class AutowireDefinitionTest extends BaseContainerTest
     /**
      * @dataProvider provideContainer
      */
+    public function test_constructor_injection_with_named_arguments(ContainerBuilder $builder)
+    {
+        $builder->addDefinitions([
+            ConstructorInjection::class => autowire()
+                ->constructor(
+                    value: 'bar',
+                ),
+        ]);
+        $container = $builder->build();
+
+        $object = $container->get(ConstructorInjection::class);
+        self::assertEquals('bar', $object->value);
+    }
+
+    /**
+     * @dataProvider provideContainer
+     */
     public function test_autowired_constructor_injection_can_be_overloaded(ContainerBuilder $builder)
     {
         $builder->addDefinitions([
@@ -241,6 +258,19 @@ class AutowireDefinitionTest extends BaseContainerTest
         $container = $builder->addDefinitions([
             Setter::class => autowire()
                 ->methodParameter('setFoo', 'bar', 'Hello'),
+        ])->build();
+
+        self::assertEquals('Hello', $container->get(Setter::class)->bar);
+    }
+
+    /**
+     * @dataProvider provideContainer
+     */
+    public function test_setting_specific_method_parameter_with_named_arguments(ContainerBuilder $builder)
+    {
+        $container = $builder->addDefinitions([
+            Setter::class => autowire()
+                ->method('setFoo', bar: 'Hello'),
         ])->build();
 
         self::assertEquals('Hello', $container->get(Setter::class)->bar);
