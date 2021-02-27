@@ -17,17 +17,9 @@ class SourceChain implements DefinitionSource, MutableDefinitionSource
     /**
      * @var DefinitionSource[]
      */
-    private $sources;
+    private array $sources;
 
-    /**
-     * @var DefinitionSource
-     */
-    private $rootSource;
-
-    /**
-     * @var MutableDefinitionSource|null
-     */
-    private $mutableSource;
+    private ?MutableDefinitionSource $mutableSource;
 
     /**
      * @param DefinitionSource[] $sources
@@ -36,7 +28,6 @@ class SourceChain implements DefinitionSource, MutableDefinitionSource
     {
         // We want a numerically indexed array to ease the traversal later
         $this->sources = array_values($sources);
-        $this->rootSource = $this;
     }
 
     /**
@@ -45,7 +36,7 @@ class SourceChain implements DefinitionSource, MutableDefinitionSource
      * @param int $startIndex Use this parameter to start looking from a specific
      *                        point in the source chain.
      */
-    public function getDefinition(string $name, int $startIndex = 0)
+    public function getDefinition(string $name, int $startIndex = 0): Definition|null
     {
         $count = count($this->sources);
         for ($i = $startIndex; $i < $count; ++$i) {
@@ -73,14 +64,12 @@ class SourceChain implements DefinitionSource, MutableDefinitionSource
         }
         $names = array_keys($names);
 
-        $definitions = array_combine($names, array_map(function (string $name) {
+        return array_combine($names, array_map(function (string $name) {
             return $this->getDefinition($name);
         }, $names));
-
-        return $definitions;
     }
 
-    public function addDefinition(Definition $definition)
+    public function addDefinition(Definition $definition): void
     {
         if (! $this->mutableSource) {
             throw new \LogicException("The container's definition source has not been initialized correctly");
@@ -101,7 +90,7 @@ class SourceChain implements DefinitionSource, MutableDefinitionSource
         }
     }
 
-    public function setMutableDefinitionSource(MutableDefinitionSource $mutableSource)
+    public function setMutableDefinitionSource(MutableDefinitionSource $mutableSource): void
     {
         $this->mutableSource = $mutableSource;
 

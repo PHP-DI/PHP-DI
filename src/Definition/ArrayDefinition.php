@@ -12,16 +12,12 @@ namespace DI\Definition;
  */
 class ArrayDefinition implements Definition
 {
-    /**
-     * Entry name.
-     */
+    /** Entry name. */
     private string $name = '';
 
-    private array $values;
-
-    public function __construct(array $values)
-    {
-        $this->values = $values;
+    public function __construct(
+        private array $values,
+    ) {
     }
 
     public function getName() : string
@@ -44,7 +40,7 @@ class ArrayDefinition implements Definition
         $this->values = array_map($replacer, $this->values);
     }
 
-    public function __toString()
+    public function __toString(): string
     {
         $str = '[' . PHP_EOL;
 

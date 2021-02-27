@@ -87,7 +87,7 @@ class CreateDefinitionHelper implements DefinitionHelper
      *
      * @return $this
      */
-    public function property(string $property, $value) : self
+    public function property(string $property, mixed $value) : self
     {
         $this->properties[$property] = $value;
 
@@ -108,7 +108,7 @@ class CreateDefinitionHelper implements DefinitionHelper
      *
      * @return $this
      */
-    public function method(string $method, ...$parameters) : self
+    public function method(string $method, mixed ...$parameters) : self
     {
         if (! isset($this->methods[$method])) {
             $this->methods[$method] = [];

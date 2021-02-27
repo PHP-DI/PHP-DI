@@ -68,7 +68,7 @@ class ObjectDefinition implements Definition
         $this->name = $name;
     }
 
-    public function setClassName(string $className = null)
+    public function setClassName(?string $className): void
     {
         $this->className = $className;
 
@@ -77,11 +77,7 @@ class ObjectDefinition implements Definition
 
     public function getClassName() : string
     {
-        if ($this->className !== null) {
-            return $this->className;
-        }
-
-        return $this->name;
+        return $this->className ?? $this->name;
     }
 
     public function getConstructorInjection() : ?MethodInjection
@@ -209,7 +205,7 @@ class ObjectDefinition implements Definition
      *
      * @param string[] $replacements
      */
-    public function replaceWildcards(array $replacements)
+    public function replaceWildcards(array $replacements): void
     {
         $className = $this->getClassName();
 
@@ -223,7 +219,7 @@ class ObjectDefinition implements Definition
         $this->setClassName($className);
     }
 
-    public function __toString()
+    public function __toString(): string
     {
         return (new ObjectDefinitionDumper)->dump($this);
     }

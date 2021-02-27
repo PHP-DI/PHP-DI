@@ -29,7 +29,7 @@ class DecoratorDefinition extends FactoryDefinition implements Definition, Exten
         // no nested definitions
     }
 
-    public function __toString()
+    public function __toString(): string
     {
         return 'Decorate(' . $this->getName() . ')';
     }

@@ -19,11 +19,9 @@ use ReflectionProperty;
  */
 class ObjectCreationCompiler
 {
-    private Compiler $compiler;
-
-    public function __construct(Compiler $compiler)
-    {
-        $this->compiler = $compiler;
+    public function __construct(
+        private Compiler $compiler,
+    ) {
     }
 
     public function compile(ObjectDefinition $definition) : string
@@ -96,7 +94,7 @@ class ObjectCreationCompiler
         return implode("\n        ", $code);
     }
 
-    public function resolveParameters(MethodInjection $definition = null, ReflectionMethod $method = null) : array
+    public function resolveParameters(?MethodInjection $definition, ?ReflectionMethod $method) : array
     {
         $args = [];
 
@@ -152,9 +150,8 @@ PHP;
      * Returns the default value of a function parameter.
      *
      * @throws InvalidDefinition Can't get default values from PHP internal classes and functions
-     * @return mixed
      */
-    private function getParameterDefaultValue(ReflectionParameter $parameter, ReflectionMethod $function)
+    private function getParameterDefaultValue(ReflectionParameter $parameter, ReflectionMethod $function): mixed
     {
         try {
             return $parameter->getDefaultValue();
@@ -175,7 +172,7 @@ PHP;
 
     private function assertClassIsNotAnonymous(ObjectDefinition $definition) : void
     {
-        if (strpos($definition->getClassName(), '@') !== false) {
+        if (str_contains($definition->getClassName(), '@')) {
             throw InvalidDefinition::create($definition, sprintf(
                 'Entry "%s" cannot be compiled: anonymous classes cannot be compiled',
                 $definition->getName()

@@ -26,10 +26,6 @@ use Psr\Container\ContainerInterface;
  */
 class ResolverDispatcher implements DefinitionResolver
 {
-    private ContainerInterface $container;
-
-    private ProxyFactory $proxyFactory;
-
     private ?ArrayResolver $arrayResolver = null;
     private ?FactoryResolver $factoryResolver = null;
     private ?DecoratorResolver $decoratorResolver = null;
@@ -37,10 +33,10 @@ class ResolverDispatcher implements DefinitionResolver
     private ?InstanceInjector $instanceResolver = null;
     private ?EnvironmentVariableResolver $envVariableResolver = null;
 
-    public function __construct(ContainerInterface $container, ProxyFactory $proxyFactory)
-    {
-        $this->container = $container;
-        $this->proxyFactory = $proxyFactory;
+    public function __construct(
+        private ContainerInterface $container,
+        private ProxyFactory $proxyFactory,
+    ) {
     }
 
     /**
@@ -53,7 +49,7 @@ class ResolverDispatcher implements DefinitionResolver
      *
      * @return mixed Value obtained from the definition.
      */
-    public function resolve(Definition $definition, array $parameters = [])
+    public function resolve(Definition $definition, array $parameters = []): mixed
     {
         // Special case, tested early for speed
         if ($definition instanceof SelfResolvingDefinition) {
@@ -122,7 +118,7 @@ class ResolverDispatcher implements DefinitionResolver
 
                 return $this->instanceResolver;
             default:
-                throw new \RuntimeException('No definition resolver was configured for definition of type ' . get_class($definition));
+                throw new \RuntimeException('No definition resolver was configured for definition of type ' . $definition::class);
         }
     }
 }

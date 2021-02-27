@@ -76,7 +76,7 @@ final class Inject
     /**
      * @return string|null Name of the entry to inject
      */
-    public function getName() : ?string
+    public function getName() : string|null
     {
         return $this->name;
     }

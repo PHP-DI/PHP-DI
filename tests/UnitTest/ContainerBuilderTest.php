@@ -179,17 +179,6 @@ class ContainerBuilderTest extends TestCase
     /**
      * @test
      */
-    public function errors_when_adding_invalid_definitions()
-    {
-        $this->expectException('InvalidArgumentException');
-        $this->expectExceptionMessage('ContainerBuilder::addDefinitions() parameter must be a string, an array or a DefinitionSource object, integer given');
-        $builder = new ContainerBuilder(FakeContainer::class);
-        $builder->addDefinitions(123);
-    }
-
-    /**
-     * @test
-     */
     public function should_allow_to_create_a_compiled_container()
     {
         $builder = new ContainerBuilder();

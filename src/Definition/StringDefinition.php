@@ -16,16 +16,12 @@ use Psr\Container\NotFoundExceptionInterface;
  */
 class StringDefinition implements Definition, SelfResolvingDefinition
 {
-    /**
-     * Entry name.
-     */
+    /** Entry name. */
     private string $name = '';
 
-    private string $expression;
-
-    public function __construct(string $expression)
-    {
-        $this->expression = $expression;
+    public function __construct(
+        private string $expression,
+    ) {
     }
 
     public function getName() : string
@@ -58,7 +54,7 @@ class StringDefinition implements Definition, SelfResolvingDefinition
         // no nested definitions
     }
 
-    public function __toString()
+    public function __toString(): string
     {
         return $this->expression;
     }

@@ -122,7 +122,7 @@ class ObjectDefinitionDumper
                         var_export($value, true)
                     );
                     continue;
-                } catch (ReflectionException $e) {
+                } catch (ReflectionException) {
                     // The default value can't be read through Reflection because it is a PHP internal class
                 }
             }

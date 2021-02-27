@@ -38,7 +38,7 @@ class AttributeBasedAutowiring implements DefinitionSource, Autowiring
     /**
      * @throws InvalidAnnotation
      */
-    public function autowire(string $name, ObjectDefinition $definition = null)
+    public function autowire(string $name, ObjectDefinition $definition = null): ObjectDefinition|null
     {
         $className = $definition ? $definition->getClassName() : $name;
 
@@ -66,7 +66,7 @@ class AttributeBasedAutowiring implements DefinitionSource, Autowiring
      * @throws InvalidAnnotation
      * @throws InvalidArgumentException The class doesn't exist
      */
-    public function getDefinition(string $name)
+    public function getDefinition(string $name): ObjectDefinition|null
     {
         return $this->autowire($name);
     }
@@ -82,7 +82,7 @@ class AttributeBasedAutowiring implements DefinitionSource, Autowiring
     /**
      * Browse the class properties looking for annotated properties.
      */
-    private function readProperties(ReflectionClass $class, ObjectDefinition $definition)
+    private function readProperties(ReflectionClass $class, ObjectDefinition $definition): void
     {
         foreach ($class->getProperties() as $property) {
             if ($property->isStatic()) {
@@ -106,7 +106,7 @@ class AttributeBasedAutowiring implements DefinitionSource, Autowiring
     /**
      * @throws InvalidAnnotation
      */
-    private function readProperty(ReflectionProperty $property, ObjectDefinition $definition, $classname = null) : void
+    private function readProperty(ReflectionProperty $property, ObjectDefinition $definition, ?string $classname = null): void
     {
         // Look for #[Inject] annotation
         try {
@@ -157,7 +157,7 @@ class AttributeBasedAutowiring implements DefinitionSource, Autowiring
     /**
      * Browse the object's methods looking for annotated methods.
      */
-    private function readMethods(ReflectionClass $class, ObjectDefinition $objectDefinition)
+    private function readMethods(ReflectionClass $class, ObjectDefinition $objectDefinition): void
     {
         // This will look in all the methods, including those of the parent classes
         foreach ($class->getMethods(ReflectionMethod::IS_PUBLIC) as $method) {
@@ -239,7 +239,7 @@ class AttributeBasedAutowiring implements DefinitionSource, Autowiring
 
         // Look for the property type
         $parameterType = $parameter->getType();
-        if ($parameterType && !$parameterType->isBuiltin() && $parameterType instanceof ReflectionNamedType) {
+        if ($parameterType && $parameterType instanceof ReflectionNamedType && !$parameterType->isBuiltin()) {
             return $parameterType->getName();
         }
 

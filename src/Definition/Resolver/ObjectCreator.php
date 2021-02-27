@@ -24,22 +24,16 @@ use ReflectionProperty;
  */
 class ObjectCreator implements DefinitionResolver
 {
-    private ProxyFactory $proxyFactory;
-
     private ParameterResolver $parameterResolver;
-
-    private DefinitionResolver $definitionResolver;
 
     /**
      * @param DefinitionResolver $definitionResolver Used to resolve nested definitions.
      * @param ProxyFactory       $proxyFactory       Used to create proxies for lazy injections.
      */
     public function __construct(
-        DefinitionResolver $definitionResolver,
-        ProxyFactory $proxyFactory
+        private DefinitionResolver $definitionResolver,
+        private ProxyFactory $proxyFactory
     ) {
-        $this->definitionResolver = $definitionResolver;
-        $this->proxyFactory = $proxyFactory;
         $this->parameterResolver = new ParameterResolver($definitionResolver);
     }
 
@@ -115,6 +109,7 @@ class ObjectCreator implements DefinitionResolver
             ));
         }
 
+        /** @psalm-var class-string $classname */
         $classname = $definition->getClassName();
         $classReflection = new ReflectionClass($classname);
 
@@ -147,7 +142,7 @@ class ObjectCreator implements DefinitionResolver
         return $object;
     }
 
-    protected function injectMethodsAndProperties($object, ObjectDefinition $objectDefinition) : void
+    protected function injectMethodsAndProperties(object $object, ObjectDefinition $objectDefinition) : void
     {
         // Property injections
         foreach ($objectDefinition->getPropertyInjections() as $propertyInjection) {
@@ -172,7 +167,7 @@ class ObjectCreator implements DefinitionResolver
      * @throws DependencyException
      * @throws InvalidDefinition
      */
-    private function injectProperty($object, PropertyInjection $propertyInjection) : void
+    private function injectProperty(object $object, PropertyInjection $propertyInjection) : void
     {
         $propertyName = $propertyInjection->getPropertyName();
 
@@ -196,7 +191,7 @@ class ObjectCreator implements DefinitionResolver
         self::setPrivatePropertyValue($propertyInjection->getClassName(), $object, $propertyName, $value);
     }
 
-    public static function setPrivatePropertyValue(string $className = null, $object, string $propertyName, $propertyValue) : void
+    public static function setPrivatePropertyValue(?string $className, $object, string $propertyName, mixed $propertyValue) : void
     {
         $className = $className ?: get_class($object);
 

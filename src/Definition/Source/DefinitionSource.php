@@ -18,9 +18,8 @@ interface DefinitionSource
      * Returns the DI definition for the entry name.
      *
      * @throws InvalidDefinition An invalid definition was found.
-     * @return Definition|null
      */
-    public function getDefinition(string $name);
+    public function getDefinition(string $name): Definition|null;
 
     /**
      * @return Definition[] Definitions indexed by their name.

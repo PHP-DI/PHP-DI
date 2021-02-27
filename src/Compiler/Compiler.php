@@ -77,11 +77,9 @@ class Compiler
 
     private bool $autowiringEnabled;
 
-    private ProxyFactory $proxyFactory;
-
-    public function __construct(ProxyFactory $proxyFactory)
-    {
-        $this->proxyFactory = $proxyFactory;
+    public function __construct(
+        private ProxyFactory $proxyFactory,
+    ) {
     }
 
     public function getProxyFactory() : ProxyFactory
@@ -302,7 +300,7 @@ PHP;
         return $methodName;
     }
 
-    public function compileValue($value) : string
+    public function compileValue(mixed $value) : string
     {
         // Check that the value can be compiled
         $errorMessage = $this->isCompilable($value);
@@ -351,7 +349,7 @@ PHP;
     /**
      * @return string|true If true is returned that means that the value is compilable.
      */
-    private function isCompilable($value)
+    private function isCompilable($value): string|bool
     {
         if ($value instanceof ValueDefinition) {
             return $this->isCompilable($value->getValue());

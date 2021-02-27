@@ -16,7 +16,7 @@ use ReflectionNamedType;
  */
 class ReflectionBasedAutowiring implements DefinitionSource, Autowiring
 {
-    public function autowire(string $name, ObjectDefinition $definition = null)
+    public function autowire(string $name, ObjectDefinition $definition = null): ObjectDefinition|null
     {
         $className = $definition ? $definition->getClassName() : $name;
 
@@ -37,7 +37,7 @@ class ReflectionBasedAutowiring implements DefinitionSource, Autowiring
         return $definition;
     }
 
-    public function getDefinition(string $name)
+    public function getDefinition(string $name): ObjectDefinition|null
     {
         return $this->autowire($name);
     }
@@ -68,12 +68,12 @@ class ReflectionBasedAutowiring implements DefinitionSource, Autowiring
                 // No type
                 continue;
             }
-            if ($parameterType->isBuiltin()) {
-                // Primitive types are not supported
-                continue;
-            }
             if (!$parameterType instanceof ReflectionNamedType) {
                 // Union types are not supported
+                continue;
+            }
+            if ($parameterType->isBuiltin()) {
+                // Primitive types are not supported
                 continue;
             }
 

@@ -302,19 +302,11 @@ class ContainerBuilder
      *                                                      or a DefinitionSource object.
      * @return $this
      */
-    public function addDefinitions(...$definitions) : self
+    public function addDefinitions(string|array|DefinitionSource ...$definitions) : self
     {
         $this->ensureNotLocked();
 
         foreach ($definitions as $definition) {
-            if (!is_string($definition) && !is_array($definition) && !($definition instanceof DefinitionSource)) {
-                throw new InvalidArgumentException(sprintf(
-                    '%s parameter must be a string, an array or a DefinitionSource object, %s given',
-                    'ContainerBuilder::addDefinitions()',
-                    is_object($definition) ? get_class($definition) : gettype($definition)
-                ));
-            }
-
             $this->definitionSources[] = $definition;
         }
 

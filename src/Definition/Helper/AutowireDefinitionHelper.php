@@ -28,7 +28,7 @@ class AutowireDefinitionHelper extends CreateDefinitionHelper
      *
      * @return $this
      */
-    public function constructorParameter($parameter, $value) : self
+    public function constructorParameter(string|int $parameter, mixed $value) : self
     {
         $this->constructor[$parameter] = $value;
 
@@ -52,7 +52,7 @@ class AutowireDefinitionHelper extends CreateDefinitionHelper
      *
      * @return $this
      */
-    public function methodParameter(string $method, $parameter, $value) : self
+    public function methodParameter(string $method, string|int $parameter, mixed $value) : self
     {
         // Special case for the constructor
         if ($method === '__construct') {

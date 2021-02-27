@@ -17,14 +17,12 @@ use Exception;
  */
 class ArrayResolver implements DefinitionResolver
 {
-    private DefinitionResolver $definitionResolver;
-
     /**
      * @param DefinitionResolver $definitionResolver Used to resolve nested definitions.
      */
-    public function __construct(DefinitionResolver $definitionResolver)
-    {
-        $this->definitionResolver = $definitionResolver;
+    public function __construct(
+        private DefinitionResolver $definitionResolver
+    ) {
     }
 
     /**
@@ -53,7 +51,7 @@ class ArrayResolver implements DefinitionResolver
         return true;
     }
 
-    private function resolveDefinition(Definition $value, ArrayDefinition $definition, $key)
+    private function resolveDefinition(Definition $value, ArrayDefinition $definition, int|string $key): mixed
     {
         try {
             return $this->definitionResolver->resolve($value);

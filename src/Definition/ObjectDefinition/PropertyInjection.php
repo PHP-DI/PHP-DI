@@ -15,9 +15,8 @@ class PropertyInjection
 
     /**
      * Value that should be injected in the property.
-     * @var mixed
      */
-    private $value;
+    private mixed $value;
 
     /**
      * Use for injecting in properties of parent classes: the class name
@@ -30,7 +29,7 @@ class PropertyInjection
      * @param string $propertyName Property name
      * @param mixed $value Value that should be injected in the property
      */
-    public function __construct(string $propertyName, $value, string $className = null)
+    public function __construct(string $propertyName, mixed $value, string $className = null)
     {
         $this->propertyName = $propertyName;
         $this->value = $value;
@@ -45,7 +44,7 @@ class PropertyInjection
     /**
      * @return mixed Value that should be injected in the property
      */
-    public function getValue()
+    public function getValue(): mixed
     {
         return $this->value;
     }

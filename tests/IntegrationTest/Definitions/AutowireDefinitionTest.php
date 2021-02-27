@@ -347,20 +347,6 @@ class AutowireDefinitionTest extends BaseContainerTest
 
     /**
      * @dataProvider provideContainer
-     * @requires PHP < 8
-     */
-    public function test_optional_parameter_followed_by_required_parameters(ContainerBuilder $builder)
-    {
-        $container = $builder->build();
-
-        $object = $container->get(OptionalParameterFollowedByRequiredParameter::class);
-
-        self::assertNull($object->first);
-        self::assertInstanceOf(\stdClass::class, $object->second);
-    }
-
-    /**
-     * @dataProvider provideContainer
      */
     public function test_php71_nullable_typehint(ContainerBuilder $builder)
     {
