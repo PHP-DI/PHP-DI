@@ -12,6 +12,8 @@ use Psr\Container\ContainerInterface;
 /**
  * Resolves a decorator definition to a value.
  *
+ * @template-implements DefinitionResolver<DecoratorDefinition>
+ *
  * @since 5.0
  * @author Matthieu Napoli <matthieu@mnapoli.fr>
  */

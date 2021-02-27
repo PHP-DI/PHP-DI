@@ -11,6 +11,8 @@ use DI\Definition\Exception\InvalidDefinition;
 /**
  * Resolves a environment variable definition to a value.
  *
+ * @template-implements DefinitionResolver<EnvironmentVariableDefinition>
+ *
  * @author James Harris <james.harris@icecave.com.au>
  */
 class EnvironmentVariableResolver implements DefinitionResolver

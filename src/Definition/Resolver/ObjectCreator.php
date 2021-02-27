@@ -19,6 +19,8 @@ use ReflectionProperty;
 /**
  * Create objects based on an object definition.
  *
+ * @template-implements DefinitionResolver<ObjectDefinition>
+ *
  * @since 4.0
  * @author Matthieu Napoli <matthieu@mnapoli.fr>
  */
@@ -70,7 +72,7 @@ class ObjectCreator implements DefinitionResolver
      */
     private function createProxy(ObjectDefinition $definition, array $parameters) : LazyLoadingInterface
     {
-        $proxy = $this->proxyFactory->createProxy(
+        return $this->proxyFactory->createProxy(
             $definition->getClassName(),
             function (& $wrappedObject, $proxy, $method, $params, & $initializer) use ($definition, $parameters) {
                 $wrappedObject = $this->createInstance($definition, $parameters);
@@ -79,8 +81,6 @@ class ObjectCreator implements DefinitionResolver
                 return true;
             }
         );
-
-        return $proxy;
     }
 
     /**
@@ -166,7 +166,6 @@ class ObjectCreator implements DefinitionResolver
      * @param PropertyInjection $propertyInjection Property injection definition
      *
      * @throws DependencyException
-     * @throws InvalidDefinition
      */
     private function injectProperty(object $object, PropertyInjection $propertyInjection) : void
     {

@@ -12,10 +12,12 @@ use Psr\Container\NotFoundExceptionInterface;
 /**
  * Injects dependencies on an existing instance.
  *
+ * @template-implements DefinitionResolver<InstanceDefinition>
+ *
  * @since 5.0
  * @author Matthieu Napoli <matthieu@mnapoli.fr>
  */
-class InstanceInjector extends ObjectCreator
+class InstanceInjector extends ObjectCreator implements DefinitionResolver
 {
     /**
      * Injects dependencies on an existing instance.

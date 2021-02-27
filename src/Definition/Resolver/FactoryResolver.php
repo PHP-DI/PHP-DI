@@ -20,6 +20,8 @@ use Psr\Container\ContainerInterface;
 /**
  * Resolves a factory definition to a value.
  *
+ * @template-implements DefinitionResolver<FactoryDefinition>
+ *
  * @since 4.0
  * @author Matthieu Napoli <matthieu@mnapoli.fr>
  */
