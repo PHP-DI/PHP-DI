@@ -30,7 +30,7 @@ interface DefinitionResolver
      *
      * @return mixed Value obtained from the definition.
      */
-    public function resolve(Definition $definition, array $parameters = []): mixed;
+    public function resolve(Definition $definition, array $parameters = []) : mixed;
 
     /**
      * Check if a definition can be resolved.

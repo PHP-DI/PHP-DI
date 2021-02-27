@@ -156,7 +156,7 @@ STR;
      *
      * @throws InvalidDefinition Can't get default values from PHP internal classes and functions
      */
-    private function getParameterDefaultValue(ReflectionParameter $parameter, ReflectionMethod $function): mixed
+    private function getParameterDefaultValue(ReflectionParameter $parameter, ReflectionMethod $function) : mixed
     {
         try {
             return $parameter->getDefaultValue();

@@ -46,7 +46,7 @@ class FactoryResolver implements DefinitionResolver
      *
      * @param FactoryDefinition $definition
      */
-    public function resolve(Definition $definition, array $parameters = []): mixed
+    public function resolve(Definition $definition, array $parameters = []) : mixed
     {
         if (! $this->invoker) {
             $parameterResolver = new ResolverChain([

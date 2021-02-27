@@ -33,7 +33,7 @@ class FactoryDefinition implements Definition
      * @param callable|array|string $factory Callable that returns the value associated to the entry name.
      * @param array $parameters Parameters to be passed to the callable
      */
-    public function __construct(string $name, callable|array|string $factory, array $parameters = [])
+    public function __construct(string $name, callable | array | string $factory, array $parameters = [])
     {
         $this->name = $name;
         $this->factory = $factory;
@@ -53,7 +53,7 @@ class FactoryDefinition implements Definition
     /**
      * @return callable|array|string Callable that returns the value associated to the entry name.
      */
-    public function getCallable(): callable|array|string
+    public function getCallable() : callable | array | string
     {
         return $this->factory;
     }
@@ -71,7 +71,7 @@ class FactoryDefinition implements Definition
         $this->parameters = array_map($replacer, $this->parameters);
     }
 
-    public function __toString(): string
+    public function __toString() : string
     {
         return 'Factory';
     }

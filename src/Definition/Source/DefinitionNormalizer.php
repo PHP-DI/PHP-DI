@@ -80,7 +80,7 @@ class DefinitionNormalizer
      *
      * @throws InvalidDefinition
      */
-    public function normalizeNestedDefinition(mixed $definition): mixed
+    public function normalizeNestedDefinition(mixed $definition) : mixed
     {
         $name = '<nested definition>';
 

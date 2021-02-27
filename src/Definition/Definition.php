@@ -33,5 +33,5 @@ interface Definition extends RequestedEntry, \Stringable
     /**
      * Definitions can be cast to string for debugging information.
      */
-    public function __toString(): string;
+    public function __toString() : string;
 }

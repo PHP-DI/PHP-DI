@@ -40,9 +40,9 @@ class ArrayDefinition implements Definition
         $this->values = array_map($replacer, $this->values);
     }
 
-    public function __toString(): string
+    public function __toString() : string
     {
-        $str = '[' . PHP_EOL;
+        $str = '[' . \PHP_EOL;
 
         foreach ($this->values as $key => $value) {
             if (is_string($key)) {
@@ -52,12 +52,12 @@ class ArrayDefinition implements Definition
             $str .= '    ' . $key . ' => ';
 
             if ($value instanceof Definition) {
-                $str .= str_replace(PHP_EOL, PHP_EOL . '    ', (string) $value);
+                $str .= str_replace(\PHP_EOL, \PHP_EOL . '    ', (string) $value);
             } else {
                 $str .= var_export($value, true);
             }
 
-            $str .= ',' . PHP_EOL;
+            $str .= ',' . \PHP_EOL;
         }
 
         return $str . ']';

@@ -28,7 +28,7 @@ class EnvironmentVariableResolver implements DefinitionResolver
      *
      * @param EnvironmentVariableDefinition $definition
      */
-    public function resolve(Definition $definition, array $parameters = []): mixed
+    public function resolve(Definition $definition, array $parameters = []) : mixed
     {
         $value = call_user_func($this->variableReader, $definition->getVariableName());
 

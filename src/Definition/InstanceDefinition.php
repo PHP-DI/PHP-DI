@@ -47,7 +47,7 @@ class InstanceDefinition implements Definition
         $this->objectDefinition->replaceNestedDefinitions($replacer);
     }
 
-    public function __toString(): string
+    public function __toString() : string
     {
         return 'Instance';
     }

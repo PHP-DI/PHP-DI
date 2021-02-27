@@ -29,7 +29,7 @@ abstract class CompiledContainer extends Container
     /**
      * {@inheritdoc}
      */
-    public function get($id): mixed
+    public function get($id) : mixed
     {
         // Try to find the entry in the singleton map
         if (isset($this->resolvedEntries[$id]) || array_key_exists($id, $this->resolvedEntries)) {
@@ -65,7 +65,7 @@ abstract class CompiledContainer extends Container
     /**
      * {@inheritdoc}
      */
-    public function has($id): bool
+    public function has($id) : bool
     {
         if (! is_string($id)) {
             throw new \InvalidArgumentException(sprintf(
@@ -83,7 +83,7 @@ abstract class CompiledContainer extends Container
         return parent::has($id);
     }
 
-    protected function setDefinition(string $name, Definition $definition): void
+    protected function setDefinition(string $name, Definition $definition) : void
     {
         // It needs to be forbidden because that would mean get() must go through the definitions
         // every time, which kinds of defeats the performance gains of the compiled container
@@ -93,7 +93,7 @@ abstract class CompiledContainer extends Container
     /**
      * Invoke the given callable.
      */
-    protected function resolveFactory($callable, $entryName, array $extraParameters = []): mixed
+    protected function resolveFactory($callable, $entryName, array $extraParameters = []) : mixed
     {
         // Initialize the factory resolver
         if (! $this->factoryInvoker) {

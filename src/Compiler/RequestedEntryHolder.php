@@ -16,7 +16,7 @@ class RequestedEntryHolder implements RequestedEntry
     ) {
     }
 
-    public function getName(): string
+    public function getName() : string
     {
         return $this->name;
     }

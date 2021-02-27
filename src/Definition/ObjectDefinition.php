@@ -68,7 +68,7 @@ class ObjectDefinition implements Definition
         $this->name = $name;
     }
 
-    public function setClassName(?string $className): void
+    public function setClassName(?string $className) : void
     {
         $this->className = $className;
 
@@ -205,7 +205,7 @@ class ObjectDefinition implements Definition
      *
      * @param string[] $replacements
      */
-    public function replaceWildcards(array $replacements): void
+    public function replaceWildcards(array $replacements) : void
     {
         $className = $this->getClassName();
 
@@ -219,7 +219,7 @@ class ObjectDefinition implements Definition
         $this->setClassName($className);
     }
 
-    public function __toString(): string
+    public function __toString() : string
     {
         return (new ObjectDefinitionDumper)->dump($this);
     }
@@ -237,7 +237,6 @@ class ObjectDefinition implements Definition
         }
 
         /** @var class-string $className */
-
         $class = new ReflectionClass($className);
         $this->isInstantiable = $class->isInstantiable();
     }

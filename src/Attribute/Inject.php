@@ -34,7 +34,7 @@ final class Inject
     /**
      * @throws InvalidAnnotation
      */
-    public function __construct(string|array|null $name = null)
+    public function __construct(string | array | null $name = null)
     {
         // #[Inject('foo')] or #[Inject(name: 'foo')]
         if (is_string($name)) {
@@ -47,7 +47,7 @@ final class Inject
                 if (! is_string($value)) {
                     throw new InvalidAnnotation(sprintf(
                         "#[Inject(['param' => 'value'])] expects \"value\" to be a string, %s given.",
-                        json_encode($value, JSON_THROW_ON_ERROR)
+                        json_encode($value, \JSON_THROW_ON_ERROR)
                     ));
                 }
 
@@ -59,7 +59,7 @@ final class Inject
     /**
      * @return string|null Name of the entry to inject
      */
-    public function getName() : string|null
+    public function getName() : string | null
     {
         return $this->name;
     }

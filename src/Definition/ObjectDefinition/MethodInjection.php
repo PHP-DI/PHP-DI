@@ -43,12 +43,12 @@ class MethodInjection implements Definition
     /**
      * Replace the parameters of the definition by a new array of parameters.
      */
-    public function replaceParameters(array $parameters): void
+    public function replaceParameters(array $parameters) : void
     {
         $this->parameters = $parameters;
     }
 
-    public function merge(self $definition): void
+    public function merge(self $definition) : void
     {
         // In case of conflicts, the current definition prevails.
         $this->parameters += $definition->parameters;
@@ -72,7 +72,7 @@ class MethodInjection implements Definition
     /**
      * {@inheritdoc}
      */
-    public function __toString(): string
+    public function __toString() : string
     {
         return sprintf('method(%s)', $this->methodName);
     }

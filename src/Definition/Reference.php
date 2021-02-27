@@ -39,7 +39,7 @@ class Reference implements Definition, SelfResolvingDefinition
         return $this->targetEntryName;
     }
 
-    public function resolve(ContainerInterface $container): mixed
+    public function resolve(ContainerInterface $container) : mixed
     {
         return $container->get($this->getTargetEntryName());
     }
@@ -54,7 +54,7 @@ class Reference implements Definition, SelfResolvingDefinition
         // no nested definitions
     }
 
-    public function __toString(): string
+    public function __toString() : string
     {
         return sprintf(
             'get(%s)',

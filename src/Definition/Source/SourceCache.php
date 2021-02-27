@@ -21,7 +21,7 @@ class SourceCache implements DefinitionSource, MutableDefinitionSource
     ) {
     }
 
-    public function getDefinition(string $name): Definition|null
+    public function getDefinition(string $name) : Definition | null
     {
         $definition = apcu_fetch($this->getCacheKey($name));
 
@@ -57,7 +57,7 @@ class SourceCache implements DefinitionSource, MutableDefinitionSource
         return self::CACHE_KEY . $this->cacheNamespace . $name;
     }
 
-    public function addDefinition(Definition $definition): void
+    public function addDefinition(Definition $definition) : void
     {
         throw new \LogicException('You cannot set a definition at runtime on a container that has caching enabled. Doing so would risk caching the definition for the next execution, where it might be different. You can either put your definitions in a file, remove the cache or ->set() a raw value directly (PHP object, string, int, ...) instead of a PHP-DI definition.');
     }

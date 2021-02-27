@@ -106,7 +106,7 @@ class Container implements ContainerInterface, FactoryInterface, InvokerInterfac
      * @throws DependencyException Error while resolving the entry.
      * @throws NotFoundException No entry found for the given name.
      */
-    public function get($id): mixed
+    public function get($id) : mixed
     {
         // If the entry is already resolved we return it
         if (isset($this->resolvedEntries[$id]) || array_key_exists($id, $this->resolvedEntries)) {
@@ -125,7 +125,7 @@ class Container implements ContainerInterface, FactoryInterface, InvokerInterfac
         return $value;
     }
 
-    private function getDefinition(string $name): ?Definition
+    private function getDefinition(string $name) : ?Definition
     {
         // Local cache that avoids fetching the same definition twice
         if (!array_key_exists($name, $this->fetchedDefinitions)) {
@@ -152,7 +152,7 @@ class Container implements ContainerInterface, FactoryInterface, InvokerInterfac
      * @throws DependencyException Error while resolving the entry.
      * @throws NotFoundException No entry found for the given name.
      */
-    public function make(string $name, array $parameters = []): mixed
+    public function make(string $name, array $parameters = []) : mixed
     {
         $definition = $this->getDefinition($name);
         if (! $definition) {
@@ -236,7 +236,7 @@ class Container implements ContainerInterface, FactoryInterface, InvokerInterfac
      *
      * @return mixed Result of the function.
      */
-    public function call($callable, array $parameters = []): mixed
+    public function call($callable, array $parameters = []) : mixed
     {
         return $this->getInvoker()->call($callable, $parameters);
     }
@@ -247,7 +247,7 @@ class Container implements ContainerInterface, FactoryInterface, InvokerInterfac
      * @param string $name Entry name
      * @param mixed|DefinitionHelper $value Value, use definition helpers to define objects
      */
-    public function set(string $name, mixed $value): void
+    public function set(string $name, mixed $value) : void
     {
         if ($value instanceof DefinitionHelper) {
             $value = $value->getDefinition($name);
@@ -334,7 +334,7 @@ class Container implements ContainerInterface, FactoryInterface, InvokerInterfac
      *
      * @throws DependencyException Error while resolving the entry.
      */
-    private function resolveDefinition(Definition $definition, array $parameters = []): mixed
+    private function resolveDefinition(Definition $definition, array $parameters = []) : mixed
     {
         $entryName = $definition->getName();
 

@@ -349,7 +349,7 @@ PHP;
     /**
      * @return string|true If true is returned that means that the value is compilable.
      */
-    private function isCompilable($value): string|bool
+    private function isCompilable($value) : string | bool
     {
         if ($value instanceof ValueDefinition) {
             return $this->isCompilable($value->getValue());

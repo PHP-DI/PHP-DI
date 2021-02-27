@@ -44,7 +44,7 @@ class PropertyInjection
     /**
      * @return mixed Value that should be injected in the property
      */
-    public function getValue(): mixed
+    public function getValue() : mixed
     {
         return $this->value;
     }

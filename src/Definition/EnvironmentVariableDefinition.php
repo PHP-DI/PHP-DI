@@ -56,7 +56,7 @@ class EnvironmentVariableDefinition implements Definition
     /**
      * @return mixed The default value to use if the environment variable is optional and not provided
      */
-    public function getDefaultValue(): mixed
+    public function getDefaultValue() : mixed
     {
         return $this->defaultValue;
     }
@@ -66,22 +66,22 @@ class EnvironmentVariableDefinition implements Definition
         $this->defaultValue = $replacer($this->defaultValue);
     }
 
-    public function __toString(): string
+    public function __toString() : string
     {
-        $str = '    variable = ' . $this->variableName . PHP_EOL
+        $str = '    variable = ' . $this->variableName . \PHP_EOL
             . '    optional = ' . ($this->isOptional ? 'yes' : 'no');
 
         if ($this->isOptional) {
             if ($this->defaultValue instanceof Definition) {
                 $nestedDefinition = (string) $this->defaultValue;
-                $defaultValueStr = str_replace(PHP_EOL, PHP_EOL . '    ', $nestedDefinition);
+                $defaultValueStr = str_replace(\PHP_EOL, \PHP_EOL . '    ', $nestedDefinition);
             } else {
                 $defaultValueStr = var_export($this->defaultValue, true);
             }
 
-            $str .= PHP_EOL . '    default = ' . $defaultValueStr;
+            $str .= \PHP_EOL . '    default = ' . $defaultValueStr;
         }
 
-        return sprintf('Environment variable (' . PHP_EOL . '%s' . PHP_EOL . ')', $str);
+        return sprintf('Environment variable (' . \PHP_EOL . '%s' . \PHP_EOL . ')', $str);
     }
 }

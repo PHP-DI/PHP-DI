@@ -26,5 +26,5 @@ interface FactoryInterface
      * @throws DependencyException       Error while resolving the entry.
      * @throws NotFoundException         No entry or class found for the given name.
      */
-    public function make(string $name, array $parameters = []): mixed;
+    public function make(string $name, array $parameters = []) : mixed;
 }

@@ -16,7 +16,7 @@ interface SelfResolvingDefinition
     /**
      * Resolve the definition and return the resulting value.
      */
-    public function resolve(ContainerInterface $container): mixed;
+    public function resolve(ContainerInterface $container) : mixed;
 
     /**
      * Check if a definition can be resolved.

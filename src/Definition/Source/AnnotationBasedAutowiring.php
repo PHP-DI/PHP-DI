@@ -37,7 +37,7 @@ class AnnotationBasedAutowiring implements DefinitionSource, Autowiring
     /**
      * @throws InvalidAnnotation
      */
-    public function autowire(string $name, ObjectDefinition $definition = null): ObjectDefinition|null
+    public function autowire(string $name, ObjectDefinition $definition = null) : ObjectDefinition | null
     {
         $className = $definition ? $definition->getClassName() : $name;
 
@@ -65,7 +65,7 @@ class AnnotationBasedAutowiring implements DefinitionSource, Autowiring
      * @throws InvalidAnnotation
      * @throws InvalidArgumentException The class doesn't exist
      */
-    public function getDefinition(string $name): ObjectDefinition|null
+    public function getDefinition(string $name) : ObjectDefinition | null
     {
         return $this->autowire($name);
     }
@@ -81,7 +81,7 @@ class AnnotationBasedAutowiring implements DefinitionSource, Autowiring
     /**
      * Browse the class properties looking for annotated properties.
      */
-    private function readProperties(ReflectionClass $class, ObjectDefinition $definition): void
+    private function readProperties(ReflectionClass $class, ObjectDefinition $definition) : void
     {
         foreach ($class->getProperties() as $property) {
             if ($property->isStatic()) {
@@ -105,7 +105,7 @@ class AnnotationBasedAutowiring implements DefinitionSource, Autowiring
     /**
      * @throws InvalidAnnotation
      */
-    private function readProperty(ReflectionProperty $property, ObjectDefinition $definition, ?string $classname = null): void
+    private function readProperty(ReflectionProperty $property, ObjectDefinition $definition, ?string $classname = null) : void
     {
         // Look for @Inject annotation
         $annotation = $this->getAnnotationReader()->getPropertyAnnotation($property, Inject::class);
@@ -145,7 +145,7 @@ class AnnotationBasedAutowiring implements DefinitionSource, Autowiring
     /**
      * Browse the object's methods looking for annotated methods.
      */
-    private function readMethods(ReflectionClass $class, ObjectDefinition $objectDefinition): void
+    private function readMethods(ReflectionClass $class, ObjectDefinition $objectDefinition) : void
     {
         // This will look in all the methods, including those of the parent classes
         foreach ($class->getMethods(ReflectionMethod::IS_PUBLIC) as $method) {
@@ -210,7 +210,7 @@ class AnnotationBasedAutowiring implements DefinitionSource, Autowiring
     /**
      * @return string|null Entry name or null if not found.
      */
-    private function getMethodParameter(int $parameterIndex, ReflectionParameter $parameter, array $annotationParameters): string|null
+    private function getMethodParameter(int $parameterIndex, ReflectionParameter $parameter, array $annotationParameters) : string | null
     {
         // @Inject has definition for this parameter (by index, or by name)
         if (isset($annotationParameters[$parameterIndex])) {
@@ -248,7 +248,7 @@ class AnnotationBasedAutowiring implements DefinitionSource, Autowiring
     /**
      * @throws InvalidAnnotation
      */
-    private function readInjectableAnnotation(ReflectionClass $class, ObjectDefinition $definition): void
+    private function readInjectableAnnotation(ReflectionClass $class, ObjectDefinition $definition) : void
     {
         try {
             /** @var Injectable|null $annotation */

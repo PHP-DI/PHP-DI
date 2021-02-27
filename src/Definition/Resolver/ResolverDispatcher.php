@@ -49,7 +49,7 @@ class ResolverDispatcher implements DefinitionResolver
      *
      * @return mixed Value obtained from the definition.
      */
-    public function resolve(Definition $definition, array $parameters = []): mixed
+    public function resolve(Definition $definition, array $parameters = []) : mixed
     {
         // Special case, tested early for speed
         if ($definition instanceof SelfResolvingDefinition) {

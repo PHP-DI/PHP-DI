@@ -30,7 +30,7 @@ class SourceChain implements DefinitionSource, MutableDefinitionSource
      * @param int $startIndex Use this parameter to start looking from a specific
      *                        point in the source chain.
      */
-    public function getDefinition(string $name, int $startIndex = 0): Definition|null
+    public function getDefinition(string $name, int $startIndex = 0) : Definition | null
     {
         $count = count($this->sources);
         for ($i = $startIndex; $i < $count; ++$i) {
@@ -52,17 +52,17 @@ class SourceChain implements DefinitionSource, MutableDefinitionSource
 
     public function getDefinitions() : array
     {
-        $allDefinitions = array_merge(...array_map(fn($source) => $source->getDefinitions(), $this->sources));
+        $allDefinitions = array_merge(...array_map(fn ($source) => $source->getDefinitions(), $this->sources));
 
         /** @var string[] $allNames */
         $allNames = array_keys($allDefinitions);
 
-        $allValues = array_filter(array_map(fn($name) => $this->getDefinition($name), $allNames));
+        $allValues = array_filter(array_map(fn ($name) => $this->getDefinition($name), $allNames));
 
         return array_combine($allNames, $allValues);
     }
 
-    public function addDefinition(Definition $definition): void
+    public function addDefinition(Definition $definition) : void
     {
         if (! $this->mutableSource) {
             throw new \LogicException("The container's definition source has not been initialized correctly");
@@ -83,7 +83,7 @@ class SourceChain implements DefinitionSource, MutableDefinitionSource
         }
     }
 
-    public function setMutableDefinitionSource(MutableDefinitionSource $mutableSource): void
+    public function setMutableDefinitionSource(MutableDefinitionSource $mutableSource) : void
     {
         $this->mutableSource = $mutableSource;
 

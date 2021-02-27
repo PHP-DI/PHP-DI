@@ -41,7 +41,7 @@ class DefinitionArray implements DefinitionSource, MutableDefinitionSource
     /**
      * @param array $definitions DI definitions in a PHP array indexed by the definition name.
      */
-    public function addDefinitions(array $definitions): void
+    public function addDefinitions(array $definitions) : void
     {
         if (isset($definitions[0])) {
             throw new \Exception('The PHP-DI definition is not indexed by an entry name in the definition array');
@@ -55,7 +55,7 @@ class DefinitionArray implements DefinitionSource, MutableDefinitionSource
         $this->wildcardDefinitions = null;
     }
 
-    public function addDefinition(Definition $definition): void
+    public function addDefinition(Definition $definition) : void
     {
         $this->definitions[$definition->getName()] = $definition;
 
@@ -63,7 +63,7 @@ class DefinitionArray implements DefinitionSource, MutableDefinitionSource
         $this->wildcardDefinitions = null;
     }
 
-    public function getDefinition(string $name): Definition|null
+    public function getDefinition(string $name) : Definition | null
     {
         // Look for the definition by name
         if (array_key_exists($name, $this->definitions)) {

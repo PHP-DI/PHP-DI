@@ -33,12 +33,12 @@ class ValueDefinition implements Definition, SelfResolvingDefinition
         $this->name = $name;
     }
 
-    public function getValue(): mixed
+    public function getValue() : mixed
     {
         return $this->value;
     }
 
-    public function resolve(ContainerInterface $container): mixed
+    public function resolve(ContainerInterface $container) : mixed
     {
         return $this->getValue();
     }
@@ -53,7 +53,7 @@ class ValueDefinition implements Definition, SelfResolvingDefinition
         // no nested definitions
     }
 
-    public function __toString(): string
+    public function __toString() : string
     {
         return sprintf('Value (%s)', var_export($this->value, true));
     }

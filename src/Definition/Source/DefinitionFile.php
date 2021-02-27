@@ -26,7 +26,7 @@ class DefinitionFile extends DefinitionArray
         parent::__construct([], $autowiring);
     }
 
-    public function getDefinition(string $name): Definition|null
+    public function getDefinition(string $name) : Definition | null
     {
         $this->initialize();
 
@@ -43,7 +43,7 @@ class DefinitionFile extends DefinitionArray
     /**
      * Lazy-loading of the definitions.
      */
-    private function initialize(): void
+    private function initialize() : void
     {
         if ($this->initialized === true) {
             return;

@@ -28,7 +28,7 @@ class ArrayResolver implements DefinitionResolver
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      *
      * Resolve an array definition to a value.
      *
@@ -58,7 +58,7 @@ class ArrayResolver implements DefinitionResolver
     /**
      * @throws DependencyException
      */
-    private function resolveDefinition(Definition $value, ArrayDefinition $definition, int|string $key): mixed
+    private function resolveDefinition(Definition $value, ArrayDefinition $definition, int | string $key) : mixed
     {
         try {
             return $this->definitionResolver->resolve($value);

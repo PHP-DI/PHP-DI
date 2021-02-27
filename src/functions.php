@@ -56,7 +56,7 @@ if (! function_exists('DI\factory')) {
      * @param callable|array|string $factory The factory is a callable that takes the container as parameter
      *        and returns the value to register in the container.
      */
-    function factory(callable|array|string $factory) : FactoryDefinitionHelper
+    function factory(callable | array | string $factory) : FactoryDefinitionHelper
     {
         return new FactoryDefinitionHelper($factory);
     }
@@ -75,7 +75,7 @@ if (! function_exists('DI\decorate')) {
      * @param callable $callable The callable takes the decorated object as first parameter and
      *                           the container as second.
      */
-    function decorate(callable|array|string $callable) : FactoryDefinitionHelper
+    function decorate(callable | array | string $callable) : FactoryDefinitionHelper
     {
         return new FactoryDefinitionHelper($callable, true);
     }

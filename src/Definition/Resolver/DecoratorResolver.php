@@ -38,7 +38,7 @@ class DecoratorResolver implements DefinitionResolver
      *
      * @param DecoratorDefinition $definition
      */
-    public function resolve(Definition $definition, array $parameters = []): mixed
+    public function resolve(Definition $definition, array $parameters = []) : mixed
     {
         $callable = $definition->getCallable();
 
