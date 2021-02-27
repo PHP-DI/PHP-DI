@@ -52,12 +52,7 @@ class ContainerBuilder
     private bool $useAttributes = false;
 
     /**
-     * If true, write the proxies to disk to improve performances.
-     */
-    private bool $writeProxiesToFile = false;
-
-    /**
-     * Directory where to write the proxies (if $writeProxiesToFile is enabled).
+     * If set, write the proxies to disk in this directory to improve performances.
      */
     private ?string $proxyDirectory = null;
 
@@ -144,10 +139,7 @@ class ContainerBuilder
             $source = new SourceCache($source, $this->sourceCacheNamespace);
         }
 
-        $proxyFactory = new ProxyFactory(
-            $this->writeProxiesToFile,
-            $this->proxyDirectory
-        );
+        $proxyFactory = new ProxyFactory($this->proxyDirectory);
 
         $this->locked = true;
 
@@ -266,8 +258,6 @@ class ContainerBuilder
     public function writeProxiesToFile(bool $writeToFile, string $proxyDirectory = null) : self
     {
         $this->ensureNotLocked();
-
-        $this->writeProxiesToFile = $writeToFile;
 
         if ($writeToFile && $proxyDirectory === null) {
             throw new InvalidArgumentException(

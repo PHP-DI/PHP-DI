@@ -68,6 +68,7 @@ class StringDefinition implements Definition, SelfResolvingDefinition
         ContainerInterface $container
     ) : string {
         $callback = function (array $matches) use ($entryName, $container) {
+            /** @psalm-suppress InvalidCatch */
             try {
                 return $container->get($matches[1]);
             } catch (NotFoundExceptionInterface $e) {

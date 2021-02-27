@@ -24,6 +24,7 @@ class InstanceInjector extends ObjectCreator
      */
     public function resolve(Definition $definition, array $parameters = []) : ?object
     {
+        /** @psalm-suppress InvalidCatch */
         try {
             $this->injectMethodsAndProperties($definition->getInstance(), $definition->getObjectDefinition());
         } catch (NotFoundExceptionInterface $e) {

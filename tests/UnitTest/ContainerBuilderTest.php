@@ -42,7 +42,7 @@ class ContainerBuilderTest extends TestCase
         // Not compiled
         $this->assertNotInstanceOf(CompiledContainer::class, $container);
         // Proxies evaluated in memory
-        $this->assertFalse($getProperty($container->proxyFactory, 'writeProxiesToFile'));
+        $this->assertNull($getProperty($container->proxyFactory, 'proxyDirectory'));
     }
 
     /**

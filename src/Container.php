@@ -86,7 +86,7 @@ class Container implements ContainerInterface, FactoryInterface, InvokerInterfac
         $this->delegateContainer = $wrapperContainer ?: $this;
 
         $this->definitionSource = $definitionSource ?: $this->createDefaultDefinitionSource();
-        $this->proxyFactory = $proxyFactory ?: new ProxyFactory(false);
+        $this->proxyFactory = $proxyFactory ?: new ProxyFactory;
         $this->definitionResolver = new ResolverDispatcher($this->delegateContainer, $this->proxyFactory);
 
         // Auto-register the container

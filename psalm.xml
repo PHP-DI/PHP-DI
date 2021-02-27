@@ -10,6 +10,7 @@
         <directory name="src" />
         <ignoreFiles>
             <directory name="vendor" />
+            <file name="src/Compiler/Template.php"/>
         </ignoreFiles>
     </projectFiles>
 </psalm>

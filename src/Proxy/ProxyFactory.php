@@ -23,73 +23,64 @@ use ProxyManager\Proxy\LazyLoadingInterface;
  */
 class ProxyFactory
 {
-    /**
-     * If true, write the proxies to disk to improve performances.
-     */
-    private bool $writeProxiesToFile;
-
-    /**
-     * Directory where to write the proxies (if $writeProxiesToFile is enabled).
-     */
-    private ?string $proxyDirectory;
-
     private ?LazyLoadingValueHolderFactory $proxyManager = null;
 
-    public function __construct(bool $writeProxiesToFile = false, string $proxyDirectory = null)
-    {
-        $this->writeProxiesToFile = $writeProxiesToFile;
-        $this->proxyDirectory = $proxyDirectory;
+    /**
+     * @param string|null $proxyDirectory If set, write the proxies to disk in this directory to improve performances.
+     */
+    public function __construct(
+        private ?string $proxyDirectory = null,
+    ) {
     }
 
     /**
      * Creates a new lazy proxy instance of the given class with
      * the given initializer.
      *
-     * @param string $className name of the class to be proxied
+     * @param class-string $className name of the class to be proxied
      * @param \Closure $initializer initializer to be passed to the proxy
      */
     public function createProxy(string $className, \Closure $initializer) : LazyLoadingInterface
     {
-        $this->createProxyManager();
+        $proxyManager = $this->proxyManager();
 
-        return $this->proxyManager->createProxy($className, $initializer);
+        return $proxyManager->createProxy($className, $initializer);
     }
 
     /**
      * Generates and writes the proxy class to file.
      *
-     * @param string $className name of the class to be proxied
+     * @param class-string $className name of the class to be proxied
      */
     public function generateProxyClass(string $className) : void
     {
         // If proxy classes a written to file then we pre-generate the class
         // If they are not written to file then there is no point to do this
-        if ($this->writeProxiesToFile) {
-            $this->createProxyManager();
+        if ($this->proxyDirectory) {
             $this->createProxy($className, function () {});
         }
     }
 
-    private function createProxyManager() : void
+    private function proxyManager() : LazyLoadingValueHolderFactory
     {
-        if ($this->proxyManager !== null) {
-            return;
+        if ($this->proxyManager === null) {
+            if (! class_exists(Configuration::class)) {
+                throw new \RuntimeException('The ocramius/proxy-manager library is not installed. Lazy injection requires that library to be installed with Composer in order to work. Run "composer require ocramius/proxy-manager:~2.0".');
+            }
+
+            $config = new Configuration();
+
+            if ($this->proxyDirectory) {
+                $config->setProxiesTargetDir($this->proxyDirectory);
+                $config->setGeneratorStrategy(new FileWriterGeneratorStrategy(new FileLocator($this->proxyDirectory)));
+                spl_autoload_register($config->getProxyAutoloader());
+            } else {
+                $config->setGeneratorStrategy(new EvaluatingGeneratorStrategy());
+            }
+
+            $this->proxyManager = new LazyLoadingValueHolderFactory($config);
         }
 
-        if (! class_exists(Configuration::class)) {
-            throw new \RuntimeException('The ocramius/proxy-manager library is not installed. Lazy injection requires that library to be installed with Composer in order to work. Run "composer require ocramius/proxy-manager:~2.0".');
-        }
-
-        $config = new Configuration();
-
-        if ($this->writeProxiesToFile) {
-            $config->setProxiesTargetDir($this->proxyDirectory);
-            $config->setGeneratorStrategy(new FileWriterGeneratorStrategy(new FileLocator($this->proxyDirectory)));
-            spl_autoload_register($config->getProxyAutoloader());
-        } else {
-            $config->setGeneratorStrategy(new EvaluatingGeneratorStrategy());
-        }
-
-        $this->proxyManager = new LazyLoadingValueHolderFactory($config);
+        return $this->proxyManager;
     }
 }

@@ -115,6 +115,7 @@ class ObjectCreator implements DefinitionResolver
 
         $constructorInjection = $definition->getConstructorInjection();
 
+        /** @psalm-suppress InvalidCatch */
         try {
             $args = $this->parameterResolver->resolveParameters(
                 $constructorInjection,
