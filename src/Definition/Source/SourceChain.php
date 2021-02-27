@@ -14,20 +14,14 @@ use DI\Definition\ExtendsPreviousDefinition;
  */
 class SourceChain implements DefinitionSource, MutableDefinitionSource
 {
-    /**
-     * @var DefinitionSource[]
-     */
-    private array $sources;
-
     private ?MutableDefinitionSource $mutableSource;
 
     /**
-     * @param DefinitionSource[] $sources
+     * @param list<DefinitionSource> $sources
      */
-    public function __construct(array $sources)
-    {
-        // We want a numerically indexed array to ease the traversal later
-        $this->sources = array_values($sources);
+    public function __construct(
+        private array $sources,
+    ) {
     }
 
     /**
@@ -58,15 +52,14 @@ class SourceChain implements DefinitionSource, MutableDefinitionSource
 
     public function getDefinitions() : array
     {
-        $names = [];
-        foreach ($this->sources as $source) {
-            $names = array_merge($names, $source->getDefinitions());
-        }
-        $names = array_keys($names);
+        $allDefinitions = array_merge(...array_map(fn($source) => $source->getDefinitions(), $this->sources));
 
-        return array_combine($names, array_map(function (string $name) {
-            return $this->getDefinition($name);
-        }, $names));
+        /** @var string[] $allNames */
+        $allNames = array_keys($allDefinitions);
+
+        $allValues = array_filter(array_map(fn($name) => $this->getDefinition($name), $allNames));
+
+        return array_combine($allNames, $allValues);
     }
 
     public function addDefinition(Definition $definition): void

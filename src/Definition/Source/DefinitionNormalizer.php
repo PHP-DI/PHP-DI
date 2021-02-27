@@ -56,6 +56,7 @@ class DefinitionNormalizer
         }
 
         if ($definition instanceof AutowireDefinition) {
+            /** @var AutowireDefinition $definition */
             $definition = $this->autowiring->autowire($name, $definition);
         }
 

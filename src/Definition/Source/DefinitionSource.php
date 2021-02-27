@@ -22,7 +22,7 @@ interface DefinitionSource
     public function getDefinition(string $name): Definition|null;
 
     /**
-     * @return Definition[] Definitions indexed by their name.
+     * @return array<string,Definition> Definitions indexed by their name.
      */
     public function getDefinitions() : array;
 }

@@ -236,6 +236,8 @@ class ObjectDefinition implements Definition
             return;
         }
 
+        /** @var class-string $className */
+
         $class = new ReflectionClass($className);
         $this->isInstantiable = $class->isInstantiable();
     }

@@ -154,13 +154,6 @@ class Container implements ContainerInterface, FactoryInterface, InvokerInterfac
      */
     public function make(string $name, array $parameters = []): mixed
     {
-        if (! is_string($name)) {
-            throw new InvalidArgumentException(sprintf(
-                'The name parameter must be of type string, %s given',
-                is_object($name) ? get_class($name) : gettype($name)
-            ));
-        }
-
         $definition = $this->getDefinition($name);
         if (! $definition) {
             // If the entry is already resolved we return it
@@ -186,7 +179,7 @@ class Container implements ContainerInterface, FactoryInterface, InvokerInterfac
         if (! is_string($id)) {
             throw new InvalidArgumentException(sprintf(
                 'The name parameter must be of type string, %s given',
-                is_object($id) ? get_class($id) : gettype($id)
+                get_debug_type($id)
             ));
         }
 
@@ -331,7 +324,7 @@ class Container implements ContainerInterface, FactoryInterface, InvokerInterfac
             return sprintf('Value (%s)', $entry === true ? 'true' : 'false');
         }
 
-        return sprintf('Value (%s)', is_scalar($entry) ? $entry : ucfirst(gettype($entry)));
+        return sprintf('Value (%s)', is_scalar($entry) ? (string) $entry : ucfirst(gettype($entry)));
     }
 
     /**

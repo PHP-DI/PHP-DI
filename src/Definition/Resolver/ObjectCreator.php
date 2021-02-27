@@ -72,8 +72,11 @@ class ObjectCreator implements DefinitionResolver
      */
     private function createProxy(ObjectDefinition $definition, array $parameters) : LazyLoadingInterface
     {
+        /** @var class-string $className */
+        $className = $definition->getClassName();
+
         return $this->proxyFactory->createProxy(
-            $definition->getClassName(),
+            $className,
             function (& $wrappedObject, $proxy, $method, $params, & $initializer) use ($definition, $parameters) {
                 $wrappedObject = $this->createInstance($definition, $parameters);
                 $initializer = null; // turning off further lazy initialization

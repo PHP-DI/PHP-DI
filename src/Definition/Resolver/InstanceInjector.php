@@ -23,6 +23,7 @@ class InstanceInjector extends ObjectCreator implements DefinitionResolver
      * Injects dependencies on an existing instance.
      *
      * @param InstanceDefinition $definition
+     * @psalm-suppress ImplementedParamTypeMismatch
      */
     public function resolve(Definition $definition, array $parameters = []) : ?object
     {

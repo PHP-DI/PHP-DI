@@ -37,11 +37,13 @@ class ContainerBuilder
 {
     /**
      * Name of the container class, used to create the container.
+     * @var class-string<Container>
      */
     private string $containerClass;
 
     /**
      * Name of the container parent class, used on compiled container.
+     * @var class-string<Container>
      */
     private string $containerParentClass;
 
@@ -87,6 +89,7 @@ class ContainerBuilder
 
     /**
      * @param string $containerClass Name of the container class, used to create the container.
+     * @psalm-param class-string<Container> $containerClass
      */
     public function __construct(string $containerClass = Container::class)
     {
@@ -179,6 +182,7 @@ class ContainerBuilder
      * @param string $directory Directory in which to put the compiled container.
      * @param string $containerClass Name of the compiled class. Customize only if necessary.
      * @param string $containerParentClass Name of the compiled container parent class. Customize only if necessary.
+     * @psalm-param class-string<CompiledContainer> $containerParentClass
      */
     public function enableCompilation(
         string $directory,
@@ -188,6 +192,7 @@ class ContainerBuilder
         $this->ensureNotLocked();
 
         $this->compileToDirectory = $directory;
+        /** @var class-string<Container> */
         $this->containerClass = $containerClass;
         $this->containerParentClass = $containerParentClass;
 

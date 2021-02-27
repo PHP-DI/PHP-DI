@@ -70,7 +70,7 @@ abstract class CompiledContainer extends Container
         if (! is_string($id)) {
             throw new \InvalidArgumentException(sprintf(
                 'The name parameter must be of type string, %s given',
-                is_object($id) ? get_class($id) : gettype($id)
+                get_debug_type($id)
             ));
         }
 
