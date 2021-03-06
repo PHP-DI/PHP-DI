@@ -43,7 +43,5 @@
     "suggest": {
         "doctrine/annotations": "Install it if you want to use annotations (version ^1.7)",
         "ocramius/proxy-manager": "Install it if you want to use lazy injection (version ^2.3)"
-    },
-    "minimum-stability": "dev",
-    "prefer-stable": true
+    }
 }
