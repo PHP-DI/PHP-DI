@@ -357,6 +357,20 @@ return [
 ];
 ```
 
+Since PHP 8, you can also use [named arguments](https://stitcher.io/blog/php-8-named-arguments):
+
+```php
+return [
+    'Logger' => DI\autowire()
+        // set the $filename parameter
+        ->constructor(
+            filename: 'app.log'
+        )
+        // set the $handler parameter
+        ->method('setHandler', handler: DI\get('SyslogHandler')),
+];
+```
+
 ### Aliases
 
 You can alias an entry to another using the `DI\get()` helper:

@@ -13,7 +13,6 @@ class SubClass extends BaseClass
 {
     /**
      * @Inject
-     * @var Dependency
      */
-    public $property4;
+    public Dependency $property4;
 }

@@ -33,14 +33,6 @@ class ContainerInjectOnTest extends BaseContainerTest
     /**
      * @dataProvider provideContainer
      */
-    public function test_inject_on_null_returns_null(ContainerBuilder $builder)
-    {
-        self::assertNull($builder->build()->injectOn(null));
-    }
-
-    /**
-     * @dataProvider provideContainer
-     */
     public function test_inject_on_object_using_annotations(ContainerBuilder $builder)
     {
         $builder->useAutowiring(true);
@@ -164,9 +156,8 @@ class ContainerInjectOnTest extends BaseContainerTest
         $obj = new class {
             /**
              * @Inject
-             * @var Class2
              */
-            public $property;
+            public Class2 $property;
 
             public $methodParam;
 

@@ -614,13 +614,12 @@ class FactoryDefinitionTest extends BaseContainerTest
         self::assertEquals('foo', $container->get('factory'));
     }
 
-    /**
-     * @requires PHP 7.4
-     */
     public function test_fn_closures_compilation_is_supported()
     {
         $builder = (new ContainerBuilder)->enableCompilation(self::COMPILATION_DIR, self::generateCompiledClassName());
-        $builder->addDefinitions(__DIR__ . '/FactoryDefinition/fn.inc');
+        $builder->addDefinitions([
+            'factory' => fn () => new stdClass(),
+        ]);
         $container = $builder->build();
 
         self::assertEntryIsCompiled($container, 'factory');

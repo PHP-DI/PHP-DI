@@ -49,9 +49,8 @@ class GuestbookController extends AbstractActionController
     /**
      * This dependency will be injected by PHP-DI
      * @Inject
-     * @var \Application\Service\GuestbookService
      */
-    private $guestbookService;
+    private \Application\Service\GuestbookService $guestbookService;
 
     public function indexAction()
     {

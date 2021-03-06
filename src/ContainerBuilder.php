@@ -6,6 +6,7 @@ namespace DI;
 
 use DI\Compiler\Compiler;
 use DI\Definition\Source\AnnotationBasedAutowiring;
+use DI\Definition\Source\AttributeBasedAutowiring;
 use DI\Definition\Source\DefinitionArray;
 use DI\Definition\Source\DefinitionFile;
 use DI\Definition\Source\DefinitionSource;
@@ -36,74 +37,47 @@ class ContainerBuilder
 {
     /**
      * Name of the container class, used to create the container.
-     * @var string
+     * @var class-string<Container>
      */
-    private $containerClass;
+    private string $containerClass;
 
     /**
      * Name of the container parent class, used on compiled container.
-     * @var string
+     * @var class-string<Container>
      */
-    private $containerParentClass;
+    private string $containerParentClass;
+
+    private bool $useAutowiring = true;
+
+    private bool $useAnnotations = false;
+
+    private bool $useAttributes = false;
 
     /**
-     * @var bool
+     * If set, write the proxies to disk in this directory to improve performances.
      */
-    private $useAutowiring = true;
-
-    /**
-     * @var bool
-     */
-    private $useAnnotations = false;
-
-    /**
-     * @var bool
-     */
-    private $ignorePhpDocErrors = false;
-
-    /**
-     * If true, write the proxies to disk to improve performances.
-     * @var bool
-     */
-    private $writeProxiesToFile = false;
-
-    /**
-     * Directory where to write the proxies (if $writeProxiesToFile is enabled).
-     * @var string|null
-     */
-    private $proxyDirectory;
+    private ?string $proxyDirectory = null;
 
     /**
      * If PHP-DI is wrapped in another container, this references the wrapper.
-     * @var ContainerInterface
      */
-    private $wrapperContainer;
+    private ?ContainerInterface $wrapperContainer = null;
 
     /**
      * @var DefinitionSource[]|string[]|array[]
      */
-    private $definitionSources = [];
+    private array $definitionSources = [];
 
     /**
      * Whether the container has already been built.
-     * @var bool
      */
-    private $locked = false;
+    private bool $locked = false;
 
-    /**
-     * @var string|null
-     */
-    private $compileToDirectory;
+    private ?string $compileToDirectory = null;
 
-    /**
-     * @var bool
-     */
-    private $sourceCache = false;
+    private bool $sourceCache = false;
 
-    /**
-     * @var string
-     */
-    protected $sourceCacheNamespace;
+    protected string $sourceCacheNamespace = '';
 
     /**
      * Build a container configured for the dev environment.
@@ -115,6 +89,7 @@ class ContainerBuilder
 
     /**
      * @param string $containerClass Name of the container class, used to create the container.
+     * @psalm-param class-string<Container> $containerClass
      */
     public function __construct(string $containerClass = Container::class)
     {
@@ -130,8 +105,11 @@ class ContainerBuilder
     {
         $sources = array_reverse($this->definitionSources);
 
-        if ($this->useAnnotations) {
-            $autowiring = new AnnotationBasedAutowiring($this->ignorePhpDocErrors);
+        if ($this->useAttributes) {
+            $autowiring = new AttributeBasedAutowiring;
+            $sources[] = $autowiring;
+        } elseif ($this->useAnnotations) {
+            $autowiring = new AnnotationBasedAutowiring;
             $sources[] = $autowiring;
         } elseif ($this->useAutowiring) {
             $autowiring = new ReflectionBasedAutowiring;
@@ -144,7 +122,8 @@ class ContainerBuilder
             if (is_string($definitions)) {
                 // File
                 return new DefinitionFile($definitions, $autowiring);
-            } elseif (is_array($definitions)) {
+            }
+            if (is_array($definitions)) {
                 return new DefinitionArray($definitions, $autowiring);
             }
 
@@ -163,10 +142,7 @@ class ContainerBuilder
             $source = new SourceCache($source, $this->sourceCacheNamespace);
         }
 
-        $proxyFactory = new ProxyFactory(
-            $this->writeProxiesToFile,
-            $this->proxyDirectory
-        );
+        $proxyFactory = new ProxyFactory($this->proxyDirectory);
 
         $this->locked = true;
 
@@ -206,6 +182,7 @@ class ContainerBuilder
      * @param string $directory Directory in which to put the compiled container.
      * @param string $containerClass Name of the compiled class. Customize only if necessary.
      * @param string $containerParentClass Name of the compiled container parent class. Customize only if necessary.
+     * @psalm-param class-string<CompiledContainer> $containerParentClass
      */
     public function enableCompilation(
         string $directory,
@@ -215,6 +192,7 @@ class ContainerBuilder
         $this->ensureNotLocked();
 
         $this->compileToDirectory = $directory;
+        /** @var class-string<Container> */
         $this->containerClass = $containerClass;
         $this->containerParentClass = $containerParentClass;
 
@@ -254,15 +232,17 @@ class ContainerBuilder
     }
 
     /**
-     * Enable or disable ignoring phpdoc errors (non-existent classes in `@param` or `@var`).
+     * Enable or disable the use of PHP 8 attributes to configure injections.
+     *
+     * Disabled by default.
      *
      * @return $this
      */
-    public function ignorePhpDocErrors(bool $bool) : self
+    public function useAttributes(bool $bool) : self
     {
         $this->ensureNotLocked();
 
-        $this->ignorePhpDocErrors = $bool;
+        $this->useAttributes = $bool;
 
         return $this;
     }
@@ -283,8 +263,6 @@ class ContainerBuilder
     public function writeProxiesToFile(bool $writeToFile, string $proxyDirectory = null) : self
     {
         $this->ensureNotLocked();
-
-        $this->writeProxiesToFile = $writeToFile;
 
         if ($writeToFile && $proxyDirectory === null) {
             throw new InvalidArgumentException(
@@ -319,19 +297,11 @@ class ContainerBuilder
      *                                                      or a DefinitionSource object.
      * @return $this
      */
-    public function addDefinitions(...$definitions) : self
+    public function addDefinitions(string | array | DefinitionSource ...$definitions) : self
     {
         $this->ensureNotLocked();
 
         foreach ($definitions as $definition) {
-            if (!is_string($definition) && !is_array($definition) && !($definition instanceof DefinitionSource)) {
-                throw new InvalidArgumentException(sprintf(
-                    '%s parameter must be a string, an array or a DefinitionSource object, %s given',
-                    'ContainerBuilder::addDefinitions()',
-                    is_object($definition) ? get_class($definition) : gettype($definition)
-                ));
-            }
-
             $this->definitionSources[] = $definition;
         }
 
@@ -376,7 +346,7 @@ class ContainerBuilder
         return (bool) $this->compileToDirectory;
     }
 
-    private function ensureNotLocked()
+    private function ensureNotLocked() : void
     {
         if ($this->locked) {
             throw new \LogicException('The ContainerBuilder cannot be modified after the container has been built');

@@ -10,9 +10,8 @@ class Child extends B
 {
     /**
      * @Inject
-     * @var A
      */
-    private $private;
+    private A $private;
 
     public function getChildPrivate()
     {

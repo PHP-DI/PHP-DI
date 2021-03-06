@@ -42,7 +42,7 @@ class ContainerBuilderTest extends TestCase
         // Not compiled
         $this->assertNotInstanceOf(CompiledContainer::class, $container);
         // Proxies evaluated in memory
-        $this->assertFalse($getProperty($container->proxyFactory, 'writeProxiesToFile'));
+        $this->assertNull($getProperty($container->proxyFactory, 'proxyDirectory'));
     }
 
     /**
@@ -174,17 +174,6 @@ class ContainerBuilderTest extends TestCase
         $definition = $container->definitionSource->getDefinition('foofoo');
         $this->assertInstanceOf(ValueDefinition::class, $definition);
         $this->assertSame('barbar', $definition->getValue());
-    }
-
-    /**
-     * @test
-     */
-    public function errors_when_adding_invalid_definitions()
-    {
-        $this->expectException('InvalidArgumentException');
-        $this->expectExceptionMessage('ContainerBuilder::addDefinitions() parameter must be a string, an array or a DefinitionSource object, integer given');
-        $builder = new ContainerBuilder(FakeContainer::class);
-        $builder->addDefinitions(123);
     }
 
     /**

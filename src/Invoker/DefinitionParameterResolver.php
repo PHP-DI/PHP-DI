@@ -18,14 +18,9 @@ use ReflectionFunctionAbstract;
  */
 class DefinitionParameterResolver implements ParameterResolver
 {
-    /**
-     * @var DefinitionResolver
-     */
-    private $definitionResolver;
-
-    public function __construct(DefinitionResolver $definitionResolver)
-    {
-        $this->definitionResolver = $definitionResolver;
+    public function __construct(
+        private DefinitionResolver $definitionResolver
+    ) {
     }
 
     public function getParameters(

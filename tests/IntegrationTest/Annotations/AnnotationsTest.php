@@ -102,37 +102,4 @@ class AnnotationsTest extends BaseContainerTest
         $builder->useAnnotations(true);
         $builder->build()->get(NamedInjection::class);
     }
-
-    /**
-     * Check that @ var annotation takes "use" statements into account.
-     * @test
-     * @dataProvider provideContainer
-     * @link https://github.com/PHP-DI/PHP-DI/issues/1
-     */
-    public function resolve_class_names_using_import_statements(ContainerBuilder $builder)
-    {
-        $builder->useAnnotations(true);
-        $container = $builder->build();
-
-        /** @var $object InjectWithUseStatements */
-        $object = $container->get(InjectWithUseStatements::class);
-        $this->assertInstanceOf(A::class, $object->a);
-        $this->assertInstanceOf(A::class, $object->alias);
-        $this->assertInstanceOf(A::class, $object->namespaceAlias);
-
-        /** @var $object InjectWithUseStatements2 */
-        $object = $container->get(InjectWithUseStatements2::class);
-        $this->assertInstanceOf(InjectWithUseStatements::class, $object->dependency);
-    }
-
-    /**
-     * @test
-     * @dataProvider provideContainer
-     */
-    public function testNotFoundVarAnnotation(ContainerBuilder $builder)
-    {
-        $this->expectException('PhpDocReader\AnnotationException');
-        $builder->useAnnotations(true);
-        $builder->build()->get(NotFoundVarAnnotation::class);
-    }
 }

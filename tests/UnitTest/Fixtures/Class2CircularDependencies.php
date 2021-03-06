@@ -11,7 +11,7 @@ class Class2CircularDependencies
 {
     /**
      * @Inject
-     * @var \DI\Test\UnitTest\Fixtures\Class1CircularDependencies
+     * @var Class1CircularDependencies
      */
-    public $class1;
+    public Class1CircularDependencies $class1;
 }

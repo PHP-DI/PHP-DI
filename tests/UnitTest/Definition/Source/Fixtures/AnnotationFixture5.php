@@ -7,14 +7,11 @@ namespace DI\Test\UnitTest\Definition\Source\Fixtures;
 class AnnotationFixture5
 {
     /**
-     * @var foobar
+     * @Inject
      */
-    public $property;
+    public foobar $property;
 
-    /**
-     * @param foobar $foo
-     */
-    public function __construct($foo)
+    public function __construct(foobar $foo)
     {
     }
 }

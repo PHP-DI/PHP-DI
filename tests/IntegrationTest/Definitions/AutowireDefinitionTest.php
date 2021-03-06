@@ -71,6 +71,23 @@ class AutowireDefinitionTest extends BaseContainerTest
     /**
      * @dataProvider provideContainer
      */
+    public function test_constructor_injection_with_named_arguments(ContainerBuilder $builder)
+    {
+        $builder->addDefinitions([
+            ConstructorInjection::class => autowire()
+                ->constructor(
+                    value: 'bar',
+                ),
+        ]);
+        $container = $builder->build();
+
+        $object = $container->get(ConstructorInjection::class);
+        self::assertEquals('bar', $object->value);
+    }
+
+    /**
+     * @dataProvider provideContainer
+     */
     public function test_autowired_constructor_injection_can_be_overloaded(ContainerBuilder $builder)
     {
         $builder->addDefinitions([
@@ -249,6 +266,19 @@ class AutowireDefinitionTest extends BaseContainerTest
     /**
      * @dataProvider provideContainer
      */
+    public function test_setting_specific_method_parameter_with_named_arguments(ContainerBuilder $builder)
+    {
+        $container = $builder->addDefinitions([
+            Setter::class => autowire()
+                ->method('setFoo', bar: 'Hello'),
+        ])->build();
+
+        self::assertEquals('Hello', $container->get(Setter::class)->bar);
+    }
+
+    /**
+     * @dataProvider provideContainer
+     */
     public function test_setting_specific_method_parameter_overrides_autowiring(ContainerBuilder $builder)
     {
         $container = $builder->addDefinitions([
@@ -313,20 +343,6 @@ class AutowireDefinitionTest extends BaseContainerTest
         self::assertFalse($object->isProxyInitialized());
         self::assertEquals('bar', $object->bar);
         self::assertTrue($object->isProxyInitialized());
-    }
-
-    /**
-     * @dataProvider provideContainer
-     * @requires PHP < 8
-     */
-    public function test_optional_parameter_followed_by_required_parameters(ContainerBuilder $builder)
-    {
-        $container = $builder->build();
-
-        $object = $container->get(OptionalParameterFollowedByRequiredParameter::class);
-
-        self::assertNull($object->first);
-        self::assertInstanceOf(\stdClass::class, $object->second);
     }
 
     /**

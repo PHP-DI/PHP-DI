@@ -115,7 +115,6 @@ class WildcardDefinitionsTestFixture
 {
     /**
      * @Inject
-     * @var Interface1
      */
-    public $dependency;
+    public Interface1 $dependency;
 }

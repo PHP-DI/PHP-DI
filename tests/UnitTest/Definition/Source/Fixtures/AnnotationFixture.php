@@ -15,9 +15,8 @@ class AnnotationFixture
 
     /**
      * @Inject
-     * @var AnnotationFixture2
      */
-    protected $property2;
+    protected AnnotationFixture2 $property2;
 
     /**
      * @Inject(name="foo")
@@ -57,9 +56,8 @@ class AnnotationFixture
     /**
      * @Inject
      * @param $param1
-     * @param AnnotationFixture2 $param2
      */
-    public function method3(AnnotationFixture2 $param1, $param2)
+    public function method3(AnnotationFixture2 $param1)
     {
     }
 

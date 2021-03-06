@@ -20,6 +20,7 @@ use DI\Test\UnitTest\Definition\Source\Fixtures\AnnotationFixtureScalarTypedProp
 use DI\Test\UnitTest\Definition\Source\Fixtures\AnnotationFixtureTypedProperties;
 use DI\Test\UnitTest\Definition\Source\Fixtures\AnnotationInjectableFixture;
 use PHPUnit\Framework\TestCase;
+use DI\Definition\Exception\InvalidAnnotation;
 
 /**
  * @covers \DI\Definition\Source\AnnotationBasedAutowiring
@@ -60,29 +61,20 @@ class AnnotationBasedAutowiringTest extends TestCase
 
     public function testUnguessableProperty()
     {
-        $this->expectException('DI\Definition\Exception\InvalidAnnotation');
-        $this->expectExceptionMessage('@Inject found on property DI\Test\UnitTest\Definition\Source\Fixtures\AnnotationFixture4::property but unable to guess what to inject, use a @var annotation');
+        $this->expectException(InvalidAnnotation::class);
+        $this->expectExceptionMessage('@Inject found on property DI\Test\UnitTest\Definition\Source\Fixtures\AnnotationFixture4::property but unable to guess what to inject, please add a type to the property');
         (new AnnotationBasedAutowiring)->autowire(AnnotationFixture4::class);
     }
 
-    /**
-     * Typed properties support requires PHP 7.4
-     * @requires PHP 7.4
-     */
     public function testTypedProperty()
     {
         $definition = (new AnnotationBasedAutowiring)->autowire(AnnotationFixtureTypedProperties::class);
 
         $this->assertNotHasPropertyInjection($definition, 'typeAndNoInject');
         $this->assertHasPropertyInjection($definition, 'typedAndInject', AnnotationFixture2::class);
-        $this->assertHasPropertyInjection($definition, 'typedAndVar', AnnotationFixture3::class);
         $this->assertHasPropertyInjection($definition, 'typedAndNamed', 'name');
     }
 
-    /**
-     * Typed properties support requires PHP 7.4
-     * @requires PHP 7.4
-     */
     public function testScalarTypedPropertiesFail()
     {
         $this->expectException(\DI\Definition\Exception\InvalidAnnotation::class);
@@ -137,11 +129,10 @@ class AnnotationBasedAutowiringTest extends TestCase
         $this->assertInstanceOf(MethodInjection::class, $methodInjection);
 
         $parameters = $methodInjection->getParameters();
-        $this->assertCount(2, $parameters);
+        $this->assertCount(1, $parameters);
 
         $reference = new Reference(AnnotationFixture2::class);
         $this->assertEquals($reference, $parameters[0]);
-        $this->assertEquals($reference, $parameters[1]);
     }
 
     public function testMethod4()
@@ -210,10 +201,7 @@ class AnnotationBasedAutowiringTest extends TestCase
         $this->assertTrue($definition->isLazy());
     }
 
-    /**
-     * @see https://github.com/mnapoli/PHP-DI/issues/99
-     */
-    public function testIssue99()
+    public function test_method_injection_with_primitive_type_causes_an_error()
     {
         $definition = (new AnnotationBasedAutowiring)->autowire(AnnotationFixture3::class);
         $this->assertInstanceOf(Definition::class, $definition);
@@ -229,22 +217,11 @@ class AnnotationBasedAutowiringTest extends TestCase
         );
     }
 
-    /**
-     * @see https://github.com/mnapoli/PHP-DI/issues/184
-     */
-    public function testFailWithPhpDocErrors()
+    public function testFailWithTypeError()
     {
-        $this->expectException('PhpDocReader\AnnotationException');
+        $this->expectException(InvalidAnnotation::class);
+        $this->expectExceptionMessage('@Inject found on property DI\Test\UnitTest\Definition\Source\Fixtures\AnnotationFixture5::property but unable to guess what to inject, the type of the property does not look like a valid class or interface name');
         (new AnnotationBasedAutowiring)->autowire(AnnotationFixture5::class);
-    }
-
-    /**
-     * @see https://github.com/mnapoli/PHP-DI/issues/184
-     */
-    public function testIgnorePhpDocErrors()
-    {
-        $source = new AnnotationBasedAutowiring($ignorePhpDocErrors = true);
-        $source->autowire(AnnotationFixture5::class);
     }
 
     public function testMergedWithParentDefinition()

@@ -11,24 +11,16 @@ use DI\Definition\Exception\InvalidDefinition;
 /**
  * Resolves a environment variable definition to a value.
  *
+ * @template-implements DefinitionResolver<EnvironmentVariableDefinition>
+ *
  * @author James Harris <james.harris@icecave.com.au>
  */
 class EnvironmentVariableResolver implements DefinitionResolver
 {
-    /**
-     * @var DefinitionResolver
-     */
-    private $definitionResolver;
-
-    /**
-     * @var callable
-     */
-    private $variableReader;
-
-    public function __construct(DefinitionResolver $definitionResolver, $variableReader = 'getenv')
-    {
-        $this->definitionResolver = $definitionResolver;
-        $this->variableReader = $variableReader;
+    public function __construct(
+        private DefinitionResolver $definitionResolver,
+        private $variableReader = 'getenv',
+    ) {
     }
 
     /**
@@ -36,7 +28,7 @@ class EnvironmentVariableResolver implements DefinitionResolver
      *
      * @param EnvironmentVariableDefinition $definition
      */
-    public function resolve(Definition $definition, array $parameters = [])
+    public function resolve(Definition $definition, array $parameters = []) : mixed
     {
         $value = call_user_func($this->variableReader, $definition->getVariableName());
 
