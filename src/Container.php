@@ -106,7 +106,7 @@ class Container implements ContainerInterface, FactoryInterface, InvokerInterfac
      * @throws DependencyException Error while resolving the entry.
      * @throws NotFoundException No entry found for the given name.
      */
-    public function get($id) : mixed
+    public function get(string $id) : mixed
     {
         // If the entry is already resolved we return it
         if (isset($this->resolvedEntries[$id]) || array_key_exists($id, $this->resolvedEntries)) {
@@ -168,21 +168,10 @@ class Container implements ContainerInterface, FactoryInterface, InvokerInterfac
     }
 
     /**
-     * Test if the container can provide something for the given name.
-     *
-     * @param string $id Entry name or a class name.
-     *
-     * @throws InvalidArgumentException The name parameter must be of type string.
+     * {@inheritDoc}
      */
-    public function has($id) : bool
+    public function has(string $id) : bool
     {
-        if (! is_string($id)) {
-            throw new InvalidArgumentException(sprintf(
-                'The name parameter must be of type string, %s given',
-                get_debug_type($id)
-            ));
-        }
-
         if (array_key_exists($id, $this->resolvedEntries)) {
             return true;
         }
