@@ -42,15 +42,4 @@ class ContainerHasTest extends BaseContainerTest
     {
         self::assertFalse($builder->build()->has('wow'));
     }
-
-    /**
-     * @test
-     * @dataProvider provideContainer
-     */
-    public function fails_with_non_string_parameter(ContainerBuilder $builder)
-    {
-        $this->expectException('InvalidArgumentException');
-        $this->expectExceptionMessage('The name parameter must be of type string');
-        $builder->build()->has(new stdClass);
-    }
 }
