@@ -19,27 +19,23 @@ use ReflectionProperty;
 /**
  * Create objects based on an object definition.
  *
+ * @template-implements DefinitionResolver<ObjectDefinition>
+ *
  * @since 4.0
  * @author Matthieu Napoli <matthieu@mnapoli.fr>
  */
 class ObjectCreator implements DefinitionResolver
 {
-    private ProxyFactory $proxyFactory;
-
     private ParameterResolver $parameterResolver;
-
-    private DefinitionResolver $definitionResolver;
 
     /**
      * @param DefinitionResolver $definitionResolver Used to resolve nested definitions.
      * @param ProxyFactory       $proxyFactory       Used to create proxies for lazy injections.
      */
     public function __construct(
-        DefinitionResolver $definitionResolver,
-        ProxyFactory $proxyFactory
+        private DefinitionResolver $definitionResolver,
+        private ProxyFactory $proxyFactory
     ) {
-        $this->definitionResolver = $definitionResolver;
-        $this->proxyFactory = $proxyFactory;
         $this->parameterResolver = new ParameterResolver($definitionResolver);
     }
 
@@ -76,8 +72,11 @@ class ObjectCreator implements DefinitionResolver
      */
     private function createProxy(ObjectDefinition $definition, array $parameters) : LazyLoadingInterface
     {
-        $proxy = $this->proxyFactory->createProxy(
-            $definition->getClassName(),
+        /** @var class-string $className */
+        $className = $definition->getClassName();
+
+        return $this->proxyFactory->createProxy(
+            $className,
             function (& $wrappedObject, $proxy, $method, $params, & $initializer) use ($definition, $parameters) {
                 $wrappedObject = $this->createInstance($definition, $parameters);
                 $initializer = null; // turning off further lazy initialization
@@ -85,8 +84,6 @@ class ObjectCreator implements DefinitionResolver
                 return true;
             }
         );
-
-        return $proxy;
     }
 
     /**
@@ -115,11 +112,13 @@ class ObjectCreator implements DefinitionResolver
             ));
         }
 
+        /** @psalm-var class-string $classname */
         $classname = $definition->getClassName();
         $classReflection = new ReflectionClass($classname);
 
         $constructorInjection = $definition->getConstructorInjection();
 
+        /** @psalm-suppress InvalidCatch */
         try {
             $args = $this->parameterResolver->resolveParameters(
                 $constructorInjection,
@@ -147,7 +146,7 @@ class ObjectCreator implements DefinitionResolver
         return $object;
     }
 
-    protected function injectMethodsAndProperties($object, ObjectDefinition $objectDefinition) : void
+    protected function injectMethodsAndProperties(object $object, ObjectDefinition $objectDefinition) : void
     {
         // Property injections
         foreach ($objectDefinition->getPropertyInjections() as $propertyInjection) {
@@ -170,9 +169,8 @@ class ObjectCreator implements DefinitionResolver
      * @param PropertyInjection $propertyInjection Property injection definition
      *
      * @throws DependencyException
-     * @throws InvalidDefinition
      */
-    private function injectProperty($object, PropertyInjection $propertyInjection) : void
+    private function injectProperty(object $object, PropertyInjection $propertyInjection) : void
     {
         $propertyName = $propertyInjection->getPropertyName();
 
@@ -196,7 +194,7 @@ class ObjectCreator implements DefinitionResolver
         self::setPrivatePropertyValue($propertyInjection->getClassName(), $object, $propertyName, $value);
     }
 
-    public static function setPrivatePropertyValue(string $className = null, $object, string $propertyName, $propertyValue) : void
+    public static function setPrivatePropertyValue(?string $className, $object, string $propertyName, mixed $propertyValue) : void
     {
         $className = $className ?: get_class($object);
 

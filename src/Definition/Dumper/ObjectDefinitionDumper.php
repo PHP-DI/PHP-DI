@@ -35,7 +35,7 @@ class ObjectDefinitionDumper
         $str = sprintf('    class = %s%s', $warning, $className);
 
         // Lazy
-        $str .= PHP_EOL . '    lazy = ' . var_export($definition->isLazy(), true);
+        $str .= \PHP_EOL . '    lazy = ' . var_export($definition->isLazy(), true);
 
         if ($classExist) {
             // Constructor
@@ -48,9 +48,12 @@ class ObjectDefinitionDumper
             $str .= $this->dumpMethods($className, $definition);
         }
 
-        return sprintf('Object (' . PHP_EOL . '%s' . PHP_EOL . ')', $str);
+        return sprintf('Object (' . \PHP_EOL . '%s' . \PHP_EOL . ')', $str);
     }
 
+    /**
+     * @param class-string $className
+     */
     private function dumpConstructor(string $className, ObjectDefinition $definition) : string
     {
         $str = '';
@@ -60,7 +63,7 @@ class ObjectDefinitionDumper
         if ($constructorInjection !== null) {
             $parameters = $this->dumpMethodParameters($className, $constructorInjection);
 
-            $str .= sprintf(PHP_EOL . '    __construct(' . PHP_EOL . '        %s' . PHP_EOL . '    )', $parameters);
+            $str .= sprintf(\PHP_EOL . '    __construct(' . \PHP_EOL . '        %s' . \PHP_EOL . '    )', $parameters);
         }
 
         return $str;
@@ -74,12 +77,15 @@ class ObjectDefinitionDumper
             $value = $propertyInjection->getValue();
             $valueStr = $value instanceof Definition ? (string) $value : var_export($value, true);
 
-            $str .= sprintf(PHP_EOL . '    $%s = %s', $propertyInjection->getPropertyName(), $valueStr);
+            $str .= sprintf(\PHP_EOL . '    $%s = %s', $propertyInjection->getPropertyName(), $valueStr);
         }
 
         return $str;
     }
 
+    /**
+     * @param class-string $className
+     */
     private function dumpMethods(string $className, ObjectDefinition $definition) : string
     {
         $str = '';
@@ -87,12 +93,15 @@ class ObjectDefinitionDumper
         foreach ($definition->getMethodInjections() as $methodInjection) {
             $parameters = $this->dumpMethodParameters($className, $methodInjection);
 
-            $str .= sprintf(PHP_EOL . '    %s(' . PHP_EOL . '        %s' . PHP_EOL . '    )', $methodInjection->getMethodName(), $parameters);
+            $str .= sprintf(\PHP_EOL . '    %s(' . \PHP_EOL . '        %s' . \PHP_EOL . '    )', $methodInjection->getMethodName(), $parameters);
         }
 
         return $str;
     }
 
+    /**
+     * @param class-string $className
+     */
     private function dumpMethodParameters(string $className, MethodInjection $methodInjection) : string
     {
         $methodReflection = new \ReflectionMethod($className, $methodInjection->getMethodName());
@@ -122,7 +131,7 @@ class ObjectDefinitionDumper
                         var_export($value, true)
                     );
                     continue;
-                } catch (ReflectionException $e) {
+                } catch (ReflectionException) {
                     // The default value can't be read through Reflection because it is a PHP internal class
                 }
             }
@@ -130,6 +139,6 @@ class ObjectDefinitionDumper
             $args[] = sprintf('$%s = #UNDEFINED#', $parameter->getName());
         }
 
-        return implode(PHP_EOL . '        ', $args);
+        return implode(\PHP_EOL . '        ', $args);
     }
 }

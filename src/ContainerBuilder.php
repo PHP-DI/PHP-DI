@@ -37,11 +37,13 @@ class ContainerBuilder
 {
     /**
      * Name of the container class, used to create the container.
+     * @var class-string<Container>
      */
     private string $containerClass;
 
     /**
      * Name of the container parent class, used on compiled container.
+     * @var class-string<Container>
      */
     private string $containerParentClass;
 
@@ -52,12 +54,7 @@ class ContainerBuilder
     private bool $useAttributes = false;
 
     /**
-     * If true, write the proxies to disk to improve performances.
-     */
-    private bool $writeProxiesToFile = false;
-
-    /**
-     * Directory where to write the proxies (if $writeProxiesToFile is enabled).
+     * If set, write the proxies to disk in this directory to improve performances.
      */
     private ?string $proxyDirectory = null;
 
@@ -92,6 +89,7 @@ class ContainerBuilder
 
     /**
      * @param string $containerClass Name of the container class, used to create the container.
+     * @psalm-param class-string<Container> $containerClass
      */
     public function __construct(string $containerClass = Container::class)
     {
@@ -144,10 +142,7 @@ class ContainerBuilder
             $source = new SourceCache($source, $this->sourceCacheNamespace);
         }
 
-        $proxyFactory = new ProxyFactory(
-            $this->writeProxiesToFile,
-            $this->proxyDirectory
-        );
+        $proxyFactory = new ProxyFactory($this->proxyDirectory);
 
         $this->locked = true;
 
@@ -187,6 +182,7 @@ class ContainerBuilder
      * @param string $directory Directory in which to put the compiled container.
      * @param string $containerClass Name of the compiled class. Customize only if necessary.
      * @param string $containerParentClass Name of the compiled container parent class. Customize only if necessary.
+     * @psalm-param class-string<CompiledContainer> $containerParentClass
      */
     public function enableCompilation(
         string $directory,
@@ -196,6 +192,7 @@ class ContainerBuilder
         $this->ensureNotLocked();
 
         $this->compileToDirectory = $directory;
+        /** @var class-string<Container> */
         $this->containerClass = $containerClass;
         $this->containerParentClass = $containerParentClass;
 
@@ -267,8 +264,6 @@ class ContainerBuilder
     {
         $this->ensureNotLocked();
 
-        $this->writeProxiesToFile = $writeToFile;
-
         if ($writeToFile && $proxyDirectory === null) {
             throw new InvalidArgumentException(
                 'The proxy directory must be specified if you want to write proxies on disk'
@@ -302,19 +297,11 @@ class ContainerBuilder
      *                                                      or a DefinitionSource object.
      * @return $this
      */
-    public function addDefinitions(...$definitions) : self
+    public function addDefinitions(string | array | DefinitionSource ...$definitions) : self
     {
         $this->ensureNotLocked();
 
         foreach ($definitions as $definition) {
-            if (!is_string($definition) && !is_array($definition) && !($definition instanceof DefinitionSource)) {
-                throw new InvalidArgumentException(sprintf(
-                    '%s parameter must be a string, an array or a DefinitionSource object, %s given',
-                    'ContainerBuilder::addDefinitions()',
-                    is_object($definition) ? get_class($definition) : gettype($definition)
-                ));
-            }
-
             $this->definitionSources[] = $definition;
         }
 

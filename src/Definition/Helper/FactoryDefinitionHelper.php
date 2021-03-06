@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace DI\Definition\Helper;
 
 use DI\Definition\DecoratorDefinition;
-use DI\Definition\Definition;
 use DI\Definition\FactoryDefinition;
 
 /**
@@ -25,10 +24,9 @@ class FactoryDefinitionHelper implements DefinitionHelper
     private array $parameters = [];
 
     /**
-     * @param callable $factory
      * @param bool $decorate Is the factory decorating a previous definition?
      */
-    public function __construct($factory, bool $decorate = false)
+    public function __construct(callable | array | string $factory, bool $decorate = false)
     {
         $this->factory = $factory;
         $this->decorate = $decorate;
@@ -56,7 +54,7 @@ class FactoryDefinitionHelper implements DefinitionHelper
      *
      * @return $this
      */
-    public function parameter(string $parameter, $value) : self
+    public function parameter(string $parameter, mixed $value) : self
     {
         $this->parameters[$parameter] = $value;
 

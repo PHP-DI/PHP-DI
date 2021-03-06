@@ -13,16 +13,12 @@ namespace DI\Definition;
 class InstanceDefinition implements Definition
 {
     /**
-     * Instance on which to inject dependencies.
+     * @param object $instance Instance on which to inject dependencies.
      */
-    private object $instance;
-
-    private ObjectDefinition $objectDefinition;
-
-    public function __construct(object $instance, ObjectDefinition $objectDefinition)
-    {
-        $this->instance = $instance;
-        $this->objectDefinition = $objectDefinition;
+    public function __construct(
+        private object $instance,
+        private ObjectDefinition $objectDefinition,
+    ) {
     }
 
     public function getName() : string
@@ -51,7 +47,7 @@ class InstanceDefinition implements Definition
         $this->objectDefinition->replaceNestedDefinitions($replacer);
     }
 
-    public function __toString()
+    public function __toString() : string
     {
         return 'Instance';
     }

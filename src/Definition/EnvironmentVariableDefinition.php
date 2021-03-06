@@ -12,40 +12,19 @@ namespace DI\Definition;
  */
 class EnvironmentVariableDefinition implements Definition
 {
-    /**
-     * Entry name.
-     */
+    /** Entry name. */
     private string $name = '';
 
     /**
-     * The name of the environment variable.
-     */
-    private string $variableName;
-
-    /**
-     * Whether or not the environment variable definition is optional.
-     *
-     * If true and the environment variable given by $variableName has not been
-     * defined, $defaultValue is used.
-     */
-    private bool $isOptional;
-
-    /**
-     * The default value to use if the environment variable is optional and not provided.
-     * @var mixed
-     */
-    private $defaultValue;
-
-    /**
      * @param string $variableName The name of the environment variable
-     * @param bool $isOptional Whether or not the environment variable definition is optional
+     * @param bool $isOptional Whether or not the environment variable definition is optional. If true and the environment variable given by $variableName has not been defined, $defaultValue is used.
      * @param mixed $defaultValue The default value to use if the environment variable is optional and not provided
      */
-    public function __construct(string $variableName, bool $isOptional = false, $defaultValue = null)
-    {
-        $this->variableName = $variableName;
-        $this->isOptional = $isOptional;
-        $this->defaultValue = $defaultValue;
+    public function __construct(
+        private string $variableName,
+        private bool $isOptional = false,
+        private mixed $defaultValue = null,
+    ) {
     }
 
     public function getName() : string
@@ -77,7 +56,7 @@ class EnvironmentVariableDefinition implements Definition
     /**
      * @return mixed The default value to use if the environment variable is optional and not provided
      */
-    public function getDefaultValue()
+    public function getDefaultValue() : mixed
     {
         return $this->defaultValue;
     }
@@ -87,22 +66,22 @@ class EnvironmentVariableDefinition implements Definition
         $this->defaultValue = $replacer($this->defaultValue);
     }
 
-    public function __toString()
+    public function __toString() : string
     {
-        $str = '    variable = ' . $this->variableName . PHP_EOL
+        $str = '    variable = ' . $this->variableName . \PHP_EOL
             . '    optional = ' . ($this->isOptional ? 'yes' : 'no');
 
         if ($this->isOptional) {
             if ($this->defaultValue instanceof Definition) {
                 $nestedDefinition = (string) $this->defaultValue;
-                $defaultValueStr = str_replace(PHP_EOL, PHP_EOL . '    ', $nestedDefinition);
+                $defaultValueStr = str_replace(\PHP_EOL, \PHP_EOL . '    ', $nestedDefinition);
             } else {
                 $defaultValueStr = var_export($this->defaultValue, true);
             }
 
-            $str .= PHP_EOL . '    default = ' . $defaultValueStr;
+            $str .= \PHP_EOL . '    default = ' . $defaultValueStr;
         }
 
-        return sprintf('Environment variable (' . PHP_EOL . '%s' . PHP_EOL . ')', $str);
+        return sprintf('Environment variable (' . \PHP_EOL . '%s' . \PHP_EOL . ')', $str);
     }
 }

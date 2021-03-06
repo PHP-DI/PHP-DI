@@ -31,7 +31,7 @@ final class Injectable
         }
     }
 
-    public function isLazy() : ?bool
+    public function isLazy() : bool | null
     {
         return $this->lazy;
     }

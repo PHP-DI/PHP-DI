@@ -20,16 +20,14 @@ use Attribute;
 final class Injectable
 {
     /**
-     * Should the object be lazy-loaded.
+     * @param bool|null $lazy Should the object be lazy-loaded.
      */
-    private ?bool $lazy = null;
-
-    public function __construct(?bool $lazy = null)
-    {
-        $this->lazy = $lazy;
+    public function __construct(
+        private ?bool $lazy = null,
+    ) {
     }
 
-    public function isLazy() : ?bool
+    public function isLazy() : bool | null
     {
         return $this->lazy;
     }

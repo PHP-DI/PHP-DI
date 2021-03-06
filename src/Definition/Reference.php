@@ -13,22 +13,15 @@ use Psr\Container\ContainerInterface;
  */
 class Reference implements Definition, SelfResolvingDefinition
 {
-    /**
-     * Entry name.
-     */
+    /** Entry name. */
     private string $name = '';
-
-    /**
-     * Name of the target entry.
-     */
-    private string $targetEntryName;
 
     /**
      * @param string $targetEntryName Name of the target entry
      */
-    public function __construct(string $targetEntryName)
-    {
-        $this->targetEntryName = $targetEntryName;
+    public function __construct(
+        private string $targetEntryName,
+    ) {
     }
 
     public function getName() : string
@@ -46,7 +39,7 @@ class Reference implements Definition, SelfResolvingDefinition
         return $this->targetEntryName;
     }
 
-    public function resolve(ContainerInterface $container)
+    public function resolve(ContainerInterface $container) : mixed
     {
         return $container->get($this->getTargetEntryName());
     }
@@ -61,7 +54,7 @@ class Reference implements Definition, SelfResolvingDefinition
         // no nested definitions
     }
 
-    public function __toString()
+    public function __toString() : string
     {
         return sprintf(
             'get(%s)',

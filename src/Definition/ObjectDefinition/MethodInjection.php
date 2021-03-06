@@ -13,17 +13,13 @@ use DI\Definition\Definition;
  */
 class MethodInjection implements Definition
 {
-    private string $methodName;
-
     /**
-     * @var mixed[]
+     * @param mixed[] $parameters
      */
-    private array $parameters;
-
-    public function __construct(string $methodName, array $parameters = [])
-    {
-        $this->methodName = $methodName;
-        $this->parameters = $parameters;
+    public function __construct(
+        private string $methodName,
+        private array $parameters = [],
+    ) {
     }
 
     public static function constructor(array $parameters = []) : self
@@ -47,15 +43,15 @@ class MethodInjection implements Definition
     /**
      * Replace the parameters of the definition by a new array of parameters.
      */
-    public function replaceParameters(array $parameters)
+    public function replaceParameters(array $parameters) : void
     {
         $this->parameters = $parameters;
     }
 
-    public function merge(self $definition)
+    public function merge(self $definition) : void
     {
         // In case of conflicts, the current definition prevails.
-        $this->parameters = $this->parameters + $definition->parameters;
+        $this->parameters += $definition->parameters;
     }
 
     public function getName() : string
@@ -76,7 +72,7 @@ class MethodInjection implements Definition
     /**
      * {@inheritdoc}
      */
-    public function __toString()
+    public function __toString() : string
     {
         return sprintf('method(%s)', $this->methodName);
     }

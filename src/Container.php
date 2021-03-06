@@ -86,7 +86,7 @@ class Container implements ContainerInterface, FactoryInterface, InvokerInterfac
         $this->delegateContainer = $wrapperContainer ?: $this;
 
         $this->definitionSource = $definitionSource ?: $this->createDefaultDefinitionSource();
-        $this->proxyFactory = $proxyFactory ?: new ProxyFactory(false);
+        $this->proxyFactory = $proxyFactory ?: new ProxyFactory;
         $this->definitionResolver = new ResolverDispatcher($this->delegateContainer, $this->proxyFactory);
 
         // Auto-register the container
@@ -101,27 +101,26 @@ class Container implements ContainerInterface, FactoryInterface, InvokerInterfac
     /**
      * Returns an entry of the container by its name.
      *
-     * @param string $name Entry name or a class name.
+     * @param string $id Entry name or a class name.
      *
      * @throws DependencyException Error while resolving the entry.
      * @throws NotFoundException No entry found for the given name.
-     * @return mixed
      */
-    public function get($name)
+    public function get($id) : mixed
     {
         // If the entry is already resolved we return it
-        if (isset($this->resolvedEntries[$name]) || array_key_exists($name, $this->resolvedEntries)) {
-            return $this->resolvedEntries[$name];
+        if (isset($this->resolvedEntries[$id]) || array_key_exists($id, $this->resolvedEntries)) {
+            return $this->resolvedEntries[$id];
         }
 
-        $definition = $this->getDefinition($name);
+        $definition = $this->getDefinition($id);
         if (! $definition) {
-            throw new NotFoundException("No entry or class found for '$name'");
+            throw new NotFoundException("No entry or class found for '$id'");
         }
 
         $value = $this->resolveDefinition($definition);
 
-        $this->resolvedEntries[$name] = $value;
+        $this->resolvedEntries[$id] = $value;
 
         return $value;
     }
@@ -152,17 +151,9 @@ class Container implements ContainerInterface, FactoryInterface, InvokerInterfac
      * @throws InvalidArgumentException The name parameter must be of type string.
      * @throws DependencyException Error while resolving the entry.
      * @throws NotFoundException No entry found for the given name.
-     * @return mixed
      */
-    public function make(string $name, array $parameters = [])
+    public function make(string $name, array $parameters = []) : mixed
     {
-        if (! is_string($name)) {
-            throw new InvalidArgumentException(sprintf(
-                'The name parameter must be of type string, %s given',
-                is_object($name) ? get_class($name) : gettype($name)
-            ));
-        }
-
         $definition = $this->getDefinition($name);
         if (! $definition) {
             // If the entry is already resolved we return it
@@ -179,24 +170,24 @@ class Container implements ContainerInterface, FactoryInterface, InvokerInterfac
     /**
      * Test if the container can provide something for the given name.
      *
-     * @param string $name Entry name or a class name.
+     * @param string $id Entry name or a class name.
      *
      * @throws InvalidArgumentException The name parameter must be of type string.
      */
-    public function has($name) : bool
+    public function has($id) : bool
     {
-        if (! is_string($name)) {
+        if (! is_string($id)) {
             throw new InvalidArgumentException(sprintf(
                 'The name parameter must be of type string, %s given',
-                is_object($name) ? get_class($name) : gettype($name)
+                get_debug_type($id)
             ));
         }
 
-        if (array_key_exists($name, $this->resolvedEntries)) {
+        if (array_key_exists($id, $this->resolvedEntries)) {
             return true;
         }
 
-        $definition = $this->getDefinition($name);
+        $definition = $this->getDefinition($id);
         if ($definition === null) {
             return false;
         }
@@ -214,11 +205,11 @@ class Container implements ContainerInterface, FactoryInterface, InvokerInterfac
      */
     public function injectOn(object $instance) : object
     {
-        $className = get_class($instance);
+        $className = $instance::class;
 
         // If the class is anonymous, don't cache its definition
         // Checking for anonymous classes is cleaner via Reflection, but also slower
-        $objectDefinition = false !== strpos($className, '@anonymous')
+        $objectDefinition = str_contains($className, '@anonymous')
             ? $this->definitionSource->getDefinition($className)
             : $this->getDefinition($className);
 
@@ -238,14 +229,14 @@ class Container implements ContainerInterface, FactoryInterface, InvokerInterfac
      *
      * Missing parameters will be resolved from the container.
      *
-     * @param callable $callable   Function to call.
+     * @param callable|array|string $callable Function to call.
      * @param array    $parameters Parameters to use. Can be indexed by the parameter names
      *                             or not indexed (same order as the parameters).
      *                             The array can also contain DI definitions, e.g. DI\get().
      *
      * @return mixed Result of the function.
      */
-    public function call($callable, array $parameters = [])
+    public function call($callable, array $parameters = []) : mixed
     {
         return $this->getInvoker()->call($callable, $parameters);
     }
@@ -256,7 +247,7 @@ class Container implements ContainerInterface, FactoryInterface, InvokerInterfac
      * @param string $name Entry name
      * @param mixed|DefinitionHelper $value Value, use definition helpers to define objects
      */
-    public function set(string $name, $value)
+    public function set(string $name, mixed $value) : void
     {
         if ($value instanceof DefinitionHelper) {
             $value = $value->getDefinition($name);
@@ -314,10 +305,8 @@ class Container implements ContainerInterface, FactoryInterface, InvokerInterfac
 
     /**
      * Get formatted entry type.
-     *
-     * @param mixed $entry
      */
-    private function getEntryType($entry) : string
+    private function getEntryType(mixed $entry) : string
     {
         if (is_object($entry)) {
             return sprintf("Object (\n    class = %s\n)", get_class($entry));
@@ -335,7 +324,7 @@ class Container implements ContainerInterface, FactoryInterface, InvokerInterfac
             return sprintf('Value (%s)', $entry === true ? 'true' : 'false');
         }
 
-        return sprintf('Value (%s)', is_scalar($entry) ? $entry : ucfirst(gettype($entry)));
+        return sprintf('Value (%s)', is_scalar($entry) ? (string) $entry : ucfirst(gettype($entry)));
     }
 
     /**
@@ -344,9 +333,8 @@ class Container implements ContainerInterface, FactoryInterface, InvokerInterfac
      * Checks for circular dependencies while resolving the definition.
      *
      * @throws DependencyException Error while resolving the entry.
-     * @return mixed
      */
-    private function resolveDefinition(Definition $definition, array $parameters = [])
+    private function resolveDefinition(Definition $definition, array $parameters = []) : mixed
     {
         $entryName = $definition->getName();
 

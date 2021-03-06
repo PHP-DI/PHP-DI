@@ -13,7 +13,7 @@ use DI\Factory\RequestedEntry;
  *
  * @author Matthieu Napoli <matthieu@mnapoli.fr>
  */
-interface Definition extends RequestedEntry
+interface Definition extends RequestedEntry, \Stringable
 {
     /**
      * Returns the name of the entry in the container.
@@ -33,5 +33,5 @@ interface Definition extends RequestedEntry
     /**
      * Definitions can be cast to string for debugging information.
      */
-    public function __toString();
+    public function __toString() : string;
 }
