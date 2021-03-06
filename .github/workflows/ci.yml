@@ -30,7 +30,9 @@ jobs:
                     php-version: ${{ matrix.php }}
                     tools: composer:v2
                     coverage: none
+                    # Enable apcu
                     extensions: apcu
+                    ini-values: apc.enable_cli=1
             -   name: Cache Composer dependencies
                 uses: actions/cache@v2
                 with:
