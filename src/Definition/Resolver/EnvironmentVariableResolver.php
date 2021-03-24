@@ -73,6 +73,7 @@ class EnvironmentVariableResolver implements DefinitionResolver
         } elseif (isset($_SERVER[$variableName])) {
             return $_SERVER[$variableName];
         }
+
         return getenv($variableName);
     }
 }
