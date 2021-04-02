@@ -5,15 +5,23 @@ current_menu: container-configuration
 
 # Configuring the container
 
-## Development environment
+## Getting started
 
-PHP-DI's container is preconfigured for "plug and play", i.e. development environment. You can start using it simply like so:
+PHP-DI's container is preconfigured for "plug and play". You can start using it simply like so:
 
 ```php
 $container = new Container();
 ```
 
-By default, PHP-DI will have [Autowiring](definition.md) enabled ([annotations](annotations.md) are disabled by default).
+By default, [Autowiring](definition.md) will be enabled. [Annotations](annotations.md) are disabled by default.
+
+To register [definitions using an array](php-definitions.md):
+
+```php
+$container = new DI\Container([
+    // place your definitions here
+]);
+```
 
 To change options on the container you can use the `ContainerBuilder` class:
 
