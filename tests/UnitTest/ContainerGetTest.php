@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace DI\Test\UnitTest;
 
+use DI\Container;
 use DI\ContainerBuilder;
 use DI\Test\UnitTest\Fixtures\PassByReferenceDependency;
 use PHPUnit\Framework\TestCase;
@@ -18,7 +19,7 @@ class ContainerGetTest extends TestCase
 {
     public function testSetGet()
     {
-        $container = ContainerBuilder::buildDevContainer();
+        $container = new Container;
         $dummy = new stdClass();
         $container->set('key', $dummy);
         $this->assertSame($dummy, $container->get('key'));
@@ -27,7 +28,7 @@ class ContainerGetTest extends TestCase
     public function testGetNotFound()
     {
         $this->expectException('DI\NotFoundException');
-        $container = ContainerBuilder::buildDevContainer();
+        $container = new Container;
         $container->get('key');
     }
 
@@ -36,20 +37,20 @@ class ContainerGetTest extends TestCase
         $closure = function () {
             return 'hello';
         };
-        $container = ContainerBuilder::buildDevContainer();
+        $container = new Container;
         $container->set('key', $closure);
         $this->assertEquals('hello', $container->get('key'));
     }
 
     public function testGetWithClassName()
     {
-        $container = ContainerBuilder::buildDevContainer();
+        $container = new Container;
         $this->assertInstanceOf('stdClass', $container->get('stdClass'));
     }
 
     public function testGetResolvesEntryOnce()
     {
-        $container = ContainerBuilder::buildDevContainer();
+        $container = new Container;
         $this->assertSame($container->get('stdClass'), $container->get('stdClass'));
     }
 
@@ -58,7 +59,7 @@ class ContainerGetTest extends TestCase
      */
     public function testPassByReferenceParameter()
     {
-        $container = ContainerBuilder::buildDevContainer();
+        $container = new Container;
         $object = $container->get(PassByReferenceDependency::class);
         $this->assertInstanceOf(PassByReferenceDependency::class, $object);
     }

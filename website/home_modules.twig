@@ -12,7 +12,7 @@
                 Just create the container and you are good to go thanks to autowiring.
             </p>
 
-<pre><code class="php">$container = ContainerBuilder::buildDevContainer();
+<pre><code class="php">$container = new Container();
 
 $home = $container->get(HomeController::class);
 </code></pre>

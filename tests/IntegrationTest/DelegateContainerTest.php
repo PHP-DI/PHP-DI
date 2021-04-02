@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace DI\Test\IntegrationTest;
 
+use DI\Container;
 use DI\ContainerBuilder;
 use function DI\get;
 use function DI\string;
@@ -18,7 +19,7 @@ class DelegateContainerTest extends BaseContainerTest
      */
     public function test_alias_to_dependency_in_delegate_container(ContainerBuilder $subContainerBuilder)
     {
-        $rootContainer = ContainerBuilder::buildDevContainer();
+        $rootContainer = new Container;
         $value = new \stdClass();
         $rootContainer->set('bar', $value);
 
@@ -36,8 +37,9 @@ class DelegateContainerTest extends BaseContainerTest
      */
     public function test_string_expression_using_dependency_in_delegate_container(ContainerBuilder $subContainerBuilder)
     {
-        $rootContainer = ContainerBuilder::buildDevContainer();
-        $rootContainer->set('bar', 'hello');
+        $rootContainer = new Container([
+            'bar' => 'hello',
+        ]);
 
         $subContainerBuilder->wrapContainer($rootContainer);
         $subContainerBuilder->addDefinitions([
@@ -53,9 +55,10 @@ class DelegateContainerTest extends BaseContainerTest
      */
     public function test_with_container_call(ContainerBuilder $subContainerBuilder)
     {
-        $rootContainer = ContainerBuilder::buildDevContainer();
         $value = new \stdClass();
-        $rootContainer->set('stdClass', $value);
+        $rootContainer = new Container([
+            'stdClass' => $value,
+        ]);
 
         $subContainerBuilder->wrapContainer($rootContainer);
         $subContainer = $subContainerBuilder->build();
