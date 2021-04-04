@@ -10,9 +10,16 @@ On top of [autowiring](autowiring.md) and [annotations](annotations.md), you can
 You can register that configuration as an array:
 
 ```php
+$container = new DI\Container([
+    // place your definitions here
+]);
+
+// or using the container builder class:
+// ...
 $containerBuilder->addDefinitions([
     // place your definitions here
 ]);
+// ...
 ```
 
 Or by putting it into a file returning an array:

@@ -80,14 +80,6 @@ class ContainerBuilder
     protected string $sourceCacheNamespace = '';
 
     /**
-     * Build a container configured for the dev environment.
-     */
-    public static function buildDevContainer() : Container
-    {
-        return new Container;
-    }
-
-    /**
      * @param string $containerClass Name of the container class, used to create the container.
      * @psalm-param class-string<Container> $containerClass
      */

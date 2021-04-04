@@ -249,12 +249,4 @@ class ContainerBuilderTest extends TestCase
 
         $builder->addDefinitions([]);
     }
-
-    /**
-     * @test
-     */
-    public function dev_container_configuration_should_be_identical_to_creating_a_new_container_from_defaults()
-    {
-        self::assertEquals(new Container, ContainerBuilder::buildDevContainer());
-    }
 }

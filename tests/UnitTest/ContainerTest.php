@@ -19,4 +19,15 @@ class ContainerTest extends TestCase
     {
         self::assertInstanceOf(Container::class, new Container); // Should not be an error
     }
+    /**
+     * @test
+     */
+    public function canBeBuiltWithDefinitionArray()
+    {
+        $container = new Container([
+            'foo' => 'bar',
+        ]);
+        self::assertInstanceOf(Container::class, $container);
+        self::assertEquals('bar', $container->get('foo'));
+    }
 }
