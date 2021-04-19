@@ -29,7 +29,9 @@
         <link href="https://cdn.jsdelivr.net/docsearch.js/1/docsearch.min.css" rel="stylesheet">
         <link href="https://php-di.org/css/highlight.github.css" rel="stylesheet">
         <link href="https://php-di.org/css/all.min.css" rel="stylesheet">
-    </head>
+    
+    <script async defer data-domain="php-di.org" src="https://plausible.io/js/plausible.js"></script>
+</head>
 <body>
 
     <header>
@@ -428,7 +430,7 @@ return [
 ];</code></pre>
 <p>Please note:</p>
 <ul>
-<li><code>factory([FooFactory::class, 'build'])</code>: if <code>build()</code> is a <strong>static</strong> method then the object will not be created: <code>FooFactory::build()</code> will be called statically (as one would expect)</li>
+<li><code>factory([FooFactory::class, 'build'])</code>: if <code>build()</code> is a <strong>static</strong> method then <code>FooFactory::build()</code> will be called statically (the static method is responsible for returning an object or returning a value)</li>
 <li>you can set any container entry name in the array, e.g. <code>DI\factory(['foo_bar_baz', 'build'])</code> (or alternatively: <code>DI\factory('foo_bar_baz::build')</code>), allowing you to configure <code>foo_bar_baz</code> and its dependencies like any other object</li>
 <li>as a factory can be any PHP callable, you can use invokable objects, too: <code>DI\factory(InvokableFooFactory::class)</code> (or alternatively: <code>DI\factory('invokable_foo_factory')</code>, if it's defined in the container)</li>
 <li>all closures will be considered by PHP-DI as <em>factories</em>, even if they are nested into other definitions like <code>create()</code>, <code>env()</code>, etc. (read more in the <a href="#nesting-definitions">Nesting definitions</a> section)</li>
@@ -609,7 +611,7 @@ $container-&gt;set('foo', DI\create('MyClass'));</code></pre>
             <div class='container'>
                                     <p>
                         A question? Unsatisfied with the documentation?
-                        Please <a href="https://github.com/PHP-DI/PHP-DI/issues/new">create an issue</a>
+                        <a href="https://github.com/PHP-DI/PHP-DI/issues/new">Open an issue</a>
                         or chat on
                         <a href="https://gitter.im/PHP-DI/PHP-DI" title="PHP-DI chat room">Gitter</a> or
                         <a href="https://twitter.com/phpdi" title="PHP-DI on Twitter">Twitter</a>.
@@ -623,8 +625,11 @@ $container-&gt;set('foo', DI\create('MyClass'));</code></pre>
                     and <a href="https://github.com/PHP-DI/PHP-DI/graphs/contributors" title="PHP-DI contributors">contributors</a>
                     |
                     Website generated with
-                    <a href="http://couscous.io" title="Static website generator for software documentation">Couscous</a>,
-                    supported by <a href="https://prettyci.com/" title="Continuous integration for PHP coding standards">PrettyCI.com</a>.
+                    <a href="http://couscous.io" title="Static website generator for software documentation">Couscous</a>.
+                </p>
+                <p>
+                    Want to support my work? Check out
+                    <a href="https://serverless-visually-explained.com/?ref=php-di" title="Serverless course">Serverless Visually Explained</a>.
                 </p>
             </div>
         </footer>
