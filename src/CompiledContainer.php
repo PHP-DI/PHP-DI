@@ -25,6 +25,12 @@ use Invoker\ParameterResolver\ResolverChain;
 abstract class CompiledContainer extends Container
 {
     /**
+     * This const is overridden in child classes (compiled containers).
+     * @var array
+     */
+    protected const METHOD_MAPPING = [];
+
+    /**
      * @var InvokerInterface
      */
     private $factoryInvoker;

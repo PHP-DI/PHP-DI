@@ -68,12 +68,12 @@ class ReflectionBasedAutowiring implements DefinitionSource, Autowiring
                 // No type
                 continue;
             }
-            if ($parameterType->isBuiltin()) {
-                // Primitive types are not supported
-                continue;
-            }
             if (!$parameterType instanceof ReflectionNamedType) {
                 // Union types are not supported
+                continue;
+            }
+            if ($parameterType->isBuiltin()) {
+                // Primitive types are not supported
                 continue;
             }
 
