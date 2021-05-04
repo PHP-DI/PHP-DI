@@ -119,6 +119,18 @@ When resolved, the array will contain the 2 entries. **If you forget to use `DI\
 
 Note that you can use `DI\add()` even if the array was not declared before.
 
+Adding to arrays in the DI definition does not work recursively, i.e. having an array entry that contains an array.
+
+```php
+return [
+    'array' => [
+        'subarray' => [DI\get(Entry::class)],
+    ],
+];
+```
+
+You cannot add elements to `subarray` using `DI\add()`.
+
 ### Decorators
 
 You can use `DI\decorate()` to decorate an object:
