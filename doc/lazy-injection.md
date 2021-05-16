@@ -122,7 +122,7 @@ $containerPHP->set('foo', \DI\create('MyClass')->lazy());
 
 ## When to use
 
-Lazy injection requires to create proxy objects for each object you declare as `lazy`. It is not recommended to use this feature more that a few times in one application.
+Lazy injection requires to create proxy objects for each object you declare as `lazy`. It is not recommended to use this feature more than a few times in one application.
 
 While proxies are extremely optimized, they are only worth it if the object you define as lazy has a constructor that takes some time (e.g. connects to a database, writes to a file, etc.).
 
