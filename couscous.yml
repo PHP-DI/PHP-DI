@@ -67,7 +67,7 @@ menu:
                 zf1:
                     text: Zend Framework 1
                     url: doc/frameworks/zf1.html
-                ze:
+                zend-expressive:
                     text: Zend Expressive
                     url: doc/frameworks/zend-expressive.html
                 silly:
@@ -140,7 +140,7 @@ menu:
 frameworks:
     zf1: Zend Framework 1
     zf2: Zend Framework 2
-    ze: Zend Expressive
+    zend-expressive: Zend Expressive
     symfony2: Symfony
     silex: Silex
     slim: Slim
