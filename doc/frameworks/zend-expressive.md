@@ -1,6 +1,6 @@
 ---
 layout: documentation
-current_menu: ze
+current_menu: zend-expressive
 ---
 
 # PHP-DI in Zend Expressive
