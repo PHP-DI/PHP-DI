@@ -28,6 +28,17 @@ return [
 $containerBuilder->addDefinitions('config.php');
 ```
 
+The _addDefinitions_ method is variadic, so it accepts multiple definition files:
+
+```php
+$containerBuilder->addDefinitions( ...[
+    'config.php', 
+    'actions.php'
+]);
+```
+
+
+
 ## A word about lazy loading
 
 PHP-DI loads the definitions you have written and uses them like instructions on how to create objects.
