@@ -413,8 +413,8 @@ class Container implements ContainerInterface, FactoryInterface, InvokerInterfac
                 new DefinitionParameterResolver($this->definitionResolver),
                 new NumericArrayResolver,
                 new AssociativeArrayResolver,
-                new DefaultValueResolver,
                 new TypeHintContainerResolver($this->delegateContainer),
+                new DefaultValueResolver,
             ]);
 
             $this->invoker = new Invoker($parameterResolver, $this);
