@@ -26,7 +26,7 @@
     },
     "require": {
         "php": ">=7.2.0",
-        "psr/container": "^1.0",
+        "psr/container": "^1.0|^2.0",
         "php-di/invoker": "^2.0",
         "php-di/phpdoc-reader": "^2.0.1",
         "opis/closure": "^3.5.5"
