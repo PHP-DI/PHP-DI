@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace DI\Compiler;
 
 use function chmod;
+use DI\Container;
 use DI\Definition\ArrayDefinition;
 use DI\Definition\DecoratorDefinition;
 use DI\Definition\Definition;
@@ -22,6 +23,8 @@ use function dirname;
 use function file_put_contents;
 use InvalidArgumentException;
 use Opis\Closure\SerializableClosure;
+use ReflectionFunction;
+use ReflectionFunctionAbstract;
 use function rename;
 use function sprintf;
 use function tempnam;
@@ -297,6 +300,35 @@ PHP;
                     ));
                 }
 
+                if ($value instanceof \Closure) {
+                    $reflection = new ReflectionFunction($value);
+                    $requestedEntry = new RequestedEntryHolder($entryName);
+                    $parametersByClassName = [
+                        'DI\Factory\RequestedEntry' => $requestedEntry,
+                    ];
+                    // default non-typehinted parameters
+                    $defaultParameters = [new Reference(Container::class), $requestedEntry];
+
+                    $resolvedParameters = $this->resolveFactoryParameters(
+                        $reflection,
+                        $definition->getParameters(),
+                        $parametersByClassName,
+                        $defaultParameters
+                    );
+
+                    $definitionParameters = array_map(function ($value) {
+                        return $this->compileValue($value);
+                    }, $resolvedParameters);
+
+                    $code = sprintf(
+                        'return (%s)(%s);',
+                        $this->compileValue($value),
+                        implode(', ', $definitionParameters)
+                    );
+                    break;
+                }
+
+                // todo optimize other (non-closure) factories
                 $definitionParameters = '';
                 if (!empty($definition->getParameters())) {
                     $definitionParameters = ', ' . $this->compileValue($definition->getParameters());
@@ -326,6 +358,11 @@ PHP;
         $errorMessage = $this->isCompilable($value);
         if ($errorMessage !== true) {
             throw new InvalidDefinition($errorMessage);
+        }
+
+        // one step ahead to skip CompiledContainer->resolveFactory
+        if ($value instanceof RequestedEntryHolder) {
+            return 'new DI\Compiler\RequestedEntryHolder(\'' . $value->getName() . '\')';
         }
 
         if ($value instanceof Definition) {
@@ -386,6 +423,10 @@ PHP;
         if ($value instanceof \Closure) {
             return true;
         }
+        // added for skipping CompiledContainer->resolveFactory - there is a special case for this in compileValue method
+        if ($value instanceof RequestedEntryHolder) {
+            return true;
+        }
         if (is_object($value)) {
             return 'An object was found but objects cannot be compiled';
         }
@@ -419,5 +460,40 @@ PHP;
         $code = trim($code, "\t\n\r;");
 
         return $code;
+    }
+
+    public function resolveFactoryParameters(
+        ReflectionFunctionAbstract $reflection,
+        array $definitionParameters = [],
+        array $parametersByClassName = [],
+        array $defaultParameters = []
+    ) {
+        $resolvedParameters = [];
+        $parameters = $reflection->getParameters();
+
+        foreach ($parameters as $index => $parameter) {
+            $name = $parameter->getName();
+            if (array_key_exists($name, $definitionParameters)) {
+                $resolvedParameters[$index] = $definitionParameters[$name];
+                continue;
+            }
+
+            $parameterClass = $parameter->getClass();
+            if (!$parameterClass) {
+                if (array_key_exists($index, $defaultParameters)) {
+                    // take default parameters, when no typehint
+                    $resolvedParameters[$index] = $defaultParameters[$index];
+                }
+                continue;
+            }
+
+            if (isset($parametersByClassName[$parameterClass->name])) {
+                $resolvedParameters[$index] = $parametersByClassName[$parameterClass->name];
+            } else {
+                $resolvedParameters[$index] = new Reference($parameterClass->name);
+            }
+        }
+
+        return $resolvedParameters;
     }
 }
