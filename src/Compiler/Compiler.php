@@ -21,8 +21,8 @@ use DI\Proxy\ProxyFactory;
 use function dirname;
 use function file_put_contents;
 use InvalidArgumentException;
-use Laravel\SerializableClosure\Support\ReflectionClosure;
 use Laravel\SerializableClosure\SerializableClosure;
+use Laravel\SerializableClosure\Support\ReflectionClosure;
 use Opis\Closure\SerializableClosure as OpisSerializableClosure;
 use function rename;
 use function sprintf;
@@ -403,7 +403,7 @@ PHP;
      */
     private function compileClosure(\Closure $closure) : string
     {
-        if (PHP_VERSION_ID < 70400) {
+        if (\PHP_VERSION_ID < 70400) {
             $wrapper = new OpisSerializableClosure($closure);
             $reflector = $wrapper->getReflector();
         } else {
