@@ -8,6 +8,10 @@ $config = new PhpCsFixer\Config;
 return $config->setRules([
     '@PSR2' => true,
     '@PHP70Migration' => true,
+    '@PHP71Migration' => true,
+    '@PHP73Migration' => true,
+    '@PHP74Migration' => true,
+    '@PHP80Migration' => true,
     '@Symfony' => true,
     '@Symfony:risky' => true,
     'array_syntax' => ['syntax' => 'short'],

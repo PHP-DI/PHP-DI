@@ -222,13 +222,13 @@ class Compiler
                 $isOptional = $this->compileValue($definition->isOptional());
                 $defaultValue = $this->compileValue($definition->getDefaultValue());
                 $code = <<<PHP
-        \$value = \$_ENV[$variableName] ?? \$_SERVER[$variableName] ?? getenv($variableName);
-        if (false !== \$value) return \$value;
-        if (!$isOptional) {
-            throw new \DI\Definition\Exception\InvalidDefinition("The environment variable '{$definition->getVariableName()}' has not been defined");
-        }
-        return $defaultValue;
-PHP;
+                            \$value = \$_ENV[$variableName] ?? \$_SERVER[$variableName] ?? getenv($variableName);
+                            if (false !== \$value) return \$value;
+                            if (!$isOptional) {
+                                throw new \DI\Definition\Exception\InvalidDefinition("The environment variable '{$definition->getVariableName()}' has not been defined");
+                            }
+                            return $defaultValue;
+                    PHP;
                 break;
             case $definition instanceof ArrayDefinition:
                 try {

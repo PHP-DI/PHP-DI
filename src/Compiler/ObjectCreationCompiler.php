@@ -140,15 +140,15 @@ class ObjectCreationCompiler
         $this->compiler->getProxyFactory()->generateProxyClass($className);
 
         return <<<STR
-        \$object = \$this->proxyFactory->createProxy(
-            '{$definition->getClassName()}',
-            function (&\$wrappedObject, \$proxy, \$method, \$params, &\$initializer) {
-                \$wrappedObject = $subDefinition;
-                \$initializer = null; // turning off further lazy initialization
-                return true;
-            }
-        );
-STR;
+                    \$object = \$this->proxyFactory->createProxy(
+                        '{$definition->getClassName()}',
+                        function (&\$wrappedObject, \$proxy, \$method, \$params, &\$initializer) {
+                            \$wrappedObject = $subDefinition;
+                            \$initializer = null; // turning off further lazy initialization
+                            return true;
+                        }
+                    );
+            STR;
     }
 
     /**
