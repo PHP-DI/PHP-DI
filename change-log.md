@@ -1,5 +1,9 @@
 # Change log
 
+## 6.1.0
+
+- [#791](https://github.com/PHP-DI/PHP-DI/issues/791) Support PHP 8.1, remove support for PHP 7.2
+
 ## 6.0.2
 
 - Fix potential regression introduced when fixing [#582](https://github.com/PHP-DI/PHP-DI/issues/582)

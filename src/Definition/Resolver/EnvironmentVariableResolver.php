@@ -17,10 +17,14 @@ use DI\Definition\Exception\InvalidDefinition;
  */
 class EnvironmentVariableResolver implements DefinitionResolver
 {
+    /** @var callable */
+    private $variableReader;
+
     public function __construct(
         private DefinitionResolver $definitionResolver,
-        private $variableReader = 'getenv',
+        $variableReader = null
     ) {
+        $this->variableReader = $variableReader ?? [$this, 'getEnvVariable'];
     }
 
     /**
@@ -56,5 +60,16 @@ class EnvironmentVariableResolver implements DefinitionResolver
     public function isResolvable(Definition $definition, array $parameters = []) : bool
     {
         return true;
+    }
+
+    protected function getEnvVariable(string $variableName)
+    {
+        if (isset($_ENV[$variableName])) {
+            return $_ENV[$variableName];
+        } elseif (isset($_SERVER[$variableName])) {
+            return $_SERVER[$variableName];
+        }
+
+        return getenv($variableName);
     }
 }

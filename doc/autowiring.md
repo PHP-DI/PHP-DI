@@ -9,7 +9,7 @@ current_menu: autowiring
 
 In order to achieve that, PHP-DI uses [PHP's reflection](http://php.net/manual/book.reflection.php) to detect what parameters a constructor needs.
 
-Autowiring does not affect performances when [compiling the container](performances.md).
+Autowiring does not affect performance when [compiling the container](performances.md).
 
 Let's take this example:
 

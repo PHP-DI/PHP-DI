@@ -114,10 +114,12 @@ class Container implements ContainerInterface, FactoryInterface, InvokerInterfac
     /**
      * Returns an entry of the container by its name.
      *
-     * @param string $id Entry name or a class name.
+     * @template T
+     * @param string|class-string<T> $id Entry name or a class name.
      *
      * @throws DependencyException Error while resolving the entry.
      * @throws NotFoundException No entry found for the given name.
+     * @return mixed|T
      */
     public function get(string $id) : mixed
     {
@@ -156,14 +158,16 @@ class Container implements ContainerInterface, FactoryInterface, InvokerInterfac
      *
      * This method makes the container behave like a factory.
      *
-     * @param string $name       Entry name or a class name.
-     * @param array  $parameters Optional parameters to use to build the entry. Use this to force specific parameters
-     *                           to specific values. Parameters not defined in this array will be resolved using
-     *                           the container.
+     * @template T
+     * @param string|class-string<T> $name       Entry name or a class name.
+     * @param array                  $parameters Optional parameters to use to build the entry. Use this to force
+     *                                           specific parameters to specific values. Parameters not defined in this
+     *                                           array will be resolved using the container.
      *
      * @throws InvalidArgumentException The name parameter must be of type string.
      * @throws DependencyException Error while resolving the entry.
      * @throws NotFoundException No entry found for the given name.
+     * @return mixed|T
      */
     public function make(string $name, array $parameters = []) : mixed
     {
@@ -200,10 +204,11 @@ class Container implements ContainerInterface, FactoryInterface, InvokerInterfac
     /**
      * Inject all dependencies on an existing instance.
      *
-     * @param object $instance Object to perform injection upon
+     * @template T
+     * @param object|T $instance Object to perform injection upon
      * @throws InvalidArgumentException
      * @throws DependencyException Error while injecting dependencies
-     * @return object $instance Returns the same instance
+     * @return object|T $instance Returns the same instance
      */
     public function injectOn(object $instance) : object
     {

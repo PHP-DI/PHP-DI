@@ -21,7 +21,7 @@ use DI\Proxy\ProxyFactory;
 use function dirname;
 use function file_put_contents;
 use InvalidArgumentException;
-use Opis\Closure\SerializableClosure;
+use Laravel\SerializableClosure\Support\ReflectionClosure;
 use function rename;
 use function sprintf;
 use function tempnam;
@@ -224,7 +224,7 @@ class Compiler
                 $isOptional = $this->compileValue($definition->isOptional());
                 $defaultValue = $this->compileValue($definition->getDefaultValue());
                 $code = <<<PHP
-        \$value = getenv($variableName);
+        \$value = \$_ENV[$variableName] ?? \$_SERVER[$variableName] ?? getenv($variableName);
         if (false !== \$value) return \$value;
         if (!$isOptional) {
             throw new \DI\Definition\Exception\InvalidDefinition("The environment variable '{$definition->getVariableName()}' has not been defined");
@@ -338,7 +338,7 @@ PHP;
 
     private function createCompilationDirectory(string $directory) : void
     {
-        if (!is_dir($directory) && !@mkdir($directory, 0777, true)) {
+        if (!is_dir($directory) && !@mkdir($directory, 0777, true) && !is_dir($directory)) {
             throw new InvalidArgumentException(sprintf('Compilation directory does not exist and cannot be created: %s.', $directory));
         }
         if (!is_writable($directory)) {
@@ -381,8 +381,7 @@ PHP;
      */
     private function compileClosure(\Closure $closure) : string
     {
-        $wrapper = new SerializableClosure($closure);
-        $reflector = $wrapper->getReflector();
+        $reflector = new ReflectionClosure($closure);
 
         if ($reflector->getUseVariables()) {
             throw new InvalidDefinition('Cannot compile closures which import variables using the `use` keyword');

@@ -388,6 +388,15 @@ return [
 ];
 ```
 
+You can use aliases to map interfaces to implementation obtaining the same object when requesting/injecting the class or the interface
+
+```php
+return [
+    // mapping an interface to an implementation (autowire the MyLogger class if not otherwise defined)
+    'LoggerInterface' => DI\get('MyLogger'),
+];
+```
+
 ### Environment variables
 
 You can get an environment variable's value using the `DI\env()` helper:
