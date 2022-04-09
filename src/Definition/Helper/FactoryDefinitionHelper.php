@@ -26,7 +26,7 @@ class FactoryDefinitionHelper implements DefinitionHelper
     /**
      * @param bool $decorate Is the factory decorating a previous definition?
      */
-    public function __construct(callable | array | string $factory, bool $decorate = false)
+    public function __construct(callable|array|string $factory, bool $decorate = false)
     {
         $this->factory = $factory;
         $this->decorate = $decorate;

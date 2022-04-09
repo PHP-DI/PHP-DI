@@ -37,7 +37,7 @@ class AnnotationBasedAutowiring implements DefinitionSource, Autowiring
     /**
      * @throws InvalidAnnotation
      */
-    public function autowire(string $name, ObjectDefinition $definition = null) : ObjectDefinition | null
+    public function autowire(string $name, ObjectDefinition $definition = null) : ObjectDefinition|null
     {
         $className = $definition ? $definition->getClassName() : $name;
 
@@ -65,7 +65,7 @@ class AnnotationBasedAutowiring implements DefinitionSource, Autowiring
      * @throws InvalidAnnotation
      * @throws InvalidArgumentException The class doesn't exist
      */
-    public function getDefinition(string $name) : ObjectDefinition | null
+    public function getDefinition(string $name) : ObjectDefinition|null
     {
         return $this->autowire($name);
     }
@@ -210,7 +210,7 @@ class AnnotationBasedAutowiring implements DefinitionSource, Autowiring
     /**
      * @return string|null Entry name or null if not found.
      */
-    private function getMethodParameter(int $parameterIndex, ReflectionParameter $parameter, array $annotationParameters) : string | null
+    private function getMethodParameter(int $parameterIndex, ReflectionParameter $parameter, array $annotationParameters) : string|null
     {
         // @Inject has definition for this parameter (by index, or by name)
         if (isset($annotationParameters[$parameterIndex])) {

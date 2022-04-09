@@ -34,7 +34,7 @@ final class Inject
     /**
      * @throws InvalidAnnotation
      */
-    public function __construct(string | array | null $name = null)
+    public function __construct(string|array|null $name = null)
     {
         // #[Inject('foo')] or #[Inject(name: 'foo')]
         if (is_string($name)) {
@@ -59,7 +59,7 @@ final class Inject
     /**
      * @return string|null Name of the entry to inject
      */
-    public function getName() : string | null
+    public function getName() : string|null
     {
         return $this->name;
     }

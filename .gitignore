@@ -7,5 +7,5 @@
 /website/bower_components/
 /website/css/all.min.css
 /logo/
-/.php_cs.cache
+/.php-cs-fixer.cache
 /.phpunit.result.cache

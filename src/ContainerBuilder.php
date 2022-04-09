@@ -289,7 +289,7 @@ class ContainerBuilder
      *                                                      or a DefinitionSource object.
      * @return $this
      */
-    public function addDefinitions(string | array | DefinitionSource ...$definitions) : self
+    public function addDefinitions(string|array|DefinitionSource ...$definitions) : self
     {
         $this->ensureNotLocked();
 

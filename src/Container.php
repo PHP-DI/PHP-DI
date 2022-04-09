@@ -88,7 +88,7 @@ class Container implements ContainerInterface, FactoryInterface, InvokerInterfac
      * @param ContainerInterface $wrapperContainer If the container is wrapped by another container.
      */
     public function __construct(
-        array | MutableDefinitionSource $definitions = [],
+        array|MutableDefinitionSource $definitions = [],
         ProxyFactory $proxyFactory = null,
         ContainerInterface $wrapperContainer = null
     ) {
