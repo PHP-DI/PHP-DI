@@ -6,7 +6,7 @@ namespace DI\Definition\Source;
 
 use DI\Attribute\Inject;
 use DI\Attribute\Injectable;
-use DI\Definition\Exception\InvalidAnnotation;
+use DI\Definition\Exception\InvalidAttribute;
 use DI\Definition\ObjectDefinition;
 use DI\Definition\ObjectDefinition\MethodInjection;
 use DI\Definition\ObjectDefinition\PropertyInjection;
@@ -28,15 +28,8 @@ use Throwable;
  */
 class AttributeBasedAutowiring implements DefinitionSource, Autowiring
 {
-    public function __construct()
-    {
-        if (\PHP_VERSION_ID < 80000) {
-            throw new \Exception('Using PHP 8 attributes for autowiring is only supported with PHP 8');
-        }
-    }
-
     /**
-     * @throws InvalidAnnotation
+     * @throws InvalidAttribute
      */
     public function autowire(string $name, ObjectDefinition $definition = null) : ObjectDefinition|null
     {
@@ -63,7 +56,7 @@ class AttributeBasedAutowiring implements DefinitionSource, Autowiring
 
     /**
      * {@inheritdoc}
-     * @throws InvalidAnnotation
+     * @throws InvalidAttribute
      * @throws InvalidArgumentException The class doesn't exist
      */
     public function getDefinition(string $name) : ObjectDefinition|null
@@ -104,11 +97,11 @@ class AttributeBasedAutowiring implements DefinitionSource, Autowiring
     }
 
     /**
-     * @throws InvalidAnnotation
+     * @throws InvalidAttribute
      */
     private function readProperty(ReflectionProperty $property, ObjectDefinition $definition, ?string $classname = null) : void
     {
-        // Look for #[Inject] annotation
+        // Look for #[Inject] attribute
         try {
             $attribute = $property->getAttributes(Inject::class)[0] ?? null;
             if (! $attribute) {
@@ -117,7 +110,7 @@ class AttributeBasedAutowiring implements DefinitionSource, Autowiring
             /** @var Inject $inject */
             $inject = $attribute->newInstance();
         } catch (Throwable $e) {
-            throw new InvalidAnnotation(sprintf(
+            throw new InvalidAttribute(sprintf(
                 '#[Inject] annotation on property %s::%s is malformed. %s',
                 $property->getDeclaringClass()->getName(),
                 $property->getName(),
@@ -132,7 +125,7 @@ class AttributeBasedAutowiring implements DefinitionSource, Autowiring
         $propertyType = $property->getType();
         if ($entryName === null && $propertyType instanceof ReflectionNamedType) {
             if (! class_exists($propertyType->getName()) && ! interface_exists($propertyType->getName())) {
-                throw new InvalidAnnotation(sprintf(
+                throw new InvalidAttribute(sprintf(
                     '#[Inject] found on property %s::%s but unable to guess what to inject, the type of the property does not look like a valid class or interface name',
                     $property->getDeclaringClass()->getName(),
                     $property->getName()
@@ -142,7 +135,7 @@ class AttributeBasedAutowiring implements DefinitionSource, Autowiring
         }
 
         if ($entryName === null) {
-            throw new InvalidAnnotation(sprintf(
+            throw new InvalidAttribute(sprintf(
                 '#[Inject] found on property %s::%s but unable to guess what to inject, please add a type to the property',
                 $property->getDeclaringClass()->getName(),
                 $property->getName()
@@ -248,7 +241,7 @@ class AttributeBasedAutowiring implements DefinitionSource, Autowiring
     }
 
     /**
-     * @throws InvalidAnnotation
+     * @throws InvalidAttribute
      */
     private function readInjectableAttribute(ReflectionClass $class, ObjectDefinition $definition) : void
     {
@@ -259,7 +252,7 @@ class AttributeBasedAutowiring implements DefinitionSource, Autowiring
             }
             $attribute = $attribute->newInstance();
         } catch (Throwable $e) {
-            throw new InvalidAnnotation(sprintf(
+            throw new InvalidAttribute(sprintf(
                 'Error while reading #[Injectable] on %s: %s',
                 $class->getName(),
                 $e->getMessage()

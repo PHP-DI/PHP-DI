@@ -44,7 +44,7 @@ class FactoryDefinitionHelper implements DefinitionHelper
     /**
      * Defines arguments to pass to the factory.
      *
-     * Because factory methods do not yet support annotations or autowiring, this method
+     * Because factory methods do not yet support attributes or autowiring, this method
      * should be used to define all parameters except the ContainerInterface and RequestedEntry.
      *
      * Multiple calls can be made to the method to override individual values.

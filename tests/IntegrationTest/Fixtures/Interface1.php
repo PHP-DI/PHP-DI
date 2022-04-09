@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace DI\Test\IntegrationTest\Fixtures;
 
-use DI\Annotation\Injectable;
+use DI\Attribute\Injectable;
 
 /**
  * Fixture interface.
- * @Injectable
  */
+#[Injectable]
 interface Interface1
 {
 }

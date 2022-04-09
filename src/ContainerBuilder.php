@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace DI;
 
 use DI\Compiler\Compiler;
-use DI\Definition\Source\AnnotationBasedAutowiring;
 use DI\Definition\Source\AttributeBasedAutowiring;
 use DI\Definition\Source\DefinitionArray;
 use DI\Definition\Source\DefinitionFile;
@@ -48,8 +47,6 @@ class ContainerBuilder
     private string $containerParentClass;
 
     private bool $useAutowiring = true;
-
-    private bool $useAnnotations = false;
 
     private bool $useAttributes = false;
 
@@ -100,9 +97,6 @@ class ContainerBuilder
         if ($this->useAttributes) {
             $autowiring = new AttributeBasedAutowiring;
             $sources[] = $autowiring;
-        } elseif ($this->useAnnotations) {
-            $autowiring = new AnnotationBasedAutowiring;
-            $sources[] = $autowiring;
         } elseif ($this->useAutowiring) {
             $autowiring = new ReflectionBasedAutowiring;
             $sources[] = $autowiring;
@@ -147,7 +141,7 @@ class ContainerBuilder
                 $this->compileToDirectory,
                 $containerClass,
                 $this->containerParentClass,
-                $this->useAutowiring || $this->useAnnotations
+                $this->useAutowiring
             );
             // Only load the file if it hasn't been already loaded
             // (the container can be created multiple times in the same process)
@@ -203,22 +197,6 @@ class ContainerBuilder
         $this->ensureNotLocked();
 
         $this->useAutowiring = $bool;
-
-        return $this;
-    }
-
-    /**
-     * Enable or disable the use of annotations to guess injections.
-     *
-     * Disabled by default.
-     *
-     * @return $this
-     */
-    public function useAnnotations(bool $bool) : self
-    {
-        $this->ensureNotLocked();
-
-        $this->useAnnotations = $bool;
 
         return $this;
     }
@@ -307,7 +285,7 @@ class ContainerBuilder
      *
      * Before using this feature, you should try these steps first:
      * - enable compilation if not already done (see `enableCompilation()`)
-     * - if you use autowiring or annotations, add all the classes you are using into your configuration so that
+     * - if you use autowiring or attributes, add all the classes you are using into your configuration so that
      *   PHP-DI knows about them and compiles them
      * Once this is done, you can try to optimize performances further with APCu. It can also be useful if you use
      * `Container::make()` instead of `get()` (`make()` calls cannot be compiled so they are not optimized).

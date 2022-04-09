@@ -72,7 +72,7 @@ class ContainerMakeTest extends BaseContainerTest
     {
         $this->expectException(DependencyException::class);
         $this->expectExceptionMessage('Circular dependency detected while trying to resolve entry \'DI\Test\UnitTest\Fixtures\Class1CircularDependencies\'');
-        $builder->useAnnotations(true);
+        $builder->useAttributes(true);
         $container = $builder->build();
         $container->make(Class1CircularDependencies::class);
     }

@@ -5,10 +5,10 @@ declare(strict_types=1);
 namespace DI\Definition\Exception;
 
 /**
- * Error in the definitions using annotations.
+ * Error in the definitions using PHP attributes.
  *
  * @author Matthieu Napoli <matthieu@mnapoli.fr>
  */
-class InvalidAnnotation extends InvalidDefinition
+class InvalidAttribute extends InvalidDefinition
 {
 }

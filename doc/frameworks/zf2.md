@@ -35,21 +35,19 @@ Register it in `application_root/config/application.config.php`:
 
 That's it!
 
-If you want to use annotations, please read the "Configuration" section below.
-
 ## Usage
 
 Now you can inject dependencies in your controllers.
 
-Here is an example of the GuestbookController of the quickstart (using annotations):
+Here is an example of the GuestbookController of the quickstart (using attributes):
 
 ```php
 class GuestbookController extends AbstractActionController
 {
     /**
      * This dependency will be injected by PHP-DI
-     * @Inject
      */
+    #[Inject]
     private \Application\Service\GuestbookService $guestbookService;
 
     public function indexAction()
@@ -78,18 +76,6 @@ To configure PHP-DI itself, you have to override the module config in `config/au
 return [
     'phpdi-zf2' => [
         ...
-    ]
-];
-```
-
-### Enable or disable annotations
-
-Annotations are disabled by default since PHP-DI 5. To enable them, use the following config:
-
-```php
-return [
-    'phpdi-zf2' => [
-        'useAnnotations' => true,
     ]
 ];
 ```

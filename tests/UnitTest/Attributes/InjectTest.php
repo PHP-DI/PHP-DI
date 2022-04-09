@@ -8,7 +8,7 @@ use DI\Attribute\Inject;
 use DI\Test\UnitTest\Attributes\Fixtures\InjectFixture;
 use PHPUnit\Framework\TestCase;
 use ReflectionClass;
-use DI\Definition\Exception\InvalidAnnotation;
+use DI\Definition\Exception\InvalidAttribute;
 
 /**
  * Inject annotation test class.
@@ -95,7 +95,7 @@ class InjectTest extends TestCase
 
     public function testInvalidAnnotation()
     {
-        $this->expectException(InvalidAnnotation::class);
+        $this->expectException(InvalidAttribute::class);
         $this->expectExceptionMessage("#[Inject(['param' => 'value'])] expects \"value\" to be a string, [] given.");
         $method = $this->reflectionClass->getMethod('method4');
         $method->getAttributes(Inject::class)[0]->newInstance();

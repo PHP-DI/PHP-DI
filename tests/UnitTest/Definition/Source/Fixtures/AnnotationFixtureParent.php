@@ -4,26 +4,20 @@ declare(strict_types=1);
 
 namespace DI\Test\UnitTest\Definition\Source\Fixtures;
 
-use DI\Annotation\Inject;
+use DI\Attribute\Inject;
 
 /**
  * Used to check that child classes also have the injections of the parent classes.
  */
 class AnnotationFixtureParent
 {
-    /**
-     * @Inject("foo")
-     */
+    #[Inject('foo')]
     protected $propertyParent;
 
-    /**
-     * @Inject("foo")
-     */
+    #[Inject('foo')]
     private $propertyParentPrivate;
 
-    /**
-     * @Inject
-     */
+    #[Inject]
     public function methodParent()
     {
     }

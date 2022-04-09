@@ -19,7 +19,7 @@ if ($compile) {
 for ($i = 0; $i < 100; $i++) {
     $builder = new ContainerBuilder();
     $builder->useAutowiring(true);
-    $builder->useAnnotations(false);
+    $builder->useAttributes(false);
     $builder->addDefinitions(__DIR__ . '/get/config.php');
     if ($compile) {
         $builder->enableCompilation(__DIR__ . '/tmp/', "Container$i");

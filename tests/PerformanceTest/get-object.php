@@ -8,7 +8,7 @@ require_once __DIR__ . '/get-object/GetFixture.php';
 
 $builder = new ContainerBuilder();
 $builder->useAutowiring(true);
-$builder->useAnnotations(false);
+$builder->useAttributes(false);
 $builder->addDefinitions(__DIR__ . '/get-object/config.php');
 $builder->enableCompilation(__DIR__ . '/tmp', 'GetObject');
 $container = $builder->build();

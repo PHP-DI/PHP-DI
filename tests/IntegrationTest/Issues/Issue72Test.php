@@ -22,7 +22,7 @@ class Issue72Test extends BaseContainerTest
     public function annotationDefinitionShouldOverrideReflectionDefinition(ContainerBuilder $builder)
     {
         $builder->useAutowiring(true);
-        $builder->useAnnotations(true);
+        $builder->useAttributes(true);
         $container = $builder->build();
 
         $value = new \stdClass();
@@ -42,7 +42,7 @@ class Issue72Test extends BaseContainerTest
     public function arrayDefinitionShouldOverrideReflectionDefinition(ContainerBuilder $builder)
     {
         $builder->useAutowiring(true);
-        $builder->useAnnotations(false);
+        $builder->useAttributes(false);
 
         // Override to 'service2' in the definition file
         $builder->addDefinitions(__DIR__ . '/Issue72/definitions.php');
@@ -62,7 +62,7 @@ class Issue72Test extends BaseContainerTest
     public function arrayDefinitionShouldOverrideAnnotationDefinition(ContainerBuilder $builder)
     {
         $builder->useAutowiring(false);
-        $builder->useAnnotations(true);
+        $builder->useAttributes(true);
 
         // Override 'service1' to 'service2' in the definition file
         $builder->addDefinitions(__DIR__ . '/Issue72/definitions.php');
@@ -82,7 +82,7 @@ class Issue72Test extends BaseContainerTest
     public function arrayDefinitionShouldOverrideAnotherArrayDefinition(ContainerBuilder $builder)
     {
         $builder->useAutowiring(false);
-        $builder->useAnnotations(false);
+        $builder->useAttributes(false);
 
         // Override 'service1' to 'service2' in the definition file
         $builder->addDefinitions(__DIR__ . '/Issue72/definitions.php');
@@ -109,7 +109,7 @@ class Issue72Test extends BaseContainerTest
         }
 
         $builder->useAutowiring(false);
-        $builder->useAnnotations(false);
+        $builder->useAttributes(false);
         $builder->addDefinitions(__DIR__ . '/Issue72/definitions.php');
         $container = $builder->build();
 
