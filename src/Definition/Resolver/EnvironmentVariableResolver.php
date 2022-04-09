@@ -64,12 +64,6 @@ class EnvironmentVariableResolver implements DefinitionResolver
 
     protected function getEnvVariable(string $variableName)
     {
-        if (isset($_ENV[$variableName])) {
-            return $_ENV[$variableName];
-        } elseif (isset($_SERVER[$variableName])) {
-            return $_SERVER[$variableName];
-        }
-
-        return getenv($variableName);
+        return $_ENV[$variableName] ?? $_SERVER[$variableName] ?? getenv($variableName);
     }
 }
