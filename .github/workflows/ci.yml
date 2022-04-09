@@ -16,10 +16,10 @@ jobs:
         timeout-minutes: 15
         strategy:
             matrix:
-                php: [ '7.3', '7.4', '8.0', '8.1' ]
+                php: [ '7.4', '8.0', '8.1' ]
                 dependency-version: [ '' ]
                 include:
-                    -   php: '7.3'
+                    -   php: '7.4'
                         dependency-version: '--prefer-lowest'
         steps:
             -   name: Checkout
@@ -28,7 +28,7 @@ jobs:
                 uses: shivammathur/setup-php@v2
                 with:
                     php-version: ${{ matrix.php }}
-                    tools: composer:v1
+                    tools: composer:v2
                     coverage: none
             -   name: Cache Composer dependencies
                 uses: actions/cache@v2

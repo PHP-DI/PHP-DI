@@ -590,7 +590,7 @@ class FactoryDefinitionTest extends BaseContainerTest
 
     public function test_multiple_closures_on_the_same_line_cannot_be_compiled()
     {
-        $this->markTestSkipped('Opis/closure doesn\'t throw on multiple closures on the same line');
+        $this->markTestSkipped('laravel/serializable-closure doesn\'t throw on multiple closures on the same line');
 
         $this->expectException(InvalidDefinition::class);
         $this->expectExceptionMessage('Cannot compile closures when two closures are defined on the same line');
@@ -614,9 +614,6 @@ class FactoryDefinitionTest extends BaseContainerTest
         self::assertEquals('foo', $container->get('factory'));
     }
 
-    /**
-     * @requires PHP 7.4
-     */
     public function test_fn_closures_compilation_is_supported()
     {
         $builder = (new ContainerBuilder)->enableCompilation(self::COMPILATION_DIR, self::generateCompiledClassName());
