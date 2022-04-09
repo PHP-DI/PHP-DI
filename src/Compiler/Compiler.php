@@ -402,7 +402,6 @@ PHP;
      */
     private function compileClosure(\Closure $closure) : string
     {
-        $wrapper = new SerializableClosure($closure);
         $reflector = new ReflectionClosure($closure);
 
         if ($reflector->getUseVariables()) {
