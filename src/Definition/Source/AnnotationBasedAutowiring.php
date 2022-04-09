@@ -227,7 +227,7 @@ class AnnotationBasedAutowiring implements DefinitionSource, Autowiring
 
         // Look for the property type
         $parameterType = $parameter->getType();
-        if ($parameterType && $parameterType instanceof ReflectionNamedType && !$parameterType->isBuiltin()) {
+        if ($parameterType instanceof ReflectionNamedType && !$parameterType->isBuiltin()) {
             return $parameterType->getName();
         }
 

@@ -68,9 +68,8 @@ class DefinitionArray implements DefinitionSource, MutableDefinitionSource
         // Look for the definition by name
         if (array_key_exists($name, $this->definitions)) {
             $definition = $this->definitions[$name];
-            $definition = $this->normalizer->normalizeRootDefinition($definition, $name);
 
-            return $definition;
+            return $this->normalizer->normalizeRootDefinition($definition, $name);
         }
 
         // Build the cache of wildcard definitions
@@ -90,9 +89,8 @@ class DefinitionArray implements DefinitionSource, MutableDefinitionSource
             $key = '#' . str_replace('\\' . self::WILDCARD, self::WILDCARD_PATTERN, $key) . '#';
             if (preg_match($key, $name, $matches) === 1) {
                 array_shift($matches);
-                $definition = $this->normalizer->normalizeRootDefinition($definition, $name, $matches);
 
-                return $definition;
+                return $this->normalizer->normalizeRootDefinition($definition, $name, $matches);
             }
         }
 

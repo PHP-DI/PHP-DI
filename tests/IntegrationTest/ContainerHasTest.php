@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace DI\Test\IntegrationTest;
 
 use DI\ContainerBuilder;
-use stdClass;
 
 /**
  * Tests the has() method from the container.

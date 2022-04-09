@@ -39,7 +39,7 @@ class FactoryDefinitionTest extends BaseContainerTest
         $this->assertEquals('bar', $container->get('factory'));
     }
 
-    public function provideCallables()
+    public function provideCallables(): array
     {
         $callables = [
             'closure' => function () {
@@ -531,7 +531,7 @@ class FactoryDefinitionTest extends BaseContainerTest
         $builder->build();
     }
 
-    private function foo()
+    private function foo(): string
     {
         return 'hello';
     }

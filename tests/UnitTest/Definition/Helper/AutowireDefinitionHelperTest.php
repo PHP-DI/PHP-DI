@@ -8,15 +8,13 @@ use DI\Definition\Helper\AutowireDefinitionHelper;
 use DI\Definition\ObjectDefinition\MethodInjection;
 use DI\Test\UnitTest\Definition\Helper\Fixtures\Class1;
 use PHPUnit\Framework\TestCase;
+use DI\Definition\Exception\InvalidDefinition;
 
 /**
  * @covers \DI\Definition\Helper\AutowireDefinitionHelper
  */
 class AutowireDefinitionHelperTest extends TestCase
 {
-    /**
-     * @test
-     */
     public function test_default_config()
     {
         $helper = new AutowireDefinitionHelper();
@@ -176,7 +174,7 @@ class AutowireDefinitionHelperTest extends TestCase
 
     public function test_error_message_on_unknown_parameter()
     {
-        $this->expectException('DI\Definition\Exception\InvalidDefinition');
+        $this->expectException(InvalidDefinition::class);
         $this->expectExceptionMessage('Parameter with name \'wrongName\' could not be found');
         $helper = new AutowireDefinitionHelper();
         $helper->methodParameter('__construct', 'wrongName', 42);

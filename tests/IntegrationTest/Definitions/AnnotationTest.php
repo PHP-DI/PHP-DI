@@ -7,7 +7,6 @@ namespace DI\Test\IntegrationTest\Definitions;
 use DI\ContainerBuilder;
 use DI\Test\IntegrationTest\BaseContainerTest;
 use DI\Test\IntegrationTest\Definitions\AnnotationTest\ConstructorInjection;
-use DI\Test\IntegrationTest\Definitions\AnnotationTest\NamespacedClass;
 use DI\Test\IntegrationTest\Definitions\AnnotationTest\NonAnnotatedClass;
 use DI\Test\IntegrationTest\Definitions\AnnotationTest\PropertyInjection;
 use ProxyManager\Proxy\LazyLoadingInterface;

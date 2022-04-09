@@ -125,10 +125,6 @@ class NonAnnotatedClass
 {
 }
 
-class NamespacedClass
-{
-}
-
 class AutowiredClass
 {
     public stdClass $entry;

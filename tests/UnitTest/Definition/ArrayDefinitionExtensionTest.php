@@ -8,15 +8,13 @@ use DI\Definition\ArrayDefinition;
 use DI\Definition\ArrayDefinitionExtension;
 use DI\Definition\ValueDefinition;
 use PHPUnit\Framework\TestCase;
+use DI\Definition\Exception\InvalidDefinition;
 
 /**
  * @covers \DI\Definition\ArrayDefinitionExtension
  */
 class ArrayDefinitionExtensionTest extends TestCase
 {
-    /**
-     * @test
-     */
     public function test_getters()
     {
         $definition = new ArrayDefinitionExtension(['hello']);
@@ -47,7 +45,7 @@ class ArrayDefinitionExtensionTest extends TestCase
      */
     public function should_error_if_not_extending_an_array()
     {
-        $this->expectException('DI\Definition\Exception\InvalidDefinition');
+        $this->expectException(InvalidDefinition::class);
         $this->expectExceptionMessage('Definition name tries to add array entries but the previous definition is not an array');
         $definition = new ArrayDefinitionExtension(['foo']);
         $definition->setName('name');

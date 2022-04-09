@@ -20,18 +20,13 @@ class ResolverDispatcherTest extends TestCase
 {
     use EasyMock;
 
-    private $container;
-    private $proxyFactory;
-    /**
-     * @var ResolverDispatcher
-     */
-    private $resolver;
+    private ResolverDispatcher $resolver;
 
     public function setUp(): void
     {
-        $this->container = $this->easyMock(ContainerInterface::class);
-        $this->proxyFactory = $this->easyMock(ProxyFactory::class);
-        $this->resolver = new ResolverDispatcher($this->container, $this->proxyFactory);
+        $container = $this->easyMock(ContainerInterface::class);
+        $proxyFactory = $this->easyMock(ProxyFactory::class);
+        $this->resolver = new ResolverDispatcher($container, $proxyFactory);
     }
 
     /**

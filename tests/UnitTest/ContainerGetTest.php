@@ -5,10 +5,10 @@ declare(strict_types=1);
 namespace DI\Test\UnitTest;
 
 use DI\Container;
-use DI\ContainerBuilder;
 use DI\Test\UnitTest\Fixtures\PassByReferenceDependency;
 use PHPUnit\Framework\TestCase;
 use stdClass;
+use DI\NotFoundException;
 
 /**
  * Test class for Container.
@@ -27,7 +27,7 @@ class ContainerGetTest extends TestCase
 
     public function testGetNotFound()
     {
-        $this->expectException('DI\NotFoundException');
+        $this->expectException(NotFoundException::class);
         $container = new Container;
         $container->get('key');
     }

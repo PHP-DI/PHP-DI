@@ -36,7 +36,7 @@ class ValueDefinitionTest extends BaseContainerTest
         $this->assertEquals(123, $container->get('int'));
 
         self::assertEntryIsNotCompiled($container, 'object');
-        $this->assertEquals(new \stdClass(), $container->get('object'));
+        $this->assertEquals(new stdClass(), $container->get('object'));
 
         self::assertEntryIsCompiled($container, 'helper');
         $this->assertEquals('foo', $container->get('helper'));

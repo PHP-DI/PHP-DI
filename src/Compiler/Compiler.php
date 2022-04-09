@@ -163,7 +163,7 @@ class Compiler
         return $fileName;
     }
 
-    private function writeFileAtomic(string $fileName, string $content) : int
+    private function writeFileAtomic(string $fileName, string $content) : void
     {
         $tmpFile = @tempnam(dirname($fileName), 'swap-compile');
         if ($tmpFile === false) {
@@ -186,8 +186,6 @@ class Compiler
             @unlink($tmpFile);
             throw new InvalidArgumentException(sprintf('Error while renaming %s to %s', $tmpFile, $fileName));
         }
-
-        return $written;
     }
 
     /**
@@ -354,10 +352,8 @@ PHP;
         if ($value instanceof ValueDefinition) {
             return $this->isCompilable($value->getValue());
         }
-        if ($value instanceof DecoratorDefinition) {
-            if (empty($value->getName())) {
-                return 'Decorators cannot be nested in another definition';
-            }
+        if (($value instanceof DecoratorDefinition) && empty($value->getName())) {
+            return 'Decorators cannot be nested in another definition';
         }
         // All other definitions are compilable
         if ($value instanceof Definition) {
@@ -395,8 +391,6 @@ PHP;
         // $this, which makes sense since their code is copied into another class.
         $code = ($reflector->isStatic() ? '' : 'static ') . $reflector->getCode();
 
-        $code = trim($code, "\t\n\r;");
-
-        return $code;
+        return trim($code, "\t\n\r;");
     }
 }

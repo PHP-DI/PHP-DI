@@ -7,6 +7,7 @@ namespace DI\Test\IntegrationTest\Definitions;
 use DI\ContainerBuilder;
 use DI\Test\IntegrationTest\BaseContainerTest;
 use Psr\Container\ContainerInterface;
+use DI\Definition\Exception\InvalidDefinition;
 
 /**
  * Test decorator definitions.
@@ -121,7 +122,7 @@ class DecoratorDefinitionTest extends BaseContainerTest
      */
     public function test_decorate_must_have_previous_definition(ContainerBuilder $builder)
     {
-        $this->expectException('DI\Definition\Exception\InvalidDefinition');
+        $this->expectException(InvalidDefinition::class);
         $this->expectExceptionMessage('Entry "foo" decorates nothing: no previous definition with the same name was found');
         $builder->addDefinitions([
             'foo' => \DI\decorate(function ($previous) {
@@ -137,7 +138,7 @@ class DecoratorDefinitionTest extends BaseContainerTest
      */
     public function test_decorator_cannot_be_nested_in_another_definition(ContainerBuilder $builder)
     {
-        $this->expectException('DI\Definition\Exception\InvalidDefinition');
+        $this->expectException(InvalidDefinition::class);
         $this->expectExceptionMessage('Definition "foo" contains an error: Decorators cannot be nested in another definition');
         $builder->addDefinitions([
             'foo' => [

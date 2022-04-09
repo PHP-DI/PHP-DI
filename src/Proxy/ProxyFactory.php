@@ -42,9 +42,7 @@ class ProxyFactory
      */
     public function createProxy(string $className, \Closure $initializer) : LazyLoadingInterface
     {
-        $proxyManager = $this->proxyManager();
-
-        return $proxyManager->createProxy($className, $initializer);
+        return $this->proxyManager()->createProxy($className, $initializer);
     }
 
     /**
@@ -73,7 +71,7 @@ class ProxyFactory
             if ($this->proxyDirectory) {
                 $config->setProxiesTargetDir($this->proxyDirectory);
                 $config->setGeneratorStrategy(new FileWriterGeneratorStrategy(new FileLocator($this->proxyDirectory)));
-            // @phpstan-ignore-next-line
+                // @phpstan-ignore-next-line
                 spl_autoload_register($config->getProxyAutoloader());
             } else {
                 $config->setGeneratorStrategy(new EvaluatingGeneratorStrategy());

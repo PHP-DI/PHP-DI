@@ -54,7 +54,7 @@ class InstanceInjectorTest extends TestCase
         $this->assertEquals('value', $instance->methodParam1);
     }
 
-    private function buildResolver()
+    private function buildResolver(): InstanceInjector
     {
         /** @var ResolverDispatcher $resolverDispatcher */
         $resolverDispatcher = $this->easyMock(ResolverDispatcher::class);

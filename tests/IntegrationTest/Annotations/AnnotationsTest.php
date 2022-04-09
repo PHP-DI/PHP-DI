@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace DI\Test\IntegrationTest\Annotations;
 
 use DI\ContainerBuilder;
-use DI\Test\IntegrationTest\Annotations\InjectWithUseStatements\InjectWithUseStatements2;
 use DI\Test\IntegrationTest\BaseContainerTest;
+use DI\DependencyException;
 
 /**
  * Test using annotations.
@@ -98,7 +98,7 @@ class AnnotationsTest extends BaseContainerTest
      */
     public function errors_if_dependency_by_name_not_found(ContainerBuilder $builder)
     {
-        $this->expectException('DI\DependencyException');
+        $this->expectException(DependencyException::class);
         $builder->useAnnotations(true);
         $builder->build()->get(NamedInjection::class);
     }

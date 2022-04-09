@@ -9,9 +9,9 @@ use DI\Definition\Source\AnnotationBasedAutowiring;
 use DI\Test\UnitTest\Annotation\Fixtures\InjectFixture;
 use DI\Test\UnitTest\Annotation\Fixtures\MixedAnnotationsFixture;
 use DI\Test\UnitTest\Annotation\Fixtures\NonImportedInjectFixture;
-use Doctrine\Common\Annotations\AnnotationReader as DoctrineAnnotationReader;
 use PHPUnit\Framework\TestCase;
 use ReflectionClass;
+use DI\Definition\Exception\InvalidAnnotation;
 
 /**
  * Inject annotation test class.
@@ -20,15 +20,9 @@ use ReflectionClass;
  */
 class InjectTest extends TestCase
 {
-    /**
-     * @var DoctrineAnnotationReader
-     */
-    private $annotationReader;
+    private \Doctrine\Common\Annotations\Reader $annotationReader;
 
-    /**
-     * @var ReflectionClass
-     */
-    private $reflectionClass;
+    private ReflectionClass $reflectionClass;
 
     public function setUp(): void
     {
@@ -106,7 +100,7 @@ class InjectTest extends TestCase
 
     public function testInvalidAnnotation()
     {
-        $this->expectException('DI\Definition\Exception\InvalidAnnotation');
+        $this->expectException(InvalidAnnotation::class);
         $this->expectExceptionMessage('@Inject({"param" = "value"}) expects "value" to be a string, [] given.');
         $method = $this->reflectionClass->getMethod('method4');
         $this->annotationReader->getMethodAnnotation($method, Inject::class);

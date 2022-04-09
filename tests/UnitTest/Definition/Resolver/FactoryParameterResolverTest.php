@@ -20,20 +20,9 @@ class FactoryParameterResolverTest extends TestCase
 {
     use EasyMock;
 
-    /**
-     * @var FactoryParameterResolver
-     */
-    private $resolver;
-
-    /**
-     * @var ContainerInterface|MockObject
-     */
-    private $container;
-
-    /**
-     * @var RequestedEntry|MockObject
-     */
-    private $requestedEntry;
+    private FactoryParameterResolver $resolver;
+    private MockObject|ContainerInterface $container;
+    private MockObject|RequestedEntry $requestedEntry;
 
     public function setUp(): void
     {
@@ -136,7 +125,7 @@ class FactoryParameterResolverTest extends TestCase
         $this->assertCount(3, $parameters);
         $this->assertSame($parameters[0], $mockContainer);
         $this->assertSame($parameters[1], $mockEntry);
-        $this->assertEquals($parameters[2], 'Foo');
+        $this->assertEquals('Foo', $parameters[2]);
     }
 
     /**

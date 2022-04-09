@@ -52,7 +52,7 @@ class DefinitionFile extends DefinitionArray
         $definitions = require $this->file;
 
         if (! is_array($definitions)) {
-            throw new \Exception("File {$this->file} should return an array of definitions");
+            throw new \Exception("File $this->file should return an array of definitions");
         }
 
         $this->addDefinitions($definitions);

@@ -17,6 +17,7 @@ use DI\Test\UnitTest\Definition\Resolver\Fixture\NoConstructor;
 use EasyMock\EasyMock;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use DI\Definition\Exception\InvalidDefinition;
 
 /**
  * @covers \DI\Definition\Resolver\ObjectCreator
@@ -26,27 +27,16 @@ class ObjectCreatorTest extends TestCase
 {
     use EasyMock;
 
-    /**
-     * @var ProxyFactory|MockObject
-     */
-    private $proxyFactory;
+    private MockObject|DefinitionResolver $parentResolver;
 
-    /**
-     * @var DefinitionResolver|MockObject
-     */
-    private $parentResolver;
-
-    /**
-     * @var ObjectCreator
-     */
-    private $resolver;
+    private ObjectCreator $resolver;
 
     public function setUp(): void
     {
-        $this->proxyFactory = $this->easyMock(ProxyFactory::class);
+        $proxyFactory = $this->easyMock(ProxyFactory::class);
         $this->parentResolver = $this->easyMock(DefinitionResolver::class);
 
-        $this->resolver = new ObjectCreator($this->parentResolver, $this->proxyFactory);
+        $this->resolver = new ObjectCreator($this->parentResolver, $proxyFactory);
     }
 
     public function testResolve()
@@ -182,7 +172,7 @@ class ObjectCreatorTest extends TestCase
 
     public function testUnknownClass()
     {
-        $this->expectException('DI\Definition\Exception\InvalidDefinition');
+        $this->expectException(InvalidDefinition::class);
         $message = <<<'MESSAGE'
 Entry "foo" cannot be resolved: the class doesn't exist
 Full definition:
@@ -200,7 +190,7 @@ MESSAGE;
 
     public function testNotInstantiable()
     {
-        $this->expectException('DI\Definition\Exception\InvalidDefinition');
+        $this->expectException(InvalidDefinition::class);
         $message = <<<'MESSAGE'
 Entry "ArrayAccess" cannot be resolved: the class is not instantiable
 Full definition:
@@ -218,7 +208,7 @@ MESSAGE;
 
     public function testUndefinedInjection()
     {
-        $this->expectException('DI\Definition\Exception\InvalidDefinition');
+        $this->expectException(InvalidDefinition::class);
         $message = <<<'MESSAGE'
 Entry "DI\Test\UnitTest\Definition\Resolver\Fixture\FixtureClass" cannot be resolved: Parameter $param1 of __construct() has no value defined or guessable
 Full definition:

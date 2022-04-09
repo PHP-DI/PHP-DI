@@ -77,7 +77,7 @@ class AnnotationBasedAutowiringTest extends TestCase
 
     public function testScalarTypedPropertiesFail()
     {
-        $this->expectException(\DI\Definition\Exception\InvalidAnnotation::class);
+        $this->expectException(InvalidAnnotation::class);
         (new AnnotationBasedAutowiring)->autowire(AnnotationFixtureScalarTypedProperty::class);
     }
 
@@ -245,7 +245,7 @@ class AnnotationBasedAutowiringTest extends TestCase
         $this->assertHasPropertyInjection($definition, 'propertyParentPrivate');
     }
 
-    private function getMethodInjection(ObjectDefinition $definition, $name)
+    private function getMethodInjection(ObjectDefinition $definition, $name): ?MethodInjection
     {
         $methodInjections = $definition->getMethodInjections();
         foreach ($methodInjections as $methodInjection) {

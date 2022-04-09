@@ -80,7 +80,7 @@ class StringDefinition implements Definition, SelfResolvingDefinition
             }
         };
 
-        $result = preg_replace_callback('#\{([^\{\}]+)\}#', $callback, $expression);
+        $result = preg_replace_callback('#\{([^{}]+)}#', $callback, $expression);
         if ($result === null) {
             throw new \RuntimeException(sprintf('An unknown error occurred while parsing the string definition: \'%s\'', $expression));
         }

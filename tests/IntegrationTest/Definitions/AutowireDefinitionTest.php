@@ -6,7 +6,6 @@ namespace DI\Test\IntegrationTest\Definitions;
 
 use DI\ContainerBuilder;
 use DI\Test\IntegrationTest\BaseContainerTest;
-use DI\Test\IntegrationTest\Definitions\AutowireDefinition\OptionalParameterFollowedByRequiredParameter;
 use DI\Test\IntegrationTest\Definitions\AutowireDefinition\Php71;
 use DI\Test\IntegrationTest\Definitions\AutowireDefinitionTest\ConstructorInjection;
 use DI\Test\IntegrationTest\Definitions\AutowireDefinitionTest\LazyService;
@@ -21,6 +20,7 @@ use ProxyManager\Proxy\LazyLoadingInterface;
 use function DI\autowire;
 use function DI\create;
 use function DI\get;
+use DI\Definition\Exception\InvalidDefinition;
 
 /**
  * Test autowired definitions.
@@ -296,7 +296,7 @@ class AutowireDefinitionTest extends BaseContainerTest
      */
     public function test_cannot_use_autowire_if_autowiring_is_disabled(ContainerBuilder $builder)
     {
-        $this->expectException('DI\Definition\Exception\InvalidDefinition');
+        $this->expectException(InvalidDefinition::class);
         $this->expectExceptionMessage('Cannot autowire entry "DI\Test\IntegrationTest\Definitions\ObjectDefinition\Class3" because autowiring is disabled');
         $container = $builder
             ->useAutowiring(false)
@@ -429,21 +429,4 @@ class ConstructorInjection
 
 class LazyService
 {
-}
-
-class AllKindsOfInjections
-{
-    public $property;
-    public $constructorParameter;
-    public $methodParameter;
-
-    public function __construct($constructorParameter)
-    {
-        $this->constructorParameter = $constructorParameter;
-    }
-
-    public function method($methodParameter)
-    {
-        $this->methodParameter = $methodParameter;
-    }
 }

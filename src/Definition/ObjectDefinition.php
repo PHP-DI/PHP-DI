@@ -189,9 +189,7 @@ class ObjectDefinition implements Definition
             $propertyInjection->replaceNestedDefinition($replacer);
         });
 
-        if ($this->constructorInjection) {
-            $this->constructorInjection->replaceNestedDefinitions($replacer);
-        }
+        $this->constructorInjection?->replaceNestedDefinitions($replacer);
 
         array_walk($this->methodInjections, function ($injectionArray) use ($replacer) {
             array_walk($injectionArray, function (MethodInjection $methodInjection) use ($replacer) {

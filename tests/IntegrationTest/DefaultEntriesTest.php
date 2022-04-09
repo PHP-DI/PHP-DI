@@ -7,7 +7,6 @@ namespace DI\Test\IntegrationTest;
 use DI\Container;
 use DI\ContainerBuilder;
 use DI\FactoryInterface;
-use DI\Test\IntegrationTest\BaseContainerTest;
 use Invoker\InvokerInterface;
 use Psr\Container\ContainerInterface;
 

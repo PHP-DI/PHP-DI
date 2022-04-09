@@ -14,6 +14,7 @@ use DI\Test\UnitTest\Definition\Resolver\Fixture\NoConstructor;
 use EasyMock\EasyMock;
 use PHPUnit\Framework\TestCase;
 use Psr\Container\ContainerInterface;
+use DI\Definition\Exception\InvalidDefinition;
 
 /**
  * @covers \DI\Definition\Resolver\FactoryResolver
@@ -61,7 +62,7 @@ class FactoryResolverTest extends TestCase
      */
     public function should_throw_if_the_factory_is_not_callable()
     {
-        $this->expectException('DI\Definition\Exception\InvalidDefinition');
+        $this->expectException(InvalidDefinition::class);
         $this->expectExceptionMessage('Entry "foo" cannot be resolved: factory \'Hello world\' is neither a callable nor a valid container entry');
         $container = $this->easyMock(ContainerInterface::class);
         $resolver = new FactoryResolver($container, $this->easyMock(DefinitionResolver::class));
@@ -79,7 +80,7 @@ class FactoryResolverTest extends TestCase
      */
     public function should_throw_if_not_enough_parameters()
     {
-        $this->expectException('DI\Definition\Exception\InvalidDefinition');
+        $this->expectException(InvalidDefinition::class);
         $this->expectExceptionMessage('Entry "foo" cannot be resolved: Unable to invoke the callable because no value was given for parameter 3 ($c)');
         $container = $this->easyMock(ContainerInterface::class);
         $resolver = new FactoryResolver($container, $this->easyMock(DefinitionResolver::class));

@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace DI\Test\UnitTest;
 
 use DI\CompiledContainer;
-use DI\Container;
 use DI\ContainerBuilder;
 use DI\Definition\Source\DefinitionArray;
 use DI\Definition\Source\SourceCache;
