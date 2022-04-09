@@ -21,7 +21,6 @@ use DI\Proxy\ProxyFactory;
 use function dirname;
 use function file_put_contents;
 use InvalidArgumentException;
-use Laravel\SerializableClosure\SerializableClosure;
 use Laravel\SerializableClosure\Support\ReflectionClosure;
 use function rename;
 use function sprintf;
