@@ -17,7 +17,7 @@ return $config->setRules([
     'concat_space' => [
         'spacing' => 'one',
     ],
-    //'declare_strict_types' => true,
+    'declare_strict_types' => true,
     'heredoc_to_nowdoc' => true,
     'linebreak_after_opening_tag' => true,
     'new_with_braces' => false,
