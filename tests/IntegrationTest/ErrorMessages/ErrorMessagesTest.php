@@ -99,7 +99,7 @@ MESSAGE;
     {
         $this->expectException(DependencyException::class);
         $this->expectExceptionMessage('Error while injecting dependencies into DI\Test\IntegrationTest\ErrorMessages\Buggy2: No entry or class found for \'nonExistentEntry\'');
-        $builder->useAnnotations(true);
+        $builder->useAttributes(true);
         $builder->build()->get(Buggy2::class);
     }
 
@@ -110,7 +110,7 @@ MESSAGE;
     {
         $this->expectException(DependencyException::class);
         $this->expectExceptionMessage('Error while injecting in DI\Test\IntegrationTest\ErrorMessages\Buggy3::dependency. No entry or class found for \'namedDependency\'');
-        $builder->useAnnotations(true);
+        $builder->useAttributes(true);
         $builder->build()->get(Buggy3::class);
     }
 
@@ -119,9 +119,9 @@ MESSAGE;
      */
     public function test_setter_injection_of_non_existent_container_entry(ContainerBuilder $builder)
     {
-        $this->expectException(DependencyException::class);
         $this->expectExceptionMessage('Error while injecting dependencies into DI\Test\IntegrationTest\ErrorMessages\Buggy4: No entry or class found for \'nonExistentBean\'');
-        $builder->useAnnotations(true);
+        $this->expectException(DependencyException::class);
+        $builder->useAttributes(true);
         $builder->build()->get(Buggy4::class);
     }
 
@@ -145,7 +145,7 @@ MESSAGE;
         $this->expectException(InvalidDefinition::class);
         $this->expectExceptionMessage($message);
 
-        $builder->useAnnotations(true);
+        $builder->useAttributes(true);
         $builder->addDefinitions([
             Buggy5::class => autowire(),
         ]);

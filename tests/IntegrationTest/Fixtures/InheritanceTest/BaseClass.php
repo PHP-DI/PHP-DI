@@ -4,16 +4,14 @@ declare(strict_types=1);
 
 namespace DI\Test\IntegrationTest\Fixtures\InheritanceTest;
 
-use DI\Annotation\Inject;
+use DI\Attribute\Inject;
 
 /**
  * Fixture class.
  */
 abstract class BaseClass
 {
-    /**
-     * @Inject
-     */
+    #[Inject]
     public Dependency $property1;
 
     public Dependency $property2;
@@ -25,9 +23,7 @@ abstract class BaseClass
         $this->property3 = $param1;
     }
 
-    /**
-     * @Inject
-     */
+    #[Inject]
     public function setProperty2(Dependency $property2)
     {
         $this->property2 = $property2;

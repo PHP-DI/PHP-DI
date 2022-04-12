@@ -8,7 +8,7 @@ current_menu: definition-introduction
 To let PHP-DI know what to inject and where, you have several options:
 
 - use [autowiring](autowiring.md)
-- use [annotations](annotations.md)
+- use [attributes](attributes.md)
 - use [PHP definitions](php-definitions.md)
 
 You can also use several or all these options at the same time if you want to.
@@ -17,7 +17,7 @@ If you combine several sources, there are priorities that apply. From the highes
 
 - Explicit definition on the container (i.e. defined with `$container->set()`)
 - PHP file definitions (if you add several configuration files, then the last one can override entries from the previous ones)
-- Annotations
+- PHP attributes
 - Autowiring
 
 Read more in the [Definition overriding documentation](definition-overriding.md)
@@ -27,9 +27,9 @@ Read more in the [Definition overriding documentation](definition-overriding.md)
 
 See the dedicated documentation about [autowiring](autowiring.md).
 
-## Annotations
+## Attributes
 
-See the dedicated documentation about [annotations](annotations.md).
+See the dedicated documentation about [attributes](attributes.md).
 
 ## PHP configuration
 

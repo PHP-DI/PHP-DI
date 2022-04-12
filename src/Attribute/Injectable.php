@@ -7,7 +7,7 @@ namespace DI\Attribute;
 use Attribute;
 
 /**
- * "Injectable" annotation.
+ * "Injectable" attribute.
  *
  * Marks a class as injectable
  *

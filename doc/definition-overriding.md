@@ -5,7 +5,7 @@ current_menu: definition-overriding
 
 # Definition extensions and overriding
 
-A simple application usually takes advantage of one or two *definition sources*: autowiring (or annotations) + a definition file/array.
+A simple application usually takes advantage of one or two *definition sources*: autowiring (with or without attributes) + a definition file/array.
 
 However in more complex applications or modular systems you might want to have multiple definition files (e.g. one per modules/bundles/plugins/…). In this case, PHP-DI provides a clear and powerful system to **override and/or extend definitions**.
 
@@ -14,7 +14,7 @@ However in more complex applications or modular systems you might want to have m
 From the lowest priority to the highest:
 
 - autowiring if enabled
-- annotations if enabled
+- attributes if enabled
 - PHP definitions (file or array) in the order they were added
 - definitions added straight in the container with `$container->set()`
 
@@ -29,21 +29,21 @@ class Foo
 }
 ```
 
-PHP-DI would inject an instance of `Bar` using autowiring. Annotations have a higher priority, we can use it to override the definition:
+PHP-DI would inject an instance of `Bar` using autowiring. Attributes have a higher priority, we can use it to override the definition:
 
 ```php
+use DI\Attribute\Inject;
+
 class Foo
 {
-    /**
-     * @Inject({"my.specific.service"})
-     */
+    #[Inject(['my.specific.service'])]
     public function __construct(Bar $param1)
     {
     }
 }
 ```
 
-You can go even further by overriding annotations and autowiring using file-based definitions:
+You can go even further by overriding attributes and autowiring using file-based definitions:
 
 ```php
 return [
@@ -61,7 +61,7 @@ If we had another definition file (registered after this one), we could override
 
 `DI\create()` overrides completely any previous definition or even autowiring. It doesn't allow extending another definition. See the "decorators" section below if you want to do that.
 
-If an object is built using autowiring (or annotations), you can override specific parameters with `DI\autowire()`:
+If an object is built using autowiring (with or without attributes), you can override specific parameters with `DI\autowire()`:
 
 ```php
 class Foo

@@ -207,10 +207,10 @@ class ContainerBuilderTest extends TestCase
     {
         $builder = new ContainerBuilder();
 
-        $result = $builder->useAnnotations(false);
+        $result = $builder->useAttributes(false);
         $this->assertSame($builder, $result);
 
-        $result = $builder->useAnnotations(true);
+        $result = $builder->useAttributes(true);
         $this->assertSame($builder, $result);
 
         $result = $builder->useAutowiring(false);

@@ -31,7 +31,7 @@ return $config->setRules([
     'no_useless_else' => true,
     'no_useless_return' => true,
     'ordered_imports' => true,
-    'php_unit_strict' => true,
+    'php_unit_strict' => false,
     'phpdoc_add_missing_param_annotation' => false,
     'phpdoc_align' => false,
     'phpdoc_annotation_without_dot' => false,
@@ -49,6 +49,7 @@ return $config->setRules([
     'yoda_style' => false,
     'native_function_invocation' => false,
     'single_line_throw' => false,
+    'php_unit_method_casing' => false,
 ])
     ->setRiskyAllowed(true)
     ->setFinder($finder);

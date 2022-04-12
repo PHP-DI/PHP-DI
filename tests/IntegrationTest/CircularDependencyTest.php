@@ -49,11 +49,11 @@ class CircularDependencyTest extends BaseContainerTest
      * @test
      * @dataProvider provideContainer
      */
-    public function circular_dependencies_with_annotations_throw_exceptions(ContainerBuilder $builder)
+    public function circular_dependencies_with_attributes_throw_exceptions(ContainerBuilder $builder)
     {
         $this->expectException(DependencyException::class);
         $this->expectExceptionMessage('Circular dependency detected while trying to resolve entry \'DI\Test\UnitTest\Fixtures\Class1CircularDependencies\'');
-        $builder->useAnnotations(true);
+        $builder->useAttributes(true);
         $builder->build()->get(Class1CircularDependencies::class);
     }
 
