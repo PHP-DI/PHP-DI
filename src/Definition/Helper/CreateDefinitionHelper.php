@@ -17,7 +17,7 @@ use DI\Definition\ObjectDefinition\PropertyInjection;
  */
 class CreateDefinitionHelper implements DefinitionHelper
 {
-    const DEFINITION_CLASS = ObjectDefinition::class;
+    public const DEFINITION_CLASS = ObjectDefinition::class;
 
     /**
      * @var string|null

@@ -16,7 +16,7 @@ class SourceCache implements DefinitionSource, MutableDefinitionSource
     /**
      * @var string
      */
-    const CACHE_KEY = 'php-di.definitions.';
+    public const CACHE_KEY = 'php-di.definitions.';
 
     /**
      * @var DefinitionSource

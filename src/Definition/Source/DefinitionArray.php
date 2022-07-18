@@ -13,11 +13,11 @@ use DI\Definition\Definition;
  */
 class DefinitionArray implements DefinitionSource, MutableDefinitionSource
 {
-    const WILDCARD = '*';
+    public const WILDCARD = '*';
     /**
      * Matches anything except "\".
      */
-    const WILDCARD_PATTERN = '([^\\\\]+)';
+    public const WILDCARD_PATTERN = '([^\\\\]+)';
 
     /**
      * DI definitions in a PHP array.

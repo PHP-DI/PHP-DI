@@ -36,7 +36,7 @@
         "mnapoli/phpunit-easymock": "^1.2",
         "doctrine/annotations": "~1.10",
         "ocramius/proxy-manager": "^2.11.2",
-        "friendsofphp/php-cs-fixer": "^2.4",
+        "friendsofphp/php-cs-fixer": "^3",
         "phpstan/phpstan": "^0.12"
     },
     "provide": {

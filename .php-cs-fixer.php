@@ -4,7 +4,7 @@ $finder = PhpCsFixer\Finder::create()
     ->in(__DIR__ . '/src')
     ->notPath('Compiler/Template.php');
 
-return PhpCsFixer\Config::create()
+return (new PhpCsFixer\Config)
     ->setRules([
         '@PSR2' => true,
         '@PHP70Migration' => true,
@@ -19,12 +19,9 @@ return PhpCsFixer\Config::create()
         ],
         //'declare_strict_types' => true,
         'heredoc_to_nowdoc' => true,
-        'is_null' => [
-            'use_yoda_style' => false,
-        ],
         'linebreak_after_opening_tag' => true,
         'new_with_braces' => false,
-        'no_multiline_whitespace_before_semicolons' => true,
+        'multiline_whitespace_before_semicolons' => false,
         'no_php4_constructor' => true,
         'no_unreachable_default_argument_value' => true,
         'no_useless_else' => true,
@@ -48,6 +45,7 @@ return PhpCsFixer\Config::create()
         'yoda_style' => false,
         'native_function_invocation' => false,
         'single_line_throw' => false,
+        'blank_line_between_import_groups' => false,
     ])
     ->setRiskyAllowed(true)
     ->setFinder($finder);
