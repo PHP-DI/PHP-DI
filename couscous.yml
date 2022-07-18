@@ -47,7 +47,7 @@ menu:
                     text: PHP definitions
                     url: doc/php-definitions.html
                 attributes:
-                    text: PHP 8 attributes
+                    text: PHP attributes
                     url: doc/attributes.html
                 annotations:
                     text: Annotations

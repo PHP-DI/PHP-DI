@@ -4,11 +4,9 @@ declare(strict_types=1);
 
 namespace DI\Test\UnitTest\Fixtures;
 
-use DI\Annotation\Injectable;
+use DI\Attribute\Injectable;
 
-/**
- * @Injectable
- */
+#[Injectable]
 class Singleton
 {
 }

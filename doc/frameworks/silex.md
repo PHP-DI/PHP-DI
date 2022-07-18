@@ -33,7 +33,7 @@ $app->run();
 
 ## Benefits
 
-Using PHP-DI in Silex allows you to use all the awesome features of PHP-DI to wire your dependencies (using the definition files, autowiring, annotations, …).
+Using PHP-DI in Silex allows you to use all the awesome features of PHP-DI to wire your dependencies (using the definition files, autowiring, attributes, …).
 
 Another big benefit of the PHP-DI integration is the ability to use dependency injection inside controllers, middlewares and param converters:
 

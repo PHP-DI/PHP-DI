@@ -188,9 +188,7 @@ Example:
 ```php
 class UserController extends BaseController
 {
-    /**
-     * @Inject
-     */
+    #[Inject]
     private SomeService $someService;
 
     public function __construct()
@@ -207,7 +205,7 @@ class UserController extends BaseController
 ```
 
 As you might have guessed, you can't use constructor injection with this method.
-But other kind of injections (property or setter) will work, whether you use annotations
+But other kind of injections (property or setter) will work, whether you use attributes
 or whether you configured your object in a definition file.
 
 ## Extending the container

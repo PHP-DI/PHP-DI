@@ -18,9 +18,9 @@ class AutowireDefinitionHelper extends CreateDefinitionHelper
     /**
      * Defines a value for a specific argument of the constructor.
      *
-     * This method is usually used together with annotations or autowiring, when a parameter
+     * This method is usually used together with attributes or autowiring, when a parameter
      * is not (or cannot be) type-hinted. Using this method instead of constructor() allows to
-     * avoid defining all the parameters (letting them being resolved using annotations or autowiring)
+     * avoid defining all the parameters (letting them being resolved using attributes or autowiring)
      * and only define one.
      *
      * @param string|int $parameter Parameter name of position for which the value will be given.
@@ -38,9 +38,9 @@ class AutowireDefinitionHelper extends CreateDefinitionHelper
     /**
      * Defines a method to call and a value for a specific argument.
      *
-     * This method is usually used together with annotations or autowiring, when a parameter
+     * This method is usually used together with attributes or autowiring, when a parameter
      * is not (or cannot be) type-hinted. Using this method instead of method() allows to
-     * avoid defining all the parameters (letting them being resolved using annotations or
+     * avoid defining all the parameters (letting them being resolved using attributes or
      * autowiring) and only define one.
      *
      * If multiple calls to the method have been configured already (e.g. in a previous definition)

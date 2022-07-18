@@ -5,7 +5,7 @@ current_menu: php-definitions
 
 # PHP definitions
 
-On top of [autowiring](autowiring.md) and [annotations](annotations.md), you can use **a PHP configuration format** to define injections.
+On top of [autowiring](autowiring.md) and [attributes](attributes.md), you can use **a PHP configuration format** to define injections.
 
 You can register that configuration as an array:
 

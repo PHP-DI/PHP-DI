@@ -112,7 +112,7 @@ class AutowireDefinitionTest extends BaseContainerTest
      */
     public function test_annotated_constructor_injection_can_be_overloaded(ContainerBuilder $builder)
     {
-        $builder->useAnnotations(true);
+        $builder->useAttributes(true);
         $builder->addDefinitions([
             AutowireDefinition\ConstructorInjection::class => autowire()
                 ->constructorParameter('overloadedParameter', get('foo')),
@@ -139,7 +139,7 @@ class AutowireDefinitionTest extends BaseContainerTest
      */
     public function test_annotated_method_injection_can_be_overloaded(ContainerBuilder $builder)
     {
-        $builder->useAnnotations(true);
+        $builder->useAttributes(true);
         $builder->addDefinitions([
             AutowireDefinition\MethodInjection::class => autowire()
                 ->methodParameter('setFoo', 'overloadedParameter', get('foo')),

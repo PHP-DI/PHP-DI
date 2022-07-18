@@ -13,7 +13,7 @@ PHP-DI's container is preconfigured for "plug and play". You can start using it 
 $container = new Container();
 ```
 
-By default, [Autowiring](definition.md) will be enabled. [Annotations](annotations.md) are disabled by default.
+By default, [Autowiring](definition.md) will be enabled. [Attributes](attributes.md) are disabled by default.
 
 To register [definitions using an array](php-definitions.md):
 
@@ -51,7 +51,7 @@ If you want to use PHP-DI's container as a simple container (no autowiring or an
 ```php
 $builder = new \DI\ContainerBuilder();
 $builder->useAutowiring(false);
-$builder->useAnnotations(false);
+$builder->useAttributes(false);
 
 $container = $builder->build();
 ```

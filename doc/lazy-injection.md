@@ -102,12 +102,12 @@ return [
 ];
 ```
 
-### Annotations
+### Attributes
 
 ```php
-/**
- * @Injectable(lazy=true)
- */
+use DI\Attribute\Injectable;
+
+#[Injectable(lazy: true)]
 class MyClass
 {
 }

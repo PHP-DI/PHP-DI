@@ -76,11 +76,11 @@ class ProductController
 Example with property injection:
 
 ```php
+use DI\Attribute\Inject;
+
 class ProductController
 {
-    /**
-     * @Inject
-     */
+    #[Inject]
     private ProductService $productService;
 
     public function clearAction()
@@ -148,17 +148,15 @@ services:
 
 ### Service name aliases
 
-PHP-DI can also work with autowiring or annotations. These rely on the fact that the service name
+PHP-DI can also work with autowiring or PHP attributes. These rely on the fact that the service name
 is the class name (or interface name), e.g. you reference the entity manager by its class name
 instead of `doctrine.orm.entity_manager`.
 
-If you want to enjoy autowiring or annotations, you can simplify your life and write simple aliases
+If you want to enjoy autowiring or attributes, you can simplify your life and write simple aliases
 like these:
 
 ```php
 return [
-    'Psr\Log\LoggerInterface' => DI\get('logger'),
-    // PHP 5.5 notation:
     ObjectManager::class => DI\get('doctrine.orm.entity_manager'),
 ];
 ```

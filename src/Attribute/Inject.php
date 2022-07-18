@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace DI\Attribute;
 
 use Attribute;
-use DI\Definition\Exception\InvalidAnnotation;
+use DI\Definition\Exception\InvalidAttribute;
 
 /**
  * #[Inject] attribute.
@@ -27,12 +27,12 @@ final class Inject
     /**
      * Parameters, indexed by the parameter number (index) or name.
      *
-     * Used if the annotation is set on a method
+     * Used if the attribute is set on a method
      */
     private array $parameters = [];
 
     /**
-     * @throws InvalidAnnotation
+     * @throws InvalidAttribute
      */
     public function __construct(string|array|null $name = null)
     {
@@ -45,7 +45,7 @@ final class Inject
         if (is_array($name)) {
             foreach ($name as $key => $value) {
                 if (! is_string($value)) {
-                    throw new InvalidAnnotation(sprintf(
+                    throw new InvalidAttribute(sprintf(
                         "#[Inject(['param' => 'value'])] expects \"value\" to be a string, %s given.",
                         json_encode($value, \JSON_THROW_ON_ERROR)
                     ));

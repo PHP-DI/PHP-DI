@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace DI\Test\IntegrationTest\Definitions\AutowireDefinition;
 
-use DI\Annotation\Inject;
+use DI\Attribute\Inject;
 
 class ConstructorInjection
 {
@@ -19,9 +19,9 @@ class ConstructorInjection
     public $overloadedParameter;
 
     /**
-     * Force the injection of a specific value for the first parameter. (when using annotations).
-     * @Inject({"autowiredParameter"="anotherStdClass"})
+     * Force the injection of a specific value for the first parameter. (when using attributes).
      */
+    #[Inject(['autowiredParameter' => 'anotherStdClass'])]
     public function __construct(\stdClass $autowiredParameter, Class1 $overloadedParameter)
     {
         $this->autowiredParameter = $autowiredParameter;
