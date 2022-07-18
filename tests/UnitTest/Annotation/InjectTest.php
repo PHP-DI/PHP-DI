@@ -12,6 +12,7 @@ use DI\Test\UnitTest\Annotation\Fixtures\NonImportedInjectFixture;
 use Doctrine\Common\Annotations\AnnotationReader as DoctrineAnnotationReader;
 use PHPUnit\Framework\TestCase;
 use ReflectionClass;
+use DI\Definition\Exception\InvalidAnnotation;
 
 /**
  * Inject annotation test class.
@@ -106,7 +107,6 @@ class InjectTest extends TestCase
 
     public function testInvalidAnnotation()
     {
-        $this->expectException('DI\Definition\Exception\InvalidAnnotation');
         $this->expectExceptionMessage('@Inject({"param" = "value"}) expects "value" to be a string, [] given.');
         $method = $this->reflectionClass->getMethod('method4');
         $this->annotationReader->getMethodAnnotation($method, Inject::class);
