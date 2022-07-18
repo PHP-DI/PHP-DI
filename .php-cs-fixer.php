@@ -25,7 +25,7 @@ return $config->setRules([
     'heredoc_to_nowdoc' => true,
     'linebreak_after_opening_tag' => true,
     'new_with_braces' => false,
-    'multiline_whitespace_before_semicolons' => true,
+    'multiline_whitespace_before_semicolons' => false,
     'no_php4_constructor' => true,
     'no_unreachable_default_argument_value' => true,
     'no_useless_else' => true,
@@ -49,6 +49,7 @@ return $config->setRules([
     'yoda_style' => false,
     'native_function_invocation' => false,
     'single_line_throw' => false,
+    'blank_line_between_import_groups' => false,
 ])
     ->setRiskyAllowed(true)
     ->setFinder($finder);

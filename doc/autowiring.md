@@ -70,3 +70,7 @@ class Database
 - `setLogger()` will not be called
 
 For those classes, you will need to use `DI\autowire()` in [PHP definitions](php-definitions.md) to declare explicitly what to inject.
+
+PHP-DI is also unable to use Reflection on any PHP-internal classes like such that provide access to extension capabilities.
+Examples include `Memcached`, `Gearman`, any `Curl*` classes, anything from the SPL classes like `RecursiveIteratorIterator`, and so on.
+If you want to instantiate any class provided by the PHP engine or an extension, you have to provide explicit constructor parameters to PHP-DI.

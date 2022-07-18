@@ -100,7 +100,6 @@ class InjectTest extends TestCase
 
     public function testInvalidAnnotation()
     {
-        $this->expectException(InvalidAnnotation::class);
         $this->expectExceptionMessage('@Inject({"param" = "value"}) expects "value" to be a string, [] given.');
         $method = $this->reflectionClass->getMethod('method4');
         $this->annotationReader->getMethodAnnotation($method, Inject::class);
