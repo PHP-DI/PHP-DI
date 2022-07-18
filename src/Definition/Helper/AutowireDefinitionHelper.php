@@ -13,7 +13,7 @@ use DI\Definition\AutowireDefinition;
  */
 class AutowireDefinitionHelper extends CreateDefinitionHelper
 {
-    const DEFINITION_CLASS = AutowireDefinition::class;
+    public const DEFINITION_CLASS = AutowireDefinition::class;
 
     /**
      * Defines a value for a specific argument of the constructor.
