@@ -301,6 +301,7 @@ class Container implements ContainerInterface, FactoryInterface, InvokerInterfac
         } else {
             $this->resolvedEntries[$name] = $value;
         }
+        unset($this->entriesBeingResolved[$name]);
     }
 
     /**
