@@ -45,9 +45,8 @@ class ResolverDispatcher implements DefinitionResolver
      * @param Definition $definition Object that defines how the value should be obtained.
      * @param array      $parameters Optional parameters to use to build the entry.
      *
-     * @throws InvalidDefinition If the definition cannot be resolved.
-     *
      * @return mixed Value obtained from the definition.
+     * @throws InvalidDefinition If the definition cannot be resolved.
      */
     public function resolve(Definition $definition, array $parameters = []) : mixed
     {

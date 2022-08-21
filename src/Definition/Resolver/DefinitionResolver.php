@@ -24,11 +24,10 @@ interface DefinitionResolver
      * @param Definition $definition Object that defines how the value should be obtained.
      * @psalm-param T $definition
      * @param array      $parameters Optional parameters to use to build the entry.
+     * @return mixed Value obtained from the definition.
      *
      * @throws InvalidDefinition If the definition cannot be resolved.
      * @throws DependencyException
-     *
-     * @return mixed Value obtained from the definition.
      */
     public function resolve(Definition $definition, array $parameters = []) : mixed;
 

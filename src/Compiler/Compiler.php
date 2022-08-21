@@ -189,9 +189,9 @@ class Compiler
     }
 
     /**
+     * @return string The method name
      * @throws DependencyException
      * @throws InvalidDefinition
-     * @return string The method name
      */
     private function compileDefinition(string $entryName, Definition $definition) : string
     {

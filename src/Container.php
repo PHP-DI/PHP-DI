@@ -117,9 +117,9 @@ class Container implements ContainerInterface, FactoryInterface, InvokerInterfac
      * @template T
      * @param string|class-string<T> $id Entry name or a class name.
      *
+     * @return mixed|T
      * @throws DependencyException Error while resolving the entry.
      * @throws NotFoundException No entry found for the given name.
-     * @return mixed|T
      */
     public function get(string $id) : mixed
     {
@@ -164,10 +164,10 @@ class Container implements ContainerInterface, FactoryInterface, InvokerInterfac
      *                                           specific parameters to specific values. Parameters not defined in this
      *                                           array will be resolved using the container.
      *
+     * @return mixed|T
      * @throws InvalidArgumentException The name parameter must be of type string.
      * @throws DependencyException Error while resolving the entry.
      * @throws NotFoundException No entry found for the given name.
-     * @return mixed|T
      */
     public function make(string $name, array $parameters = []) : mixed
     {
@@ -206,9 +206,9 @@ class Container implements ContainerInterface, FactoryInterface, InvokerInterfac
      *
      * @template T
      * @param object|T $instance Object to perform injection upon
+     * @return object|T $instance Returns the same instance
      * @throws InvalidArgumentException
      * @throws DependencyException Error while injecting dependencies
-     * @return object|T $instance Returns the same instance
      */
     public function injectOn(object $instance) : object
     {

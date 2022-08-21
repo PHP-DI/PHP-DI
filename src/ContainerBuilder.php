@@ -227,8 +227,8 @@ class ContainerBuilder
      *
      * @param bool $writeToFile If true, write the proxies to disk to improve performances
      * @param string|null $proxyDirectory Directory where to write the proxies
-     * @throws InvalidArgumentException when writeToFile is set to true and the proxy directory is null
      * @return $this
+     * @throws InvalidArgumentException when writeToFile is set to true and the proxy directory is null
      */
     public function writeProxiesToFile(bool $writeToFile, string $proxyDirectory = null) : self
     {

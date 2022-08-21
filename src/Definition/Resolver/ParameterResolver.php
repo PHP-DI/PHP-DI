@@ -27,8 +27,8 @@ class ParameterResolver
     }
 
     /**
-     * @throws InvalidDefinition A parameter has no value defined or guessable.
      * @return array Parameters to use to call the function.
+     * @throws InvalidDefinition A parameter has no value defined or guessable.
      */
     public function resolveParameters(
         MethodInjection $definition = null,
