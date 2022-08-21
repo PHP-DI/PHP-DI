@@ -106,9 +106,9 @@ class ObjectCreator implements DefinitionResolver
      *
      * @param array            $parameters      Optional parameters to use to create the instance.
      *
+     * @return object
      * @throws InvalidDefinition
      * @throws DependencyException
-     * @return object
      */
     private function createInstance(ObjectDefinition $definition, array $parameters)
     {
