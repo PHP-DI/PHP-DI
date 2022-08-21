@@ -120,9 +120,9 @@ class Container implements ContainerInterface, FactoryInterface, InvokerInterfac
      * @template T
      * @param string|class-string<T> $name Entry name or a class name.
      *
+     * @return mixed|T
      * @throws DependencyException Error while resolving the entry.
      * @throws NotFoundException No entry found for the given name.
-     * @return mixed|T
      */
     public function get($name)
     {
@@ -172,10 +172,10 @@ class Container implements ContainerInterface, FactoryInterface, InvokerInterfac
      *                                           specific parameters to specific values. Parameters not defined in this
      *                                           array will be resolved using the container.
      *
+     * @return mixed|T
      * @throws InvalidArgumentException The name parameter must be of type string.
      * @throws DependencyException Error while resolving the entry.
      * @throws NotFoundException No entry found for the given name.
-     * @return mixed|T
      */
     public function make($name, array $parameters = [])
     {
@@ -204,8 +204,8 @@ class Container implements ContainerInterface, FactoryInterface, InvokerInterfac
      *
      * @param string $name Entry name or a class name.
      *
-     * @throws InvalidArgumentException The name parameter must be of type string.
      * @return bool
+     * @throws InvalidArgumentException The name parameter must be of type string.
      */
     public function has($name)
     {
@@ -233,9 +233,9 @@ class Container implements ContainerInterface, FactoryInterface, InvokerInterfac
      *
      * @template T
      * @param object|T $instance Object to perform injection upon
+     * @return object|T $instance Returns the same instance
      * @throws InvalidArgumentException
      * @throws DependencyException Error while injecting dependencies
-     * @return object|T $instance Returns the same instance
      */
     public function injectOn($instance)
     {
@@ -372,8 +372,8 @@ class Container implements ContainerInterface, FactoryInterface, InvokerInterfac
      *
      * Checks for circular dependencies while resolving the definition.
      *
-     * @throws DependencyException Error while resolving the entry.
      * @return mixed
+     * @throws DependencyException Error while resolving the entry.
      */
     private function resolveDefinition(Definition $definition, array $parameters = [])
     {

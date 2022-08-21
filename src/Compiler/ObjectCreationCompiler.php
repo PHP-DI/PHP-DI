@@ -154,8 +154,8 @@ PHP;
     /**
      * Returns the default value of a function parameter.
      *
-     * @throws InvalidDefinition Can't get default values from PHP internal classes and functions
      * @return mixed
+     * @throws InvalidDefinition Can't get default values from PHP internal classes and functions
      */
     private function getParameterDefaultValue(ReflectionParameter $parameter, ReflectionMethod $function)
     {
