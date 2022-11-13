@@ -5,7 +5,7 @@ parameters:
     level: 5
     paths:
         - src
-    excludes_analyse:
+    excludePaths:
         - src/Compiler/Template.php
     ignoreErrors:
         - '#Access to undefined constant DI\\CompiledContainer::METHOD_MAPPING.#'

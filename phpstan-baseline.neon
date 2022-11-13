@@ -3,60 +3,90 @@ parameters:
 		-
 			message: "#^Else branch is unreachable because ternary operator condition is always true\\.$#"
 			count: 1
-			path: src\CompiledContainer.php
+			path: src/CompiledContainer.php
 
 		-
 			message: "#^Negated boolean expression is always false\\.$#"
 			count: 1
-			path: src\CompiledContainer.php
-
-		-
-			message: "#^Negated boolean expression is always false\\.$#"
-			count: 2
-			path: src\Compiler\Compiler.php
+			path: src/CompiledContainer.php
 
 		-
 			message: "#^If condition is always false\\.$#"
 			count: 1
-			path: src\Compiler\Compiler.php
+			path: src/Compiler/Compiler.php
+
+		-
+			message: "#^Negated boolean expression is always false\\.$#"
+			count: 2
+			path: src/Compiler/Compiler.php
+
+		-
+			message: "#^Property DI\\\\Compiler\\\\Compiler\\:\\:\\$containerClass is never read, only written\\.$#"
+			count: 1
+			path: src/Compiler/Compiler.php
+
+		-
+			message: "#^Property DI\\\\Compiler\\\\Compiler\\:\\:\\$containerParentClass is never read, only written\\.$#"
+			count: 1
+			path: src/Compiler/Compiler.php
+
+		-
+			message: "#^Property DI\\\\Compiler\\\\Compiler\\:\\:\\$methods is never read, only written\\.$#"
+			count: 1
+			path: src/Compiler/Compiler.php
 
 		-
 			message: "#^Else branch is unreachable because ternary operator condition is always true\\.$#"
 			count: 2
-			path: src\Container.php
+			path: src/Container.php
 
 		-
-			message: "#^Negated boolean expression is always false\\.$#"
+			message: "#^Template type T of method DI\\\\Container\\:\\:get\\(\\) is not referenced in a parameter\\.$#"
 			count: 1
-			path: src\Container.php
+			path: src/Container.php
 
 		-
-			message: "#^Result of && is always false\\.$#"
+			message: "#^Template type T of method DI\\\\Container\\:\\:make\\(\\) is not referenced in a parameter\\.$#"
 			count: 1
-			path: src\ContainerBuilder.php
+			path: src/Container.php
 
 		-
 			message: "#^Else branch is unreachable because ternary operator condition is always true\\.$#"
 			count: 1
-			path: src\ContainerBuilder.php
+			path: src/ContainerBuilder.php
+
+		-
+			message: "#^Result of && is always false\\.$#"
+			count: 1
+			path: src/ContainerBuilder.php
 
 		-
 			message: "#^Negated boolean expression is always false\\.$#"
 			count: 1
-			path: src\Definition\ArrayDefinitionExtension.php
+			path: src/Definition/ArrayDefinitionExtension.php
+
+		-
+			message: "#^Dead catch \\- DI\\\\DependencyException is never thrown in the try block\\.$#"
+			count: 1
+			path: src/Definition/Resolver/ArrayResolver.php
 
 		-
 			message: "#^Parameter \\#1 \\$definition \\(DI\\\\Definition\\\\InstanceDefinition\\) of method DI\\\\Definition\\\\Resolver\\\\InstanceInjector\\:\\:resolve\\(\\) should be compatible with parameter \\$definition \\(DI\\\\Definition\\\\ObjectDefinition\\) of method DI\\\\Definition\\\\Resolver\\\\ObjectCreator\\:\\:resolve\\(\\)$#"
 			count: 1
-			path: src\Definition\Resolver\InstanceInjector.php
+			path: src/Definition/Resolver/InstanceInjector.php
+
+		-
+			message: "#^Dead catch \\- DI\\\\DependencyException is never thrown in the try block\\.$#"
+			count: 1
+			path: src/Definition/Resolver/ObjectCreator.php
 
 		-
 			message: "#^Instanceof between DI\\\\Definition\\\\Definition and DI\\\\Definition\\\\AutowireDefinition will always evaluate to false\\.$#"
 			count: 1
-			path: src\Definition\Source\SourceCache.php
+			path: src/Definition/Source/SourceCache.php
 
 		-
-			message: "#^Parameter \\#1 \\$autoload_function of function spl_autoload_register expects callable\\(string\\)\\: void, ProxyManager\\\\Autoloader\\\\AutoloaderInterface given\\.$#"
+			message: "#^Property DI\\\\Definition\\\\Source\\\\SourceChain\\:\\:\\$rootSource is never read, only written\\.$#"
 			count: 1
-			path: src\Proxy\ProxyFactory.php
+			path: src/Definition/Source/SourceChain.php
 
