@@ -46,6 +46,7 @@ return (new PhpCsFixer\Config)
         'native_function_invocation' => false,
         'single_line_throw' => false,
         'blank_line_between_import_groups' => false,
+        'global_namespace_import' => false,
     ])
     ->setRiskyAllowed(true)
     ->setFinder($finder);
