@@ -1,4 +1,4 @@
-# Change log
+# Changelog
 
 ## 6.1.0
 
