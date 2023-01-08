@@ -133,6 +133,11 @@ if (/* is production */) {
 }
 ```
 
+You can also pass an optional namespace argument to `enableDefinitionCache('my-namespace')` which will add the provided namespace to all PHP-DI cache keys. This is helpful to prevent cache collisions when sharing a single APCu memory pool between multiple DI containers. Here is an example of a PHP-DI cache key for a class named `MyClass` with, and without, a namespace:
+
+- With namespace:  `php-di.definitions.my-namespaceMyClass`
+- No namespace:    `php-di.definitions.MyClass`
+
 Heads up:
 
 - do not use a cache in a development environment, else changes you make to the definitions (attributes, configuration files, etc.) may not be taken into account
