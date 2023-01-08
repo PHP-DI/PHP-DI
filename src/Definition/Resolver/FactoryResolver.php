@@ -71,7 +71,7 @@ class FactoryResolver implements DefinitionResolver
             // Custom error message to help debugging
             if (is_string($callable) && class_exists($callable) && method_exists($callable, '__invoke')) {
                 throw new InvalidDefinition(sprintf(
-                    'Entry "%s" cannot be resolved: factory %s. Invokable classes cannot be automatically resolved if autowiring is disabled on the container, you need to enable autowiring or define the entry manually.',
+                    'Entry "%s" cannot be resolved: factory %s. Invocable classes cannot be automatically resolved if autowiring is disabled on the container, you need to enable autowiring or define the entry manually.',
                     $definition->getName(),
                     $e->getMessage()
                 ));

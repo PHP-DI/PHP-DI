@@ -270,7 +270,7 @@ class Compiler
                 $isInvokableClass = is_string($value) && class_exists($value) && method_exists($value, '__invoke');
                 if ($isInvokableClass && !$this->autowiringEnabled) {
                     throw new InvalidDefinition(sprintf(
-                        'Entry "%s" cannot be compiled. Invokable classes cannot be automatically resolved if autowiring is disabled on the container, you need to enable autowiring or define the entry manually.',
+                        'Entry "%s" cannot be compiled. Invocable classes cannot be automatically resolved if autowiring is disabled on the container, you need to enable autowiring or define the entry manually.',
                         $entryName
                     ));
                 }

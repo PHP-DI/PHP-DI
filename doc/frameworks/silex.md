@@ -90,7 +90,7 @@ $app->get('/{name}', [HelloController::class, 'helloAction']);
 
 You will notice above that we give the class name and not an object: PHP-DI will instantiate the instance (and inject dependencies inside it) only if it is used.
 
-- [invokable class](http://php.net/manual/en/language.types.callable.php)
+- [invocable class](http://php.net/manual/en/language.types.callable.php)
 
 ```php
 class HelloController
@@ -104,7 +104,7 @@ class HelloController
 $app->get('/{name}', HelloController::class);
 ```
 
-Again you will notice that we pass the class name and not an instance. PHP-DI will correctly detect that this is an invokable class and will instantiate it.
+Again you will notice that we pass the class name and not an instance. PHP-DI will correctly detect that this is an invocable class and will instantiate it.
 
 ### Middlewares, route variable converters, error handlers and view handlers
 

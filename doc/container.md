@@ -154,11 +154,11 @@ interface InvokerInterface
 - closures
 - functions
 - object methods and static methods
-- invokable objects (objects that implement [__invoke()](http://php.net/manual/en/language.oop5.magic.php#object.invoke))
+- invocable objects (objects that implement [__invoke()](http://php.net/manual/en/language.oop5.magic.php#object.invoke))
 
 Additionally you can call:
 
-- name of [invokable](http://php.net/manual/en/language.oop5.magic.php#object.invoke) classes: `$container->call('My\CallableClass')`
+- name of [invocable](http://php.net/manual/en/language.oop5.magic.php#object.invoke) classes: `$container->call('My\CallableClass')`
 - object methods (give the class name, not an object): `$container->call(['MyClass', 'someMethod'])`
 
 In both case, `'My\CallableClass'` and `'MyClass'` will be resolved by the container using `$container->get()`.

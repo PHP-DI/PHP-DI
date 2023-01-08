@@ -31,9 +31,9 @@ PHP-DI 4.4 brings support for every callable type:
 - PHP functions: `'someFunction'` would call `someFunction(…)`
 - object method: `[$object, 'method']` would call `$object->method(…)`
 - static class method: `['MyClass', 'method']` would call `MyClass::method(…)`
-- [invokable object](http://php.net/manual/en/language.oop5.magic.php#object.invoke): `$object` would call `$object(…)`
+- [invocable object](http://php.net/manual/en/language.oop5.magic.php#object.invoke): `$object` would call `$object(…)`
 
-Invokable objects are objects implementing the `__invoke()` magic method. They can be called directly:
+Invocable objects are objects implementing the `__invoke()` magic method. They can be called directly:
 
 ```php
 class MyClass {
@@ -54,7 +54,7 @@ $controller = /* get from the router */;
 $container->call($controller, $_GET + $_POST);
 ```
 
-This lets you write your controllers as PHP callables. That means you can use functions, closures, object methods or even invokable objects as controllers.
+This lets you write your controllers as PHP callables. That means you can use functions, closures, object methods or even invocable objects as controllers.
 
 ### Auto-creation of callable objects
 
@@ -76,7 +76,7 @@ If `method()` is not a static method, then `MyClass` will be resolved from the c
 (new MyClass)->method();
 ```
 
-With PHP-DI 4.4, you can now use the same feature for invokable objects:
+With PHP-DI 4.4, you can now use the same feature for invocable objects:
 
 ```php
 class MyClass {
