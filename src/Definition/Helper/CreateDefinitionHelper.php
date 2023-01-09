@@ -104,7 +104,7 @@ class CreateDefinitionHelper implements DefinitionHelper
      * Can be used multiple times to declare multiple calls.
      *
      * @param string $method       Name of the method to call.
-     * @param mixed $parameters Parameters to use for calling the method.
+     * @param mixed ...$parameters Parameters to use for calling the method.
      *
      * @return $this
      */
