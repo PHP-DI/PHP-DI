@@ -68,7 +68,7 @@ class CreateDefinitionHelper implements DefinitionHelper
      * This method takes a variable number of arguments, example:
      *     ->constructor($param1, $param2, $param3)
      *
-     * @param mixed[] $parameters Parameters to use for calling the constructor of the class.
+     * @param mixed $parameters Parameters to use for calling the constructor of the class.
      *
      * @return $this
      */
@@ -104,7 +104,7 @@ class CreateDefinitionHelper implements DefinitionHelper
      * Can be used multiple times to declare multiple calls.
      *
      * @param string $method       Name of the method to call.
-     * @param mixed[] $parameters Parameters to use for calling the method.
+     * @param mixed $parameters Parameters to use for calling the method.
      *
      * @return $this
      */
