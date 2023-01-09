@@ -19,7 +19,7 @@ Before:
 ```php
 return [
     Form::class => create()
-        ->scope(Scope::PROTOTYPE), // a new form is created everytime it is injected
+        ->scope(Scope::PROTOTYPE), // a new form is created every time it is injected
 ];
 
 class Service
