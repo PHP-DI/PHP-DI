@@ -125,6 +125,11 @@
                                     </a>
                                 </li>
                                                             <li class="">
+                                    <a href="https://php-di.org/doc/attributes.html">
+                                        PHP attributes
+                                    </a>
+                                </li>
+                                                            <li class="">
                                     <a href="https://php-di.org/doc/annotations.html">
                                         Annotations
                                     </a>
@@ -298,7 +303,7 @@
 <h2 id="installation">Installation</h2>
 <p>Install PHP-DI with <a href="http://getcomposer.org/doc/00-intro.html">Composer</a>:</p>
 <pre><code>composer require php-di/php-di</code></pre>
-<p>PHP-DI requires PHP 7.2 or above.</p>
+<p>PHP-DI 7 requires PHP 8.0 or above.</p>
 <h2 id="basic-usage">Basic usage</h2>
 <h3 id="1-use-dependency-injection">1. Use dependency injection</h3>
 <p>First, let's write code using dependency injection without thinking about PHP-DI:</p>
@@ -355,7 +360,7 @@ $userManager = new UserManager($mailer);</code></pre>
 <p>We have seen <strong>autowiring</strong>, which is when PHP-DI figures out automatically the dependencies a class needs. But we have 3 ways to define what to inject in a class:</p>
 <ul>
 <li>using <a href="autowiring.html">autowiring</a></li>
-<li>using <a href="annotations.html">annotations</a></li>
+<li>using <a href="attributes.html">attributes</a></li>
 <li>using <a href="php-definitions.html">PHP definitions</a></li>
 </ul>
 <p>Every one of them is different and optional. Here is an example of PHP definitions in a file:</p>
@@ -367,7 +372,7 @@ $userManager = new UserManager($mailer);</code></pre>
     'Controller' =&gt; DI\create()
         -&gt;constructor(DI\get('Webservice')),
 ];</code></pre>
-<p>Please read the <a href="definition.html">Defining injections</a> documentation to learn about autowiring, annotations and PHP definitions.</p>
+<p>Please read the <a href="definition.html">Defining injections</a> documentation to learn about autowiring, attributes and PHP definitions.</p>
 <h2 id="framework-integration">Framework integration</h2>
 <p>We have seen in the example above that we can use the container to get objects:</p>
 <pre><code class="language-php">$userManager = $container-&gt;get('UserManager');</code></pre>
@@ -382,6 +387,7 @@ $userManager = new UserManager($mailer);</code></pre>
 <li><a href="frameworks/slim.html">Slim</a></li>
 <li><a href="frameworks/silex.html">Silex</a></li>
 <li><a href="frameworks/zf2.html">Zend Framework 2</a></li>
+<li><a href="frameworks/zend-expressive.html">Zend Expressive</a></li>
 <li><a href="frameworks/silly.html">Silly</a></li>
 </ul>
 <p>If you want to use PHP-DI with another framework or your own code, try to use <code>$container-&gt;get()</code> in you root application class or front controller. Have a look at this <a href="https://github.com/PHP-DI/demo"><strong>demo application</strong></a> built around PHP-DI for a practical example.</p>

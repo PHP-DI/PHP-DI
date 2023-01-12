@@ -125,6 +125,11 @@
                                     </a>
                                 </li>
                                                             <li class="">
+                                    <a href="https://php-di.org/doc/attributes.html">
+                                        PHP attributes
+                                    </a>
+                                </li>
+                                                            <li class="">
                                     <a href="https://php-di.org/doc/annotations.html">
                                         Annotations
                                     </a>
@@ -302,7 +307,7 @@ to call the container (thus avoiding the Service Locator pattern).</p>
 <pre><code class="language-php">    protected function _initContainer()
     {
         $builder = new \DI\ContainerBuilder();
-        $builder-&gt;useAnnotations(true);
+        $builder-&gt;useAttributes(true);
         $container = $builder-&gt;build();
 
         $dispatcher = new \DI\Bridge\ZendFramework1\Dispatcher();
@@ -311,7 +316,6 @@ to call the container (thus avoiding the Service Locator pattern).</p>
         Zend_Controller_Front::getInstance()-&gt;setDispatcher($dispatcher);
     }</code></pre>
 <p>That's it!</p>
-<p>As you can see since PHP-DI 5 it's necessary to enable <a href="../annotations.html">annotations</a> because they are disabled by default.</p>
 <p><strong>Warning</strong>: if you use Zend's autoloader (and not Composer), you will need to configure it:</p>
 <pre><code class="language-php">$autoloader-&gt;suppressNotFoundWarnings(true);</code></pre>
 <h2 id="usage">Usage</h2>
@@ -321,10 +325,9 @@ to call the container (thus avoiding the Service Locator pattern).</p>
 {
     /**
      * This dependency will be injected by PHP-DI
-     * @Inject
-     * @var Application_Service_GuestbookService
      */
-    private $guestbookService;
+    #[Inject]
+    private Application_Service_GuestbookService $guestbookService;
 
     public function indexAction()
     {

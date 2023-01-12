@@ -125,6 +125,11 @@
                                     </a>
                                 </li>
                                                             <li class="">
+                                    <a href="https://php-di.org/doc/attributes.html">
+                                        PHP attributes
+                                    </a>
+                                </li>
+                                                            <li class="">
                                     <a href="https://php-di.org/doc/annotations.html">
                                         Annotations
                                     </a>
@@ -293,11 +298,18 @@
             </div>
 
             <h1 id="php-definitions">PHP definitions</h1>
-<p>On top of <a href="autowiring.html">autowiring</a> and <a href="annotations.html">annotations</a>, you can use <strong>a PHP configuration format</strong> to define injections.</p>
+<p>On top of <a href="autowiring.html">autowiring</a> and <a href="attributes.html">attributes</a>, you can use <strong>a PHP configuration format</strong> to define injections.</p>
 <p>You can register that configuration as an array:</p>
-<pre><code class="language-php">$containerBuilder-&gt;addDefinitions([
+<pre><code class="language-php">$container = new DI\Container([
     // place your definitions here
-]);</code></pre>
+]);
+
+// or using the container builder class:
+// ...
+$containerBuilder-&gt;addDefinitions([
+    // place your definitions here
+]);
+// ...</code></pre>
 <p>Or by putting it into a file returning an array:</p>
 <pre><code class="language-php">&lt;?php
 return [
@@ -522,10 +534,25 @@ return [
         // set the $handler parameter
         -&gt;methodParameter('setHandler', 'handler', DI\get('SyslogHandler')),
 ];</code></pre>
+<p>Since PHP 8, you can also use <a href="https://stitcher.io/blog/php-8-named-arguments">named arguments</a>:</p>
+<pre><code class="language-php">return [
+    'Logger' =&gt; DI\autowire()
+        // set the $filename parameter
+        -&gt;constructor(
+            filename: 'app.log'
+        )
+        // set the $handler parameter
+        -&gt;method('setHandler', handler: DI\get('SyslogHandler')),
+];</code></pre>
 <h3 id="aliases">Aliases</h3>
 <p>You can alias an entry to another using the <code>DI\get()</code> helper:</p>
 <pre><code class="language-php">return [
     'doctrine.entity_manager' =&gt; DI\get('Doctrine\ORM\EntityManager'),
+];</code></pre>
+<p>You can use aliases to map interfaces to implementation obtaining the same object when requesting/injecting the class or the interface</p>
+<pre><code class="language-php">return [
+    // mapping an interface to an implementation (autowire the MyLogger class if not otherwise defined)
+    'LoggerInterface' =&gt; DI\get('MyLogger'),
 ];</code></pre>
 <h3 id="environment-variables">Environment variables</h3>
 <p>You can get an environment variable's value using the <code>DI\env()</code> helper:</p>

@@ -125,6 +125,11 @@
                                     </a>
                                 </li>
                                                             <li class="">
+                                    <a href="https://php-di.org/doc/attributes.html">
+                                        PHP attributes
+                                    </a>
+                                </li>
+                                                            <li class="">
                                     <a href="https://php-di.org/doc/annotations.html">
                                         Annotations
                                     </a>
@@ -423,11 +428,8 @@ use it only where you really have to.</p>
 <p>Example:</p>
 <pre><code class="language-php">class UserController extends BaseController
 {
-    /**
-     * @Inject
-     * @var SomeService
-     */
-    private $someService;
+    #[Inject]
+    private SomeService $someService;
 
     public function __construct()
     {
@@ -441,7 +443,7 @@ use it only where you really have to.</p>
     }
 }</code></pre>
 <p>As you might have guessed, you can't use constructor injection with this method.
-But other kind of injections (property or setter) will work, whether you use annotations
+But other kind of injections (property or setter) will work, whether you use attributes
 or whether you configured your object in a definition file.</p>
 <h2 id="extending-the-container">Extending the container</h2>
 <p>If you wish to delve into the container's internals, be aware that only the classes and interfaces tagged with the <code>@api</code> annotation are meant to be used by PHP-DI users.</p>

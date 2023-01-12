@@ -125,6 +125,11 @@
                                     </a>
                                 </li>
                                                             <li class="">
+                                    <a href="https://php-di.org/doc/attributes.html">
+                                        PHP attributes
+                                    </a>
+                                </li>
+                                                            <li class="">
                                     <a href="https://php-di.org/doc/annotations.html">
                                         Annotations
                                     </a>
@@ -312,18 +317,16 @@
         ],
     ],</code></pre>
 <p>That's it!</p>
-<p>If you want to use annotations, please read the &quot;Configuration&quot; section below.</p>
 <h2 id="usage">Usage</h2>
 <p>Now you can inject dependencies in your controllers.</p>
-<p>Here is an example of the GuestbookController of the quickstart (using annotations):</p>
+<p>Here is an example of the GuestbookController of the quickstart (using attributes):</p>
 <pre><code class="language-php">class GuestbookController extends AbstractActionController
 {
     /**
      * This dependency will be injected by PHP-DI
-     * @Inject
-     * @var \Application\Service\GuestbookService
      */
-    private $guestbookService;
+    #[Inject]
+    private \Application\Service\GuestbookService $guestbookService;
 
     public function indexAction()
     {
@@ -341,13 +344,6 @@ return [
 <pre><code class="language-php">return [
     'phpdi-zf2' =&gt; [
         ...
-    ]
-];</code></pre>
-<h3 id="enable-or-disable-annotations">Enable or disable annotations</h3>
-<p>Annotations are disabled by default since PHP-DI 5. To enable them, use the following config:</p>
-<pre><code class="language-php">return [
-    'phpdi-zf2' =&gt; [
-        'useAnnotations' =&gt; true,
     ]
 ];</code></pre>
 <h3 id="override-definitions-file-location">Override definitions file location</h3>

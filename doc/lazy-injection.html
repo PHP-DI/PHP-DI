@@ -125,6 +125,11 @@
                                     </a>
                                 </li>
                                                             <li class="">
+                                    <a href="https://php-di.org/doc/attributes.html">
+                                        PHP attributes
+                                    </a>
+                                </li>
+                                                            <li class="">
                                     <a href="https://php-di.org/doc/annotations.html">
                                         Annotations
                                     </a>
@@ -363,10 +368,10 @@ return [
     'foo' =&gt; DI\create('MyClass')
         -&gt;lazy(),
 ];</code></pre>
-<h3 id="annotations">Annotations</h3>
-<pre><code class="language-php">/**
- * @Injectable(lazy=true)
- */
+<h3 id="attributes">Attributes</h3>
+<pre><code class="language-php">use DI\Attribute\Injectable;
+
+#[Injectable(lazy: true)]
 class MyClass
 {
 }</code></pre>
@@ -374,7 +379,7 @@ class MyClass
 <pre><code class="language-php">&lt;?php
 $containerPHP-&gt;set('foo', \DI\create('MyClass')-&gt;lazy());</code></pre>
 <h2 id="when-to-use">When to use</h2>
-<p>Lazy injection requires to create proxy objects for each object you declare as <code>lazy</code>. It is not recommended to use this feature more that a few times in one application.</p>
+<p>Lazy injection requires to create proxy objects for each object you declare as <code>lazy</code>. It is not recommended to use this feature more than a few times in one application.</p>
 <p>While proxies are extremely optimized, they are only worth it if the object you define as lazy has a constructor that takes some time (e.g. connects to a database, writes to a file, etc.).</p>
 <h2 id="optimizing-performances">Optimizing performances</h2>
 <p>PHP-DI needs to generate proxies of the classes you mark as &quot;<em>lazy</em>&quot;.</p>

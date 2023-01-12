@@ -125,6 +125,11 @@
                                     </a>
                                 </li>
                                                             <li class="">
+                                    <a href="https://php-di.org/doc/attributes.html">
+                                        PHP attributes
+                                    </a>
+                                </li>
+                                                            <li class="">
                                     <a href="https://php-di.org/doc/annotations.html">
                                         Annotations
                                     </a>
@@ -339,13 +344,12 @@ The <code>:</code> notation means <code>service_id:method</code>, whereas the <c
     }
 }</code></pre>
 <p>Example with property injection:</p>
-<pre><code class="language-php">class ProductController
+<pre><code class="language-php">use DI\Attribute\Inject;
+
+class ProductController
 {
-    /**
-     * @Inject
-     * @var ProductService
-     */
-    private $productService;
+    #[Inject]
+    private ProductService $productService;
 
     public function clearAction()
     {
@@ -392,14 +396,12 @@ in Symfony's container, and the controller is resolved by PHP-DI.</p>
             # UserRepository is created by PHP-DI
             - '@AppBundle\\Service\\UserRepository'</code></pre>
 <h3 id="service-name-aliases">Service name aliases</h3>
-<p>PHP-DI can also work with autowiring or annotations. These rely on the fact that the service name
+<p>PHP-DI can also work with autowiring or PHP attributes. These rely on the fact that the service name
 is the class name (or interface name), e.g. you reference the entity manager by its class name
 instead of <code>doctrine.orm.entity_manager</code>.</p>
-<p>If you want to enjoy autowiring or annotations, you can simplify your life and write simple aliases
+<p>If you want to enjoy autowiring or attributes, you can simplify your life and write simple aliases
 like these:</p>
 <pre><code class="language-php">return [
-    'Psr\Log\LoggerInterface' =&gt; DI\get('logger'),
-    // PHP 5.5 notation:
     ObjectManager::class =&gt; DI\get('doctrine.orm.entity_manager'),
 ];</code></pre>
 <p>Keep in mind that it's always better to type-hint against interfaces instead of class names!

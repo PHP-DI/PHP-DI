@@ -125,6 +125,11 @@
                                     </a>
                                 </li>
                                                             <li class="">
+                                    <a href="https://php-di.org/doc/attributes.html">
+                                        PHP attributes
+                                    </a>
+                                </li>
+                                                            <li class="">
                                     <a href="https://php-di.org/doc/annotations.html">
                                         Annotations
                                     </a>
@@ -303,7 +308,7 @@
 <p>Before:</p>
 <pre><code class="language-php">return [
     Form::class =&gt; create()
-        -&gt;scope(Scope::PROTOTYPE), // a new form is created everytime it is injected
+        -&gt;scope(Scope::PROTOTYPE), // a new form is created every time it is injected
 ];
 
 class Service

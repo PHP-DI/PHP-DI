@@ -125,6 +125,11 @@
                                     </a>
                                 </li>
                                                             <li class="">
+                                    <a href="https://php-di.org/doc/attributes.html">
+                                        PHP attributes
+                                    </a>
+                                </li>
+                                                            <li class="">
                                     <a href="https://php-di.org/doc/annotations.html">
                                         Annotations
                                     </a>
@@ -347,7 +352,7 @@ $app-&gt;run();</code></pre>
 // Notice how we register the controller using the class name?
 // PHP-DI will instantiate the class for us only when it's actually necessary
 $app-&gt;delete('/user/{id}', [UserController::class, 'delete']);</code></pre>
-<p>Dependencies can then be injected in your controller using <a href="../definition.html">autowiring, PHP-DI config files or even annotations</a>.</p>
+<p>Dependencies can then be injected in your controller using <a href="../definition.html">autowiring, PHP-DI config files or even PHP attributes</a>.</p>
 <h3 id="controller-parameters">Controller parameters</h3>
 <p>By default, Slim controllers have a strict signature: <code>$request, $response, $args</code>. The PHP-DI bridge offers a more flexible and developer friendly alternative.</p>
 <p>Controller parameters can be any of these things:</p>

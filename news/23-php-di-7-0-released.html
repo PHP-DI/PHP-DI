@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>
+<html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>
+<html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>
+<html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!-->
+<html class="no-js"> <!--<![endif]-->
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>PHP-DI 7.0 released - The Dependency Injection Container for humans</title>
+    <meta name="description" content="PHP-DI is a Dependency Injection Container for PHP that intends to be practical and powerful.">
+
+    <link rel="canonical" href="https://php-di.org" />
+
+    <meta name="application-name" content="PHP-DI"/>
+    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="https://php-di.org/img/apple-touch-icon-144x144.png" />
+    <link rel="apple-touch-icon-precomposed" sizes="152x152" href="https://php-di.org/img/apple-touch-icon-152x152.png" />
+    <link rel="icon" type="image/png" href="https://php-di.org/img/favicon-32x32.png" sizes="32x32" />
+    <link rel="icon" type="image/png" href="https://php-di.org/img/favicon-16x16.png" sizes="16x16" />
+    <meta name="msapplication-TileColor" content="#484949" />
+    <meta name="msapplication-TileImage" content="https://php-di.org/img/mstile-144x144.png" />
+
+            <link href="https://fonts.googleapis.com/css?family=Abel:400|Oswald:300,400,700" media="all" rel="stylesheet" type="text/css">
+        <link href="https://cdn.jsdelivr.net/docsearch.js/1/docsearch.min.css" rel="stylesheet">
+        <link href="https://php-di.org/css/highlight.github.css" rel="stylesheet">
+        <link href="https://php-di.org/css/all.min.css" rel="stylesheet">
+    
+    <script async defer data-domain="php-di.org" src="https://plausible.io/js/plausible.js"></script>
+</head>
+<body>
+
+    <header>
+        <div class="navbar navbar-default navbar-fixed-top">
+            <div class="container">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#top-navigation">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand" href="https://php-di.org/" title="Dependency injection container for PHP">PHP-DI</a>
+                </div>
+                <div class="navbar-form navbar-left hidden-xs hidden-sm">
+                    <input id="search-input" type="text" class="form-control" placeholder="Search...">
+                </div>
+                <div class="collapse navbar-collapse" id="top-navigation">
+                    <ul class="nav navbar-nav navbar-right">
+                        <li><a href="https://php-di.org/doc/getting-started.html" title="Getting started with PHP-DI">Getting started</a></li>
+                        <li><a href="https://php-di.org/doc/" title="PHP-DI documentation">Documentation</a></li>
+                        <li><a href="https://php-di.org/support.html" title="Enterprise support for PHP-DI">For Enterprise</a></li>
+                        <li><a href="https://php-di.org/news/" title="News about PHP-DI">News</a></li>
+                        <li><a href="https://php-di.org/change-log.html" title="PHP-DI's changelog">Changelog</a></li>
+                        <li><a class="github" href="https://github.com/PHP-DI/PHP-DI" title="PHP-DI on GitHub"><i class="fa fa-github"></i></a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    
+    <section class="container">
+        <div class="row">
+            <div class="col-md-9">
+
+                
+    <article>
+        <h1>PHP-DI 7.0 released</h1>
+
+        <p class="article-information">
+            Posted by <a href="https://mnapoli.fr">Matthieu Napoli</a> on January 12th 2023
+        </p>
+
+        <p>I am very happy to announce that PHP-DI 7.0 has been released!</p>
+<p><strong>If you have never heard of PHP-DI visit <a href="../">the home page</a> first</strong> to get an overview of what PHP-DI can do for you.</p>
+<p>I'll make this one short and to the point. PHP-DI 7 is a maturation of v6 to support modern PHP versions and their new features:</p>
+<ul>
+<li>PHP 8.0 and greater is supported</li>
+<li><code>@Inject</code> phpdoc annotations have been replaced by the native PHP attribute <code>#[Inject]</code></li>
+<li>PSR-11 2.0 compatibility</li>
+<li>The codebase and the API exposed is now much more typed (thanks to the new PHP features)</li>
+</ul>
+<p>If you are migrating from a 6.x version check out <strong>the detailed <a href="../doc/migration/7.0.html">migration guide</a></strong>.</p>
+<p>The documentation shown on <a href="http://php-di.org">php-di.org</a> is now for the 7.0 version, the 6.x documentation can be found <a href="https://github.com/PHP-DI/PHP-DI/tree/6.4/doc">here</a>.</p>
+<p>If something isn't right in the package or the documentation, please <a href="https://github.com/PHP-DI/PHP-DI/issues/new">open an issue</a> or a pull request.</p>
+    </article>
+
+    <h3>
+        Comments
+    </h3>
+    <div id="disqus_thread"></div>
+    <noscript>
+        Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+    </noscript>
+
+
+            </div>
+
+            <div class="col-md-3">
+                <h3>
+                    All posts
+                </h3>
+
+                <ul class="all-posts list-unstyled">
+                    <li>
+                        <a href="https://php-di.org/news/23-php-di-7-0-released.html">PHP-DI 7.0 released</a>
+                    </li>
+                    <li>
+                        <a href="https://php-di.org/news/22-php-di-6-0-released.html">PHP-DI 6.0 released</a>
+                    </li>
+                    <li>
+                        <a href="https://php-di.org/news/21-php-di-6-compiled-container.html">PHP-DI 6: turning into a compiled container for maximum performances</a>
+                    </li>
+                    <li>
+                        <a href="https://php-di.org/news/20-php-di-5-4-released.html">PHP-DI 5.4 released</a>
+                    </li>
+                    <li>
+                        <a href="https://php-di.org/news/19-php-di-5-3-released.html">PHP-DI 5.3 released</a>
+                    </li>
+                    <li>
+                        <a href="https://php-di.org/news/18-slim-bridge-released.html">Introducing the PHP-DI bridge for Slim</a>
+                    </li>
+                    <li>
+                        <a href="https://php-di.org/news/17-php-di-5-2-released.html">PHP-DI 5.2 released</a>
+                    </li>
+                    <li>
+                        <a href="https://php-di.org/news/16-php-di-5-1-released.html">PHP-DI 5.1 released</a>
+                    </li>
+                    <li>
+                        <a href="https://php-di.org/news/15-php-di-5-0-released.html">PHP-DI 5.0 released</a>
+                    </li>
+                    <li>
+                        <a href="https://php-di.org/news/14-php-di-5-syntaxic-sugar.html">Syntactic sugar in PHP-DI 5</a>
+                    </li>
+                    <li>
+                        <a href="https://php-di.org/news/13-php-di-4-4-released.html">PHP-DI 4.4 released</a>
+                    </li>
+                    <li>
+                        <a href="https://php-di.org/news/12-php-di-is-better-with-php-5-6.html">PHP 5.6 is out and PHP-DI just got better</a>
+                    </li>
+                    <li>
+                        <a href="https://php-di.org/news/11-php-di-4-3-released.html">PHP-DI 4.3 released</a>
+                    </li>
+                    <li>
+                        <a href="https://php-di.org/news/10-php-di-4-2-released.html">PHP-DI 4.2 released</a>
+                    </li>
+                    <li>
+                        <a href="https://php-di.org/news/09-php-di-4-1-released.html">PHP-DI 4.1 released</a>
+                    </li>
+                    <li>
+                        <a href="https://php-di.org/news/08-10000-installs.html">10.000 installs!</a>
+                    </li>
+                    <li>
+                        <a href="https://php-di.org/news/07-php-di-4-0-released.html">PHP-DI 4.0 released</a>
+                    </li>
+                    <li>
+                        <a href="https://php-di.org/news/06-php-di-4-0-new-definitions.html">What will change in PHP-DI 4: the new definition format</a>
+                    </li>
+                    <li>
+                        <a href="https://php-di.org/news/05-php-di-3-5.html">PHP-DI 3.5 released</a>
+                    </li>
+                    <li>
+                        <a href="https://php-di.org/news/04-php-di-3-4.html">PHP-DI 3.4 released</a>
+                    </li>
+                    <li>
+                        <a href="https://php-di.org/news/03-php-di-3-3.html">PHP-DI 3.3 released</a>
+                    </li>
+                    <li>
+                        <a href="https://php-di.org/news/02-php-di-3-2.html">PHP-DI 3.2 released</a>
+                    </li>
+                </ul>
+            </div>
+
+        </div>
+    </section>
+
+
+            <footer>
+            <div class='container'>
+                                    <p>
+                        A question? Unsatisfied with the documentation?
+                        <a href="https://github.com/PHP-DI/PHP-DI/issues/new">Open an issue</a>
+                        or chat on
+                        <a href="https://gitter.im/PHP-DI/PHP-DI" title="PHP-DI chat room">Gitter</a> or
+                        <a href="https://twitter.com/phpdi" title="PHP-DI on Twitter">Twitter</a>.
+                    </p>
+                                <p>
+                    <a href="https://twitter.com/share" class="twitter-share-button" data-related="PHPDI" data-dnt="true">Tweet</a>
+                    <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+                </p>
+                <p>
+                    By <a href="https://mnapoli.fr/" title="Software consulting and PHP news">Matthieu Napoli</a>
+                    and <a href="https://github.com/PHP-DI/PHP-DI/graphs/contributors" title="PHP-DI contributors">contributors</a>
+                    |
+                    Website generated with
+                    <a href="http://couscous.io" title="Static website generator for software documentation">Couscous</a>.
+                </p>
+                <p>
+                    Want to support my work? Check out
+                    <a href="https://serverless-visually-explained.com/?ref=php-di" title="Serverless course">Serverless Visually Explained</a>.
+                </p>
+            </div>
+        </footer>
+    
+                <script src="https://php-di.org/bower_components/jquery/dist/jquery.min.js"></script>
+        <script src="https://php-di.org/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+        <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.5/highlight.min.js"></script>
+
+        <script>
+            $(function() {
+                hljs.initHighlightingOnLoad();
+
+                // Add anchors to headers
+                $('article h2, article h3, article h4, article h5').each(function () {
+                    var url = document.URL.replace(/#.*$/, "") + '#' + $(this).attr('id');
+                    $(this).append(' <a class="anchor" href="' + url + '">#</a>');
+                });
+            });
+        </script>
+    
+
+    <script>
+        // Disqus comments
+        var disqus_shortname = 'phpdi';
+
+        (function() {
+            var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+            dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+        })();
+    </script>
+
+    <script>
+        var _gaq = _gaq || [];
+        _gaq.push(['_setAccount', 'UA-15584647-13']);
+        _gaq.push(['_trackPageview']);
+        (function() {
+            var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+            ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+            var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+        })();
+    </script>
+
+    <!-- Gitter -->
+    <script>
+        ((window.gitter = {}).chat = {}).options = {
+            room: 'PHP-DI/PHP-DI'
+        };
+    </script>
+    <script src="https://sidecar.gitter.im/dist/sidecar.v1.js" async defer></script>
+
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/docsearch.js/1/docsearch.min.js"></script>
+    <script type="text/javascript">
+        $(function () {
+            var search = docsearch({
+                apiKey: 'ef6af24cbacae1f85d3c44741df49167',
+                indexName: 'php-di',
+                inputSelector: '#search-input'
+            });
+            var delay = (function () {
+                var timer = 0;
+                return function (callback, ms) {
+                    clearTimeout(timer);
+                    timer = setTimeout(callback, ms);
+                };
+            })();
+            search.autocomplete.on('autocomplete:selected', function (e, suggestion) {
+                var articleTitle = suggestion.subcategory;
+                // Strip HTML tags
+                var div = document.createElement("div");
+                div.innerHTML = articleTitle;
+                articleTitle = div.textContent || div.innerText || "";
+                _gaq.push(['_trackEvent', 'search', 'click', articleTitle]);
+            });
+            $('#search-input').bind('input', function () {
+                var search = $(this).val();
+                if (search.length < 3) {
+                    return;
+                }
+                delay(function () {
+                    _gaq.push(['_trackPageview', '/search?q=' + search]);
+                }, 600);
+            });
+        });
+    </script>
+
+</body>
+</html>

@@ -125,6 +125,11 @@
                                     </a>
                                 </li>
                                                             <li class="">
+                                    <a href="https://php-di.org/doc/attributes.html">
+                                        PHP attributes
+                                    </a>
+                                </li>
+                                                            <li class="">
                                     <a href="https://php-di.org/doc/annotations.html">
                                         Annotations
                                     </a>
@@ -293,13 +298,13 @@
             </div>
 
             <h1 id="definition-extensions-and-overriding">Definition extensions and overriding</h1>
-<p>A simple application usually takes advantage of one or two <em>definition sources</em>: autowiring (or annotations) + a definition file/array.</p>
+<p>A simple application usually takes advantage of one or two <em>definition sources</em>: autowiring (with or without attributes) + a definition file/array.</p>
 <p>However in more complex applications or modular systems you might want to have multiple definition files (e.g. one per modules/bundles/plugins/…). In this case, PHP-DI provides a clear and powerful system to <strong>override and/or extend definitions</strong>.</p>
 <h2 id="priorities-of-definition-sources">Priorities of definition sources</h2>
 <p>From the lowest priority to the highest:</p>
 <ul>
 <li>autowiring if enabled</li>
-<li>annotations if enabled</li>
+<li>attributes if enabled</li>
 <li>PHP definitions (file or array) in the order they were added</li>
 <li>definitions added straight in the container with <code>$container-&gt;set()</code></li>
 </ul>
@@ -310,17 +315,17 @@
     {
     }
 }</code></pre>
-<p>PHP-DI would inject an instance of <code>Bar</code> using autowiring. Annotations have a higher priority, we can use it to override the definition:</p>
-<pre><code class="language-php">class Foo
+<p>PHP-DI would inject an instance of <code>Bar</code> using autowiring. Attributes have a higher priority, we can use it to override the definition:</p>
+<pre><code class="language-php">use DI\Attribute\Inject;
+
+class Foo
 {
-    /**
-     * @Inject({"my.specific.service"})
-     */
+    #[Inject(['my.specific.service'])]
     public function __construct(Bar $param1)
     {
     }
 }</code></pre>
-<p>You can go even further by overriding annotations and autowiring using file-based definitions:</p>
+<p>You can go even further by overriding attributes and autowiring using file-based definitions:</p>
 <pre><code class="language-php">return [
     'Foo' =&gt; DI\create()
         -&gt;constructor(DI\get('another.specific.service')),
@@ -330,7 +335,7 @@
 <h2 id="extending-definitions">Extending definitions</h2>
 <h3 id="objects">Objects</h3>
 <p><code>DI\create()</code> overrides completely any previous definition or even autowiring. It doesn't allow extending another definition. See the &quot;decorators&quot; section below if you want to do that.</p>
-<p>If an object is built using autowiring (or annotations), you can override specific parameters with <code>DI\autowire()</code>:</p>
+<p>If an object is built using autowiring (with or without attributes), you can override specific parameters with <code>DI\autowire()</code>:</p>
 <pre><code class="language-php">class Foo
 {
     public function __construct(Bar $param1, $param2)
@@ -366,6 +371,13 @@ return [
 ];</code></pre>
 <p>When resolved, the array will contain the 2 entries. <strong>If you forget to use <code>DI\add()</code>, the array will be overridden entirely!</strong></p>
 <p>Note that you can use <code>DI\add()</code> even if the array was not declared before.</p>
+<p>Adding to arrays in the DI definition does not work recursively, i.e. having an array entry that contains an array.</p>
+<pre><code class="language-php">return [
+    'array' =&gt; [
+        'subarray' =&gt; [DI\get(Entry::class)],
+    ],
+];</code></pre>
+<p>You cannot add elements to <code>subarray</code> using <code>DI\add()</code>.</p>
 <h3 id="decorators">Decorators</h3>
 <p>You can use <code>DI\decorate()</code> to decorate an object:</p>
 <pre><code class="language-php">return [

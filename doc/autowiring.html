@@ -125,6 +125,11 @@
                                     </a>
                                 </li>
                                                             <li class="">
+                                    <a href="https://php-di.org/doc/attributes.html">
+                                        PHP attributes
+                                    </a>
+                                </li>
+                                                            <li class="">
                                     <a href="https://php-di.org/doc/annotations.html">
                                         Annotations
                                     </a>
@@ -295,7 +300,7 @@
             <h1 id="autowiring">Autowiring</h1>
 <p><em>Autowiring</em> is an exotic word that represents something very simple: <strong>the ability of the container to automatically create and inject dependencies</strong>.</p>
 <p>In order to achieve that, PHP-DI uses <a href="http://php.net/manual/book.reflection.php">PHP's reflection</a> to detect what parameters a constructor needs.</p>
-<p>Autowiring does not affect performances when <a href="performances.html">compiling the container</a>.</p>
+<p>Autowiring does not affect performance when <a href="performances.html">compiling the container</a>.</p>
 <p>Let's take this example:</p>
 <pre><code class="language-php">class UserRepository
 {
@@ -309,7 +314,7 @@ class UserRegistrationService
         // ...
     }
 }</code></pre>
-<p>When PHP-DI needs to create the <code>UserRegistrationService</code>, it detects that the constructor takes a <code>UserRepository</code> object (using the <a href="http://www.php.net/manual/en/functions.arguments.php#functions.arguments.type-declaration">type hinting</a>).</p>
+<p>When PHP-DI needs to create the <code>UserRegistrationService</code>, it detects that the constructor takes a <code>UserRepository</code> object (using the <a href="http://www.php.net/manual/en/functions.arguments.php#functions.arguments.type-declaration">type declarations</a>).</p>
 <p><strong>Without any configuration</strong>, PHP-DI will create a <code>UserRepository</code> instance (if it wasn't already created) and pass it as a constructor parameter. The equivalent raw PHP code would be:</p>
 <pre><code class="language-php">$repository = new UserRepository();
 $service = new UserRegistrationService($repository);</code></pre>
@@ -336,6 +341,9 @@ $service = new UserRegistrationService($repository);</code></pre>
 <li><code>setLogger()</code> will not be called</li>
 </ul>
 <p>For those classes, you will need to use <code>DI\autowire()</code> in <a href="php-definitions.html">PHP definitions</a> to declare explicitly what to inject.</p>
+<p>PHP-DI is also unable to use Reflection on any PHP-internal classes like such that provide access to extension capabilities.
+Examples include <code>Memcached</code>, <code>Gearman</code>, any <code>Curl*</code> classes, anything from the SPL classes like <code>RecursiveIteratorIterator</code>, and so on.
+If you want to instantiate any class provided by the PHP engine or an extension, you have to provide explicit constructor parameters to PHP-DI.</p>
         </article>
 
     </div>

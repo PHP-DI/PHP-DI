@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>
+<html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>
+<html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>
+<html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!-->
+<html class="no-js"> <!--<![endif]-->
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>PHP-DI - The Dependency Injection Container for humans</title>
+    <meta name="description" content="PHP-DI is a Dependency Injection Container for PHP that intends to be practical and powerful.">
+
+    <link rel="canonical" href="https://php-di.org" />
+
+    <meta name="application-name" content="PHP-DI"/>
+    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="https://php-di.org/img/apple-touch-icon-144x144.png" />
+    <link rel="apple-touch-icon-precomposed" sizes="152x152" href="https://php-di.org/img/apple-touch-icon-152x152.png" />
+    <link rel="icon" type="image/png" href="https://php-di.org/img/favicon-32x32.png" sizes="32x32" />
+    <link rel="icon" type="image/png" href="https://php-di.org/img/favicon-16x16.png" sizes="16x16" />
+    <meta name="msapplication-TileColor" content="#484949" />
+    <meta name="msapplication-TileImage" content="https://php-di.org/img/mstile-144x144.png" />
+
+            <link href="https://fonts.googleapis.com/css?family=Abel:400|Oswald:300,400,700" media="all" rel="stylesheet" type="text/css">
+        <link href="https://cdn.jsdelivr.net/docsearch.js/1/docsearch.min.css" rel="stylesheet">
+        <link href="https://php-di.org/css/highlight.github.css" rel="stylesheet">
+        <link href="https://php-di.org/css/all.min.css" rel="stylesheet">
+    
+    <script async defer data-domain="php-di.org" src="https://plausible.io/js/plausible.js"></script>
+</head>
+<body>
+
+    <header>
+        <div class="navbar navbar-default navbar-fixed-top">
+            <div class="container">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#top-navigation">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand" href="https://php-di.org/" title="Dependency injection container for PHP">PHP-DI</a>
+                </div>
+                <div class="navbar-form navbar-left hidden-xs hidden-sm">
+                    <input id="search-input" type="text" class="form-control" placeholder="Search...">
+                </div>
+                <div class="collapse navbar-collapse" id="top-navigation">
+                    <ul class="nav navbar-nav navbar-right">
+                        <li><a href="https://php-di.org/doc/getting-started.html" title="Getting started with PHP-DI">Getting started</a></li>
+                        <li><a href="https://php-di.org/doc/" title="PHP-DI documentation">Documentation</a></li>
+                        <li><a href="https://php-di.org/support.html" title="Enterprise support for PHP-DI">For Enterprise</a></li>
+                        <li><a href="https://php-di.org/news/" title="News about PHP-DI">News</a></li>
+                        <li><a href="https://php-di.org/change-log.html" title="PHP-DI's changelog">Changelog</a></li>
+                        <li><a class="github" href="https://github.com/PHP-DI/PHP-DI" title="PHP-DI on GitHub"><i class="fa fa-github"></i></a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    
+    <div class="container documentation">
+
+        <div class="sidebar">
+            <ul>
+                                    <li>
+                        <span class="section-title">Introduction</span>
+
+                        <ul>
+                                                            <li class="">
+                                    <a href="https://php-di.org/doc/getting-started.html">
+                                        Getting started
+                                    </a>
+                                </li>
+                                                            <li class="">
+                                    <a href="https://php-di.org/doc/understanding-di.html">
+                                        Understanding dependency injection
+                                    </a>
+                                </li>
+                                                            <li class="">
+                                    <a href="https://php-di.org/doc/best-practices.html">
+                                        "Best practices" guide
+                                    </a>
+                                </li>
+                                                    </ul>
+                    </li>
+                                    <li>
+                        <span class="section-title">Usage</span>
+
+                        <ul>
+                                                            <li class="">
+                                    <a href="https://php-di.org/doc/container-configuration.html">
+                                        Configuring the container
+                                    </a>
+                                </li>
+                                                            <li class="">
+                                    <a href="https://php-di.org/doc/container.html">
+                                        Using the container
+                                    </a>
+                                </li>
+                                                    </ul>
+                    </li>
+                                    <li>
+                        <span class="section-title">Definitions</span>
+
+                        <ul>
+                                                            <li class="">
+                                    <a href="https://php-di.org/doc/definition.html">
+                                        Introduction
+                                    </a>
+                                </li>
+                                                            <li class="">
+                                    <a href="https://php-di.org/doc/autowiring.html">
+                                        Autowiring
+                                    </a>
+                                </li>
+                                                            <li class="">
+                                    <a href="https://php-di.org/doc/php-definitions.html">
+                                        PHP definitions
+                                    </a>
+                                </li>
+                                                            <li class="active">
+                                    <a href="https://php-di.org/doc/attributes.html">
+                                        PHP attributes
+                                    </a>
+                                </li>
+                                                            <li class="">
+                                    <a href="https://php-di.org/doc/annotations.html">
+                                        Annotations
+                                    </a>
+                                </li>
+                                                            <li class="">
+                                    <a href="https://php-di.org/doc/definition-overriding.html">
+                                        Definition extensions and overriding
+                                    </a>
+                                </li>
+                                                    </ul>
+                    </li>
+                                    <li>
+                        <span class="section-title">Frameworks</span>
+
+                        <ul>
+                                                            <li class="">
+                                    <a href="https://php-di.org/doc/frameworks/slim.html">
+                                        Slim
+                                    </a>
+                                </li>
+                                                            <li class="">
+                                    <a href="https://php-di.org/doc/frameworks/symfony2.html">
+                                        Symfony
+                                    </a>
+                                </li>
+                                                            <li class="">
+                                    <a href="https://php-di.org/doc/frameworks/zf2.html">
+                                        Zend Framework 2
+                                    </a>
+                                </li>
+                                                            <li class="">
+                                    <a href="https://php-di.org/doc/frameworks/zf1.html">
+                                        Zend Framework 1
+                                    </a>
+                                </li>
+                                                            <li class="">
+                                    <a href="https://php-di.org/doc/frameworks/zend-expressive.html">
+                                        Zend Expressive
+                                    </a>
+                                </li>
+                                                            <li class="">
+                                    <a href="https://php-di.org/doc/frameworks/silly.html">
+                                        Silly
+                                    </a>
+                                </li>
+                                                            <li class="">
+                                    <a href="https://php-di.org/doc/frameworks/silex.html">
+                                        Silex
+                                    </a>
+                                </li>
+                                                            <li class="">
+                                    <a href="https://github.com/PHP-DI/demo">
+                                        Demo application
+                                    </a>
+                                </li>
+                                                    </ul>
+                    </li>
+                                    <li>
+                        <span class="section-title">Advanced topics</span>
+
+                        <ul>
+                                                            <li class="">
+                                    <a href="https://php-di.org/doc/performances.html">
+                                        Performances
+                                    </a>
+                                </li>
+                                                            <li class="">
+                                    <a href="https://php-di.org/doc/lazy-injection.html">
+                                        Lazy injection
+                                    </a>
+                                </li>
+                                                            <li class="">
+                                    <a href="https://php-di.org/doc/inject-on-instance.html">
+                                        Inject on an existing instance
+                                    </a>
+                                </li>
+                                                            <li class="">
+                                    <a href="https://php-di.org/doc/environments.html">
+                                        Injections depending on the environment
+                                    </a>
+                                </li>
+                                                            <li class="">
+                                    <a href="https://php-di.org/doc/ide-integration.html">
+                                        IDE integration
+                                    </a>
+                                </li>
+                                                    </ul>
+                    </li>
+                                    <li>
+                        <span class="section-title">Migration guides</span>
+
+                        <ul>
+                                                            <li class="">
+                                    <a href="https://php-di.org/doc/migration/4.0.html">
+                                        From PHP-DI 3.x to 4.0
+                                    </a>
+                                </li>
+                                                            <li class="">
+                                    <a href="https://php-di.org/doc/migration/5.0.html">
+                                        From PHP-DI 4.x to 5.0
+                                    </a>
+                                </li>
+                                                            <li class="">
+                                    <a href="https://php-di.org/doc/migration/6.0.html">
+                                        From PHP-DI 5.x to 6.0
+                                    </a>
+                                </li>
+                                                    </ul>
+                    </li>
+                                    <li>
+                        <span class="section-title">Support</span>
+
+                        <ul>
+                                                            <li class="">
+                                    <a href="https://php-di.org/support.html">
+                                        Enterprise support
+                                    </a>
+                                </li>
+                                                    </ul>
+                    </li>
+                                    <li>
+                        <span class="section-title">Internals</span>
+
+                        <ul>
+                                                            <li class="">
+                                    <a href="https://php-di.org/contributing.html">
+                                        Contributing
+                                    </a>
+                                </li>
+                                                            <li class="">
+                                    <a href="https://php-di.org/doc/how-it-works.html">
+                                        How PHP-DI works
+                                    </a>
+                                </li>
+                                                    </ul>
+                    </li>
+                                    <li>
+                        <span class="section-title">Old documentation</span>
+
+                        <ul>
+                                                            <li class="">
+                                    <a href="https://github.com/PHP-DI/PHP-DI/tree/3.x/doc">
+                                        PHP-DI 3.x
+                                    </a>
+                                </li>
+                                                            <li class="">
+                                    <a href="https://github.com/PHP-DI/PHP-DI/tree/4.x/doc">
+                                        PHP-DI 4.x
+                                    </a>
+                                </li>
+                                                            <li class="">
+                                    <a href="https://github.com/PHP-DI/PHP-DI/tree/5.4/doc">
+                                        PHP-DI 5.x
+                                    </a>
+                                </li>
+                                                    </ul>
+                    </li>
+                            </ul>
+        </div>
+
+        <article>
+            <div class="pull-right">
+                <a href="https://github.com/PHP-DI/PHP-DI/blob/master/doc/attributes.md" class="btn btn-default btn-sm" title="Fork PHP-DI and improve the documentation via a pull request">
+                    Edit this page on GitHub
+                </a>
+            </div>
+
+            <h1 id="attributes">Attributes</h1>
+<p>On top of <a href="autowiring.html">autowiring</a> and <a href="php-definitions.html">PHP configuration files</a>, you can define injections using PHP 8 attributes.</p>
+<p>Using attributes do not affect performances when <a href="performances.html">compiling the container</a>. For a non-compiled container, the PHP reflection is used but the overhead is minimal.</p>
+<h2 id="setup">Setup</h2>
+<p>Enable attributes <a href="container-configuration.html">via the <code>ContainerBuilder</code></a>:</p>
+<pre><code class="language-php">$containerBuilder-&gt;useAttributes(true);</code></pre>
+<h2 id="inject">Inject</h2>
+<p><code>#[Inject]</code> lets you define where PHP-DI should inject something, and optionally what it should inject.</p>
+<p>It can be used on:</p>
+<ul>
+<li>the constructor (constructor injection)</li>
+<li>methods (setter/method injection)</li>
+<li>properties (property injection)</li>
+</ul>
+<p><em>Note: property injections occur after the constructor is executed, so any injectable property will be null inside <code>__construct</code>.</em></p>
+<p><strong>Note: <code>#[Inject]</code> ignores types declared in phpdoc. Only types specified in PHP code are considered.</strong></p>
+<p>Here is an example of all possible uses of the <code>#[Inject]</code> attribute:</p>
+<pre><code class="language-php">use DI\Attribute\Inject;
+
+class Example
+{
+    /**
+     * Attribute combined with a type on the property:
+     */
+    #[Inject]
+    private Foo $property1;
+
+    /**
+     * Explicit definition of the entry to inject:
+     */
+    #[Inject('db.host')]
+    private $property2;
+
+    /**
+     * Alternative to the above:
+     */
+    #[Inject(name: 'db.host')]
+    private $property3;
+
+    /**
+     * The constructor is of course always called, but the
+     * #[Inject] attribute can be used on a parameter
+     * to specify what to inject.
+     */
+    public function __construct(Foo $foo, #[Inject('db.host')] $dbHost)
+    {
+    }
+
+    /**
+     * #[Inject] tells PHP-DI to call the method.
+     * By default, PHP-DI uses the PHP types to find the service to inject:
+     */
+    #[Inject]
+    public function method1(Foo $param)
+    {
+    }
+
+    /**
+     * #[Inject] can be used at the parameter level to
+     * specify what to inject.
+     * Note: #[Inject] *must be place* on the function too.
+     */
+    #[Inject]
+    public function method2(#[Inject('db.host')] $param)
+    {
+    }
+
+    /**
+     * Explicit definition of the entries to inject:
+     */
+    #[Inject(['db.host', 'db.name'])]
+    public function method3($param1, $param2)
+    {
+    }
+
+    /**
+     * Explicit definition of parameters by their name
+     * (types are used for the other parameters):
+     */
+    #[Inject(['param2' =&gt; 'db.host'])]
+    public function method4(Foo $param1, $param2)
+    {
+    }
+}</code></pre>
+<p><em>Note: remember to import the attribute class via <code>use DI\Attribute\Inject;</code>.</em></p>
+<h3 id="troubleshooting-attributes">Troubleshooting attributes</h3>
+<ul>
+<li>remember to import the attribute class via <code>use DI\Attribute\Inject;</code></li>
+<li><code>#[Inject]</code> is not meant to be used on the method to call with <a href="container.html#call"><code>Container::call()</code></a> (it will be ignored)</li>
+<li><code>#[Inject]</code> ignores types declared in phpdoc. Only types specified in PHP code are considered.</li>
+</ul>
+<p>Note that <code>#[Inject]</code> is implicit on all constructors (because constructors must be called to create an object).</p>
+<h2 id="injectable">Injectable</h2>
+<p>The <code>#[Injectable]</code> attribute lets you set options on injectable classes:</p>
+<pre><code class="language-php">use DI\Attribute\Injectable;
+
+#[Injectable(lazy: true)]
+class Example
+{
+}</code></pre>
+<p><strong>The <code>#[Injectable]</code> attribute is optional: by default, all classes are injectable.</strong></p>
+<h2 id="limitations">Limitations</h2>
+<p>There are things that can't be defined with attributes:</p>
+<ul>
+<li>values (instead of classes)</li>
+<li>mapping interfaces to implementations</li>
+<li>defining entries with an anonymous function</li>
+</ul>
+<p>For that, you can combine attributes with <a href="php-definitions.html">definitions in PHP</a>.</p>
+        </article>
+
+    </div>
+
+
+            <footer>
+            <div class='container'>
+                                    <p>
+                        A question? Unsatisfied with the documentation?
+                        <a href="https://github.com/PHP-DI/PHP-DI/issues/new">Open an issue</a>
+                        or chat on
+                        <a href="https://gitter.im/PHP-DI/PHP-DI" title="PHP-DI chat room">Gitter</a> or
+                        <a href="https://twitter.com/phpdi" title="PHP-DI on Twitter">Twitter</a>.
+                    </p>
+                                <p>
+                    <a href="https://twitter.com/share" class="twitter-share-button" data-related="PHPDI" data-dnt="true">Tweet</a>
+                    <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+                </p>
+                <p>
+                    By <a href="https://mnapoli.fr/" title="Software consulting and PHP news">Matthieu Napoli</a>
+                    and <a href="https://github.com/PHP-DI/PHP-DI/graphs/contributors" title="PHP-DI contributors">contributors</a>
+                    |
+                    Website generated with
+                    <a href="http://couscous.io" title="Static website generator for software documentation">Couscous</a>.
+                </p>
+                <p>
+                    Want to support my work? Check out
+                    <a href="https://serverless-visually-explained.com/?ref=php-di" title="Serverless course">Serverless Visually Explained</a>.
+                </p>
+            </div>
+        </footer>
+    
+            <script src="https://php-di.org/bower_components/jquery/dist/jquery.min.js"></script>
+        <script src="https://php-di.org/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+        <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.5/highlight.min.js"></script>
+
+        <script>
+            $(function() {
+                hljs.initHighlightingOnLoad();
+
+                // Add anchors to headers
+                $('article h2, article h3, article h4, article h5').each(function () {
+                    var url = document.URL.replace(/#.*$/, "") + '#' + $(this).attr('id');
+                    $(this).append(' <a class="anchor" href="' + url + '">#</a>');
+                });
+            });
+        </script>
+    
+    <script>
+        var _gaq = _gaq || [];
+        _gaq.push(['_setAccount', 'UA-15584647-13']);
+        _gaq.push(['_trackPageview']);
+        (function() {
+            var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+            ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+            var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+        })();
+    </script>
+
+    <!-- Gitter -->
+    <script>
+        ((window.gitter = {}).chat = {}).options = {
+            room: 'PHP-DI/PHP-DI'
+        };
+    </script>
+    <script src="https://sidecar.gitter.im/dist/sidecar.v1.js" async defer></script>
+
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/docsearch.js/1/docsearch.min.js"></script>
+    <script type="text/javascript">
+        $(function () {
+            var search = docsearch({
+                apiKey: 'ef6af24cbacae1f85d3c44741df49167',
+                indexName: 'php-di',
+                inputSelector: '#search-input'
+            });
+            var delay = (function () {
+                var timer = 0;
+                return function (callback, ms) {
+                    clearTimeout(timer);
+                    timer = setTimeout(callback, ms);
+                };
+            })();
+            search.autocomplete.on('autocomplete:selected', function (e, suggestion) {
+                var articleTitle = suggestion.subcategory;
+                // Strip HTML tags
+                var div = document.createElement("div");
+                div.innerHTML = articleTitle;
+                articleTitle = div.textContent || div.innerText || "";
+                _gaq.push(['_trackEvent', 'search', 'click', articleTitle]);
+            });
+            $('#search-input').bind('input', function () {
+                var search = $(this).val();
+                if (search.length < 3) {
+                    return;
+                }
+                delay(function () {
+                    _gaq.push(['_trackPageview', '/search?q=' + search]);
+                }, 600);
+            });
+        });
+    </script>
+
+</body>
+</html>

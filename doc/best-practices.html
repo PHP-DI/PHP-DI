@@ -125,6 +125,11 @@
                                     </a>
                                 </li>
                                                             <li class="">
+                                    <a href="https://php-di.org/doc/attributes.html">
+                                        PHP attributes
+                                    </a>
+                                </li>
+                                                            <li class="">
                                     <a href="https://php-di.org/doc/annotations.html">
                                         Annotations
                                     </a>
@@ -323,13 +328,11 @@ the way you want.</p>
 </ul>
 <p>This is the solution we recommend.</p>
 <p>Example:</p>
-<pre><code class="language-php">class UserController
+<pre><code class="language-php">
+class UserController
 {
-    /**
-     * @Inject
-     * @var FormFactoryInterface
-     */
-    private $formFactory;
+    #[Inject]
+    private FormFactoryInterface $formFactory;
 
     public function createForm($type, $data, $options)
     {
@@ -342,7 +345,7 @@ the way you want.</p>
 <ul>
 <li>injecting in a private property breaks encapsulation</li>
 <li>it is not an explicit dependency: there is no contract saying your class need the property to be set to work</li>
-<li>if you use PHP-DI's annotations to mark the dependency to be injected, your class is dependent on the container (see the 2nd rule above)</li>
+<li>if you use PHP-DI's attributes to mark the dependency to be injected, your class is dependent on the container (see the 2nd rule above)</li>
 </ul>
 <p>BUT</p>
 <p>if you follow general best practices on how to write your application, your controllers
@@ -355,10 +358,10 @@ will not contain business logic (only routing calls to the models and binding re
 (because most dependencies like Request, Response, templating system, etc. will have changed)</li>
 </ul>
 <p>This solution offers many benefits for no major drawback, so
-<strong>we recommend using annotations in controllers</strong>.</p>
+<strong>we recommend using attributes in controllers</strong>.</p>
 <h2 id="writing-services">Writing services</h2>
 <p>Given a service is intended to be reused, tested and independent of your framework, <strong>we do not recommend
-using annotations for injecting dependencies</strong>.</p>
+using attributes for injecting dependencies</strong>.</p>
 <p>Instead, we recommend using <strong>constructor injection and autowiring</strong>:</p>
 <pre><code class="language-php">class OrderService implements OrderServiceInterface
 {

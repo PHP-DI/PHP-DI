@@ -125,6 +125,11 @@
                                     </a>
                                 </li>
                                                             <li class="">
+                                    <a href="https://php-di.org/doc/attributes.html">
+                                        PHP attributes
+                                    </a>
+                                </li>
+                                                            <li class="">
                                     <a href="https://php-di.org/doc/annotations.html">
                                         Annotations
                                     </a>
@@ -293,10 +298,14 @@
             </div>
 
             <h1 id="configuring-the-container">Configuring the container</h1>
-<h2 id="development-environment">Development environment</h2>
-<p>PHP-DI's container is preconfigured for &quot;plug and play&quot;, i.e. development environment. You can start using it simply like so:</p>
+<h2 id="getting-started">Getting started</h2>
+<p>PHP-DI's container is preconfigured for &quot;plug and play&quot;. You can start using it simply like so:</p>
 <pre><code class="language-php">$container = new Container();</code></pre>
-<p>By default, PHP-DI will have <a href="definition.html">Autowiring</a> enabled (<a href="annotations.html">annotations</a> are disabled by default).</p>
+<p>By default, <a href="definition.html">Autowiring</a> will be enabled. <a href="attributes.html">Attributes</a> are disabled by default.</p>
+<p>To register <a href="php-definitions.html">definitions using an array</a>:</p>
+<pre><code class="language-php">$container = new DI\Container([
+    // place your definitions here
+]);</code></pre>
 <p>To change options on the container you can use the <code>ContainerBuilder</code> class:</p>
 <pre><code class="language-php">$builder = new \DI\ContainerBuilder();
 $container = $builder-&gt;build();</code></pre>
@@ -312,7 +321,7 @@ $container = $builder-&gt;build();</code></pre>
 <p>If you want to use PHP-DI's container as a simple container (no autowiring or annotation support), you will want to disable all extra features.</p>
 <pre><code class="language-php">$builder = new \DI\ContainerBuilder();
 $builder-&gt;useAutowiring(false);
-$builder-&gt;useAnnotations(false);
+$builder-&gt;useAttributes(false);
 
 $container = $builder-&gt;build();</code></pre>
 <p>Note that this doesn't necessarily means that the container will be faster, since everything can be cached anyway.
@@ -338,26 +347,6 @@ $container-&gt;addContainer($phpdiContainer);
 
 // Good to go!
 $foo = $container-&gt;get('foo');</code></pre>
-<h2 id="ignoring-phpdoc-errors">Ignoring phpDoc errors</h2>
-<p><em>Added in v4.4</em></p>
-<p>If you use annotations and your phpDoc is not always correct, you can set up the container to silently ignore those errors:</p>
-<pre><code class="language-php">$builder-&gt;ignorePhpDocErrors(true);</code></pre>
-<p>For example:</p>
-<pre><code class="language-php">class Foo
-{
-    /**
-     * @param NonExistentClass $param
-     */
-    public function useAutowiring($param)
-    {
-    }
-}</code></pre>
-<p>Here, PHP-DI will throw an exception because <code>NonExistentClass</code> doesn't exist: this is a phpDoc error.</p>
-<p>There has been reports that PHP-FPM might choke on such errors and report it with a message like this:</p>
-<blockquote>
-<p>Handler for fastcgi-script returned invalid result code 1</p>
-</blockquote>
-<p>In case the errors still occur, make sure your annotations are correct or temporarily disable annotations (<code>$builder-&gt;useAnnotations(false)</code>) to prevent fatal errors and try to clean up your configuration form there.</p>
         </article>
 
     </div>
