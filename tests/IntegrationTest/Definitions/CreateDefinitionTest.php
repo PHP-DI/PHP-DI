@@ -18,6 +18,7 @@ use DI\Test\IntegrationTest\Definitions\ObjectDefinition\Class3;
 use ProxyManager\Proxy\LazyLoadingInterface;
 use function DI\create;
 use function DI\get;
+use DI\Definition\Exception\InvalidDefinition;
 
 /**
  * Test object definitions.
@@ -186,7 +187,7 @@ class CreateDefinitionTest extends BaseContainerTest
      */
     public function test_does_not_trigger_autowiring(ContainerBuilder $builder)
     {
-        $this->expectException('DI\Definition\Exception\InvalidDefinition');
+        $this->expectException(InvalidDefinition::class);
         $this->expectExceptionMessage('Parameter $parameter of __construct() has no value defined or guessable');
         $builder->useAutowiring(true);
         $builder->addDefinitions([

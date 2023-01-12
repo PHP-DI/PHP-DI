@@ -18,7 +18,7 @@ Install PHP-DI with [Composer](http://getcomposer.org/doc/00-intro.md):
 composer require php-di/php-di
 ```
 
-PHP-DI requires PHP 7.2 or above.
+PHP-DI 7 requires PHP 8.0 or above.
 
 ## Basic usage
 
@@ -107,7 +107,7 @@ Don't worry, PHP-DI uses [PHP's Reflection classes](http://php.net/manual/en/boo
 We have seen **autowiring**, which is when PHP-DI figures out automatically the dependencies a class needs. But we have 3 ways to define what to inject in a class:
 
 - using [autowiring](autowiring.md)
-- using [annotations](annotations.md)
+- using [attributes](attributes.md)
 - using [PHP definitions](php-definitions.md)
 
 Every one of them is different and optional. Here is an example of PHP definitions in a file:
@@ -123,7 +123,7 @@ return [
 ];
 ```
 
-Please read the [Defining injections](definition.md) documentation to learn about autowiring, annotations and PHP definitions.
+Please read the [Defining injections](definition.md) documentation to learn about autowiring, attributes and PHP definitions.
 
 ## Framework integration
 

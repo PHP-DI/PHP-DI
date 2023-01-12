@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace DI\Test\IntegrationTest;
 
 use DI\ContainerBuilder;
+use Invoker\Exception\NotCallableException;
+use Invoker\Exception\NotEnoughParametersException;
 
 /**
  * Tests the call() method from the container.
@@ -149,7 +151,7 @@ class ContainerCallTest extends BaseContainerTest
      */
     public function creates_and_calls_class_methods_using_container(ContainerBuilder $builder)
     {
-        $class = __NAMESPACE__ . '\TestClass';
+        $class = TestClass::class;
         $result = $builder->build()->call([$class, 'foo']);
         $this->assertEquals(42, $result);
     }
@@ -160,7 +162,7 @@ class ContainerCallTest extends BaseContainerTest
      */
     public function calls_static_methods(ContainerBuilder $builder)
     {
-        $class = __NAMESPACE__ . '\TestClass';
+        $class = TestClass::class;
         $result = $builder->build()->call([$class, 'bar']);
         $this->assertEquals(24, $result);
     }
@@ -171,7 +173,7 @@ class ContainerCallTest extends BaseContainerTest
      */
     public function calls_invokable_object(ContainerBuilder $builder)
     {
-        $class = __NAMESPACE__ . '\CallableTestClass';
+        $class = CallableTestClass::class;
         $result = $builder->build()->call(new $class);
         $this->assertEquals(42, $result);
     }
@@ -182,7 +184,7 @@ class ContainerCallTest extends BaseContainerTest
      */
     public function creates_and_calls_invokable_objects_using_container(ContainerBuilder $builder)
     {
-        $result = $builder->build()->call(__NAMESPACE__ . '\CallableTestClass');
+        $result = $builder->build()->call(CallableTestClass::class);
         $this->assertEquals(42, $result);
     }
 
@@ -203,7 +205,7 @@ class ContainerCallTest extends BaseContainerTest
      */
     public function test_not_enough_parameters(ContainerBuilder $builder)
     {
-        $this->expectException('Invoker\Exception\NotEnoughParametersException');
+        $this->expectException(NotEnoughParametersException::class);
         $this->expectExceptionMessage('Unable to invoke the callable because no value was given for parameter 1 ($foo)');
         $builder->build()->call(function ($foo) {
         });
@@ -214,7 +216,7 @@ class ContainerCallTest extends BaseContainerTest
      */
     public function test_not_callable(ContainerBuilder $builder)
     {
-        $this->expectException('Invoker\Exception\NotCallableException');
+        $this->expectException(NotCallableException::class);
         $this->expectExceptionMessage('\'foo\' is neither a callable nor a valid container entry');
         $builder->build()->call('foo');
     }

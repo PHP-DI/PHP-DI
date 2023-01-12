@@ -4,18 +4,15 @@ declare(strict_types=1);
 
 namespace DI\Test\IntegrationTest\Fixtures;
 
-use DI\Annotation\Injectable;
+use DI\Attribute\Injectable;
 
 /**
  * Fixture class.
- * @Injectable(lazy=true)
  */
+#[Injectable(lazy: true)]
 class LazyDependency
 {
-    /**
-     * @return bool
-     */
-    public function getValue()
+    public function getValue(): bool
     {
         return true;
     }

@@ -14,7 +14,7 @@ use PHPUnit\Framework\TestCase;
  */
 abstract class BaseContainerTest extends TestCase
 {
-    const COMPILATION_DIR = __DIR__ . '/tmp';
+    public const COMPILATION_DIR = __DIR__ . '/tmp';
 
     public static function setUpBeforeClass(): void
     {
@@ -50,7 +50,7 @@ abstract class BaseContainerTest extends TestCase
         ];
     }
 
-    protected static function generateCompiledClassName()
+    protected static function generateCompiledClassName(): string
     {
         return 'Container' . uniqid();
     }
@@ -64,7 +64,6 @@ abstract class BaseContainerTest extends TestCase
             return;
         }
 
-        /** @noinspection PhpUndefinedFieldInspection */
         $compiledEntries = $container::METHOD_MAPPING;
         self::assertArrayHasKey($entry, $compiledEntries, "Entry $entry is not compiled");
     }
@@ -78,7 +77,6 @@ abstract class BaseContainerTest extends TestCase
             return;
         }
 
-        /** @noinspection PhpUndefinedFieldInspection */
         $compiledEntries = $container::METHOD_MAPPING;
         self::assertArrayNotHasKey($entry, $compiledEntries, "Entry $entry is compiled");
     }

@@ -39,7 +39,7 @@ class FactoryDefinitionTest extends BaseContainerTest
         $this->assertEquals('bar', $container->get('factory'));
     }
 
-    public function provideCallables()
+    public function provideCallables(): array
     {
         $callables = [
             'closure' => function () {
@@ -531,7 +531,7 @@ class FactoryDefinitionTest extends BaseContainerTest
         $builder->build();
     }
 
-    private function foo()
+    private function foo(): string
     {
         return 'hello';
     }
@@ -617,7 +617,9 @@ class FactoryDefinitionTest extends BaseContainerTest
     public function test_fn_closures_compilation_is_supported()
     {
         $builder = (new ContainerBuilder)->enableCompilation(self::COMPILATION_DIR, self::generateCompiledClassName());
-        $builder->addDefinitions(__DIR__ . '/FactoryDefinition/fn.inc');
+        $builder->addDefinitions([
+            'factory' => fn () => new stdClass(),
+        ]);
         $container = $builder->build();
 
         self::assertEntryIsCompiled($container, 'factory');

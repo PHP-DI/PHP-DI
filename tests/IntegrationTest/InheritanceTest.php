@@ -22,7 +22,7 @@ class InheritanceTest extends BaseContainerTest
     public function test_dependency_is_injected_if_injection_defined_on_parent_class_with_config(ContainerBuilder $builder)
     {
         $builder->useAutowiring(false);
-        $builder->useAnnotations(false);
+        $builder->useAttributes(false);
         $builder->addDefinitions([
             Dependency::class => \DI\create(),
             BaseClass::class => \DI\create(SubClass::class)
@@ -51,10 +51,10 @@ class InheritanceTest extends BaseContainerTest
      *
      * @dataProvider provideContainer
      */
-    public function test_dependency_is_injected_if_injection_defined_on_parent_class_with_annotations(ContainerBuilder $builder)
+    public function test_dependency_is_injected_if_injection_defined_on_parent_class_with_attributes(ContainerBuilder $builder)
     {
         $builder->useAutowiring(true);
-        $builder->useAnnotations(true);
+        $builder->useAttributes(true);
         $builder->addDefinitions([
             BaseClass::class => \DI\get(SubClass::class),
         ]);
@@ -76,7 +76,7 @@ class InheritanceTest extends BaseContainerTest
     public function test_dependency_is_injected_if_injection_defined_on_base_class_with_config(ContainerBuilder $builder)
     {
         $builder->useAutowiring(false);
-        $builder->useAnnotations(false);
+        $builder->useAttributes(false);
         $builder->addDefinitions([
             Dependency::class => \DI\create(),
             BaseClass::class => \DI\create(SubClass::class)
@@ -105,10 +105,10 @@ class InheritanceTest extends BaseContainerTest
      *
      * @dataProvider provideContainer
      */
-    public function test_dependency_is_injected_if_injection_defined_on_base_class_with_annotations(ContainerBuilder $builder)
+    public function test_dependency_is_injected_if_injection_defined_on_base_class_with_attributes(ContainerBuilder $builder)
     {
         $builder->useAutowiring(true);
-        $builder->useAnnotations(true);
+        $builder->useAttributes(true);
         $builder->addDefinitions([
             BaseClass::class => \DI\get(SubClass::class),
         ]);

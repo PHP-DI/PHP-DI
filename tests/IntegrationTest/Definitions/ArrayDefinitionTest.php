@@ -225,10 +225,3 @@ class ArrayDefinitionTest extends BaseContainerTest
         $this->assertEquals('value 1', $array[0]);
     }
 }
-
-namespace DI\Test\IntegrationTest\Definitions\ArrayDefinitionTest;
-
-class SimpleClass
-{
-    public $dependency;
-}

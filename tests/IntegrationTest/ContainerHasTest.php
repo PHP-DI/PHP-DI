@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace DI\Test\IntegrationTest;
 
 use DI\ContainerBuilder;
-use stdClass;
 
 /**
  * Tests the has() method from the container.
@@ -41,16 +40,5 @@ class ContainerHasTest extends BaseContainerTest
     public function test_has_not(ContainerBuilder $builder)
     {
         self::assertFalse($builder->build()->has('wow'));
-    }
-
-    /**
-     * @test
-     * @dataProvider provideContainer
-     */
-    public function fails_with_non_string_parameter(ContainerBuilder $builder)
-    {
-        $this->expectException('InvalidArgumentException');
-        $this->expectExceptionMessage('The name parameter must be of type string');
-        $builder->build()->has(new stdClass);
     }
 }

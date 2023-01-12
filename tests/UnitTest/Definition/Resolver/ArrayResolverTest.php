@@ -12,6 +12,7 @@ use DI\Definition\Resolver\DefinitionResolver;
 use EasyMock\EasyMock;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use DI\DependencyException;
 
 /**
  * @covers \DI\Definition\Resolver\ArrayResolver
@@ -20,15 +21,9 @@ class ArrayResolverTest extends TestCase
 {
     use EasyMock;
 
-    /**
-     * @var DefinitionResolver|MockObject
-     */
-    private $parentResolver;
+    private MockObject|DefinitionResolver $parentResolver;
 
-    /**
-     * @var ArrayResolver
-     */
-    private $resolver;
+    private ArrayResolver $resolver;
 
     public function setUp(): void
     {
@@ -94,7 +89,7 @@ class ArrayResolverTest extends TestCase
      */
     public function should_throw_with_a_nice_message()
     {
-        $this->expectException('DI\DependencyException');
+        $this->expectException(DependencyException::class);
         $this->expectExceptionMessage('Error while resolving foo[0]. This is a message');
         $this->parentResolver->expects($this->once())
             ->method('resolve')

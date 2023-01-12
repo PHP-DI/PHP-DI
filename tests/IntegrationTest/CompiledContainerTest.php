@@ -9,6 +9,7 @@ use DI\ContainerBuilder;
 use function DI\create;
 use DI\Definition\Exception\InvalidDefinition;
 use function DI\get;
+use DI\DependencyException;
 
 /**
  * Tests specific to the compiled container.
@@ -61,7 +62,7 @@ class CompiledContainerTest extends BaseContainerTest
      */
     public function anonymous_classes_cannot_be_compiled()
     {
-        $this->expectException('DI\Definition\Exception\InvalidDefinition');
+        $this->expectException(InvalidDefinition::class);
         $this->expectExceptionMessage('Entry "foo" cannot be compiled: anonymous classes cannot be compiled');
         $class = get_class(new class() {
         });
@@ -79,7 +80,7 @@ class CompiledContainerTest extends BaseContainerTest
      */
     public function object_nested_in_other_definitions_cannot_be_compiled()
     {
-        $this->expectException('DI\Definition\Exception\InvalidDefinition');
+        $this->expectException(InvalidDefinition::class);
         $this->expectExceptionMessage('Entry "stdClass" cannot be compiled: An object was found but objects cannot be compiled');
         $builder = new ContainerBuilder;
         $builder->addDefinitions([
@@ -95,7 +96,7 @@ class CompiledContainerTest extends BaseContainerTest
      */
     public function object_nested_in_arrays_cannot_be_compiled()
     {
-        $this->expectException('DI\DependencyException');
+        $this->expectException(DependencyException::class);
         $this->expectExceptionMessage('Error while compiling foo. Error while compiling <nested definition>. Error while compiling <nested definition>. An object was found but objects cannot be compiled');
         $builder = new ContainerBuilder;
         $builder->addDefinitions([

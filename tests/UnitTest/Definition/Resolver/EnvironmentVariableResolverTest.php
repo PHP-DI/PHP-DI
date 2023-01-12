@@ -11,6 +11,7 @@ use DI\Definition\Resolver\EnvironmentVariableResolver;
 use EasyMock\EasyMock;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use DI\Definition\Exception\InvalidDefinition;
 
 /**
  * @covers \DI\Definition\Resolver\EnvironmentVariableResolver
@@ -19,19 +20,13 @@ class EnvironmentVariableResolverTest extends TestCase
 {
     use EasyMock;
 
-    /**
-     * @var EnvironmentVariableResolver
-     */
-    private $resolver;
-    /**
-     * @var DefinitionResolver|MockObject
-     */
-    private $parentResolver;
+    private EnvironmentVariableResolver $resolver;
+    private MockObject|DefinitionResolver $parentResolver;
 
-    private $definedDefinition;
-    private $undefinedDefinition;
-    private $optionalDefinition;
-    private $nestedDefinition;
+    private EnvironmentVariableDefinition $definedDefinition;
+    private EnvironmentVariableDefinition $undefinedDefinition;
+    private EnvironmentVariableDefinition $optionalDefinition;
+    private EnvironmentVariableDefinition $nestedDefinition;
 
     public function setUp(): void
     {
@@ -92,7 +87,7 @@ class EnvironmentVariableResolverTest extends TestCase
      */
     public function should_throw_if_undefined_env_variable_and_no_default()
     {
-        $this->expectException('DI\Definition\Exception\InvalidDefinition');
+        $this->expectException(InvalidDefinition::class);
         $this->expectExceptionMessage('The environment variable \'UNDEFINED\' has not been defined');
         $this->resolver->resolve($this->undefinedDefinition);
     }

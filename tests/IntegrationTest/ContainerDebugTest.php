@@ -6,6 +6,9 @@ namespace DI\Test\IntegrationTest;
 
 use DI\Container;
 use DI\ContainerBuilder;
+use DI\FactoryInterface;
+use Psr\Container\ContainerInterface;
+use Invoker\InvokerInterface;
 
 /**
  * Tests container debugging.
@@ -15,10 +18,10 @@ class ContainerDebugTest extends BaseContainerTest
     public function testKnownEntries()
     {
         $expectedEntries = [
-            'DI\Container',
-            'DI\FactoryInterface',
-            'Invoker\InvokerInterface',
-            'Psr\Container\ContainerInterface',
+            Container::class,
+            FactoryInterface::class,
+            InvokerInterface::class,
+            ContainerInterface::class,
             'bar',
             'foo',
         ];
@@ -26,7 +29,7 @@ class ContainerDebugTest extends BaseContainerTest
         $builder = new ContainerBuilder();
         $builder->addDefinitions(['foo' => 'bar']);
 
-        /** @var \DI\Container $container */
+        /** @var Container $container */
         $container = $builder->build();
         $container->set('bar', 'baz');
 
@@ -59,7 +62,7 @@ class ContainerDebugTest extends BaseContainerTest
             'null' => \DI\value(null),
         ]);
 
-        /** @var \DI\Container $container */
+        /** @var Container $container */
         $container = $builder->build();
 
         $container->set('entry_object', new \stdClass());
@@ -74,18 +77,18 @@ class ContainerDebugTest extends BaseContainerTest
         });
 
         // Default definitions
-        $this->assertMatchesRegularExpression('/^Object \(\n {4}class = DI\\\Container\n/', $container->debugEntry('DI\Container'));
+        $this->assertMatchesRegularExpression('/^Object \(\n {4}class = DI\\\Container\n/', $container->debugEntry(Container::class));
         $this->assertMatchesRegularExpression(
             '/^Object \(\n {4}class = #NOT INSTANTIABLE# DI\\\FactoryInterface\n/',
-            $container->debugEntry('DI\FactoryInterface')
+            $container->debugEntry(FactoryInterface::class)
         );
         $this->assertMatchesRegularExpression(
             '/^Object \(\n {4}class = #NOT INSTANTIABLE# Invoker\\\InvokerInterface\n/',
-            $container->debugEntry('Invoker\InvokerInterface')
+            $container->debugEntry(InvokerInterface::class)
         );
         $this->assertMatchesRegularExpression(
             '/^Object \(\n {4}class = #NOT INSTANTIABLE# Psr\\\Container\\\ContainerInterface\n/',
-            $container->debugEntry('Psr\Container\ContainerInterface')
+            $container->debugEntry(ContainerInterface::class)
         );
 
         // Container definitions

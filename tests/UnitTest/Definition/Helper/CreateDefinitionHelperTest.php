@@ -12,9 +12,6 @@ use PHPUnit\Framework\TestCase;
  */
 class CreateDefinitionHelperTest extends TestCase
 {
-    /**
-     * @test
-     */
     public function test_default_config()
     {
         $helper = new CreateDefinitionHelper();

@@ -6,6 +6,7 @@ namespace DI\Test\IntegrationTest\Definitions;
 
 use DI\ContainerBuilder;
 use DI\Test\IntegrationTest\BaseContainerTest;
+use DI\Definition\Exception\InvalidDefinition;
 
 /**
  * Test environment variable definitions.
@@ -38,7 +39,7 @@ class EnvironmentVariableDefinitionTest extends BaseContainerTest
      */
     public function test_nonexistent_env_variable(ContainerBuilder $builder)
     {
-        $this->expectException('DI\Definition\Exception\InvalidDefinition');
+        $this->expectException(InvalidDefinition::class);
         $this->expectExceptionMessage('The environment variable \'PHP_DI_DO_NOT_DEFINE_THIS\' has not been defined');
         $builder->addDefinitions([
             'var' => \DI\env('PHP_DI_DO_NOT_DEFINE_THIS'),

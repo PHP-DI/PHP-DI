@@ -12,6 +12,7 @@ use EasyMock\EasyMock;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\Container\ContainerInterface;
+use DI\Definition\Exception\InvalidDefinition;
 
 /**
  * @covers \DI\Definition\Resolver\DecoratorResolver
@@ -20,15 +21,9 @@ class DecoratorResolverTest extends TestCase
 {
     use EasyMock;
 
-    /**
-     * @var DecoratorResolver
-     */
-    private $resolver;
+    private DecoratorResolver $resolver;
 
-    /**
-     * @var DefinitionResolver|MockObject
-     */
-    private $parentResolver;
+    private MockObject|DefinitionResolver $parentResolver;
 
     public function setUp(): void
     {
@@ -65,7 +60,7 @@ class DecoratorResolverTest extends TestCase
      */
     public function should_throw_if_the_factory_is_not_callable()
     {
-        $this->expectException('DI\Definition\Exception\InvalidDefinition');
+        $this->expectException(InvalidDefinition::class);
         $this->expectExceptionMessage('The decorator "foo" is not callable');
         $definition = new DecoratorDefinition('foo', 'Hello world');
 

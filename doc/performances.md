@@ -13,7 +13,7 @@ PHP-DI 4 and 5 relied a lot on caching. With PHP-DI 6 the main vector for optimi
 
 PHP-DI performs two tasks that can be expensive:
 
-- reading definitions from your [configuration](php-definitions.md), from [autowiring](autowiring.md) or from [annotations](annotations.md)
+- reading definitions from your [configuration](php-definitions.md), from [autowiring](autowiring.md) or from [attributes](attributes.md)
 - resolving those definitions to create your services
 
 In order to avoid those two tasks, the container can be compiled into PHP code optimized especially for your configuration and your classes.
@@ -43,7 +43,7 @@ If your production handles a lot of traffic you may also want to generate the co
 
 ### Development environment
 
-**Do not compile the container in a development environment**, else all the changes you make to the definitions (annotations, configuration files, etc.) will not be taken into account. Here is an example of what you can do:
+**Do not compile the container in a development environment**, else all the changes you make to the definitions (attributes, configuration files, etc.) will not be taken into account. Here is an example of what you can do:
 
 ```php
 $containerBuilder = new \DI\ContainerBuilder();
@@ -120,7 +120,7 @@ Compiling the container is the most efficient solution, but it has some limits. 
 - wildcard definitions
 - usage of `Container::make()` or `Container::injectOn()` (because those are not using the compiled code)
 
-If you make heavy use of those features, and if it slows down your application you can enable the caching system. The cache will ensure annotations or the reflection is not read again on every request.
+If you make heavy use of those features, and if it slows down your application you can enable the caching system. The cache will ensure the reflection is not read again on every request.
 
 The cache relies on APCu directly because it is the only cache system that makes sense (very fast to write and read). Other caches are not good options, this is why PHP-DI does not use PSR-6 or PSR-16 for this cache.
 
@@ -140,5 +140,5 @@ You can also pass an optional namespace argument to `enableDefinitionCache('my-n
 
 Heads up:
 
-- do not use a cache in a development environment, else changes you make to the definitions (annotations, configuration files, etc.) may not be taken into account
+- do not use a cache in a development environment, else changes you make to the definitions (attributes, configuration files, etc.) may not be taken into account
 - clear the APCu cache on each deployment in production (to avoid using a stale cache)

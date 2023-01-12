@@ -29,7 +29,6 @@ class ContainerSetTest extends BaseContainerTest
 
     /**
      * @see https://github.com/mnapoli/PHP-DI/issues/126
-     * @test
      * @dataProvider provideContainer
      */
     public function testSetGetSetGet(ContainerBuilder $builder)

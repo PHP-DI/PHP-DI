@@ -16,10 +16,10 @@ jobs:
         timeout-minutes: 15
         strategy:
             matrix:
-                php: [ '7.4', '8.0', '8.1' ]
+                php: [ '8.0', '8.1' ]
                 dependency-version: [ '' ]
                 include:
-                    -   php: '7.4'
+                    -   php: '8.0'
                         dependency-version: '--prefer-lowest'
         steps:
             -   name: Checkout
@@ -30,6 +30,9 @@ jobs:
                     php-version: ${{ matrix.php }}
                     tools: composer:v2
                     coverage: none
+                    # Enable apcu
+                    extensions: apcu
+                    ini-values: apc.enable_cli=1
             -   name: Cache Composer dependencies
                 uses: actions/cache@v2
                 with:
@@ -41,10 +44,7 @@ jobs:
                 run: composer update ${{ matrix.dependency-version }} --prefer-dist --no-interaction --no-progress --no-suggest
             -   name: 'Install PHP dependencies on PHP 8.1 (TODO: remove that)'
                 if: matrix.php == '8.1'
-                run: |
-                    # Install Composer 2
-                    composer self-update --snapshot
-                    composer update --ignore-platform-reqs ${{ matrix.dependency-version }} --prefer-dist --no-interaction --no-progress --no-suggest
+                run: composer update --ignore-platform-reqs ${{ matrix.dependency-version }} --prefer-dist --no-interaction --no-progress --no-suggest
             -   name: PHPUnit
                 run: vendor/bin/phpunit
 
@@ -57,8 +57,8 @@ jobs:
             -   name: Setup PHP
                 uses: shivammathur/setup-php@v2
                 with:
-                    php-version: 7.4
-                    tools: composer, cs2pr
+                    php-version: 8.0
+                    tools: composer:v2, cs2pr
                     coverage: none
             -   name: Cache Composer dependencies
                 uses: actions/cache@v2
@@ -71,8 +71,7 @@ jobs:
             -   name: PHP CS Fixer
                 run: vendor/bin/php-cs-fixer fix --dry-run --format=checkstyle | cs2pr
 
-    phpstan:
-        name: PHPStan
+    psalm:
         runs-on: ubuntu-latest
         steps:
             -   name: Checkout
@@ -80,8 +79,8 @@ jobs:
             -   name: Setup PHP
                 uses: shivammathur/setup-php@v2
                 with:
-                    php-version: 7.4
-                    tools: composer, cs2pr
+                    php-version: 8.0
+                    tools: composer:v2, cs2pr
                     coverage: none
             -   name: Cache Composer dependencies
                 uses: actions/cache@v2
@@ -91,5 +90,5 @@ jobs:
                     restore-keys: php-composer-locked-
             -   name: Install PHP dependencies
                 run: composer install --no-interaction --no-progress --no-suggest
-            -   name: PHPStan
-                run: vendor/bin/phpstan analyse --error-format=checkstyle | cs2pr
+            -   name: Psalm
+                run: vendor/bin/psalm --output-format=checkstyle | cs2pr

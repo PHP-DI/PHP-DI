@@ -55,6 +55,6 @@ class FactoryDefinitionHelperTest extends TestCase
         $helper->parameter('foo', 'bar');
         $definition = $helper->getDefinition('foo');
 
-        $this->assertEquals($definition->getParameters(), ['foo' => 'bar']);
+        $this->assertEquals(['foo' => 'bar'], $definition->getParameters());
     }
 }

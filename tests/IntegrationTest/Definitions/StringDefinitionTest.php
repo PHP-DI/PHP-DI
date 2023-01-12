@@ -6,6 +6,7 @@ namespace DI\Test\IntegrationTest\Definitions;
 
 use DI\ContainerBuilder;
 use DI\Test\IntegrationTest\BaseContainerTest;
+use DI\DependencyException;
 
 /**
  * Test string definitions.
@@ -75,7 +76,7 @@ class StringDefinitionTest extends BaseContainerTest
      */
     public function test_string_with_nonexistent_placeholder(ContainerBuilder $builder)
     {
-        $this->expectException('DI\DependencyException');
+        $this->expectException(DependencyException::class);
         $this->expectExceptionMessage('Error while parsing string expression for entry \'test-string\': No entry or class found for \'foo\'');
         $builder->addDefinitions([
             'test-string' => \DI\string('Hello {foo}'),

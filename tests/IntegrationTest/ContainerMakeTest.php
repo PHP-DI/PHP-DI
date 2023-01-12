@@ -9,6 +9,8 @@ use DI\Test\UnitTest\Fixtures\Class1CircularDependencies;
 use DI\Test\UnitTest\Fixtures\PassByReferenceDependency;
 use DI\Test\UnitTest\Fixtures\Singleton;
 use stdClass;
+use DI\DependencyException;
+use DI\NotFoundException;
 
 /**
  * Test class for Container.
@@ -31,7 +33,7 @@ class ContainerMakeTest extends BaseContainerTest
      */
     public function testMakeNotFound(ContainerBuilder $builder)
     {
-        $this->expectException('DI\NotFoundException');
+        $this->expectException(NotFoundException::class);
         $builder->build()->make('key');
     }
 
@@ -68,9 +70,9 @@ class ContainerMakeTest extends BaseContainerTest
      */
     public function testCircularDependencyException(ContainerBuilder $builder)
     {
-        $this->expectException('DI\DependencyException');
+        $this->expectException(DependencyException::class);
         $this->expectExceptionMessage('Circular dependency detected while trying to resolve entry \'DI\Test\UnitTest\Fixtures\Class1CircularDependencies\'');
-        $builder->useAnnotations(true);
+        $builder->useAttributes(true);
         $container = $builder->build();
         $container->make(Class1CircularDependencies::class);
     }
@@ -80,7 +82,7 @@ class ContainerMakeTest extends BaseContainerTest
      */
     public function testCircularDependencyExceptionWithAlias(ContainerBuilder $builder)
     {
-        $this->expectException('DI\DependencyException');
+        $this->expectException(DependencyException::class);
         $this->expectExceptionMessage('Circular dependency detected while trying to resolve entry \'foo\'');
         $builder->addDefinitions([
             // Alias to itself -> infinite recursive loop
@@ -88,16 +90,6 @@ class ContainerMakeTest extends BaseContainerTest
         ]);
         $container = $builder->build();
         $container->make('foo');
-    }
-
-    /**
-     * @dataProvider provideContainer
-     */
-    public function testNonStringParameter(ContainerBuilder $builder)
-    {
-        $this->expectException('InvalidArgumentException');
-        $this->expectExceptionMessage('The name parameter must be of type string');
-        $builder->build()->make(new stdClass);
     }
 
     /**

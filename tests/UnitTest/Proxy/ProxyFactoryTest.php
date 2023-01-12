@@ -18,7 +18,7 @@ class ProxyFactoryTest extends TestCase
      */
     public function should_create_lazy_proxies()
     {
-        $factory = new ProxyFactory(false);
+        $factory = new ProxyFactory;
 
         $instance = new ClassToProxy();
         $initialized = false;

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace DI\Test\IntegrationTest\Definitions;
 
-use DI\Annotation\Inject;
+use DI\Attribute\Inject;
 use DI\ContainerBuilder;
 use DI\Test\IntegrationTest\BaseContainerTest;
 use DI\Test\IntegrationTest\Fixtures\Implementation1;
@@ -99,7 +99,7 @@ class WildcardDefinitionsTest extends BaseContainerTest
      */
     public function test_wildcards_as_dependency(ContainerBuilder $builder)
     {
-        $builder->useAnnotations(true);
+        $builder->useAttributes(true);
         $builder->addDefinitions([
             'DI\Test\IntegrationTest\*\Interface*' => \DI\create('DI\Test\IntegrationTest\*\Implementation*'),
         ]);
@@ -113,9 +113,6 @@ class WildcardDefinitionsTest extends BaseContainerTest
 
 class WildcardDefinitionsTestFixture
 {
-    /**
-     * @Inject
-     * @var Interface1
-     */
-    public $dependency;
+    #[Inject]
+    public Interface1 $dependency;
 }

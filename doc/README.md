@@ -19,7 +19,7 @@ title: Documentation index
 * [Introduction](definition.md)
 * [Autowiring](autowiring.md)
 * [PHP definitions](php-definitions.md)
-* [Annotations](annotations.md)
+* [Attributes](attributes.md)
 * [Definition extensions and overriding](definition-overriding.md)
 
 ### Frameworks integration
@@ -45,6 +45,7 @@ title: Documentation index
 * [Migration from PHP-DI 3.x to 4.0](migration/4.0.md)
 * [Migration from PHP-DI 4.x to 5.0](migration/5.0.md)
 * [Migration from PHP-DI 5.x to 6.0](migration/6.0.md)
+* [Migration from PHP-DI 6.x to 7.0](migration/7.0.md)
 
 ### Internals
 

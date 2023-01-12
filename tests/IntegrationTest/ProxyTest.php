@@ -49,6 +49,7 @@ class ProxyTest extends BaseContainerTest
         $proxy = $container->get('foo');
         $this->assertSame($proxy, $container->get('foo'));
         // Resolve the proxy and check again
+        /** @noinspection PhpExpressionResultUnusedInspection */
         $proxy->getValue();
         $this->assertSame($proxy, $container->get('foo'));
     }

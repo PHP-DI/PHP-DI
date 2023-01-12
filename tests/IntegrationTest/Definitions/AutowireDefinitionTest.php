@@ -6,7 +6,6 @@ namespace DI\Test\IntegrationTest\Definitions;
 
 use DI\ContainerBuilder;
 use DI\Test\IntegrationTest\BaseContainerTest;
-use DI\Test\IntegrationTest\Definitions\AutowireDefinition\OptionalParameterFollowedByRequiredParameter;
 use DI\Test\IntegrationTest\Definitions\AutowireDefinition\Php71;
 use DI\Test\IntegrationTest\Definitions\AutowireDefinitionTest\ConstructorInjection;
 use DI\Test\IntegrationTest\Definitions\AutowireDefinitionTest\LazyService;
@@ -21,6 +20,7 @@ use ProxyManager\Proxy\LazyLoadingInterface;
 use function DI\autowire;
 use function DI\create;
 use function DI\get;
+use DI\Definition\Exception\InvalidDefinition;
 
 /**
  * Test autowired definitions.
@@ -71,6 +71,23 @@ class AutowireDefinitionTest extends BaseContainerTest
     /**
      * @dataProvider provideContainer
      */
+    public function test_constructor_injection_with_named_arguments(ContainerBuilder $builder)
+    {
+        $builder->addDefinitions([
+            ConstructorInjection::class => autowire()
+                ->constructor(
+                    value: 'bar',
+                ),
+        ]);
+        $container = $builder->build();
+
+        $object = $container->get(ConstructorInjection::class);
+        self::assertEquals('bar', $object->value);
+    }
+
+    /**
+     * @dataProvider provideContainer
+     */
     public function test_autowired_constructor_injection_can_be_overloaded(ContainerBuilder $builder)
     {
         $builder->addDefinitions([
@@ -95,7 +112,7 @@ class AutowireDefinitionTest extends BaseContainerTest
      */
     public function test_annotated_constructor_injection_can_be_overloaded(ContainerBuilder $builder)
     {
-        $builder->useAnnotations(true);
+        $builder->useAttributes(true);
         $builder->addDefinitions([
             AutowireDefinition\ConstructorInjection::class => autowire()
                 ->constructorParameter('overloadedParameter', get('foo')),
@@ -122,7 +139,7 @@ class AutowireDefinitionTest extends BaseContainerTest
      */
     public function test_annotated_method_injection_can_be_overloaded(ContainerBuilder $builder)
     {
-        $builder->useAnnotations(true);
+        $builder->useAttributes(true);
         $builder->addDefinitions([
             AutowireDefinition\MethodInjection::class => autowire()
                 ->methodParameter('setFoo', 'overloadedParameter', get('foo')),
@@ -249,6 +266,19 @@ class AutowireDefinitionTest extends BaseContainerTest
     /**
      * @dataProvider provideContainer
      */
+    public function test_setting_specific_method_parameter_with_named_arguments(ContainerBuilder $builder)
+    {
+        $container = $builder->addDefinitions([
+            Setter::class => autowire()
+                ->method('setFoo', bar: 'Hello'),
+        ])->build();
+
+        self::assertEquals('Hello', $container->get(Setter::class)->bar);
+    }
+
+    /**
+     * @dataProvider provideContainer
+     */
     public function test_setting_specific_method_parameter_overrides_autowiring(ContainerBuilder $builder)
     {
         $container = $builder->addDefinitions([
@@ -266,7 +296,7 @@ class AutowireDefinitionTest extends BaseContainerTest
      */
     public function test_cannot_use_autowire_if_autowiring_is_disabled(ContainerBuilder $builder)
     {
-        $this->expectException('DI\Definition\Exception\InvalidDefinition');
+        $this->expectException(InvalidDefinition::class);
         $this->expectExceptionMessage('Cannot autowire entry "DI\Test\IntegrationTest\Definitions\ObjectDefinition\Class3" because autowiring is disabled');
         $container = $builder
             ->useAutowiring(false)
@@ -313,20 +343,6 @@ class AutowireDefinitionTest extends BaseContainerTest
         self::assertFalse($object->isProxyInitialized());
         self::assertEquals('bar', $object->bar);
         self::assertTrue($object->isProxyInitialized());
-    }
-
-    /**
-     * @dataProvider provideContainer
-     * @requires PHP < 8
-     */
-    public function test_optional_parameter_followed_by_required_parameters(ContainerBuilder $builder)
-    {
-        $container = $builder->build();
-
-        $object = $container->get(OptionalParameterFollowedByRequiredParameter::class);
-
-        self::assertNull($object->first);
-        self::assertInstanceOf(\stdClass::class, $object->second);
     }
 
     /**
@@ -413,21 +429,4 @@ class ConstructorInjection
 
 class LazyService
 {
-}
-
-class AllKindsOfInjections
-{
-    public $property;
-    public $constructorParameter;
-    public $methodParameter;
-
-    public function __construct($constructorParameter)
-    {
-        $this->constructorParameter = $constructorParameter;
-    }
-
-    public function method($methodParameter)
-    {
-        $this->methodParameter = $methodParameter;
-    }
 }

@@ -4,17 +4,14 @@ declare(strict_types=1);
 
 namespace DI\Test\UnitTest\Definition\Source\Fixtures;
 
+use DI\Attribute\Inject;
+
 class AnnotationFixture5
 {
-    /**
-     * @var foobar
-     */
-    public $property;
+    #[Inject]
+    public foobar $property;
 
-    /**
-     * @param foobar $foo
-     */
-    public function __construct($foo)
+    public function __construct(foobar $foo)
     {
     }
 }

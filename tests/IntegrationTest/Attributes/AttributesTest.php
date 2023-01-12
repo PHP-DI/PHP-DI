@@ -2,16 +2,18 @@
 
 declare(strict_types=1);
 
-namespace DI\Test\IntegrationTest\Annotations;
+namespace DI\Test\IntegrationTest\Attributes;
 
 use DI\ContainerBuilder;
-use DI\Test\IntegrationTest\Annotations\InjectWithUseStatements\InjectWithUseStatements2;
 use DI\Test\IntegrationTest\BaseContainerTest;
+use DI\DependencyException;
 
 /**
- * Test using annotations.
+ * Test using PHP 8 attributes.
+ *
+ * @requires PHP >= 8
  */
-class AnnotationsTest extends BaseContainerTest
+class AttributesTest extends BaseContainerTest
 {
     /**
      * @test
@@ -19,7 +21,7 @@ class AnnotationsTest extends BaseContainerTest
      */
     public function inject_in_properties(ContainerBuilder $builder)
     {
-        $builder->useAnnotations(true);
+        $builder->useAttributes(true);
 
         /** @var B $object */
         $object = $builder->build()->get(B::class);
@@ -37,7 +39,7 @@ class AnnotationsTest extends BaseContainerTest
      */
     public function inject_in_parent_properties(ContainerBuilder $builder)
     {
-        $builder->useAnnotations(true);
+        $builder->useAttributes(true);
         $container = $builder->build();
 
         /** @var C $object */
@@ -61,7 +63,7 @@ class AnnotationsTest extends BaseContainerTest
      */
     public function inject_in_private_parent_properties_with_same_name(ContainerBuilder $builder)
     {
-        $builder->useAnnotations(true);
+        $builder->useAttributes(true);
         $container = $builder->build();
 
         /** @var Child $object */
@@ -78,7 +80,7 @@ class AnnotationsTest extends BaseContainerTest
      */
     public function inject_by_name(ContainerBuilder $builder)
     {
-        $builder->useAnnotations(true);
+        $builder->useAttributes(true);
 
         $dependency = new \stdClass();
 
@@ -89,7 +91,8 @@ class AnnotationsTest extends BaseContainerTest
 
         /** @var NamedInjection $object */
         $object = $container->get(NamedInjection::class);
-        $this->assertSame($dependency, $object->dependency);
+        $this->assertSame($dependency, $object->dependency1);
+        $this->assertSame($dependency, $object->dependency2);
     }
 
     /**
@@ -98,41 +101,8 @@ class AnnotationsTest extends BaseContainerTest
      */
     public function errors_if_dependency_by_name_not_found(ContainerBuilder $builder)
     {
-        $this->expectException('DI\DependencyException');
-        $builder->useAnnotations(true);
+        $this->expectException(DependencyException::class);
+        $builder->useAttributes(true);
         $builder->build()->get(NamedInjection::class);
-    }
-
-    /**
-     * Check that @ var annotation takes "use" statements into account.
-     * @test
-     * @dataProvider provideContainer
-     * @link https://github.com/PHP-DI/PHP-DI/issues/1
-     */
-    public function resolve_class_names_using_import_statements(ContainerBuilder $builder)
-    {
-        $builder->useAnnotations(true);
-        $container = $builder->build();
-
-        /** @var $object InjectWithUseStatements */
-        $object = $container->get(InjectWithUseStatements::class);
-        $this->assertInstanceOf(A::class, $object->a);
-        $this->assertInstanceOf(A::class, $object->alias);
-        $this->assertInstanceOf(A::class, $object->namespaceAlias);
-
-        /** @var $object InjectWithUseStatements2 */
-        $object = $container->get(InjectWithUseStatements2::class);
-        $this->assertInstanceOf(InjectWithUseStatements::class, $object->dependency);
-    }
-
-    /**
-     * @test
-     * @dataProvider provideContainer
-     */
-    public function testNotFoundVarAnnotation(ContainerBuilder $builder)
-    {
-        $this->expectException('PhpDocReader\AnnotationException');
-        $builder->useAnnotations(true);
-        $builder->build()->get(NotFoundVarAnnotation::class);
     }
 }

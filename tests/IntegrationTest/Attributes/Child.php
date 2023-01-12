@@ -2,17 +2,14 @@
 
 declare(strict_types=1);
 
-namespace DI\Test\IntegrationTest\Annotations;
+namespace DI\Test\IntegrationTest\Attributes;
 
-use DI\Annotation\Inject;
+use DI\Attribute\Inject;
 
 class Child extends B
 {
-    /**
-     * @Inject
-     * @var A
-     */
-    private $private;
+    #[Inject]
+    private A $private;
 
     public function getChildPrivate()
     {

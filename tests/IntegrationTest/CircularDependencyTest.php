@@ -5,11 +5,11 @@ declare(strict_types=1);
 namespace DI\Test\IntegrationTest;
 
 use DI\ContainerBuilder;
-use DI\Test\IntegrationTest\BaseContainerTest;
 use DI\Test\UnitTest\Fixtures\Class1CircularDependencies;
 use DI\Test\UnitTest\Fixtures\Class2CircularDependencies;
 use function DI\create;
 use function DI\get;
+use DI\DependencyException;
 
 /**
  * Test that circular dependencies are handled correctly.
@@ -34,7 +34,7 @@ class CircularDependencyTest extends BaseContainerTest
      */
     public function circular_dependencies_throw_exceptions(ContainerBuilder $builder)
     {
-        $this->expectException('DI\DependencyException');
+        $this->expectException(DependencyException::class);
         $this->expectExceptionMessage('Circular dependency detected while trying to resolve entry \'DI\Test\UnitTest\Fixtures\Class1CircularDependencies\'');
         $builder->addDefinitions([
             Class1CircularDependencies::class => create()
@@ -49,11 +49,11 @@ class CircularDependencyTest extends BaseContainerTest
      * @test
      * @dataProvider provideContainer
      */
-    public function circular_dependencies_with_annotations_throw_exceptions(ContainerBuilder $builder)
+    public function circular_dependencies_with_attributes_throw_exceptions(ContainerBuilder $builder)
     {
-        $this->expectException('DI\DependencyException');
+        $this->expectException(DependencyException::class);
         $this->expectExceptionMessage('Circular dependency detected while trying to resolve entry \'DI\Test\UnitTest\Fixtures\Class1CircularDependencies\'');
-        $builder->useAnnotations(true);
+        $builder->useAttributes(true);
         $builder->build()->get(Class1CircularDependencies::class);
     }
 
@@ -63,7 +63,7 @@ class CircularDependencyTest extends BaseContainerTest
      */
     public function circular_dependencies_because_of_self_alias_throw_exceptions(ContainerBuilder $builder)
     {
-        $this->expectException('DI\DependencyException');
+        $this->expectException(DependencyException::class);
         $this->expectExceptionMessage('Circular dependency detected while trying to resolve entry \'foo\'');
         $builder->addDefinitions([
             // Alias to itself -> infinite recursive loop

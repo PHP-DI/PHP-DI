@@ -17,13 +17,12 @@ interface DefinitionSource
     /**
      * Returns the DI definition for the entry name.
      *
-     * @return Definition|null
      * @throws InvalidDefinition An invalid definition was found.
      */
-    public function getDefinition(string $name);
+    public function getDefinition(string $name) : Definition|null;
 
     /**
-     * @return Definition[] Definitions indexed by their name.
+     * @return array<string,Definition> Definitions indexed by their name.
      */
     public function getDefinitions() : array;
 }

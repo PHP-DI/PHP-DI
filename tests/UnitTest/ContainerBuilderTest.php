@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace DI\Test\UnitTest;
 
 use DI\CompiledContainer;
-use DI\Container;
 use DI\ContainerBuilder;
 use DI\Definition\Source\DefinitionArray;
 use DI\Definition\Source\SourceCache;
@@ -42,7 +41,7 @@ class ContainerBuilderTest extends TestCase
         // Not compiled
         $this->assertNotInstanceOf(CompiledContainer::class, $container);
         // Proxies evaluated in memory
-        $this->assertFalse($getProperty($container->proxyFactory, 'writeProxiesToFile'));
+        $this->assertNull($getProperty($container->proxyFactory, 'proxyDirectory'));
     }
 
     /**
@@ -179,17 +178,6 @@ class ContainerBuilderTest extends TestCase
     /**
      * @test
      */
-    public function errors_when_adding_invalid_definitions()
-    {
-        $this->expectException('InvalidArgumentException');
-        $this->expectExceptionMessage('ContainerBuilder::addDefinitions() parameter must be a string, an array or a DefinitionSource object, integer given');
-        $builder = new ContainerBuilder(FakeContainer::class);
-        $builder->addDefinitions(123);
-    }
-
-    /**
-     * @test
-     */
     public function should_allow_to_create_a_compiled_container()
     {
         $builder = new ContainerBuilder();
@@ -219,10 +207,10 @@ class ContainerBuilderTest extends TestCase
     {
         $builder = new ContainerBuilder();
 
-        $result = $builder->useAnnotations(false);
+        $result = $builder->useAttributes(false);
         $this->assertSame($builder, $result);
 
-        $result = $builder->useAnnotations(true);
+        $result = $builder->useAttributes(true);
         $this->assertSame($builder, $result);
 
         $result = $builder->useAutowiring(false);
@@ -259,13 +247,5 @@ class ContainerBuilderTest extends TestCase
         $builder->build();
 
         $builder->addDefinitions([]);
-    }
-
-    /**
-     * @test
-     */
-    public function dev_container_configuration_should_be_identical_to_creating_a_new_container_from_defaults()
-    {
-        self::assertEquals(new Container, ContainerBuilder::buildDevContainer());
     }
 }

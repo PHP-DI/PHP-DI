@@ -9,6 +9,7 @@ use DI\NotFoundException;
 use EasyMock\EasyMock;
 use PHPUnit\Framework\TestCase;
 use Psr\Container\ContainerInterface;
+use DI\DependencyException;
 
 /**
  * @covers \DI\Definition\StringDefinition
@@ -87,7 +88,7 @@ class StringDefinitionTest extends TestCase
      */
     public function should_throw_on_unknown_entry_name()
     {
-        $this->expectException('DI\DependencyException');
+        $this->expectException(DependencyException::class);
         $this->expectExceptionMessage('Error while parsing string expression for entry \'foo\': No entry or class found for \'test\'');
         $container = $this->easyMock(ContainerInterface::class, [
             'get' => new NotFoundException("No entry or class found for 'test'"),

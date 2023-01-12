@@ -5,14 +5,21 @@ current_menu: php-definitions
 
 # PHP definitions
 
-On top of [autowiring](autowiring.md) and [annotations](annotations.md), you can use **a PHP configuration format** to define injections.
+On top of [autowiring](autowiring.md) and [attributes](attributes.md), you can use **a PHP configuration format** to define injections.
 
 You can register that configuration as an array:
 
 ```php
+$container = new DI\Container([
+    // place your definitions here
+]);
+
+// or using the container builder class:
+// ...
 $containerBuilder->addDefinitions([
     // place your definitions here
 ]);
+// ...
 ```
 
 Or by putting it into a file returning an array:
@@ -354,6 +361,20 @@ return [
         ->constructorParameter('filename', 'app.log')
         // set the $handler parameter
         ->methodParameter('setHandler', 'handler', DI\get('SyslogHandler')),
+];
+```
+
+Since PHP 8, you can also use [named arguments](https://stitcher.io/blog/php-8-named-arguments):
+
+```php
+return [
+    'Logger' => DI\autowire()
+        // set the $filename parameter
+        ->constructor(
+            filename: 'app.log'
+        )
+        // set the $handler parameter
+        ->method('setHandler', handler: DI\get('SyslogHandler')),
 ];
 ```
 

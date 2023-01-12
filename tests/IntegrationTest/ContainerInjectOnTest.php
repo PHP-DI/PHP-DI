@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace DI\Test\IntegrationTest;
 
+use DI\Attribute\Inject;
 use DI\ContainerBuilder;
 use DI\Test\IntegrationTest\Fixtures\Class1;
 use DI\Test\IntegrationTest\Fixtures\Class2;
@@ -33,18 +34,10 @@ class ContainerInjectOnTest extends BaseContainerTest
     /**
      * @dataProvider provideContainer
      */
-    public function test_inject_on_null_returns_null(ContainerBuilder $builder)
-    {
-        self::assertNull($builder->build()->injectOn(null));
-    }
-
-    /**
-     * @dataProvider provideContainer
-     */
-    public function test_inject_on_object_using_annotations(ContainerBuilder $builder)
+    public function test_inject_on_object_using_attributes(ContainerBuilder $builder)
     {
         $builder->useAutowiring(true);
-        $builder->useAnnotations(true);
+        $builder->useAttributes(true);
         $builder->addDefinitions([
             'foo' => 'bar',
             Interface1::class => create(Implementation1::class),
@@ -74,7 +67,7 @@ class ContainerInjectOnTest extends BaseContainerTest
         self::assertInstanceOf(Class2::class, $obj->method1Param1);
         // Method 2 (automatic resolution with type hinting)
         self::assertInstanceOf(Implementation1::class, $obj->method2Param1);
-        // Method 3 (defining parameters with the annotation)
+        // Method 3 (defining parameters with the attribute)
         self::assertInstanceOf(Class2::class, $obj->method3Param1);
         self::assertEquals('bar', $obj->method3Param2);
         // Method 4 (lazy)
@@ -92,7 +85,7 @@ class ContainerInjectOnTest extends BaseContainerTest
     public function test_inject_on_object_using_config(ContainerBuilder $builder)
     {
         $builder->useAutowiring(false);
-        $builder->useAnnotations(false);
+        $builder->useAttributes(false);
         $builder->addDefinitions([
             'foo' => 'bar',
 
@@ -144,7 +137,7 @@ class ContainerInjectOnTest extends BaseContainerTest
         self::assertInstanceOf(Class2::class, $obj->method1Param1);
         // Method 2 (automatic resolution with type hinting)
         self::assertInstanceOf(Implementation1::class, $obj->method2Param1);
-        // Method 3 (defining parameters with the annotation)
+        // Method 3 (defining parameters with the attribute)
         self::assertInstanceOf(Class2::class, $obj->method3Param1);
         self::assertEquals('bar', $obj->method3Param2);
         // Method 4 (lazy)
@@ -162,24 +155,19 @@ class ContainerInjectOnTest extends BaseContainerTest
     public function testInjectOnAnonClass(ContainerBuilder $builder)
     {
         $obj = new class {
-            /**
-             * @Inject
-             * @var Class2
-             */
-            public $property;
+            #[Inject]
+            public Class2 $property;
 
             public $methodParam;
 
-            /**
-             * @Inject
-             */
+            #[Inject]
             public function setParam(Class2 $param)
             {
                 $this->methodParam = $param;
             }
         };
 
-        $builder->useAnnotations(true);
+        $builder->useAttributes(true);
         $container = $builder->build();
         $container->injectOn($obj);
 

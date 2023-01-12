@@ -85,7 +85,7 @@ class UserController
 $app->delete('/user/{id}', [UserController::class, 'delete']);
 ```
 
-Dependencies can then be injected in your controller using [autowiring, PHP-DI config files or even annotations](../definition.md).
+Dependencies can then be injected in your controller using [autowiring, PHP-DI config files or even PHP attributes](../definition.md).
 
 ### Controller parameters
 

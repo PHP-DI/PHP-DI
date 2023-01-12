@@ -24,11 +24,11 @@ class NestedDefinitionsTest extends BaseContainerTest
     {
         $builder->addDefinitions([
             'foo' => 'bar',
-            'link' => \DI\env('PHP_DI_DO_NOT_DEFINE_THIS', \DI\get('foo')),
-            'object' => \DI\env('PHP_DI_DO_NOT_DEFINE_THIS', \DI\create('stdClass')),
-            'objectInArray' => \DI\env('PHP_DI_DO_NOT_DEFINE_THIS', [\DI\create('stdClass')]),
-            'autowired' => \DI\env('PHP_DI_DO_NOT_DEFINE_THIS', autowire(Autowireable::class)),
-            'factory' => \DI\env('PHP_DI_DO_NOT_DEFINE_THIS', \DI\factory(function () {
+            'link' => env('PHP_DI_DO_NOT_DEFINE_THIS', get('foo')),
+            'object' => env('PHP_DI_DO_NOT_DEFINE_THIS', create('stdClass')),
+            'objectInArray' => env('PHP_DI_DO_NOT_DEFINE_THIS', [create('stdClass')]),
+            'autowired' => env('PHP_DI_DO_NOT_DEFINE_THIS', autowire(Autowireable::class)),
+            'factory' => env('PHP_DI_DO_NOT_DEFINE_THIS', \DI\factory(function () {
                 return 'hello';
             })),
         ]);
@@ -212,7 +212,7 @@ class NestedDefinitionsTest extends BaseContainerTest
             'array' => [
                 function () { return 'hello'; },
             ],
-            'env' => \DI\env('PHP_DI_DO_NOT_DEFINE_THIS', function () {
+            'env' => env('PHP_DI_DO_NOT_DEFINE_THIS', function () {
                 return 'hello';
             }),
             'factory' => \DI\factory(function ($entry) {

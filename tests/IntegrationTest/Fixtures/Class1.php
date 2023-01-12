@@ -4,42 +4,29 @@ declare(strict_types=1);
 
 namespace DI\Test\IntegrationTest\Fixtures;
 
-use DI\Annotation\Inject;
-use DI\Annotation\Injectable;
+use DI\Attribute\Inject;
+use DI\Attribute\Injectable;
 
 /**
  * Fixture class.
- * @Injectable
  */
+#[Injectable]
 class Class1
 {
-    /**
-     * @Inject
-     * @var Class2
-     */
-    public $property1;
+    #[Inject]
+    public Class2 $property1;
 
-    /**
-     * @Inject
-     * @var Interface1
-     */
-    public $property2;
+    #[Inject]
+    public Interface1 $property2;
 
-    /**
-     * @Inject("namedDependency")
-     */
+    #[Inject('namedDependency')]
     public $property3;
 
-    /**
-     * @Inject(name="foo")
-     */
+    #[Inject(name: 'foo')]
     public $property4;
 
-    /**
-     * @Inject
-     * @var LazyDependency
-     */
-    public $property5;
+    #[Inject]
+    public LazyDependency $property5;
 
     public $constructorParam1;
     public $constructorParam2;
@@ -55,9 +42,6 @@ class Class1
     public $method4Param1;
 
     /**
-     * @param Class2         $param1
-     * @param Interface1     $param2
-     * @param LazyDependency $param3
      * @throws \Exception
      */
     public function __construct(Class2 $param1, Interface1 $param2, LazyDependency $param3, $optional = true)
@@ -73,11 +57,8 @@ class Class1
 
     /**
      * Tests optional parameter is not overridden.
-     *
-     * @Inject
-     * @param Class2 $param1
-     * @throws \Exception
      */
+    #[Inject]
     public function method1(Class2 $param1, $optional = true)
     {
         $this->method1Param1 = $param1;
@@ -89,10 +70,8 @@ class Class1
 
     /**
      * Tests automatic resolution of parameter based on the type-hinting.
-     *
-     * @Inject
-     * @param Interface1 $param1
      */
+    #[Inject]
     public function method2(Interface1 $param1)
     {
         $this->method2Param1 = $param1;
@@ -101,9 +80,9 @@ class Class1
     /**
      * Tests defining parameters.
      *
-     * @Inject({"namedDependency", "foo"})
      * @param string $param1
      */
+    #[Inject(['namedDependency', 'foo'])]
     public function method3($param1, $param2)
     {
         $this->method3Param1 = $param1;
@@ -112,10 +91,8 @@ class Class1
 
     /**
      * Tests injecting a lazy dependency.
-     *
-     * @Inject
-     * @param LazyDependency $param1
      */
+    #[Inject]
     public function method4(LazyDependency $param1)
     {
         $this->method4Param1 = $param1;

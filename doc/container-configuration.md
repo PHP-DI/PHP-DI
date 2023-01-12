@@ -5,15 +5,23 @@ current_menu: container-configuration
 
 # Configuring the container
 
-## Development environment
+## Getting started
 
-PHP-DI's container is preconfigured for "plug and play", i.e. development environment. You can start using it simply like so:
+PHP-DI's container is preconfigured for "plug and play". You can start using it simply like so:
 
 ```php
 $container = new Container();
 ```
 
-By default, PHP-DI will have [Autowiring](definition.md) enabled ([annotations](annotations.md) are disabled by default).
+By default, [Autowiring](definition.md) will be enabled. [Attributes](attributes.md) are disabled by default.
+
+To register [definitions using an array](php-definitions.md):
+
+```php
+$container = new DI\Container([
+    // place your definitions here
+]);
+```
 
 To change options on the container you can use the `ContainerBuilder` class:
 
@@ -43,7 +51,7 @@ If you want to use PHP-DI's container as a simple container (no autowiring or an
 ```php
 $builder = new \DI\ContainerBuilder();
 $builder->useAutowiring(false);
-$builder->useAnnotations(false);
+$builder->useAttributes(false);
 
 $container = $builder->build();
 ```
@@ -78,35 +86,3 @@ $container->addContainer($phpdiContainer);
 // Good to go!
 $foo = $container->get('foo');
 ```
-
-## Ignoring phpDoc errors
-
-*Added in v4.4*
-
-If you use annotations and your phpDoc is not always correct, you can set up the container to silently ignore those errors:
-
-```php
-$builder->ignorePhpDocErrors(true);
-```
-
-For example:
-
-```php
-class Foo
-{
-    /**
-     * @param NonExistentClass $param
-     */
-    public function useAutowiring($param)
-    {
-    }
-}
-```
-
-Here, PHP-DI will throw an exception because `NonExistentClass` doesn't exist: this is a phpDoc error.
-
-There has been reports that PHP-FPM might choke on such errors and report it with a message like this:
-
-> Handler for fastcgi-script returned invalid result code 1
-
-In case the errors still occur, make sure your annotations are correct or temporarily disable annotations (`$builder->useAnnotations(false)`) to prevent fatal errors and try to clean up your configuration form there.
