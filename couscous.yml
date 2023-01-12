@@ -112,6 +112,9 @@ menu:
                 v6:
                     text: From PHP-DI 5.x to 6.0
                     url: doc/migration/6.0.html
+                v7:
+                    text: From PHP-DI 6.x to 7.0
+                    url: doc/migration/7.0.html
         support:
             section: Support
             items:
