@@ -31,18 +31,20 @@ use Psr\Container\ContainerInterface;
  *
  * @since  3.2
  * @author Matthieu Napoli <matthieu@mnapoli.fr>
+ *
+ * @template ContainerClass of Container
  */
 class ContainerBuilder
 {
     /**
      * Name of the container class, used to create the container.
-     * @var class-string<Container>
+     * @var class-string<ContainerClass>
      */
     private string $containerClass;
 
     /**
      * Name of the container parent class, used on compiled container.
-     * @var class-string<Container>
+     * @var class-string<ContainerClass>
      */
     private string $containerParentClass;
 
@@ -77,8 +79,7 @@ class ContainerBuilder
     protected string $sourceCacheNamespace = '';
 
     /**
-     * @param string $containerClass Name of the container class, used to create the container.
-     * @psalm-param class-string<Container> $containerClass
+     * @param class-string<ContainerClass> $containerClass Name of the container class, used to create the container.
      */
     public function __construct(string $containerClass = Container::class)
     {
@@ -88,7 +89,7 @@ class ContainerBuilder
     /**
      * Build and return a container.
      *
-     * @return Container
+     * @return ContainerClass
      */
     public function build()
     {
@@ -165,10 +166,12 @@ class ContainerBuilder
      *
      * @see https://php-di.org/doc/performances.html
      *
+     * @template T of CompiledContainer
      * @param string $directory Directory in which to put the compiled container.
      * @param string $containerClass Name of the compiled class. Customize only if necessary.
-     * @param string $containerParentClass Name of the compiled container parent class. Customize only if necessary.
-     * @psalm-param class-string<CompiledContainer> $containerParentClass
+     * @param class-string<T> $containerParentClass Name of the compiled container parent class. Customize only if necessary.
+     *
+     * @return self<T>
      */
     public function enableCompilation(
         string $directory,
@@ -178,7 +181,6 @@ class ContainerBuilder
         $this->ensureNotLocked();
 
         $this->compileToDirectory = $directory;
-        /** @var class-string<Container> */
         $this->containerClass = $containerClass;
         $this->containerParentClass = $containerParentClass;
 
