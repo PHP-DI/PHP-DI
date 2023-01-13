@@ -35,7 +35,7 @@ abstract class CompiledContainer extends Container
     /**
      * {@inheritdoc}
      */
-    public function get($id) : mixed
+    public function get(string $id) : mixed
     {
         // Try to find the entry in the singleton map
         if (isset($this->resolvedEntries[$id]) || array_key_exists($id, $this->resolvedEntries)) {
@@ -71,15 +71,8 @@ abstract class CompiledContainer extends Container
     /**
      * {@inheritdoc}
      */
-    public function has($id) : bool
+    public function has(string $id) : bool
     {
-        if (! is_string($id)) {
-            throw new \InvalidArgumentException(sprintf(
-                'The name parameter must be of type string, %s given',
-                get_debug_type($id)
-            ));
-        }
-
         // The parent method is overridden to check in our array, it avoids resolving definitions
         /** @psalm-suppress UndefinedConstant */
         if (isset(static::METHOD_MAPPING[$id])) {
