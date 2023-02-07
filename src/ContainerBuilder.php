@@ -32,19 +32,21 @@ use Psr\Container\ContainerInterface;
  * @since  3.2
  * @author Matthieu Napoli <matthieu@mnapoli.fr>
  *
- * @template ContainerClass of Container
+ * @psalm-template ContainerClass of Container
  */
 class ContainerBuilder
 {
     /**
      * Name of the container class, used to create the container.
-     * @var class-string<ContainerClass>
+     * @var class-string<Container>
+     * @psalm-var class-string<ContainerClass>
      */
     private string $containerClass;
 
     /**
      * Name of the container parent class, used on compiled container.
-     * @var class-string<ContainerClass>
+     * @var class-string<Container>
+     * @psalm-var class-string<ContainerClass>
      */
     private string $containerParentClass;
 
@@ -79,7 +81,8 @@ class ContainerBuilder
     protected string $sourceCacheNamespace = '';
 
     /**
-     * @param class-string<ContainerClass> $containerClass Name of the container class, used to create the container.
+     * @param class-string<Container> $containerClass Name of the container class, used to create the container.
+     * @psalm-param class-string<ContainerClass> $containerClass
      */
     public function __construct(string $containerClass = Container::class)
     {
@@ -89,7 +92,8 @@ class ContainerBuilder
     /**
      * Build and return a container.
      *
-     * @return ContainerClass
+     * @return Container
+     * @psalm-return ContainerClass
      */
     public function build()
     {
@@ -166,12 +170,14 @@ class ContainerBuilder
      *
      * @see https://php-di.org/doc/performances.html
      *
-     * @template T of CompiledContainer
+     * @psalm-template T of CompiledContainer
+     *
      * @param string $directory Directory in which to put the compiled container.
      * @param string $containerClass Name of the compiled class. Customize only if necessary.
-     * @param class-string<T> $containerParentClass Name of the compiled container parent class. Customize only if necessary.
+     * @param class-string<Container> $containerParentClass Name of the compiled container parent class. Customize only if necessary.
+     * @psalm-param class-string<T> $containerParentClass
      *
-     * @return self<T>
+     * @psalm-return self<T>
      */
     public function enableCompilation(
         string $directory,
