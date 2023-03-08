@@ -327,7 +327,7 @@ $container = new \DI\Container([
 </ul>
 <pre><code class="language-php">// Container configuration
 $containerBuilder = new \DI\ContainerBuilder;
-$containerBuilder-&gt;useAnnotations();</code></pre>
+$containerBuilder-&gt;useAnnotations(true);</code></pre>
 <pre><code class="language-php">class Example
 {
     /**
@@ -349,7 +349,7 @@ $containerBuilder-&gt;useAnnotations();</code></pre>
 </ul>
 <pre><code class="language-php">// Container configuration
 $containerBuilder = new \DI\ContainerBuilder;
-$containerBuilder-&gt;useAttributes();</code></pre>
+$containerBuilder-&gt;useAttributes(true);</code></pre>
 <pre><code class="language-php">use DI\Attribute\Inject;
 
 class Example
@@ -362,6 +362,7 @@ class Example
     {
     }
 }</code></pre>
+<p><em>Note: remember to import the attribute class via <code>use DI\Attribute\Inject;</code>.</em></p>
 <p>Read more about attributes in the PHP-DI documentation: <a href="../attributes.html">PHP-DI attributes</a>.</p>
 <h2 id="internal-changes">Internal changes</h2>
 <p>If you were overriding or extending some internal classes of PHP-DI, be aware that they may have changed.</p>
