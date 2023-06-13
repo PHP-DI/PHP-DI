@@ -97,7 +97,8 @@ class Compiler
         string $directory,
         string $className,
         string $parentClassName,
-        bool $autowiringEnabled
+        bool $autowiringEnabled,
+        array $permissions
     ) : string {
         $fileName = rtrim($directory, '/') . '/' . $className . '.php';
 
@@ -157,13 +158,13 @@ class Compiler
 
         $fileContent = "<?php\n" . $fileContent;
 
-        $this->createCompilationDirectory(dirname($fileName));
-        $this->writeFileAtomic($fileName, $fileContent);
+        $this->createCompilationDirectory(dirname($fileName), $permissions);
+        $this->writeFileAtomic($fileName, $fileContent, $permissions);
 
         return $fileName;
     }
 
-    private function writeFileAtomic(string $fileName, string $content) : void
+    private function writeFileAtomic(string $fileName, string $content, array $permissions) : void
     {
         $tmpFile = @tempnam(dirname($fileName), 'swap-compile');
         if ($tmpFile === false) {
@@ -171,7 +172,6 @@ class Compiler
                 sprintf('Error while creating temporary file in %s', dirname($fileName))
             );
         }
-        @chmod($tmpFile, 0666);
 
         $written = file_put_contents($tmpFile, $content);
         if ($written === false) {
@@ -180,7 +180,7 @@ class Compiler
             throw new InvalidArgumentException(sprintf('Error while writing to %s', $tmpFile));
         }
 
-        @chmod($tmpFile, 0666);
+        @chmod($tmpFile, $permissions['file']);
         $renamed = @rename($tmpFile, $fileName);
         if (!$renamed) {
             @unlink($tmpFile);
@@ -334,9 +334,9 @@ class Compiler
         return var_export($value, true);
     }
 
-    private function createCompilationDirectory(string $directory) : void
+    private function createCompilationDirectory(string $directory, array $permissions) : void
     {
-        if (!is_dir($directory) && !@mkdir($directory, 0777, true) && !is_dir($directory)) {
+        if (!is_dir($directory) && !@mkdir($directory, $permissions['dir'], true) && !is_dir($directory)) {
             throw new InvalidArgumentException(sprintf('Compilation directory does not exist and cannot be created: %s.', $directory));
         }
         if (!is_writable($directory)) {
