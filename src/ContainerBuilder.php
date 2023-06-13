@@ -76,10 +76,9 @@ class ContainerBuilder
 
     private ?string $compileToDirectory = null;
 
-    private array $permissions = [
-        'file' => 0664,
-        'dir' => 0775
-    ];
+    private int $filePermission = 0664;
+
+    private int $directoryPermission = 0775;
 
     private bool $sourceCache = false;
 
@@ -152,7 +151,8 @@ class ContainerBuilder
                 $containerClass,
                 $this->containerParentClass,
                 $this->useAutowiring,
-                $this->permissions
+                $this->filePermission,
+                $this->directoryPermission
             );
             // Only load the file if it hasn't been already loaded
             // (the container can be created multiple times in the same process)
@@ -209,8 +209,8 @@ class ContainerBuilder
      */
     public function cachePermissions(int $file, int $directory) : self
     {
-        $this->permissions['file'] = $file;
-        $this->permissions['dir'] = $directory;
+        $this->filePermission = $file;
+        $this->directoryPermission = $directory;
         return $this;
     }
 
