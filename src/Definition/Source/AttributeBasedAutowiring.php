@@ -77,9 +77,6 @@ class AttributeBasedAutowiring implements DefinitionSource, Autowiring
     private function readProperties(ReflectionClass $class, ObjectDefinition $definition) : void
     {
         foreach ($class->getProperties() as $property) {
-            if ($property->isStatic()) {
-                continue;
-            }
             $this->readProperty($property, $definition);
         }
 
@@ -87,9 +84,6 @@ class AttributeBasedAutowiring implements DefinitionSource, Autowiring
         /** @noinspection PhpAssignmentInConditionInspection */
         while ($class = $class->getParentClass()) {
             foreach ($class->getProperties(ReflectionProperty::IS_PRIVATE) as $property) {
-                if ($property->isStatic()) {
-                    continue;
-                }
                 $this->readProperty($property, $definition, $class->getName());
             }
         }
@@ -100,6 +94,10 @@ class AttributeBasedAutowiring implements DefinitionSource, Autowiring
      */
     private function readProperty(ReflectionProperty $property, ObjectDefinition $definition, string $classname = null) : void
     {
+        if ($property->isStatic() || $property->isPromoted()) {
+            return;
+        }
+
         // Look for #[Inject] attribute
         try {
             $attribute = $property->getAttributes(Inject::class)[0] ?? null;

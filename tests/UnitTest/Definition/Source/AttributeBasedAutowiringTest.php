@@ -20,6 +20,7 @@ use DI\Test\UnitTest\Definition\Source\Fixtures\AnnotationFixtureScalarTypedProp
 use DI\Test\UnitTest\Definition\Source\Fixtures\AnnotationFixtureTypedProperties;
 use DI\Test\UnitTest\Definition\Source\Fixtures\AnnotationInjectableFixture;
 use DI\Test\UnitTest\Definition\Source\Fixtures\AttributeFixture;
+use DI\Test\UnitTest\Definition\Source\Fixtures\AttributeFixturePromotedProperty;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -242,6 +243,19 @@ class AttributeBasedAutowiringTest extends TestCase
         $this->assertHasPropertyInjection($definition, 'propertyParentPrivate');
     }
 
+    public function testPromotedProperties(): void
+    {
+        $definition = (new AttributeBasedAutowiring)->autowire(AttributeFixturePromotedProperty::class);
+        $this->assertNotHasPropertyInjection($definition, 'promotedProperty');
+
+        $constructorInjection = $definition->getConstructorInjection();
+        $this->assertInstanceOf(MethodInjection::class, $constructorInjection);
+
+        $parameters = $constructorInjection->getParameters();
+        $this->assertCount(1, $parameters);
+        $this->assertEquals(new Reference('foo'), $parameters[0]);
+    }
+
     private function getMethodInjection(ObjectDefinition $definition, $name) : ?MethodInjection
     {
         $methodInjections = $definition->getMethodInjections();
@@ -279,7 +293,7 @@ class AttributeBasedAutowiringTest extends TestCase
         $propertyInjections = $definition->getPropertyInjections();
         foreach ($propertyInjections as $propertyInjection) {
             if ($propertyInjection->getPropertyName() === $propertyName) {
-                $this->fail('No property injection found for ' . $propertyName);
+                $this->fail('Unexpected property injection found for ' . $propertyName);
             }
         }
     }
