@@ -69,9 +69,6 @@ class MethodInjection implements Definition
         $this->parameters = array_map($replacer, $this->parameters);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function __toString() : string
     {
         return sprintf('method(%s)', $this->methodName);

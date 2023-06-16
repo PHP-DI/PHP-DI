@@ -32,9 +32,6 @@ abstract class CompiledContainer extends Container
 
     private ?InvokerInterface $factoryInvoker = null;
 
-    /**
-     * {@inheritdoc}
-     */
     public function get(string $id) : mixed
     {
         // Try to find the entry in the singleton map
@@ -68,9 +65,6 @@ abstract class CompiledContainer extends Container
         return parent::get($id);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function has(string $id) : bool
     {
         // The parent method is overridden to check in our array, it avoids resolving definitions
