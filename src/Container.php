@@ -184,9 +184,6 @@ class Container implements ContainerInterface, FactoryInterface, InvokerInterfac
         return $this->resolveDefinition($definition, $parameters);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function has(string $id) : bool
     {
         if (array_key_exists($id, $this->resolvedEntries)) {
@@ -316,7 +313,7 @@ class Container implements ContainerInterface, FactoryInterface, InvokerInterfac
     private function getEntryType(mixed $entry) : string
     {
         if (is_object($entry)) {
-            return sprintf("Object (\n    class = %s\n)", get_class($entry));
+            return sprintf("Object (\n    class = %s\n)", $entry::class);
         }
 
         if (is_array($entry)) {

@@ -290,7 +290,7 @@ class Compiler
                 break;
             default:
                 // This case should not happen (so it cannot be tested)
-                throw new \Exception('Cannot compile definition of type ' . get_class($definition));
+                throw new \Exception('Cannot compile definition of type ' . $definition::class);
         }
 
         $this->methods[$methodName] = $code;

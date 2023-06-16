@@ -184,7 +184,7 @@ class ObjectCreator implements DefinitionResolver
             } catch (Exception $e) {
                 throw new DependencyException(sprintf(
                     'Error while injecting in %s::%s. %s',
-                    get_class($object),
+                    $object::class,
                     $propertyName,
                     $e->getMessage()
                 ), 0, $e);
@@ -196,7 +196,7 @@ class ObjectCreator implements DefinitionResolver
 
     public static function setPrivatePropertyValue(?string $className, $object, string $propertyName, mixed $propertyValue) : void
     {
-        $className = $className ?: get_class($object);
+        $className = $className ?: $object::class;
 
         $property = new ReflectionProperty($className, $propertyName);
         if (! $property->isPublic()) {

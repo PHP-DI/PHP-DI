@@ -55,7 +55,6 @@ class AttributeBasedAutowiring implements DefinitionSource, Autowiring
     }
 
     /**
-     * {@inheritdoc}
      * @throws InvalidAttribute
      * @throws InvalidArgumentException The class doesn't exist
      */
@@ -99,7 +98,7 @@ class AttributeBasedAutowiring implements DefinitionSource, Autowiring
     /**
      * @throws InvalidAttribute
      */
-    private function readProperty(ReflectionProperty $property, ObjectDefinition $definition, ?string $classname = null) : void
+    private function readProperty(ReflectionProperty $property, ObjectDefinition $definition, string $classname = null) : void
     {
         // Look for #[Inject] attribute
         try {
