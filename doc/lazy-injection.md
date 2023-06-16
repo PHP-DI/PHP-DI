@@ -85,10 +85,10 @@ You can define an object as "lazy". If it is injected as a dependency, then a pr
 
 ### Installation
 
-Lazy injection requires the [Ocramius/ProxyManager](https://github.com/Ocramius/ProxyManager) library. This library is not installed by default with PHP-DI, you need to require it:
+Lazy injection requires the [Ocramius/ProxyManager](https://github.com/Ocramius/ProxyManager) library. This library is not installed by default with PHP-DI, you need to require it. However, you should install the fork that is compatible with PHP 8.1:
 
 ````
-composer require ocramius/proxy-manager
+composer require friendsofphp/proxy-manager-lts
 ````
 
 ### PHP configuration file
