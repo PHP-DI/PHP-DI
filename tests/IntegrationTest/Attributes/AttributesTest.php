@@ -105,4 +105,29 @@ class AttributesTest extends BaseContainerTest
         $builder->useAttributes(true);
         $builder->build()->get(NamedInjection::class);
     }
+
+    /**
+     * @test
+     * @dataProvider provideContainer
+     */
+    public function inject_promoted_property(ContainerBuilder $builder)
+    {
+        $builder->useAttributes(true);
+        $object = $builder->build()->get(PromotedProperty::class);
+        $this->assertInstanceOf(A::class, $object->promotedProperty);
+    }
+
+    /**
+     * @test
+     * @dataProvider provideContainer
+     */
+    public function inject_promoted_readonly_property(ContainerBuilder $builder)
+    {
+        if (PHP_VERSION_ID < 80100) {
+            $this->markTestSkipped("PHP 8.1 required for readonly properties");
+        }
+        $builder->useAttributes(true);
+        $object = $builder->build()->get(PromotedReadonlyProperty::class);
+        $this->assertInstanceOf(A::class, $object->promotedProperty);
+    }
 }
