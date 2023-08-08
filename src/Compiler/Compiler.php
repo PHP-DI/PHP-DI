@@ -362,7 +362,8 @@ class Compiler
         if ($value instanceof \Closure) {
             return true;
         }
-        if ($value instanceof \UnitEnum) {
+        /** @psalm-suppress UndefinedClass */
+        if ((\PHP_VERSION_ID >= 80100) && ($value instanceof \UnitEnum)) {
             return true;
         }
         if (is_object($value)) {
