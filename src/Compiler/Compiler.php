@@ -362,6 +362,9 @@ class Compiler
         if ($value instanceof \Closure) {
             return true;
         }
+        if ($value instanceof \UnitEnum) {
+            return true;
+        }
         if (is_object($value)) {
             return 'An object was found but objects cannot be compiled';
         }
