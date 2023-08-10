@@ -51,7 +51,8 @@ return $config->setRules([
     'single_line_throw' => false,
     'php_unit_method_casing' => false,
     'blank_line_between_import_groups' => false,
-        'global_namespace_import' => false,
+    'global_namespace_import' => false,
+    'nullable_type_declaration_for_default_null_value' => false,
 ])
     ->setRiskyAllowed(true)
     ->setFinder($finder);
