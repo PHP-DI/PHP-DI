@@ -247,6 +247,17 @@ class DefinitionArrayTest extends TestCase
     }
 
     /**
+     * The wildcard for global namespace should not match across namespaces.
+     */
+    public function testGlobalNamespaceWildcardShouldNotMatchAcrossNamespace()
+    {
+        $source = new DefinitionArray([
+            '*Interface' => \DI\create(),
+        ]);
+        $this->assertNull($source->getDefinition('My\FooInterface'));
+    }
+
+    /**
      * @see https://github.com/PHP-DI/PHP-DI/issues/379
      */
     public function testWildcardStringsAreEscaped()
