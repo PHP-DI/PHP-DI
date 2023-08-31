@@ -86,7 +86,7 @@ class DefinitionArray implements DefinitionSource, MutableDefinitionSource
         foreach ($this->wildcardDefinitions as $key => $definition) {
             // Turn the pattern into a regex
             $key = preg_quote($key, '#');
-            $key = '#' . str_replace('\\' . self::WILDCARD, self::WILDCARD_PATTERN, $key) . '#';
+            $key = '#^' . str_replace('\\' . self::WILDCARD, self::WILDCARD_PATTERN, $key) . '#';
             if (preg_match($key, $name, $matches) === 1) {
                 array_shift($matches);
 
