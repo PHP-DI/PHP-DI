@@ -169,6 +169,7 @@ class ObjectDefinition implements Definition
         if ($this->lazy !== null) {
             return $this->lazy;
         }
+
         // Default value
         return false;
     }
