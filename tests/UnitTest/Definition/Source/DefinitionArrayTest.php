@@ -180,6 +180,7 @@ class DefinitionArrayTest extends TestCase
             'Namespaced\*Interface'  => \DI\create('Namespaced\*'),
             'Namespaced2\*Interface' => \DI\create('Namespaced2\Foo'),
             'Multiple\*\*\Matches'   => \DI\create('Multiple\*\*\Implementation'),
+            '*Interface'   => \DI\create('GlobalImplementation'),
         ]);
 
         $definition = $source->getDefinition('foo1');
@@ -201,6 +202,11 @@ class DefinitionArrayTest extends TestCase
         $this->assertInstanceOf(ObjectDefinition::class, $definition);
         $this->assertEquals('Multiple\Foo\Bar\Matches', $definition->getName());
         $this->assertEquals('Multiple\Foo\Bar\Implementation', $definition->getClassName());
+
+        $definition = $source->getDefinition('GlobalInterface');
+        $this->assertInstanceOf(ObjectDefinition::class, $definition);
+        $this->assertEquals('GlobalInterface', $definition->getName());
+        $this->assertEquals('GlobalImplementation', $definition->getClassName());
     }
 
     /**
@@ -238,6 +244,17 @@ class DefinitionArrayTest extends TestCase
             'My\*Interface' => \DI\create('My\*'),
         ]);
         $this->assertNull($source->getDefinition('My\Foo\BarInterface'));
+    }
+
+    /**
+     * The wildcard for global namespace should not match across namespaces.
+     */
+    public function testGlobalNamespaceWildcardShouldNotMatchAcrossNamespace()
+    {
+        $source = new DefinitionArray([
+            '*Interface' => \DI\create(),
+        ]);
+        $this->assertNull($source->getDefinition('My\FooInterface'));
     }
 
     /**
