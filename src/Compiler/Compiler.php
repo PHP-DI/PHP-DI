@@ -184,6 +184,7 @@ class Compiler
         $renamed = @rename($tmpFile, $fileName);
         if (!$renamed) {
             @unlink($tmpFile);
+
             throw new InvalidArgumentException(sprintf('Error while renaming %s to %s', $tmpFile, $fileName));
         }
     }
@@ -311,6 +312,7 @@ class Compiler
             $subEntryName = 'subEntry' . (++$this->subEntryCounter);
             // Compile the sub-definition in another method
             $methodName = $this->compileDefinition($subEntryName, $value);
+
             // The value is now a method call to that method (which returns the value)
             return "\$this->$methodName()";
         }
