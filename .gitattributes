@@ -7,13 +7,14 @@ news              export-ignore
 .gitattributes    export-ignore
 .gitignore        export-ignore
 .gitstats.yml     export-ignore
-.php_cs           export-ignore
+.php-cs-fixer.php export-ignore
 .phpstorm.meta.php export-ignore
 404.md            export-ignore
 CONTRIBUTING.md   export-ignore
 couscous.yml      export-ignore
 *.neon            export-ignore
 phpunit.xml.dist  export-ignore
+psalm.xml         export-ignore
 SECURITY.md       export-ignore
 
 # Auto detect text files and perform LF normalization
