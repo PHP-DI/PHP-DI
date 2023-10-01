@@ -155,7 +155,7 @@ class Compiler
         require __DIR__ . '/Template.php';
         $fileContent = ob_get_clean();
 
-        $fileContent = "<?php\n" . $fileContent;
+        $fileContent = "<?php declare(strict_types=1);\n" . $fileContent;
 
         $this->createCompilationDirectory(dirname($fileName));
         $this->writeFileAtomic($fileName, $fileContent);
