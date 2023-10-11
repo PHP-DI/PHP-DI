@@ -24,7 +24,7 @@ return $config->setRules([
     'declare_strict_types' => true,
     'heredoc_to_nowdoc' => true,
     'linebreak_after_opening_tag' => true,
-    'new_with_braces' => false,
+    'new_with_parentheses' => false,
     'multiline_whitespace_before_semicolons' => false,
     'no_php4_constructor' => true,
     'no_unreachable_default_argument_value' => true,
