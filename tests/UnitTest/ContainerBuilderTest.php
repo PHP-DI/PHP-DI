@@ -21,18 +21,19 @@ use Psr\Container\ContainerInterface;
 class ContainerBuilderTest extends TestCase
 {
     use EasyMock;
+	
+	private static function getProperty(object $object, string $propertyName)
+	{
+		return (function (string $propertyName) {
+			return $this->$propertyName;
+		})->bindTo($object, $object)($propertyName);
+	}
 
     /**
      * @test
      */
     public function should_configure_for_development_by_default()
     {
-        $getProperty = function (object $object, string $propertyName) {
-            return (function (string $propertyName) {
-                return $this->$propertyName;
-            })->bindTo($object, $object)($propertyName);
-        };
-
         // Make the ContainerBuilder use our fake class to catch constructor parameters
         $builder = new ContainerBuilder(FakeContainer::class);
         /** @var FakeContainer $container */
@@ -41,7 +42,7 @@ class ContainerBuilderTest extends TestCase
         // Not compiled
         $this->assertNotInstanceOf(CompiledContainer::class, $container);
         // Proxies evaluated in memory
-        $this->assertNull($getProperty($container->proxyFactory, 'proxyDirectory'));
+        $this->assertNull(self::getProperty($container->proxyFactory, 'proxyDirectory'));
     }
 
     /**
@@ -247,5 +248,29 @@ class ContainerBuilderTest extends TestCase
         $builder->build();
 
         $builder->addDefinitions([]);
+    }
+
+    /**
+     * @test
+     */
+    public function should_create_proxies()
+    {
+        $builder = new ContainerBuilder(FakeContainer::class);
+		$builder->writeProxiesToFile(true, 'somedir');
+        $container = $builder->build();
+
+        $this->assertSame('somedir', self::getProperty($container->proxyFactory, 'proxyDirectory'));
+    }
+
+    /**
+     * @test
+     */
+    public function should_not_create_proxies()
+    {
+        $builder = new ContainerBuilder(FakeContainer::class);
+		$builder->writeProxiesToFile(false, 'somedir');
+        $container = $builder->build();
+
+        $this->assertNull(self::getProperty($container->proxyFactory, 'proxyDirectory'));
     }
 }

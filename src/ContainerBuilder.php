@@ -247,7 +247,7 @@ class ContainerBuilder
                 'The proxy directory must be specified if you want to write proxies on disk'
             );
         }
-        $this->proxyDirectory = $proxyDirectory;
+        $this->proxyDirectory = $writeToFile ? $proxyDirectory : null;
 
         return $this;
     }
