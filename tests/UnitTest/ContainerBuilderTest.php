@@ -256,7 +256,7 @@ class ContainerBuilderTest extends TestCase
     public function should_create_proxies()
     {
         $builder = new ContainerBuilder(FakeContainer::class);
-		$builder->writeProxiesToFile(true, 'somedir');
+        $builder->writeProxiesToFile(true, 'somedir');
         $container = $builder->build();
 
         $this->assertSame('somedir', self::getProperty($container->proxyFactory, 'proxyDirectory'));
@@ -268,7 +268,7 @@ class ContainerBuilderTest extends TestCase
     public function should_not_create_proxies()
     {
         $builder = new ContainerBuilder(FakeContainer::class);
-		$builder->writeProxiesToFile(false, 'somedir');
+        $builder->writeProxiesToFile(false, 'somedir');
         $container = $builder->build();
 
         $this->assertNull(self::getProperty($container->proxyFactory, 'proxyDirectory'));
