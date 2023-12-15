@@ -118,6 +118,7 @@ class Container implements ContainerInterface, FactoryInterface, InvokerInterfac
      * @param string|class-string<T> $id Entry name or a class name.
      *
      * @return mixed|T
+     * @psalm-return ($id is class-string<T> ? T : mixed)
      * @throws DependencyException Error while resolving the entry.
      * @throws NotFoundException No entry found for the given name.
      */
@@ -165,6 +166,7 @@ class Container implements ContainerInterface, FactoryInterface, InvokerInterfac
      *                                           array will be resolved using the container.
      *
      * @return mixed|T
+     * @psalm-return ($id is class-string<T> ? T : mixed)
      * @throws InvalidArgumentException The name parameter must be of type string.
      * @throws DependencyException Error while resolving the entry.
      * @throws NotFoundException No entry found for the given name.
@@ -204,6 +206,7 @@ class Container implements ContainerInterface, FactoryInterface, InvokerInterfac
      * @template T
      * @param object|T $instance Object to perform injection upon
      * @return object|T $instance Returns the same instance
+     * @psalm-return T
      * @throws InvalidArgumentException
      * @throws DependencyException Error while injecting dependencies
      */
