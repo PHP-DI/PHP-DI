@@ -15,9 +15,14 @@ return $config->setRules([
     '@Symfony' => true,
     '@Symfony:risky' => true,
     'array_syntax' => ['syntax' => 'short'],
-    'braces' => [
-        'allow_single_line_closure' => true,
-    ],
+    'single_space_around_construct' => true,
+    'control_structure_braces' => true,
+    'control_structure_continuation_position' => true,
+    'declare_parentheses' => true,
+    'no_multiple_statements_per_line' => true,
+    'braces_position' => true,
+    'statement_indentation' => true,
+    'no_extra_blank_lines' => true,
     'concat_space' => [
         'spacing' => 'one',
     ],
