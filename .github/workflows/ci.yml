@@ -16,7 +16,7 @@ jobs:
         timeout-minutes: 15
         strategy:
             matrix:
-                php: [ '8.0', '8.1' ]
+                php: [ '8.0', '8.1', '8.2', '8.3' ]
                 dependency-version: [ '' ]
                 include:
                     -   php: '8.0'
