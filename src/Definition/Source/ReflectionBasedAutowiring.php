@@ -16,6 +16,8 @@ use ReflectionNamedType;
  */
 class ReflectionBasedAutowiring implements DefinitionSource, Autowiring
 {
+    use LogeableSource;
+
     public function autowire(string $name, ObjectDefinition $definition = null) : ObjectDefinition|null
     {
         $className = $definition ? $definition->getClassName() : $name;
@@ -23,6 +25,8 @@ class ReflectionBasedAutowiring implements DefinitionSource, Autowiring
         if (!class_exists($className) && !interface_exists($className)) {
             return $definition;
         }
+
+        $this->logger?->log($this->logLevel, sprintf('Autowiring %s', $name));
 
         $definition = $definition ?: new ObjectDefinition($name);
 
