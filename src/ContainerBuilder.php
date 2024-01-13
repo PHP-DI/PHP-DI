@@ -16,6 +16,8 @@ use DI\Definition\Source\SourceChain;
 use DI\Proxy\ProxyFactory;
 use InvalidArgumentException;
 use Psr\Container\ContainerInterface;
+use Psr\Log\LoggerInterface;
+use Psr\Log\LogLevel;
 
 /**
  * Helper to create and configure a Container.
@@ -80,6 +82,10 @@ class ContainerBuilder
 
     protected string $sourceCacheNamespace = '';
 
+    protected ?LoggerInterface $logger = null;
+
+    protected string $logLevel = LogLevel::DEBUG;
+
     /**
      * @param class-string<Container> $containerClass Name of the container class, used to create the container.
      * @psalm-param class-string<ContainerClass> $containerClass
@@ -101,9 +107,15 @@ class ContainerBuilder
 
         if ($this->useAttributes) {
             $autowiring = new AttributeBasedAutowiring;
+            if ($this->logger !== null) {
+                $autowiring->setLogger($this->logger, $this->logLevel);
+            }
             $sources[] = $autowiring;
         } elseif ($this->useAutowiring) {
             $autowiring = new ReflectionBasedAutowiring;
+            if ($this->logger !== null) {
+                $autowiring->setLogger($this->logger, $this->logLevel);
+            }
             $sources[] = $autowiring;
         } else {
             $autowiring = new NoAutowiring;
@@ -322,6 +334,35 @@ class ContainerBuilder
     public function isCompilationEnabled() : bool
     {
         return (bool) $this->compileToDirectory;
+    }
+
+    /**
+     * Some definitions sources may log their actions if logger was provided.
+     *
+     * @psalm-param LogLevel::* $logLevel
+     */
+    public function setLogger(LoggerInterface $logger, string $logLevel = LogLevel::DEBUG): self
+    {
+        $this->ensureNotLocked();
+
+        $allowedLogLevels = [
+            LogLevel::DEBUG,
+            LogLevel::INFO,
+            LogLevel::NOTICE,
+            LogLevel::WARNING,
+            LogLevel::ERROR,
+            LogLevel::CRITICAL,
+            LogLevel::ALERT,
+            LogLevel::EMERGENCY,
+        ];
+        if (!in_array($logLevel, $allowedLogLevels, true)) {
+            throw new \InvalidArgumentException(sprintf('Invalid log level "%s"', $logLevel));
+        }
+
+        $this->logger = $logger;
+        $this->logLevel = $logLevel;
+
+        return $this;
     }
 
     private function ensureNotLocked() : void

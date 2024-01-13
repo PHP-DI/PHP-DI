@@ -28,6 +28,8 @@ use Throwable;
  */
 class AttributeBasedAutowiring implements DefinitionSource, Autowiring
 {
+    use LogeableSource;
+
     /**
      * @throws InvalidAttribute
      */
@@ -38,6 +40,8 @@ class AttributeBasedAutowiring implements DefinitionSource, Autowiring
         if (!class_exists($className) && !interface_exists($className)) {
             return $definition;
         }
+
+        $this->logger?->log($this->logLevel, sprintf('Autowiring %s', $name));
 
         $definition = $definition ?: new ObjectDefinition($name);
 
