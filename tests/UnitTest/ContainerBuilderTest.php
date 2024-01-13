@@ -12,6 +12,7 @@ use DI\Definition\ValueDefinition;
 use DI\Test\IntegrationTest\BaseContainerTest;
 use DI\Test\UnitTest\Fixtures\FakeContainer;
 use EasyMock\EasyMock;
+use Generator;
 use PHPUnit\Framework\TestCase;
 use Psr\Container\ContainerInterface;
 use Psr\Log\LoggerInterface;
@@ -243,15 +244,16 @@ class ContainerBuilderTest extends TestCase
     /**
      * Ensure the ContainerBuilder cannot be modified after the container has been built.
      * @test
+     * @dataProvider modifyMethods
      */
-    public function should_throw_if_modified_after_building_a_container()
+    public function should_throw_if_modified_after_building_a_container(string $modifyMethod, mixed ...$args)
     {
         $this->expectException('LogicException');
         $this->expectExceptionMessage('The ContainerBuilder cannot be modified after the container has been built');
         $builder = new ContainerBuilder();
         $builder->build();
 
-        $builder->addDefinitions([]);
+        $builder->$modifyMethod(...$args);
     }
 
     /**
@@ -276,5 +278,17 @@ class ContainerBuilderTest extends TestCase
         $container = $builder->build();
 
         $this->assertNull(self::getProperty($container->proxyFactory, 'proxyDirectory'));
+    }
+
+    public function modifyMethods(): Generator
+    {
+        yield 'enable-compilation' => ['enableCompilation', 'foo', 'bar', 'baz'];
+        yield 'use-autowiring' => ['useAutowiring', false];
+        yield 'use-attributes' => ['useAttributes', false];
+        yield 'write-proxies-to-file' => ['writeProxiesToFile', false, 'somedir'];
+        yield 'wrap-container' => ['wrapContainer', $this->easyMock(ContainerInterface::class)];
+        yield 'add-definitions' => ['addDefinitions', ['foo' => 'bar']];
+        yield 'enable-definition-cache' => ['enableDefinitionCache', 'someNS'];
+        yield 'set-logger' => ['setLogger', $this->easyMock(LoggerInterface::class)];
     }
 }
