@@ -14,6 +14,7 @@ use DI\Test\UnitTest\Fixtures\FakeContainer;
 use EasyMock\EasyMock;
 use PHPUnit\Framework\TestCase;
 use Psr\Container\ContainerInterface;
+use Psr\Log\LoggerInterface;
 
 /**
  * @covers \DI\ContainerBuilder
@@ -233,6 +234,9 @@ class ContainerBuilderTest extends TestCase
         $this->assertSame($builder, $result);
 
         $result = $builder->wrapContainer($this->easyMock(ContainerInterface::class));
+        $this->assertSame($builder, $result);
+
+        $result = $builder->setLogger($this->easyMock(LoggerInterface::class));
         $this->assertSame($builder, $result);
     }
 
