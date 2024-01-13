@@ -39,7 +39,7 @@ class FactoryDefinitionTest extends BaseContainerTest
         $this->assertEquals('bar', $container->get('factory'));
     }
 
-    public function provideCallables(): array
+    public static function provideCallables(): array
     {
         $callables = [
             'closure' => function () {
@@ -57,7 +57,7 @@ class FactoryDefinitionTest extends BaseContainerTest
 
         $testCases = [];
         foreach ($callables as $callableName => $callable) {
-            foreach ($this->provideContainer() as $containerName => $container) {
+            foreach (self::provideContainer() as $containerName => $container) {
                 $testCases[$containerName . ' - ' . $callableName] = [$callable, clone $container[0]];
             }
         }

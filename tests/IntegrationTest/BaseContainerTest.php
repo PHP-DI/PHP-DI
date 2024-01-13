@@ -32,7 +32,7 @@ abstract class BaseContainerTest extends TestCase
         parent::setUp();
     }
 
-    public function provideContainer() : array
+    public static function provideContainer() : array
     {
         // Clear all files
         array_map('unlink', glob(self::COMPILATION_DIR . '/*'));

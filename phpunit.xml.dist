@@ -17,6 +17,7 @@
         </testsuite>
         <testsuite name="integration">
             <directory>./tests/IntegrationTest/</directory>
+            <exclude>./tests/IntegrationTest/BaseContainerTest.php</exclude>
         </testsuite>
     </testsuites>
 
