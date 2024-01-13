@@ -11,6 +11,7 @@ use DI\Definition\ObjectDefinition\MethodInjection;
 use DI\Definition\ObjectDefinition\PropertyInjection;
 use DI\Definition\Reference;
 use DI\Definition\Source\AttributeBasedAutowiring;
+use DI\Definition\Source\ReflectionBasedAutowiring;
 use DI\Test\UnitTest\Definition\Source\Fixtures\AnnotationFixture2;
 use DI\Test\UnitTest\Definition\Source\Fixtures\AnnotationFixture3;
 use DI\Test\UnitTest\Definition\Source\Fixtures\AnnotationFixture4;
@@ -21,7 +22,11 @@ use DI\Test\UnitTest\Definition\Source\Fixtures\AnnotationFixtureTypedProperties
 use DI\Test\UnitTest\Definition\Source\Fixtures\AnnotationInjectableFixture;
 use DI\Test\UnitTest\Definition\Source\Fixtures\AttributeFixture;
 use DI\Test\UnitTest\Definition\Source\Fixtures\AttributeFixturePromotedProperty;
+use DI\Test\UnitTest\Definition\Source\Fixtures\AutowiringFixture;
+use Generator;
 use PHPUnit\Framework\TestCase;
+use Psr\Log\LoggerInterface;
+use Psr\Log\LogLevel;
 
 /**
  * @covers \DI\Definition\Source\AttributeBasedAutowiring
@@ -254,6 +259,48 @@ class AttributeBasedAutowiringTest extends TestCase
         $parameters = $constructorInjection->getParameters();
         $this->assertCount(1, $parameters);
         $this->assertEquals(new Reference('foo'), $parameters[0]);
+    }
+
+
+    public function testAutowireHitLoggedAtDefaultLogLevel(): void
+    {
+        $class = AutowiringFixture::class;
+        $loggerMock = $this->createMock(LoggerInterface::class);
+        $loggerMock->expects($this->once())
+            ->method('log')
+            // Log level is set to debug by default
+            ->with(LogLevel::DEBUG, "Autowiring {$class}");
+
+        $autowiring = (new ReflectionBasedAutowiring())->setLogger($loggerMock);
+
+        $autowiring->autowire($class);
+    }
+
+    /** @dataProvider availableLogLevels */
+    public function testAutowireHitLogged(string $logLevel): void
+    {
+        $class = AutowiringFixture::class;
+        $loggerMock = $this->createMock(LoggerInterface::class);
+        $loggerMock->expects($this->once())
+            ->method('log')
+            ->with($logLevel, "Autowiring {$class}");
+
+        $autowiring = (new ReflectionBasedAutowiring())->setLogger($loggerMock, $logLevel);
+
+        $autowiring->autowire($class);
+    }
+
+    /** @return Generator<string> */
+    public function availableLogLevels(): Generator
+    {
+        yield 'debug' => [LogLevel::DEBUG];
+        yield 'info' => [LogLevel::INFO];
+        yield 'notice' => [LogLevel::NOTICE];
+        yield 'warning' => [LogLevel::WARNING];
+        yield 'error' => [LogLevel::ERROR];
+        yield 'critical' => [LogLevel::CRITICAL];
+        yield 'alert' => [LogLevel::ALERT];
+        yield 'emergency' => [LogLevel::EMERGENCY];
     }
 
     private function getMethodInjection(ObjectDefinition $definition, $name) : ?MethodInjection
