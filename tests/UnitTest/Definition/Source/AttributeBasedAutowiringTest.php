@@ -11,7 +11,6 @@ use DI\Definition\ObjectDefinition\MethodInjection;
 use DI\Definition\ObjectDefinition\PropertyInjection;
 use DI\Definition\Reference;
 use DI\Definition\Source\AttributeBasedAutowiring;
-use DI\Definition\Source\ReflectionBasedAutowiring;
 use DI\Test\UnitTest\Definition\Source\Fixtures\AnnotationFixture2;
 use DI\Test\UnitTest\Definition\Source\Fixtures\AnnotationFixture3;
 use DI\Test\UnitTest\Definition\Source\Fixtures\AnnotationFixture4;
@@ -271,7 +270,7 @@ class AttributeBasedAutowiringTest extends TestCase
             // Log level is set to debug by default
             ->with(LogLevel::DEBUG, "Autowiring {$class}");
 
-        $autowiring = (new ReflectionBasedAutowiring())->setLogger($loggerMock);
+        $autowiring = (new AttributeBasedAutowiring())->setLogger($loggerMock);
 
         $autowiring->autowire($class);
     }
@@ -285,7 +284,7 @@ class AttributeBasedAutowiringTest extends TestCase
             ->method('log')
             ->with($logLevel, "Autowiring {$class}");
 
-        $autowiring = (new ReflectionBasedAutowiring())->setLogger($loggerMock, $logLevel);
+        $autowiring = (new AttributeBasedAutowiring())->setLogger($loggerMock, $logLevel);
 
         $autowiring->autowire($class);
     }
