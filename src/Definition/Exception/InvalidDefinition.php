@@ -17,7 +17,7 @@ class InvalidDefinition extends \Exception implements ContainerExceptionInterfac
     public static function create(Definition $definition, string $message, \Exception $previous = null) : self
     {
         return new self(sprintf(
-            '%s' . \PHP_EOL . 'Full definition:' . \PHP_EOL . '%s',
+            '%s' . "\n" . 'Full definition:' . "\n" . '%s',
             $message,
             (string) $definition
         ), 0, $previous);
