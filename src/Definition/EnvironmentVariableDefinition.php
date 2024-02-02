@@ -68,20 +68,20 @@ class EnvironmentVariableDefinition implements Definition
 
     public function __toString() : string
     {
-        $str = '    variable = ' . $this->variableName . \PHP_EOL
+        $str = '    variable = ' . $this->variableName . "\n"
             . '    optional = ' . ($this->isOptional ? 'yes' : 'no');
 
         if ($this->isOptional) {
             if ($this->defaultValue instanceof Definition) {
                 $nestedDefinition = (string) $this->defaultValue;
-                $defaultValueStr = str_replace(\PHP_EOL, \PHP_EOL . '    ', $nestedDefinition);
+                $defaultValueStr = str_replace("\n", "\n" . '    ', $nestedDefinition);
             } else {
                 $defaultValueStr = var_export($this->defaultValue, true);
             }
 
-            $str .= \PHP_EOL . '    default = ' . $defaultValueStr;
+            $str .= "\n" . '    default = ' . $defaultValueStr;
         }
 
-        return sprintf('Environment variable (' . \PHP_EOL . '%s' . \PHP_EOL . ')', $str);
+        return sprintf('Environment variable (' . "\n" . '%s' . "\n" . ')', $str);
     }
 }
