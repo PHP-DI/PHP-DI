@@ -14,7 +14,7 @@ use Psr\Container\NotFoundExceptionInterface;
  * @since 5.0
  * @author Matthieu Napoli <matthieu@mnapoli.fr>
  */
-class StringDefinition implements Definition, SelfResolvingDefinition
+class StringDefinition implements DefinitionInterface, SelfResolvingDefinition
 {
     /** Entry name. */
     private string $name = '';

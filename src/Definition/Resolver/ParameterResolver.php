@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace DI\Definition\Resolver;
 
-use DI\Definition\Definition;
+use DI\Definition\DefinitionInterface;
 use DI\Definition\Exception\InvalidDefinition;
 use DI\Definition\ObjectDefinition\MethodInjection;
 use ReflectionMethod;
@@ -19,10 +19,10 @@ use ReflectionParameter;
 class ParameterResolver
 {
     /**
-     * @param DefinitionResolver $definitionResolver Will be used to resolve nested definitions.
+     * @param DefinitionResolverInterface $definitionResolver Will be used to resolve nested definitions.
      */
     public function __construct(
-        private DefinitionResolver $definitionResolver,
+        private DefinitionResolverInterface $definitionResolver,
     ) {
     }
 
@@ -65,7 +65,7 @@ class ParameterResolver
             }
 
             // Nested definitions
-            if ($value instanceof Definition) {
+            if ($value instanceof DefinitionInterface) {
                 // If the container cannot produce the entry, we can use the default parameter value
                 if ($parameter->isOptional() && ! $this->definitionResolver->isResolvable($value)) {
                     $value = $this->getParameterDefaultValue($parameter, $method);

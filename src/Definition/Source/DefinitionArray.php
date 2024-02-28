@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace DI\Definition\Source;
 
-use DI\Definition\Definition;
+use DI\Definition\DefinitionInterface;
 
 /**
  * Reads DI definitions from a PHP array.
@@ -55,7 +55,7 @@ class DefinitionArray implements DefinitionSource, MutableDefinitionSource
         $this->wildcardDefinitions = null;
     }
 
-    public function addDefinition(Definition $definition) : void
+    public function addDefinition(DefinitionInterface $definition) : void
     {
         $this->definitions[$definition->getName()] = $definition;
 
@@ -63,7 +63,7 @@ class DefinitionArray implements DefinitionSource, MutableDefinitionSource
         $this->wildcardDefinitions = null;
     }
 
-    public function getDefinition(string $name) : Definition|null
+    public function getDefinition(string $name) : DefinitionInterface|null
     {
         // Look for the definition by name
         if (array_key_exists($name, $this->definitions)) {

@@ -14,7 +14,7 @@ namespace DI\Factory;
  *
  * @author Matthieu Napoli <matthieu@mnapoli.fr>
  */
-interface RequestedEntry
+interface RequestedEntryInterface
 {
     /**
      * Returns the name of the entry that was requested by the container.

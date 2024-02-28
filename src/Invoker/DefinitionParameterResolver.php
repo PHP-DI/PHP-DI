@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace DI\Invoker;
 
-use DI\Definition\Definition;
-use DI\Definition\Helper\DefinitionHelper;
-use DI\Definition\Resolver\DefinitionResolver;
+use DI\Definition\DefinitionInterface;
+use DI\Definition\Helper\DefinitionHelperInterface;
+use DI\Definition\Resolver\DefinitionResolverInterface;
 use Invoker\ParameterResolver\ParameterResolver;
 use ReflectionFunctionAbstract;
 
@@ -19,7 +19,7 @@ use ReflectionFunctionAbstract;
 class DefinitionParameterResolver implements ParameterResolver
 {
     public function __construct(
-        private DefinitionResolver $definitionResolver
+        private DefinitionResolverInterface $definitionResolver
     ) {
     }
 
@@ -34,11 +34,11 @@ class DefinitionParameterResolver implements ParameterResolver
         }
 
         foreach ($providedParameters as $key => $value) {
-            if ($value instanceof DefinitionHelper) {
+            if ($value instanceof DefinitionHelperInterface) {
                 $value = $value->getDefinition('');
             }
 
-            if (! $value instanceof Definition) {
+            if (! $value instanceof DefinitionInterface) {
                 continue;
             }
 

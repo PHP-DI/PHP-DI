@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace DI\Test\UnitTest\Definition\Resolver;
 
-use DI\Definition\Definition;
+use DI\Definition\DefinitionInterface;
 use DI\Definition\Resolver\ResolverDispatcher;
 use DI\Definition\StringDefinition;
 use DI\Definition\ValueDefinition;
@@ -54,7 +54,7 @@ class ResolverDispatcherTest extends TestCase
     {
         $this->expectException('RuntimeException');
         $this->expectExceptionMessage('No definition resolver was configured for definition of type');
-        $this->resolver->resolve($this->easyMock(Definition::class));
+        $this->resolver->resolve($this->easyMock(DefinitionInterface::class));
     }
 
     /**

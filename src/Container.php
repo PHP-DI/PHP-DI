@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace DI;
 
-use DI\Definition\Definition;
+use DI\Definition\DefinitionInterface;
 use DI\Definition\Exception\InvalidDefinition;
 use DI\Definition\FactoryDefinition;
-use DI\Definition\Helper\DefinitionHelper;
+use DI\Definition\Helper\DefinitionHelperInterface;
 use DI\Definition\InstanceDefinition;
 use DI\Definition\ObjectDefinition;
-use DI\Definition\Resolver\DefinitionResolver;
+use DI\Definition\Resolver\DefinitionResolverInterface;
 use DI\Definition\Resolver\ResolverDispatcher;
 use DI\Definition\Source\DefinitionArray;
 use DI\Definition\Source\MutableDefinitionSource;
@@ -45,12 +45,12 @@ class Container implements ContainerInterface, FactoryInterface, InvokerInterfac
 
     private MutableDefinitionSource $definitionSource;
 
-    private DefinitionResolver $definitionResolver;
+    private DefinitionResolverInterface $definitionResolver;
 
     /**
      * Map of definitions that are already fetched (local cache).
      *
-     * @var array<Definition|null>
+     * @var array<DefinitionInterface|null>
      */
     private array $fetchedDefinitions = [];
 
@@ -140,7 +140,7 @@ class Container implements ContainerInterface, FactoryInterface, InvokerInterfac
         return $value;
     }
 
-    private function getDefinition(string $name) : ?Definition
+    private function getDefinition(string $name) : ?DefinitionInterface
     {
         // Local cache that avoids fetching the same definition twice
         if (!array_key_exists($name, $this->fetchedDefinitions)) {
@@ -249,11 +249,11 @@ class Container implements ContainerInterface, FactoryInterface, InvokerInterfac
      * Define an object or a value in the container.
      *
      * @param string $name Entry name
-     * @param mixed|DefinitionHelper $value Value, use definition helpers to define objects
+     * @param mixed|DefinitionHelperInterface $value Value, use definition helpers to define objects
      */
     public function set(string $name, mixed $value) : void
     {
-        if ($value instanceof DefinitionHelper) {
+        if ($value instanceof DefinitionHelperInterface) {
             $value = $value->getDefinition($name);
         } elseif ($value instanceof \Closure) {
             $value = new FactoryDefinition($name, $value);
@@ -261,7 +261,7 @@ class Container implements ContainerInterface, FactoryInterface, InvokerInterfac
 
         if ($value instanceof ValueDefinition) {
             $this->resolvedEntries[$name] = $value->getValue();
-        } elseif ($value instanceof Definition) {
+        } elseif ($value instanceof DefinitionInterface) {
             $value->setName($name);
             $this->setDefinition($name, $value);
         } else {
@@ -296,7 +296,7 @@ class Container implements ContainerInterface, FactoryInterface, InvokerInterfac
     public function debugEntry(string $name) : string
     {
         $definition = $this->definitionSource->getDefinition($name);
-        if ($definition instanceof Definition) {
+        if ($definition instanceof DefinitionInterface) {
             return (string) $definition;
         }
 
@@ -338,7 +338,7 @@ class Container implements ContainerInterface, FactoryInterface, InvokerInterfac
      *
      * @throws DependencyException Error while resolving the entry.
      */
-    private function resolveDefinition(Definition $definition, array $parameters = []) : mixed
+    private function resolveDefinition(DefinitionInterface $definition, array $parameters = []) : mixed
     {
         $entryName = $definition->getName();
 
@@ -358,7 +358,7 @@ class Container implements ContainerInterface, FactoryInterface, InvokerInterfac
         return $value;
     }
 
-    protected function setDefinition(string $name, Definition $definition) : void
+    protected function setDefinition(string $name, DefinitionInterface $definition) : void
     {
         // Clear existing entry if it exists
         if (array_key_exists($name, $this->resolvedEntries)) {

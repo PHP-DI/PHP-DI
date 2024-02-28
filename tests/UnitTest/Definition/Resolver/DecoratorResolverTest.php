@@ -6,7 +6,7 @@ namespace DI\Test\UnitTest\Definition\Resolver;
 
 use DI\Definition\DecoratorDefinition;
 use DI\Definition\Resolver\DecoratorResolver;
-use DI\Definition\Resolver\DefinitionResolver;
+use DI\Definition\Resolver\DefinitionResolverInterface;
 use DI\Definition\ValueDefinition;
 use EasyMock\EasyMock;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -23,12 +23,12 @@ class DecoratorResolverTest extends TestCase
 
     private DecoratorResolver $resolver;
 
-    private MockObject|DefinitionResolver $parentResolver;
+    private MockObject|DefinitionResolverInterface $parentResolver;
 
     public function setUp(): void
     {
         $container = $this->easyMock(ContainerInterface::class);
-        $this->parentResolver = $this->easyMock(DefinitionResolver::class);
+        $this->parentResolver = $this->easyMock(DefinitionResolverInterface::class);
         $this->resolver = new DecoratorResolver($container, $this->parentResolver);
     }
 

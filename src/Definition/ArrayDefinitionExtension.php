@@ -12,7 +12,7 @@ use DI\Definition\Exception\InvalidDefinition;
  * @since 5.0
  * @author Matthieu Napoli <matthieu@mnapoli.fr>
  */
-class ArrayDefinitionExtension extends ArrayDefinition implements ExtendsPreviousDefinition
+class ArrayDefinitionExtension extends ArrayDefinition implements ExtendsPreviousDefinitionInterface
 {
     private ?ArrayDefinition $subDefinition = null;
 
@@ -25,7 +25,7 @@ class ArrayDefinitionExtension extends ArrayDefinition implements ExtendsPreviou
         return array_merge($this->subDefinition->getValues(), parent::getValues());
     }
 
-    public function setExtendedDefinition(Definition $definition) : void
+    public function setExtendedDefinition(DefinitionInterface $definition) : void
     {
         if (! $definition instanceof ArrayDefinition) {
             throw new InvalidDefinition(sprintf(

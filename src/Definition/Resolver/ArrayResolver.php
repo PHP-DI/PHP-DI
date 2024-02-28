@@ -5,25 +5,25 @@ declare(strict_types=1);
 namespace DI\Definition\Resolver;
 
 use DI\Definition\ArrayDefinition;
-use DI\Definition\Definition;
+use DI\Definition\DefinitionInterface;
 use DI\DependencyException;
 use Exception;
 
 /**
  * Resolves an array definition to a value.
  *
- * @template-implements DefinitionResolver<ArrayDefinition>
+ * @template-implements DefinitionResolverInterface<ArrayDefinition>
  *
  * @since 5.0
  * @author Matthieu Napoli <matthieu@mnapoli.fr>
  */
-class ArrayResolver implements DefinitionResolver
+class ArrayResolver implements DefinitionResolverInterface
 {
     /**
-     * @param DefinitionResolver $definitionResolver Used to resolve nested definitions.
+     * @param DefinitionResolverInterface $definitionResolver Used to resolve nested definitions.
      */
     public function __construct(
-        private DefinitionResolver $definitionResolver
+        private DefinitionResolverInterface $definitionResolver
     ) {
     }
 
@@ -36,13 +36,13 @@ class ArrayResolver implements DefinitionResolver
      *
      * @param ArrayDefinition $definition
      */
-    public function resolve(Definition $definition, array $parameters = []) : array
+    public function resolve(DefinitionInterface $definition, array $parameters = []) : array
     {
         $values = $definition->getValues();
 
         // Resolve nested definitions
         array_walk_recursive($values, function (& $value, $key) use ($definition) {
-            if ($value instanceof Definition) {
+            if ($value instanceof DefinitionInterface) {
                 $value = $this->resolveDefinition($value, $definition, $key);
             }
         });
@@ -50,7 +50,7 @@ class ArrayResolver implements DefinitionResolver
         return $values;
     }
 
-    public function isResolvable(Definition $definition, array $parameters = []) : bool
+    public function isResolvable(DefinitionInterface $definition, array $parameters = []) : bool
     {
         return true;
     }
@@ -58,7 +58,7 @@ class ArrayResolver implements DefinitionResolver
     /**
      * @throws DependencyException
      */
-    private function resolveDefinition(Definition $value, ArrayDefinition $definition, int|string $key) : mixed
+    private function resolveDefinition(DefinitionInterface $value, ArrayDefinition $definition, int|string $key) : mixed
     {
         try {
             return $this->definitionResolver->resolve($value);

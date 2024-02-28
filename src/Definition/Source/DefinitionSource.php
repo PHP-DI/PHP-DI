@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace DI\Definition\Source;
 
-use DI\Definition\Definition;
+use DI\Definition\DefinitionInterface;
 use DI\Definition\Exception\InvalidDefinition;
 
 /**
@@ -19,10 +19,10 @@ interface DefinitionSource
      *
      * @throws InvalidDefinition An invalid definition was found.
      */
-    public function getDefinition(string $name) : Definition|null;
+    public function getDefinition(string $name) : DefinitionInterface|null;
 
     /**
-     * @return array<string,Definition> Definitions indexed by their name.
+     * @return array<string,DefinitionInterface> Definitions indexed by their name.
      */
     public function getDefinitions() : array;
 }

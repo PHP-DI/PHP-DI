@@ -10,7 +10,7 @@ namespace DI\Definition;
  * @since 5.0
  * @author Matthieu Napoli <matthieu@mnapoli.fr>
  */
-class ArrayDefinition implements Definition
+class ArrayDefinition implements DefinitionInterface
 {
     /** Entry name. */
     private string $name = '';
@@ -51,7 +51,7 @@ class ArrayDefinition implements Definition
 
             $str .= '    ' . $key . ' => ';
 
-            if ($value instanceof Definition) {
+            if ($value instanceof DefinitionInterface) {
                 $str .= str_replace(\PHP_EOL, \PHP_EOL . '    ', (string) $value);
             } else {
                 $str .= var_export($value, true);

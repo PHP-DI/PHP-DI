@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace DI\Test\UnitTest\Definition\Source;
 
-use DI\Definition\Definition;
+use DI\Definition\DefinitionInterface;
 use DI\Definition\Exception\InvalidAttribute;
 use DI\Definition\ObjectDefinition;
 use DI\Definition\ObjectDefinition\MethodInjection;
@@ -36,7 +36,7 @@ class AttributeBasedAutowiringTest extends TestCase
     public function testProperty1()
     {
         $definition = (new AttributeBasedAutowiring)->autowire(AttributeFixture::class);
-        $this->assertInstanceOf(Definition::class, $definition);
+        $this->assertInstanceOf(DefinitionInterface::class, $definition);
 
         $properties = $definition->getPropertyInjections();
         $this->assertInstanceOf(PropertyInjection::class, $properties['property1']);
@@ -85,7 +85,7 @@ class AttributeBasedAutowiringTest extends TestCase
     public function testConstructor()
     {
         $definition = (new AttributeBasedAutowiring)->autowire(AttributeFixture::class);
-        $this->assertInstanceOf(Definition::class, $definition);
+        $this->assertInstanceOf(DefinitionInterface::class, $definition);
 
         $constructorInjection = $definition->getConstructorInjection();
         $this->assertInstanceOf(MethodInjection::class, $constructorInjection);
@@ -99,7 +99,7 @@ class AttributeBasedAutowiringTest extends TestCase
     public function testMethod1()
     {
         $definition = (new AttributeBasedAutowiring)->autowire(AttributeFixture::class);
-        $this->assertInstanceOf(Definition::class, $definition);
+        $this->assertInstanceOf(DefinitionInterface::class, $definition);
 
         $methodInjection = $this->getMethodInjection($definition, 'method1');
         $this->assertInstanceOf(MethodInjection::class, $methodInjection);
@@ -110,7 +110,7 @@ class AttributeBasedAutowiringTest extends TestCase
     public function testMethod2()
     {
         $definition = (new AttributeBasedAutowiring)->autowire(AttributeFixture::class);
-        $this->assertInstanceOf(Definition::class, $definition);
+        $this->assertInstanceOf(DefinitionInterface::class, $definition);
 
         $methodInjection = $this->getMethodInjection($definition, 'method2');
         $this->assertInstanceOf(MethodInjection::class, $methodInjection);
@@ -124,7 +124,7 @@ class AttributeBasedAutowiringTest extends TestCase
     public function testMethod3()
     {
         $definition = (new AttributeBasedAutowiring)->autowire(AttributeFixture::class);
-        $this->assertInstanceOf(Definition::class, $definition);
+        $this->assertInstanceOf(DefinitionInterface::class, $definition);
 
         $methodInjection = $this->getMethodInjection($definition, 'method3');
         $this->assertInstanceOf(MethodInjection::class, $methodInjection);
@@ -139,7 +139,7 @@ class AttributeBasedAutowiringTest extends TestCase
     public function testMethod4()
     {
         $definition = (new AttributeBasedAutowiring)->autowire(AttributeFixture::class);
-        $this->assertInstanceOf(Definition::class, $definition);
+        $this->assertInstanceOf(DefinitionInterface::class, $definition);
 
         $methodInjection = $this->getMethodInjection($definition, 'method4');
         $this->assertInstanceOf(MethodInjection::class, $methodInjection);
@@ -153,7 +153,7 @@ class AttributeBasedAutowiringTest extends TestCase
     public function testMethod5()
     {
         $definition = (new AttributeBasedAutowiring)->autowire(AttributeFixture::class);
-        $this->assertInstanceOf(Definition::class, $definition);
+        $this->assertInstanceOf(DefinitionInterface::class, $definition);
 
         $methodInjection = $this->getMethodInjection($definition, 'method5');
         $this->assertInstanceOf(MethodInjection::class, $methodInjection);
@@ -195,14 +195,14 @@ class AttributeBasedAutowiringTest extends TestCase
     public function testInjectable()
     {
         $definition = (new AttributeBasedAutowiring)->autowire(AnnotationInjectableFixture::class);
-        $this->assertInstanceOf(Definition::class, $definition);
+        $this->assertInstanceOf(DefinitionInterface::class, $definition);
         $this->assertTrue($definition->isLazy());
     }
 
     public function testMethodInjectionWithPrimitiveTypeCausesAnError()
     {
         $definition = (new AttributeBasedAutowiring)->autowire(AnnotationFixture3::class);
-        $this->assertInstanceOf(Definition::class, $definition);
+        $this->assertInstanceOf(DefinitionInterface::class, $definition);
 
         $methodInjection = $this->getMethodInjection($definition, 'method1');
         $this->assertInstanceOf(MethodInjection::class, $methodInjection);

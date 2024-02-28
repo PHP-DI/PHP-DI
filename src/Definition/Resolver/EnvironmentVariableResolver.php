@@ -4,25 +4,25 @@ declare(strict_types=1);
 
 namespace DI\Definition\Resolver;
 
-use DI\Definition\Definition;
+use DI\Definition\DefinitionInterface;
 use DI\Definition\EnvironmentVariableDefinition;
 use DI\Definition\Exception\InvalidDefinition;
 
 /**
  * Resolves a environment variable definition to a value.
  *
- * @template-implements DefinitionResolver<EnvironmentVariableDefinition>
+ * @template-implements DefinitionResolverInterface<EnvironmentVariableDefinition>
  *
  * @author James Harris <james.harris@icecave.com.au>
  */
-class EnvironmentVariableResolver implements DefinitionResolver
+class EnvironmentVariableResolver implements DefinitionResolverInterface
 {
     /** @var callable */
     private $variableReader;
 
     public function __construct(
-        private DefinitionResolver $definitionResolver,
-        $variableReader = null
+        private DefinitionResolverInterface $definitionResolver,
+                                            $variableReader = null
     ) {
         $this->variableReader = $variableReader ?? [$this, 'getEnvVariable'];
     }
@@ -32,7 +32,7 @@ class EnvironmentVariableResolver implements DefinitionResolver
      *
      * @param EnvironmentVariableDefinition $definition
      */
-    public function resolve(Definition $definition, array $parameters = []) : mixed
+    public function resolve(DefinitionInterface $definition, array $parameters = []) : mixed
     {
         $value = call_user_func($this->variableReader, $definition->getVariableName());
 
@@ -50,14 +50,14 @@ class EnvironmentVariableResolver implements DefinitionResolver
         $value = $definition->getDefaultValue();
 
         // Nested definition
-        if ($value instanceof Definition) {
+        if ($value instanceof DefinitionInterface) {
             return $this->definitionResolver->resolve($value);
         }
 
         return $value;
     }
 
-    public function isResolvable(Definition $definition, array $parameters = []) : bool
+    public function isResolvable(DefinitionInterface $definition, array $parameters = []) : bool
     {
         return true;
     }

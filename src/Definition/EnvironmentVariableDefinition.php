@@ -10,7 +10,7 @@ namespace DI\Definition;
  *
  * @author James Harris <james.harris@icecave.com.au>
  */
-class EnvironmentVariableDefinition implements Definition
+class EnvironmentVariableDefinition implements DefinitionInterface
 {
     /** Entry name. */
     private string $name = '';
@@ -72,7 +72,7 @@ class EnvironmentVariableDefinition implements Definition
             . '    optional = ' . ($this->isOptional ? 'yes' : 'no');
 
         if ($this->isOptional) {
-            if ($this->defaultValue instanceof Definition) {
+            if ($this->defaultValue instanceof DefinitionInterface) {
                 $nestedDefinition = (string) $this->defaultValue;
                 $defaultValueStr = str_replace(\PHP_EOL, \PHP_EOL . '    ', $nestedDefinition);
             } else {

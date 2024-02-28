@@ -230,10 +230,10 @@ Please note:
 If you want to reuse the same factory for creating different entries, you might want to retrieve the name of the entry that is currently being resolved. You can do this by injecting the `DI\Factory\RequestedEntry` object using a type-hint:
 
 ```php
-use DI\Factory\RequestedEntry;
+use DI\Factory\RequestedEntryInterface;
 
 return [
-    'Foo' => function (RequestedEntry $entry) {
+    'Foo' => function (RequestedEntryInterface $entry) {
         // $entry->getName() contains the requested name
         $class = $entry->getName();
         return new $class();

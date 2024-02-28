@@ -15,7 +15,7 @@ use ReflectionClass;
  *
  * @author Matthieu Napoli <matthieu@mnapoli.fr>
  */
-class ObjectDefinition implements Definition
+class ObjectDefinition implements DefinitionInterface
 {
     /**
      * Entry name (most of the time, same as $classname).

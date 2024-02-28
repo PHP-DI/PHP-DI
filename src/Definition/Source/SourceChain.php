@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace DI\Definition\Source;
 
-use DI\Definition\Definition;
-use DI\Definition\ExtendsPreviousDefinition;
+use DI\Definition\DefinitionInterface;
+use DI\Definition\ExtendsPreviousDefinitionInterface;
 
 /**
  * Manages a chain of other definition sources.
@@ -28,7 +28,7 @@ class SourceChain implements DefinitionSource, MutableDefinitionSource
      * @param int $startIndex Use this parameter to start looking from a specific
      *                        point in the source chain.
      */
-    public function getDefinition(string $name, int $startIndex = 0) : Definition|null
+    public function getDefinition(string $name, int $startIndex = 0) : DefinitionInterface|null
     {
         $count = count($this->sources);
         for ($i = $startIndex; $i < $count; ++$i) {
@@ -37,7 +37,7 @@ class SourceChain implements DefinitionSource, MutableDefinitionSource
             $definition = $source->getDefinition($name);
 
             if ($definition) {
-                if ($definition instanceof ExtendsPreviousDefinition) {
+                if ($definition instanceof ExtendsPreviousDefinitionInterface) {
                     $this->resolveExtendedDefinition($definition, $i);
                 }
 
@@ -60,7 +60,7 @@ class SourceChain implements DefinitionSource, MutableDefinitionSource
         return array_combine($allNames, $allValues);
     }
 
-    public function addDefinition(Definition $definition) : void
+    public function addDefinition(DefinitionInterface $definition) : void
     {
         if (! $this->mutableSource) {
             throw new \LogicException("The container's definition source has not been initialized correctly");
@@ -69,7 +69,7 @@ class SourceChain implements DefinitionSource, MutableDefinitionSource
         $this->mutableSource->addDefinition($definition);
     }
 
-    private function resolveExtendedDefinition(ExtendsPreviousDefinition $definition, int $currentIndex)
+    private function resolveExtendedDefinition(ExtendsPreviousDefinitionInterface $definition, int $currentIndex)
     {
         // Look in the next sources only (else infinite recursion, and we can only extend
         // entries defined in the previous definition files - a previous == next here because

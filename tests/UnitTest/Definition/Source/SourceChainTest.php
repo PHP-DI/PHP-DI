@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace DI\Test\UnitTest\Definition\Source;
 
-use DI\Definition\Definition;
+use DI\Definition\DefinitionInterface;
 use DI\Definition\Source\DefinitionArray;
 use DI\Definition\Source\SourceChain;
 use DI\Definition\ValueDefinition;
@@ -86,7 +86,7 @@ class SourceChainTest extends TestCase
         $this->assertSame($mutableSource->getDefinition('foo'), $chain->getDefinition('foo'));
     }
 
-    private function assertValueDefinition(Definition $definition, $value)
+    private function assertValueDefinition(DefinitionInterface $definition, $value)
     {
         $this->assertInstanceOf(ValueDefinition::class, $definition);
         /** @var ValueDefinition $definition */

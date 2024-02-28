@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace DI\Test\UnitTest\Definition\Resolver;
 
 use DI\Container;
-use DI\Factory\RequestedEntry;
+use DI\Factory\RequestedEntryInterface;
 use DI\Invoker\FactoryParameterResolver;
 use DI\Test\UnitTest\Definition\Resolver\Fixture\NoConstructor;
 use EasyMock\EasyMock;
@@ -22,13 +22,13 @@ class FactoryParameterResolverTest extends TestCase
 
     private FactoryParameterResolver $resolver;
     private MockObject|ContainerInterface $container;
-    private MockObject|RequestedEntry $requestedEntry;
+    private MockObject|RequestedEntryInterface $requestedEntry;
 
     public function setUp(): void
     {
         $this->container = $this->easyMock(ContainerInterface::class);
         $this->resolver = new FactoryParameterResolver($this->container);
-        $this->requestedEntry = $this->easyMock(RequestedEntry::class);
+        $this->requestedEntry = $this->easyMock(RequestedEntryInterface::class);
     }
 
     /**
@@ -51,7 +51,7 @@ class FactoryParameterResolverTest extends TestCase
      */
     public function should_resolve_container_and_requested_entry()
     {
-        $callable = function (ContainerInterface $c, RequestedEntry $entry) {
+        $callable = function (ContainerInterface $c, RequestedEntryInterface $entry) {
         };
         $reflection = new \ReflectionFunction($callable);
 
@@ -82,7 +82,7 @@ class FactoryParameterResolverTest extends TestCase
      */
     public function should_resolve_only_requested_entry()
     {
-        $callable = function (RequestedEntry $entry) {
+        $callable = function (RequestedEntryInterface $entry) {
         };
         $reflection = new \ReflectionFunction($callable);
 
@@ -111,12 +111,12 @@ class FactoryParameterResolverTest extends TestCase
      */
     public function should_not_overwrite_resolved_with_container_or_entry()
     {
-        $callable = function (ContainerInterface $container, RequestedEntry $entry, $other) {
+        $callable = function (ContainerInterface $container, RequestedEntryInterface $entry, $other) {
         };
         $reflection = new \ReflectionFunction($callable);
 
         $mockContainer = $this->easyMock(Container::class);
-        $mockEntry = $this->easyMock(RequestedEntry::class);
+        $mockEntry = $this->easyMock(RequestedEntryInterface::class);
 
         $resolvedParams = [$mockContainer, $mockEntry, 'Foo'];
 

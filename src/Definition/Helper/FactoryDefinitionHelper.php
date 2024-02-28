@@ -12,7 +12,7 @@ use DI\Definition\FactoryDefinition;
  *
  * @author Matthieu Napoli <matthieu@mnapoli.fr>
  */
-class FactoryDefinitionHelper implements DefinitionHelper
+class FactoryDefinitionHelper implements DefinitionHelperInterface
 {
     /**
      * @var callable

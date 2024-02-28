@@ -9,7 +9,7 @@ namespace DI\Definition;
  *
  * @author Matthieu Napoli <matthieu@mnapoli.fr>
  */
-interface ExtendsPreviousDefinition extends Definition
+interface ExtendsPreviousDefinitionInterface extends DefinitionInterface
 {
-    public function setExtendedDefinition(Definition $definition) : void;
+    public function setExtendedDefinition(DefinitionInterface $definition) : void;
 }

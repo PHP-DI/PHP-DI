@@ -9,7 +9,7 @@ namespace DI\Definition;
  *
  * @author Matthieu Napoli <matthieu@mnapoli.fr>
  */
-class FactoryDefinition implements Definition
+class FactoryDefinition implements DefinitionInterface
 {
     /**
      * Entry name.

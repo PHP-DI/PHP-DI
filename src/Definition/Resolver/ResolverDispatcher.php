@@ -6,7 +6,7 @@ namespace DI\Definition\Resolver;
 
 use DI\Definition\ArrayDefinition;
 use DI\Definition\DecoratorDefinition;
-use DI\Definition\Definition;
+use DI\Definition\DefinitionInterface;
 use DI\Definition\EnvironmentVariableDefinition;
 use DI\Definition\Exception\InvalidDefinition;
 use DI\Definition\FactoryDefinition;
@@ -24,7 +24,7 @@ use Psr\Container\ContainerInterface;
  * @since 5.0
  * @author Matthieu Napoli <matthieu@mnapoli.fr>
  */
-class ResolverDispatcher implements DefinitionResolver
+class ResolverDispatcher implements DefinitionResolverInterface
 {
     private ?ArrayResolver $arrayResolver = null;
     private ?FactoryResolver $factoryResolver = null;
@@ -42,13 +42,13 @@ class ResolverDispatcher implements DefinitionResolver
     /**
      * Resolve a definition to a value.
      *
-     * @param Definition $definition Object that defines how the value should be obtained.
+     * @param DefinitionInterface $definition Object that defines how the value should be obtained.
      * @param array      $parameters Optional parameters to use to build the entry.
      *
      * @return mixed Value obtained from the definition.
      * @throws InvalidDefinition If the definition cannot be resolved.
      */
-    public function resolve(Definition $definition, array $parameters = []) : mixed
+    public function resolve(DefinitionInterface $definition, array $parameters = []) : mixed
     {
         // Special case, tested early for speed
         if ($definition instanceof SelfResolvingDefinition) {
@@ -60,7 +60,7 @@ class ResolverDispatcher implements DefinitionResolver
         return $definitionResolver->resolve($definition, $parameters);
     }
 
-    public function isResolvable(Definition $definition, array $parameters = []) : bool
+    public function isResolvable(DefinitionInterface $definition, array $parameters = []) : bool
     {
         // Special case, tested early for speed
         if ($definition instanceof SelfResolvingDefinition) {
@@ -77,7 +77,7 @@ class ResolverDispatcher implements DefinitionResolver
      *
      * @throws \RuntimeException No definition resolver was found for this type of definition.
      */
-    private function getDefinitionResolver(Definition $definition) : DefinitionResolver
+    private function getDefinitionResolver(DefinitionInterface $definition) : DefinitionResolverInterface
     {
         switch (true) {
             case $definition instanceof ObjectDefinition:

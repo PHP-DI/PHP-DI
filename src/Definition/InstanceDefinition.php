@@ -10,7 +10,7 @@ namespace DI\Definition;
  * @since  5.0
  * @author Matthieu Napoli <matthieu@mnapoli.fr>
  */
-class InstanceDefinition implements Definition
+class InstanceDefinition implements DefinitionInterface
 {
     /**
      * @param object $instance Instance on which to inject dependencies.

@@ -14,7 +14,7 @@ use DI\Definition\ObjectDefinition\PropertyInjection;
  *
  * @author Matthieu Napoli <matthieu@mnapoli.fr>
  */
-class CreateDefinitionHelper implements DefinitionHelper
+class CreateDefinitionHelper implements DefinitionHelperInterface
 {
     private const DEFINITION_CLASS = ObjectDefinition::class;
 

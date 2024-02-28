@@ -6,7 +6,7 @@ namespace DI\Test\UnitTest\Definition\Resolver;
 
 use DI\Definition\Reference;
 use DI\Definition\EnvironmentVariableDefinition;
-use DI\Definition\Resolver\DefinitionResolver;
+use DI\Definition\Resolver\DefinitionResolverInterface;
 use DI\Definition\Resolver\EnvironmentVariableResolver;
 use EasyMock\EasyMock;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -21,7 +21,7 @@ class EnvironmentVariableResolverTest extends TestCase
     use EasyMock;
 
     private EnvironmentVariableResolver $resolver;
-    private MockObject|DefinitionResolver $parentResolver;
+    private MockObject|DefinitionResolverInterface $parentResolver;
 
     private EnvironmentVariableDefinition $definedDefinition;
     private EnvironmentVariableDefinition $undefinedDefinition;
@@ -30,7 +30,7 @@ class EnvironmentVariableResolverTest extends TestCase
 
     public function setUp(): void
     {
-        $this->parentResolver = $this->easyMock(DefinitionResolver::class);
+        $this->parentResolver = $this->easyMock(DefinitionResolverInterface::class);
 
         $variableReader = function ($variableName) {
             if ('DEFINED' === $variableName) {

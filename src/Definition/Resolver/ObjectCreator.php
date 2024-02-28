@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace DI\Definition\Resolver;
 
-use DI\Definition\Definition;
+use DI\Definition\DefinitionInterface;
 use DI\Definition\Exception\InvalidDefinition;
 use DI\Definition\ObjectDefinition;
 use DI\Definition\ObjectDefinition\PropertyInjection;
@@ -19,22 +19,22 @@ use ReflectionProperty;
 /**
  * Create objects based on an object definition.
  *
- * @template-implements DefinitionResolver<ObjectDefinition>
+ * @template-implements DefinitionResolverInterface<ObjectDefinition>
  *
  * @since 4.0
  * @author Matthieu Napoli <matthieu@mnapoli.fr>
  */
-class ObjectCreator implements DefinitionResolver
+class ObjectCreator implements DefinitionResolverInterface
 {
     private ParameterResolver $parameterResolver;
 
     /**
-     * @param DefinitionResolver $definitionResolver Used to resolve nested definitions.
+     * @param DefinitionResolverInterface $definitionResolver Used to resolve nested definitions.
      * @param ProxyFactory       $proxyFactory       Used to create proxies for lazy injections.
      */
     public function __construct(
-        private DefinitionResolver $definitionResolver,
-        private ProxyFactory $proxyFactory
+        private DefinitionResolverInterface $definitionResolver,
+        private ProxyFactory                $proxyFactory
     ) {
         $this->parameterResolver = new ParameterResolver($definitionResolver);
     }
@@ -46,7 +46,7 @@ class ObjectCreator implements DefinitionResolver
      *
      * @param ObjectDefinition $definition
      */
-    public function resolve(Definition $definition, array $parameters = []) : ?object
+    public function resolve(DefinitionInterface $definition, array $parameters = []) : ?object
     {
         // Lazy?
         if ($definition->isLazy()) {
@@ -62,7 +62,7 @@ class ObjectCreator implements DefinitionResolver
      *
      * @param ObjectDefinition $definition
      */
-    public function isResolvable(Definition $definition, array $parameters = []) : bool
+    public function isResolvable(DefinitionInterface $definition, array $parameters = []) : bool
     {
         return $definition->isInstantiable();
     }
@@ -176,7 +176,7 @@ class ObjectCreator implements DefinitionResolver
 
         $value = $propertyInjection->getValue();
 
-        if ($value instanceof Definition) {
+        if ($value instanceof DefinitionInterface) {
             try {
                 $value = $this->definitionResolver->resolve($value);
             } catch (DependencyException $e) {

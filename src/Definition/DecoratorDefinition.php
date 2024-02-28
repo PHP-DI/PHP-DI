@@ -10,16 +10,16 @@ namespace DI\Definition;
  * @since 5.0
  * @author Matthieu Napoli <matthieu@mnapoli.fr>
  */
-class DecoratorDefinition extends FactoryDefinition implements Definition, ExtendsPreviousDefinition
+class DecoratorDefinition extends FactoryDefinition implements DefinitionInterface, ExtendsPreviousDefinitionInterface
 {
-    private ?Definition $decorated = null;
+    private ?DefinitionInterface $decorated = null;
 
-    public function setExtendedDefinition(Definition $definition) : void
+    public function setExtendedDefinition(DefinitionInterface $definition) : void
     {
         $this->decorated = $definition;
     }
 
-    public function getDecoratedDefinition() : ?Definition
+    public function getDecoratedDefinition() : ?DefinitionInterface
     {
         return $this->decorated;
     }

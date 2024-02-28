@@ -7,7 +7,7 @@ namespace DI\Test\UnitTest\Definition\Resolver;
 use DI\Definition\ObjectDefinition;
 use DI\Definition\ObjectDefinition\MethodInjection;
 use DI\Definition\ObjectDefinition\PropertyInjection;
-use DI\Definition\Resolver\DefinitionResolver;
+use DI\Definition\Resolver\DefinitionResolverInterface;
 use DI\Definition\Resolver\ObjectCreator;
 use DI\Proxy\ProxyFactory;
 use DI\Test\UnitTest\Definition\Resolver\Fixture\FixtureAbstractClass;
@@ -27,14 +27,14 @@ class ObjectCreatorTest extends TestCase
 {
     use EasyMock;
 
-    private MockObject|DefinitionResolver $parentResolver;
+    private MockObject|DefinitionResolverInterface $parentResolver;
 
     private ObjectCreator $resolver;
 
     public function setUp(): void
     {
         $proxyFactory = $this->easyMock(ProxyFactory::class);
-        $this->parentResolver = $this->easyMock(DefinitionResolver::class);
+        $this->parentResolver = $this->easyMock(DefinitionResolverInterface::class);
 
         $this->resolver = new ObjectCreator($this->parentResolver, $proxyFactory);
     }

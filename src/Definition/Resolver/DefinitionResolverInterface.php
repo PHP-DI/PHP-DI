@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace DI\Definition\Resolver;
 
-use DI\Definition\Definition;
+use DI\Definition\DefinitionInterface;
 use DI\Definition\Exception\InvalidDefinition;
 use DI\DependencyException;
 
@@ -14,14 +14,14 @@ use DI\DependencyException;
  * @since 4.0
  * @author Matthieu Napoli <matthieu@mnapoli.fr>
  *
- * @template T of Definition
+ * @template T of DefinitionInterface
  */
-interface DefinitionResolver
+interface DefinitionResolverInterface
 {
     /**
      * Resolve a definition to a value.
      *
-     * @param Definition $definition Object that defines how the value should be obtained.
+     * @param DefinitionInterface $definition Object that defines how the value should be obtained.
      * @psalm-param T $definition
      * @param array      $parameters Optional parameters to use to build the entry.
      * @return mixed Value obtained from the definition.
@@ -29,14 +29,14 @@ interface DefinitionResolver
      * @throws InvalidDefinition If the definition cannot be resolved.
      * @throws DependencyException
      */
-    public function resolve(Definition $definition, array $parameters = []) : mixed;
+    public function resolve(DefinitionInterface $definition, array $parameters = []) : mixed;
 
     /**
      * Check if a definition can be resolved.
      *
-     * @param Definition $definition Object that defines how the value should be obtained.
+     * @param DefinitionInterface $definition Object that defines how the value should be obtained.
      * @psalm-param T $definition
      * @param array      $parameters Optional parameters to use to build the entry.
      */
-    public function isResolvable(Definition $definition, array $parameters = []) : bool;
+    public function isResolvable(DefinitionInterface $definition, array $parameters = []) : bool;
 }

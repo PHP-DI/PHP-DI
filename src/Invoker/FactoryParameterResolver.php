@@ -56,7 +56,7 @@ class FactoryParameterResolver implements ParameterResolver
 
             if ($parameterClass === 'Psr\Container\ContainerInterface') {
                 $resolvedParameters[$index] = $this->container;
-            } elseif ($parameterClass === 'DI\Factory\RequestedEntry') {
+            } elseif ($parameterClass === 'DI\Factory\RequestedEntryInterface') {
                 // By convention the second parameter is the definition
                 $resolvedParameters[$index] = $providedParameters[1];
             } elseif ($this->container->has($parameterClass)) {

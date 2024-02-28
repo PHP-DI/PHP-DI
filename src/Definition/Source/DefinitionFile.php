@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace DI\Definition\Source;
 
-use DI\Definition\Definition;
+use DI\Definition\DefinitionInterface;
 
 /**
  * Reads DI definitions from a file returning a PHP array.
@@ -26,7 +26,7 @@ class DefinitionFile extends DefinitionArray
         parent::__construct([], $autowiring);
     }
 
-    public function getDefinition(string $name) : Definition|null
+    public function getDefinition(string $name) : DefinitionInterface|null
     {
         $this->initialize();
 

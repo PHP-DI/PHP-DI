@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace DI\Definition\Resolver;
 
-use DI\Definition\Definition;
+use DI\Definition\DefinitionInterface;
 use DI\Definition\Exception\InvalidDefinition;
 use DI\Definition\FactoryDefinition;
 use DI\Invoker\FactoryParameterResolver;
@@ -20,12 +20,12 @@ use Psr\Container\ContainerInterface;
 /**
  * Resolves a factory definition to a value.
  *
- * @template-implements DefinitionResolver<FactoryDefinition>
+ * @template-implements DefinitionResolverInterface<FactoryDefinition>
  *
  * @since 4.0
  * @author Matthieu Napoli <matthieu@mnapoli.fr>
  */
-class FactoryResolver implements DefinitionResolver
+class FactoryResolver implements DefinitionResolverInterface
 {
     private ?Invoker $invoker = null;
 
@@ -34,8 +34,8 @@ class FactoryResolver implements DefinitionResolver
      * so that the factory can access other entries of the container.
      */
     public function __construct(
-        private ContainerInterface $container,
-        private DefinitionResolver $resolver,
+        private ContainerInterface          $container,
+        private DefinitionResolverInterface $resolver,
     ) {
     }
 
@@ -46,7 +46,7 @@ class FactoryResolver implements DefinitionResolver
      *
      * @param FactoryDefinition $definition
      */
-    public function resolve(Definition $definition, array $parameters = []) : mixed
+    public function resolve(DefinitionInterface $definition, array $parameters = []) : mixed
     {
         if (! $this->invoker) {
             $parameterResolver = new ResolverChain([
@@ -91,7 +91,7 @@ class FactoryResolver implements DefinitionResolver
         }
     }
 
-    public function isResolvable(Definition $definition, array $parameters = []) : bool
+    public function isResolvable(DefinitionInterface $definition, array $parameters = []) : bool
     {
         return true;
     }
@@ -101,7 +101,7 @@ class FactoryResolver implements DefinitionResolver
         $resolved = [];
         foreach ($params as $key => $value) {
             // Nested definitions
-            if ($value instanceof Definition) {
+            if ($value instanceof DefinitionInterface) {
                 $value = $this->resolver->resolve($value);
             }
             $resolved[$key] = $value;

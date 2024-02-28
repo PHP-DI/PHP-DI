@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace DI\Definition\Source;
 
 use DI\Definition\AutowireDefinition;
-use DI\Definition\Definition;
+use DI\Definition\DefinitionInterface;
 use DI\Definition\ObjectDefinition;
 
 /**
@@ -23,7 +23,7 @@ class SourceCache implements DefinitionSource, MutableDefinitionSource
     ) {
     }
 
-    public function getDefinition(string $name) : Definition|null
+    public function getDefinition(string $name) : DefinitionInterface|null
     {
         $definition = apcu_fetch($this->getCacheKey($name));
 
@@ -59,12 +59,12 @@ class SourceCache implements DefinitionSource, MutableDefinitionSource
         return self::CACHE_KEY . $this->cacheNamespace . $name;
     }
 
-    public function addDefinition(Definition $definition) : void
+    public function addDefinition(DefinitionInterface $definition) : void
     {
         throw new \LogicException('You cannot set a definition at runtime on a container that has caching enabled. Doing so would risk caching the definition for the next execution, where it might be different. You can either put your definitions in a file, remove the cache or ->set() a raw value directly (PHP object, string, int, ...) instead of a PHP-DI definition.');
     }
 
-    private function shouldBeCached(Definition $definition = null) : bool
+    private function shouldBeCached(DefinitionInterface $definition = null) : bool
     {
         return
             // Cache missing definitions

@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace DI;
 
 use DI\Compiler\RequestedEntryHolder;
-use DI\Definition\Definition;
+use DI\Definition\DefinitionInterface;
 use DI\Definition\Exception\InvalidDefinition;
 use DI\Invoker\FactoryParameterResolver;
 use Invoker\Exception\NotCallableException;
@@ -76,7 +76,7 @@ abstract class CompiledContainer extends Container
         return parent::has($id);
     }
 
-    protected function setDefinition(string $name, Definition $definition) : void
+    protected function setDefinition(string $name, DefinitionInterface $definition) : void
     {
         // It needs to be forbidden because that would mean get() must go through the definitions
         // every time, which kinds of defeats the performance gains of the compiled container

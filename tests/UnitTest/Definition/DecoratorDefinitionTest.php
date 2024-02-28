@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace DI\Test\UnitTest\Definition;
 
 use DI\Definition\DecoratorDefinition;
-use DI\Definition\ExtendsPreviousDefinition;
+use DI\Definition\ExtendsPreviousDefinitionInterface;
 use DI\Definition\ValueDefinition;
 use PHPUnit\Framework\TestCase;
 
@@ -43,7 +43,7 @@ class DecoratorDefinitionTest extends TestCase
     {
         $definition = new DecoratorDefinition('foo', function () {
         });
-        $this->assertInstanceOf(ExtendsPreviousDefinition::class, $definition);
+        $this->assertInstanceOf(ExtendsPreviousDefinitionInterface::class, $definition);
 
         $subDefinition = new ValueDefinition('bar');
         $definition->setExtendedDefinition($subDefinition);

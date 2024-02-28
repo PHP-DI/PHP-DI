@@ -11,7 +11,7 @@ use Psr\Container\ContainerInterface;
  *
  * @author Matthieu Napoli <matthieu@mnapoli.fr>
  */
-class ValueDefinition implements Definition, SelfResolvingDefinition
+class ValueDefinition implements DefinitionInterface, SelfResolvingDefinition
 {
     /**
      * Entry name.

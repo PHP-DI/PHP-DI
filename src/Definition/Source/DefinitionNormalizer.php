@@ -7,10 +7,10 @@ namespace DI\Definition\Source;
 use DI\Definition\ArrayDefinition;
 use DI\Definition\AutowireDefinition;
 use DI\Definition\DecoratorDefinition;
-use DI\Definition\Definition;
+use DI\Definition\DefinitionInterface;
 use DI\Definition\Exception\InvalidDefinition;
 use DI\Definition\FactoryDefinition;
-use DI\Definition\Helper\DefinitionHelper;
+use DI\Definition\Helper\DefinitionHelperInterface;
 use DI\Definition\ObjectDefinition;
 use DI\Definition\ValueDefinition;
 
@@ -37,15 +37,15 @@ class DefinitionNormalizer
      *
      * @throws InvalidDefinition
      */
-    public function normalizeRootDefinition(mixed $definition, string $name, array $wildcardsReplacements = null) : Definition
+    public function normalizeRootDefinition(mixed $definition, string $name, array $wildcardsReplacements = null) : DefinitionInterface
     {
-        if ($definition instanceof DefinitionHelper) {
+        if ($definition instanceof DefinitionHelperInterface) {
             $definition = $definition->getDefinition($name);
         } elseif (is_array($definition)) {
             $definition = new ArrayDefinition($definition);
         } elseif ($definition instanceof \Closure) {
             $definition = new FactoryDefinition($name, $definition);
-        } elseif (! $definition instanceof Definition) {
+        } elseif (! $definition instanceof DefinitionInterface) {
             $definition = new ValueDefinition($definition);
         }
 
@@ -84,7 +84,7 @@ class DefinitionNormalizer
     {
         $name = '<nested definition>';
 
-        if ($definition instanceof DefinitionHelper) {
+        if ($definition instanceof DefinitionHelperInterface) {
             $definition = $definition->getDefinition($name);
         } elseif (is_array($definition)) {
             $definition = new ArrayDefinition($definition);
@@ -100,7 +100,7 @@ class DefinitionNormalizer
             $definition = $this->autowiring->autowire($name, $definition);
         }
 
-        if ($definition instanceof Definition) {
+        if ($definition instanceof DefinitionInterface) {
             $definition->setName($name);
 
             // Recursively traverse nested definitions

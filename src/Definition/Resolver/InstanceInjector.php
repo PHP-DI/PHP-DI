@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace DI\Definition\Resolver;
 
-use DI\Definition\Definition;
+use DI\Definition\DefinitionInterface;
 use DI\Definition\InstanceDefinition;
 use DI\DependencyException;
 use Psr\Container\NotFoundExceptionInterface;
@@ -12,12 +12,12 @@ use Psr\Container\NotFoundExceptionInterface;
 /**
  * Injects dependencies on an existing instance.
  *
- * @template-implements DefinitionResolver<InstanceDefinition>
+ * @template-implements DefinitionResolverInterface<InstanceDefinition>
  *
  * @since 5.0
  * @author Matthieu Napoli <matthieu@mnapoli.fr>
  */
-class InstanceInjector extends ObjectCreator implements DefinitionResolver
+class InstanceInjector extends ObjectCreator implements DefinitionResolverInterface
 {
     /**
      * Injects dependencies on an existing instance.
@@ -25,7 +25,7 @@ class InstanceInjector extends ObjectCreator implements DefinitionResolver
      * @param InstanceDefinition $definition
      * @psalm-suppress ImplementedParamTypeMismatch
      */
-    public function resolve(Definition $definition, array $parameters = []) : ?object
+    public function resolve(DefinitionInterface $definition, array $parameters = []) : ?object
     {
         /** @psalm-suppress InvalidCatch */
         try {
@@ -43,7 +43,7 @@ class InstanceInjector extends ObjectCreator implements DefinitionResolver
         return $definition;
     }
 
-    public function isResolvable(Definition $definition, array $parameters = []) : bool
+    public function isResolvable(DefinitionInterface $definition, array $parameters = []) : bool
     {
         return true;
     }

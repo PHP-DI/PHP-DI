@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace DI\Definition\Source;
 
-use DI\Definition\Definition;
+use DI\Definition\DefinitionInterface;
 
 /**
  * Describes a definition source to which we can add new definitions.
@@ -13,5 +13,5 @@ use DI\Definition\Definition;
  */
 interface MutableDefinitionSource extends DefinitionSource
 {
-    public function addDefinition(Definition $definition) : void;
+    public function addDefinition(DefinitionInterface $definition) : void;
 }

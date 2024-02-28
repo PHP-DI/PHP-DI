@@ -7,7 +7,7 @@ namespace DI\Test\IntegrationTest\Definitions;
 use Closure;
 use DI\ContainerBuilder;
 use DI\Definition\Exception\InvalidDefinition;
-use DI\Factory\RequestedEntry;
+use DI\Factory\RequestedEntryInterface;
 use DI\Test\IntegrationTest\BaseContainerTest;
 use DI\Test\UnitTest\Definition\Resolver\Fixture\NoConstructor;
 use Psr\Container\ContainerInterface;
@@ -185,7 +185,7 @@ class FactoryDefinitionTest extends BaseContainerTest
     public function test_requested_entry_gets_injected_with_typehint(ContainerBuilder $builder)
     {
         $builder->addDefinitions([
-            'foobar' => function (RequestedEntry $entry) {
+            'foobar' => function (RequestedEntryInterface $entry) {
                 return $entry->getName();
             },
         ]);
@@ -217,7 +217,7 @@ class FactoryDefinitionTest extends BaseContainerTest
     public function test_container_and_requested_entry_get_injected_in_arbitrary_position_via_typehint(ContainerBuilder $builder)
     {
         $builder->addDefinitions([
-            'factory' => function (stdClass $stdClass, RequestedEntry $e, ContainerInterface $c) {
+            'factory' => function (stdClass $stdClass, RequestedEntryInterface $e, ContainerInterface $c) {
                 return [$stdClass, $e, $c];
             },
         ]);
@@ -225,7 +225,7 @@ class FactoryDefinitionTest extends BaseContainerTest
         $factory = $builder->build()->get('factory');
 
         $this->assertInstanceOf('stdClass', $factory[0]);
-        $this->assertInstanceOf(RequestedEntry::class, $factory[1]);
+        $this->assertInstanceOf(RequestedEntryInterface::class, $factory[1]);
         $this->assertInstanceOf(ContainerInterface::class, $factory[2]);
     }
 
@@ -347,7 +347,7 @@ class FactoryDefinitionTest extends BaseContainerTest
         $factory = $builder->build()->get('factory');
 
         $this->assertInstanceOf(ContainerInterface::class, $factory[0]);
-        $this->assertInstanceOf(RequestedEntry::class, $factory[1]);
+        $this->assertInstanceOf(RequestedEntryInterface::class, $factory[1]);
         $this->assertInstanceOf('stdClass', $factory[2]);
         $this->assertEquals('Bar', $factory[3]);
     }
@@ -359,7 +359,7 @@ class FactoryDefinitionTest extends BaseContainerTest
     {
         $builder->addDefinitions([
             'secret' => 'Bar',
-            'factory' => factory(function (stdClass $object, RequestedEntry $requestedEntry, $value, ContainerInterface $container) {
+            'factory' => factory(function (stdClass $object, RequestedEntryInterface $requestedEntry, $value, ContainerInterface $container) {
                 return [$object, $requestedEntry, $value, $container];
             })->parameter('value', get('secret')),
         ]);
@@ -367,7 +367,7 @@ class FactoryDefinitionTest extends BaseContainerTest
         $factory = $builder->build()->get('factory');
 
         $this->assertInstanceOf('stdClass', $factory[0]);
-        $this->assertInstanceOf(RequestedEntry::class, $factory[1]);
+        $this->assertInstanceOf(RequestedEntryInterface::class, $factory[1]);
         $this->assertEquals('Bar', $factory[2]);
         $this->assertInstanceOf(ContainerInterface::class, $factory[3]);
     }

@@ -8,7 +8,7 @@ use DI\Definition\Reference;
 use DI\Definition\ArrayDefinition;
 use DI\Definition\ObjectDefinition;
 use DI\Definition\Resolver\ArrayResolver;
-use DI\Definition\Resolver\DefinitionResolver;
+use DI\Definition\Resolver\DefinitionResolverInterface;
 use EasyMock\EasyMock;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -21,13 +21,13 @@ class ArrayResolverTest extends TestCase
 {
     use EasyMock;
 
-    private MockObject|DefinitionResolver $parentResolver;
+    private MockObject|DefinitionResolverInterface $parentResolver;
 
     private ArrayResolver $resolver;
 
     public function setUp(): void
     {
-        $this->parentResolver = $this->easyMock(DefinitionResolver::class);
+        $this->parentResolver = $this->easyMock(DefinitionResolverInterface::class);
         $this->resolver = new ArrayResolver($this->parentResolver);
     }
 

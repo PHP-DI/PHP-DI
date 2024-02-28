@@ -7,7 +7,7 @@ namespace DI\Compiler;
 use function chmod;
 use DI\Definition\ArrayDefinition;
 use DI\Definition\DecoratorDefinition;
-use DI\Definition\Definition;
+use DI\Definition\DefinitionInterface;
 use DI\Definition\EnvironmentVariableDefinition;
 use DI\Definition\Exception\InvalidDefinition;
 use DI\Definition\FactoryDefinition;
@@ -194,7 +194,7 @@ class Compiler
      * @throws DependencyException
      * @throws InvalidDefinition
      */
-    private function compileDefinition(string $entryName, Definition $definition) : string
+    private function compileDefinition(string $entryName, DefinitionInterface $definition) : string
     {
         // Generate a unique method name
         $methodName = 'get' . (++$this->methodMappingCounter);
@@ -249,7 +249,7 @@ class Compiler
                 break;
             case $definition instanceof DecoratorDefinition:
                 $decoratedDefinition = $definition->getDecoratedDefinition();
-                if (! $decoratedDefinition instanceof Definition) {
+                if (! $decoratedDefinition instanceof DefinitionInterface) {
                     if (! $definition->getName()) {
                         throw new InvalidDefinition('Decorators cannot be nested in another definition');
                     }
@@ -307,7 +307,7 @@ class Compiler
             throw new InvalidDefinition($errorMessage);
         }
 
-        if ($value instanceof Definition) {
+        if ($value instanceof DefinitionInterface) {
             // Give it an arbitrary unique name
             $subEntryName = 'subEntry' . (++$this->subEntryCounter);
             // Compile the sub-definition in another method
@@ -358,7 +358,7 @@ class Compiler
             return 'Decorators cannot be nested in another definition';
         }
         // All other definitions are compilable
-        if ($value instanceof Definition) {
+        if ($value instanceof DefinitionInterface) {
             return true;
         }
         if ($value instanceof \Closure) {

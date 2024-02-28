@@ -5,29 +5,29 @@ declare(strict_types=1);
 namespace DI\Definition\Resolver;
 
 use DI\Definition\DecoratorDefinition;
-use DI\Definition\Definition;
+use DI\Definition\DefinitionInterface;
 use DI\Definition\Exception\InvalidDefinition;
 use Psr\Container\ContainerInterface;
 
 /**
  * Resolves a decorator definition to a value.
  *
- * @template-implements DefinitionResolver<DecoratorDefinition>
+ * @template-implements DefinitionResolverInterface<DecoratorDefinition>
  *
  * @since 5.0
  * @author Matthieu Napoli <matthieu@mnapoli.fr>
  */
-class DecoratorResolver implements DefinitionResolver
+class DecoratorResolver implements DefinitionResolverInterface
 {
     /**
      * The resolver needs a container. This container will be passed to the factory as a parameter
      * so that the factory can access other entries of the container.
      *
-     * @param DefinitionResolver $definitionResolver Used to resolve nested definitions.
+     * @param DefinitionResolverInterface $definitionResolver Used to resolve nested definitions.
      */
     public function __construct(
-        private ContainerInterface $container,
-        private DefinitionResolver $definitionResolver
+        private ContainerInterface          $container,
+        private DefinitionResolverInterface $definitionResolver
     ) {
     }
 
@@ -38,7 +38,7 @@ class DecoratorResolver implements DefinitionResolver
      *
      * @param DecoratorDefinition $definition
      */
-    public function resolve(Definition $definition, array $parameters = []) : mixed
+    public function resolve(DefinitionInterface $definition, array $parameters = []) : mixed
     {
         $callable = $definition->getCallable();
 
@@ -51,7 +51,7 @@ class DecoratorResolver implements DefinitionResolver
 
         $decoratedDefinition = $definition->getDecoratedDefinition();
 
-        if (! $decoratedDefinition instanceof Definition) {
+        if (! $decoratedDefinition instanceof DefinitionInterface) {
             if (! $definition->getName()) {
                 throw new InvalidDefinition('Decorators cannot be nested in another definition');
             }
@@ -67,7 +67,7 @@ class DecoratorResolver implements DefinitionResolver
         return $callable($decorated, $this->container);
     }
 
-    public function isResolvable(Definition $definition, array $parameters = []) : bool
+    public function isResolvable(DefinitionInterface $definition, array $parameters = []) : bool
     {
         return true;
     }

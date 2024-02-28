@@ -11,7 +11,7 @@ use Psr\Container\ContainerInterface;
  *
  * @author Matthieu Napoli <matthieu@mnapoli.fr>
  */
-class Reference implements Definition, SelfResolvingDefinition
+class Reference implements DefinitionInterface, SelfResolvingDefinition
 {
     /** Entry name. */
     private string $name = '';

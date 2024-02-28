@@ -4,14 +4,14 @@ declare(strict_types=1);
 
 namespace DI\Definition\ObjectDefinition;
 
-use DI\Definition\Definition;
+use DI\Definition\DefinitionInterface;
 
 /**
  * Describe an injection in an object method.
  *
  * @author Matthieu Napoli <matthieu@mnapoli.fr>
  */
-class MethodInjection implements Definition
+class MethodInjection implements DefinitionInterface
 {
     /**
      * @param mixed[] $parameters
