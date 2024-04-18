@@ -9,19 +9,20 @@ on:
 jobs:
 
     tests:
-        name: Tests - PHP ${{ matrix.php }} ${{ matrix.dependency-version }}
-        runs-on: ubuntu-latest
+        name: Tests ${{ matrix.os }} - PHP ${{ matrix.php }}
         timeout-minutes: 15
         strategy:
             matrix:
+                os: [ubuntu-latest, windows-latest]
                 php: [ '8.0', '8.1', '8.2', '8.3' ]
-                dependency-version: [ '' ]
-                include:
-                    -   php: '8.0'
-                        dependency-version: '--prefer-lowest'
+        runs-on: ${{ matrix.os }}        
         steps:
+            -   name: Set git to use LF
+                run: |
+                    git config --global core.autocrlf input
+                    git config --global core.eol lf
             -   name: Checkout
-                uses: actions/checkout@v2
+                uses: actions/checkout@v4
             -   name: Setup PHP
                 uses: shivammathur/setup-php@v2
                 with:
@@ -30,19 +31,15 @@ jobs:
                     coverage: none
                     # Enable apcu
                     extensions: apcu
-                    ini-values: apc.enable_cli=1
+                    ini-values: apc.enable_cli=1, opcache.enable=1, opcache.jit=tracing, opcache.jit_buffer_size=128M
             -   name: Cache Composer dependencies
-                uses: actions/cache@v2
+                uses: actions/cache@v4
                 with:
                     path: ~/.composer/cache
                     key: php-${{ matrix.php }}-composer-locked-${{ hashFiles('composer.lock') }}
                     restore-keys: php-${{ matrix.php }}-composer-locked-
             -   name: Install PHP dependencies
-                if: matrix.php != '8.1'
-                run: composer update ${{ matrix.dependency-version }} --prefer-dist --no-interaction --no-progress --no-suggest
-            -   name: 'Install PHP dependencies on PHP 8.1 (TODO: remove that)'
-                if: matrix.php == '8.1'
-                run: composer update --ignore-platform-reqs ${{ matrix.dependency-version }} --prefer-dist --no-interaction --no-progress --no-suggest
+                run: composer update ${{ matrix.dependency-version }} --prefer-dist --no-interaction --no-progress
             -   name: PHPUnit
                 run: vendor/bin/phpunit
 
@@ -51,15 +48,15 @@ jobs:
         runs-on: ubuntu-latest
         steps:
             -   name: Checkout
-                uses: actions/checkout@v2
+                uses: actions/checkout@v4
             -   name: Setup PHP
                 uses: shivammathur/setup-php@v2
                 with:
-                    php-version: 8.0
+                    php-version: 8.3
                     tools: composer:v2, cs2pr
                     coverage: none
             -   name: Cache Composer dependencies
-                uses: actions/cache@v2
+                uses: actions/cache@v4
                 with:
                     path: ~/.composer/cache
                     key: php-composer-locked-${{ hashFiles('composer.lock') }}
@@ -73,15 +70,15 @@ jobs:
         runs-on: ubuntu-latest
         steps:
             -   name: Checkout
-                uses: actions/checkout@v2
+                uses: actions/checkout@v4
             -   name: Setup PHP
                 uses: shivammathur/setup-php@v2
                 with:
-                    php-version: 8.0
+                    php-version: 8.3
                     tools: composer:v2, cs2pr
                     coverage: none
             -   name: Cache Composer dependencies
-                uses: actions/cache@v2
+                uses: actions/cache@v4
                 with:
                     path: ~/.composer/cache
                     key: php-composer-locked-${{ hashFiles('composer.lock') }}
