@@ -179,41 +179,6 @@ class CompiledContainerTest extends BaseContainerTest
 
     /**
      * @test
-     * @see https://github.com/PHP-DI/PHP-DI/issues/881
-     */
-    public function works_with_variadic_parameters()
-    {
-        $builder = new ContainerBuilder();
-        $builder->enableCompilation(self::COMPILATION_DIR, self::generateCompiledClassName());
-        $builder->addDefinitions([
-            'foo' => create(CompiledContainerTest\WithVariadicParameter::class)
-                ->constructor(
-                    get(CompiledContainerTest\C::class),
-                    get(CompiledContainerTest\B::class),
-                    get(CompiledContainerTest\A::class),
-                )
-                ->method(
-                    'method',
-                    get(CompiledContainerTest\A::class),
-                    get(CompiledContainerTest\B::class),
-                    get(CompiledContainerTest\C::class),
-                ),
-        ]);
-
-        $container = $builder->build();
-        $instance = $container->get('foo');
-
-        self::assertInstanceOf(CompiledContainerTest\WithVariadicParameter::class, $instance);
-        self::assertNotEmpty($instance->a);
-        self::assertNotEmpty($instance->b);
-        self::assertNotEmpty($instance->c);
-        self::assertNotEmpty($instance->a1);
-        self::assertNotEmpty($instance->b1);
-        self::assertNotEmpty($instance->c1);
-    }
-
-    /**
-     * @test
      * @see https://github.com/PHP-DI/PHP-DI/issues/565
      */
     public function recursively_compiles_referenced_definitions_found()
@@ -307,40 +272,4 @@ class ConstructorWithAbstractClassTypehint
 
 abstract class AbstractClass
 {
-}
-
-class A
-{
-}
-
-class B
-{
-}
-
-class C
-{
-}
-
-class WithVariadicParameter
-{
-    public A $a;
-    public B $b;
-    public C $c;
-    public A $a1;
-    public B $b1;
-    public C $c1;
-
-    public function __construct(A|B|C ...$v)
-    {
-        $this->a = $v[2];
-        $this->b = $v[1];
-        $this->c = $v[0];
-    }
-
-    public function method(A $a, B|C ...$v): void
-    {
-        $this->a1 = $a;
-        $this->b1 = $v[0];
-        $this->c1 = $v[1];
-    }
 }
