@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace DI\Test\IntegrationTest\Issues\Issue881;
+namespace DI\Test\IntegrationTest\Definitions\ObjectDefinition;
 
 final class ClassWithVariadicParameter
 {

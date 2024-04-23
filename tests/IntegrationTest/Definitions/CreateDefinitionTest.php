@@ -12,9 +12,13 @@ use DI\Test\IntegrationTest\Definitions\CreateDefinitionTest\PrivatePropertyInje
 use DI\Test\IntegrationTest\Definitions\CreateDefinitionTest\PrivatePropertyInjectionSubClass;
 use DI\Test\IntegrationTest\Definitions\CreateDefinitionTest\Property;
 use DI\Test\IntegrationTest\Definitions\CreateDefinitionTest\PropertyInjection;
+use DI\Test\IntegrationTest\Definitions\ObjectDefinition\A;
+use DI\Test\IntegrationTest\Definitions\ObjectDefinition\B;
+use DI\Test\IntegrationTest\Definitions\ObjectDefinition\C;
 use DI\Test\IntegrationTest\Definitions\ObjectDefinition\Class1;
 use DI\Test\IntegrationTest\Definitions\ObjectDefinition\Class2;
 use DI\Test\IntegrationTest\Definitions\ObjectDefinition\Class3;
+use DI\Test\IntegrationTest\Definitions\ObjectDefinition\ClassWithVariadicParameter;
 use ProxyManager\Proxy\LazyLoadingInterface;
 use function DI\create;
 use function DI\get;
@@ -307,6 +311,38 @@ class CreateDefinitionTest extends BaseContainerTest
 
         self::assertEntryIsCompiled($container, 'foo');
         self::assertInstanceOf(Property::class, $container->get('foo')['bar']);
+    }
+
+    /**
+     * @dataProvider provideContainer
+     */
+    public function test_with_variadics(ContainerBuilder $builder)
+    {
+        $builder->addDefinitions([
+            'foo' => create(ClassWithVariadicParameter::class)
+                ->constructor(
+                    get(C::class),
+                    get(B::class),
+                    get(A::class),
+                )
+                ->method(
+                    'method',
+                    get(A::class),
+                    get(B::class),
+                    get(C::class),
+                ),
+        ]);
+
+        $container = $builder->build();
+        $instance = $container->get('foo');
+
+        self::assertInstanceOf(ClassWithVariadicParameter::class, $instance);
+        self::assertNotEmpty($instance->a);
+        self::assertNotEmpty($instance->b);
+        self::assertNotEmpty($instance->c);
+        self::assertNotEmpty($instance->a1);
+        self::assertNotEmpty($instance->b1);
+        self::assertNotEmpty($instance->c1);
     }
 }
 
