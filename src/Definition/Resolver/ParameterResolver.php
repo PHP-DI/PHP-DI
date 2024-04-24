@@ -42,32 +42,33 @@ class ParameterResolver
         }
 
         $definitionParameters = $definition ? $definition->getParameters() : [];
+        ksort($definitionParameters);
 
         foreach ($method->getParameters() as $index => $parameter) {
+            if ($parameter->isVariadic()) {
+                $args = array_merge(
+                    $args,
+                    // Resolve definitions, if any
+                    array_map(
+                        function ($arg) {
+                            if ($arg instanceof Definition) {
+                                return $this->definitionResolver->resolve($arg);
+                            }
+
+                            return $arg;
+                        },
+                        // Parameters that are left
+                        array_slice($definitionParameters, $index)
+                    )
+                );
+
+                break;
+            }
+
             if (array_key_exists($parameter->getName(), $parameters)) {
                 // Look in the $parameters array
                 $value = &$parameters[$parameter->getName()];
             } elseif (array_key_exists($index, $definitionParameters)) {
-                if ($parameter->isVariadic()) {
-                    $args = array_merge(
-                        $args,
-                        // Resolve definitions, if any
-                        array_map(
-                            function ($arg) {
-                                if ($arg instanceof Definition) {
-                                    return $this->definitionResolver->resolve($arg);
-                                }
-
-                                return $arg;
-                            },
-                            // Parameters that are left
-                            array_slice($definitionParameters, $index)
-                        )
-                    );
-
-                    break;
-                }
-
                 // Look in the definition
                 $value = &$definitionParameters[$index];
             } else {

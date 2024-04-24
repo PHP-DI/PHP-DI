@@ -66,6 +66,18 @@ class ObjectCreatorTest extends TestCase
         $this->assertEquals(['value1', 'value2', 'value3'], $object->methodParam3);
     }
 
+    public function testResolveWithVariadicParameterEmpty()
+    {
+        $definition = new ObjectDefinition(FixtureClass::class);
+        $definition->setConstructorInjection(MethodInjection::constructor(['value1']));
+        $definition->addMethodInjection(new MethodInjection('methodWithVariadicParameter', ['value1']));
+
+        $object = $this->resolver->resolve($definition);
+
+        $this->assertInstanceOf(FixtureClass::class, $object);
+        $this->assertEquals(['value1'], $object->methodParam3);
+    }
+
     public function testResolveNoConstructorClass()
     {
         $definition = new ObjectDefinition(NoConstructor::class);
