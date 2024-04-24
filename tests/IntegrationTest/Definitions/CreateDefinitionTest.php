@@ -21,7 +21,6 @@ use DI\Test\IntegrationTest\Definitions\ObjectDefinition\Class3;
 use DI\Test\IntegrationTest\Definitions\ObjectDefinition\VariadicParameterInConstructor;
 use DI\Test\IntegrationTest\Definitions\ObjectDefinition\VariadicParameterInMethod;
 use ProxyManager\Proxy\LazyLoadingInterface;
-use function DI\autowire;
 use function DI\create;
 use function DI\get;
 use DI\Definition\Exception\InvalidDefinition;
