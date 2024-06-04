@@ -21,7 +21,7 @@ jobs:
                         dependency-version: '--prefer-lowest'
         steps:
             -   name: Checkout
-                uses: actions/checkout@v2
+                uses: actions/checkout@v4
             -   name: Setup PHP
                 uses: shivammathur/setup-php@v2
                 with:
@@ -32,17 +32,13 @@ jobs:
                     extensions: apcu
                     ini-values: apc.enable_cli=1
             -   name: Cache Composer dependencies
-                uses: actions/cache@v2
+                uses: actions/cache@v4
                 with:
                     path: ~/.composer/cache
                     key: php-${{ matrix.php }}-composer-locked-${{ hashFiles('composer.lock') }}
                     restore-keys: php-${{ matrix.php }}-composer-locked-
             -   name: Install PHP dependencies
-                if: matrix.php != '8.1'
                 run: composer update ${{ matrix.dependency-version }} --prefer-dist --no-interaction --no-progress --no-suggest
-            -   name: 'Install PHP dependencies on PHP 8.1 (TODO: remove that)'
-                if: matrix.php == '8.1'
-                run: composer update --ignore-platform-reqs ${{ matrix.dependency-version }} --prefer-dist --no-interaction --no-progress --no-suggest
             -   name: PHPUnit
                 run: vendor/bin/phpunit
 
@@ -51,7 +47,7 @@ jobs:
         runs-on: ubuntu-latest
         steps:
             -   name: Checkout
-                uses: actions/checkout@v2
+                uses: actions/checkout@v4
             -   name: Setup PHP
                 uses: shivammathur/setup-php@v2
                 with:
@@ -59,7 +55,7 @@ jobs:
                     tools: composer:v2, cs2pr
                     coverage: none
             -   name: Cache Composer dependencies
-                uses: actions/cache@v2
+                uses: actions/cache@v4
                 with:
                     path: ~/.composer/cache
                     key: php-composer-locked-${{ hashFiles('composer.lock') }}
@@ -73,15 +69,15 @@ jobs:
         runs-on: ubuntu-latest
         steps:
             -   name: Checkout
-                uses: actions/checkout@v2
+                uses: actions/checkout@v4
             -   name: Setup PHP
                 uses: shivammathur/setup-php@v2
                 with:
                     php-version: 8.0
-                    tools: composer:v2, cs2pr
+                    tools: composer:v2
                     coverage: none
             -   name: Cache Composer dependencies
-                uses: actions/cache@v2
+                uses: actions/cache@v4
                 with:
                     path: ~/.composer/cache
                     key: php-composer-locked-${{ hashFiles('composer.lock') }}
@@ -89,4 +85,4 @@ jobs:
             -   name: Install PHP dependencies
                 run: composer install --no-interaction --no-progress --no-suggest
             -   name: Psalm
-                run: vendor/bin/psalm --output-format=checkstyle | cs2pr
+                run: vendor/bin/psalm --output-format=github
