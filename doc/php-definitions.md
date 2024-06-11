@@ -501,7 +501,7 @@ Be also aware that it isn't possible to add definitions to a container on the fl
 
 ```php
 $builder = new ContainerBuilder();
-$builder->setDefinitionCache(new ApcCache());
+$builder->enableCompilation(__DIR__ . '/var/cache');
 $container = $builder->build();
 
 // Works: you can set values
