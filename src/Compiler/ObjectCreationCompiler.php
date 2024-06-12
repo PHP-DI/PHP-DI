@@ -105,8 +105,19 @@ class ObjectCreationCompiler
         }
 
         $definitionParameters = $definition ? $definition->getParameters() : [];
+        ksort($definitionParameters);
 
         foreach ($method->getParameters() as $index => $parameter) {
+            if ($parameter->isVariadic()) {
+                $args = array_merge(
+                    $args,
+                    // Parameters that are left
+                    array_slice($definitionParameters, $index)
+                );
+
+                break;
+            }
+
             if (array_key_exists($index, $definitionParameters)) {
                 // Look in the definition
                 $value = &$definitionParameters[$index];

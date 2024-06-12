@@ -10,6 +10,7 @@ class FixtureClass
     public $constructorParam1;
     public $methodParam1;
     public $methodParam2;
+    public $methodParam3;
 
     public function __construct($param1)
     {
@@ -24,5 +25,10 @@ class FixtureClass
     public function methodDefaultValue($param = 'defaultValue')
     {
         $this->methodParam2 = $param;
+    }
+
+    public function methodWithVariadicParameter($param1, ...$param2)
+    {
+        $this->methodParam3 = [$param1, ...$param2];
     }
 }

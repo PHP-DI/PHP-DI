@@ -12,9 +12,14 @@ use DI\Test\IntegrationTest\Definitions\CreateDefinitionTest\PrivatePropertyInje
 use DI\Test\IntegrationTest\Definitions\CreateDefinitionTest\PrivatePropertyInjectionSubClass;
 use DI\Test\IntegrationTest\Definitions\CreateDefinitionTest\Property;
 use DI\Test\IntegrationTest\Definitions\CreateDefinitionTest\PropertyInjection;
+use DI\Test\IntegrationTest\Definitions\ObjectDefinition\A;
+use DI\Test\IntegrationTest\Definitions\ObjectDefinition\B;
+use DI\Test\IntegrationTest\Definitions\ObjectDefinition\C;
 use DI\Test\IntegrationTest\Definitions\ObjectDefinition\Class1;
 use DI\Test\IntegrationTest\Definitions\ObjectDefinition\Class2;
 use DI\Test\IntegrationTest\Definitions\ObjectDefinition\Class3;
+use DI\Test\IntegrationTest\Definitions\ObjectDefinition\VariadicParameterInConstructor;
+use DI\Test\IntegrationTest\Definitions\ObjectDefinition\VariadicParameterInMethod;
 use ProxyManager\Proxy\LazyLoadingInterface;
 use function DI\create;
 use function DI\get;
@@ -307,6 +312,140 @@ class CreateDefinitionTest extends BaseContainerTest
 
         self::assertEntryIsCompiled($container, 'foo');
         self::assertInstanceOf(Property::class, $container->get('foo')['bar']);
+    }
+
+    /**
+     * @dataProvider provideContainer
+     */
+    public function test_with_variadics_positional(ContainerBuilder $builder)
+    {
+        $builder->addDefinitions([
+            'foo' => create(VariadicParameterInConstructor::class)
+                ->constructor(
+                    get(A::class),
+                    get(B::class),
+                    get(C::class),
+                ),
+            'bar' => create(VariadicParameterInMethod::class)
+                ->method(
+                    'method1',
+                    get(A::class),
+                    get(B::class),
+                    get(C::class),
+                ),
+        ]);
+
+        $container = $builder->build();
+
+        $foo = $container->get('foo');
+        self::assertInstanceOf(VariadicParameterInConstructor::class, $foo);
+        self::assertNotEmpty($foo->a);
+        self::assertNotEmpty($foo->b);
+        self::assertNotEmpty($foo->c);
+
+        $bar = $container->get('bar');
+        self::assertInstanceOf(VariadicParameterInMethod::class, $bar);
+        self::assertNotEmpty($bar->a1);
+        self::assertNotEmpty($bar->b1);
+        self::assertNotEmpty($bar->c1);
+    }
+
+    /**
+     * @dataProvider provideContainer
+     */
+    public function test_with_variadics_positional_empty(ContainerBuilder $builder)
+    {
+        $builder->addDefinitions([
+            'foo' => create(VariadicParameterInConstructor::class)
+                ->constructor(
+                    get(A::class),
+                ),
+            'bar' => create(VariadicParameterInMethod::class)
+                ->method(
+                    'method1',
+                    get(A::class),
+                ),
+        ]);
+
+        $container = $builder->build();
+
+        $foo = $container->get('foo');
+        self::assertInstanceOf(VariadicParameterInConstructor::class, $foo);
+        self::assertNotEmpty($foo->a);
+        self::assertEmpty($foo->b);
+        self::assertEmpty($foo->c);
+
+        $bar = $container->get('bar');
+        self::assertInstanceOf(VariadicParameterInMethod::class, $bar);
+        self::assertNotEmpty($bar->a1);
+        self::assertEmpty($bar->b1);
+        self::assertEmpty($bar->c1);
+    }
+
+    /**
+     * @dataProvider provideContainer
+     */
+    public function test_with_variadics_named(ContainerBuilder $builder)
+    {
+        $builder->addDefinitions([
+            'foo' => create(VariadicParameterInConstructor::class)
+                ->constructor(
+                    a: get(A::class),
+                    v: get(B::class),
+                ),
+            'bar' => create(VariadicParameterInMethod::class)
+                ->method(
+                    'method1',
+                    a: get(A::class),
+                    v: get(B::class),
+                ),
+        ]);
+
+        $container = $builder->build();
+
+        $foo = $container->get('foo');
+        self::assertInstanceOf(VariadicParameterInConstructor::class, $foo);
+        self::assertNotEmpty($foo->a);
+        self::assertNotEmpty($foo->b);
+        self::assertEmpty($foo->c);
+
+        $bar = $container->get('bar');
+        self::assertInstanceOf(VariadicParameterInMethod::class, $bar);
+        self::assertNotEmpty($bar->a1);
+        self::assertNotEmpty($bar->b1);
+        self::assertEmpty($bar->c1);
+    }
+
+    /**
+     * @dataProvider provideContainer
+     */
+    public function test_with_variadics_named_empty(ContainerBuilder $builder)
+    {
+        $builder->addDefinitions([
+            'foo' => create(VariadicParameterInConstructor::class)
+                ->constructor(
+                    a: get(A::class),
+                ),
+            'bar' => create(VariadicParameterInMethod::class)
+                ->method(
+                    'method1',
+                    a: get(A::class),
+                ),
+        ]);
+
+        $container = $builder->build();
+
+        $foo = $container->get('foo');
+        self::assertInstanceOf(VariadicParameterInConstructor::class, $foo);
+        self::assertNotEmpty($foo->a);
+        self::assertEmpty($foo->b);
+        self::assertEmpty($foo->c);
+
+        $bar = $container->get('bar');
+        self::assertInstanceOf(VariadicParameterInMethod::class, $bar);
+        self::assertNotEmpty($bar->a1);
+        self::assertEmpty($bar->b1);
+        self::assertEmpty($bar->c1);
     }
 }
 

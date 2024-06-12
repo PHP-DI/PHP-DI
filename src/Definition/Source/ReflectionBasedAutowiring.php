@@ -7,6 +7,7 @@ namespace DI\Definition\Source;
 use DI\Definition\ObjectDefinition;
 use DI\Definition\ObjectDefinition\MethodInjection;
 use DI\Definition\Reference;
+use ReflectionClass;
 use ReflectionNamedType;
 
 /**
@@ -26,12 +27,23 @@ class ReflectionBasedAutowiring implements DefinitionSource, Autowiring
 
         $definition = $definition ?: new ObjectDefinition($name);
 
+        $class = new ReflectionClass($className);
+
         // Constructor
-        $class = new \ReflectionClass($className);
         $constructor = $class->getConstructor();
         if ($constructor && $constructor->isPublic()) {
             $constructorInjection = MethodInjection::constructor($this->getParametersDefinition($constructor));
             $definition->completeConstructorInjection($constructorInjection);
+        }
+
+        // Ensure method injections are complete
+        $methodInjections = $definition->getMethodInjections();
+        foreach ($methodInjections as $methodInjection) {
+            $reflectionMethodInjection = new MethodInjection(
+                $methodInjection->getMethodName(),
+                $this->getParametersDefinition($class->getMethod($methodInjection->getMethodName())),
+            );
+            $definition->completeFirstMethodInjection($reflectionMethodInjection);
         }
 
         return $definition;
