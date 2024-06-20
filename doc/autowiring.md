@@ -47,6 +47,15 @@ As you can imagine, it's very simple, doesn't require any configuration, and it 
 $containerBuilder->useAutowiring(false);
 ```
 
+It may be helpful not to disable autowiring but have logs about autowiring made a hit. You can enable logging using the container builder:
+
+```php
+// of course, you can use any other PSR-3 logger, Monolog is just an example
+$logger = new \Monolog\Logger('php-di');
+
+$containerBuilder->setLogger($logger, \Psr\Log\LogLevel::INFO);
+```
+
 ## Limitations
 
 PHP-DI won't be able to resolve cases like this:
