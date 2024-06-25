@@ -71,7 +71,7 @@ class ContainerMakeTest extends BaseContainerTest
     public function testCircularDependencyException(ContainerBuilder $builder)
     {
         $this->expectException(DependencyException::class);
-        $this->expectExceptionMessage('Circular dependency detected while trying to resolve entry \'DI\Test\UnitTest\Fixtures\Class1CircularDependencies\'');
+        $this->expectExceptionMessage('Circular dependency detected while trying to resolve entry \'DI\Test\UnitTest\Fixtures\Class1CircularDependencies\': Dependencies: DI\Test\UnitTest\Fixtures\Class1CircularDependencies -> DI\Test\UnitTest\Fixtures\Class2CircularDependencies -> DI\Test\UnitTest\Fixtures\Class1CircularDependencies');
         $builder->useAttributes(true);
         $container = $builder->build();
         $container->make(Class1CircularDependencies::class);
@@ -83,7 +83,7 @@ class ContainerMakeTest extends BaseContainerTest
     public function testCircularDependencyExceptionWithAlias(ContainerBuilder $builder)
     {
         $this->expectException(DependencyException::class);
-        $this->expectExceptionMessage('Circular dependency detected while trying to resolve entry \'foo\'');
+        $this->expectExceptionMessage('Circular dependency detected while trying to resolve entry \'foo\': Dependencies: foo -> foo');
         $builder->addDefinitions([
             // Alias to itself -> infinite recursive loop
             'foo' => \DI\get('foo'),

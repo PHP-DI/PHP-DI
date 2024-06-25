@@ -52,7 +52,7 @@ class CircularDependencyTest extends BaseContainerTest
     public function circular_dependencies_with_attributes_throw_exceptions(ContainerBuilder $builder)
     {
         $this->expectException(DependencyException::class);
-        $this->expectExceptionMessage('Circular dependency detected while trying to resolve entry \'DI\Test\UnitTest\Fixtures\Class1CircularDependencies\'');
+        $this->expectExceptionMessage("Circular dependency detected while trying to resolve entry 'DI\Test\UnitTest\Fixtures\Class1CircularDependencies': Dependencies: DI\Test\UnitTest\Fixtures\Class1CircularDependencies -> DI\Test\UnitTest\Fixtures\Class2CircularDependencies -> DI\Test\UnitTest\Fixtures\Class1CircularDependencies");
         $builder->useAttributes(true);
         $builder->build()->get(Class1CircularDependencies::class);
     }
@@ -64,7 +64,7 @@ class CircularDependencyTest extends BaseContainerTest
     public function circular_dependencies_because_of_self_alias_throw_exceptions(ContainerBuilder $builder)
     {
         $this->expectException(DependencyException::class);
-        $this->expectExceptionMessage('Circular dependency detected while trying to resolve entry \'foo\'');
+        $this->expectExceptionMessage("Circular dependency detected while trying to resolve entry 'foo': Dependencies: foo -> foo");
         $builder->addDefinitions([
             // Alias to itself -> infinite recursive loop
             'foo' => get('foo'),
