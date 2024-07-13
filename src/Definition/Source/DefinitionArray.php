@@ -27,7 +27,7 @@ class DefinitionArray implements DefinitionSource, MutableDefinitionSource
 
     private DefinitionNormalizer $normalizer;
 
-    public function __construct(array $definitions = [], Autowiring $autowiring = null)
+    public function __construct(array $definitions = [], ?Autowiring $autowiring = null)
     {
         if (isset($definitions[0])) {
             throw new \Exception('The PHP-DI definition is not indexed by an entry name in the definition array');
@@ -63,7 +63,7 @@ class DefinitionArray implements DefinitionSource, MutableDefinitionSource
         $this->wildcardDefinitions = null;
     }
 
-    public function getDefinition(string $name) : Definition|null
+    public function getDefinition(string $name) : ?Definition
     {
         // Look for the definition by name
         if (array_key_exists($name, $this->definitions)) {

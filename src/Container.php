@@ -89,8 +89,8 @@ class Container implements ContainerInterface, FactoryInterface, InvokerInterfac
      */
     public function __construct(
         array|MutableDefinitionSource $definitions = [],
-        ProxyFactory $proxyFactory = null,
-        ContainerInterface $wrapperContainer = null
+        ?ProxyFactory $proxyFactory = null,
+        ?ContainerInterface $wrapperContainer = null
     ) {
         if (is_array($definitions)) {
             $this->definitionSource = $this->createDefaultDefinitionSource($definitions);

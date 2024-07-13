@@ -20,13 +20,13 @@ class DefinitionFile extends DefinitionArray
      */
     public function __construct(
         private string $file,
-        Autowiring $autowiring = null,
+        ?Autowiring $autowiring = null,
     ) {
         // Lazy-loading to improve performances
         parent::__construct([], $autowiring);
     }
 
-    public function getDefinition(string $name) : Definition|null
+    public function getDefinition(string $name) : ?Definition
     {
         $this->initialize();
 
