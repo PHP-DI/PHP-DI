@@ -26,7 +26,7 @@ class DefinitionFile extends DefinitionArray
         parent::__construct([], $autowiring);
     }
 
-    public function getDefinition(string $name) : ?Definition
+    public function getDefinition(string $name) : Definition|null
     {
         $this->initialize();
 

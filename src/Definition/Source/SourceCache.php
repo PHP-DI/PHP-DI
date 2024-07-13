@@ -23,7 +23,7 @@ class SourceCache implements DefinitionSource, MutableDefinitionSource
     ) {
     }
 
-    public function getDefinition(string $name) : ?Definition
+    public function getDefinition(string $name) : Definition|null
     {
         $definition = apcu_fetch($this->getCacheKey($name));
 
