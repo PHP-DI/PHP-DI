@@ -38,7 +38,7 @@ jobs:
                     key: php-${{ matrix.php }}-composer-locked-${{ hashFiles('composer.lock') }}
                     restore-keys: php-${{ matrix.php }}-composer-locked-
             -   name: Install PHP dependencies
-                run: composer update ${{ matrix.dependency-version }} --prefer-dist --no-interaction --no-progress --no-suggest
+                run: composer update ${{ matrix.dependency-version }} --prefer-dist --no-interaction --no-progress
             -   name: PHPUnit
                 run: vendor/bin/phpunit
 
@@ -61,7 +61,7 @@ jobs:
                     key: php-composer-locked-${{ hashFiles('composer.lock') }}
                     restore-keys: php-composer-locked-
             -   name: Install PHP dependencies
-                run: composer install --no-interaction --no-progress --no-suggest
+                run: composer install --no-interaction --no-progress
             -   name: PHP CS Fixer
                 run: vendor/bin/php-cs-fixer fix --dry-run --format=checkstyle | cs2pr
 
@@ -83,6 +83,6 @@ jobs:
                     key: php-composer-locked-${{ hashFiles('composer.lock') }}
                     restore-keys: php-composer-locked-
             -   name: Install PHP dependencies
-                run: composer install --no-interaction --no-progress --no-suggest
+                run: composer install --no-interaction --no-progress
             -   name: Psalm
                 run: vendor/bin/psalm --output-format=github
