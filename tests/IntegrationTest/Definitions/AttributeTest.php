@@ -138,11 +138,11 @@ class ConstructorInjection
 {
     public $value;
     public string $scalarValue;
-    public stdClass $typedValue;
-    public ?stdClass $typedOptionalValue;
+    public \stdClass $typedValue;
+    public \stdClass $typedOptionalValue;
     /** @var stdClass&\ProxyManager\Proxy\LazyLoadingInterface */
     public $lazyService;
-    public stdClass $attribute;
+    public \stdClass $attribute;
     public string $optionalValue;
 
     #[Inject(['value' => 'foo', 'scalarValue' => 'foo', 'lazyService' => 'lazyService'])]
@@ -150,10 +150,10 @@ class ConstructorInjection
         $value,
         string $scalarValue,
         \stdClass $typedValue,
-        \stdClass $typedOptionalValue = null,
-        \stdClass $lazyService,
+        \stdClass $typedOptionalValue = new \stdClass(),
+        \stdClass $lazyService = new \stdClass(),
         #[Inject('attribute')]
-        \stdClass $attribute,
+        \stdClass $attribute = new \stdClass(),
         string $optionalValue = 'hello'
     ) {
         $this->value = $value;
@@ -194,11 +194,11 @@ class MethodInjection
         $value,
         string $scalarValue,
         $untypedValue,
-        \stdClass $typedOptionalValue = null,
-        \stdClass $lazyService,
+        \stdClass $typedOptionalValue = new \stdClass(),
+        \stdClass $lazyService = new \stdClass(),
         #[Inject('attribute')]
-        stdClass $attribute,
-        $optionalValue = 'hello'
+        \stdClass $attribute = new \stdClass(),
+        string $optionalValue = 'hello'
     ) {
         $this->value = $value;
         $this->scalarValue = $scalarValue;

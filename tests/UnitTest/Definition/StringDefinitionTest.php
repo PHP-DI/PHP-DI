@@ -71,10 +71,18 @@ class StringDefinitionTest extends TestCase
     public function should_resolve_multiple_references()
     {
         $container = $this->easySpy(ContainerInterface::class);
-        $container->expects($this->exactly(2))
-            ->method('get')
-            ->withConsecutive(['tmp'], ['logs'])
-            ->willReturnOnConsecutiveCalls('/private/tmp', 'myapp-logs');
+        $matcher = $this->exactly(2);
+        $container->expects($matcher)
+            ->method('get')->willReturnCallback(function (...$parameters) use ($matcher) {
+            if ($matcher->numberOfInvocations() === 1) {
+                $this->assertSame('tmp', $parameters[0]);
+                return '/private/tmp';
+            }
+            if ($matcher->numberOfInvocations() === 2) {
+                $this->assertSame('logs', $parameters[0]);
+                return 'myapp-logs';
+            }
+        });
 
         $definition = new StringDefinition('{tmp}/{logs}/app.log');
 

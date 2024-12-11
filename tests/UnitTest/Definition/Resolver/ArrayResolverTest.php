@@ -51,13 +51,18 @@ class ArrayResolverTest extends TestCase
      */
     public function should_resolve_nested_definitions()
     {
-        $this->parentResolver->expects($this->exactly(2))
-            ->method('resolve')
-            ->withConsecutive(
-                [$this->isInstanceOf(Reference::class)],
-                [$this->isInstanceOf(ObjectDefinition::class)]
-            )
-            ->willReturnOnConsecutiveCalls(42, new \stdClass());
+        $matcher = $this->exactly(2);
+        $this->parentResolver->expects($matcher)
+            ->method('resolve')->willReturnCallback(function (...$parameters) use ($matcher) {
+            if ($matcher->numberOfInvocations() === 1) {
+                $this->assertSame($this->isInstanceOf(Reference::class), $parameters[0]);
+                return 42;
+            }
+            if ($matcher->numberOfInvocations() === 2) {
+                $this->assertSame($this->isInstanceOf(ObjectDefinition::class), $parameters[0]);
+                return new \stdClass();
+            }
+        });
 
         $definition = new ArrayDefinition([
             'bar',

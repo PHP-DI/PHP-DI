@@ -331,8 +331,8 @@ class ConstructorInjection
         $value,
         string $scalarValue,
         \stdClass $typedValue,
-        \stdClass $typedOptionalValue = null,
-        \stdClass $lazyService,
+        ?\stdClass $typedOptionalValue = null,
+        ?\stdClass $lazyService = null,
         $optionalValue = 'hello'
     ) {
         $this->value = $value;
@@ -366,8 +366,8 @@ class MethodInjection
         $value,
         string $scalarValue,
         \stdClass $typedValue,
-        \stdClass $typedOptionalValue = null,
-        \stdClass $lazyService,
+        \stdClass $typedOptionalValue = new \stdClass(),
+        \stdClass $lazyService = new \stdClass(),
         $optionalValue = 'hello'
     ) {
         $this->value = $value;

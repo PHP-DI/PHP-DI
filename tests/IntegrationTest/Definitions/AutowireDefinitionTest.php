@@ -58,8 +58,8 @@ class AutowireDefinitionTest extends BaseContainerTest
 
         $object = $container->get(ConstructorInjection::class);
 
-        self::assertEquals(new \stdClass, $object->typedValue);
-        self::assertEquals(new \stdClass, $object->typedOptionalValue);
+        self::assertEquals(new \stdClass(), $object->typedValue);
+        self::assertEquals(new \stdClass(), $object->typedOptionalValue);
         self::assertEquals('bar', $object->value);
         self::assertInstanceOf(LazyService::class, $object->lazyService);
         self::assertInstanceOf(LazyLoadingInterface::class, $object->lazyService);
@@ -362,21 +362,15 @@ namespace DI\Test\IntegrationTest\Definitions\AutowireDefinitionTest;
 
 class NullableConstructorParameter
 {
-    public $bar;
-
-    public function __construct($bar = null)
+    public function __construct(public $bar = null)
     {
-        $this->bar = $bar;
     }
 }
 
 class NullableTypedConstructorParameter
 {
-    public $bar;
-
-    public function __construct(\stdClass $bar = null)
+    public function __construct(public ?\stdClass $bar = null)
     {
-        $this->bar = $bar;
     }
 }
 
@@ -413,9 +407,9 @@ class ConstructorInjection
     public function __construct(
         \stdClass $typedValue,
         string $value,
-        \stdClass $typedOptionalValue = null,
-        LazyService $lazyService,
-        UnknownClass $unknownTypedAndOptional = null,
+        ?\stdClass $typedOptionalValue,
+        ?LazyService $lazyService,
+        $unknownTypedAndOptional = null,
         $optionalValue = 'hello'
     ) {
         $this->value = $value;
