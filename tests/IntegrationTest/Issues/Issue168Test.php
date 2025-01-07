@@ -20,23 +20,23 @@ class Issue168Test extends BaseContainerTest
      */
     public function testInterfaceOptionalParameter(ContainerBuilder $builder)
     {
+        require_once __DIR__ . '/Issue168/class.php';
+
         $container = $builder->build();
-        $object = $container->get(TestClass::class);
-        $this->assertInstanceOf(TestClass::class, $object);
+        $object = $container->get(Issue168\TestClass::class);
+        $this->assertInstanceOf(Issue168\TestClass::class, $object);
     }
-}
 
-class TestClass
-{
     /**
-     * The parameter is optional. TestInterface is not instantiable, so `null` should
-     * be injected instead of getting an exception.
+     * @dataProvider provideContainer
+     * @requires PHP < 8.4.0
      */
-    public function __construct(TestInterface $param = null)
+    public function testInterfaceOptionalParameterForPHP83(ContainerBuilder $builder)
     {
-    }
-}
+        require_once __DIR__ . '/Issue168/class-php83.php';
 
-interface TestInterface
-{
+        $container = $builder->build();
+        $object = $container->get(Issue168\TestClass83::class);
+        $this->assertInstanceOf(Issue168\TestClass83::class, $object);
+    }
 }
