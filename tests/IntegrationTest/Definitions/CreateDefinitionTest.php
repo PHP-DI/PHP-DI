@@ -59,8 +59,8 @@ class CreateDefinitionTest extends BaseContainerTest
                     123,
                     get('foo'),
                     get(\stdClass::class),
+                    get('lazyService'),
                     get(\stdClass::class),
-                    get('lazyService')
                 ),
             'foo' => 'bar',
             'lazyService' => create(\stdClass::class)->lazy(),
@@ -118,8 +118,8 @@ class CreateDefinitionTest extends BaseContainerTest
                     123,
                     get('foo'),
                     get(\stdClass::class),
+                    get('lazyService'),
                     get(\stdClass::class),
-                    get('lazyService')
                 ),
             'foo' => 'bar',
             'lazyService' => create(\stdClass::class)->lazy(),
@@ -323,6 +323,7 @@ class ConstructorInjection
     public $scalarValue;
     public $typedValue;
     public $typedOptionalValue;
+    public $typedOptionalValueDefaultNull;
     /** @var \ProxyManager\Proxy\LazyLoadingInterface */
     public $lazyService;
     public $optionalValue;
@@ -331,14 +332,16 @@ class ConstructorInjection
         $value,
         string $scalarValue,
         \stdClass $typedValue,
-        \stdClass $typedOptionalValue = null,
         \stdClass $lazyService,
+        ?\stdClass $typedOptionalValue = new \stdClass(),
+        ?\stdClass $typedOptionalValueDefaultNull = null,
         $optionalValue = 'hello'
     ) {
         $this->value = $value;
         $this->scalarValue = $scalarValue;
         $this->typedValue = $typedValue;
         $this->typedOptionalValue = $typedOptionalValue;
+        $this->typedOptionalValueDefaultNull = $typedOptionalValueDefaultNull;
         $this->lazyService = $lazyService;
         $this->optionalValue = $optionalValue;
     }
@@ -358,6 +361,7 @@ class MethodInjection
     public $scalarValue;
     public $typedValue;
     public $typedOptionalValue;
+    public $typedOptionalValueDefaultNull;
     /** @var \ProxyManager\Proxy\LazyLoadingInterface */
     public $lazyService;
     public $optionalValue;
@@ -366,14 +370,16 @@ class MethodInjection
         $value,
         string $scalarValue,
         \stdClass $typedValue,
-        \stdClass $typedOptionalValue = null,
         \stdClass $lazyService,
+        ?\stdClass $typedOptionalValue = new stdClass(),
+        ?\stdClass $typedOptionalValueDefaultNull = null,
         $optionalValue = 'hello'
     ) {
         $this->value = $value;
         $this->scalarValue = $scalarValue;
         $this->typedValue = $typedValue;
         $this->typedOptionalValue = $typedOptionalValue;
+        $this->typedOptionalValueDefaultNull = $typedOptionalValueDefaultNull;
         $this->lazyService = $lazyService;
         $this->optionalValue = $optionalValue;
     }

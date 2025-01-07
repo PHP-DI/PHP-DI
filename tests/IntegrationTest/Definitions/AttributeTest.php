@@ -47,6 +47,7 @@ class AttributeTest extends BaseContainerTest
 
         self::assertEquals(new \stdClass, $object->typedValue);
         self::assertEquals(new \stdClass, $object->typedOptionalValue);
+        self::assertNull($object->typedOptionalValueDefaultNull);
         self::assertEquals('bar', $object->value);
         self::assertInstanceOf(\stdClass::class, $object->lazyService);
         self::assertInstanceOf(LazyLoadingInterface::class, $object->lazyService);
@@ -107,6 +108,7 @@ class AttributeTest extends BaseContainerTest
 
         self::assertEquals(new \stdClass, $object->typedValue);
         self::assertEquals(new \stdClass, $object->typedOptionalValue);
+        self::assertNull($object->typedOptionalValueDefaultNull);
         self::assertEquals('bar', $object->value);
         self::assertInstanceOf(\stdClass::class, $object->lazyService);
         self::assertInstanceOf(LazyLoadingInterface::class, $object->lazyService);
@@ -140,6 +142,7 @@ class ConstructorInjection
     public string $scalarValue;
     public stdClass $typedValue;
     public ?stdClass $typedOptionalValue;
+    public ?stdClass $typedOptionalValueDefaultNull;
     /** @var stdClass&\ProxyManager\Proxy\LazyLoadingInterface */
     public $lazyService;
     public stdClass $attribute;
@@ -150,16 +153,18 @@ class ConstructorInjection
         $value,
         string $scalarValue,
         \stdClass $typedValue,
-        \stdClass $typedOptionalValue = null,
         \stdClass $lazyService,
         #[Inject('attribute')]
         \stdClass $attribute,
+        ?\stdClass $typedOptionalValue = new stdClass(),
+        ?\stdClass $typedOptionalValueDefaultNull = null,
         string $optionalValue = 'hello'
     ) {
         $this->value = $value;
         $this->scalarValue = $scalarValue;
         $this->typedValue = $typedValue;
         $this->typedOptionalValue = $typedOptionalValue;
+        $this->typedOptionalValueDefaultNull = $typedOptionalValueDefaultNull;
         $this->lazyService = $lazyService;
         $this->attribute = $attribute;
         $this->optionalValue = $optionalValue;
@@ -184,6 +189,7 @@ class MethodInjection
     public $scalarValue;
     public $typedValue;
     public $typedOptionalValue;
+    public $typedOptionalValueDefaultNull;
     /** @var \ProxyManager\Proxy\LazyLoadingInterface */
     public $lazyService;
     public stdClass $attribute;
@@ -194,16 +200,18 @@ class MethodInjection
         $value,
         string $scalarValue,
         $untypedValue,
-        \stdClass $typedOptionalValue = null,
         \stdClass $lazyService,
         #[Inject('attribute')]
         stdClass $attribute,
+        ?\stdClass $typedOptionalValue = new stdClass,
+        ?\stdClass $typedOptionalValueDefaultNull = null,
         $optionalValue = 'hello'
     ) {
         $this->value = $value;
         $this->scalarValue = $scalarValue;
         $this->untypedValue = $untypedValue;
         $this->typedOptionalValue = $typedOptionalValue;
+        $this->typedOptionalValueDefaultNull = $typedOptionalValueDefaultNull;
         $this->lazyService = $lazyService;
         $this->attribute = $attribute;
         $this->optionalValue = $optionalValue;
