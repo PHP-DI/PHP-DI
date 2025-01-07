@@ -67,7 +67,7 @@ class AttributeFixture
     }
 
     #[Inject(['foo'])]
-    public function optionalParameter(\stdClass $optional1 = null, \stdClass $optional2 = null)
+    public function optionalParameter(?\stdClass $optional1 = null, ?\stdClass $optional2 = null)
     {
     }
 

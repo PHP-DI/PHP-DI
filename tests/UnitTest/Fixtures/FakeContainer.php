@@ -33,7 +33,7 @@ class FakeContainer
     public function __construct(
         DefinitionSource $definitionSource,
         ProxyFactory $proxyFactory,
-        ContainerInterface $wrapperContainer = null
+        ?ContainerInterface $wrapperContainer = null,
     ) {
         $this->definitionSource = $definitionSource;
         $this->proxyFactory = $proxyFactory;
