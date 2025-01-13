@@ -21,6 +21,15 @@ use function DI\create;
  */
 class AttributeTest extends BaseContainerTest
 {
+    public static function setUpBeforeClass(): void
+    {
+        if (PHP_VERSION_ID < 80400) {
+            require_once __DIR__ . '/Attribute/class-php83.php';
+        } else {
+            require_once __DIR__ . '/Attribute/class.php';
+        }
+    }
+
     /**
      * @dataProvider provideContainer
      */
@@ -46,7 +55,8 @@ class AttributeTest extends BaseContainerTest
         $object = $container->get(ConstructorInjection::class);
 
         self::assertEquals(new \stdClass, $object->typedValue);
-        self::assertEquals(new \stdClass, $object->typedOptionalValue);
+        self::assertEquals(PHP_VERSION_ID < 80400 ? null : new \stdClass, $object->typedOptionalValue);
+        self::assertNull($object->typedOptionalValueDefaultNull);
         self::assertEquals('bar', $object->value);
         self::assertInstanceOf(\stdClass::class, $object->lazyService);
         self::assertInstanceOf(LazyLoadingInterface::class, $object->lazyService);
@@ -106,106 +116,13 @@ class AttributeTest extends BaseContainerTest
         $object = $container->get(ConstructorInjection::class);
 
         self::assertEquals(new \stdClass, $object->typedValue);
-        self::assertEquals(new \stdClass, $object->typedOptionalValue);
+        self::assertEquals(PHP_VERSION_ID < 80400 ? null : new \stdClass, $object->typedOptionalValue);
+        self::assertNull($object->typedOptionalValueDefaultNull);
         self::assertEquals('bar', $object->value);
         self::assertInstanceOf(\stdClass::class, $object->lazyService);
         self::assertInstanceOf(LazyLoadingInterface::class, $object->lazyService);
         self::assertFalse($object->lazyService->isProxyInitialized());
         self::assertSame($container->get('attribute'), $object->attribute);
         self::assertEquals('hello', $object->optionalValue);
-    }
-}
-
-namespace DI\Test\IntegrationTest\Definitions\AttributesTest;
-
-use DI\Attribute\Inject;
-use stdClass;
-
-class NonAnnotatedClass
-{
-}
-
-class AutowiredClass
-{
-    public stdClass $entry;
-    public function __construct(stdClass $entry)
-    {
-        $this->entry = $entry;
-    }
-}
-
-class ConstructorInjection
-{
-    public $value;
-    public string $scalarValue;
-    public stdClass $typedValue;
-    public ?stdClass $typedOptionalValue;
-    /** @var stdClass&\ProxyManager\Proxy\LazyLoadingInterface */
-    public $lazyService;
-    public stdClass $attribute;
-    public string $optionalValue;
-
-    #[Inject(['value' => 'foo', 'scalarValue' => 'foo', 'lazyService' => 'lazyService'])]
-    public function __construct(
-        $value,
-        string $scalarValue,
-        \stdClass $typedValue,
-        \stdClass $typedOptionalValue = null,
-        \stdClass $lazyService,
-        #[Inject('attribute')]
-        \stdClass $attribute,
-        string $optionalValue = 'hello'
-    ) {
-        $this->value = $value;
-        $this->scalarValue = $scalarValue;
-        $this->typedValue = $typedValue;
-        $this->typedOptionalValue = $typedOptionalValue;
-        $this->lazyService = $lazyService;
-        $this->attribute = $attribute;
-        $this->optionalValue = $optionalValue;
-    }
-}
-
-class PropertyInjection
-{
-    #[Inject(name: 'foo')]
-    public $value;
-    #[Inject('foo')]
-    public $value2;
-    #[Inject]
-    public stdClass $entry;
-    #[Inject('lazyService')]
-    public $lazyService;
-}
-
-class MethodInjection
-{
-    public $value;
-    public $scalarValue;
-    public $typedValue;
-    public $typedOptionalValue;
-    /** @var \ProxyManager\Proxy\LazyLoadingInterface */
-    public $lazyService;
-    public stdClass $attribute;
-    public $optionalValue;
-
-    #[Inject(['value' => 'foo', 'scalarValue' => 'foo', 'lazyService' => 'lazyService'])]
-    public function method(
-        $value,
-        string $scalarValue,
-        $untypedValue,
-        \stdClass $typedOptionalValue = null,
-        \stdClass $lazyService,
-        #[Inject('attribute')]
-        stdClass $attribute,
-        $optionalValue = 'hello'
-    ) {
-        $this->value = $value;
-        $this->scalarValue = $scalarValue;
-        $this->untypedValue = $untypedValue;
-        $this->typedOptionalValue = $typedOptionalValue;
-        $this->lazyService = $lazyService;
-        $this->attribute = $attribute;
-        $this->optionalValue = $optionalValue;
     }
 }
