@@ -23,6 +23,8 @@ use Psr\Container\ContainerInterface;
  *
  * @since 5.0
  * @author Matthieu Napoli <matthieu@mnapoli.fr>
+ *
+ * @psalm-suppress MissingTemplateParam
  */
 class ResolverDispatcher implements DefinitionResolver
 {
