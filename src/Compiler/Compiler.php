@@ -97,7 +97,7 @@ class Compiler
         string $directory,
         string $className,
         string $parentClassName,
-        bool $autowiringEnabled
+        bool $autowiringEnabled,
     ) : string {
         $fileName = rtrim($directory, '/') . '/' . $className . '.php';
 

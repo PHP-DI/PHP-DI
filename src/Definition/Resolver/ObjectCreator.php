@@ -34,7 +34,7 @@ class ObjectCreator implements DefinitionResolver
      */
     public function __construct(
         private DefinitionResolver $definitionResolver,
-        private ProxyFactory $proxyFactory
+        private ProxyFactory $proxyFactory,
     ) {
         $this->parameterResolver = new ParameterResolver($definitionResolver);
     }

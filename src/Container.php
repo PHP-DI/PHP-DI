@@ -69,7 +69,7 @@ class Container implements ContainerInterface, FactoryInterface, InvokerInterfac
     protected ProxyFactory $proxyFactory;
 
     public static function create(
-        array $definitions
+        array $definitions,
     ) : static {
         $source = new SourceChain([new ReflectionBasedAutowiring]);
         $source->setMutableDefinitionSource(new DefinitionArray($definitions, new ReflectionBasedAutowiring));
@@ -90,7 +90,7 @@ class Container implements ContainerInterface, FactoryInterface, InvokerInterfac
     public function __construct(
         array|MutableDefinitionSource $definitions = [],
         ?ProxyFactory $proxyFactory = null,
-        ?ContainerInterface $wrapperContainer = null
+        ?ContainerInterface $wrapperContainer = null,
     ) {
         if (is_array($definitions)) {
             $this->definitionSource = $this->createDefaultDefinitionSource($definitions);
@@ -344,7 +344,7 @@ class Container implements ContainerInterface, FactoryInterface, InvokerInterfac
 
         // Check if we are already getting this entry -> circular dependency
         if (isset($this->entriesBeingResolved[$entryName])) {
-            $entryList = implode(" -> ", [...array_keys($this->entriesBeingResolved), $entryName]);
+            $entryList = implode(' -> ', [...array_keys($this->entriesBeingResolved), $entryName]);
             throw new DependencyException("Circular dependency detected while trying to resolve entry '$entryName': Dependencies: " . $entryList);
         }
         $this->entriesBeingResolved[$entryName] = true;
