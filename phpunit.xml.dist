@@ -2,32 +2,22 @@
 <!--
     phpunit -c phpunit.xml
 -->
-<phpunit backupGlobals="false"
-         backupStaticAttributes="false"
-         colors="true"
-         convertErrorsToExceptions="true"
-         convertNoticesToExceptions="true"
-         convertWarningsToExceptions="true"
-         beStrictAboutTestsThatDoNotTestAnything="false"
-         bootstrap="./vendor/autoload.php">
-
-    <testsuites>
-        <testsuite name="unit">
-            <directory>./tests/UnitTest/</directory>
-        </testsuite>
-        <testsuite name="integration">
-            <directory>./tests/IntegrationTest/</directory>
-            <exclude>./tests/IntegrationTest/BaseContainerTest.php</exclude>
-        </testsuite>
-    </testsuites>
-
-    <filter>
-        <whitelist processUncoveredFilesFromWhitelist="true">
-            <directory suffix=".php">src</directory>
-            <exclude>
-                <file>src/Compiler/Template.php</file>
-            </exclude>
-        </whitelist>
-    </filter>
-
+<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" backupGlobals="false" backupStaticAttributes="false" colors="true" convertErrorsToExceptions="true" convertNoticesToExceptions="true" convertWarningsToExceptions="true" beStrictAboutTestsThatDoNotTestAnything="false" bootstrap="./vendor/autoload.php" xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/9.3/phpunit.xsd">
+  <coverage processUncoveredFiles="true">
+    <include>
+      <directory suffix=".php">src</directory>
+    </include>
+    <exclude>
+      <file>src/Compiler/Template.php</file>
+    </exclude>
+  </coverage>
+  <testsuites>
+    <testsuite name="unit">
+      <directory>./tests/UnitTest/</directory>
+    </testsuite>
+    <testsuite name="integration">
+      <directory>./tests/IntegrationTest/</directory>
+      <exclude>./tests/IntegrationTest/BaseContainerTest.php</exclude>
+    </testsuite>
+  </testsuites>
 </phpunit>
