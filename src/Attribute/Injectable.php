@@ -27,7 +27,7 @@ class Injectable
     ) {
     }
 
-    public function isLazy() : bool|null
+    public function isLazy() : ?bool
     {
         return $this->lazy;
     }

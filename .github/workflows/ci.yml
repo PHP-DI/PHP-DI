@@ -51,7 +51,7 @@ jobs:
             -   name: Setup PHP
                 uses: shivammathur/setup-php@v2
                 with:
-                    php-version: 8.0
+                    php-version: 8.3
                     tools: composer:v2, cs2pr
                     coverage: none
             -   name: Cache Composer dependencies
@@ -73,7 +73,7 @@ jobs:
             -   name: Setup PHP
                 uses: shivammathur/setup-php@v2
                 with:
-                    php-version: 8.0
+                    php-version: 8.4
                     tools: composer:v2
                     coverage: none
             -   name: Cache Composer dependencies
