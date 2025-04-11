@@ -73,7 +73,10 @@ class StringDefinitionTest extends TestCase
         $container = $this->easySpy(ContainerInterface::class);
         $container->expects($this->exactly(2))
             ->method('get')
-            ->withConsecutive(['tmp'], ['logs'])
+            ->willReturnMap([
+                ['tmp'],
+                ['logs'],
+            ])
             ->willReturnOnConsecutiveCalls('/private/tmp', 'myapp-logs');
 
         $definition = new StringDefinition('{tmp}/{logs}/app.log');

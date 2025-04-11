@@ -53,10 +53,10 @@ class ArrayResolverTest extends TestCase
     {
         $this->parentResolver->expects($this->exactly(2))
             ->method('resolve')
-            ->withConsecutive(
+            ->willReturnMap([
                 [$this->isInstanceOf(Reference::class)],
-                [$this->isInstanceOf(ObjectDefinition::class)]
-            )
+                [$this->isInstanceOf(ObjectDefinition::class)],
+            ])
             ->willReturnOnConsecutiveCalls(42, new \stdClass());
 
         $definition = new ArrayDefinition([
