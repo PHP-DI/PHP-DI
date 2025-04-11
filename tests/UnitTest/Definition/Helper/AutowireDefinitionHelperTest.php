@@ -13,6 +13,7 @@ use DI\Definition\Exception\InvalidDefinition;
 /**
  * @covers \DI\Definition\Helper\AutowireDefinitionHelper
  */
+#[\PHPUnit\Framework\Attributes\CoversClass(\DI\Definition\Helper\AutowireDefinitionHelper::class)]
 class AutowireDefinitionHelperTest extends TestCase
 {
     public function test_default_config()

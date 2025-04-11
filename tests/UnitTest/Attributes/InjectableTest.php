@@ -17,6 +17,7 @@ use ReflectionClass;
  *
  * @covers \DI\Attribute\Injectable
  */
+#[\PHPUnit\Framework\Attributes\CoversClass(\DI\Attribute\Injectable::class)]
 class InjectableTest extends TestCase
 {
     public function testEmptyAnnotation()

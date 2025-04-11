@@ -10,6 +10,7 @@ use PHPUnit\Framework\TestCase;
 /**
  * @covers \DI\Definition\ObjectDefinition\PropertyInjection
  */
+#[\PHPUnit\Framework\Attributes\CoversClass(\DI\Definition\ObjectDefinition\PropertyInjection::class)]
 class PropertyInjectionTest extends TestCase
 {
     public function testGetters()

@@ -13,6 +13,7 @@ use DI\Definition\Exception\InvalidDefinition;
 /**
  * @covers \DI\Definition\ArrayDefinitionExtension
  */
+#[\PHPUnit\Framework\Attributes\CoversClass(\DI\Definition\ArrayDefinitionExtension::class)]
 class ArrayDefinitionExtensionTest extends TestCase
 {
     public function test_getters()

@@ -10,6 +10,7 @@ use PHPUnit\Framework\TestCase;
 /**
  * @covers \DI\Definition\EnvironmentVariableDefinition
  */
+#[\PHPUnit\Framework\Attributes\CoversClass(\DI\Definition\EnvironmentVariableDefinition::class)]
 class EnvironmentVariableDefinitionTest extends TestCase
 {
     public function test_getters()

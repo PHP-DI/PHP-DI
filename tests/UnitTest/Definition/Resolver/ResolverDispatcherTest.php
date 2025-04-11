@@ -16,6 +16,7 @@ use Psr\Container\ContainerInterface;
 /**
  * @covers \DI\Definition\Resolver\ResolverDispatcher
  */
+#[\PHPUnit\Framework\Attributes\CoversClass(\DI\Definition\Resolver\ResolverDispatcher::class)]
 class ResolverDispatcherTest extends TestCase
 {
     use EasyMock;

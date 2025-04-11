@@ -12,6 +12,7 @@ use Psr\Container\ContainerInterface;
 /**
  * @covers \DI\Definition\Reference
  */
+#[\PHPUnit\Framework\Attributes\CoversClass(\DI\Definition\Reference::class)]
 class ReferenceTest extends TestCase
 {
     use EasyMock;

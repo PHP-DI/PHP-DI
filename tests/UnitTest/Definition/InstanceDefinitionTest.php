@@ -12,6 +12,7 @@ use PHPUnit\Framework\TestCase;
 /**
  * @covers \DI\Definition\InstanceDefinition
  */
+#[\PHPUnit\Framework\Attributes\CoversClass(\DI\Definition\InstanceDefinition::class)]
 class InstanceDefinitionTest extends TestCase
 {
     use EasyMock;

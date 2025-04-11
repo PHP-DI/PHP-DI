@@ -16,6 +16,7 @@ use DI\Definition\Exception\InvalidDefinition;
 /**
  * @covers \DI\Definition\Resolver\EnvironmentVariableResolver
  */
+#[\PHPUnit\Framework\Attributes\CoversClass(\DI\Definition\Resolver\EnvironmentVariableResolver::class)]
 class EnvironmentVariableResolverTest extends TestCase
 {
     use EasyMock;

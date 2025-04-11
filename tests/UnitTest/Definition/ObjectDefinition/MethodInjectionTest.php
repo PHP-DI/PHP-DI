@@ -10,6 +10,7 @@ use PHPUnit\Framework\TestCase;
 /**
  * @covers \DI\Definition\ObjectDefinition\MethodInjection
  */
+#[\PHPUnit\Framework\Attributes\CoversClass(\DI\Definition\ObjectDefinition\MethodInjection::class)]
 class MethodInjectionTest extends TestCase
 {
     public function testBasicMethods()

@@ -12,6 +12,7 @@ use PHPUnit\Framework\TestCase;
 /**
  * @covers \DI\Definition\Source\DefinitionFile
  */
+#[\PHPUnit\Framework\Attributes\CoversClass(\DI\Definition\Source\DefinitionFile::class)]
 class DefinitionFileTest extends TestCase
 {
     /**

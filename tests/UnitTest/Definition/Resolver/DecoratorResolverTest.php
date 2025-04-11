@@ -17,6 +17,7 @@ use DI\Definition\Exception\InvalidDefinition;
 /**
  * @covers \DI\Definition\Resolver\DecoratorResolver
  */
+#[\PHPUnit\Framework\Attributes\CoversClass(\DI\Definition\Resolver\DecoratorResolver::class)]
 class DecoratorResolverTest extends TestCase
 {
     use EasyMock;

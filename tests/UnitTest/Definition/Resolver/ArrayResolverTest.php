@@ -17,6 +17,7 @@ use DI\DependencyException;
 /**
  * @covers \DI\Definition\Resolver\ArrayResolver
  */
+#[\PHPUnit\Framework\Attributes\CoversClass(\DI\Definition\Resolver\ArrayResolver::class)]
 class ArrayResolverTest extends TestCase
 {
     use EasyMock;

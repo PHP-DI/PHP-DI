@@ -10,6 +10,7 @@ use PHPUnit\Framework\TestCase;
 /**
  * @covers \DI\Definition\Helper\CreateDefinitionHelper
  */
+#[\PHPUnit\Framework\Attributes\CoversClass(\DI\Definition\Helper\CreateDefinitionHelper::class)]
 class CreateDefinitionHelperTest extends TestCase
 {
     public function test_default_config()

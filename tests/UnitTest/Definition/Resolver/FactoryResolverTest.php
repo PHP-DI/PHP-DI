@@ -19,6 +19,7 @@ use DI\Definition\Exception\InvalidDefinition;
 /**
  * @covers \DI\Definition\Resolver\FactoryResolver
  */
+#[\PHPUnit\Framework\Attributes\CoversClass(\DI\Definition\Resolver\FactoryResolver::class)]
 class FactoryResolverTest extends TestCase
 {
     use EasyMock;

@@ -11,6 +11,7 @@ use PHPUnit\Framework\TestCase;
 /**
  * @covers \DI\Proxy\ProxyFactory
  */
+#[\PHPUnit\Framework\Attributes\CoversClass(\DI\Proxy\ProxyFactory::class)]
 class ProxyFactoryTest extends TestCase
 {
     /**

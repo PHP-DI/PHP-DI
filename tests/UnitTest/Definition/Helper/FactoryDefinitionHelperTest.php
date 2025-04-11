@@ -12,6 +12,7 @@ use PHPUnit\Framework\TestCase;
 /**
  * @covers \DI\Definition\Helper\FactoryDefinitionHelper
  */
+#[\PHPUnit\Framework\Attributes\CoversClass(\DI\Definition\Helper\FactoryDefinitionHelper::class)]
 class FactoryDefinitionHelperTest extends TestCase
 {
     /**

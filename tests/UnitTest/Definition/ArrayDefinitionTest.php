@@ -10,6 +10,7 @@ use PHPUnit\Framework\TestCase;
 /**
  * @covers \DI\Definition\ArrayDefinition
  */
+#[\PHPUnit\Framework\Attributes\CoversClass(\DI\Definition\ArrayDefinition::class)]
 class ArrayDefinitionTest extends TestCase
 {
     /**

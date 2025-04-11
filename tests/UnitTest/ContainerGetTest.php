@@ -15,6 +15,7 @@ use DI\NotFoundException;
  *
  * @covers \DI\Container
  */
+#[\PHPUnit\Framework\Attributes\CoversClass(\DI\Container::class)]
 class ContainerGetTest extends TestCase
 {
     public function testSetGet()

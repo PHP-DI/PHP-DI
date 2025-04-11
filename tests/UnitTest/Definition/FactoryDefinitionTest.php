@@ -10,6 +10,7 @@ use PHPUnit\Framework\TestCase;
 /**
  * @covers \DI\Definition\FactoryDefinition
  */
+#[\PHPUnit\Framework\Attributes\CoversClass(\DI\Definition\FactoryDefinition::class)]
 class FactoryDefinitionTest extends TestCase
 {
     public function test_getters()

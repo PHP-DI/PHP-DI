@@ -16,6 +16,7 @@ use Psr\Container\ContainerInterface;
 /**
  * @covers \DI\Invoker\FactoryParameterResolver
  */
+#[\PHPUnit\Framework\Attributes\CoversClass(\DI\Invoker\FactoryParameterResolver::class)]
 class FactoryParameterResolverTest extends TestCase
 {
     use EasyMock;

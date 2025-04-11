@@ -18,6 +18,7 @@ use PHPUnit\Framework\TestCase;
 /**
  * @covers \DI\Definition\Resolver\InstanceInjector
  */
+#[\PHPUnit\Framework\Attributes\CoversClass(\DI\Definition\Resolver\InstanceInjector::class)]
 class InstanceInjectorTest extends TestCase
 {
     use EasyMock;

@@ -12,6 +12,7 @@ use PHPUnit\Framework\TestCase;
 /**
  * @covers \DI\Definition\DecoratorDefinition
  */
+#[\PHPUnit\Framework\Attributes\CoversClass(\DI\Definition\DecoratorDefinition::class)]
 class DecoratorDefinitionTest extends TestCase
 {
     public function test_getters()

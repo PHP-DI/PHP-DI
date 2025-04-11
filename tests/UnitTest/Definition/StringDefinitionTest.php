@@ -14,6 +14,7 @@ use DI\DependencyException;
 /**
  * @covers \DI\Definition\StringDefinition
  */
+#[\PHPUnit\Framework\Attributes\CoversClass(\DI\Definition\StringDefinition::class)]
 class StringDefinitionTest extends TestCase
 {
     use EasyMock;

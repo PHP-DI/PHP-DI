@@ -13,6 +13,7 @@ use PHPUnit\Framework\TestCase;
 /**
  * @covers \DI\Definition\Source\SourceChain
  */
+#[\PHPUnit\Framework\Attributes\CoversClass(\DI\Definition\Source\SourceChain::class)]
 class SourceChainTest extends TestCase
 {
     /**

@@ -17,6 +17,7 @@ use DI\Definition\Exception\InvalidAttribute;
  *
  * @covers \DI\Attribute\Inject
  */
+#[\PHPUnit\Framework\Attributes\CoversClass(\DI\Attribute\Inject::class)]
 class InjectTest extends TestCase
 {
     private ReflectionClass $reflectionClass;

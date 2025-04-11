@@ -18,6 +18,7 @@ use Psr\Container\ContainerInterface;
 /**
  * @covers \DI\ContainerBuilder
  */
+#[\PHPUnit\Framework\Attributes\CoversClass(\DI\ContainerBuilder::class)]
 class ContainerBuilderTest extends TestCase
 {
     use EasyMock;

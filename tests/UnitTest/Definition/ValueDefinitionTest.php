@@ -12,6 +12,7 @@ use Psr\Container\ContainerInterface;
 /**
  * @covers \DI\Definition\ValueDefinition
  */
+#[\PHPUnit\Framework\Attributes\CoversClass(\DI\Definition\ValueDefinition::class)]
 class ValueDefinitionTest extends TestCase
 {
     use EasyMock;
