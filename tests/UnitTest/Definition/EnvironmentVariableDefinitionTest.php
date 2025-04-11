@@ -26,6 +26,7 @@ class EnvironmentVariableDefinitionTest extends TestCase
     /**
      * @test
      */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function should_cast_to_string()
     {
         $str = 'Environment variable (
@@ -38,6 +39,7 @@ class EnvironmentVariableDefinitionTest extends TestCase
     /**
      * @test
      */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function should_cast_to_string_with_default_value()
     {
         $str = 'Environment variable (
@@ -51,6 +53,7 @@ class EnvironmentVariableDefinitionTest extends TestCase
     /**
      * @test
      */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function should_cast_to_string_with_reference_as_default_value()
     {
         $str = 'Environment variable (
@@ -64,6 +67,7 @@ class EnvironmentVariableDefinitionTest extends TestCase
     /**
      * @test
      */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function should_cast_to_string_with_nested_definition_as_default_value()
     {
         $str = 'Environment variable (

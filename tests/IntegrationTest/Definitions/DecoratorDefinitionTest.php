@@ -17,6 +17,7 @@ class DecoratorDefinitionTest extends BaseContainerTest
     /**
      * @dataProvider provideContainer
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideContainer')]
     public function test_decorate_value(ContainerBuilder $builder)
     {
         $builder->addDefinitions([
@@ -36,6 +37,7 @@ class DecoratorDefinitionTest extends BaseContainerTest
     /**
      * @dataProvider provideContainer
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideContainer')]
     public function test_decorate_factory(ContainerBuilder $builder)
     {
         $builder->addDefinitions([
@@ -56,6 +58,7 @@ class DecoratorDefinitionTest extends BaseContainerTest
     /**
      * @dataProvider provideContainer
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideContainer')]
     public function test_decorate_object(ContainerBuilder $builder)
     {
         $builder->addDefinitions([
@@ -77,6 +80,7 @@ class DecoratorDefinitionTest extends BaseContainerTest
     /**
      * @dataProvider provideContainer
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideContainer')]
     public function test_decorator_gets_container(ContainerBuilder $builder)
     {
         $builder->addDefinitions([
@@ -96,6 +100,7 @@ class DecoratorDefinitionTest extends BaseContainerTest
     /**
      * @dataProvider provideContainer
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideContainer')]
     public function test_multiple_decorators(ContainerBuilder $builder)
     {
         $builder->addDefinitions([
@@ -120,6 +125,7 @@ class DecoratorDefinitionTest extends BaseContainerTest
     /**
      * @dataProvider provideContainer
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideContainer')]
     public function test_decorate_must_have_previous_definition(ContainerBuilder $builder)
     {
         $this->expectException(InvalidDefinition::class);
@@ -136,6 +142,7 @@ class DecoratorDefinitionTest extends BaseContainerTest
     /**
      * @dataProvider provideContainer
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideContainer')]
     public function test_decorator_cannot_be_nested_in_another_definition(ContainerBuilder $builder)
     {
         $this->expectException(InvalidDefinition::class);

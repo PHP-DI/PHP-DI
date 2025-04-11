@@ -18,6 +18,7 @@ class Issue168Test extends BaseContainerTest
     /**
      * @dataProvider provideContainer
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideContainer')]
     public function testInterfaceOptionalParameter(ContainerBuilder $builder)
     {
         require_once __DIR__ . '/Issue168/class.php';
@@ -31,6 +32,7 @@ class Issue168Test extends BaseContainerTest
      * @dataProvider provideContainer
      * @requires PHP < 8.4.0
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideContainer')]
     public function testInterfaceOptionalParameterForPHP83(ContainerBuilder $builder)
     {
         require_once __DIR__ . '/Issue168/class-php83.php';

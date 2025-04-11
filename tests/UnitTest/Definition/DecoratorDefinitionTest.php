@@ -27,6 +27,7 @@ class DecoratorDefinitionTest extends TestCase
     /**
      * @test
      */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function should_accept_callables_other_than_closures()
     {
         $callable = [$this, 'foo'];
@@ -39,6 +40,7 @@ class DecoratorDefinitionTest extends TestCase
     /**
      * @test
      */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function should_extend_previous_definition()
     {
         $definition = new DecoratorDefinition('foo', function () {
@@ -53,6 +55,7 @@ class DecoratorDefinitionTest extends TestCase
     /**
      * @test
      */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function should_cast_to_string()
     {
         $this->assertEquals('Decorate(foo)', (string) new DecoratorDefinition('foo', 'bar'));

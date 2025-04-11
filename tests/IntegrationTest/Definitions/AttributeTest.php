@@ -33,6 +33,7 @@ class AttributeTest extends BaseContainerTest
     /**
      * @dataProvider provideContainer
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideContainer')]
     public function test_injectable_annotation_is_not_required(ContainerBuilder $builder)
     {
         $container = $builder->useAttributes(true)->build();
@@ -42,6 +43,7 @@ class AttributeTest extends BaseContainerTest
     /**
      * @dataProvider provideContainer
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideContainer')]
     public function test_constructor_injection(ContainerBuilder $builder)
     {
         $builder->useAttributes(true);
@@ -68,6 +70,7 @@ class AttributeTest extends BaseContainerTest
     /**
      * @dataProvider provideContainer
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideContainer')]
     public function test_supports_autowiring(ContainerBuilder $builder)
     {
         $builder->useAttributes(true);
@@ -81,6 +84,7 @@ class AttributeTest extends BaseContainerTest
     /**
      * @dataProvider provideContainer
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideContainer')]
     public function test_property_injection(ContainerBuilder $builder)
     {
         $builder->useAttributes(true);
@@ -103,6 +107,7 @@ class AttributeTest extends BaseContainerTest
     /**
      * @dataProvider provideContainer
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideContainer')]
     public function test_method_injection(ContainerBuilder $builder)
     {
         $builder->useAttributes(true);

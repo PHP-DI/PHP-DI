@@ -35,6 +35,7 @@ class DecoratorResolverTest extends TestCase
     /**
      * @test
      */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function should_resolve_decorators()
     {
         $previousDefinition = new ValueDefinition('bar');
@@ -58,6 +59,7 @@ class DecoratorResolverTest extends TestCase
     /**
      * @test
      */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function should_throw_if_the_factory_is_not_callable()
     {
         $this->expectException(InvalidDefinition::class);

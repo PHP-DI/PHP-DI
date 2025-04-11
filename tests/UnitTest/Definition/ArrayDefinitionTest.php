@@ -15,6 +15,7 @@ class ArrayDefinitionTest extends TestCase
     /**
      * @test
      */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function should_contain_values()
     {
         $definition = new ArrayDefinition(['bar']);
@@ -27,6 +28,7 @@ class ArrayDefinitionTest extends TestCase
     /**
      * @test
      */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function should_cast_to_string()
     {
         $definition = new ArrayDefinition([
@@ -43,6 +45,7 @@ class ArrayDefinitionTest extends TestCase
     /**
      * @test
      */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function should_cast_to_string_with_string_keys()
     {
         $str = "[
@@ -54,6 +57,7 @@ class ArrayDefinitionTest extends TestCase
     /**
      * @test
      */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function should_cast_to_string_with_nested_definitions()
     {
         $definition = new ArrayDefinition([

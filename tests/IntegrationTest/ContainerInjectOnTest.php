@@ -24,6 +24,7 @@ class ContainerInjectOnTest extends BaseContainerTest
     /**
      * @dataProvider provideContainer
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideContainer')]
     public function test_returns_the_same_object(ContainerBuilder $builder)
     {
         $instance = new stdClass();
@@ -34,6 +35,7 @@ class ContainerInjectOnTest extends BaseContainerTest
     /**
      * @dataProvider provideContainer
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideContainer')]
     public function test_inject_on_object_using_attributes(ContainerBuilder $builder)
     {
         $builder->useAutowiring(true);
@@ -82,6 +84,7 @@ class ContainerInjectOnTest extends BaseContainerTest
     /**
      * @dataProvider provideContainer
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideContainer')]
     public function test_inject_on_object_using_config(ContainerBuilder $builder)
     {
         $builder->useAutowiring(false);
@@ -152,6 +155,7 @@ class ContainerInjectOnTest extends BaseContainerTest
     /**
      * @dataProvider provideContainer
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideContainer')]
     public function testInjectOnAnonClass(ContainerBuilder $builder)
     {
         $obj = new class {

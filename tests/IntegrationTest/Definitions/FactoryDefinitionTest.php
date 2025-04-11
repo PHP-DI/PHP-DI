@@ -26,6 +26,7 @@ class FactoryDefinitionTest extends BaseContainerTest
     /**
      * @dataProvider provideContainer
      */
+     #[\PHPUnit\Framework\Attributes\DataProvider('provideContainer')]
     public function test_closure_shortcut(ContainerBuilder $builder)
     {
         $builder->addDefinitions([
@@ -68,6 +69,7 @@ class FactoryDefinitionTest extends BaseContainerTest
     /**
      * @dataProvider provideCallables
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideCallables')]
     public function test_factory($callable, ContainerBuilder $builder)
     {
         $isClosure = $callable instanceof Closure;
@@ -90,6 +92,7 @@ class FactoryDefinitionTest extends BaseContainerTest
     /**
      * @dataProvider provideContainer
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideContainer')]
     public function test_named_container_entry_as_factory(ContainerBuilder $builder)
     {
         $builder->addDefinitions([
@@ -105,6 +108,7 @@ class FactoryDefinitionTest extends BaseContainerTest
     /**
      * @dataProvider provideContainer
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideContainer')]
     public function test_named_container_entry_as_factory_with_string_callable(ContainerBuilder $builder)
     {
         $builder->addDefinitions([
@@ -120,6 +124,7 @@ class FactoryDefinitionTest extends BaseContainerTest
     /**
      * @dataProvider provideContainer
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideContainer')]
     public function test_named_invokable_container_entry_as_factory(ContainerBuilder $builder)
     {
         $builder->addDefinitions([
@@ -135,6 +140,7 @@ class FactoryDefinitionTest extends BaseContainerTest
     /**
      * @dataProvider provideContainer
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideContainer')]
     public function test_error_message_on_invokable_class_without_autowiring(ContainerBuilder $builder)
     {
         $this->expectException(InvalidDefinition::class);
@@ -150,6 +156,7 @@ class FactoryDefinitionTest extends BaseContainerTest
     /**
      * @dataProvider provideContainer
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideContainer')]
     public function test_container_gets_injected_as_first_argument_without_typehint(ContainerBuilder $builder)
     {
         $builder->addDefinitions([
@@ -166,6 +173,7 @@ class FactoryDefinitionTest extends BaseContainerTest
     /**
      * @dataProvider provideContainer
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideContainer')]
     public function test_requested_entry_gets_injected_as_second_argument_without_typehint(ContainerBuilder $builder)
     {
         $builder->addDefinitions([
@@ -182,6 +190,7 @@ class FactoryDefinitionTest extends BaseContainerTest
     /**
      * @dataProvider provideContainer
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideContainer')]
     public function test_requested_entry_gets_injected_with_typehint(ContainerBuilder $builder)
     {
         $builder->addDefinitions([
@@ -198,6 +207,7 @@ class FactoryDefinitionTest extends BaseContainerTest
     /**
      * @dataProvider provideContainer
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideContainer')]
     public function test_arbitrary_object_gets_injected_via_typehint(ContainerBuilder $builder)
     {
         $builder->addDefinitions([
@@ -214,6 +224,7 @@ class FactoryDefinitionTest extends BaseContainerTest
     /**
      * @dataProvider provideContainer
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideContainer')]
     public function test_container_and_requested_entry_get_injected_in_arbitrary_position_via_typehint(ContainerBuilder $builder)
     {
         $builder->addDefinitions([
@@ -232,6 +243,7 @@ class FactoryDefinitionTest extends BaseContainerTest
     /**
      * @dataProvider provideContainer
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideContainer')]
     public function test_container_get_injected_in_arbitrary_position_via_typehint(ContainerBuilder $builder)
     {
         $builder->addDefinitions([
@@ -249,6 +261,7 @@ class FactoryDefinitionTest extends BaseContainerTest
     /**
      * @dataProvider provideContainer
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideContainer')]
     public function test_value_gets_injected_via_parameter(ContainerBuilder $builder)
     {
         $builder->addDefinitions([
@@ -265,6 +278,7 @@ class FactoryDefinitionTest extends BaseContainerTest
     /**
      * @dataProvider provideContainer
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideContainer')]
     public function test_named_entry_gets_injected_via_parameter(ContainerBuilder $builder)
     {
         $builder->addDefinitions([
@@ -282,6 +296,7 @@ class FactoryDefinitionTest extends BaseContainerTest
     /**
      * @dataProvider provideContainer
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideContainer')]
     public function test_sub_entry_gets_injected_via_parameter(ContainerBuilder $builder)
     {
         $builder->addDefinitions([
@@ -298,6 +313,7 @@ class FactoryDefinitionTest extends BaseContainerTest
     /**
      * @dataProvider provideContainer
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideContainer')]
     public function test_class_gets_injected_via_parameter(ContainerBuilder $builder)
     {
         $builder->addDefinitions([
@@ -314,6 +330,7 @@ class FactoryDefinitionTest extends BaseContainerTest
     /**
      * @dataProvider provideContainer
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideContainer')]
     public function test_multiple_injections_via_parameter(ContainerBuilder $builder)
     {
         $builder->addDefinitions([
@@ -335,6 +352,7 @@ class FactoryDefinitionTest extends BaseContainerTest
     /**
      * @dataProvider provideContainer
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideContainer')]
     public function test_container_and_requested_entry_and_typehints_get_injected_with_parameter(ContainerBuilder $builder)
     {
         $builder->addDefinitions([
@@ -355,6 +373,7 @@ class FactoryDefinitionTest extends BaseContainerTest
     /**
      * @dataProvider provideContainer
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideContainer')]
     public function test_container_and_requested_entry_and_typehints_get_injected_in_arbitrary_positions_with_parameter(ContainerBuilder $builder)
     {
         $builder->addDefinitions([
@@ -375,6 +394,7 @@ class FactoryDefinitionTest extends BaseContainerTest
     /**
      * @dataProvider provideContainer
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideContainer')]
     public function test_parameters_take_priority_over_container(ContainerBuilder $builder)
     {
         $builder->addDefinitions([
@@ -395,6 +415,7 @@ class FactoryDefinitionTest extends BaseContainerTest
     /**
      * @dataProvider provideContainer
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideContainer')]
     public function test_parameters_take_priority_over_default_value(ContainerBuilder $builder)
     {
         $builder->addDefinitions([
@@ -411,6 +432,7 @@ class FactoryDefinitionTest extends BaseContainerTest
     /**
      * @dataProvider provideContainer
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideContainer')]
     public function test_resolve_failure_on_parameter(ContainerBuilder $builder)
     {
         $this->expectException(NotFoundException::class);
@@ -426,6 +448,7 @@ class FactoryDefinitionTest extends BaseContainerTest
     /**
      * @dataProvider provideContainer
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideContainer')]
     public function test_not_callable_factory_definition(ContainerBuilder $builder)
     {
         $this->expectException(InvalidDefinition::class);
@@ -441,6 +464,7 @@ class FactoryDefinitionTest extends BaseContainerTest
      * the container is compiled.
      * @dataProvider provideContainer
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideContainer')]
     public function test_closure_using_magic_constant(ContainerBuilder $builder)
     {
         $builder->addDefinitions([
@@ -455,6 +479,7 @@ class FactoryDefinitionTest extends BaseContainerTest
      * Test that non FQN for classes are preserved even when the container is compiled.
      * @dataProvider provideContainer
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideContainer')]
     public function test_closure_containing_class_name_not_fully_qualified(ContainerBuilder $builder)
     {
         $builder->addDefinitions([
@@ -468,6 +493,7 @@ class FactoryDefinitionTest extends BaseContainerTest
     /**
      * @dataProvider provideContainer
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideContainer')]
     public function test_closure_with_return_types_are_supported(ContainerBuilder $builder)
     {
         $builder->addDefinitions([
@@ -539,6 +565,7 @@ class FactoryDefinitionTest extends BaseContainerTest
     /**
      * @dataProvider provideContainer
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideContainer')]
     public function test_static_closure_are_supported(ContainerBuilder $builder)
     {
         $builder->addDefinitions([
@@ -555,6 +582,7 @@ class FactoryDefinitionTest extends BaseContainerTest
     /**
      * @dataProvider provideContainer
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideContainer')]
     public function test_static_closures_inside_closures_are_supported(ContainerBuilder $builder)
     {
         $builder->addDefinitions([
@@ -573,6 +601,7 @@ class FactoryDefinitionTest extends BaseContainerTest
     /**
      * @dataProvider provideContainer
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideContainer')]
     public function test_closure_with_static_variables_are_supported(ContainerBuilder $builder)
     {
         $builder->addDefinitions([
@@ -602,6 +631,7 @@ class FactoryDefinitionTest extends BaseContainerTest
     /**
      * @dataProvider provideContainer
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideContainer')]
     public function test_optional_parameters_can_be_omitted(ContainerBuilder $builder)
     {
         $builder->addDefinitions([

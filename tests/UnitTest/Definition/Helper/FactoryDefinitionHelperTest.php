@@ -17,6 +17,7 @@ class FactoryDefinitionHelperTest extends TestCase
     /**
      * @test
      */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function creates_factory_definition()
     {
         $callable = function () {
@@ -32,6 +33,7 @@ class FactoryDefinitionHelperTest extends TestCase
     /**
      * @test
      */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function creates_decorator_definition()
     {
         $callable = function () {
@@ -47,6 +49,7 @@ class FactoryDefinitionHelperTest extends TestCase
     /**
      * @test
      */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function allows_to_define_method_parameters()
     {
         $callable = function ($foo) {

@@ -17,6 +17,8 @@ class Issue70and76Test extends BaseContainerTest
      * @test
      * @dataProvider provideContainer
      */
+    #[\PHPUnit\Framework\Attributes\Test]
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideContainer')]
     public function valueDefinitionShouldOverrideReflectionDefinition(ContainerBuilder $builder)
     {
         $container = $builder->build();
@@ -29,6 +31,8 @@ class Issue70and76Test extends BaseContainerTest
      * @test
      * @dataProvider provideContainer
      */
+    #[\PHPUnit\Framework\Attributes\Test]
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideContainer')]
     public function closureDefinitionShouldOverrideReflectionDefinition(ContainerBuilder $builder)
     {
         $builder->addDefinitions([

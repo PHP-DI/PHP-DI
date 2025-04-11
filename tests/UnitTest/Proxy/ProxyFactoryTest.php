@@ -16,6 +16,7 @@ class ProxyFactoryTest extends TestCase
     /**
      * @test
      */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function should_create_lazy_proxies()
     {
         $factory = new ProxyFactory;

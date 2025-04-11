@@ -15,6 +15,7 @@ class ContainerTest extends TestCase
     /**
      * @test
      */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function canBeBuiltWithoutParameters()
     {
         self::assertInstanceOf(Container::class, new Container); // Should not be an error
@@ -22,6 +23,7 @@ class ContainerTest extends TestCase
     /**
      * @test
      */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function canBeBuiltWithDefinitionArray()
     {
         $container = new Container([

@@ -25,6 +25,7 @@ class SourceCacheTest extends TestCase
     /**
      * @test
      */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function should_get_from_cache()
     {
         $definition = new ObjectDefinition('foo');
@@ -44,6 +45,7 @@ class SourceCacheTest extends TestCase
     /**
      * @test
      */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function should_save_to_cache_and_return()
     {
         $cachedSource = new DefinitionArray([
@@ -63,6 +65,7 @@ class SourceCacheTest extends TestCase
     /**
      * @test
      */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function should_save_null_to_cache_and_return_null()
     {
         $source = new SourceCache(new DefinitionArray);
@@ -74,6 +77,7 @@ class SourceCacheTest extends TestCase
     /**
      * @test
      */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function should_only_cache_object_and_autowire_definitions()
     {
         $definition = new Reference('foo');
@@ -93,6 +97,7 @@ class SourceCacheTest extends TestCase
     /**
      * @test
      */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function should_use_namespaced_cache_keys()
     {
         $namespace = 'staging';

@@ -17,6 +17,7 @@ class Issue141Test extends BaseContainerTest
     /**
      * @dataProvider provideContainer
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideContainer')]
     public function testIssue141(ContainerBuilder $builder)
     {
         $builder->addDefinitions(__DIR__ . '/Issue141/config1.php');

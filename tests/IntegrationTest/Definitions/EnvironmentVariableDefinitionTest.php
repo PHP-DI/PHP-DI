@@ -16,6 +16,7 @@ class EnvironmentVariableDefinitionTest extends BaseContainerTest
     /**
      * @dataProvider provideContainer
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideContainer')]
     public function test_existing_env_variable(ContainerBuilder $builder)
     {
         $expectedValue = getenv('USER');
@@ -37,6 +38,7 @@ class EnvironmentVariableDefinitionTest extends BaseContainerTest
     /**
      * @dataProvider provideContainer
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideContainer')]
     public function test_nonexistent_env_variable(ContainerBuilder $builder)
     {
         $this->expectException(InvalidDefinition::class);
@@ -52,6 +54,7 @@ class EnvironmentVariableDefinitionTest extends BaseContainerTest
     /**
      * @dataProvider provideContainer
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideContainer')]
     public function test_nonexistent_env_variable_with_default_value(ContainerBuilder $builder)
     {
         $builder->addDefinitions([
@@ -66,6 +69,7 @@ class EnvironmentVariableDefinitionTest extends BaseContainerTest
     /**
      * @dataProvider provideContainer
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideContainer')]
     public function test_nonexistent_env_variable_with_null_as_default(ContainerBuilder $builder)
     {
         $builder->addDefinitions([
@@ -80,6 +84,7 @@ class EnvironmentVariableDefinitionTest extends BaseContainerTest
     /**
      * @dataProvider provideContainer
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideContainer')]
     public function test_nonexistent_env_variable_with_other_entry_as_default(ContainerBuilder $builder)
     {
         $builder->addDefinitions([

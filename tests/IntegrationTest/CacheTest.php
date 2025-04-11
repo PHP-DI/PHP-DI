@@ -23,6 +23,7 @@ class CacheTest extends BaseContainerTest
     /**
      * @test
      */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function cached_definitions_should_be_overridable()
     {
         $builder = new ContainerBuilder();
@@ -39,6 +40,7 @@ class CacheTest extends BaseContainerTest
     /**
      * @test
      */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function compiled_entries_should_not_be_put_in_cache()
     {
         $builder = new ContainerBuilder();
@@ -57,6 +59,7 @@ class CacheTest extends BaseContainerTest
     /**
      * @test
      */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function non_compiled_entries_should_be_put_in_cache()
     {
         $builder = new ContainerBuilder();

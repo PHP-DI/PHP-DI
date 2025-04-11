@@ -17,6 +17,7 @@ class DefinitionFileTest extends TestCase
     /**
      * @test
      */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function should_load_definition_from_file()
     {
         $source = new DefinitionFile(__DIR__ . '/Fixtures/definitions.php');

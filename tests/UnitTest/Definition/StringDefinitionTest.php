@@ -30,6 +30,7 @@ class StringDefinitionTest extends TestCase
     /**
      * @test
      */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function should_be_resolvable()
     {
         $container = $this->easyMock(ContainerInterface::class);
@@ -42,6 +43,7 @@ class StringDefinitionTest extends TestCase
     /**
      * @test
      */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function should_resolve_bare_strings()
     {
         $container = $this->easyMock(ContainerInterface::class);
@@ -54,6 +56,7 @@ class StringDefinitionTest extends TestCase
     /**
      * @test
      */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function should_resolve_references()
     {
         $container = $this->easyMock(ContainerInterface::class, [
@@ -68,6 +71,7 @@ class StringDefinitionTest extends TestCase
     /**
      * @test
      */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function should_resolve_multiple_references()
     {
         $container = $this->easySpy(ContainerInterface::class);
@@ -89,6 +93,7 @@ class StringDefinitionTest extends TestCase
     /**
      * @test
      */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function should_throw_on_unknown_entry_name()
     {
         $this->expectException(DependencyException::class);
@@ -105,6 +110,7 @@ class StringDefinitionTest extends TestCase
     /**
      * @test
      */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function should_cast_to_string()
     {
         $this->assertEquals('foo/{bar}', (string) new StringDefinition('foo/{bar}'));

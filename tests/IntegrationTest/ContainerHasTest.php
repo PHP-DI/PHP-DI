@@ -14,6 +14,7 @@ class ContainerHasTest extends BaseContainerTest
     /**
      * @dataProvider provideContainer
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideContainer')]
     public function test_has(ContainerBuilder $builder)
     {
         $builder->addDefinitions([
@@ -26,6 +27,7 @@ class ContainerHasTest extends BaseContainerTest
     /**
      * @dataProvider provideContainer
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideContainer')]
     public function test_has_when_set_directly(ContainerBuilder $builder)
     {
         $container = $builder->build();
@@ -37,6 +39,7 @@ class ContainerHasTest extends BaseContainerTest
     /**
      * @dataProvider provideContainer
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideContainer')]
     public function test_has_not(ContainerBuilder $builder)
     {
         self::assertFalse($builder->build()->has('wow'));

@@ -19,6 +19,7 @@ class ReferenceTest extends TestCase
     /**
      * @test
      */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function should_have_a_name()
     {
         $definition = new Reference('bar');
@@ -30,6 +31,7 @@ class ReferenceTest extends TestCase
     /**
      * @test
      */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function should_have_a_target_entry_name()
     {
         $definition = new Reference('bar');
@@ -40,6 +42,7 @@ class ReferenceTest extends TestCase
     /**
      * @test
      */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function should_resolve()
     {
         $container = $this->easySpy(ContainerInterface::class, [
@@ -54,6 +57,7 @@ class ReferenceTest extends TestCase
     /**
      * @test
      */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function should_be_resolvable()
     {
         $container = $this->easySpy(ContainerInterface::class, [
@@ -68,6 +72,7 @@ class ReferenceTest extends TestCase
     /**
      * @test
      */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function should_cast_to_string()
     {
         $this->assertEquals('get(bar)', (string) new Reference('bar'));

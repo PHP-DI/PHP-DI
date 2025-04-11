@@ -25,6 +25,7 @@ class InstanceInjectorTest extends TestCase
     /**
      * @test
      */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function should_inject_properties_on_instance()
     {
         $instance = new FixtureClass('');
@@ -41,6 +42,7 @@ class InstanceInjectorTest extends TestCase
     /**
      * @test
      */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function should_inject_methods_on_instance()
     {
         $instance = new FixtureClass('');

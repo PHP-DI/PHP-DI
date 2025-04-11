@@ -17,6 +17,7 @@ class DelegateContainerTest extends BaseContainerTest
     /**
      * @dataProvider provideContainer
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideContainer')]
     public function test_alias_to_dependency_in_delegate_container(ContainerBuilder $subContainerBuilder)
     {
         $rootContainer = new Container;
@@ -35,6 +36,7 @@ class DelegateContainerTest extends BaseContainerTest
     /**
      * @dataProvider provideContainer
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideContainer')]
     public function test_string_expression_using_dependency_in_delegate_container(ContainerBuilder $subContainerBuilder)
     {
         $rootContainer = new Container([
@@ -53,6 +55,7 @@ class DelegateContainerTest extends BaseContainerTest
     /**
      * @dataProvider provideContainer
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideContainer')]
     public function test_with_container_call(ContainerBuilder $subContainerBuilder)
     {
         $value = new \stdClass();

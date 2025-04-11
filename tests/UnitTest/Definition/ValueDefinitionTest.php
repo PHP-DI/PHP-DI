@@ -28,6 +28,7 @@ class ValueDefinitionTest extends TestCase
     /**
      * @test
      */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function should_be_resolvable()
     {
         $definition = new ValueDefinition('foo');
@@ -38,6 +39,7 @@ class ValueDefinitionTest extends TestCase
     /**
      * @test
      */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function should_resolve()
     {
         $definition = new ValueDefinition('bar');
@@ -45,6 +47,10 @@ class ValueDefinitionTest extends TestCase
         $this->assertEquals('bar', $definition->resolve($container));
     }
 
+    /**
+     * @test
+     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function should_cast_to_string()
     {
         $this->assertEquals("Value ('bar')", (string) new ValueDefinition('bar'));

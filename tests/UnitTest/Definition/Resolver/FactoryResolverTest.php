@@ -26,6 +26,7 @@ class FactoryResolverTest extends TestCase
     /**
      * @test
      */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function should_resolve_callables()
     {
         $container = $this->easyMock(ContainerInterface::class);
@@ -43,6 +44,7 @@ class FactoryResolverTest extends TestCase
     /**
      * @test
      */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function should_inject_container()
     {
         $container = $this->easyMock(ContainerInterface::class);
@@ -60,6 +62,7 @@ class FactoryResolverTest extends TestCase
     /**
      * @test
      */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function should_throw_if_the_factory_is_not_callable()
     {
         $this->expectException(InvalidDefinition::class);
@@ -78,6 +81,7 @@ class FactoryResolverTest extends TestCase
     /**
      * @test
      */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function should_throw_if_not_enough_parameters()
     {
         $this->expectException(InvalidDefinition::class);
@@ -94,6 +98,7 @@ class FactoryResolverTest extends TestCase
     /**
      * @test
      */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function should_inject_parameters()
     {
         $container = $this->easyMock(ContainerInterface::class);
@@ -116,6 +121,7 @@ class FactoryResolverTest extends TestCase
     /**
      * @test
      */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function should_resolve_nested_definition_in_parameters()
     {
         $container = $this->easyMock(ContainerInterface::class);

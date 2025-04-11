@@ -27,6 +27,7 @@ class FactoryDefinitionTest extends TestCase
     /**
      * @test
      */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function should_accept_callables_other_than_closures()
     {
         $callable = [$this, 'foo'];
@@ -39,6 +40,7 @@ class FactoryDefinitionTest extends TestCase
     /**
      * @test
      */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function should_cast_to_string()
     {
         $this->assertEquals('Factory', new FactoryDefinition('', 'bar'));
@@ -47,6 +49,7 @@ class FactoryDefinitionTest extends TestCase
     /**
      * @test
      */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function should_accept_parameters()
     {
         $parameters = ['flag' => true];

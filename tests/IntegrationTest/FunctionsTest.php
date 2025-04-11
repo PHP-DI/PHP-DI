@@ -11,6 +11,7 @@ class FunctionsTest extends TestCase
     /**
      * @test
      */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function including_functions_twice_should_not_error()
     {
         include __DIR__ . '/../../src/functions.php';

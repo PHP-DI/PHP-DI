@@ -19,6 +19,7 @@ class DefaultEntriesTest extends BaseContainerTest
      * The container auto-registers itself.
      * @dataProvider provideContainer
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideContainer')]
     public function testContainerIsRegistered(ContainerBuilder $builder)
     {
         $container = $builder->build();
@@ -30,6 +31,7 @@ class DefaultEntriesTest extends BaseContainerTest
      * The container auto-registers itself (with the factory interface).
      * @dataProvider provideContainer
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideContainer')]
     public function testFactoryInterfaceIsRegistered(ContainerBuilder $builder)
     {
         $container = $builder->build();
@@ -41,6 +43,7 @@ class DefaultEntriesTest extends BaseContainerTest
      * The container auto-registers itself (with the invoker interface).
      * @dataProvider provideContainer
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideContainer')]
     public function testInvokerInterfaceIsRegistered(ContainerBuilder $builder)
     {
         $container = $builder->build();
@@ -52,6 +55,7 @@ class DefaultEntriesTest extends BaseContainerTest
      * The container auto-registers itself (with the container interface).
      * @dataProvider provideContainer
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideContainer')]
     public function testContainerInterfaceIsRegistered(ContainerBuilder $builder)
     {
         $container = $builder->build();
@@ -62,6 +66,7 @@ class DefaultEntriesTest extends BaseContainerTest
     /**
      * @dataProvider provideContainer
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideContainer')]
     public function testWithAWrapperContainer(ContainerBuilder $builder)
     {
         $wrapperContainer = new Container;

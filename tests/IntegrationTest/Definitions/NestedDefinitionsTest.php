@@ -20,6 +20,8 @@ class NestedDefinitionsTest extends BaseContainerTest
      * @test
      * @dataProvider provideContainer
      */
+    #[\PHPUnit\Framework\Attributes\Test]
+     #[\PHPUnit\Framework\Attributes\DataProvider('provideContainer')]
     public function should_allow_nested_definitions_in_environment_variables(ContainerBuilder $builder)
     {
         $builder->addDefinitions([
@@ -45,6 +47,8 @@ class NestedDefinitionsTest extends BaseContainerTest
      * @test
      * @dataProvider provideContainer
      */
+    #[\PHPUnit\Framework\Attributes\Test]
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideContainer')]
     public function should_allow_nested_definitions_in_factories(ContainerBuilder $builder)
     {
         $builder->addDefinitions([
@@ -63,6 +67,8 @@ class NestedDefinitionsTest extends BaseContainerTest
      * @test
      * @dataProvider provideContainer
      */
+    #[\PHPUnit\Framework\Attributes\Test]
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideContainer')]
     public function should_allow_nested_definitions_in_create_definitions(ContainerBuilder $builder)
     {
         $builder->addDefinitions([
@@ -86,6 +92,8 @@ class NestedDefinitionsTest extends BaseContainerTest
      * @test
      * @dataProvider provideContainer
      */
+    #[\PHPUnit\Framework\Attributes\Test]
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideContainer')]
     public function should_allow_nested_definitions_in_arrays_in_create_definitions(ContainerBuilder $builder)
     {
         $builder->addDefinitions([
@@ -115,6 +123,8 @@ class NestedDefinitionsTest extends BaseContainerTest
      * @test
      * @dataProvider provideContainer
      */
+    #[\PHPUnit\Framework\Attributes\Test]
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideContainer')]
     public function should_allow_nested_definitions_in_autowire_definitions(ContainerBuilder $builder)
     {
         $builder->addDefinitions([
@@ -138,6 +148,8 @@ class NestedDefinitionsTest extends BaseContainerTest
      * @test
      * @dataProvider provideContainer
      */
+    #[\PHPUnit\Framework\Attributes\Test]
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideContainer')]
     public function should_allow_nested_definitions_in_arrays_in_autowire_definitions(ContainerBuilder $builder)
     {
         $builder->addDefinitions([
@@ -167,6 +179,8 @@ class NestedDefinitionsTest extends BaseContainerTest
      * @test
      * @dataProvider provideContainer
      */
+    #[\PHPUnit\Framework\Attributes\Test]
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideContainer')]
     public function should_allow_nested_definitions_in_arrays(ContainerBuilder $builder)
     {
         $builder->addDefinitions([
@@ -206,6 +220,7 @@ class NestedDefinitionsTest extends BaseContainerTest
     /**
      * @dataProvider provideContainer
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideContainer')]
     public function test_anonymous_functions_can_be_nested_in_other_definitions(ContainerBuilder $builder)
     {
         $builder->addDefinitions([

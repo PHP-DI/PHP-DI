@@ -34,6 +34,7 @@ class ArrayResolverTest extends TestCase
     /**
      * @test
      */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function should_resolve_array_of_values()
     {
         $definition = new ArrayDefinition([
@@ -49,6 +50,7 @@ class ArrayResolverTest extends TestCase
     /**
      * @test
      */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function should_resolve_nested_definitions()
     {
         $this->parentResolver->expects($this->exactly(2))
@@ -73,6 +75,7 @@ class ArrayResolverTest extends TestCase
     /**
      * @test
      */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function resolve_should_preserve_keys()
     {
         $definition = new ArrayDefinition([
@@ -87,6 +90,7 @@ class ArrayResolverTest extends TestCase
     /**
      * @test
      */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function should_throw_with_a_nice_message()
     {
         $this->expectException(DependencyException::class);

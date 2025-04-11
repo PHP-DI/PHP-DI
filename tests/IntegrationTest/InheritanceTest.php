@@ -19,6 +19,7 @@ class InheritanceTest extends BaseContainerTest
      *
      * @dataProvider provideContainer
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideContainer')]
     public function test_dependency_is_injected_if_injection_defined_on_parent_class_with_config(ContainerBuilder $builder)
     {
         $builder->useAutowiring(false);
@@ -51,6 +52,7 @@ class InheritanceTest extends BaseContainerTest
      *
      * @dataProvider provideContainer
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideContainer')]
     public function test_dependency_is_injected_if_injection_defined_on_parent_class_with_attributes(ContainerBuilder $builder)
     {
         $builder->useAutowiring(true);
@@ -73,6 +75,7 @@ class InheritanceTest extends BaseContainerTest
      *
      * @dataProvider provideContainer
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideContainer')]
     public function test_dependency_is_injected_if_injection_defined_on_base_class_with_config(ContainerBuilder $builder)
     {
         $builder->useAutowiring(false);
@@ -105,6 +108,7 @@ class InheritanceTest extends BaseContainerTest
      *
      * @dataProvider provideContainer
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideContainer')]
     public function test_dependency_is_injected_if_injection_defined_on_base_class_with_attributes(ContainerBuilder $builder)
     {
         $builder->useAutowiring(true);

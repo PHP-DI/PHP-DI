@@ -19,6 +19,7 @@ class ContainerSetTest extends BaseContainerTest
      * @see https://github.com/mnapoli/PHP-DI/issues/79
      * @dataProvider provideContainer
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideContainer')]
     public function testSetNullValue(ContainerBuilder $builder)
     {
         $container = $builder->build();
@@ -31,6 +32,7 @@ class ContainerSetTest extends BaseContainerTest
      * @see https://github.com/mnapoli/PHP-DI/issues/126
      * @dataProvider provideContainer
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideContainer')]
     public function testSetGetSetGet(ContainerBuilder $builder)
     {
         $container = $builder->build();
@@ -46,6 +48,8 @@ class ContainerSetTest extends BaseContainerTest
      * @test
      * @dataProvider provideContainer
      */
+    #[\PHPUnit\Framework\Attributes\Test]
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideContainer')]
     public function array_entries_can_be_overridden_by_values(ContainerBuilder $builder)
     {
         $builder->addDefinitions([
@@ -63,6 +67,8 @@ class ContainerSetTest extends BaseContainerTest
      * @test
      * @dataProvider provideContainer
      */
+    #[\PHPUnit\Framework\Attributes\Test]
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideContainer')]
     public function value_definitions_are_interpreted_as_raw_values(ContainerBuilder $builder)
     {
         $container = $builder->build();
@@ -84,6 +90,8 @@ class ContainerSetTest extends BaseContainerTest
      * @test
      * @dataProvider provideContainer
      */
+    #[\PHPUnit\Framework\Attributes\Test]
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideContainer')]
     public function array_entries_can_be_overridden_by_definitions(ContainerBuilder $builder)
     {
         if ($builder->isCompilationEnabled()) {
@@ -106,6 +114,8 @@ class ContainerSetTest extends BaseContainerTest
      * @test
      * @dataProvider provideContainer
      */
+    #[\PHPUnit\Framework\Attributes\Test]
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideContainer')]
     public function interfaces_can_be_mapped_to_implementations(ContainerBuilder $builder)
     {
         if ($builder->isCompilationEnabled()) {
