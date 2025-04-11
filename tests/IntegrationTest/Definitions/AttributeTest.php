@@ -19,6 +19,7 @@ use function DI\create;
  *
  * @requires PHP >= 8
  */
+#[\PHPUnit\Framework\Attributes\RequiresPhp('>= 8')]
 class AttributeTest extends BaseContainerTest
 {
     public static function setUpBeforeClass(): void

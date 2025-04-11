@@ -13,6 +13,7 @@ use DI\DependencyException;
  *
  * @requires PHP >= 8
  */
+#[\PHPUnit\Framework\Attributes\RequiresPhp('>= 8')]
 class AttributesTest extends BaseContainerTest
 {
     /**

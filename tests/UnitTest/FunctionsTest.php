@@ -21,6 +21,7 @@ use PHPUnit\Framework\TestCase;
 /**
  * Tests the helper functions.
  */
+#[\PHPUnit\Framework\Attributes\CoversClass(DI::class)]
 class FunctionsTest extends TestCase
 {
     public function test_value()
