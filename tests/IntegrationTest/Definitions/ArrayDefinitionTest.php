@@ -15,6 +15,7 @@ class ArrayDefinitionTest extends BaseContainerTest
     /**
      * @dataProvider provideContainer
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideContainer')]
     public function test_array_with_values(ContainerBuilder $builder)
     {
         $builder->addDefinitions([
@@ -35,6 +36,7 @@ class ArrayDefinitionTest extends BaseContainerTest
     /**
      * @dataProvider provideContainer
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideContainer')]
     public function test_array_containing_sub_array(ContainerBuilder $builder)
     {
         $builder->addDefinitions([
@@ -63,6 +65,7 @@ class ArrayDefinitionTest extends BaseContainerTest
     /**
      * @dataProvider provideContainer
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideContainer')]
     public function test_array_with_links(ContainerBuilder $builder)
     {
         $builder->addDefinitions([
@@ -87,6 +90,7 @@ class ArrayDefinitionTest extends BaseContainerTest
     /**
      * @dataProvider provideContainer
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideContainer')]
     public function test_array_with_nested_definitions(ContainerBuilder $builder)
     {
         $builder->addDefinitions([
@@ -107,6 +111,7 @@ class ArrayDefinitionTest extends BaseContainerTest
     /**
      * @dataProvider provideContainer
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideContainer')]
     public function test_nested_array_with_nested_definitions(ContainerBuilder $builder)
     {
         $builder->addDefinitions([
@@ -129,6 +134,7 @@ class ArrayDefinitionTest extends BaseContainerTest
     /**
      * @dataProvider provideContainer
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideContainer')]
     public function test_nested_array_preserve_keys(ContainerBuilder $builder)
     {
         $builder->addDefinitions([
@@ -151,6 +157,7 @@ class ArrayDefinitionTest extends BaseContainerTest
     /**
      * @dataProvider provideContainer
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideContainer')]
     public function test_add_entries(ContainerBuilder $builder)
     {
         $builder->addDefinitions([
@@ -181,6 +188,7 @@ class ArrayDefinitionTest extends BaseContainerTest
     /**
      * @dataProvider provideContainer
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideContainer')]
     public function test_add_entries_with_nested_definitions(ContainerBuilder $builder)
     {
         $builder->addDefinitions([
@@ -209,6 +217,7 @@ class ArrayDefinitionTest extends BaseContainerTest
     /**
      * @dataProvider provideContainer
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideContainer')]
     public function test_add_to_non_existing_array_works(ContainerBuilder $builder)
     {
         $builder->addDefinitions([

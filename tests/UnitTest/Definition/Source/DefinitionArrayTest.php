@@ -15,6 +15,7 @@ use PHPUnit\Framework\TestCase;
 /**
  * @covers \DI\Definition\Source\DefinitionArray
  */
+#[\PHPUnit\Framework\Attributes\CoversClass(\DI\Definition\Source\DefinitionArray::class)]
 class DefinitionArrayTest extends TestCase
 {
     public function testEntryNotFound()

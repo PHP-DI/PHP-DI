@@ -30,6 +30,7 @@ class AutowireDefinitionTest extends BaseContainerTest
     /**
      * @dataProvider provideContainer
      */
+     #[\PHPUnit\Framework\Attributes\DataProvider('provideContainer')]
     public function test_autowire_simple_object(ContainerBuilder $builder)
     {
         $container = $builder->addDefinitions([
@@ -46,6 +47,7 @@ class AutowireDefinitionTest extends BaseContainerTest
     /**
      * @dataProvider provideContainer
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideContainer')]
     public function test_constructor_injection(ContainerBuilder $builder)
     {
         $builder->addDefinitions([
@@ -71,6 +73,7 @@ class AutowireDefinitionTest extends BaseContainerTest
     /**
      * @dataProvider provideContainer
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideContainer')]
     public function test_constructor_injection_with_named_arguments(ContainerBuilder $builder)
     {
         $builder->addDefinitions([
@@ -88,6 +91,7 @@ class AutowireDefinitionTest extends BaseContainerTest
     /**
      * @dataProvider provideContainer
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideContainer')]
     public function test_autowired_constructor_injection_can_be_overloaded(ContainerBuilder $builder)
     {
         $builder->addDefinitions([
@@ -110,6 +114,7 @@ class AutowireDefinitionTest extends BaseContainerTest
     /**
      * @dataProvider provideContainer
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideContainer')]
     public function test_annotated_constructor_injection_can_be_overloaded(ContainerBuilder $builder)
     {
         $builder->useAttributes(true);
@@ -137,6 +142,7 @@ class AutowireDefinitionTest extends BaseContainerTest
     /**
      * @dataProvider provideContainer
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideContainer')]
     public function test_annotated_method_injection_can_be_overloaded(ContainerBuilder $builder)
     {
         $builder->useAttributes(true);
@@ -164,6 +170,7 @@ class AutowireDefinitionTest extends BaseContainerTest
     /**
      * @dataProvider provideContainer
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideContainer')]
     public function test_singleton(ContainerBuilder $builder)
     {
         $container = $builder->addDefinitions([
@@ -176,6 +183,7 @@ class AutowireDefinitionTest extends BaseContainerTest
     /**
      * @dataProvider provideContainer
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideContainer')]
     public function test_infer_class_name_from_entry(ContainerBuilder $builder)
     {
         $container = $builder->addDefinitions([
@@ -188,6 +196,7 @@ class AutowireDefinitionTest extends BaseContainerTest
     /**
      * @dataProvider provideContainer
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideContainer')]
     public function test_overrides_the_previous_entry(ContainerBuilder $builder)
     {
         $container = $builder->addDefinitions([
@@ -206,6 +215,7 @@ class AutowireDefinitionTest extends BaseContainerTest
     /**
      * @dataProvider provideContainer
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideContainer')]
     public function test_has_entry_when_explicitly_autowired(ContainerBuilder $builder)
     {
         $container = $builder->addDefinitions([
@@ -217,6 +227,7 @@ class AutowireDefinitionTest extends BaseContainerTest
     /**
      * @dataProvider provideContainer
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideContainer')]
     public function test_has_entry_when_not_explicitly_autowired(ContainerBuilder $builder)
     {
         self::assertTrue($builder->build()->has(Class1::class));
@@ -225,6 +236,7 @@ class AutowireDefinitionTest extends BaseContainerTest
     /**
      * @dataProvider provideContainer
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideContainer')]
     public function test_setting_specific_constructor_parameter(ContainerBuilder $builder)
     {
         $container = $builder->addDefinitions([
@@ -238,6 +250,7 @@ class AutowireDefinitionTest extends BaseContainerTest
     /**
      * @dataProvider provideContainer
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideContainer')]
     public function test_setting_specific_constructor_parameter_overrides_autowiring(ContainerBuilder $builder)
     {
         $container = $builder->addDefinitions([
@@ -253,6 +266,7 @@ class AutowireDefinitionTest extends BaseContainerTest
     /**
      * @dataProvider provideContainer
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideContainer')]
     public function test_setting_specific_method_parameter(ContainerBuilder $builder)
     {
         $container = $builder->addDefinitions([
@@ -266,6 +280,7 @@ class AutowireDefinitionTest extends BaseContainerTest
     /**
      * @dataProvider provideContainer
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideContainer')]
     public function test_setting_specific_method_parameter_with_named_arguments(ContainerBuilder $builder)
     {
         $container = $builder->addDefinitions([
@@ -279,6 +294,7 @@ class AutowireDefinitionTest extends BaseContainerTest
     /**
      * @dataProvider provideContainer
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideContainer')]
     public function test_setting_specific_method_parameter_overrides_autowiring(ContainerBuilder $builder)
     {
         $container = $builder->addDefinitions([
@@ -294,6 +310,7 @@ class AutowireDefinitionTest extends BaseContainerTest
     /**
      * @dataProvider provideContainer
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideContainer')]
     public function test_cannot_use_autowire_if_autowiring_is_disabled(ContainerBuilder $builder)
     {
         $this->expectException(InvalidDefinition::class);
@@ -309,6 +326,7 @@ class AutowireDefinitionTest extends BaseContainerTest
     /**
      * @dataProvider provideContainer
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideContainer')]
     public function test_same_method_can_be_called_multiple_times(ContainerBuilder $builder)
     {
         $container = $builder
@@ -326,6 +344,7 @@ class AutowireDefinitionTest extends BaseContainerTest
     /**
      * @dataProvider provideContainer
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideContainer')]
     public function test_autowire_lazy_object(ContainerBuilder $builder)
     {
         $builder->addDefinitions([
@@ -348,6 +367,7 @@ class AutowireDefinitionTest extends BaseContainerTest
     /**
      * @dataProvider provideContainer
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideContainer')]
     public function test_php71_nullable_typehint(ContainerBuilder $builder)
     {
         $container = $builder->build();

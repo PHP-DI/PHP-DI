@@ -13,6 +13,7 @@ use DI\Definition\Exception\InvalidDefinition;
 /**
  * @covers \DI\Definition\ArrayDefinitionExtension
  */
+#[\PHPUnit\Framework\Attributes\CoversClass(\DI\Definition\ArrayDefinitionExtension::class)]
 class ArrayDefinitionExtensionTest extends TestCase
 {
     public function test_getters()
@@ -27,6 +28,7 @@ class ArrayDefinitionExtensionTest extends TestCase
     /**
      * @test
      */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function should_append_values_after_sub_definitions_values()
     {
         $definition = new ArrayDefinitionExtension(['foo']);
@@ -43,6 +45,7 @@ class ArrayDefinitionExtensionTest extends TestCase
     /**
      * @test
      */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function should_error_if_not_extending_an_array()
     {
         $this->expectException(InvalidDefinition::class);

@@ -18,10 +18,11 @@ use Psr\Container\ContainerInterface;
 /**
  * @covers \DI\ContainerBuilder
  */
+#[\PHPUnit\Framework\Attributes\CoversClass(\DI\ContainerBuilder::class)]
 class ContainerBuilderTest extends TestCase
 {
     use EasyMock;
-	
+
 	private static function getProperty(object $object, string $propertyName)
 	{
 		return (function (string $propertyName) {
@@ -32,6 +33,7 @@ class ContainerBuilderTest extends TestCase
     /**
      * @test
      */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function should_configure_for_development_by_default()
     {
         // Make the ContainerBuilder use our fake class to catch constructor parameters
@@ -48,6 +50,7 @@ class ContainerBuilderTest extends TestCase
     /**
      * @test
      */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function should_allow_to_configure_a_cache()
     {
         if (! SourceCache::isSupported()) {
@@ -67,6 +70,7 @@ class ContainerBuilderTest extends TestCase
     /**
      * @test
      */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function should_allow_to_configure_a_cache_with_a_namespace()
     {
         if (! SourceCache::isSupported()) {
@@ -89,6 +93,7 @@ class ContainerBuilderTest extends TestCase
     /**
      * @test
      */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function the_container_should_not_be_wrapped_by_default()
     {
         $builder = new ContainerBuilder(FakeContainer::class);
@@ -101,6 +106,7 @@ class ContainerBuilderTest extends TestCase
     /**
      * @test
      */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function should_allow_to_set_a_wrapper_container()
     {
         $otherContainer = $this->easyMock(ContainerInterface::class);
@@ -117,6 +123,7 @@ class ContainerBuilderTest extends TestCase
     /**
      * @test
      */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function should_allow_to_add_custom_definition_sources()
     {
         $builder = new ContainerBuilder(FakeContainer::class);
@@ -140,6 +147,7 @@ class ContainerBuilderTest extends TestCase
     /**
      * @test
      */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function should_chain_definition_sources_in_reverse_order()
     {
         $builder = new ContainerBuilder(FakeContainer::class);
@@ -157,6 +165,7 @@ class ContainerBuilderTest extends TestCase
     /**
      * @test
      */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function should_allow_to_add_definitions_in_an_array()
     {
         $builder = new ContainerBuilder(FakeContainer::class);
@@ -179,6 +188,7 @@ class ContainerBuilderTest extends TestCase
     /**
      * @test
      */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function should_allow_to_create_a_compiled_container()
     {
         $builder = new ContainerBuilder();
@@ -191,6 +201,7 @@ class ContainerBuilderTest extends TestCase
      * That allows to create several compiled containers in the same process.
      * @test
      */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function should_allow_to_customize_the_class_name_of_the_compiled_container()
     {
         $builder = new ContainerBuilder();
@@ -204,6 +215,7 @@ class ContainerBuilderTest extends TestCase
     /**
      * @test
      */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function should_have_a_fluent_interface()
     {
         $builder = new ContainerBuilder();
@@ -240,6 +252,7 @@ class ContainerBuilderTest extends TestCase
      * Ensure the ContainerBuilder cannot be modified after the container has been built.
      * @test
      */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function should_throw_if_modified_after_building_a_container()
     {
         $this->expectException('LogicException');
@@ -253,6 +266,7 @@ class ContainerBuilderTest extends TestCase
     /**
      * @test
      */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function should_create_proxies()
     {
         $builder = new ContainerBuilder(FakeContainer::class);
@@ -265,6 +279,7 @@ class ContainerBuilderTest extends TestCase
     /**
      * @test
      */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function should_not_create_proxies()
     {
         $builder = new ContainerBuilder(FakeContainer::class);

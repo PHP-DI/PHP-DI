@@ -17,6 +17,7 @@ use DI\DependencyException;
 /**
  * @covers \DI\Definition\Resolver\ArrayResolver
  */
+#[\PHPUnit\Framework\Attributes\CoversClass(\DI\Definition\Resolver\ArrayResolver::class)]
 class ArrayResolverTest extends TestCase
 {
     use EasyMock;
@@ -34,6 +35,7 @@ class ArrayResolverTest extends TestCase
     /**
      * @test
      */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function should_resolve_array_of_values()
     {
         $definition = new ArrayDefinition([
@@ -49,14 +51,15 @@ class ArrayResolverTest extends TestCase
     /**
      * @test
      */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function should_resolve_nested_definitions()
     {
         $this->parentResolver->expects($this->exactly(2))
             ->method('resolve')
-            ->withConsecutive(
+            ->willReturnMap([
                 [$this->isInstanceOf(Reference::class)],
-                [$this->isInstanceOf(ObjectDefinition::class)]
-            )
+                [$this->isInstanceOf(ObjectDefinition::class)],
+            ])
             ->willReturnOnConsecutiveCalls(42, new \stdClass());
 
         $definition = new ArrayDefinition([
@@ -73,6 +76,7 @@ class ArrayResolverTest extends TestCase
     /**
      * @test
      */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function resolve_should_preserve_keys()
     {
         $definition = new ArrayDefinition([
@@ -87,6 +91,7 @@ class ArrayResolverTest extends TestCase
     /**
      * @test
      */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function should_throw_with_a_nice_message()
     {
         $this->expectException(DependencyException::class);

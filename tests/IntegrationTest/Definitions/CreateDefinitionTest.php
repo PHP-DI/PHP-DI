@@ -37,6 +37,7 @@ class CreateDefinitionTest extends BaseContainerTest
     /**
      * @dataProvider provideContainer
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideContainer')]
     public function test_create_simple_object(ContainerBuilder $builder)
     {
         $builder->addDefinitions([
@@ -60,6 +61,7 @@ class CreateDefinitionTest extends BaseContainerTest
     /**
      * @dataProvider provideContainer
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideContainer')]
     public function test_constructor_injection(ContainerBuilder $builder)
     {
         $builder->addDefinitions([
@@ -91,6 +93,7 @@ class CreateDefinitionTest extends BaseContainerTest
     /**
      * @dataProvider provideContainer
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideContainer')]
     public function test_property_injection(ContainerBuilder $builder)
     {
         $builder->addDefinitions([
@@ -118,6 +121,7 @@ class CreateDefinitionTest extends BaseContainerTest
     /**
      * @dataProvider provideContainer
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideContainer')]
     public function test_method_injection(ContainerBuilder $builder)
     {
         $builder->addDefinitions([
@@ -150,6 +154,7 @@ class CreateDefinitionTest extends BaseContainerTest
     /**
      * @dataProvider provideContainer
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideContainer')]
     public function test_singleton(ContainerBuilder $builder)
     {
         $container = $builder->addDefinitions([
@@ -162,6 +167,7 @@ class CreateDefinitionTest extends BaseContainerTest
     /**
      * @dataProvider provideContainer
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideContainer')]
     public function test_overrides_the_previous_entry(ContainerBuilder $builder)
     {
         $builder->addDefinitions([
@@ -182,6 +188,7 @@ class CreateDefinitionTest extends BaseContainerTest
     /**
      * @dataProvider provideContainer
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideContainer')]
     public function test_has_entry(ContainerBuilder $builder)
     {
         $container = $builder->addDefinitions([
@@ -194,6 +201,7 @@ class CreateDefinitionTest extends BaseContainerTest
      * It should not inherit the definition from autowiring.
      * @dataProvider provideContainer
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideContainer')]
     public function test_does_not_trigger_autowiring(ContainerBuilder $builder)
     {
         $this->expectException(InvalidDefinition::class);
@@ -209,6 +217,7 @@ class CreateDefinitionTest extends BaseContainerTest
     /**
      * @dataProvider provideContainer
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideContainer')]
     public function test_same_method_can_be_called_multiple_times(ContainerBuilder $builder)
     {
         $builder->useAutowiring(false);
@@ -226,6 +235,7 @@ class CreateDefinitionTest extends BaseContainerTest
     /**
      * @dataProvider provideContainer
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideContainer')]
     public function test_create_lazy_object(ContainerBuilder $builder)
     {
         $builder->addDefinitions([
@@ -248,6 +258,7 @@ class CreateDefinitionTest extends BaseContainerTest
     /**
      * @dataProvider provideContainer
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideContainer')]
     public function test_property_injection_in_private_properties(ContainerBuilder $builder)
     {
         $builder->addDefinitions([
@@ -266,6 +277,7 @@ class CreateDefinitionTest extends BaseContainerTest
     /**
      * @dataProvider provideContainer
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideContainer')]
     public function test_property_injection_in_private_properties_of_parent_class(ContainerBuilder $builder)
     {
         $builder->addDefinitions([
@@ -291,6 +303,7 @@ class CreateDefinitionTest extends BaseContainerTest
     /**
      * @dataProvider provideContainer
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideContainer')]
     public function test_property_injection_in_unknown_property(ContainerBuilder $builder)
     {
         $this->expectException('Exception');
@@ -306,6 +319,7 @@ class CreateDefinitionTest extends BaseContainerTest
     /**
      * @dataProvider provideContainer
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideContainer')]
     public function test_create_in_array(ContainerBuilder $builder)
     {
         $container = $builder->addDefinitions([

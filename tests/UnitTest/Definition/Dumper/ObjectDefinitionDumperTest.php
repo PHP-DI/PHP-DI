@@ -10,6 +10,7 @@ use PHPUnit\Framework\TestCase;
 /**
  * @covers \DI\Definition\Dumper\ObjectDefinitionDumper
  */
+#[\PHPUnit\Framework\Attributes\CoversClass(\DI\Definition\Dumper\ObjectDefinitionDumper::class)]
 class ObjectDefinitionDumperTest extends TestCase
 {
     public function testAll()

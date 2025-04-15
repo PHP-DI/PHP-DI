@@ -16,6 +16,7 @@ class StringDefinitionTest extends BaseContainerTest
     /**
      * @dataProvider provideContainer
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideContainer')]
     public function test_string_without_placeholder(ContainerBuilder $builder)
     {
         $builder->addDefinitions([
@@ -30,6 +31,7 @@ class StringDefinitionTest extends BaseContainerTest
     /**
      * @dataProvider provideContainer
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideContainer')]
     public function test_string_with_placeholder(ContainerBuilder $builder)
     {
         $builder->addDefinitions([
@@ -44,6 +46,7 @@ class StringDefinitionTest extends BaseContainerTest
     /**
      * @dataProvider provideContainer
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideContainer')]
     public function test_string_with_multiple_placeholders(ContainerBuilder $builder)
     {
         $builder->addDefinitions([
@@ -59,6 +62,7 @@ class StringDefinitionTest extends BaseContainerTest
     /**
      * @dataProvider provideContainer
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideContainer')]
     public function test_nested_string_expressions(ContainerBuilder $builder)
     {
         $builder->addDefinitions([
@@ -74,6 +78,7 @@ class StringDefinitionTest extends BaseContainerTest
     /**
      * @dataProvider provideContainer
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideContainer')]
     public function test_string_with_nonexistent_placeholder(ContainerBuilder $builder)
     {
         $this->expectException(DependencyException::class);

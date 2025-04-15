@@ -10,6 +10,7 @@ use PHPUnit\Framework\TestCase;
 /**
  * @covers \DI\Definition\Helper\CreateDefinitionHelper
  */
+#[\PHPUnit\Framework\Attributes\CoversClass(\DI\Definition\Helper\CreateDefinitionHelper::class)]
 class CreateDefinitionHelperTest extends TestCase
 {
     public function test_default_config()
@@ -27,6 +28,7 @@ class CreateDefinitionHelperTest extends TestCase
     /**
      * @test
      */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function allows_to_define_the_class_name()
     {
         $helper = new CreateDefinitionHelper('bar');
@@ -39,6 +41,7 @@ class CreateDefinitionHelperTest extends TestCase
     /**
      * @test
      */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function allows_to_declare_the_service_as_lazy()
     {
         $helper = new CreateDefinitionHelper();
@@ -51,6 +54,7 @@ class CreateDefinitionHelperTest extends TestCase
     /**
      * @test
      */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function allows_to_define_constructor_parameters()
     {
         $helper = new CreateDefinitionHelper();
@@ -63,6 +67,7 @@ class CreateDefinitionHelperTest extends TestCase
     /**
      * @test
      */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function allows_to_define_a_property_injection()
     {
         $helper = new CreateDefinitionHelper();
@@ -77,6 +82,7 @@ class CreateDefinitionHelperTest extends TestCase
     /**
      * @test
      */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function allows_to_define_a_method_call()
     {
         $helper = new CreateDefinitionHelper();
@@ -91,6 +97,7 @@ class CreateDefinitionHelperTest extends TestCase
     /**
      * @test
      */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function allows_to_define_multiple_method_calls()
     {
         $helper = new CreateDefinitionHelper();

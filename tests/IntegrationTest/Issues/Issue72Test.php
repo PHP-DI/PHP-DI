@@ -19,6 +19,8 @@ class Issue72Test extends BaseContainerTest
      * @test
      * @dataProvider provideContainer
      */
+    #[\PHPUnit\Framework\Attributes\Test]
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideContainer')]
     public function annotationDefinitionShouldOverrideReflectionDefinition(ContainerBuilder $builder)
     {
         $builder->useAutowiring(true);
@@ -39,6 +41,8 @@ class Issue72Test extends BaseContainerTest
      * @test
      * @dataProvider provideContainer
      */
+    #[\PHPUnit\Framework\Attributes\Test]
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideContainer')]
     public function arrayDefinitionShouldOverrideReflectionDefinition(ContainerBuilder $builder)
     {
         $builder->useAutowiring(true);
@@ -59,6 +63,8 @@ class Issue72Test extends BaseContainerTest
      * @test
      * @dataProvider provideContainer
      */
+    #[\PHPUnit\Framework\Attributes\Test]
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideContainer')]
     public function arrayDefinitionShouldOverrideAnnotationDefinition(ContainerBuilder $builder)
     {
         $builder->useAutowiring(false);
@@ -79,6 +85,8 @@ class Issue72Test extends BaseContainerTest
      * @test
      * @dataProvider provideContainer
      */
+    #[\PHPUnit\Framework\Attributes\Test]
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideContainer')]
     public function arrayDefinitionShouldOverrideAnotherArrayDefinition(ContainerBuilder $builder)
     {
         $builder->useAutowiring(false);
@@ -101,6 +109,8 @@ class Issue72Test extends BaseContainerTest
      * @test
      * @dataProvider provideContainer
      */
+    #[\PHPUnit\Framework\Attributes\Test]
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideContainer')]
     public function phpDefinitionShouldOverrideArrayDefinition(ContainerBuilder $builder)
     {
         if ($builder->isCompilationEnabled()) {

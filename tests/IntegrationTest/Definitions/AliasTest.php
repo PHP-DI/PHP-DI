@@ -15,6 +15,7 @@ class AliasTest extends BaseContainerTest
     /**
      * @dataProvider provideContainer
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideContainer')]
     public function test_alias_definitions(ContainerBuilder $builder)
     {
         $builder->addDefinitions([

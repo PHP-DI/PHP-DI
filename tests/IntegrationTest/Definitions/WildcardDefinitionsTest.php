@@ -20,6 +20,7 @@ class WildcardDefinitionsTest extends BaseContainerTest
     /**
      * @dataProvider provideContainer
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideContainer')]
     public function test_wildcards(ContainerBuilder $builder)
     {
         $builder->addDefinitions([
@@ -41,6 +42,7 @@ class WildcardDefinitionsTest extends BaseContainerTest
     /**
      * @dataProvider provideContainer
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideContainer')]
     public function test_wildcard_with_static_name(ContainerBuilder $builder)
     {
         $builder->addDefinitions([
@@ -57,6 +59,7 @@ class WildcardDefinitionsTest extends BaseContainerTest
     /**
      * @dataProvider provideContainer
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideContainer')]
     public function test_wildcards_autowire(ContainerBuilder $builder)
     {
         $builder->addDefinitions([
@@ -75,6 +78,7 @@ class WildcardDefinitionsTest extends BaseContainerTest
     /**
      * @dataProvider provideContainer
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideContainer')]
     public function test_wildcards_autowire_with_dependency(ContainerBuilder $builder)
     {
         $builder->addDefinitions([
@@ -97,6 +101,7 @@ class WildcardDefinitionsTest extends BaseContainerTest
     /**
      * @dataProvider provideContainer
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideContainer')]
     public function test_wildcards_as_dependency(ContainerBuilder $builder)
     {
         $builder->useAttributes(true);

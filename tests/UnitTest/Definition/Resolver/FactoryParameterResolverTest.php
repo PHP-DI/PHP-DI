@@ -16,6 +16,7 @@ use Psr\Container\ContainerInterface;
 /**
  * @covers \DI\Invoker\FactoryParameterResolver
  */
+#[\PHPUnit\Framework\Attributes\CoversClass(\DI\Invoker\FactoryParameterResolver::class)]
 class FactoryParameterResolverTest extends TestCase
 {
     use EasyMock;
@@ -34,6 +35,7 @@ class FactoryParameterResolverTest extends TestCase
     /**
      * @test
      */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function should_resolve_psr11_container()
     {
         $callable = function (ContainerInterface $c) {
@@ -49,6 +51,7 @@ class FactoryParameterResolverTest extends TestCase
     /**
      * @test
      */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function should_resolve_container_and_requested_entry()
     {
         $callable = function (ContainerInterface $c, RequestedEntry $entry) {
@@ -65,6 +68,7 @@ class FactoryParameterResolverTest extends TestCase
     /**
      * @test
      */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function should_resolve_only_container()
     {
         $callable = function (ContainerInterface $c) {
@@ -80,6 +84,7 @@ class FactoryParameterResolverTest extends TestCase
     /**
      * @test
      */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function should_resolve_only_requested_entry()
     {
         $callable = function (RequestedEntry $entry) {
@@ -95,6 +100,7 @@ class FactoryParameterResolverTest extends TestCase
     /**
      * @test
      */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function should_resolve_nothing()
     {
         $callable = function () {
@@ -109,6 +115,7 @@ class FactoryParameterResolverTest extends TestCase
     /**
      * @test
      */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function should_not_overwrite_resolved_with_container_or_entry()
     {
         $callable = function (ContainerInterface $container, RequestedEntry $entry, $other) {
@@ -131,6 +138,7 @@ class FactoryParameterResolverTest extends TestCase
     /**
      * @test
      */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function should_not_overwrite_resolved_from_container()
     {
         $callable = function (NoConstructor $nc) {

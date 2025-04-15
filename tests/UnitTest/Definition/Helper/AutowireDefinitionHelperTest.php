@@ -13,6 +13,7 @@ use DI\Definition\Exception\InvalidDefinition;
 /**
  * @covers \DI\Definition\Helper\AutowireDefinitionHelper
  */
+#[\PHPUnit\Framework\Attributes\CoversClass(\DI\Definition\Helper\AutowireDefinitionHelper::class)]
 class AutowireDefinitionHelperTest extends TestCase
 {
     public function test_default_config()
@@ -30,6 +31,7 @@ class AutowireDefinitionHelperTest extends TestCase
     /**
      * @test
      */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function allows_to_define_the_class_name()
     {
         $helper = new AutowireDefinitionHelper('bar');
@@ -42,6 +44,7 @@ class AutowireDefinitionHelperTest extends TestCase
     /**
      * @test
      */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function allows_to_declare_the_service_as_lazy()
     {
         $helper = new AutowireDefinitionHelper();
@@ -54,6 +57,7 @@ class AutowireDefinitionHelperTest extends TestCase
     /**
      * @test
      */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function allows_to_define_constructor_parameters()
     {
         $helper = new AutowireDefinitionHelper();
@@ -66,6 +70,7 @@ class AutowireDefinitionHelperTest extends TestCase
     /**
      * @test
      */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function allows_to_override_a_parameter_injection()
     {
         $helper = new AutowireDefinitionHelper();
@@ -80,6 +85,7 @@ class AutowireDefinitionHelperTest extends TestCase
     /**
      * @test
      */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function allows_to_define_a_property_injection()
     {
         $helper = new AutowireDefinitionHelper();
@@ -94,6 +100,7 @@ class AutowireDefinitionHelperTest extends TestCase
     /**
      * @test
      */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function allows_to_define_a_method_call()
     {
         $helper = new AutowireDefinitionHelper();
@@ -108,6 +115,7 @@ class AutowireDefinitionHelperTest extends TestCase
     /**
      * @test
      */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function allows_to_define_multiple_method_calls()
     {
         $helper = new AutowireDefinitionHelper();
@@ -126,6 +134,7 @@ class AutowireDefinitionHelperTest extends TestCase
     /**
      * @test
      */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function allows_to_override_a_parameter_injection_by_index()
     {
         $helper = new AutowireDefinitionHelper();
@@ -142,7 +151,9 @@ class AutowireDefinitionHelperTest extends TestCase
 
     /**
      * Check using the parameter name, not its index.
+     * @test
      */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function allows_to_override_a_parameter_injection_by_name()
     {
         $helper = new AutowireDefinitionHelper();
@@ -159,7 +170,9 @@ class AutowireDefinitionHelperTest extends TestCase
 
     /**
      * If using methodParameter() for "__construct", then the constructor definition should be updated.
+     * @test
      */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function should_update_constructor_definition_if_overriding_parameter_for_constructor()
     {
         $helper = new AutowireDefinitionHelper();

@@ -18,6 +18,7 @@ class ValueDefinitionTest extends BaseContainerTest
     /**
      * @dataProvider provideContainer
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideContainer')]
     public function test_value_definitions(ContainerBuilder $builder)
     {
         $builder->addDefinitions([
@@ -50,6 +51,7 @@ class ValueDefinitionTest extends BaseContainerTest
     /**
      * @dataProvider provideContainer
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideContainer')]
     public function test_enum_value_definitions(ContainerBuilder $builder)
     {
         if (PHP_VERSION_ID < 80100) {

@@ -13,6 +13,7 @@ use PHPUnit\Framework\TestCase;
 /**
  * @covers \DI\Definition\ObjectDefinition
  */
+#[\PHPUnit\Framework\Attributes\CoversClass(\DI\Definition\ObjectDefinition::class)]
 class ObjectDefinitionTest extends TestCase
 {
     public function test_getters_setters()

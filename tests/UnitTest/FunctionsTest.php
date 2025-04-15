@@ -21,11 +21,9 @@ use PHPUnit\Framework\TestCase;
 /**
  * Tests the helper functions.
  */
+#[\PHPUnit\Framework\Attributes\CoversClass(DI::class)]
 class FunctionsTest extends TestCase
 {
-    /**
-     * @covers ::\DI\value
-     */
     public function test_value()
     {
         $definition = \DI\value('foo');
@@ -34,9 +32,6 @@ class FunctionsTest extends TestCase
         $this->assertEquals('foo', $definition->getValue());
     }
 
-    /**
-     * @covers ::\DI\create
-     */
     public function test_create()
     {
         $helper = \DI\create();
@@ -54,9 +49,6 @@ class FunctionsTest extends TestCase
         $this->assertEquals('foo', $definition->getClassName());
     }
 
-    /**
-     * @covers ::\DI\autowire
-     */
     public function test_autowire()
     {
         $helper = \DI\autowire();
@@ -74,9 +66,6 @@ class FunctionsTest extends TestCase
         $this->assertEquals('foo', $definition->getClassName());
     }
 
-    /**
-     * @covers ::\DI\factory
-     */
     public function test_factory()
     {
         $helper = \DI\factory(function () {
@@ -90,9 +79,6 @@ class FunctionsTest extends TestCase
         $this->assertEquals(42, $callable());
     }
 
-    /**
-     * @covers ::\DI\decorate
-     */
     public function test_decorate()
     {
         $helper = \DI\decorate(function () {
@@ -106,9 +92,6 @@ class FunctionsTest extends TestCase
         $this->assertEquals(42, $callable());
     }
 
-    /**
-     * @covers ::\DI\get
-     */
     public function test_get()
     {
         $reference = \DI\get('foo');
@@ -117,9 +100,6 @@ class FunctionsTest extends TestCase
         $this->assertEquals('foo', $reference->getTargetEntryName());
     }
 
-    /**
-     * @covers ::\DI\env
-     */
     public function test_env()
     {
         $definition = \DI\env('foo');
@@ -129,9 +109,6 @@ class FunctionsTest extends TestCase
         $this->assertFalse($definition->isOptional());
     }
 
-    /**
-     * @covers ::\DI\env
-     */
     public function test_env_default_value()
     {
         $definition = \DI\env('foo', 'default');
@@ -142,9 +119,6 @@ class FunctionsTest extends TestCase
         $this->assertEquals('default', $definition->getDefaultValue());
     }
 
-    /**
-     * @covers ::\DI\env
-     */
     public function test_env_default_value_null()
     {
         $definition = \DI\env('foo', null);
@@ -155,9 +129,6 @@ class FunctionsTest extends TestCase
         $this->assertNull($definition->getDefaultValue());
     }
 
-    /**
-     * @covers ::\DI\add
-     */
     public function test_add_value()
     {
         $definition = \DI\add('hello');
@@ -169,9 +140,6 @@ class FunctionsTest extends TestCase
         $this->assertEquals(['hello'], $definition->getValues());
     }
 
-    /**
-     * @covers ::\DI\add
-     */
     public function test_add_array()
     {
         $definition = \DI\add(['hello', 'world']);
@@ -183,9 +151,6 @@ class FunctionsTest extends TestCase
         $this->assertEquals(['hello', 'world'], $definition->getValues());
     }
 
-    /**
-     * @covers ::\DI\string
-     */
     public function test_string()
     {
         $definition = \DI\string('bar');

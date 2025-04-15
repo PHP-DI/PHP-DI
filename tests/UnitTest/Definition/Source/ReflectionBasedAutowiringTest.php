@@ -15,6 +15,7 @@ use DI\Test\UnitTest\Definition\Source\Fixtures\AutowiringFixtureChild;
 /**
  * @covers \DI\Definition\Source\ReflectionBasedAutowiring
  */
+#[\PHPUnit\Framework\Attributes\CoversClass(\DI\Definition\Source\ReflectionBasedAutowiring::class)]
 class ReflectionBasedAutowiringTest extends TestCase
 {
     public function testUnknownClass()

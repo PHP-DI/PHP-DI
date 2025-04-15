@@ -26,6 +26,7 @@ use PHPUnit\Framework\TestCase;
 /**
  * @covers \DI\Definition\Source\AttributeBasedAutowiring
  */
+#[\PHPUnit\Framework\Attributes\CoversClass(\DI\Definition\Source\AttributeBasedAutowiring::class)]
 class AttributeBasedAutowiringTest extends TestCase
 {
     public function testUnknownClass()

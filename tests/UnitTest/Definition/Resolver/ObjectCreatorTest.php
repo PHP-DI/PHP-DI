@@ -23,6 +23,7 @@ use DI\Definition\Exception\InvalidDefinition;
  * @covers \DI\Definition\Resolver\ObjectCreator
  * @covers \DI\Definition\Resolver\ParameterResolver
  */
+#[\PHPUnit\Framework\Attributes\CoversClass(\DI\Definition\Resolver\ParameterResolver::class)]
 class ObjectCreatorTest extends TestCase
 {
     use EasyMock;

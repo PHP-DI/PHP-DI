@@ -19,6 +19,8 @@ class ProxyTest extends BaseContainerTest
      * @test
      * @dataProvider provideContainer
      */
+    #[\PHPUnit\Framework\Attributes\Test]
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideContainer')]
     public function container_can_create_lazy_objects(ContainerBuilder $builder)
     {
         $builder->useAutowiring(false);
@@ -36,6 +38,8 @@ class ProxyTest extends BaseContainerTest
      * @test
      * @dataProvider provideContainer
      */
+    #[\PHPUnit\Framework\Attributes\Test]
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideContainer')]
     public function lazy_services_resolve_to_the_same_instance(ContainerBuilder $builder)
     {
         $builder->useAutowiring(false);
@@ -58,6 +62,8 @@ class ProxyTest extends BaseContainerTest
      * @test
      * @dataProvider provideContainer
      */
+    #[\PHPUnit\Framework\Attributes\Test]
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideContainer')]
     public function dependencies_of_proxies_are_resolved_once(ContainerBuilder $builder)
     {
         $builder->useAutowiring(false);

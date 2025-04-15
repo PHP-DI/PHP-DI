@@ -13,12 +13,15 @@ use DI\DependencyException;
  *
  * @requires PHP >= 8
  */
+#[\PHPUnit\Framework\Attributes\RequiresPhp('>= 8')]
 class AttributesTest extends BaseContainerTest
 {
     /**
      * @test
      * @dataProvider provideContainer
      */
+    #[\PHPUnit\Framework\Attributes\Test]
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideContainer')]
     public function inject_in_properties(ContainerBuilder $builder)
     {
         $builder->useAttributes(true);
@@ -37,6 +40,8 @@ class AttributesTest extends BaseContainerTest
      * @test
      * @dataProvider provideContainer
      */
+    #[\PHPUnit\Framework\Attributes\Test]
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideContainer')]
     public function inject_in_parent_properties(ContainerBuilder $builder)
     {
         $builder->useAttributes(true);
@@ -61,6 +66,8 @@ class AttributesTest extends BaseContainerTest
      * @test
      * @dataProvider provideContainer
      */
+    #[\PHPUnit\Framework\Attributes\Test]
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideContainer')]
     public function inject_in_private_parent_properties_with_same_name(ContainerBuilder $builder)
     {
         $builder->useAttributes(true);
@@ -78,6 +85,8 @@ class AttributesTest extends BaseContainerTest
      * @test
      * @dataProvider provideContainer
      */
+    #[\PHPUnit\Framework\Attributes\Test]
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideContainer')]
     public function inject_by_name(ContainerBuilder $builder)
     {
         $builder->useAttributes(true);
@@ -99,6 +108,8 @@ class AttributesTest extends BaseContainerTest
      * @test
      * @dataProvider provideContainer
      */
+    #[\PHPUnit\Framework\Attributes\Test]
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideContainer')]
     public function errors_if_dependency_by_name_not_found(ContainerBuilder $builder)
     {
         $this->expectException(DependencyException::class);
@@ -110,6 +121,8 @@ class AttributesTest extends BaseContainerTest
      * @test
      * @dataProvider provideContainer
      */
+    #[\PHPUnit\Framework\Attributes\Test]
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideContainer')]
     public function inject_promoted_property(ContainerBuilder $builder)
     {
         $builder->useAttributes(true);
@@ -121,6 +134,8 @@ class AttributesTest extends BaseContainerTest
      * @test
      * @dataProvider provideContainer
      */
+    #[\PHPUnit\Framework\Attributes\Test]
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideContainer')]
     public function inject_promoted_readonly_property(ContainerBuilder $builder)
     {
         if (PHP_VERSION_ID < 80100) {

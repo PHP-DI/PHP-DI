@@ -10,7 +10,7 @@ class TestClass83
      * The parameter is optional. TestInterface is not instantiable, so `null` should
      * be injected instead of getting an exception.
      */
-    public function __construct(TestInterface83 $param = null)
+    public function __construct(?TestInterface83 $param = null)
     {
     }
 }

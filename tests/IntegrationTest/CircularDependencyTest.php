@@ -21,6 +21,8 @@ class CircularDependencyTest extends BaseContainerTest
      * @test
      * @dataProvider provideContainer
      */
+    #[\PHPUnit\Framework\Attributes\Test]
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideContainer')]
     public function can_get_the_same_entry_twice(ContainerBuilder $builder)
     {
         $container = $builder->build();
@@ -32,6 +34,8 @@ class CircularDependencyTest extends BaseContainerTest
      * @test
      * @dataProvider provideContainer
      */
+    #[\PHPUnit\Framework\Attributes\Test]
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideContainer')]
     public function circular_dependencies_throw_exceptions(ContainerBuilder $builder)
     {
         $this->expectException(DependencyException::class);
@@ -49,6 +53,8 @@ class CircularDependencyTest extends BaseContainerTest
      * @test
      * @dataProvider provideContainer
      */
+    #[\PHPUnit\Framework\Attributes\Test]
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideContainer')]
     public function circular_dependencies_with_attributes_throw_exceptions(ContainerBuilder $builder)
     {
         $this->expectException(DependencyException::class);
@@ -61,6 +67,8 @@ class CircularDependencyTest extends BaseContainerTest
      * @test
      * @dataProvider provideContainer
      */
+    #[\PHPUnit\Framework\Attributes\Test]
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideContainer')]
     public function circular_dependencies_because_of_self_alias_throw_exceptions(ContainerBuilder $builder)
     {
         $this->expectException(DependencyException::class);

@@ -20,6 +20,7 @@ class ContainerMakeTest extends BaseContainerTest
     /**
      * @dataProvider provideContainer
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideContainer')]
     public function testSetMake(ContainerBuilder $builder)
     {
         $container = $builder->build();
@@ -31,6 +32,7 @@ class ContainerMakeTest extends BaseContainerTest
     /**
      * @dataProvider provideContainer
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideContainer')]
     public function testMakeNotFound(ContainerBuilder $builder)
     {
         $this->expectException(NotFoundException::class);
@@ -40,6 +42,7 @@ class ContainerMakeTest extends BaseContainerTest
     /**
      * @dataProvider provideContainer
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideContainer')]
     public function testMakeWithClassName(ContainerBuilder $builder)
     {
         $this->assertInstanceOf('stdClass', $builder->build()->make('stdClass'));
@@ -48,6 +51,7 @@ class ContainerMakeTest extends BaseContainerTest
     /**
      * @dataProvider provideContainer
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideContainer')]
     public function testMakeAlwaysReturnsNewInstance(ContainerBuilder $builder)
     {
         $container = $builder->build();
@@ -58,6 +62,7 @@ class ContainerMakeTest extends BaseContainerTest
      * Tests if instantiation unlock works. We should be able to create two instances of the same class.
      * @dataProvider provideContainer
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideContainer')]
     public function testCircularDependencies(ContainerBuilder $builder)
     {
         $container = $builder->build();
@@ -68,6 +73,7 @@ class ContainerMakeTest extends BaseContainerTest
     /**
      * @dataProvider provideContainer
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideContainer')]
     public function testCircularDependencyException(ContainerBuilder $builder)
     {
         $this->expectException(DependencyException::class);
@@ -80,6 +86,7 @@ class ContainerMakeTest extends BaseContainerTest
     /**
      * @dataProvider provideContainer
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideContainer')]
     public function testCircularDependencyExceptionWithAlias(ContainerBuilder $builder)
     {
         $this->expectException(DependencyException::class);
@@ -96,6 +103,7 @@ class ContainerMakeTest extends BaseContainerTest
      * Tests a dependency can be made when a dependency is passed by reference.
      * @dataProvider provideContainer
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideContainer')]
     public function testPassByReferenceParameter(ContainerBuilder $builder)
     {
         $builder->build()->make(PassByReferenceDependency::class);
@@ -105,6 +113,7 @@ class ContainerMakeTest extends BaseContainerTest
      * Tests the parameter can be provided by reference.
      * @dataProvider provideContainer
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideContainer')]
     public function testProvidedPassByReferenceParameter(ContainerBuilder $builder)
     {
         $object = new stdClass();
@@ -118,6 +127,7 @@ class ContainerMakeTest extends BaseContainerTest
      * Test that PHP-7 non-exceptions are correctly handled when resolving definitions.
      * @dataProvider provideContainer
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideContainer')]
     public function testThrowableDuringResolve(ContainerBuilder $builder)
     {
       $builder->addDefinitions([
@@ -149,6 +159,7 @@ class ContainerMakeTest extends BaseContainerTest
      * @see https://github.com/PHP-DI/PHP-DI/issues/554
      * @dataProvider provideContainer
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideContainer')]
     public function testMakeWithDecorator(ContainerBuilder $builder)
     {
         $builder->addDefinitions([
@@ -167,6 +178,7 @@ class ContainerMakeTest extends BaseContainerTest
      * Test that factory method can access to the values provided to the make call
      * @dataProvider provideContainer
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideContainer')]
     public function testFactoryFunctionForwardsPassedParameters(ContainerBuilder $builder)
     {
         $builder->addDefinitions([

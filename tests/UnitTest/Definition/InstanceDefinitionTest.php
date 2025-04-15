@@ -12,6 +12,7 @@ use PHPUnit\Framework\TestCase;
 /**
  * @covers \DI\Definition\InstanceDefinition
  */
+#[\PHPUnit\Framework\Attributes\CoversClass(\DI\Definition\InstanceDefinition::class)]
 class InstanceDefinitionTest extends TestCase
 {
     use EasyMock;
@@ -19,6 +20,7 @@ class InstanceDefinitionTest extends TestCase
     /**
      * @test
      */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function should_contain_an_instance()
     {
         $instance = new \stdClass();
@@ -31,6 +33,7 @@ class InstanceDefinitionTest extends TestCase
     /**
      * @test
      */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function should_contain_an_object_definition()
     {
         $objectDefinition = $this->easyMock(ObjectDefinition::class);

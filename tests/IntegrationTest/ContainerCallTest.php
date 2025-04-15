@@ -16,6 +16,7 @@ class ContainerCallTest extends BaseContainerTest
     /**
      * @dataProvider provideContainer
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideContainer')]
     public function test_no_parameters(ContainerBuilder $builder)
     {
         $result = $builder->build()->call(function () {
@@ -27,6 +28,7 @@ class ContainerCallTest extends BaseContainerTest
     /**
      * @dataProvider provideContainer
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideContainer')]
     public function test_parameters_ordered(ContainerBuilder $builder)
     {
         $result = $builder->build()->call(function ($foo, $bar) {
@@ -38,6 +40,7 @@ class ContainerCallTest extends BaseContainerTest
     /**
      * @dataProvider provideContainer
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideContainer')]
     public function test_parameters_indexed_by_name(ContainerBuilder $builder)
     {
         $result = $builder->build()->call(function ($foo, $bar) {
@@ -53,6 +56,7 @@ class ContainerCallTest extends BaseContainerTest
     /**
      * @dataProvider provideContainer
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideContainer')]
     public function test_parameter_with_definitions_indexed(ContainerBuilder $builder)
     {
         $container = $builder->build();
@@ -73,6 +77,7 @@ class ContainerCallTest extends BaseContainerTest
     /**
      * @dataProvider provideContainer
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideContainer')]
     public function test_parameter_with_definitions_not_indexed(ContainerBuilder $builder)
     {
         $container = $builder->build();
@@ -90,6 +95,7 @@ class ContainerCallTest extends BaseContainerTest
     /**
      * @dataProvider provideContainer
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideContainer')]
     public function test_parameter_default_value(ContainerBuilder $builder)
     {
         $result = $builder->build()->call(function ($foo = 'hello') {
@@ -101,6 +107,7 @@ class ContainerCallTest extends BaseContainerTest
     /**
      * @dataProvider provideContainer
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideContainer')]
     public function test_parameter_explicit_value_overrides_default_value(ContainerBuilder $builder)
     {
         $container = $builder->build();
@@ -121,6 +128,7 @@ class ContainerCallTest extends BaseContainerTest
     /**
      * @dataProvider provideContainer
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideContainer')]
     public function test_parameter_from_type_hint(ContainerBuilder $builder)
     {
         $container = $builder->build();
@@ -138,6 +146,8 @@ class ContainerCallTest extends BaseContainerTest
      * @test
      * @dataProvider provideContainer
      */
+    #[\PHPUnit\Framework\Attributes\Test]
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideContainer')]
     public function calls_object_methods(ContainerBuilder $builder)
     {
         $object = new TestClass();
@@ -149,6 +159,8 @@ class ContainerCallTest extends BaseContainerTest
      * @test
      * @dataProvider provideContainer
      */
+    #[\PHPUnit\Framework\Attributes\Test]
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideContainer')]
     public function creates_and_calls_class_methods_using_container(ContainerBuilder $builder)
     {
         $class = TestClass::class;
@@ -160,6 +172,8 @@ class ContainerCallTest extends BaseContainerTest
      * @test
      * @dataProvider provideContainer
      */
+    #[\PHPUnit\Framework\Attributes\Test]
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideContainer')]
     public function calls_static_methods(ContainerBuilder $builder)
     {
         $class = TestClass::class;
@@ -171,6 +185,8 @@ class ContainerCallTest extends BaseContainerTest
      * @test
      * @dataProvider provideContainer
      */
+    #[\PHPUnit\Framework\Attributes\Test]
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideContainer')]
     public function calls_invokable_object(ContainerBuilder $builder)
     {
         $class = CallableTestClass::class;
@@ -182,6 +198,8 @@ class ContainerCallTest extends BaseContainerTest
      * @test
      * @dataProvider provideContainer
      */
+    #[\PHPUnit\Framework\Attributes\Test]
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideContainer')]
     public function creates_and_calls_invokable_objects_using_container(ContainerBuilder $builder)
     {
         $result = $builder->build()->call(CallableTestClass::class);
@@ -192,6 +210,8 @@ class ContainerCallTest extends BaseContainerTest
      * @test
      * @dataProvider provideContainer
      */
+    #[\PHPUnit\Framework\Attributes\Test]
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideContainer')]
     public function calls_functions(ContainerBuilder $builder)
     {
         $result = $builder->build()->call(__NAMESPACE__ . '\CallFunctionTest_function', [
@@ -203,6 +223,7 @@ class ContainerCallTest extends BaseContainerTest
     /**
      * @dataProvider provideContainer
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideContainer')]
     public function test_not_enough_parameters(ContainerBuilder $builder)
     {
         $this->expectException(NotEnoughParametersException::class);
@@ -214,6 +235,7 @@ class ContainerCallTest extends BaseContainerTest
     /**
      * @dataProvider provideContainer
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideContainer')]
     public function test_not_callable(ContainerBuilder $builder)
     {
         $this->expectException(NotCallableException::class);

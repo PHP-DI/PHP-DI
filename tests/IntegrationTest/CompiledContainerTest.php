@@ -17,6 +17,7 @@ use DI\DependencyException;
 class CompiledContainerTest extends BaseContainerTest
 {
     /** @test */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function the_same_container_can_be_recreated_multiple_times()
     {
         $builder = new ContainerBuilder;
@@ -31,6 +32,7 @@ class CompiledContainerTest extends BaseContainerTest
     }
 
     /** @test */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function the_container_is_compiled_once_and_never_recompiled_after()
     {
         $compiledContainerClass = self::generateCompiledClassName();
@@ -60,6 +62,7 @@ class CompiledContainerTest extends BaseContainerTest
     /**
      * @test
      */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function anonymous_classes_cannot_be_compiled()
     {
         $this->expectException(InvalidDefinition::class);
@@ -78,6 +81,7 @@ class CompiledContainerTest extends BaseContainerTest
     /**
      * @test
      */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function object_nested_in_other_definitions_cannot_be_compiled()
     {
         $this->expectException(InvalidDefinition::class);
@@ -94,6 +98,7 @@ class CompiledContainerTest extends BaseContainerTest
     /**
      * @test
      */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function object_nested_in_arrays_cannot_be_compiled()
     {
         $this->expectException(DependencyException::class);
@@ -115,6 +120,7 @@ class CompiledContainerTest extends BaseContainerTest
     /**
      * @test
      */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function entries_cannot_be_overridden_by_definitions_in_the_compiled_container()
     {
         $this->expectException('LogicException');
@@ -132,6 +138,7 @@ class CompiledContainerTest extends BaseContainerTest
     /**
      * @test
      */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function compiling_to_an_invalid_class_name_throws_an_error()
     {
         $this->expectException('InvalidArgumentException');
@@ -144,6 +151,7 @@ class CompiledContainerTest extends BaseContainerTest
     /**
      * @test
      */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function the_compiled_container_can_extend_a_custom_class()
     {
         $builder = new ContainerBuilder;
@@ -161,6 +169,7 @@ class CompiledContainerTest extends BaseContainerTest
     /**
      * @test
      */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function proxy_classes_can_be_pregenerated_at_compile_time()
     {
         $builder = new ContainerBuilder;
@@ -181,6 +190,7 @@ class CompiledContainerTest extends BaseContainerTest
      * @test
      * @see https://github.com/PHP-DI/PHP-DI/issues/565
      */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function recursively_compiles_referenced_definitions_found()
     {
         $builder = new ContainerBuilder;
@@ -198,6 +208,7 @@ class CompiledContainerTest extends BaseContainerTest
      * @test
      * @see https://github.com/PHP-DI/PHP-DI/issues/567
      */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function invalid_definitions_referenced_in_the_configuration_throw_an_error()
     {
         $message = <<<MESSAGE
@@ -223,6 +234,7 @@ MESSAGE;
      * @test
      * @see https://github.com/PHP-DI/PHP-DI/issues/567
      */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function invalid_definitions_transitively_referenced_are_skipped_and_do_not_throw_an_error()
     {
         $builder = new ContainerBuilder;

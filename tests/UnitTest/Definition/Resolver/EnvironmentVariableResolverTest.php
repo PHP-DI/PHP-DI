@@ -16,6 +16,7 @@ use DI\Definition\Exception\InvalidDefinition;
 /**
  * @covers \DI\Definition\Resolver\EnvironmentVariableResolver
  */
+#[\PHPUnit\Framework\Attributes\CoversClass(\DI\Definition\Resolver\EnvironmentVariableResolver::class)]
 class EnvironmentVariableResolverTest extends TestCase
 {
     use EasyMock;
@@ -50,6 +51,7 @@ class EnvironmentVariableResolverTest extends TestCase
     /**
      * @test
      */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function should_resolve_existing_env_variable()
     {
         $value = $this->resolver->resolve($this->definedDefinition);
@@ -60,6 +62,7 @@ class EnvironmentVariableResolverTest extends TestCase
     /**
      * @test
      */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function should_return_default_value_when_env_variable_is_undefined()
     {
         $value = $this->resolver->resolve($this->optionalDefinition);
@@ -70,6 +73,7 @@ class EnvironmentVariableResolverTest extends TestCase
     /**
      * @test
      */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function should_resolve_nested_definition_in_default_value()
     {
         $this->parentResolver->expects($this->once())
@@ -85,6 +89,7 @@ class EnvironmentVariableResolverTest extends TestCase
     /**
      * @test
      */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function should_throw_if_undefined_env_variable_and_no_default()
     {
         $this->expectException(InvalidDefinition::class);
@@ -95,6 +100,7 @@ class EnvironmentVariableResolverTest extends TestCase
     /**
      * @test
      */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function should_be_able_to_resolve_defined_env_variables()
     {
         $this->assertTrue($this->resolver->isResolvable($this->definedDefinition));
@@ -105,6 +111,7 @@ class EnvironmentVariableResolverTest extends TestCase
      *
      * @see https://github.com/container-interop/container-interop/issues/37
      */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function should_be_able_to_resolve_undefined_env_variables()
     {
         $this->assertTrue($this->resolver->isResolvable($this->undefinedDefinition));
@@ -113,6 +120,7 @@ class EnvironmentVariableResolverTest extends TestCase
     /**
      * @test
      */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function should_be_able_to_resolve_undefined_env_variables_with_default_values()
     {
         $this->assertTrue($this->resolver->isResolvable($this->optionalDefinition));

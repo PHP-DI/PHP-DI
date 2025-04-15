@@ -18,6 +18,7 @@ class ErrorMessagesTest extends BaseContainerTest
     /**
      * @dataProvider provideContainer
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideContainer')]
     public function test_non_instantiable_class(ContainerBuilder $builder)
     {
         $word = $builder->isCompilationEnabled() ? 'compiled' : 'resolved';
@@ -41,6 +42,7 @@ MESSAGE;
     /**
      * @dataProvider provideContainer
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideContainer')]
     public function test_non_existent_class(ContainerBuilder $builder)
     {
         $word = $builder->isCompilationEnabled() ? 'compiled' : 'resolved';
@@ -65,6 +67,7 @@ MESSAGE;
     /**
      * @dataProvider provideContainer
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideContainer')]
     public function test_undefined_constructor_parameter(ContainerBuilder $builder)
     {
         $word = $builder->isCompilationEnabled() ? 'compiled' : 'resolved';
@@ -95,6 +98,7 @@ MESSAGE;
     /**
      * @dataProvider provideContainer
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideContainer')]
     public function test_constructor_injection_of_non_existent_container_entry(ContainerBuilder $builder)
     {
         $this->expectException(DependencyException::class);
@@ -106,6 +110,7 @@ MESSAGE;
     /**
      * @dataProvider provideContainer
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideContainer')]
     public function test_property_injection_of_non_existent_container_entry(ContainerBuilder $builder)
     {
         $this->expectException(DependencyException::class);
@@ -117,6 +122,7 @@ MESSAGE;
     /**
      * @dataProvider provideContainer
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideContainer')]
     public function test_setter_injection_of_non_existent_container_entry(ContainerBuilder $builder)
     {
         $this->expectExceptionMessage('Error while injecting dependencies into DI\Test\IntegrationTest\ErrorMessages\Buggy4: No entry or class found for \'nonExistentBean\'');
@@ -128,6 +134,7 @@ MESSAGE;
     /**
      * @dataProvider provideContainer
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideContainer')]
     public function test_setter_injection_not_type_hinted(ContainerBuilder $builder)
     {
         $word = $builder->isCompilationEnabled() ? 'compiled' : 'resolved';
@@ -156,6 +163,7 @@ MESSAGE;
     /**
      * @dataProvider provideContainer
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideContainer')]
     public function test_factory_not_callable(ContainerBuilder $builder)
     {
         $this->expectException(InvalidDefinition::class);

@@ -10,6 +10,7 @@ use PHPUnit\Framework\TestCase;
 /**
  * @covers \DI\Definition\FactoryDefinition
  */
+#[\PHPUnit\Framework\Attributes\CoversClass(\DI\Definition\FactoryDefinition::class)]
 class FactoryDefinitionTest extends TestCase
 {
     public function test_getters()
@@ -27,6 +28,7 @@ class FactoryDefinitionTest extends TestCase
     /**
      * @test
      */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function should_accept_callables_other_than_closures()
     {
         $callable = [$this, 'foo'];
@@ -39,6 +41,7 @@ class FactoryDefinitionTest extends TestCase
     /**
      * @test
      */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function should_cast_to_string()
     {
         $this->assertEquals('Factory', new FactoryDefinition('', 'bar'));
@@ -47,6 +50,7 @@ class FactoryDefinitionTest extends TestCase
     /**
      * @test
      */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function should_accept_parameters()
     {
         $parameters = ['flag' => true];

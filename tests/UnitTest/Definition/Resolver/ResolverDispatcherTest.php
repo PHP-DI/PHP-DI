@@ -16,6 +16,7 @@ use Psr\Container\ContainerInterface;
 /**
  * @covers \DI\Definition\Resolver\ResolverDispatcher
  */
+#[\PHPUnit\Framework\Attributes\CoversClass(\DI\Definition\Resolver\ResolverDispatcher::class)]
 class ResolverDispatcherTest extends TestCase
 {
     use EasyMock;
@@ -32,6 +33,7 @@ class ResolverDispatcherTest extends TestCase
     /**
      * @test
      */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function should_resolve_using_sub_resolvers()
     {
         $this->assertEquals('foo', $this->resolver->resolve(new ValueDefinition('foo')));
@@ -41,6 +43,7 @@ class ResolverDispatcherTest extends TestCase
     /**
      * @test
      */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function should_test_if_resolvable_using_sub_resolvers()
     {
         $this->assertTrue($this->resolver->isResolvable(new ValueDefinition('value')));
@@ -50,6 +53,7 @@ class ResolverDispatcherTest extends TestCase
     /**
      * @test
      */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function should_throw_if_non_handled_definition()
     {
         $this->expectException('RuntimeException');
@@ -60,6 +64,7 @@ class ResolverDispatcherTest extends TestCase
     /**
      * @test
      */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function should_resolve_definitions()
     {
         $definition = new ValueDefinition('bar');

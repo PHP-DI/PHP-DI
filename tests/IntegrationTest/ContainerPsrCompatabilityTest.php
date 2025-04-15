@@ -14,6 +14,7 @@ class ContainerPsrCompatabilityTest extends BaseContainerTest
     /**
      * @dataProvider provideContainer
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideContainer')]
     public function testNotFound(ContainerBuilder $builder)
     {
         $this->expectException(NotFoundExceptionInterface::class);
@@ -23,6 +24,7 @@ class ContainerPsrCompatabilityTest extends BaseContainerTest
     /**
      * @dataProvider provideContainer
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideContainer')]
     public function testUnresolvable(ContainerBuilder $builder)
     {
         $this->expectException(ContainerExceptionInterface::class);

@@ -13,11 +13,13 @@ use PHPUnit\Framework\TestCase;
 /**
  * @covers \DI\Definition\Source\SourceChain
  */
+#[\PHPUnit\Framework\Attributes\CoversClass(\DI\Definition\Source\SourceChain::class)]
 class SourceChainTest extends TestCase
 {
     /**
      * @test
      */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function should_get_from_all_sources()
     {
         $chain = new SourceChain([
@@ -39,6 +41,7 @@ class SourceChainTest extends TestCase
     /**
      * @test
      */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function should_stop_when_definition_found()
     {
         $chain = new SourceChain([
@@ -55,6 +58,7 @@ class SourceChainTest extends TestCase
     /**
      * @test
      */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function setting_the_mutable_definition_source_should_chain_it_at_the_top()
     {
         $chain = new SourceChain([
@@ -72,6 +76,7 @@ class SourceChainTest extends TestCase
     /**
      * @test
      */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function adding_definitions_should_go_in_the_mutable_definition_source()
     {
         $chain = new SourceChain([]);
