@@ -117,7 +117,7 @@ class Container implements ContainerInterface, FactoryInterface, InvokerInterfac
      * @template T
      * @param string|class-string<T> $id Entry name or a class name.
      *
-     * @return ($id is class-string<T> ? T : mixed)
+     * @return mixed|T
      * @throws DependencyException Error while resolving the entry.
      * @throws NotFoundException No entry found for the given name.
      */
