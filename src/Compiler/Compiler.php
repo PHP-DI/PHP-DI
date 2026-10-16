@@ -25,6 +25,7 @@ use Laravel\SerializableClosure\Support\ReflectionClosure;
 use function rename;
 use function sprintf;
 use function tempnam;
+use function umask;
 use function unlink;
 
 /**
@@ -171,7 +172,7 @@ class Compiler
                 sprintf('Error while creating temporary file in %s', dirname($fileName))
             );
         }
-        @chmod($tmpFile, 0666);
+        @chmod($tmpFile, 0666 & ~umask());
 
         $written = file_put_contents($tmpFile, $content);
         if ($written === false) {
@@ -180,7 +181,7 @@ class Compiler
             throw new InvalidArgumentException(sprintf('Error while writing to %s', $tmpFile));
         }
 
-        @chmod($tmpFile, 0666);
+        @chmod($tmpFile, 0666 & ~umask());
         $renamed = @rename($tmpFile, $fileName);
         if (!$renamed) {
             @unlink($tmpFile);

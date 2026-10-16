@@ -171,6 +171,29 @@ class CompiledContainerTest extends BaseContainerTest
      * @test
      */
     #[\PHPUnit\Framework\Attributes\Test]
+    public function the_compiled_container_file_respects_the_umask()
+    {
+        $className = self::generateCompiledClassName();
+
+        $previousUmask = umask(0027);
+        try {
+            $builder = new ContainerBuilder;
+            $builder->enableCompilation(self::COMPILATION_DIR, $className);
+            $builder->build();
+        } finally {
+            umask($previousUmask);
+        }
+
+        clearstatcache();
+        $permissions = fileperms(self::COMPILATION_DIR . '/' . $className . '.php') & 0777;
+
+        self::assertSame(0640, $permissions, sprintf('Expected file permissions 0640, got 0%o', $permissions));
+    }
+    
+    /**
+     * @test
+     */
+    #[\PHPUnit\Framework\Attributes\Test]
     #[RequiresPhp('< 8.4')]
     public function proxy_classes_can_be_pregenerated_at_compile_time()
     {
