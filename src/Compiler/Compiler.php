@@ -25,6 +25,7 @@ use Laravel\SerializableClosure\Support\ReflectionClosure;
 use function rename;
 use function sprintf;
 use function tempnam;
+use function umask;
 use function unlink;
 
 /**
